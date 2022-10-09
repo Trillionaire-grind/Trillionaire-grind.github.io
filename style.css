@@ -1,0 +1,69 @@
+*{
+    background-color: white;
+}
+
+.hook{
+    color: #00303F;
+    font-size: 32px;
+    text-align: center;
+    margin-right: 10%;
+    margin-left: 10%;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+.centre{
+    font-size: 40px;
+    color: #000;
+}
+
+.subheader{
+    font-size: 30px;
+    text-align: center;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+}
+
+.video{
+    height: 400px;
+    width: 60%;
+    background-color: #000;
+    margin: 0 auto;
+    display: block;
+}
+
+.play{
+    width: 0; 
+    height: 0; 
+    border-top: 60px solid transparent;
+    border-bottom: 60px solid transparent;
+    border-left: 100px solid white;
+    background-color: #00303F;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    margin: -25px 0 0 -25px; /* Apply negative top and left margins to truly center the element */
+}
+
+.cta{
+    width: 60%;
+    height: 10%;
+    margin-top: 20px;
+    font-size: 30px;
+    margin-left: 20%;
+    margin-right: 20%;
+    border-color: #00303F;
+    border: none;
+}
+
+.logo{
+    width: 16%;
+    height: auto;
+    float: right;
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
+    margin-left: 12px;
+    margin-top: 20px;
+}
+
