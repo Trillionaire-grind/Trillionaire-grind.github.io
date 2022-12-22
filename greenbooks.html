@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <!--Title-->
+        <title>Green Books App</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" type="image/x-icon" href="greenbooks_logo.png" />
+    </head>
+    <style>
+        body {margin: 0;}
+    
+        ul.topnav {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #39B052;
+        }
+    
+        ul.topnav li {float: left;}
+    
+        ul.topnav li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        background-color: #39B052;
+        }
+    
+        ul.topnav li a:hover:not(.active) {background-color: #000;}
+    
+        ul.topnav li a.active {background-color: #39B052;}
+
+        ul.topnav li a.in
+    
+        ul.topnav li.right {float: right;}
+    
+        @media screen and (max-width: 600px) {
+        ul.topnav li.right, 
+        ul.topnav li {float: none;}
+        }
+        </style>
+    <body style="
+    background-color: #39B052; 
+    border-color: #39B052;
+    margin: 0; padding: 0;
+    ">
+        <ul class="topnav">
+            <li><a href="./index.html">Képler Siguineau</a></li>
+          </ul>
+        <!--Start hook-->
+        <h1 style="color: #fff; background-color: #39B052;" class="hook">
+            Are you in college?<br>
+            Do you buy used textbooks?<br>
+            Want to save time, money, and help the environemnt?<br>
+        </h1>
+        <!--End hook-->
+        <!--Watch text-->
+        <h2 style="color: #fff; background-color: #39B052;" class="subheader">
+            Figure out how you can do that with The Green Books App
+        </h2>
+        <!--YouTube video-->
+        <iframe class="video"
+            src="https://www.youtube.com/embed/28y5BYtuNpA">
+        </iframe>
+        <!--CTA for stripe-->
+        <button style="background-color: #000; color: #fff;" class="cta" onclick="location.href='https://buy.stripe.com/28o5oegTr7EFcU06ow'">Early Bird Special</button>
+        <!--CTA for stripe-->
+        <br>
+        <!--Logo with Stripe-->
+        <img class="logo" style="background-color: #39B052;" onclick="location.href='https://play.google.com/store/apps/details?id=com.greenbooks.app'" src="greenbooks_logo.png">
+        <!--Logo with Stripe-->
+    </body>  
+</html>
