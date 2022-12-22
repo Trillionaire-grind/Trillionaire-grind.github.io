@@ -4,8 +4,44 @@
         <title>Pre-order landing page challenge</title>
         <link rel="stylesheet" href="style.css">
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+        <style>
+            ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #fff;
+            }
+        
+            ul.topnav li {float: left;}
+        
+            ul.topnav li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            background-color: #fff;
+            }
+        
+            ul.topnav li a:hover:not(.active) {background-color: #D31034;}
+        
+            ul.topnav li a.active {background-color: #39B052;}
+    
+            ul.topnav li a.in
+        
+            ul.topnav li.right {float: right;}
+        
+            @media screen and (max-width: 600px) {
+            ul.topnav li.right, 
+            ul.topnav li {float: none;}
+            }
+        </style>
     </head>
     <body>
+        <ul class="topnav">
+            <li><a href="./greenbooks.html">Képler Siguineau</a></li>
+        </ul>
         <!--Start hook-->
         <h1 style="color: #222;" class="hook">
             Have a new business idea?<br>
@@ -28,5 +64,15 @@
         <!--Logo with Stripe-->
         <img class="logo" onclick="location.href='https://buy.stripe.com/28o5oegTr7EFcU06ow'" src="landing.png">
         <!--Logo with Stripe-->
+       
+
+        <script type="text/javascript">
+            document.getElementById("greenbooks").onclick = function() {
+            location.href = "./greenbooks.html";
+            };
+            document.getElementById("preorder").onclick = function() {
+            location.href = "./option2.html";
+            };
+        </script>
     </body>  
 </html>
