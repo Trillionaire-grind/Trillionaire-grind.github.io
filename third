@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Mastery For Seniors</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    
+    header {
+      background-color: #000;
+      color: #fff;
+      text-align: center;
+      padding: 1px 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .line{
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 4px;
+        background-color: red;
+    }
+
+    .cta{
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 1px;
+        display: block;
+        align-items: center;
+        justify-content: center;
+        height: 20vh;
+        background-color: red;
+        border-radius: 10px;
+    }
+
+    img {
+      max-width: 30px;
+      max-height:30px;
+    }
+
+    .text {
+        font-size: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .highlight{
+        background-color: #FFFF3A;
+        color: #000;
+        padding: 6px;
+        margin-top: 12px;
+    }
+    
+    .headline{
+        text-align: center;
+        font-size: 28px;
+        padding-top: 0px;
+        margin: 1px;
+        padding-bottom: 8px;
+    }
+
+    .videoContainer{
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+    }
+
+    .videoDesc{
+        background-color: red;
+        width: 90%;
+        height: 10%;
+        margin: 0 auto;
+        display:block;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+    }
+
+    .tester{
+        margin: 0 auto;
+        color: white;
+        font-size: 8px;
+        padding-bottom: 20px;
+    }
+
+    .video{
+        text-align: left;
+        margin: 0 auto;
+        display:block;
+    }
+
+    .spacer{
+        height: 5vh;
+    }
+    .ctaContainer{
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ctaImg {
+      max-width: 120px;
+      max-height:120px;
+      margin-left: 1vh;
+      padding: 10px;
+      padding-bottom: 20px;
+    }
+
+
+    /* Add additional CSS styles for your website content here */
+
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+        <div class="text">
+          <h1>Tech Mastery</h1>
+        </div>
+        <div class="image">
+          <!--<img src="https://i.pinimg.com/564x/59/32/29/593229739184504afd9507cc42a9cb86.jpg">-->
+          <img src="coach.png">
+        </div>
+      </div>
+  </header>
+  <div class="line"></div>
+
+
+    <div class="container">
+    <!-- Your website content goes here -->
+        <p class="highlight">Get one on one personal coaching</p>
+    </div>
+    <p class="headline">
+      "Get undivided <strong>attention</strong> in a learning 
+      environment built for <strong>you</strong> and on going
+      Support"
+    </p>
+    <div class="spacer"></div>
+    <div class="videoDesc">
+        <div class="videoContainer">
+            <div class="image">
+                <!--<img src="https://i.pinimg.com/564x/59/32/29/593229739184504afd9507cc42a9cb86.jpg">-->
+                <img src="speaker.png"style="padding: 8px">
+              </div>
+            <div class="tester">
+              <h1>Listen to learn about the 2 hours workshop</h1>
+            </div>
+          </div>
+    </div>
+    <iframe class="video"  width = "90%" height="200px"frameBorder="0" allow="fullscreen" 
+    allowfullscreen="allowfullscreen"
+        mozallowfullscreen="mozallowfullscreen" 
+        msallowfullscreen="msallowfullscreen" 
+        oallowfullscreen="oallowfullscreen" 
+        webkitallowfullscreen="webkitallowfullscreen"
+        src="https://www.youtube.com/embed/tgbNymZ7vqY">
+    </iframe>
+    <div class="spacer">
+
+    </div>
+    <a href="https://buy.stripe.com/test_5kAfZJb49cT28vu4go" style="text-decoration: none; ">
+      <div class="cta">
+        <h1 style="text-align: center; color: white; font-size: 22px; padding: 0;">Only 3 Spots Left!</h1>
+        <div class="ctaContainer">
+            <div class="ctaImg">
+                <!--<img src="https://i.pinimg.com/564x/59/32/29/593229739184504afd9507cc42a9cb86.jpg">-->
+                <img src="cart.png"style="padding: 8px">
+              </div>
+            <div class="tester">
+              <h1 style="text-align: left; align-self: center;">YES! I WANT TO GET <br>1 ON 1 COACHING<br>
+                for <strong>only </strong>$2,500
+              </h1>
+            </div>
+        </div>
+        
+      </div>
+    </a>
+  </body>
+</html>
