@@ -6,21 +6,12 @@
     let details = navigator.userAgent 
     let regexp = /android|iphone|kindle|ipad/i;
     let isMobileDevice = regexp.test(details)
-    /*if(isMobileDevice)
-    {
-      console.log("sees it as mobile")
-      alert("desktop")
-    }
-    else{
-      console.log("see it as desktop")
-      alert("desktop")
-    }*/ 
+
     if (window.innerWidth < 600) {
-      alert("small")
-      window.location.href = "second.html"
+      window.location.href = "first_mobile.html"
     }
     else{
-      //alert("big")
+      window.location.href = "first_desktop.html"
     }
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -199,7 +190,7 @@
                 <img src="cart.png"style="padding: 8px; width=50%" >
               </div>
             <div class="tester">
-              <h1>YES! I WANT TO JOIN THE WORKSHOP<br>
+              <h1>YES! I WANT TO JOIN THE SEMINAR<br>
                 FOR <strong>ONLY </strong>$10
               </h1>
             </div>
