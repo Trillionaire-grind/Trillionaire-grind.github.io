@@ -7,10 +7,7 @@
     let regexp = /android|iphone|kindle|ipad/i;
     let isMobileDevice = regexp.test(details)
 
-    alert("isMobileDevice"+isMobileDevice)
-    alert(window.innerWidth)
-
-    if (window.innerWidth < 600) {
+    if (isMobileDevice) {
       window.location.href = "first_mobile.html"
     }
     else{
