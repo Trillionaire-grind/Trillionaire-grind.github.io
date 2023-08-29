@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <script>
+            let details = navigator.userAgent 
+            let regexp = /android|iphone|kindle|ipad/i;
+            let isMobileDevice = regexp.test(details)
+
+            alert(`isMobileDevice:`+isMobileDevice+'isSmaller' + (window.innerWidth < 600))
+
+            if (isMobileDevice || window.innerWidth < 600) {
+            window.location.href = "first_mobile.html"
+            }
+            else{
+            window.location.href = "first_desktop.html"
+            }
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tech Mastery For Seniors</title>
+    </head>
+</html>
