@@ -1,0 +1,11 @@
+Model Information:
+* title:	Free - Lamborghini Countach
+* source:	https://sketchfab.com/3d-models/free-lamborghini-countach-fdd16d7aa2b34c59ac5cadfff2923dc0
+* author:	Navarion (https://sketchfab.com/Navarion)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Free - Lamborghini Countach" (https://sketchfab.com/3d-models/free-lamborghini-countach-fdd16d7aa2b34c59ac5cadfff2923dc0) by Navarion (https://sketchfab.com/Navarion) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
