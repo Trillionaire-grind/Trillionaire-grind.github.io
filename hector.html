@@ -4,10 +4,7 @@
     <!--color #39B052-->
     <!-- Google tag (gtag.js) -->
    <!-- Google tag (gtag.js) -->
-    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NWYGXR7XD"></script>
-     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
-    <script nomodule src="https://unpkg.com/@google/model-viewer/dist/model-viewer-legacy.js"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -23,7 +20,7 @@
       let isMobileDevice = regexp.test(details)
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hector's Thing</title>
+    <title>XLT - Experience The Difference</title>
     <style>
       body {
         margin: 0;
@@ -55,7 +52,7 @@
         align-items: center;
         justify-content: center;
         height: 4px;
-        background-color: #a16a38;
+        background-color: #F8DF8D;
       }
 
       .logo {
@@ -155,7 +152,7 @@
         align-items: center;
         justify-content: center;
         height: 10vh;
-        background-color: #a16a38;
+        background-color: #F8DF8D;
         border-radius: 10px;
       }
 
@@ -183,7 +180,7 @@
         align-items: center;
         justify-content: center;
         height: 10vh;
-        background-color: #a16a38;
+        background-color: #000;
         border-radius: 10px;
       }
 
@@ -214,25 +211,32 @@
         width: 50%;
       }
 
-      #aSide {
-        height: 600px;
-        width: 600px;
-        position: absolute;
-        top: calc(50% - 250px);
-        right: 7%;
-    }
-
-
-/* This styles the 3D object inserted in the aside container */
-
-    #aSide model-viewer {
-        height: 600px;
-        width: 600px;
-        position: absolute;
-        top: 0;
-        left: 0;
-        border: none;
-    }
+      .popup {
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+        .popup-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888888;
+            width: 100%;
+            font-weight: bolder;
+        }
+        .popup-content button {
+            display: block;
+            margin: 0 auto;
+        }
+        .show {
+            display: block;
+        }
     </style>
   </head>
 
@@ -240,10 +244,10 @@
     <header>
       <div class="container">
         <div class="text">
-          <h1>HECTOR</h1>
+          <h1>XLT</h1>
         </div>
         <div class="image">
-          <img class="logo" src="gba_logo.png">
+          <!--<img class="logo" src="gba_logo.png">-->
         </div>
       </div>
     </header>
@@ -253,31 +257,75 @@
       <p class="highlight">Do you value your time?</p>
     </div>
     <p class="headline">
-      Do You Hate Losing Money Because Of Travelling?<br> We Will Save You A Lot Of Time<br> Which Also Means A Lof Of Money...<br> Like THOUSANDS A <strong>DAY!!!</strong>
+      <strong>Learn How To Save Time
+         <br>To Make Maximum Money
+      </strong>
     </p>
     <div class="smallSpace"></div>
+    <div class="videoDesc">
+      <div class="videoContainer">
+        <div class="image">
+          <!--<img class="logo" src="speaker.png" style="padding: 8px">-->
+        </div>
+        <div class="ctaText">
+          <h2>Listen to learn how you can make thousands </h2>
+        </div>
+      </div>
+    </div>
+    <iframe class="video" style="padding-bottom: 8px;" width="90%" height="200px" frameBorder="0" allow="fullscreen"
+      allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen"
+      oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"
+      src="https://www.youtube.com/embed/w2yFwbYITMg">
+    </iframe>
+    <div class="smallSpace">
+
     </div>
     <div class="salesLetter">
-        <div style="text-align: center;">
-            <model-viewer style="height: 60vh; width: 60vh; display: block;
-            margin-left: auto;
-            margin-right: auto;" src="assets/scene.gltf" alt="VR Headset" auto-rotate camera-controls ar ios-src="assets/scene.gltf">
-            </model-viewer>
-        </div>
-       
-      <a href="https://buy.stripe.com/00geYOav30cd9HOcN2" style="text-decoration: none; ">
-        <div class="secondCta">
-          <div class="secondCtaContainer">
-            <div class="secondCtaImg">
-              <img class="bigLogo" src="cart.png" style="padding: 8px; width:50%">
-            </div>
-            <div class="ctaText">
-              <p style="font-size: 12px;"><strong style="font-size: 16px;">YES! I WANT TO BOOK
-              <p>
-            </div>
-          </div>
-        </div>
-      </a>
+      <!--<img width="40%" height="40%" style="margin-bottom:32px" src="ad_assets/offer (14).jpeg" class="center" >-->
     </div>
+    <button id="myButton" style="background-color: #000; color: #fff; width: 80%; margin-left: 10%; margin-right: 10%; height: 10vh; border-radius: 10px;">
+       Yes, I want to Book
+    </button>
+    <!--<button id="myButton">
+        Click me
+    </button>-->
+    <div id="myPopup" class="popup">
+        <div class="popup-content">
+            <h1 style="color:black;">
+                You Must Accept The Terms and Conditions Before Booking
+            </h1>
+            <p>Put terms and conditions here::</p>
+            <div style="display: inline-block;">
+                <button style="display: inline-block; background-color: white; color: #000;" id="closePopup">
+                    Close
+                </button>
+                <button onclick=location.href="https://calendly.com/buildingwithkepler/30min?month=2023-11" type="button" style="display: inline-block; background-color: #000; color: white;" id="openCalendar">
+                    I Accept
+                </button>
+            </div>
+           
+        </div>
+    </div>
+
+    <div class="bigSpace">
+
+    </div>
+    <script>
+        myButton.addEventListener("click", function () {
+            myPopup.classList.add("show");
+        });
+
+        openCalendar.addEventListener("click", function(){
+
+        })
+        closePopup.addEventListener("click", function () {
+            myPopup.classList.remove("show");
+        });
+        window.addEventListener("click", function (event) {
+            if (event.target == myPopup) {
+                myPopup.classList.remove("show");
+            }
+        });
+    </script>
   </body>
 </html>
