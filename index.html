@@ -1,78 +1,28 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <!--Title-->
-        <title>Pre-order landing page challenge</title>
-        <link rel="stylesheet" href="style.css">
-        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-        <style>
-            ul.topnav {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            background-color: #fff;
-            }
-        
-            ul.topnav li {float: left;}
-        
-            ul.topnav li a {
-            display: block;
-            color: black;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
-            background-color: #fff;
-            }
-        
-            ul.topnav li a:hover:not(.active) {background-color: #D31034;}
-        
-            ul.topnav li a.active {background-color: #39B052;}
-    
-            ul.topnav li a.in
-        
-            ul.topnav li.right {float: right;}
-        
-            @media screen and (max-width: 600px) {
-            ul.topnav li.right, 
-            ul.topnav li {float: none;}
-            }
-        </style>
-    </head>
-    <body>
-        <ul class="topnav">
-            <li><a href="./greenbooks.html">Képler Siguineau</a></li>
-        </ul>
-        <!--Start hook-->
-        <h1 style="color: #222;" class="hook">
-            Have a new business idea?<br>
-            learn how to avoid <span class="centre" ><strong> <u>wasting your time & $$$</u></strong></span> on something nobody wants
-            and how to <span class="centre"> <bold><u>save time</u></bold></span> and <span class="centre"> <bold><u>earn money</u></bold></span> from your idea!
-        </h1>
-        <!--End hook-->
-        <!--Watch text-->
-        <h2 style="color: #000;" class="subheader">
-            Watch now!
-        </h2>
-        <!--YouTube video-->
-        <iframe class="video"
-            src="https://www.youtube.com/embed/28y5BYtuNpA">
-        </iframe>
-        <!--CTA for stripe-->
-        <button style="background-color: #D31034; color: #fff;" class="cta" onclick="location.href='https://buy.stripe.com/28o5oegTr7EFcU06ow'">Yes! I want the course!</button>
-        <!--CTA for stripe-->
-        <br>
-        <!--Logo with Stripe-->
-        <img class="logo" onclick="location.href='https://buy.stripe.com/28o5oegTr7EFcU06ow'" src="landing.png">
-        <!--Logo with Stripe-->
-       
+ <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-2NWYGXR7XD"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
 
-        <script type="text/javascript">
-            document.getElementById("greenbooks").onclick = function() {
-            location.href = "./greenbooks.html";
-            };
-            document.getElementById("preorder").onclick = function() {
-            location.href = "./option2.html";
-            };
+            gtag('config', 'G-2NWYGXR7XD');
         </script>
-    </body>  
+        <meta charset="UTF-8">
+        <script>
+            let details = navigator.userAgent 
+            let regexp = /android|iphone|kindle|ipad/i;
+            let isMobileDevice = regexp.test(details)
+            if (isMobileDevice || window.innerWidth < 600) {
+            window.location.href = "DigitalMoneyPrinter_mobile.html"
+            }
+            else{
+            window.location.href = "DigitalMoneyPrinter_dekstop.html"
+            }
+        </script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>How To Monetize Your Audience As A YouTuber - No Matter The Size</title>
+    </head>
 </html>
