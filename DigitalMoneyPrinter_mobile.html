@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script>
+      let details = navigator.userAgent
+      let regexp = /android|iphone|kindle|ipad/i;
+      let isMobileDevice = regexp.test(details)
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Title-->
+    <title>
+        Company or Product Name
+    </title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+      }
+
+      header {
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        padding: 1px 0;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center
+      }
+
+      .line {
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 4px;
+        background-color: red;
+      }
+
+      .logo {
+        max-width: 20px;
+        max-height: 20px;
+      }
+
+      .bigLogo {
+        max-width: 30px;
+        max-height: 30px;
+      }
+
+      .text {
+        font-size: 10px;
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .highlight {
+        background-color: #FFFF3A;
+        color: #000;
+        padding: 6px;
+        margin-top: 12px;
+      }
+
+      .headline {
+        text-align: center;
+        font-size: 18px;
+        padding-top: 0px;
+        margin: 1px;
+        padding-bottom: 2px;
+      }
+
+      .videoContainer {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+      }
+
+      .videoDesc {
+        background-color: red;
+        width: 90%;
+        height: 2%;
+        margin: 0 auto;
+        display: block;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
+      }
+
+      .ctaText {
+        margin: 0;
+        padding: 2px;
+        color: white;
+        font-size: 8px;
+      }
+
+      .video {
+        text-align: center;
+        margin: 0 auto;
+        display: block;
+      }
+
+      .smallSpace {
+        height: 2vh;
+      }
+
+      .mediumSpace {
+        height: 10vh;
+      }
+
+      .salesLetter{
+        margin-left: 5%;
+        margin-right: 5%;
+        width: 90%;
+      }
+
+      .ctaContainer {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+
+      }
+
+      .cta {
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        background-color: red;
+        border-radius: 10px;
+      }
+
+      .ctaImg {
+        max-width: 120px;
+        max-height: 120px;
+      }
+
+      /*second cta*/
+
+      .secondCtaContainer {
+        max-width: 80%;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+      }
+
+      .secondCta {
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 10vh;
+        background-color: red;
+        border-radius: 10px;
+      }
+
+      .ctaNImg {
+        max-width: 120px;
+        max-height: 120px;
+      }
+
+      /*second cta*/
+
+      .bigSpace {
+        height: 18vh;
+      }
+
+
+      .smallerCta {
+        max-width: 90%;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+      }
+      .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="container">
+        <div class="text">
+          <!--Company / product name-->
+          <h1>
+              Digital Money Printer
+          </h1>
+        </div>
+        <div class="image">
+          <img class="logo" src="assets/money.png">
+        </div>
+      </div>
+    </header>
+    <div class="line"></div>
+    <div class="container">
+      <!-- Your website content goes here -->
+      <p class="highlight">
+        Have a new business idea?
+      </p>
+    </div>
+    <p class="headline">
+      Learn How To Avoid<span class="centre"><strong> <u> Wasting Your Time And Money</strong> </u></span> On Something Nobody Wants and
+      <br>How To<span class="centre"><strong> <u> Save Time And Earn Money</u></strong></span> From Your Idea!
+    </p>
+    <div class="smallSpace"></div>
+    <!--<div class="videoDesc">
+      <div class="videoContainer">
+        <div class="image">
+          <img class="logo" src="assets/speaker.png" style="padding: 8px">
+        </div>
+        <div class="ctaText">
+          <h2>
+              Watch to learn how to monetize your audience
+          </h2>
+        </div>
+      </div>
+    </div>
+    <iframe class="video" style="padding-bottom: 8px;" width="90%" height="200px" frameBorder="0" allow="fullscreen"
+      allowfullscreen="allowfullscreen" mozallowfullscreen="mozallowfullscreen" msallowfullscreen="msallowfullscreen"
+      oallowfullscreen="oallowfullscreen" webkitallowfullscreen="webkitallowfullscreen"
+      src="https://www.youtube.com/embed/s00XTNZYewY">
+    </iframe>-->
+    <!--<img width="40%" height="40%" style="margin-bottom:32px" src="assets/money.png" class="center">-->
+    <div class="bigSpace">
+
+    </div>
+    <!--CTA-->
+    <a href="https://buy.stripe.com/7sIeYOeLjaQR5ry00j" style="text-decoration: none; ">
+      <div class="secondCta">
+        <div class="secondCtaContainer">
+          <div class="secondCtaImg">
+            <img class="bigLogo" src="assets/cart.png" style="padding: 8px; width:50%">
+          </div>
+          <div class="ctaText">
+            <p style="font-size: 12px;"><strong style="font-size: 16px;">
+              Yes! I want To Build My Own Digital Money Printer
+            <p>
+          </div>
+        </div>
+      </div>
+    </a>
+    <!--Offer-->
+    <div class="salesLetter">
+      
+    </div>
+    <div class="bigSpace"></div>
+  </body>
+</html>
