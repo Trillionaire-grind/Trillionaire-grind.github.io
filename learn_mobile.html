@@ -180,13 +180,15 @@
   <script>
      var link = document.getElementById('dynamicLink'); 
     
-      
+     let info = navigator.userAgent 
+     let regex = /android|iphone|kindle|ipad/i;
+     let isMobile = regex.test(details)
    
     if (window?.navigator?.platform === "iPhone"){ 
         console.log("This is the iPhone plaltform")
         link.href = "https://www.Apple.com"
     }
-    else if(window?.navigator?.platform === "Android"){
+    else if(isMobile ||  window.innerWidth < 600){
       console.log();
       link.href = "https://store.google.com/us/category/phones?pli=1&hl=en-US"
     }
