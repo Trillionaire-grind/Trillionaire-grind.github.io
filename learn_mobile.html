@@ -5,8 +5,8 @@
   <script>
     let details = navigator.userAgent 
     let regexp = /android|iphone|kindle|ipad/i;
+
    
-    
     
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -163,7 +163,7 @@
     <div class="spacer">
 
     </div>
-    <a href="https://buy.stripe.com/test_14k4h1dch6uEdPO6ov" style="text-decoration: none; ">
+    <a id="dynamicLink" href="" style="text-decoration: none; ">
       <div class="cta">
         <div class="ctaContainer">
             <div class="tester">
@@ -175,5 +175,29 @@
         
       </div>
     </a>
+    
   </body>
+  <script>
+     var link = document.getElementById('dynamicLink'); 
+    
+      
+   
+    if (window?.navigator?.platform === "iPhone"){ 
+        console.log("This is the iPhone plaltform")
+        link.href = "https://www.Apple.com"
+    }
+    else if(window?.navigator?.platform === "Android"){
+      console.log();
+      link.href = "https://store.google.com/us/category/phones?pli=1&hl=en-US"
+    }
+    else{
+      console.log("This is not the iPhone platform")
+      console.log(`the platform ${window?.navigator?.platform}`)
+      link.href = "http://www.google.com"
+    }
+    //(window?navigator?.platform == "Android"){
+    /*else{
+        
+    }*/
+  </script>
 </html>
