@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mobile-Friendly Website</title>
+        <style>
+            /* Add your CSS styles here */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .header {
+                background-color: #024165;
+                color: #fff;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            
+            
+            .content {
+                padding: 20px;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px 0;
+                border-top: 1px solid #ccc; /* Add border on top */
+            }
+            .bottom-nav a {
+                color: #333; /* Change text color */
+                text-decoration: none;
+                padding: 10px;
+                border-right: 1px solid #ccc; /* Add border between buttons */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 25%; /* Equal width for each button */
+                box-sizing: border-box; /* Include padding in the width calculation */
+            }
+            .bottom-nav a:last-child {
+                border-right: none; /* Remove border on last button */
+            }
+            .bottom-nav img {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 5px; /* Add spacing between icon and text */
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="header">
+            <!--<button class="arrow">&#8249;</button>-->
+            <button style="width: 40px; height: 40px; background: none; color: white;" onclick="getTotal()"> 
+                &lt;
+            </button>
+            <h1 id="titleLbl" class="title">This Week's Meeting</h1>
+            <button id="rightBtn" style="width: 40px; height: 40px; background: none; color: white;visibility: hidden;"  class="arrow right-arrow">&gt;</button>
+        </div>
+        <div style="width: 100%; height: 100vh;">
+            <iframe id="frame" style="width: 100%; height: 100vh;" src="assets/seminar_free.pdf" frameborder="0"></iframe>
+        </div>
+          <!--PDF Viewer-->
+          <!--<iframe id="frame" style="visibility: hidden; height: fill; width: 100%;" src="https://css4.pub/2015/icelandic/dictionary.pdf">
+
+          </iframe>-->
+         
+    </body>
+
+    <script>
+        function getTotal()
+        {
+            console.log("What Is The Total")
+
+            var rightBtn = document.getElementById("rightBtn")
+            var titleLbl = document.getElementById("titleLbl")
+            var frame = document.getElementById("frame")
+            var pdfViewer = document.getElementById("pdfViewer")
+
+            rightBtn.style.visibility = "visible"
+            titleLbl.innerText = "March 16, 2024"
+            frame.style.visibility = "visible"
+            pdfViewer.style.visibility = "visible"
+            frame.style.visibility = "hidden"
+            
+        }
+    </script>
+</html>

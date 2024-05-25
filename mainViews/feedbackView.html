@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mobile-Friendly Website</title>
+        <style>
+            /* Add your CSS styles here */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .content {
+                padding: 20px;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px 0;
+                border-top: 1px solid #ccc; /* Add border on top */
+            }
+            .bottom-nav a {
+                color: #333; /* Change text color */
+                text-decoration: none;
+                padding: 10px;
+                border-right: 1px solid #ccc; /* Add border between buttons */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 25%; /* Equal width for each button */
+                box-sizing: border-box; /* Include padding in the width calculation */
+            }
+            .bottom-nav a:last-child {
+                border-right: none; /* Remove border on last button */
+            }
+            .bottom-nav img {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 5px; /* Add spacing between icon and text */
+            }
+
+            .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            }
+            .row {
+                display: flex;
+                flex-direction: row;
+            }
+
+            .image-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            }
+            .text-container {
+                flex: 1;
+                padding: 0 20px; /* Adjust padding as needed */
+                box-sizing: border-box;
+            }
+            img {
+                max-width: 100%;
+                width: 10vh;
+                height: 10vh;
+                display: block;
+                margin: auto; 
+            }
+        </style>
+        
+    </head>
+    <body>
+        <div style="display: flex;">
+            <h1 style="text-align: center; margin-left: auto; margin-right: 0%;">Our Speakers</h1>
+            <img src="assets/vote.jpg" style="margin-right: 0;">
+        </div>
+       
+        <div class="speaker">
+
+        </div>
+        <div class="container">
+            <div class="row"  style="padding-top: 8px;">
+                <div class="image-container">
+                    <img src="person.png" alt="Image">
+                </div>
+                <div class="text-container">
+                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
+                </div>
+            </div>
+            <div class="row" style="padding-top: 8vh;">
+                <div class="image-container">
+                    <img src="person.png" alt="Image">
+                </div>
+                <div class="text-container">
+                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
+                </div>
+            </div>
+            <div class="row"  style="padding-top: 8vh;">
+                <div class="image-container">
+                    <img src="person.png" alt="Image">
+                </div>
+                <div class="text-container">
+                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
+                </div>
+            </div>
+        </div>
+    </body> 
+    <script>
+        let startX;
+        let currentX;
+        const threshold = 50; // Minimum swipe distance for visibility change
+    
+        document.addEventListener('touchstart', handleTouchStart, false);
+        document.addEventListener('touchmove', handleTouchMove, false);
+    
+        function handleTouchStart(event) {
+            startX = event.touches[0].pageX;
+        }
+    
+        function handleTouchMove(event) {
+            if (!startX) return;
+    
+            currentX = event.touches[0].pageX;
+    
+            let deltaX = currentX - startX;
+    
+            if (Math.abs(deltaX) > threshold) {
+                if (deltaX > 0) {
+                    showView('view2');
+                } else {
+                    showView('view1');
+                }
+                startX = null;
+            }
+        }
+    
+        function showView(viewId) {
+            const views = document.querySelectorAll('.view');
+            views.forEach(view => {
+                if (view.id === viewId) {
+                    view.classList.remove('invisible');
+                    view.classList.add('visible');
+                } else {
+                    view.classList.remove('visible');
+                    view.classList.add('invisible');
+                }
+            });
+        }
+    </script>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sunrise Bay Toastmasters</title>
+        
+        <style>
+            /* Add your CSS styles here */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .content {
+                padding: 20px;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px 0;
+                border-top: 1px solid #ccc; /* Add border on top */
+            }
+            .bottom-nav button {
+                color: #333; /* Change text color */
+                text-decoration: none;
+                padding: 10px;
+                margin: 10px;
+                /* Add border between buttons */
+                display: flex;
+                background-color: #DEE2E1;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 25%; /* Equal width for each button */
+                box-sizing: border-box; /* Include padding in the width calculation */
+            }
+            .bottom-nav a:last-child {
+                border-right: none; /* Remove border on last button */
+            }
+            .bottom-nav img {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 5px; /* Add spacing between icon and text */
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
+                <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+            </div>
+            <div  style="display: none; background-color: bisque;"  id="feedbackView" style="height: 100vh;  width: 100%;">
+                <iframe src="mainViews/feedbackView.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+            <div style="display: none; background-color: aqua;"  id="toolsView"  style="height: 100vh;  width: 100%;">
+                <iframe src="mainViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
+            </div>
+            <div style="display: none; background-color: red;"  id="profileView"  style="height: 100vh; width: 100%;">
+                <iframe src="mainViews/profileView.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+            
+        </div>
+        
+
+        <div class="bottom-nav" style="margin-top: 30px;">
+            <button onclick="changeTo(0)">
+                <img src="assets/calendar.png" alt="Calendar Icon">
+                Calendar
+            </button>
+            <button onclick="changeTo(1)">
+                <img src="assets/pencil.png" alt="Feedback Icon">
+                Feedback
+            </button>
+            <button onclick="changeTo(2)">
+                <img src="assets/book.png" alt="Tools Icon">
+                Tools
+            </button>
+            <button onclick="changeTo(3)">
+                <img src="assets/person.png" alt="Profile Icon">
+                Profile
+            </button>
+        </div>
+
+        <script>
+            // Function to change iframe src
+            var calendarView = document.getElementById('calendarView');
+            var feedbackView = document.getElementById('feedbackView')
+            var toolsView = document.getElementById('toolsView')
+            var profileView = document.getElementById('profileView')
+
+            let views = [calendarView, feedbackView, toolsView, profileView]
+            
+            function changeTo(destination)
+            {
+                for(var i=0; i<views.length; i++)
+                {
+                    views[i].style.display = "none"
+                }
+                views[destination].style.display = "inline"
+                console.log(`view to be visible ${destination}`)
+            }
+         
+        </script>
+    </body>
+</html>

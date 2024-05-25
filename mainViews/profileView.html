@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mobile-Friendly Website</title>
+        <style>
+            /* Add your CSS styles here */
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+            }
+            .content {
+                padding: 20px;
+            }
+            .bottom-nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #fff;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                padding: 10px 0;
+                border-top: 1px solid #ccc; /* Add border on top */
+            }
+            .bottom-nav a {
+                color: #333; /* Change text color */
+                text-decoration: none;
+                padding: 10px;
+                border-right: 1px solid #ccc; /* Add border between buttons */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 25%; /* Equal width for each button */
+                box-sizing: border-box; /* Include padding in the width calculation */
+            }
+            .bottom-nav a:last-child {
+                border-right: none; /* Remove border on last button */
+            }
+            .bottom-nav img {
+                width: 24px;
+                height: 24px;
+                margin-bottom: 5px; /* Add spacing between icon and text */
+            }
+            .header{
+                position: absolute;
+                left: 0px;
+                right: 0px;
+                top: 0px;
+                display: flex;
+                justify-content: center; /* Center horizontally */
+                align-items: center; 
+                margin-bottom: 20px; 
+            }
+
+            .btn {
+            border: none;
+            background-color: inherit;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            display: inline-block;
+            }
+
+            .userImage{
+                display: block;
+                margin-top: 8vh; 
+                text-align: center;
+            }
+
+        </style>
+    </head>
+    <body>  
+        <div class="header">
+            <p style="display: inline-block; font-size: 24px;  margin-left: auto;">Your Toastmasters Experience</p>
+            <button class="btn" style="display: inline-block; background: none; margin-left: auto; padding-right: 8px;">edit</button>
+        </div>
+        <br>
+        <div class="userImage">
+            <img src="person.png" style="border-radius: 50%; height: 20v; width: 20vh;">
+            <h1 style="font-size: 24px;">Képler Siguineau</h1>
+            <h2 style="font-size: 16px;">Apps, businesses, cities</h2>
+            <p >A short bio of what I do. This is to get<br> 
+                People to understand me a little more</p>
+        </div>
+        <p style="text-align: start; padding-left: 8px;">Communication</p>
+        <div style="width: 80%; margin-right: auto; margin-left: auto; background-color: #ccc; height: 20vh;display: flex ">
+            <div class="leftDiv" style=" height: 100%;  width: 50%;">
+                <div class="communicationMedium" style="display: flex;">
+                    <img src="assets/phone.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p>954-514-239</p>
+                </div>
+                <div class="communicationMedium" style="display: flex;">
+                    <img src="assets/x.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p>@KeplerSiguineau</p>
+                </div>
+                <div class="communicationMedium" style="display: flex;">
+                    <img src="assets/instagram.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p>@KeplerSiguineau</p>
+                </div>
+            </div>
+            <div class="rightDiv" style=" height: 100%; width: 50%;"> 
+                <div class="communicationMedium" style="display: flex; overflow-y: hidden;">
+                    <img src="assets/mail.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p style="font-size: 1.5vh">buildingwithkepler@gmail.com</p>
+                </div>
+                <div class="communicationMedium" style="display: flex;">
+                    <img src="assets/facebook.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p>@KeplerSiguineau</p>
+                </div>
+                <div class="communicationMedium" style="display: flex;">
+                    <img src="assets/snap.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
+                    <p>@KeplerSiguineau</p>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: start; padding-left: 8px;">Speaking History</p>
+  
+        <div style="display: flexbox; overflow-y: scroll; width: 100%;">
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+            
+            <div style="width: 150px; display: inline-block; height: 160px; 
+            background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+                <p style="text-align: center; font-weight: bold;">4/20/69</p>
+                <img src="person.png" style="height: 30px; width: 40px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto"/>
+                <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+            </div>
+        </div>
+        <div style="width: 150px; display: inline-block; height: 160px; 
+        background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
+            <p style="text-align: center; font-weight: bold;">4/20/69</p>
+            <img src="person.png" style="height: 30px; width: 40px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto"/>
+            <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
+        </div>
+    </body>
+</html>
