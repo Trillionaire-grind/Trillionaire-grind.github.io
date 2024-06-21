@@ -3,7 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mobile-Friendly Website</title>
+        <title>Napels Sunrise Bay</title>
+        
         <style>
             /* Add your CSS styles here */
             body {
@@ -48,113 +49,534 @@
             }
 
             .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
             .row {
                 display: flex;
                 flex-direction: row;
             }
 
-            .image-container {
-            flex: 1;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            .imageContainer {
+                position: relative;
+                width: 30%;
             }
-            .text-container {
-                flex: 1;
-                padding: 0 20px; /* Adjust padding as needed */
-                box-sizing: border-box;
-            }
-            img {
-                max-width: 100%;
-                width: 10vh;
-                height: 10vh;
+
+            .image {
+                opacity: 1;
                 display: block;
-                margin: auto; 
+                width: 90%;
+                height: 40vh;
+                transition: .5s ease;
+                backface-visibility: hidden;
+            }
+
+            .middle {
+                transition: .5s ease;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+            .imageContainer:hover .image {
+                opacity: 0.3;
+            }
+
+            .imageContainer:hover .middle {
+                opacity: 1;
+            }
+
+            .text {
+                background-color: #7D2128;
+                color: white;
+                font-size: 16px;
+                padding: 16px 32px;
+            }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
+
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
             }
         </style>
         
     </head>
     <body>
-        <div style="display: flex;">
-            <h1 style="text-align: center; margin-left: auto; margin-right: 0%;">Our Speakers</h1>
-            <img src="assets/vote.jpg" style="margin-right: 0;">
-        </div>
-       
-        <div class="speaker">
+        <div id="speakerDiv" style="margin-bottom: 20vh;">
+            <div style="display: flex;">
+                <h1 style="text-align: center; margin-left: auto; margin-right: auto;">Our Speakers</h1>
+                <input type="image" src="assets/vote.jpg" style="height: 40px; width: 40px; margin-right:8px ; margin-top: 20px;" onclick="showSpeakers(false)"/>
+            </div>
 
+            <!-- The Modal -->
+            <div id="myModal"  class="modal">
+                <!-- Modal content -->
+                <div class="modal-content" style="width: 80%; height: 30vh;">
+                    <button class="close" onclick="closeModal()">&times;</button>
+                    <p id="modalName">Provide your feedback for </p>
+                    <p id="modalId" style="visibility: hidden;"></p>
+                    <textarea id="feedbackText" style="width: 100%; height: 10vh;"></textarea>
+                    <div style="display: flex; float: right; ">
+                        <button onclick="closeModal()" style="background: none;" >Cancel</button>
+                        <button id="feedbackBtn" onclick="addFeedback()"style="background: black; border-color: #fff; color: white; height: 30px; width: 60px;">Send</button>
+                    </div>
+                </div>
+            </div>
+   
+            <div class="imageContainer" style="display: flex; width: 90%; height: 30vh; margin-left: auto; margin-right: auto;">
+                <div>
+                    <img id="firstImg" src="assets/alex.jpeg" alt="Avatar" style="width: 20vh; height: 20vh; padding-top: auto; margin-bottom: auto">
+                    <p id="firstName">Napoleon Bonaparte</p>
+                    <div class="middle">
+                        <button id="firstSpeakerFeedbackBtn" class="text">Provide Feedback</button>
+                    </div>
+                </div>
+                <div class="text-container" style="display: inline; padding: 8px; ">
+                    <p id="firstBio">The Gods chose me to lead my nation to greatness.
+                        For I am the greatest of the great. That is why your modern heroes have studied me, 
+                        have used me as inpisiraton and have manifested my wisdom in their ears.  </p>
+                </div>
+            </div>
+            <div class="imageContainer" style="display: flex; width: 90%; height: 30vh; margin-left: auto; margin-right: auto;">
+                <div>
+                    <img id="secondImg" src="assets/khan.jpeg" alt="Avatar" style="width: 20vh; height: 20vh; padding-top: auto; margin-bottom: auto">
+                    <p id="secondName">Napoleon Bonaparte</p>
+                    <div class="middle">
+                        <button id="secondSpeakerFeedbackBtn"  class="text">Provide Feedback</button>
+                    </div>
+                </div>
+                <div class="text-container" style="display: inline; padding: 8px; ">
+                    <p id="secondBio">Genghis Khan, also known as Chinggis Khan, was the founder and 
+                        first khan of the Mongol Empire, which he ruled from 1206 
+                        until his death in 1227; it later became the largest contiguous empire in history.
+                    On my death bed I had the larggest empire. 800 years later, I still hold the title. I AM
+                the GREATEST</p>
+                </div>
+            </div>
+            <div class="imageContainer" style="display: flex; width: 90%; height: 30vh; margin-left: auto; margin-right: auto;">
+                <div>
+                   
+                    <img id="thirdImg" src="assets/napoleon.jpeg" alt="Avatar" style="width: 20vh; height: 20vh; padding-top: auto; margin-bottom: auto">
+                    <p id="thirdName">Napoleon Bonaparte</p>
+                    <div class="middle">
+                        <button id="thirdSpeakerFeedbackBtn"  class="text">Provide Feedback</button>
+                    </div>
+                </div>
+                <div class="text-container" style="display: inline; padding: 8px; ">
+                    <p id="thirdBio">Hi, I am Napoleon the leader of the Great French empire. I am the emperor. The protector of the 
+                        French empire. My greatness was inspired the greatness of Alexander and Caesar. All I did was copy
+                        what the greats did, then improved on it. 
+                    </p>
+                </div>
+            </div>
         </div>
-        <div class="container">
-            <div class="row"  style="padding-top: 8px;">
-                <div class="image-container">
-                    <img src="person.png" alt="Image">
-                </div>
-                <div class="text-container">
-                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
+        
+        <div id="voteDiv" style="display: none; margin-left: auto; margin-right: auto;">
+            <div style="display: flex;">
+                <p class="close" onclick="showSpeakers(true)" style="text-align: center; margin-right: auto; margin-left: 8px;">view Speakers</p>
+            </div>
+            <div style="display: flex;display: none; margin-left: auto;">
+                <button style="background: none; border: none; padding-left: 16px;" onclick="showSpeakers(true)">speakers</button>
+                <div style="display: flex;margin-right:auto ;">
+                    <p  style="height: 40px; margin-top: 20px; font-size: 5vh; text-align: center;">Cast Your Votes</p>
+                    <img src="assets/vote.jpg" style="height: 60px; width: 60px;margin-top: 20px; "/>
                 </div>
             </div>
-            <div class="row" style="padding-top: 8vh;">
-                <div class="image-container">
-                    <img src="person.png" alt="Image">
-                </div>
-                <div class="text-container">
-                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
-                </div>
-            </div>
-            <div class="row"  style="padding-top: 8vh;">
-                <div class="image-container">
-                    <img src="person.png" alt="Image">
-                </div>
-                <div class="text-container">
-                    <p>Your text goes here. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed accumsan, odio eget consectetur tincidunt, libero ligula aliquam nisi, nec luctus justo ex id eros.</p>
+            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
+                <p>Choose best speaker</p>
+                <div style="padding-top: 16px; padding-left: 16px;">
+                    <select id="bestSpeaker">  
+                        <option id="speaker_1"></option>  
+                        <option id="speaker_2"></option>  
+                        <option id="speaker_3"></option> 
+                    </select> 
                 </div>
             </div>
-        </div>
-    </body> 
-    <script>
-        let startX;
-        let currentX;
-        const threshold = 50; // Minimum swipe distance for visibility change
-    
-        document.addEventListener('touchstart', handleTouchStart, false);
-        document.addEventListener('touchmove', handleTouchMove, false);
-    
-        function handleTouchStart(event) {
-            startX = event.touches[0].pageX;
-        }
-    
-        function handleTouchMove(event) {
-            if (!startX) return;
-    
-            currentX = event.touches[0].pageX;
-    
-            let deltaX = currentX - startX;
-    
-            if (Math.abs(deltaX) > threshold) {
-                if (deltaX > 0) {
-                    showView('view2');
-                } else {
-                    showView('view1');
+            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
+                <p>Choose best Evaluator</p>
+                <div style="padding-top: 16px; padding-left: 16px;">
+                    <select id="bestEvaluator">  
+                        <option id="eval_1">Alex</option>  
+                        <option id="eval_2">Khan</option>  
+                        <option id="eval_3">Napoleon</option> 
+                    </select> 
+                </div>
+            </div>
+            <div style="margin-right: auto; margin-left: auto;">
+                <div style="width: 100%;display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
+                    <p>Choose Best Table Topics Speaker</p>
+                    <textarea style="margin-left: 8px;" id="bestTable" name="story" rows="1" cols="16">
+                    
+                    </textarea>
+                </div>
+            </div>
+            
+            <div style="padding-top: 16px">
+                <div style="width: 10vh;  margin-left: auto; margin-right: auto;">
+                    <button id="castVoteBtn" style="background-color: #000; " >
+                        <p style="color: white;">Cast Votes</p>
+                    </button>
+                </div>
+
+                <div style="width: 10vh; margin-left: auto; margin-right: auto;">
+                    <button  style="background: none; border: none;" onclick="showModal('test', 'id')">
+                        <p style="color: black;">Reveal Votes</p>
+                    </button>
+                </div>
+            </div>
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+            import { getAuth,  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+
+
+            let feedbackBtn = document.getElementById("feedbackBtn")
+            let castVoteBtn = document.getElementById("castVoteBtn")
+            let bestSpeaker = document.getElementById("bestSpeaker")
+            let bestEvaluator = document.getElementById("bestEvaluator")
+            let bestTable = document.getElementById("bestTable")
+
+            let firstSpeakerFeedbackBtn = document.getElementById("firstSpeakerFeedbackBtn")
+            let secondSpeakerFeedbackBtn = document.getElementById("secondSpeakerFeedbackBtn")
+            let thirdSpeakerFeedbackBtn = document.getElementById("thirdSpeakerFeedbackBtn")
+
+            
+
+            let idHolder = [];
+            let nameHolder = [];
+            //view elements ^
+
+            const firebaseConfig = {
+            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+            authDomain: "naples-sunrise-bay.firebaseapp.com",
+            projectId: "naples-sunrise-bay",
+            storageBucket: "naples-sunrise-bay.appspot.com",
+            messagingSenderId: "39028676552",
+            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+            measurementId: "G-L0QCNW7C6W"
+            };
+        
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const db = getFirestore(app);
+            const auth = getAuth(app)
+
+
+            const feedbackRef = collection(db, "feedback");
+            const voteRef = collection(db, "votes")
+            const usersRef = collection(db, "users")
+
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+            ];
+
+            function addFeedback()
+            {
+                let feedbackTextValue = document.getElementById("feedbackText").value
+                let id = document.getElementById("modalId").textContent
+
+                const date = new Date();
+
+                let day = ''
+                let month = ''
+                if(date.getDate() < 10){
+                    day = `0${date.getDate()}`
                 }
-                startX = null;
+                else{
+                    day = `${date.getDate()}`
+                }
+
+                if(date.getMonth() < 10){
+                    month = `0${date.getMonth()}`
+                }else{
+                    month = `${date.getMonth()}`
+                }
+
+                let displayedDate = `${date.getFullYear()}-${month}-${day}`
+
+                const docRef =  addDoc(collection(db, "users",`${id}`,"speeches",`${displayedDate}`,"feedback"), {
+                    feedback: `${feedbackTextValue}`
+                    }).then(() => {
+                        closeModal()
+                        alert('feedback give successfully')
+                    });
+                    console.log("Document written with ID: ", docRef.id);       
             }
-        }
-    
-        function showView(viewId) {
-            const views = document.querySelectorAll('.view');
-            views.forEach(view => {
-                if (view.id === viewId) {
-                    view.classList.remove('invisible');
-                    view.classList.add('visible');
-                } else {
-                    view.classList.remove('visible');
-                    view.classList.add('invisible');
+
+            async function fetchSpeakers()
+            {
+                const querySnapshot =  await getDocs(collection(db, "meeting/currentMeeting/speakers"));
+                querySnapshot.forEach((doc) => {
+                    console.log(`${doc.id} => ${doc.data().bio}`);
+                });
+            }
+
+            async function fetchEvaluators()
+            {
+                const docRef = doc(db, "meeting", "currentMeeting");
+                const docSnap = await getDoc(docRef);
+
+                let eval_1 = document.getElementById('eval_1')
+                let eval_2 = document.getElementById('eval_2')
+                let eval_3 = document.getElementById('eval_3')
+
+                let speaker_1 = document.getElementById("speaker_1")
+                let speaker_2 = document.getElementById("speaker_2")
+                let speaker_3 = document.getElementById("speaker_3")
+
+                if(docSnap.exists()) 
+                {
+                    console.log("evaluator data:", docSnap.data());
+                    let eval1 = docSnap.data().evaluator_1
+                    let eval2 = docSnap.data().evaluator_2
+                    let eval3 = docSnap.data().evaluator_3
+
+                    let firstName = document.getElementById("firstName")
+                    let firstBio = document.getElementById("firstBio")
+                    let firstImg = document.getElementById("firstImg")
+
+                    let secondName = document.getElementById("secondName")
+                    let secondBio = document.getElementById("secondBio")
+                    let secondImg = document.getElementById("secondImg")
+
+                    let thirdName = document.getElementById("thirdName")
+                    let thirdBio = document.getElementById("thirdBio")
+                    let thirdImg = document.getElementById("thirdImg")
+
+                    firstName.innerText = docSnap.data().speaker_1.name
+                    firstBio.innerText = docSnap.data().speaker_1.bio
+                    firstImg.src = docSnap.data().speaker_1.imgUrl
+
+                    secondName.innerText = docSnap.data().speaker_2.name
+                    secondBio.innerText = docSnap.data().speaker_2.bio
+                    secondImg.src = docSnap.data().speaker_2.imgUrl
+
+                    thirdName.innerText = docSnap.data().speaker_3.name
+                    thirdBio.innerText = docSnap.data().speaker_3.bio
+                    thirdImg.src = docSnap.data().speaker_3.imgUrl
+
+                    eval_1.innerText = eval1
+                    eval_2.innerText = eval2
+                    eval_3.innerText = eval3
+
+                    speaker_1.innerText = docSnap.data().speaker_1.name
+                    speaker_2.innerText = docSnap.data().speaker_2.name
+                    speaker_3.innerText = docSnap.data().speaker_3.name
+
+                    idHolder.push(docSnap.data().speaker_1.id)
+                    idHolder.push(docSnap.data().speaker_2.id)
+                    idHolder.push(docSnap.data().speaker_3.id)
+
+                    nameHolder.push(docSnap.data().speaker_1.name)
+                    nameHolder.push(docSnap.data().speaker_2.name)
+                    nameHolder.push(docSnap.data().speaker_3.name)
+                    
+                    console.log(`what is the idHolder ${idHolder}`)
+                } else{
+                    console.log("No such document!");
                 }
-            });
-        }
-    </script>
+            }
+
+            function castVote()
+            {
+                let user = auth.currentUser
+                let userId = user.uid
+
+                let bestSpeakerValue = bestSpeaker.options[bestSpeaker.selectedIndex].text
+                let bestEvaluatorValue = bestEvaluator.options[bestEvaluator.selectedIndex].text
+                let bestTableValue = bestTable.value
+
+                
+                console.log(`user and userId ${user} ${userId}`)
+                setDoc(doc(voteRef, userId), {
+                    bestSpeaker : `${bestSpeakerValue}`,
+                    bestEvaluator : `${bestEvaluatorValue}`,
+                    bestTable : `${bestTableValue}`
+                })
+                alert("your vote has been casted")
+            }
+
+
+            feedbackBtn.onclick = () => {
+                addFeedback()
+                
+            } 
+
+            castVoteBtn.onclick = () => {
+                castVote()
+            }
+
+            firstSpeakerFeedbackBtn.onclick = () => {
+                showModal(nameHolder[0], idHolder[0])
+                console.log(`the id should be the first ${idHolder[0]} and name ${nameHolder[0]}`)
+            }
+
+            secondSpeakerFeedbackBtn.onclick = () => {
+                showModal(nameHolder[1], idHolder[1])
+                console.log(`the id should be the second ${idHolder[1]} and name ${nameHolder[1]}`)
+            }
+
+            thirdSpeakerFeedbackBtn.onclick = () => {
+                showModal(nameHolder[2], idHolder[2])
+                console.log(`the id should be the third ${idHolder[2]} and name ${nameHolder[2]}`)
+            }
+
+            fetchSpeakers()
+            fetchEvaluators()
+        
+        </script>
+        <script>
+            let startX;
+            let currentX;
+            const threshold = 50; // Minimum swipe distance for visibility change
+        
+            let voteDiv = document.getElementById("voteDiv")
+            let speakerDiv = document.getElementById("speakerDiv")
+            let voteBtn = document.getElementById("voteBtn")
+            let speakerBtn = document.getElementById("speakerBtn")
+        
+            document.addEventListener('touchstart', handleTouchStart, false);
+            document.addEventListener('touchmove', handleTouchMove, false);
+
+            var modal = document.getElementById("myModal");
+            var modalName = document.getElementById('modalName')
+            var modalId = document.getElementById("modalId")
+
+            // Get the button that opens the modal
+            var btn = document.getElementById("myBtn");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks on the button, open the modal
+            btn.onclick = function() {
+                modal.style.display = "block";
+            }
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+            modal.style.display = "none";
+            }
+
+            function closeModal()
+            {
+                modal.style.display = "none"
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                }
+            }
+
+            function showModal(name, id){
+                modal.style.display = "block"
+                modalName.innerText = `provide feedback to ${name}`
+                modalId.innerText = id
+            }
+        
+            function handleTouchStart(event) {
+                startX = event.touches[0].pageX;
+            }
+
+            function handleTouchMove(event) {
+                if (!startX) return;
+        
+                currentX = event.touches[0].pageX;
+        
+                let deltaX = currentX - startX;
+        
+                if (Math.abs(deltaX) > threshold) {
+                    if (deltaX > 0) {
+                        showView('view2');
+                    } else {
+                        showView('view1');
+                    }
+                    startX = null;
+                }
+            }
+        
+            function showView(viewId) {
+                const views = document.querySelectorAll('.view');
+                views.forEach(view => {
+                    if (view.id === viewId) {
+                        view.classList.remove('invisible');
+                        view.classList.add('visible');
+                    } else {
+                        view.classList.remove('visible');
+                        view.classList.add('invisible');
+                    }
+                });
+            }
+    
+            function tester()
+            {
+                console.log("Dance")
+            }
+    
+            function showSpeakers(showSpeaker)
+            {
+                var voteDiv = document.getElementById("voteDiv")
+                var speakerDiv = document.getElementById("speakerDiv")
+                var voteBtn = document.getElementById("voteBtn")
+                var speakerBtn = document.getElementById("speakerBtn")
+                if(showSpeaker)
+                {
+                    speakerDiv.style.display = "inline"
+                    voteDiv.style.display = "none"
+                }else{
+                   
+                    speakerDiv.style.display = "none"
+                    voteDiv.style.display = "inline"
+                }
+            }
+
+            function showAlert()
+            {
+                alert("Your Vote Has Been Registered")
+            }
+        </script>
+    </body> 
+    
 </html>
