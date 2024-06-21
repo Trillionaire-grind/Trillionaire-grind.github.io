@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mobile-Friendly Website</title>
+        <title>Naples Sunrise Bay</title>
         <style>
             /* Add your CSS styles here */
             body {
@@ -56,20 +56,119 @@
                 height: 24px;
                 margin-bottom: 5px; /* Add spacing between icon and text */
             }
+
+            .profileContainer {
+            position: relative;
+            width: 50%;
+            }
+
+            .image {
+            opacity: 1;
+            display: block;
+            width: 100%;
+            height: auto;
+            transition: .5s ease;
+            backface-visibility: hidden;
+            }
+
+            .middle {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            text-align: center;
+            }
+
+            .profileContainer:hover .image {
+            opacity: 0.3;
+            }
+
+            .profileContainer:hover .middle {
+            opacity: 1;
+            }
+
+            .text {
+            background-color: #024165;
+            color: white;
+            font-size: 16px;
+            padding: 16px 32px;
+            }
+
+            /* Dropdown Button */
+            .dropbtn {
+            background-color: #fff;
+            color: #024165;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            }
+
+            /* The container <div> - needed to position the dropdown content */
+            .dropdown {
+            position: relative;
+            display: inline-block;
+            }
+
+            /* Dropdown Content (Hidden by Default) */
+            .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            }
+
+            .dropdown-content button {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            }
+
+            /* Change color of dropdown links on hover */
+            .dropdown-content a:hover {background-color: #ddd;}
+
+            /* Show the dropdown menu on hover */
+            .dropdown:hover .dropdown-content {display: block;}
+
+            /* Change the background color of the dropdown button when the dropdown content is shown */
+            .dropdown:hover .dropbtn {background-color: #7D2128; color: white;}
         </style>
     </head>
     <body>
 
         <div class="header">
             <!--<button class="arrow">&#8249;</button>-->
-            <button style="width: 40px; height: 40px; background: none; color: white;" onclick="getTotal()"> 
+            <!--<button id="leftBtn" style="width: 40px; height: 40px; background: none; color: white;" onclick="showRecap(1)"> 
                 &lt;
-            </button>
-            <h1 id="titleLbl" class="title">This Week's Meeting</h1>
-            <button id="rightBtn" style="width: 40px; height: 40px; background: none; color: white;visibility: hidden;"  class="arrow right-arrow">&gt;</button>
+            </button>-->
+            <div class="dropdown">
+                <button class="dropbtn">Past Meetings</button>
+                <div id="dropdown-content" class="dropdown-content">
+                    <!--This is where all the previous meetings go-->
+                </div>
+            </div>
+            <p id="titleLbl" class="title">This Week's Agenda</p>
+            <button id="rightBtn" style=" background-color: #fff; color: #024165; padding: 16px; 
+            font-size: 16px; border: none; visibility: hidden;"  onclick="showAgenda()">Curent Meeting</button>
         </div>
-        <div style="width: 100%; height: 100vh;">
-            <iframe id="frame" style="width: 100%; height: 100vh;" src="assets/seminar_free.pdf" frameborder="0"></iframe>
+        <div id="agendaView" style="width: 100%; height: 100vh;">
+            <iframe id="frame" style="width: 100%; height: 100vh;" src="assets/agenda.pdf" frameborder="0"></iframe>
+        </div>
+        <div id="recapView" style="width: 100%; height: 100vh; display: none;">
+            <iframe id="recapFrame" style="width: 100%; height: 100vh;" frameborder="0"></iframe>
         </div>
           <!--PDF Viewer-->
           <!--<iframe id="frame" style="visibility: hidden; height: fill; width: 100%;" src="https://css4.pub/2015/icelandic/dictionary.pdf">
@@ -78,22 +177,134 @@
          
     </body>
 
-    <script>
-        function getTotal()
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { collection, doc, setDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+
+        const firebaseConfig = {
+              apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+              authDomain: "naples-sunrise-bay.firebaseapp.com",
+              projectId: "naples-sunrise-bay",
+              storageBucket: "naples-sunrise-bay.appspot.com",
+              messagingSenderId: "39028676552",
+              appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+              measurementId: "G-L0QCNW7C6W"
+        };
+          
+            // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+
+        var agendaView = document.getElementById("agendaView")
+        var recapView = document.getElementById("recapView")
+        var recapFrame = document.getElementById("recapFrame")
+        var titleLbl = document.getElementById("titleLbl")
+        var menu = document.getElementById("dropdown-content")
+        var rightBtn = document.getElementById("rightBtn")
+
+        rightBtn.onclick = () => showAgenda()
+       
+        function showPreviousAgenda(url, date)
         {
-            console.log("What Is The Total")
 
             var rightBtn = document.getElementById("rightBtn")
-            var titleLbl = document.getElementById("titleLbl")
-            var frame = document.getElementById("frame")
-            var pdfViewer = document.getElementById("pdfViewer")
-
-            rightBtn.style.visibility = "visible"
-            titleLbl.innerText = "March 16, 2024"
-            frame.style.visibility = "visible"
-            pdfViewer.style.visibility = "visible"
-            frame.style.visibility = "hidden"
             
+            recapFrame.src = url 
+            rightBtn.style.visibility = "visible"
+            titleLbl.innerText = date 
+            recapView.style.display = "inline"
+            agendaView.style.display = "none"
+
         }
+
+        function showAgenda()
+        {
+            titleLbl.innerText = "This Week's Agenda"
+            agendaView.style.display = "inline"
+            recapView.style.display = "none"
+            rightBtn.style.visibility = "hidden"
+        }
+
+        async function fetchGuestSpeaker()
+        {
+            //const testSpeakerRef = collection(db, "meeting/currentMeeting/speakers")
+            
+            const querySnapshot =  await getDocs(collection(db, "meeting/currentMeeting/speakers"));
+            querySnapshot.forEach((doc) => {
+                console.log(`${doc.id} => ${doc.data().bio}`);
+            });
+        }
+
+        function showRecap(amount)
+        {
+            var titleLbl = document.getElementById("titleLbl")
+            var rightBtn = document.getElementById("rightBtn")
+            var agendaView = document.getElementById("agendaView")
+            var recapView = document.getElementById("recapView")
+            
+            rightBtn.style.visibility = "visible"
+            
+            titleLbl.innerText = "May 14, 2024"
+            agendaView.style.display = "none"
+            recapView.style.display = "inline"
+        }
+
+        async function getPreviousAgendas()
+        {
+            const agendasRef = collection(db, "pastMeetings")
+
+            const querySnapshot =  await getDocs(collection(db, "pastMeetings"));
+            querySnapshot.forEach((doc) => {
+                //console.log(`${doc.id} => ${doc.data().agenda}`);
+            });
+
+            const q = query(collection(db, "pastMeetings"), orderBy("date", "desc"));
+
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+            ];
+
+
+            const testSnapshot = await getDocs(q);
+            testSnapshot.forEach((doc) => 
+            {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data().date);
+                let seconds = doc.data().date.seconds
+
+                let time = seconds * 1000
+                let date = new Date(time)
+
+                let anchor = document.createElement('a')
+                let day = ""
+                let month = ""
+                if(date.getDate() < 10)
+                {
+                    day = `0${date.getDate()}`
+                }
+                else{
+                    day = `${date.getDate()}`
+                }
+                if(date.getMonth() < 10){
+                    month = `0${date.getMonth()}`
+                }
+                else{
+                    month = date.getMonth()
+                }
+       
+                let displayedDate = `${date.getFullYear()}-${month}-${day}`
+                anchor.innerHTML = displayedDate
+                anchor.style.cursor = "pointer"
+                anchor.onclick = () => showPreviousAgenda(doc.data().agenda,displayedDate)
+                menu.appendChild(anchor)
+                
+            });
+        }
+    
+        getPreviousAgendas()
     </script>
 </html>
