@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your TM Experience</title>
+    <style>
+        /* General reset and basic styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            /*background-color: #F0F1F3;*/
+            background-color: #DEE2E1;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .fab {
+            position: fixed;
+            bottom: 20px; /* Adjust as needed */
+            right: 50%;
+            background-color: #024165;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transform: translateX(50%);
+        }
+        /* Styling for icons in the bottom navigation bar */
+        footer{
+            background-color: white;
+        }
+        footer nav {
+            display: flex;
+            justify-content: space-around;
+          
+        }
+        footer nav a {
+            text-decoration: none;
+            color: #333;
+        }
+        footer nav a:hover {
+            color: #007bff;
+        }
+
+        .card-container {
+            display: flex;
+            width: 90%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 40%;
+            /*margin: 10;*/
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .card-content {
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group textarea {
+            width: calc(100% - 12px);
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group textarea {
+            resize: vertical;
+        }
+        .form-group .file-input {
+            display: block;
+            margin-top: 10px;
+        }
+        .form-group .file-input input[type="file"] {
+            display: none;
+        }
+        .form-group .file-input label {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .form-group .file-name {
+            margin-top: 5px;
+            font-size: 12px;
+        }
+        .form-group .social-input {
+            display: flex;
+            align-items: center;
+        }
+        .form-group .social-input label {
+            margin-right: 10px;
+        }
+        .form-group .social-input input[type="text"] {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .form-group .social-input span {
+            font-size: 12px;
+            color: #666;
+        }
+        .form-group .submit-btn {
+            text-align: center;
+        }
+        .form-group .submit-btn input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 20px 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+        const db = getFirestore(app);
+
+        let mainViewDiv = document.getElementById("mainViewDiv")
+
+        //views
+        var calendarView = document.getElementById('calendarView');
+        var feedbackView = document.getElementById('feedbackView')
+        var toolsView = document.getElementById('toolsView')
+        var adminView = document.getElementById('adminView')
+        var profileView = document.getElementById('profileView')
+
+        //nav buttons
+        let calendarBtn = document.getElementById("calendarBtn")
+        let feedbackBtn = document.getElementById("feedbackBtn")
+        let toolsBtn = document.getElementById("toolsBtn")
+        let adminBtn = document.getElementById("adminBtn")
+        let profileBtn = document.getElementById("profileBtn")
+
+        
+        function changeTo(destination)
+        {
+            let views = [calendarView, feedbackView, toolsView, adminView, profileView]
+            for(var i=0; i<views.length; i++)
+            {
+                views[i].style.display = "none"
+            }
+            views[destination].style.display = "inline"
+
+            console.log(`view to be visible ${destination}`)
+
+            selectedBtn(destination)
+        }
+
+        function showMainView()
+        {
+            let mainView = document.getElementById("mainViewDiv")
+            let registerView = document.getElementById("registerView")
+
+            mainView.style.display = 'inline'
+        }
+
+        showMainView()
+    
+    </script>
+    <div id="mainViewDiv" style="display: none;">
+        <div>
+            <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
+                <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+            </div>
+            <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
+                <iframe src="mainViews/newFeedback.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+            <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
+                <iframe src="mainViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
+            </div>
+            <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
+                <iframe src="mainViews/newAdmin.html" style="height: 100vh; width: 100%;" ></iframe>
+            </div>
+            <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
+                <iframe src="mainViews/newProfile.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+        </div>
+        <footer>
+            <nav>
+                <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="20px" width="20px"></a> 
+                <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/clipboard.svg" height="20px" width="20px"></a> 
+                <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="20px" width="20px"></a> 
+                <a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="20px" width="20px"></a>            
+                <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="20px" width="20px"></a>  
+                 
+            </nav>
+        </footer>
+    </div>
+    <div class="container" style="display: none;">
+        <h2>Registration Form</h2>
+        <form action="#" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="bio">Bio:</label>
+                <textarea id="bio" name="bio" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone" name="phone">
+            </div>
+            <div class="form-group">
+                <label for="text">Text:</label>
+                <input type="text" id="text" name="text">
+            </div>
+            <div class="form-group">
+                <label for="snapchat">Snapchat Username:</label>
+                <input type="text" id="snapchat" name="snapchat">
+            </div>
+            <div class="form-group">
+                <label for="x">X:</label>
+                <input type="text" id="x" name="x">
+            </div>
+            <div class="form-group">
+                <label for="ig">Instagram Username:</label>
+                <input type="text" id="ig" name="ig">
+            </div>
+            <div class="form-group">
+                <label for="facebook">Facebook Profile:</label>
+                <input type="text" id="facebook" name="facebook">
+            </div>
+            <div class="form-group">
+                <label for="profileImage">Profile Image:</label>
+                <div class="file-input">
+                    <input type="file" id="profileImage" name="profileImage">
+                    <label for="profileImage">Choose File</label>
+                    <span class="file-name"></span>
+                </div>
+            </div>
+            <div class="form-group submit-btn">
+                <input type="submit" value="Register">
+            </div>
+        </form>
+    </div>
+    <div style="margin-left: 5%; margin-right: 5%;">
+        <p style="text-align: left;">
+            Discover...<br>
+            <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
+                "How To Master<br> Public Speaking"
+            </span>
+            <span style="display: block;text-align: center; ">
+                <mark>With the TM Experience App</mark>
+            </span>
+        </p>
+        <iframe style="width: 90%; height: 30vh; margin-left: 5%; margin-right: 5%; background-color: red;"></iframe>
+        <p>
+            Do you want to be a better speaker?<br>
+            Do you want to be able to express yourself?<br>
+            Do you want to be able to help others<br>
+            <br>
+            Do you like receving feedback on your speeches?<br>
+            Do you like preparing throughly before a speeches?
+            Do you like improving your speeches?<br>
+            <br>
+            Do you want the #1 app to master speaking?
+        </p>
+        <a href="https://www.example.com" class="button">Yes, I want the<br>
+            TM Experience App </a>
+        <p>or</p>
+        <p style="cursor: pointer; text-align: center;" onclick="alert('haha')">Log In</p>
+    </div>
+   
+    <script>
+        // Function to change iframe src
+        var calendarView = document.getElementById('calendarView');
+        var feedbackView = document.getElementById('feedbackView')
+        var toolsView = document.getElementById('toolsView')
+        var adminView = document.getElementById('adminView')
+        var profileView = document.getElementById('profileView')
+
+        let views = [calendarView, feedbackView, toolsView, adminView, profileView]
+        
+        function changeTo(destination)
+        {
+            views.forEach((view, index) => {
+                if (index === destination) {
+                    view.style.display = 'inline';
+                } else {
+                    view.style.display = 'none';
+                }
+            });
+            selectedBtn(destination)
+        }
+
+        function selectedBtn(destination)
+        {
+            let calendarBtn = document.getElementById("calendarBtn")
+            let feedbackBtn = document.getElementById("feedbackBtn")
+            let toolsBtn = document.getElementById("toolsBtn")
+            let adminView = document.getElementById("adminView")
+            let profileBtn = document.getElementById("profileBtn")
+
+            calendarBtn.src = "mainViews/assets/calendar.svg"
+            feedbackBtn.src = "mainViews/assets/clipboard.svg"
+            toolsBtn.src = "mainViews/assets/tools.svg"
+            adminBtn.src = "mainViews/assets/admin.svg"
+            profileBtn.src = "mainViews/assets/person.svg"
+            
+            switch (destination){
+                case 0:
+                    calendarBtn.src = "mainViews/assets/calendar_b.svg"
+                    break
+                case 1:
+                    feedbackBtn.src = "mainViews/assets/clipboard_b.svg"
+                    break
+                case 2:
+                    toolsBtn.src = "mainViews/assets/tools_b.svg"
+                    break
+                case 3:
+                    adminBtn.src = "mainViews/assets/admin_b.svg"
+                    break
+                case 4:
+                    profileBtn.src = "mainViews/assets/person_b.svg"
+                    break
+            }
+        }
+        changeTo(0)
+    </script>
+</body>
+</html>
