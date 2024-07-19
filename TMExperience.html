@@ -164,22 +164,24 @@
 
         .button {
             display: inline-block;
-            padding: 20px 40px;
+          
             font-size: 24px;
             font-weight: bold;
             text-align: center;
-            background-color: #3498db;
+            background-color: #024165;
             color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
+            width: 100%;
             text-decoration: none;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease;
         }
         
         .button:hover {
-            background-color: #2980b9;
+            background-color: #fff;
+            color: #024165;
         }
     </style>
 </head>
@@ -213,6 +215,8 @@
         let adminBtn = document.getElementById("adminBtn")
         let profileBtn = document.getElementById("profileBtn")
 
+        //buttons
+        let logInBtn = document.getElementById("logInBtn")
         
         function changeTo(destination)
         {
@@ -236,10 +240,12 @@
             mainView.style.display = 'inline'
         }
 
-        showMainView()
+
+        
+       
     
     </script>
-    <div id="mainViewDiv" style="display: none;">
+    <div id="mainView" style="display: none;">
         <div>
             <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
                 <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
@@ -324,7 +330,7 @@
             </div>
         </form>
     </div>
-    <div style="margin-left: 5%; margin-right: 5%;">
+    <div id="welcomeView" style="margin-left: 5%; margin-right: 5%;">
         <p style="text-align: left;">
             Discover...<br>
             <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
@@ -334,7 +340,7 @@
                 <mark>With the TM Experience App</mark>
             </span>
         </p>
-        <iframe style="width: 90%; height: 30vh; margin-left: 5%; margin-right: 5%; background-color: red;"></iframe>
+        <iframe style="width: 90%; height: 30vh; margin-left: 5%; margin-right: 5%; background-color: white;"></iframe>
         <p>
             Do you want to be a better speaker?<br>
             Do you want to be able to express yourself?<br>
@@ -346,10 +352,10 @@
             <br>
             Do you want the #1 app to master speaking?
         </p>
-        <a href="https://www.example.com" class="button">Yes, I want the<br>
+        <a style="padding: 8px;" href="https://www.example.com" class="button">Yes, I want the<br>
             TM Experience App </a>
         <p>or</p>
-        <p style="cursor: pointer; text-align: center;" onclick="alert('haha')">Log In</p>
+        <button id="logInBtn" style="cursor: pointer; border: none;background:none; margin-left:40%; font-size: 24px; color: #024165; font-weight: bold;">Log In</button>
     </div>
    
     <script>
@@ -361,6 +367,8 @@
         var profileView = document.getElementById('profileView')
 
         let views = [calendarView, feedbackView, toolsView, adminView, profileView]
+
+      
         
         function changeTo(destination)
         {
@@ -372,6 +380,21 @@
                 }
             });
             selectedBtn(destination)
+        }
+
+        function logIn()
+        {
+            let mainView = document.getElementById("mainView")
+            let welcomeView = document.getElementById("welcomeView")
+
+            welcomeView.style.display = 'none'
+            mainView.style.display = 'inline'
+        }
+
+        //showMainView()
+        logInBtn.onclick = () => {
+            alert('Welcome To The Protetype')
+            logIn()
         }
 
         function selectedBtn(destination)
@@ -407,6 +430,8 @@
             }
         }
         changeTo(0)
+
+        //logIn()
     </script>
 </body>
 </html>
