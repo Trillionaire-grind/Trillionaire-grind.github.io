@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liv Lakay</title>
+    <style>
+        /* General reset and basic styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            /*background-color: #F0F1F3;*/
+            background-color: #DEE2E1;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #f0f0f0;
+            text-align: center;
+            padding: 10px 0;
+        }
+        .fab {
+            position: fixed;
+            bottom: 20px; /* Adjust as needed */
+            right: 50%;
+            background-color: #024165;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 50px;
+            font-size: 24px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transform: translateX(50%);
+        }
+        /* Styling for icons in the bottom navigation bar */
+        footer{
+            background-color: white;
+        }
+        footer nav {
+            display: flex;
+            justify-content: space-around;
+          
+        }
+        footer nav a {
+            text-decoration: none;
+            color: #333;
+        }
+        footer nav a:hover {
+            color: #007bff;
+        }
+
+        .card-container {
+            display: flex;
+            width: 90%;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+        .card {
+            width: 40%;
+            /*margin: 10;*/
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+        .card-content {
+            padding: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                width: 100%;
+            }
+        }
+
+        /* Styles for the popup */
+        .popup {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scrolling if needed */
+            background-color: rgba(0,0,0,0.4); /* Black with opacity */
+        }
+
+        .popup-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* 80% width */
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    </style>
+    <script>
+        // Function to open the popup
+        function openPopup() {
+            document.getElementById('popup').style.display = 'block';
+        }
+
+        // Function to close the popup
+        function closePopup() {
+            document.getElementById('popup').style.display = 'none';
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <button onclick="openPopup()" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
+        padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
+    
+        <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
+       <!--This is the view of the speaker-->
+        <div style="height: 30vh; width: 90%; background-color: white; margin-left: auto; margin-right: auto; border-radius: 5%;">
+
+        </div>
+        <div>
+            <div style="display: flex;">
+                <button style="margin-left: 5%; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; background-color: #024165; color: white; border-radius: 50%; cursor: pointer;"> &larr;</button>
+                <div style="display: flex; margin-left: auto; margin-right: auto; margin-top: 8px;">
+                    <img src="assets/khan.jpeg" height="100px" width="50px">
+                    <img src="assets/alex.jpeg" height="100px" width="50px">
+                    <img src="assets/napoleon.jpeg" height="100px" width="50px">
+                </div>
+                <button style="margin-right: 5%; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; background-color: #024165; color: white; border-radius: 50%; cursor: pointer;"> &rarr; </button>
+            </div>
+            <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #024165; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
+                <button style="border: none; border-radius: 50%; background-color: white; height: 16px; width: 16px;;"></button>
+                <button style="border: none; border-radius: 50%; background-color: white; height: 16px; width: 16px; margin-left: auto; "></button>
+                <button style="border: none; border-radius: 50%; background-color: white; height: 16px; width: 16px; margin-left: auto;"></button>
+            </div>
+        </div>
+        <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
+            <p style="font-weight: bold; margin-top: 64px;">Napoleon Bonaparte</p>
+            <button style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
+        </div>
+        
+        <p style="margin-left: 5%; margin-right: 5%;">Napoleon Bonaparte, later known by his regnal name Napoleon I, 
+            was a French military and political leader who rose to prominence during the French 
+            Revolution and led a series of successful campaigns across Europe during the Revolutionary 
+            Wars and Napoleonic Wars from 1796 to 1815.</p>
+       
+    </div>
+
+
+    <!-- The popup dialog -->
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <span class="close" onclick="closePopup()">&times;</span>
+            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
+                <p>Choose best speaker</p>
+                <div style="padding-top: 16px; padding-left: 16px;">
+                    <select id="bestSpeaker">  
+                        <option id="speaker_1"></option>  
+                        <option id="speaker_2"></option>  
+                        <option id="speaker_3"></option> 
+                    </select> 
+                </div>
+            </div>
+            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
+                <p>Choose best Evaluator</p>
+                <div style="padding-top: 16px; padding-left: 16px; margin-right: 5%;">
+                    <select id="bestEvaluator">  
+                        <option id="eval_1">Alex</option>  
+                        <option id="eval_2">Khan</option>  
+                        <option id="eval_3">Napoleon</option> 
+                    </select> 
+                </div>
+            </div>
+            <div style="margin-right: auto; margin-left: auto; margin-right: 5%;">
+                <div style="width: 100%;display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
+                    <p>Choose Best Table Topics Speaker</p>
+                    <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
+                    
+                    </textarea>
+                </div>
+            </div>
+            <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
+                <button id="castVoteBtn" style="background-color: #024165; color: white; 
+                cursor: pointer; float: right; margin-right: auto;" > Cast Votes</button>
+               
+            </div>
+        </div>
+    </div>
+   
+    
+    <footer>
+        <nav>
+            <a style="cursor: pointer;" onclick="alert('worked?')"> <img src="assets/calendar_b.svg" height="20px" width="20px"></a>            
+            <a href="#"><img src="assets/clipboard.svg" height="20px" width="20px"></a> 
+            <a href="#"><img src="assets/tools.svg" height="20px" width="20px"></a> 
+            <a href="#"><img src="assets/admin.svg" height="20px" width="20px"></a>            
+            <a href="#"><img src="assets/person.svg" height="20px" width="20px"></a>  
+             
+        </nav>
+
+    </footer>
+</body>
+</html>
