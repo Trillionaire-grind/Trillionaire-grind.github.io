@@ -66,7 +66,7 @@
     </head>
     <body style="margin-bottom: 30vh;">
         <h1 id="titleTV" style="text-align: center; padding-left: 8px; font-size: 5vw;"></h1>
-        <div style="display: flex; margin-left: 80%; width: 90%;  margin-top: 8px;">
+        <div style="display: flex; margin-left: 80%;   margin-top: 8px;">
             <p id="pathTV"> </p>
             <p id="dateTV"></p>
         </div>
@@ -74,7 +74,7 @@
             <iframe style="width: 60%; margin-left: auto; margin-right: auto;text-align: center; background-color: #333;" height="80%"></iframe>
         </div>
       
-        <p id="awardTV" style="text-align: center;">Won Best Speaker</p>
+        <p id="pathTV" style="text-align: center;"></p>
         
         <!--<div class="evaluatorView">
             <div class="evaluatorName" style="display: flex; border:1px solid black;">
@@ -92,7 +92,7 @@
                 <button style="display: inline;margin-left: auto; padding-top: 8px;" id="feedbackBtn" class="button" onclick="minimizeFeedback()">-</button>
             </div>
             <div class="window">
-                <div id="feedbackText" class="evaluationText">  
+                <div style="visibility: visible;" class="evaluationText" id="feedbackTV"  >  
                 </div>
             </div>
         </div>
@@ -126,6 +126,8 @@
             //use the userId and the date to get the speech
             //users/id/speeches.getDoc(date.data()){.title, .date, .path};
             //users/id/speeches/feedback.getDocs()
+
+
             async function getFeedback(userId, speechId)
             {
                 //to do this, we will have to fetch an Id from the URL that helps us get that speech 
@@ -133,18 +135,22 @@
                 let titleTV = document.getElementById("titleTV")
                 let pathTV = document.getElementById("pathTV")
                 let dateTV = document.getElementById("dateTV")
+                let feedbackTV = document.getElementById("feedbackTV")
 
-                alert(`this was called`)
 
-                const feedbackRef = collection(db, `users/${userId}/speeches/${speechId}/feedback`)
+                const feedbackRef = collection(db, `speeches/${speechId}/feedback`)
 
                 const feedbackSnapshot = await getDocs(feedbackRef)
-                const speechSnapshot = await getDoc(doc(db, `users/${userId}/speeches/${speechId}`))
+                const speechSnapshot = await getDoc(doc(db, `speeches/${speechId}`))
 
+                let name = ``
+                
                 feedbackSnapshot.forEach((doc) => {
-                    console.log(`send the info ${doc.data()}`)
+                    console.log(`feedback ${doc.data().feedback}`)
+                    name += doc.data().feedback
                     
                 })
+                feedbackTV.innerText = name
 
                 if (speechSnapshot.exists()) {
                     console.log("Document data:", speechSnapshot.data());
@@ -152,28 +158,111 @@
                     titleTV.textContent = `"${speechSnapshot.data().title}"`
                     dateTV.textContent = `${speechId}` 
 
-                    //pathTV.textContent = 
+                    pathTV.textContent = `${speechSnapshot.data().path}`
+                   
 
                 } else {
                     // docSnap.data() will be undefined in this case
                     console.log("No such document!");
-                    alert("this is not exist")
+                    alert("does not exist")
+              
                 }
             }
 
-            function getUser()
+            function getParameter(sParam)
             {
-                let user = auth.currentUser
-                if(user != null){
-                    getFeedback(user.uid, "2020-12-10")
-                }else{
-                    alert('its null')
-                    getFeedback('DxsaOr7Vy9gInmo6s7iDV2AFwMs1', "2020-12-10")
+                var sPageURL = window.location.search.substring(1);
+                var sURLVariables = sPageURL.split('&');
+                for (var i = 0; i < sURLVariables.length; i++) 
+                {
+                    var sParameterName = sURLVariables[i].split('=');
+                    console.log(`the value of parameter ${sParameterName}`)
+                    if (sParameterName[0] == sParam) 
+                    {
+                        return sParameterName[1];
+                    }
                 }
-            
             }
 
-            getUser()
+            function extractParamsFromUrl(url) {
+                // Extract the query string part from the URL
+                const speechId = url.split('?')[1];
+                const userId = url.split('?')[2];
+                console.log(`queryString${speechId} and  pool  ${userId}`)
+                
+                // Split the query string into individual key-value pairs
+                const speechParams = speechId.split('&');
+                const userParams = userId.split('&');
+                console.log(`params ${speechParams} ${userParams}`)
+                
+                // Initialize an object to store the extracted parameters
+                const extractedParams = {};
+                
+                // Loop through each key-value pair and extract the values
+                /*params.forEach(param => {
+                    const [key, value] = param.split('=');
+                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '));
+                });*/
+                
+                speechParams.forEach(param => {
+                    const [key, value] = param.split('=');
+                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+                })
+                userParams.forEach(param => {
+                    const [key, value] = param.split('=');
+                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+                })
+
+                
+                //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
+                // Return an array with values of 'speech' and 'user'
+                //return [extractedParams['speech'], extractedParams['user']];
+                getSpeech(extractedParams['speech'], extractedParams['user'])
+            }
+
+            //function 
+
+
+          
+
+            async function getSpeech(speechId,  userId)
+            {
+                let titleTV = document.getElementById("titleTV")
+                let pathTV = document.getElementById("pathTV")
+                let dateTV = document.getElementById("dateTV")
+                let feedbackTV = document.getElementById("feedbackTV")
+
+
+                const feedbackRef = collection(db, `users/${userId}/speeches/${speechId}/feedback`)
+                const speechSnapshot = await getDoc(doc(db, `users/${userId}/speeches/${speechId}`))
+
+                const feedbackSnapshot = await getDocs(feedbackRef)
+
+
+                if (speechSnapshot.exists()) {
+                    console.log("Document data:", speechSnapshot.data());
+
+                    titleTV.textContent = `"${speechSnapshot.data().title}"`
+                    dateTV.textContent = `${speechSnapshot.id}` 
+
+                    pathTV.textContent = `${speechSnapshot.data().path}`
+
+                    feedbackSnapshot.forEach((doc) => {
+                        console.log(`feedback ${doc.data().feedback}`)
+                        name += doc.data().feedback
+                    })
+
+                    feedbackTV.innerText = name
+
+                } else {
+                    // docSnap.data() will be undefined in this case
+                    console.log("No such document!");
+              
+                }
+            }
+
+            //const [speechValue, userValue] = 
+            extractParamsFromUrl(window.location.href);
 
         </script>
      
@@ -181,7 +270,6 @@
             function minimizeEvaluator(){
                 var evaluationBtn = document.getElementById("evaluationBtn")
                 var evaluationText = document.getElementById("evaluationText")
-                alert('called')
                 if(evaluationBtn.innerHTML == "-")
                 {
                     evaluationBtn.innerHTML = "+"
@@ -198,17 +286,17 @@
             }
             function minimizeFeedback(){
                 var feedbackBtn = document.getElementById("feedbackBtn")
-                var feedbackText = document.getElementById("feedbackText")
+                var feedbackText = document.getElementById("feedbackTV")
 
-                if(feedbackBtn.innerHTML == "-")
-                {
-                    feedbackBtn.innerHTML = "+"
-                    console.log("")
-                    feedbackText.display = 'hidden'
-                }
-                else{
-                    feedbackBtn.innerHTML = "-"
-                    console.log("")
+               
+                if (feedbackBtn.innerHTML == "-") {
+                    feedbackBtn.innerHTML = "+";
+                    console.log("should minimize");
+                    feedbackText.style.visibility = 'hidden'; // Correctly set visibility to 'hidden'
+                } else {
+                    feedbackBtn.innerHTML = "-";
+                    console.log("should maximize");
+                    feedbackText.style.visibility = 'visible'; // Ensure visibility is set to 'visible' when maximizing
                 }
                
             }
@@ -216,4 +304,3 @@
 
     </body>
 </html>
-
