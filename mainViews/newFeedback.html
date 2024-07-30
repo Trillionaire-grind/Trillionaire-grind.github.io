@@ -1,604 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Speakers</title>
-    <style>
-        /* General reset and basic styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            /*background-color: #F0F1F3;*/
-            background-color: #DEE2E1;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .fab {
-            position: fixed;
-            bottom: 20px; /* Adjust as needed */
-            right: 50%;
-            background-color: #024165;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
-            font-size: 24px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transform: translateX(50%);
-        }
-        /* Styling for icons in the bottom navigation bar */
-        footer{
-            background-color: white;
-        }
-        footer nav {
-            display: flex;
-            justify-content: space-around;
-          
-        }
-        footer nav a {
-            text-decoration: none;
-            color: #333;
-        }
-        footer nav a:hover {
-            color: #007bff;
-        }
-
-        .card-container {
-            display: flex;
-            width: 90%;
-            margin: 0 auto;
-            flex-wrap: wrap;
-        }
-        .card {
-            width: 40%;
-            /*margin: 10;*/
-            background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-        }
-        .card-content {
-            padding: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .card {
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Naples Sunrise Bay</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                /*background-color: #F0F1F3;*/
+                background-color: #DEE2E1;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
                 width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
             }
-        }
-
-        /* Styles for the popup */
-        .popup {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scrolling if needed */
-            background-color: rgba(0,0,0,0.4); /* Black with opacity */
-        }
-
-    
-        .popup-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* 80% width */
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .imageContainer:hover .middle {
-                opacity: 1;
-        }
-
-        .middle {
-            transition: .5s ease;
-            opacity: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-
-        /* Modal Content/Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-        }
-
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .selectorBtn{
-            background-color: #024165;
-        }
-
-        .selectorBtn:hover{
-            background-color: #7D2128;
-        }
-
-    </style>
-    
-    <script>
-        // Function to open the popup
-        function openPopup() {
-            document.getElementById('popup').style.display = 'block';
-        }
-        //openPopup()
-        // Function to close the popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-
-        function openFeedbackDialog() {
-            document.getElementById('feedbackDialog').style.display = 'block'
-        }
-
-        function closeFeebackDialog()
-        {
-            document.getElementById('feedbackDialog').style.display = 'none'
-        } 
-
-     
-
-      
-    </script>
-</head>
-<body>
-    <div>
-        <button onclick="openPopup()" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
-        padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
-
-        <div id="myModal"  class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 80%; height: 30vh;">
-                <button class="close" onclick="closeModal()">&times;</button>
-                <p id="modalName">Provide your feedback for </p>
-                <p id="modalId" style="visibility: hidden;"></p>
-                <textarea id="feedbackText" style="width: 100%; height: 10vh;"></textarea>
-                <div style="display: flex; float: right; ">
-                    <button onclick="closeModal()" style="background: none;" >Cancel</button>
-                    <button id="feedbackBtn" onclick="addFeedback()"style="background: black; border-color: #fff; color: white; height: 30px; width: 60px;">Send</button>
-                </div>
-            </div>
-        </div>
-    
-        <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
-       <!--This is the view of the speaker-->
-        <div>
-            <div style="display: flex;">
-                <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; color: white; border-radius: 50%; cursor: pointer; "> &larr;</button>
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #024165;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
             
-                <div style="height: 30vh; width: 80%; background-color: white; border-radius: 5%; margin-left: auto; margin-right: auto; padding: 10px;">
-                    <img id="currentSpeakerImg" src="assets/khan.jpeg" width="100%" height="100%" style="background-color: #024165;  ">
-                </div>
-                <button class="selectorBtn" id="rightBtn" style="margin-right: 5%; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto;  color: white; border-radius: 50%; cursor: pointer; margin-left: 16px;" > &rarr; </button>
-            </div>
-            <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #fff; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
-                <button id="firstSpeakerSelector" style="border: none; border-radius: 50%; background-color: #7D2128; height: 16px; width: 16px;"></button>
-                <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
-                <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
-            </div>
-        </div>
-        <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
-            <p id="currentSpeakerName" style="font-weight: bold; margin-top: 64px;">Genghis Khan</p>
-            <button onclick="openFeedbackDialog()" style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
-        </div>
-        <div class="" style="display: flex; width: 90%; height: 30vh; margin-left: auto; margin-right: auto;">
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
 
-                <p id="currentSpeakerBio">Genghis Khan, also known as Chinggis Khan, was the founder and 
-                    first khan of the Mongol Empire, which he ruled from 1206 
-                    until his death in 1227; it later became the largest contiguous empire in history.
-                On my death bed I had the larggest empire. 800 years later, I still hold the title. I AM
-            the GREATEST</p>
-            </div>
-        </div>
-    </div>
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 40%;
+                /*margin: 10;*/
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
 
-
-    <!-- The vote popup dialog -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                <p>Choose best speaker</p>
-                <div style="padding-top: 16px; padding-left: 16px;">
-                    <select id="bestSpeaker">  
-                        <option id="firstSpeakerOption"></option>  
-                        <option id="secondSpeakerOption"></option>  
-                        <option id="thirdSpeakerOption"></option> 
-                    </select> 
-                </div>
-            </div>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                <p>Choose best Evaluator</p>
-                <div style="padding-top: 16px; padding-left: 16px; margin-right: 5%;">
-                    <select id="bestEvaluator">  
-                        <option id="firstEval">Alex</option>  
-                        <option id="secondEval">Khan</option>  
-                        <option id="thirdEval">Napoleon</option> 
-                    </select> 
-                </div>
-            </div>
-            <div style="margin-right: auto; margin-left: auto; margin-right: 5%;">
-                <div style="width: 100%;display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                    <p>Choose Best Table Topics Speaker</p>
-                    <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
-                    
-                    </textarea>
-                </div>
-            </div>
-            <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                <button id="castVoteBtn" style="background-color: #024165; color: white; 
-                cursor: pointer; float: right; margin-right: auto;" > Cast Votes</button>
-               
-            </div>
-        </div>
-    </div>
-
-    <!-- The feedback popup dialog -->
-    <!--<div id="feedbackDialog" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closeFeebackDialog()">&times;</span>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                <p>Leave Feedback</p>
-                <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
-                    
-                </textarea>
-                <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                    <button id="giveFeedbackBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: auto;" > Give Feedback</button>
-                </div>
-        </div>
-    </div>-->
-    <div id="feedbackDialog" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closeFeebackDialog()">&times;</span>
-            <p id="feedbackId" style="visibility: hidden;"></p>
-
-            <div style="margin-top: 16px;">
-                <label style="margin-bottom: 16px; display: block;">Leave Feedback</label>
-                <div style=" align-items: center;">
-                    <textarea id="feedbackTV" name="story" rows="4" style="flex: 1; width: 95%; min-width: 100px; height: 100px; margin-right: 16px;"></textarea>
-                </div>
-                <button id="leaveFeedbackBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: 5%; width: 100px; height: 40px; margin-bottom: 16px;" > Leave Feedback</button>
-                <br>
-                <br>
-            </div>
-        </div>
-    </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth,  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-
-
-        let feedbackBtn = document.getElementById("feedbackBtn")
-        let castVoteBtn = document.getElementById("castVoteBtn")
-        let bestSpeaker = document.getElementById("bestSpeaker")
-        let bestEvaluator = document.getElementById("bestEvaluator")
-        let bestTable = document.getElementById("bestTable")
-
-        let firstSpeakerFeedbackBtn = document.getElementById("firstSpeakerFeedbackBtn")
-        let secondSpeakerFeedbackBtn = document.getElementById("secondSpeakerFeedbackBtn")
-        let thirdSpeakerFeedbackBtn = document.getElementById("thirdSpeakerFeedbackBtn")
-
-        let firstSpeakerImg = document.getElementById('firstSpeakerImg')
-        let secondSpeakerImg = document.getElementById('secondSpeakerImg')
-        let thirdSpeakerImg = document.getElementById('thirdSpeakerImg')
-
-        let idHolder = [];
-        let nameHolder = [];
-        let speakerHolder = [];
-        let evaluatorHolder = [];
-
-
-        let index = 0;
-        let speakers = [];
-        //view elements ^
-
-        //definently not safe to share 
-        const firebaseConfig = {
-        apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-        authDomain: "naples-sunrise-bay.firebaseapp.com",
-        projectId: "naples-sunrise-bay",
-        storageBucket: "naples-sunrise-bay.appspot.com",
-        messagingSenderId: "39028676552",
-        appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-        measurementId: "G-L0QCNW7C6W"
-        };
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+        
+    </head>
+    <body>
+        <header>
+            <p style="font-size: 26px; padding-left: 5%;">Hello <br><span id="nameTV" style="font-size: 32px; font-weight: bold;  color: #024165;">Michael</span></p>
+        </header>
     
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-        const auth = getAuth(app)
+
+        <p style="margin-left: 5%; font-weight: bold;">Your Bio</p>
+        <div style="width: 90; background-color: white; margin-left: 5%; margin-right: 5%;  border-radius: 6px; display: flex;">
+            <img src="assets/alex.jpeg" id="profileImage" height="60px" width="50px" style="margin-top: auto; margin-bottom: auto; margin-left: 10px;">
+            <div style="margin: auto; margin-bottom: auto; margin-left: 4%;">
+                <p style="font-size: 16px; font-weight: bold;">I am...<br>
+                    <p id="bioTV"> </p>
+            </div>
+        </div>
+        <p style="font-weight: bold; margin-left: 5%;">Your Speeches</p>
+        <!--<div class="cardView" style="display: flex; width: 90%; margin-left: 5%; margin-right: 5%; ">
+            <div class="card">
+                <div class="card-content">
+                    <p style="font-weight: bold; text-align: center;">2021-03-12<br><span style="font-size: 12px;">My Ice Breaker</span></p>
+                </div>
+            </div>
+            <div class="card" style="margin-left: 10%; float: right">
+                <div class="card-content">
+                    <p style="font-weight: bold; text-align: center;">2022-01-10<br><span style="font-size: 12px;">How To Dance</span></p>
+                </div>
+            </div>
+        </div>-->
+        <div style="margin-bottom: 20vh;">
+            <!--<div id="speechesDiv" style="display: flexbox; overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
+            
+            </div>-->
+            <div id="speechesDiv" style="display: flex; flex-wrap: wrap; justify-content: left;  overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
+
+            </div>
+        </div>
+        <script type="module">
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+            import { getStorage, ref} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
 
 
-        const feedbackRef = collection(db, "feedback");
-        const voteRef = collection(db, "votes")
-        const usersRef = collection(db, "users")
+            const firebaseConfig = {
+            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+            authDomain: "naples-sunrise-bay.firebaseapp.com",
+            projectId: "naples-sunrise-bay",
+            storageBucket: "naples-sunrise-bay.appspot.com",
+            messagingSenderId: "39028676552",
+            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+            measurementId: "G-L0QCNW7C6W"
+            };
 
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-        ];
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app)
+            const db = getFirestore(app);
 
-        function addFeedback()
-        {
-            let feedbackTV = document.getElementById("feedbackTV")
-            let id = document.getElementById("modalId").textContent
+            function getUser() {
+            const auth = getAuth();
+            var uid = 0;
 
-            let feedbackValue = feedbackTV.value
-
-            id = speakers[index].id
-
-            const date = new Date();
-
-            let day = ''
-            let month = ''
-            if(date.getDate() < 10){
-                day = `0${date.getDate()}`
-            }
-            else{
-                day = `${date.getDate()}`
-            }
-
-            if(date.getMonth() < 10){
-                month = `0${date.getMonth()}`
-            }else{
-                month = `${date.getMonth()}`
-            }
-
-            let displayedDate = `${date.getFullYear()}-${month}-${day}`
-
-            const docRef =  addDoc(collection(db, "users",`${id}`,"speeches",`${displayedDate}`,"feedback"), {
-                feedback: `${feedbackTV}`
-                }).then(() => {
-                    alert('feedback given successfully')
-                    feedbackTV.value = ""
-                    closeFeebackDialog()
-                   
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        uid = user.uid;
+                        fetchUserInfo(uid)
+                        fetchSpeeches(uid)
+                        // You can perform further actions with the user object here
+                    } else {
+                        // User is signed out
+                        alert('No user signed in');
+                    }
                 });
-        }
-
-      
-
-        async function theSpeakers(){
-            const docSnap = await getDoc(doc(db, `meeting/currentMeeting`))
-
-            let firstEval = document.getElementById("firstEval")
-            let secondEval = document.getElementById("secondEval")
-            let thirdEval = document.getElementById("thirdEval")
-
-            let firstSpeakerOption = document.getElementById("firstSpeakerOption")
-            let secondSpeakerOption = document.getElementById("secondSpeakerOption")
-            let thirdSpeakerOption = document.getElementById("thirdSpeakerOption")
-            if(docSnap.exists()){
-                
-
-                console.log(`first Eval ${firstEval}`)
-
-                getSpeaker(firstSpeakerOption, docSnap.data().first_speaker)
-                getSpeaker(secondSpeakerOption,docSnap.data().second_speaker)
-                getSpeaker(thirdSpeakerOption,docSnap.data().third_speaker)
-
-                firstEval.value = docSnap.data().first_evaluator
-                firstEval.innerText = docSnap.data().first_evaluator
-                //
-                secondEval.value = docSnap.data().second_evaluator
-                secondEval.innerText = docSnap.data().second_evaluator
-                //
-                thirdEval.value = docSnap.data().third_evaluator
-                thirdEval.innerText = docSnap.data().third_evaluator
-
-
-            }else{
-                alert(`docSnap does not exist`)
             }
-        }
 
-        async function getSpeaker(speakerOption, id)
-        {
-            const docSnap = await getDoc(doc(db, `users/${id}`))
-            console.log(`what is the id ${id}`)
-        
-            if(docSnap.exists())
+            
+            function openIndividualSpeech(speechId, uid)
             {
-                let speaker = {};
-                speaker.name = docSnap.data().name
-                speaker.imageUrl = docSnap.data().imageUrl
-                speaker.bio = docSnap.data().bio
-                speaker.id = id
-                speakers.push(speaker)
-                speakerOption.innerText = docSnap.data().name
-                //alert('ok')
-                setSpeaker(0)
-            }else{
-                //alert(`there was an issue in FBV-363`)
-            }
-        }
-
-        function setSpeaker(index){
-            //alert('set')
-
-            let speaker = speakers[index]
-            
-            let currentSpeakerName = document.getElementById("currentSpeakerName")
-            let currentSpeakerBio = document.getElementById("currentSpeakerBio")
-            let currentSpeakerImg = document.getElementById("currentSpeakerImg")
-
-            currentSpeakerName.innerText = speaker.name
-            currentSpeakerBio.innerText = speaker.bio 
-            currentSpeakerImg.src = speaker.imageUrl
-        }
-        
-        function castVote()
-        {
-            let user = auth.currentUser
-            let userId = user.uid
-
-            let bestSpeakerValue = bestSpeaker.options[bestSpeaker.selectedIndex].text
-            let bestEvaluatorValue = bestEvaluator.options[bestEvaluator.selectedIndex].text
-            let bestTableValue = bestTable.value
-
-            
-            setDoc(doc(voteRef, userId), {
-                bestSpeaker : `${bestSpeakerValue}`,
-                bestEvaluator : `${bestEvaluatorValue}`,
-                bestTable : `${bestTableValue}`
-            })
-            alert("your vote has been casted")
-            //close
-            closePopup()
-        }
-
-        feedbackBtn.onclick = () => {
-            addFeedback()
-            
-        } 
-
-        castVoteBtn.onclick = () => {
-            castVote()
-        }
-        /*->
-        firstSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[0], idHolder[0])
-            console.log(`the id should be the first ${idHolder[0]} and name ${nameHolder[0]}`)
-        }
-
-        secondSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[1], idHolder[1])
-            console.log(`the id should be the second ${idHolder[1]} and name ${nameHolder[1]}`)
-        }
-
-        thirdSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[2], idHolder[2])
-            console.log(`the id should be the third ${idHolder[2]} and name ${nameHolder[2]}`)
-        }*/
-
-        let rightBtn = document.getElementById("rightBtn")
-        let leftBtn = document.getElementById("leftBtn")
-
-        rightBtn.onclick = () => {
-            updateSpeaker(1)
-        }
-
-        leftBtn.onclick = () => {
-            updateSpeaker(-1)
-        }
-
-        function updateSpeaker(positionChange)
-        {
-            if(index == 0 && positionChange == -1){
-                index = 2;
-            }else if(index == 2 && positionChange == 1){
-                index = 0;
-            }else{
-                index = (index + positionChange)
+                let url = `./individualSpeech.html?speech=${speechId}?user=${uid}`
+                //let e
+                window.open(url, '_blank').focus();
             }
 
-            showSelectedSpeaker(index)
-        }
+            async function fetchUserInfo(userId)
+            {
+                const docRef = doc(db, "users", userId)
+                const docSnap = await getDoc(docRef)
 
-        function showSelectedSpeaker(index)
-        {
-            let firstSpeakerSelector = document.getElementById("firstSpeakerSelector")
-            let secondSpeakerSelector = document.getElementById("secondSpeakerSelector")
-            let thirdSpeakerSelector = document.getElementById("thirdSpeakerSelector")
+                if(docSnap.exists()){
+                    setData(docSnap.data())
+                }else{
+                    alert(`PV: there was an error ${userId}`)
+                }
+            }
 
-            let views = [firstSpeakerSelector, secondSpeakerSelector, thirdSpeakerSelector]
+            function setData(data)
+            {
+                let nameTV = document.getElementById("nameTV")
+                //let phoneTV = document.getElementById("phoneTV")
+                let bioTV = document.getElementById("bioTV")
+                //let xTV = document.getElementById("xTV")
+                //let instagramTV = document.getElementById("instagramTV")
+                //let facebookTV = document.getElementById("facebookTV")
+                //let emailTV = document.getElementById("emailTV")
+                //let snapTV = document.getElementById("snapTV")
 
-            firstSpeakerSelector.style.backgroundColor = '#024165'
-            secondSpeakerSelector.style.backgroundColor = '#024165'
-            thirdSpeakerSelector.style.backgroundColor = '#024165'
-
-            views[index].style.backgroundColor = '#7D2128'
-            setSpeaker(index);
-        }
-
-
-        //fetchSpeakers()
-       // getSpeaker("DxsaOr7Vy9gInmo6s7iDV2AFwMs1")
-        theSpeakers()
-
-        let leaveFeedbackBtn = document.getElementById("leaveFeedbackBtn")
-        let feedbackTV = document.getElementById("feedbackTV")
-        let feedbackDialog = document.getElementById("feedbackDialog")
+                let profileImage = document.getElementById("profileImage")
 
 
+                //alert(`bio ${data.bio}`)
 
-        leaveFeedbackBtn.onclick = () => {
-            feedbackDialog.style.display = 'none'
-            addFeedback()
-            
-        }
-    </script>
+                nameTV.innerText = data.name
+                bioTV.innerText = data.bio
+                /*phoneTV.innerText = data.phone
+           
+                xTV.innerText = data.x
+                instagramTV.innerText = data.instagram
+                facebookTV.innerText = data.facebook
+                emailTV.innerText = data.email
+                snapTV.innerText = data.snapchat*/
+                profileImage.src = data.imageUrl
+
+            }
+
+            async function fetchSpeeches(userId) {
+                let speechesDiv = document.getElementById("speechesDiv");
+                speechesDiv.innerHTML = ''; // Clear previous content if any
+                try {
+                    const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
+                    console.log("Query snapshot size:", querySnapshot.size);
+                    
+
+                    querySnapshot.forEach((doc) => {
+                        
+                        speechesDiv.appendChild(createSpeechDiv(doc.id, doc.data().title, userId));
+                    });
+
+                    console.log("Speeches fetched successfully.");
+                } catch (error) {
+                    console.error("Error fetching speeches:", error);
+                    // Optionally, display an error message in speechesDiv
+                    speechesDiv.innerText = "Failed to fetch speeches. Please try again later.";
+                }
+            }
+
+
+            function createSpeechDiv(id, title, userId) {
+                let div = document.createElement('div');
+                div.className = 'speechCard';
+                div.dataset.speechId = id;
+                div.innerHTML = `
+                    <div style="width: 150px; display: inline-block; height: 160px; cursor: pointer;
+                                background-color: #fff; margin: 10px; border-radius: 10%;"
+                        onmouseover="this.style.background='#7D2128';" 
+                        onmouseout="this.style.background='#fff';"
+                        id="speechCard";
+                    >
+                        <p style="text-align: center; font-weight: bold;">${id}</p>
+                        <p style="text-align: center; font-size: 16px;">${title}</p>
+                    </div>`;
+                    div.addEventListener('click', () => {
+                        openIndividualSpeech(id, userId);
+                    });
+
+                return div;
+            }
+
+
+            getUser()
+            //fetchSpeeches("7XUaLIrBJAZQWaIuoT013j6wJ2H2")
+
+        </script>
     
-    
-</body>
+    </body>
 </html>
