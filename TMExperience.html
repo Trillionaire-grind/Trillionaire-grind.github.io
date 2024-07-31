@@ -1,823 +1,833 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your TM Experience</title>
-    <style>
-        /* General reset and basic styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            /*background-color: #F0F1F3;*/
-            background-color: #DEE2E1;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .fab {
-            position: fixed;
-            bottom: 20px; /* Adjust as needed */
-            right: 50%;
-            background-color: #024165;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
-            font-size: 24px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transform: translateX(50%);
-        }
-        /* Styling for icons in the bottom navigation bar */
-        footer{
-            background-color: white;
-        }
-        footer nav {
-            display: flex;
-            justify-content: space-around;
-          
-        }
-        footer nav a {
-            text-decoration: none;
-            color: #333;
-        }
-        footer nav a:hover {
-            color: #007bff;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your TM Experience</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                /*background-color: #F0F1F3;*/
+                background-color: #DEE2E1;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #024165;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
 
-        .card-container {
-            display: flex;
-            width: 90%;
-            margin: 0 auto;
-            flex-wrap: wrap;
-        }
-        .card {
-            width: 40%;
-            /*margin: 10;*/
-            background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-        }
-        .card-content {
-            padding: 10px;
-        }
-
-        @media (max-width: 768px) {
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
             .card {
+                width: 40%;
+                /*margin: 10;*/
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group input[type="password"],
+            .form-group textarea {
+                width: calc(100% - 12px);
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            .form-group textarea {
+                resize: vertical;
+            }
+            .form-group .file-input {
+                display: block;
+                margin-top: 10px;
+            }
+            .form-group .file-input input[type="file"] {
+                display: none;
+            }
+            .form-group .file-input label {
+                display: inline-block;
+                background-color: #007bff;
+                color: #fff;
+                padding: 8px 12px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .form-group .file-name {
+                margin-top: 5px;
+                font-size: 12px;
+            }
+            .form-group .social-input {
+                display: flex;
+                align-items: center;
+            }
+            .form-group .social-input label {
+                margin-right: 10px;
+            }
+            .form-group .social-input input[type="text"] {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            .form-group .social-input span {
+                font-size: 12px;
+                color: #666;
+            }
+            .form-group .submit-btn {
+                text-align: center;
+            }
+            .form-group .submit-btn input[type="submit"] {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .button {
+                display: inline-block;
+            
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
+                background-color: #024165;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                width: 100%;
+                text-decoration: none;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease;
+            }
+            
+            .button:hover {
+                background-color: #fff;
+                color: #024165;
+            }
+
+            .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+          
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .form-container label {
+                display: block;
+                text-align: left;
+                margin-bottom: 5px;
+                margin-left: 8px;
+            }
+
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="password"],
+            .form-container textarea,
+            .form-container input[type="tel"],
+            .form-container input[type="file"] {
+                width: calc(100% - 20px);
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-left: 8px;
+                
+            }
+
+            .form-container button {
+                padding: 12px 20px;
+                background-color: #024165;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-left: 8px;
+            }
+
+            .form-container button.secondary {
+                background-color: #008CBA;
+            }
+
+            .form-container button.danger {
+                background-color: #f44336;
+            }
+
+
+            @media (max-width: 600px) {
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="password"],
+            .form-container textarea,
+            .form-container input[type="tel"],
+            .form-container input[type="file"] {
                 width: 100%;
             }
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-        .form-group label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-group input[type="text"],
-        .form-group input[type="email"],
-        .form-group input[type="password"],
-        .form-group textarea {
-            width: calc(100% - 12px);
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group textarea {
-            resize: vertical;
-        }
-        .form-group .file-input {
-            display: block;
-            margin-top: 10px;
-        }
-        .form-group .file-input input[type="file"] {
-            display: none;
-        }
-        .form-group .file-input label {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        .form-group .file-name {
-            margin-top: 5px;
-            font-size: 12px;
-        }
-        .form-group .social-input {
-            display: flex;
-            align-items: center;
-        }
-        .form-group .social-input label {
-            margin-right: 10px;
-        }
-        .form-group .social-input input[type="text"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-        .form-group .social-input span {
-            font-size: 12px;
-            color: #666;
-        }
-        .form-group .submit-btn {
-            text-align: center;
-        }
-        .form-group .submit-btn input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .button {
-            display: inline-block;
-          
-            font-size: 24px;
-            font-weight: bold;
-            text-align: center;
-            background-color: #024165;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            width: 100%;
-            text-decoration: none;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
-        }
-        
-        .button:hover {
-            background-color: #fff;
-            color: #024165;
-        }
-
-        .form-container {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #fff;
-        border-radius: 8px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .form-container label {
-            display: block;
-            text-align: left;
-            margin-bottom: 5px;
-        }
-
-        .form-container input[type="text"],
-        .form-container input[type="email"],
-        .form-container input[type="password"],
-        .form-container textarea,
-        .form-container input[type="tel"],
-        .form-container input[type="file"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .form-container button {
-            padding: 12px 20px;
-            background-color: #024165;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .form-container button.secondary {
-            background-color: #008CBA;
-        }
-
-        .form-container button.danger {
-            background-color: #f44336;
-        }
-
-
-        @media (max-width: 600px) {
-        .form-container input[type="text"],
-        .form-container input[type="email"],
-        .form-container input[type="password"],
-        .form-container textarea,
-        .form-container input[type="tel"],
-        .form-container input[type="file"] {
-            width: 100%;
-        }
-        }
-
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
-
-        /* Modal Content/Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-        }
-
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            background-color: #024165;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
-
-        const firebaseConfig = {
-              apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-              authDomain: "naples-sunrise-bay.firebaseapp.com",
-              projectId: "naples-sunrise-bay",
-              storageBucket: "naples-sunrise-bay.appspot.com",
-              messagingSenderId: "39028676552",
-              appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-              measurementId: "G-L0QCNW7C6W"
-        };
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app)
-        const db = getFirestore(app);
-
-        let mainViewDiv = document.getElementById("mainViewDiv")
-
-        //views
-        var calendarView = document.getElementById('calendarView');
-        var feedbackView = document.getElementById('feedbackView')
-        var toolsView = document.getElementById('toolsView')
-        var adminView = document.getElementById('adminView')
-        var profileView = document.getElementById('profileView')
-
-        //nav buttons
-        let calendarBtn = document.getElementById("calendarBtn")
-        let feedbackBtn = document.getElementById("feedbackBtn")
-        let toolsBtn = document.getElementById("toolsBtn")
-        //let adminBtn = document.getElementById("adminBtn")
-        let profileBtn = document.getElementById("profileBtn")
-
-        //buttons
-        let logInBtn = document.getElementById("logInBtn")
-        
-        function changeTo(destination)
-        {
-            let views = [calendarView, feedbackView, toolsView, adminView, profileView]
-            for(var i=0; i<views.length; i++)
-            {
-                views[i].style.display = "none"
             }
-            views[destination].style.display = "inline"
 
-            console.log(`view to be visible ${destination}`)
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
 
-            selectedBtn(destination)
-        }
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
 
-        function showMainView()
-        {
-            let mainView = document.getElementById("mainViewDiv")
-            let registerView = document.getElementById("registerView")
-            let formContainer = document.getElementById("form-container")
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background-color: #024165;
+            }
 
-            mainView.style.display = 'inline'
-            registerView.style.display = 'none'
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+                authDomain: "naples-sunrise-bay.firebaseapp.com",
+                projectId: "naples-sunrise-bay",
+                storageBucket: "naples-sunrise-bay.appspot.com",
+                messagingSenderId: "39028676552",
+                appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+                measurementId: "G-L0QCNW7C6W"
+            };
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app)
+            const db = getFirestore(app);
+
+            let mainViewDiv = document.getElementById("mainViewDiv")
+
+            //views
+            var calendarView = document.getElementById('calendarView');
+            var feedbackView = document.getElementById('feedbackView')
+            var toolsView = document.getElementById('toolsView')
+            var adminView = document.getElementById('adminView')
+            var profileView = document.getElementById('profileView')
+
+            //nav buttons
+            let calendarBtn = document.getElementById("calendarBtn")
+            let feedbackBtn = document.getElementById("feedbackBtn")
+            let toolsBtn = document.getElementById("toolsBtn")
+            //let adminBtn = document.getElementById("adminBtn")
+            let profileBtn = document.getElementById("profileBtn")
+
+            //buttons
+            let logInBtn = document.getElementById("logInBtn")
             
-        }
-
-        function filledOut()
-        {
-            let name = document.getElementById("registerName").value
-            let email = document.getElementById("registerEmail").value
-            let password = document.getElementById("registerPassword").value
-
-            let bio = document.getElementById("registerBio").value
-            let phone = document.getElementById("registerPhone").value
-            let x = document.getElementById("registerX").value
-            let snapchat = document.getElementById("registerSnapchat").value
-            let ig = document.getElementById("registerIg").value
-            let facebook = document.getElementById("registerFacebook").value
-            let image = document.getElementById("image")
-
-            if(name.length < 1)
+            function changeTo(destination)
             {
-                return false;
-            }
-            if(email.length < 1)
-            {
-                return false;
-            }
-            if(password.length < 1)
-            {
-                return false;
-            }
-            if(bio.length < 1)
-            {
-                return false;
-            }
-            if(phone.length < 1)
-            {
-                return false;
-            }
-            if(x.length < 1)
-            {
-                return false;
-            }
-            if(snapchat.length < 1)
-            {
-                return false;
-            }
-            if(ig.length < 1)
-            {
-                return false;
-            }
-            if(facebook.length < 1)
-            {
-                return false;
-            }
-            if(image.files < 1)
-            {
-                return false;
-            }
-            return true
-        }
-
-        function createAccount()
-        {
-            let emailValue = document.getElementById('registerEmail').value
-            let passwordValue = document.getElementById('registerPassword').value
-
-            let file = document.getElementById("image").files[0]
-            createUserWithEmailAndPassword(auth, emailValue, passwordValue)
-            .then((userCredential) => {
-                const user = userCredential.user;
-                let id = user.uid;
-                if(id != null)
+                let views = [calendarView, feedbackView, toolsView, adminView, profileView]
+                for(var i=0; i<views.length; i++)
                 {
-                    uploadImage(file, id)
+                    views[i].style.display = "none"
                 }
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
-                // ..
-            });
-        }
+                views[destination].style.display = "inline"
 
-        function uploadImage(file, userId)
+                console.log(`view to be visible ${destination}`)
+
+                selectedBtn(destination)
+            }
+
+            function showMainView()
             {
-                const storage = getStorage();
-                const moutainsRef = ref(storage, `${userId}.jpg`)
+                let mainView = document.getElementById("mainViewDiv")
+                let registerView = document.getElementById("registerView")
+                let formContainer = document.getElementById("form-container")
 
+                mainView.style.display = 'inline'
+                registerView.style.display = 'none'
                 
-
-                uploadBytes(moutainsRef, file).then((snapshot) => {
-                    console.log('Uploaded a blob or file!');
-                    getDownloadURL(moutainsRef).then((downloadURL) => {
-                        console.log('File available at', downloadURL);
-                        createUser(userId, downloadURL)
-                        // Now you can use downloadURL as needed, for example, save it to Firestore
-                        // or display it to the user.
-                    }).catch((error) => {
-                        console.error('Error getting download URL', error);
-                        alert('Error getting download URL');
-                    });
-                });
             }
 
-        function createUser(userId, imageUrl)
-        {
-            const usersRef = collection(db, "users");
+            function filledOut()
+            {
+                let name = document.getElementById("registerName").value
+                let email = document.getElementById("registerEmail").value
+                let password = document.getElementById("registerPassword").value
 
-            let name = document.getElementById("registerName").value
-            let email = document.getElementById("registerEmail").value
-            let password = document.getElementById("registerPassword").value
+                let bio = document.getElementById("registerBio").value
+                let phone = document.getElementById("registerPhone").value
+                let x = document.getElementById("registerX").value
+                let snapchat = document.getElementById("registerSnapchat").value
+                let ig = document.getElementById("registerIg").value
+                let facebook = document.getElementById("registerFacebook").value
+                let image = document.getElementById("image")
 
-            let bio = document.getElementById("registerBio").value
-            let phone = document.getElementById("registerPhone").value
-            let x = document.getElementById("registerX").value
-            let snapchat = document.getElementById("registerSnapchat").value
-            let ig = document.getElementById("registerIg").value
-            let facebook = document.getElementById("registerFacebook").value
-
-
-
-            setDoc(doc(usersRef, userId), {
-                name: `${name}`, x: `${x}`, instagram: `${ig}`,
-                facebook: `${facebook}`, snapchat: `${snapchat}`,email: `${email}`,
-                phone: `${phone}`, bio:`${bio}`, imageUrl: `${imageUrl}`,speeches: [] }).then(()=>{
-                    alert("created account")
-                    //signIn(email, password)
-                    window.location.reload();
-                });
-        }
-
-        async function checkRole(userId)
-        {
-            const userRef = doc(db, "users", userId)
-
-            const docSnap = await getDoc(userRef);
-            if (docSnap.exists()) {
-                if(docSnap.data().role == 'admin'){
-                    alert(`admin user`)
-                    //let adminBtn = document.getElementById("adminBtn")
-                    //adminBtn.style.display = 'inline'
+                if(name.length < 1)
+                {
+                    return false;
                 }
-                showMainView()
-            } else {
-                console.log("No such document!");
+                if(email.length < 1)
+                {
+                    return false;
+                }
+                if(password.length < 1)
+                {
+                    return false;
+                }
+                if(bio.length < 1)
+                {
+                    return false;
+                }
+                if(phone.length < 1)
+                {
+                    return false;
+                }
+                if(x.length < 1)
+                {
+                    return false;
+                }
+                if(snapchat.length < 1)
+                {
+                    return false;
+                }
+                if(ig.length < 1)
+                {
+                    return false;
+                }
+                if(facebook.length < 1)
+                {
+                    return false;
+                }
+                if(image.files < 1)
+                {
+                    return false;
+                }
+                return true
             }
 
-        }
+            function createAccount()
+            {
+                let emailValue = document.getElementById('registerEmail').value
+                let passwordValue = document.getElementById('registerPassword').value
 
-        function signIn(email, password) {
-            signOut(auth).then(() => {
-                // Sign-out successful.
-                signInWithEmailAndPassword(auth, email, password)
+                let file = document.getElementById("image").files[0]
+                createUserWithEmailAndPassword(auth, emailValue, passwordValue)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    console.log(`User signed in: ${user.uid}`);
-                    alert("Welcome back!")
-                    checkRole(user.uid)
-                
-                    // Perform actions after successful sign-in
-                
+                    let id = user.uid;
+                    if(id != null)
+                    {
+                        uploadImage(file, id)
+                    }
+                    // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    console.error(`Sign-in error: ${errorCode} - ${errorMessage}`);
-                    alert(`Logged in failed ${errorMessage}`)
+                    //console.log(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
+                    // ..
                 });
-                    }).catch((error) => {
-                    // An error happened.
-            });
-            
-            
-        }
+            }
 
-        function showRegister(bool)
-        {
-            if(bool)
+            function uploadImage(file, userId)
+                {
+                    const storage = getStorage();
+                    const moutainsRef = ref(storage, `${userId}.jpg`)
+
+                    
+
+                    uploadBytes(moutainsRef, file).then((snapshot) => {
+                        console.log('Uploaded a blob or file!');
+                        getDownloadURL(moutainsRef).then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            createUser(userId, downloadURL)
+                            // Now you can use downloadURL as needed, for example, save it to Firestore
+                            // or display it to the user.
+                        }).catch((error) => {
+                            console.error('Error getting download URL', error);
+                            alert('Error getting download URL');
+                        });
+                    });
+                }
+
+            function createUser(userId, imageUrl)
             {
-                registerView.style.display = "inline"
-                logInView.style.display = "none"
+                const usersRef = collection(db, "users");
+
+                let name = document.getElementById("registerName").value
+                let email = document.getElementById("registerEmail").value
+                let password = document.getElementById("registerPassword").value
+
+                let bio = document.getElementById("registerBio").value
+                let phone = document.getElementById("registerPhone").value
+                let x = document.getElementById("registerX").value
+                let snapchat = document.getElementById("registerSnapchat").value
+                let ig = document.getElementById("registerIg").value
+                let facebook = document.getElementById("registerFacebook").value
+
+
+
+                setDoc(doc(usersRef, userId), {
+                    name: `${name}`, x: `${x}`, instagram: `${ig}`,
+                    facebook: `${facebook}`, snapchat: `${snapchat}`,email: `${email}`,
+                    phone: `${phone}`, bio:`${bio}`, imageUrl: `${imageUrl}`,speeches: [] }).then(()=>{
+                        alert("created account")
+                        //signIn(email, password)
+                        window.location.reload();
+                        alert('Sign-In to confirm account')
+                    });
             }
-            else{
-                registerView.style.display = "none"
-                logInView.style.display = "inline"
+
+            async function checkRole(userId)
+            {
+                const userRef = doc(db, "users", userId)
+
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    if(docSnap.data().role == 'admin'){
+                        alert(`admin user`)
+                        //let adminBtn = document.getElementById("adminBtn")
+                        //adminBtn.style.display = 'inline'
+                    }
+                    showMainView()
+                } else {
+                    console.log("No such document!");
+                }
+
             }
-        }
 
-
-        registerBtn.onclick = () => {
-            if(filledOut()){
-                createAccount()
+            function signIn(email, password) {
+                signOut(auth).then(() => {
+                    // Sign-out successful.
+                    signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log(`User signed in: ${user.uid}`);
+                        alert("Welcome back!")
+                        checkRole(user.uid)
+                    
+                        // Perform actions after successful sign-in
+                    
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.error(`Sign-in error: ${errorCode} - ${errorMessage}`);
+                        alert(`Logged in failed ${errorMessage}`)
+                    });
+                        }).catch((error) => {
+                        // An error happened.
+                });
+                
+                
             }
-            else{
-                alert("not filled out")
+
+            function showRegister(bool)
+            {
+                let registerView = document.getElementById("registerView")
+                let welcomeView = document.getElementById("welcomeView")
+                if(bool)
+                {
+                    registerView.style.display = "inline"
+                    welcomeView.style.display = "none"
+                }
+                else{
+                    registerView.style.display = "none"
+                    welcomeView.style.display = "inline"
+                }
             }
-        }
 
-        signInDialogBtn.onclick = () => {
-            
-        }
 
-        logInBtn.onclick = () => {
-                let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
-                let password = document.getElementById("logInPassword").value
-                signIn(email, password)
-        } 
+            registerBtn.onclick = () => {
+                if(filledOut()){
+                    createAccount()
+                }
+                else{
+                    alert("not filled out")
+                }
+            }
 
-        showRegister(true)
+            signInDialogBtn.onclick = () => {
+                
+            }
 
-    
-    </script>
-    <div id="mainViewDiv" style="display: none;">
-        <div>
-            <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
-                <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
-            </div>
-            <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/newFeedback.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
-            <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/newTools.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
-            <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/newAdmin.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
-            <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
-                <iframe src="mainViews/newProfile.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
-        </div>
-        <footer>
-            <nav>
-                <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="30px" width="30px"></a> 
-                <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/clipboard.svg" height="30px" width="30px"></a> 
-                <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="30px" width="30px"></a> 
-                <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="30px" width="30px"></a>-->      
-                <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="30px" width="30px"></a>  
-                 
-            </nav>
-        </footer>
-    </div>
-    <div class="form-container" id="form-container">
-        <div id="registerView">
-            <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
-            <h2>Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
-            <div id="myModal"  class="modal">
-                <div class="modal-content" style="width: 80%; height: 40vh;">
-                    <button class="close" onclick="closeModal()">&times;</button>
-                    <h2 id="">Log In</h2>
-                    <label for="logInEmail">Email</label>
-                    <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-            
-                    <label for="logInPassword">Password</label>
-                    <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-                    <div style="float: right;">
-                        <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
-                        <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
-                    </div>
+            logInBtn.onclick = () => {
+                    let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
+                    let password = document.getElementById("logInPassword").value
+                    signIn(email, password)
+            } 
+
+            let yesBtn = document.getElementById("yesBtn")
+
+            yesBtn.onclick = () => {
+                showRegister(true)
+            }
+
+            showRegister(false)
+
+        
+        </script>
+        <div id="mainViewDiv" style="display: none;">
+            <div>
+                <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
+                    <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                </div>
+                <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newFeedback.html" style="height: 100vh; width: 100%;"></iframe>
+                </div>
+                <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newTools.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newAdmin.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
+                    <iframe src="mainViews/newProfile.html" style="height: 100vh; width: 100%;"></iframe>
                 </div>
             </div>
-            <label for="registerName">Name</label>
-            <input type="text" id="registerName" placeholder="Enter your name"><br>
-    
-            <label for="registerEmail">Email</label>
-            <input type="email" id="registerEmail" placeholder="Enter your email"><br>
-    
-            <label for="registerPassword">Password</label>
-            <input type="password" id="registerPassword" placeholder="Enter your password"><br>
-    
-            <label for="registerBio">Bio</label>
-            <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
-    
-            <label for="registerPhone">Phone</label>
-            <input type="tel" id="registerPhone" placeholder="Enter your phone number"><br>
-    
-            <label for="registerX">X</label>
-            <input type="text" id="registerX" placeholder="Enter X"><br>
-    
-            <label for="registerSnapchat">Snapchat</label>
-            <input type="text" id="registerSnapchat" placeholder="Enter your Snapchat username"><br>
-    
-            <label for="registerIg">IG</label>
-            <input type="text" id="registerIg" placeholder="Enter your Instagram username"><br>
-    
-            <label for="registerFacebook">Facebook</label>
-            <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>
-    
-            <label for="image">Select image:</label>
-            <input type="file" id="image" name="img" accept="image/*"><br>
-    
-            <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
+            <footer>
+                <nav>
+                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="30px" width="30px"></a> 
+                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/clipboard.svg" height="30px" width="30px"></a> 
+                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="30px" width="30px"></a> 
+                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="30px" width="30px"></a>-->      
+                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="30px" width="30px"></a>  
+                    
+                </nav>
+            </footer>
         </div>
-    
-        <div id="logInView" style="display: none;">
-            <label for="logInEmail">Email</label>
-            <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-    
-            <label for="logInPassword">Password</label>
-            <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-    
-            <button id="logInBtn" class="secondary">Log-In</button>
-        </div>
-    
-        <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
-    </div>
-    <div id="welcomeView" style="margin-left: 5%; margin-right: 5%; display: none;">
-        <p style="text-align: left;">
-            Discover...<br>
-            <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
-                "How To Master<br> Public Speaking"
-            </span>
-            <span style="display: block;text-align: center; ">
-                <mark>With the TM Experience App</mark>
-            </span>
-        </p>
-        <iframe style="width: 90%; height: 30vh; margin-left: 5%; margin-right: 5%; background-color: white;"></iframe>
-        <p>
-            Do you want to be a better speaker?<br>
-            Do you want to be able to express yourself?<br>
-            Do you want to be able to help others<br>
-            <br>
-            Do you like receving feedback on your speeches?<br>
-            Do you like preparing throughly before a speeches?
-            Do you like improving your speeches?<br>
-            <br>
-            Do you want the #1 app to master speaking?
-        </p>
-        <a style="padding: 8px;" href="https://www.example.com" class="button">Yes, I want the<br>
-            TM Experience App </a>
-        <p>or</p>
-        <button id="logInBtn" style="cursor: pointer; border: none;background:none; margin-left:40%; font-size: 24px; color: #024165; font-weight: bold;">Log In</button>
-    </div>
-   
-    <script>
-        // Function to change iframe src
-        var calendarView = document.getElementById('calendarView');
-        var feedbackView = document.getElementById('feedbackView')
-        var toolsView = document.getElementById('toolsView')
-        var adminView = document.getElementById('adminView')
-        var profileView = document.getElementById('profileView')
-
-        let views = [calendarView, feedbackView, toolsView, adminView, profileView]
-
-      
+        <div class="form-container" id="registerView" style="display: none; background-color: red;">
+            <div>
+                <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
+                <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
+                <div id="myModal"  class="modal">
+                    <div class="modal-content" style="width: 80%; height: 40vh;">
+                        <button class="close" onclick="closeModal()">&times;</button>
+                        <h2 id="">Log In</h2>
+                        <label for="logInEmail">Email</label>
+                        <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+                
+                        <label for="logInPassword">Password</label>
+                        <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+                        <div style="float: right;">
+                            <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
+                            <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+                <label for="registerName">Name</label>
+                <input type="text" id="registerName" placeholder="Enter your name"><br>
         
-        function changeTo(destination)
-        {
-            views.forEach((view, index) => {
-                if (index === destination) {
-                    view.style.display = 'inline';
-                } else {
-                    view.style.display = 'none';
-                }
-            });
-            selectedBtn(destination)
-        }
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email"><br>
+        
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Enter your password"><br>
+        
+                <label for="registerBio">Bio</label>
+                <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
+        
+                <label for="registerPhone">Phone</label>
+                <input type="tel" id="registerPhone" placeholder="Enter your phone number"><br>
+        
+                <label for="registerX">X</label>
+                <input type="text" id="registerX" placeholder="Enter X"><br>
+        
+                <label for="registerSnapchat">Snapchat</label>
+                <input type="text" id="registerSnapchat" placeholder="Enter your Snapchat username"><br>
+        
+                <label for="registerIg">IG</label>
+                <input type="text" id="registerIg" placeholder="Enter your Instagram username"><br>
+        
+                <label for="registerFacebook">Facebook</label>
+                <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>
+        
+                <label for="image">Select image:</label>
+                <input type="file" id="image" name="img" accept="image/*"><br>
+        
+                <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
+            </div>
+        
+            <div id="logInView" style="display: none;">
+                <label for="logInEmail">Email</label>
+                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+        
+                <label for="logInPassword">Password</label>
+                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+        
+                <button id="logInBtn" class="secondary">Log-In</button>
+            </div>
+        
+            <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
+        </div>
+        <div id="welcomeView">
+            <p style="text-align: left; margin-left: 5%;">Discover...
+                <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
+                    "How To Master<br> Public Speaking"
+                </span>
+                <span style="display: block;text-align: center; ">
+                    <mark>With the TM Experience App</mark>
+                </span>
+            </p>
+            <iframe style="width: 90%; height: 30vh; margin-left: 5%; margin-right: 5%; background-color: white;"></iframe>
+            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%;">
+                Do you want to be a better speaker?<br>
+                Do you want to be able to express yourself?<br>
+                Do you want to be able to help others?<br>
+                <br>
+                Do you like receving feedback on your speeches?<br>
+                Do you like preparing throughly before a speeches?<br>
+                Do you like improving your speeches?<br>
+                <br>
+                Do you want the #1 app to master public speaking?
+            </p>
+            <a style=" width: 80%;  margin-left: 10%; margin-right: 10%;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
+                TM Experience App </a>
+        </div>
+    
+        <script>
+            // Function to change iframe src
+            var calendarView = document.getElementById('calendarView');
+            var feedbackView = document.getElementById('feedbackView')
+            var toolsView = document.getElementById('toolsView')
+            var adminView = document.getElementById('adminView')
+            var profileView = document.getElementById('profileView')
 
-        function logIn()
-        {
-            let mainView = document.getElementById("mainView")
-            let welcomeView = document.getElementById("welcomeView")
+            let views = [calendarView, feedbackView, toolsView, adminView, profileView]
 
-            welcomeView.style.display = 'none'
-            mainView.style.display = 'inline'
-        }
-
-        //showMainView()
-        logInBtn.onclick = () => {
-            alert('Welcome To The Protetype')
-            logIn()
-        }
-
-        function selectedBtn(destination)
-        {
-            let calendarBtn = document.getElementById("calendarBtn")
-            let feedbackBtn = document.getElementById("feedbackBtn")
-            let toolsBtn = document.getElementById("toolsBtn")
-            let adminView = document.getElementById("adminView")
-            let profileBtn = document.getElementById("profileBtn")
-
-            calendarBtn.src = "mainViews/assets/calendar.svg"
-            feedbackBtn.src = "mainViews/assets/clipboard.svg"
-            toolsBtn.src = "mainViews/assets/tools.svg"
-            //adminBtn.src = "mainViews/assets/admin.svg"
-            profileBtn.src = "mainViews/assets/person.svg"
+        
             
-            switch (destination){
-                case 0:
-                    calendarBtn.src = "mainViews/assets/calendar_b.svg"
-                    break
-                case 1:
-                    feedbackBtn.src = "mainViews/assets/clipboard_b.svg"
-                    break
-                case 2:
-                    toolsBtn.src = "mainViews/assets/tools_b.svg"
-                    break
-                case 3:
-                    //adminBtn.src = "mainViews/assets/admin_b.svg"
-                    break
-                case 4:
-                    profileBtn.src = "mainViews/assets/person_b.svg"
-                    break
-            }
-        }
-        changeTo(0)
-
-        //logIn()
-    </script>
-    <script>
-        let startX;
-            let currentX;
-            const threshold = 50; // Minimum swipe distance for visibility change
-        
-            let voteDiv = document.getElementById("voteDiv")
-            let speakerDiv = document.getElementById("speakerDiv")
-            let voteBtn = document.getElementById("voteBtn")
-            let speakerBtn = document.getElementById("speakerBtn")
-        
-            document.addEventListener('touchstart', handleTouchStart, false);
-            document.addEventListener('touchmove', handleTouchMove, false);
-
-            var modal = document.getElementById("myModal");
-            //var modalName = document.getElementById('modalName')
-            var modalId = document.getElementById("modalId")
-
-            // Get the button that opens the modal
-            var btn = document.getElementById("signInDialogBtn");
-
-            // Get the <span> element that closes the modal
-            //var span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks on the button, open the modal
-            btn.onclick = function() {
-                modal.style.display = "block";
-
-            }
-
-            // When the user clicks on <span> (x), close the modal
-            //span.onclick = function() {
-            //modal.style.display = "none";
-            //}
-
-            function closeModal()
+            function changeTo(destination)
             {
-                modal.style.display = "none"
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                }
-            }
-
-            function showModal(name, id){
-                modal.style.display = "block"
-                //modalName.innerText = `provide feedback to ${name}`
-                //modalId.innerText = id
-            }
-        
-            function handleTouchStart(event) {
-                startX = event.touches[0].pageX;
-            }
-
-            function handleTouchMove(event) {
-                if (!startX) return;
-        
-                currentX = event.touches[0].pageX;
-        
-                let deltaX = currentX - startX;
-        
-                if (Math.abs(deltaX) > threshold) {
-                    if (deltaX > 0) {
-                        showView('view2');
+                views.forEach((view, index) => {
+                    if (index === destination) {
+                        view.style.display = 'inline';
                     } else {
-                        showView('view1');
+                        view.style.display = 'none';
                     }
-                    startX = null;
+                });
+                selectedBtn(destination)
+            }
+
+            function logIn()
+            {
+                let mainView = document.getElementById("mainView")
+                let welcomeView = document.getElementById("welcomeView")
+
+                welcomeView.style.display = 'none'
+                mainView.style.display = 'inline'
+            }
+
+            //showMainView()
+            logInBtn.onclick = () => {
+                alert('Welcome To The Protetype')
+                logIn()
+            }
+
+            function selectedBtn(destination)
+            {
+                let calendarBtn = document.getElementById("calendarBtn")
+                let feedbackBtn = document.getElementById("feedbackBtn")
+                let toolsBtn = document.getElementById("toolsBtn")
+                let adminView = document.getElementById("adminView")
+                let profileBtn = document.getElementById("profileBtn")
+
+                calendarBtn.src = "mainViews/assets/calendar.svg"
+                feedbackBtn.src = "mainViews/assets/clipboard.svg"
+                toolsBtn.src = "mainViews/assets/tools.svg"
+                //adminBtn.src = "mainViews/assets/admin.svg"
+                profileBtn.src = "mainViews/assets/person.svg"
+                
+                switch (destination){
+                    case 0:
+                        calendarBtn.src = "mainViews/assets/calendar_b.svg"
+                        break
+                    case 1:
+                        feedbackBtn.src = "mainViews/assets/clipboard_b.svg"
+                        break
+                    case 2:
+                        toolsBtn.src = "mainViews/assets/tools_b.svg"
+                        break
+                    case 3:
+                        //adminBtn.src = "mainViews/assets/admin_b.svg"
+                        break
+                    case 4:
+                        profileBtn.src = "mainViews/assets/person_b.svg"
+                        break
                 }
             }
-    </script>
-</body>
+            changeTo(0)
+
+            //logIn()
+        </script>
+        <script>
+            let startX;
+                let currentX;
+                const threshold = 50; // Minimum swipe distance for visibility change
+            
+                let voteDiv = document.getElementById("voteDiv")
+                let speakerDiv = document.getElementById("speakerDiv")
+                let voteBtn = document.getElementById("voteBtn")
+                let speakerBtn = document.getElementById("speakerBtn")
+            
+                document.addEventListener('touchstart', handleTouchStart, false);
+                document.addEventListener('touchmove', handleTouchMove, false);
+
+                var modal = document.getElementById("myModal");
+                //var modalName = document.getElementById('modalName')
+                var modalId = document.getElementById("modalId")
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("signInDialogBtn");
+
+                // Get the <span> element that closes the modal
+                //var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks on the button, open the modal
+                btn.onclick = function() {
+                    modal.style.display = "block";
+
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                //span.onclick = function() {
+                //modal.style.display = "none";
+                //}
+
+                function closeModal()
+                {
+                    modal.style.display = "none"
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    }
+                }
+
+                function showModal(name, id){
+                    modal.style.display = "block"
+                    //modalName.innerText = `provide feedback to ${name}`
+                    //modalId.innerText = id
+                }
+            
+                function handleTouchStart(event) {
+                    startX = event.touches[0].pageX;
+                }
+
+                function handleTouchMove(event) {
+                    if (!startX) return;
+            
+                    currentX = event.touches[0].pageX;
+            
+                    let deltaX = currentX - startX;
+            
+                    if (Math.abs(deltaX) > threshold) {
+                        if (deltaX > 0) {
+                            showView('view2');
+                        } else {
+                            showView('view1');
+                        }
+                        startX = null;
+                    }
+                }
+        </script>
+    </body>
 </html>
