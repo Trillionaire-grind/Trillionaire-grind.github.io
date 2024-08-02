@@ -1,604 +1,834 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Speakers</title>
-    <style>
-        /* General reset and basic styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            /*background-color: #F0F1F3;*/
-            background-color: #DEE2E1;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .fab {
-            position: fixed;
-            bottom: 20px; /* Adjust as needed */
-            right: 50%;
-            background-color: #024165;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
-            font-size: 24px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transform: translateX(50%);
-        }
-        /* Styling for icons in the bottom navigation bar */
-        footer{
-            background-color: white;
-        }
-        footer nav {
-            display: flex;
-            justify-content: space-around;
-          
-        }
-        footer nav a {
-            text-decoration: none;
-            color: #333;
-        }
-        footer nav a:hover {
-            color: #007bff;
-        }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Your TM Experience</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                /*background-color: #F0F1F3;*/
+                background-color: #DEE2E1;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #024165;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
 
-        .card-container {
-            display: flex;
-            width: 90%;
-            margin: 0 auto;
-            flex-wrap: wrap;
-        }
-        .card {
-            width: 40%;
-            /*margin: 10;*/
-            background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-        }
-        .card-content {
-            padding: 10px;
-        }
-
-        @media (max-width: 768px) {
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
             .card {
+                width: 40%;
+                /*margin: 10;*/
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            .form-group {
+                margin-bottom: 15px;
+            }
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group input[type="password"],
+            .form-group textarea {
+                width: calc(100% - 12px);
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            .form-group textarea {
+                resize: vertical;
+            }
+            .form-group .file-input {
+                display: block;
+                margin-top: 10px;
+            }
+            .form-group .file-input input[type="file"] {
+                display: none;
+            }
+            .form-group .file-input label {
+                display: inline-block;
+                background-color: #007bff;
+                color: #fff;
+                padding: 8px 12px;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+            }
+            .form-group .file-name {
+                margin-top: 5px;
+                font-size: 12px;
+            }
+            .form-group .social-input {
+                display: flex;
+                align-items: center;
+            }
+            .form-group .social-input label {
+                margin-right: 10px;
+            }
+            .form-group .social-input input[type="text"] {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            .form-group .social-input span {
+                font-size: 12px;
+                color: #666;
+            }
+            .form-group .submit-btn {
+                text-align: center;
+            }
+            .form-group .submit-btn input[type="submit"] {
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+            }
+
+            .button {
+                display: inline-block;
+            
+                font-size: 24px;
+                font-weight: bold;
+                text-align: center;
+                background-color: #024165;
+                color: white;
+                border: none;
+                border-radius: 10px;
+                cursor: pointer;
+                width: 100%;
+                text-decoration: none;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease;
+            }
+            
+            .button:hover {
+                background-color: #fff;
+                color: #024165;
+            }
+
+            .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+          
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .form-container label {
+                display: block;
+                text-align: left;
+                margin-bottom: 5px;
+                margin-left: 8px;
+            }
+
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="password"],
+            .form-container textarea,
+            .form-container input[type="tel"],
+            .form-container input[type="file"] {
+                width: calc(100% - 20px);
+                padding: 10px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                margin-left: 8px;
+                
+            }
+
+            .form-container button {
+                padding: 12px 20px;
+                background-color: #024165;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                margin-left: 8px;
+            }
+
+            .form-container button.secondary {
+                background-color: #008CBA;
+            }
+
+            .form-container button.danger {
+                background-color: #f44336;
+            }
+
+
+            @media (max-width: 600px) {
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="password"],
+            .form-container textarea,
+            .form-container input[type="tel"],
+            .form-container input[type="file"] {
                 width: 100%;
             }
-        }
+            }
 
-        /* Styles for the popup */
-        .popup {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scrolling if needed */
-            background-color: rgba(0,0,0,0.4); /* Black with opacity */
-        }
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
 
-    
-        .popup-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* 80% width */
-        }
+            /* Modal Content/Box */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
 
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
+            /* The Close Button */
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background-color: #024165;
+            }
 
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
 
-        .imageContainer:hover .middle {
-                opacity: 1;
-        }
+            const firebaseConfig = {
+                apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+                authDomain: "naples-sunrise-bay.firebaseapp.com",
+                projectId: "naples-sunrise-bay",
+                storageBucket: "naples-sunrise-bay.appspot.com",
+                messagingSenderId: "39028676552",
+                appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+                measurementId: "G-L0QCNW7C6W"
+            };
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app)
+            const db = getFirestore(app);
 
-        .middle {
-            transition: .5s ease;
-            opacity: 0;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            -ms-transform: translate(-50%, -50%);
-            text-align: center;
-        }
+            let mainViewDiv = document.getElementById("mainViewDiv")
 
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1; /* Sit on top */
-            left: 0;
-            top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgb(0,0,0); /* Fallback color */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-        }
+            //views
+            var calendarView = document.getElementById('calendarView');
+            var feedbackView = document.getElementById('feedbackView')
+            var toolsView = document.getElementById('toolsView')
+            var adminView = document.getElementById('adminView')
+            var profileView = document.getElementById('profileView')
 
-        /* Modal Content/Box */
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
-        }
+            //nav buttons
+            let calendarBtn = document.getElementById("calendarBtn")
+            let feedbackBtn = document.getElementById("feedbackBtn")
+            let toolsBtn = document.getElementById("toolsBtn")
+            //let adminBtn = document.getElementById("adminBtn")
+            let profileBtn = document.getElementById("profileBtn")
 
-        /* The Close Button */
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .selectorBtn{
-            background-color: #024165;
-        }
-
-        .selectorBtn:hover{
-            background-color: #7D2128;
-        }
-
-    </style>
-    
-    <script>
-        // Function to open the popup
-        function openPopup() {
-            document.getElementById('popup').style.display = 'block';
-        }
-        //openPopup()
-        // Function to close the popup
-        function closePopup() {
-            document.getElementById('popup').style.display = 'none';
-        }
-
-
-        function openFeedbackDialog() {
-            document.getElementById('feedbackDialog').style.display = 'block'
-        }
-
-        function closeFeebackDialog()
-        {
-            document.getElementById('feedbackDialog').style.display = 'none'
-        } 
-
-     
-
-      
-    </script>
-</head>
-<body>
-    <div>
-        <button onclick="openPopup()" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
-        padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
-
-        <div id="myModal"  class="modal">
-            <!-- Modal content -->
-            <div class="modal-content" style="width: 80%; height: 30vh;">
-                <button class="close" onclick="closeModal()">&times;</button>
-                <p id="modalName">Provide your feedback for </p>
-                <p id="modalId" style="visibility: hidden;"></p>
-                <textarea id="feedbackText" style="width: 100%; height: 10vh;"></textarea>
-                <div style="display: flex; float: right; ">
-                    <button onclick="closeModal()" style="background: none;" >Cancel</button>
-                    <button id="feedbackBtn" onclick="addFeedback()"style="background: black; border-color: #fff; color: white; height: 30px; width: 60px;">Send</button>
-                </div>
-            </div>
-        </div>
-    
-        <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
-       <!--This is the view of the speaker-->
-        <div>
-            <div style="display: flex;">
-                <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; color: white; border-radius: 50%; cursor: pointer; "> &larr;</button>
+            //buttons
+            let logInBtn = document.getElementById("logInBtn")
             
-                <div style=" background-color: white; border-radius: 5%; margin-left: auto; margin-right: auto; padding: 10px;">
-                    <img id="currentSpeakerImg" src="assets/khan.jpeg" width="300px" style="background-color: #024165;  ">
-                </div>
-                <button class="selectorBtn" id="rightBtn" style="margin-right: 5%; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto;  color: white; border-radius: 50%; cursor: pointer; margin-left: 16px;" > &rarr; </button>
-            </div>
-            <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #fff; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
-                <button id="firstSpeakerSelector" style="border: none; border-radius: 50%; background-color: #7D2128; height: 16px; width: 16px;"></button>
-                <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
-                <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
-            </div>
-        </div>
-        <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
-            <p id="currentSpeakerName" style="font-weight: bold; margin-top: 64px;">Genghis Khan</p>
-            <button onclick="openFeedbackDialog()" style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
-        </div>
-        <div class="" style="display: flex; width: 90%; height: 30vh; margin-left: auto; margin-right: auto;">
-
-                <p id="currentSpeakerBio">Genghis Khan, also known as Chinggis Khan, was the founder and 
-                    first khan of the Mongol Empire, which he ruled from 1206 
-                    until his death in 1227; it later became the largest contiguous empire in history.
-                On my death bed I had the larggest empire. 800 years later, I still hold the title. I AM
-            the GREATEST</p>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- The vote popup dialog -->
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closePopup()">&times;</span>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                <p>Choose best speaker</p>
-                <div style="padding-top: 16px; padding-left: 16px;">
-                    <select id="bestSpeaker">  
-                        <option id="firstSpeakerOption"></option>  
-                        <option id="secondSpeakerOption"></option>  
-                        <option id="thirdSpeakerOption"></option> 
-                    </select> 
-                </div>
-            </div>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                <p>Choose best Evaluator</p>
-                <div style="padding-top: 16px; padding-left: 16px; margin-right: 5%;">
-                    <select id="bestEvaluator">  
-                        <option id="firstEval">Alex</option>  
-                        <option id="secondEval">Khan</option>  
-                        <option id="thirdEval">Napoleon</option> 
-                    </select> 
-                </div>
-            </div>
-            <div style="margin-right: auto; margin-left: auto; margin-right: 5%;">
-                <div style="width: 100%;display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                    <p>Choose Best Table Topics Speaker</p>
-                    <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
-                    
-                    </textarea>
-                </div>
-            </div>
-            <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                <button id="castVoteBtn" style="background-color: #024165; color: white; 
-                cursor: pointer; float: right; margin-right: auto;" > Cast Votes</button>
-               
-            </div>
-        </div>
-    </div>
-
-    <!-- The feedback popup dialog -->
-    <!--<div id="feedbackDialog" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closeFeebackDialog()">&times;</span>
-            <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                <p>Leave Feedback</p>
-                <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
-                    
-                </textarea>
-                <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                    <button id="giveFeedbackBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: auto;" > Give Feedback</button>
-                </div>
-        </div>
-    </div>-->
-    <div id="feedbackDialog" class="popup">
-        <div class="popup-content">
-            <span class="close" onclick="closeFeebackDialog()">&times;</span>
-            <p id="feedbackId" style="visibility: hidden;"></p>
-
-            <div style="margin-top: 16px;">
-                <label style="margin-bottom: 16px; display: block;">Leave Feedback</label>
-                <div style=" align-items: center;">
-                    <textarea id="feedbackTV" name="story" rows="4" style="flex: 1; width: 95%; min-width: 100px; height: 100px; margin-right: 16px;"></textarea>
-                </div>
-                <button id="leaveFeedbackBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: 5%; width: 100px; height: 40px; margin-bottom: 16px;" > Leave Feedback</button>
-                <br>
-                <br>
-            </div>
-        </div>
-    </div>
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth,  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-
-
-        let feedbackBtn = document.getElementById("feedbackBtn")
-        let castVoteBtn = document.getElementById("castVoteBtn")
-        let bestSpeaker = document.getElementById("bestSpeaker")
-        let bestEvaluator = document.getElementById("bestEvaluator")
-        let bestTable = document.getElementById("bestTable")
-
-        let firstSpeakerFeedbackBtn = document.getElementById("firstSpeakerFeedbackBtn")
-        let secondSpeakerFeedbackBtn = document.getElementById("secondSpeakerFeedbackBtn")
-        let thirdSpeakerFeedbackBtn = document.getElementById("thirdSpeakerFeedbackBtn")
-
-        let firstSpeakerImg = document.getElementById('firstSpeakerImg')
-        let secondSpeakerImg = document.getElementById('secondSpeakerImg')
-        let thirdSpeakerImg = document.getElementById('thirdSpeakerImg')
-
-        let idHolder = [];
-        let nameHolder = [];
-        let speakerHolder = [];
-        let evaluatorHolder = [];
-
-
-        let index = 0;
-        let speakers = [];
-        //view elements ^
-
-        //definently not safe to share 
-        const firebaseConfig = {
-        apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-        authDomain: "naples-sunrise-bay.firebaseapp.com",
-        projectId: "naples-sunrise-bay",
-        storageBucket: "naples-sunrise-bay.appspot.com",
-        messagingSenderId: "39028676552",
-        appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-        measurementId: "G-L0QCNW7C6W"
-        };
-    
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const db = getFirestore(app);
-        const auth = getAuth(app)
-
-
-        const feedbackRef = collection(db, "feedback");
-        const voteRef = collection(db, "votes")
-        const usersRef = collection(db, "users")
-
-        const monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-        ];
-
-        function addFeedback()
-        {
-            let feedbackTV = document.getElementById("feedbackTV")
-            let id = document.getElementById("modalId").textContent
-
-            let feedbackValue = feedbackTV.value
-
-            id = speakers[index].id
-
-            const date = new Date();
-
-            let day = ''
-            let month = ''
-            if(date.getDate() < 10){
-                day = `0${date.getDate()}`
-            }
-            else{
-                day = `${date.getDate()}`
-            }
-
-            if(date.getMonth() < 10){
-                month = `0${date.getMonth()}`
-            }else{
-                month = `${date.getMonth()}`
-            }
-
-            let displayedDate = `${date.getFullYear()}-${month}-${day}`
-
-            const docRef =  addDoc(collection(db, "users",`${id}`,"speeches",`${displayedDate}`,"feedback"), {
-                feedback: `${feedbackTV}`
-                }).then(() => {
-                    alert('feedback given successfully')
-                    feedbackTV.value = ""
-                    closeFeebackDialog()
-                   
-                });
-        }
-
-      
-
-        async function theSpeakers(){
-            const docSnap = await getDoc(doc(db, `meeting/currentMeeting`))
-
-            let firstEval = document.getElementById("firstEval")
-            let secondEval = document.getElementById("secondEval")
-            let thirdEval = document.getElementById("thirdEval")
-
-            let firstSpeakerOption = document.getElementById("firstSpeakerOption")
-            let secondSpeakerOption = document.getElementById("secondSpeakerOption")
-            let thirdSpeakerOption = document.getElementById("thirdSpeakerOption")
-            if(docSnap.exists()){
-                
-
-                console.log(`first Eval ${firstEval}`)
-
-                getSpeaker(firstSpeakerOption, docSnap.data().first_speaker)
-                getSpeaker(secondSpeakerOption,docSnap.data().second_speaker)
-                getSpeaker(thirdSpeakerOption,docSnap.data().third_speaker)
-
-                firstEval.value = docSnap.data().first_evaluator
-                firstEval.innerText = docSnap.data().first_evaluator
-                //
-                secondEval.value = docSnap.data().second_evaluator
-                secondEval.innerText = docSnap.data().second_evaluator
-                //
-                thirdEval.value = docSnap.data().third_evaluator
-                thirdEval.innerText = docSnap.data().third_evaluator
-
-
-            }else{
-                alert(`docSnap does not exist`)
-            }
-        }
-
-        async function getSpeaker(speakerOption, id)
-        {
-            const docSnap = await getDoc(doc(db, `users/${id}`))
-            console.log(`what is the id ${id}`)
-        
-            if(docSnap.exists())
+            function changeTo(destination)
             {
-                let speaker = {};
-                speaker.name = docSnap.data().name
-                speaker.imageUrl = docSnap.data().imageUrl
-                speaker.bio = docSnap.data().bio
-                speaker.id = id
-                speakers.push(speaker)
-                speakerOption.innerText = docSnap.data().name
-                //alert('ok')
-                setSpeaker(0)
-            }else{
-                //alert(`there was an issue in FBV-363`)
+                let views = [calendarView, feedbackView, toolsView, adminView, profileView]
+                for(var i=0; i<views.length; i++)
+                {
+                    views[i].style.display = "none"
+                }
+                views[destination].style.display = "inline"
+
+                console.log(`view to be visible ${destination}`)
+
+                selectedBtn(destination)
             }
-        }
 
-        function setSpeaker(index){
-            //alert('set')
+            function showMainView()
+            {
+                let mainView = document.getElementById("mainViewDiv")
+                let registerView = document.getElementById("registerView")
+                let formContainer = document.getElementById("form-container")
 
-            let speaker = speakers[index]
-            
-            let currentSpeakerName = document.getElementById("currentSpeakerName")
-            let currentSpeakerBio = document.getElementById("currentSpeakerBio")
-            let currentSpeakerImg = document.getElementById("currentSpeakerImg")
+                mainView.style.display = 'inline'
+                registerView.style.display = 'none'
+                
+            }
 
-            currentSpeakerName.innerText = speaker.name
-            currentSpeakerBio.innerText = speaker.bio 
-            currentSpeakerImg.src = speaker.imageUrl
-        }
+            function filledOut()
+            {
+                let name = document.getElementById("registerName").value
+                let email = document.getElementById("registerEmail").value
+                let password = document.getElementById("registerPassword").value
+
+                let bio = document.getElementById("registerBio").value
+                let phone = document.getElementById("registerPhone").value
+                let x = document.getElementById("registerX").value
+                let snapchat = document.getElementById("registerSnapchat").value
+                let ig = document.getElementById("registerIg").value
+                let facebook = document.getElementById("registerFacebook").value
+                let image = document.getElementById("image")
+
+                if(name.length < 1)
+                {
+                    return false;
+                }
+                if(email.length < 1)
+                {
+                    return false;
+                }
+                if(password.length < 1)
+                {
+                    return false;
+                }
+                if(bio.length < 1)
+                {
+                    return false;
+                }
+                if(phone.length < 1)
+                {
+                    return false;
+                }
+                if(x.length < 1)
+                {
+                    return false;
+                }
+                if(snapchat.length < 1)
+                {
+                    return false;
+                }
+                if(ig.length < 1)
+                {
+                    return false;
+                }
+                if(facebook.length < 1)
+                {
+                    return false;
+                }
+                if(image.files < 1)
+                {
+                    return false;
+                }
+                return true
+            }
+
+            function createAccount()
+            {
+                let emailValue = document.getElementById('registerEmail').value
+                let passwordValue = document.getElementById('registerPassword').value
+
+                let file = document.getElementById("image").files[0]
+                createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    let id = user.uid;
+                    if(id != null)
+                    {
+                        uploadImage(file, id)
+                    }
+                    // ...
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    //console.log(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
+                    // ..
+                });
+            }
+
+            function uploadImage(file, userId)
+                {
+                    const storage = getStorage();
+                    const moutainsRef = ref(storage, `${userId}.jpg`)
+
+                    
+
+                    uploadBytes(moutainsRef, file).then((snapshot) => {
+                        console.log('Uploaded a blob or file!');
+                        getDownloadURL(moutainsRef).then((downloadURL) => {
+                            console.log('File available at', downloadURL);
+                            createUser(userId, downloadURL)
+                            // Now you can use downloadURL as needed, for example, save it to Firestore
+                            // or display it to the user.
+                        }).catch((error) => {
+                            console.error('Error getting download URL', error);
+                            alert('Error getting download URL');
+                        });
+                    });
+                }
+
+            function createUser(userId, imageUrl)
+            {
+                const usersRef = collection(db, "users");
+
+                let name = document.getElementById("registerName").value
+                let email = document.getElementById("registerEmail").value
+                let password = document.getElementById("registerPassword").value
+
+                let bio = document.getElementById("registerBio").value
+                let phone = document.getElementById("registerPhone").value
+                let x = document.getElementById("registerX").value
+                let snapchat = document.getElementById("registerSnapchat").value
+                let ig = document.getElementById("registerIg").value
+                let facebook = document.getElementById("registerFacebook").value
+
+
+
+                setDoc(doc(usersRef, userId), {
+                    name: `${name}`, x: `${x}`, instagram: `${ig}`,
+                    facebook: `${facebook}`, snapchat: `${snapchat}`,email: `${email}`,
+                    phone: `${phone}`, bio:`${bio}`, imageUrl: `${imageUrl}`,speeches: [] }).then(()=>{
+                        alert("created account")
+                        //signIn(email, password)
+                        window.location.reload();
+                        alert('Sign-In to confirm account')
+                    });
+            }
+
+            async function checkRole(userId)
+            {
+                const userRef = doc(db, "users", userId)
+
+                const docSnap = await getDoc(userRef);
+                if (docSnap.exists()) {
+                    if(docSnap.data().role == 'admin'){
+                        alert(`admin user`)
+                        //let adminBtn = document.getElementById("adminBtn")
+                        //adminBtn.style.display = 'inline'
+                    }
+                    showMainView()
+                } else {
+                    console.log("No such document!");
+                }
+
+            }
+
+            function signIn(email, password) {
+                signOut(auth).then(() => {
+                    // Sign-out successful.
+                    signInWithEmailAndPassword(auth, email, password)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        console.log(`User signed in: ${user.uid}`);
+                        alert("Welcome back!")
+                        checkRole(user.uid)
+                    
+                        // Perform actions after successful sign-in
+                    
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code;
+                        const errorMessage = error.message;
+                        console.error(`Sign-in error: ${errorCode} - ${errorMessage}`);
+                        alert(`Logged in failed ${errorMessage}`)
+                    });
+                        }).catch((error) => {
+                        // An error happened.
+                });
+                
+                
+            }
+
+            function showRegister(bool)
+            {
+                let registerView = document.getElementById("registerView")
+                let welcomeView = document.getElementById("welcomeView")
+                if(bool)
+                {
+                    registerView.style.display = "inline"
+                    welcomeView.style.display = "none"
+                }
+                else{
+                    registerView.style.display = "none"
+                    welcomeView.style.display = "inline"
+                }
+            }
+
+
+            registerBtn.onclick = () => {
+                if(filledOut()){
+                    createAccount()
+                }
+                else{
+                    alert("not filled out")
+                }
+            }
+
+            signInDialogBtn.onclick = () => {
+                
+            }
+
+            logInBtn.onclick = () => {
+                    let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
+                    let password = document.getElementById("logInPassword").value
+                    signIn(email, password)
+            } 
+
+            let yesBtn = document.getElementById("yesBtn")
+
+            yesBtn.onclick = () => {
+                showRegister(true)
+            }
+
+            showRegister(false)
+
         
-        function castVote()
-        {
-            let user = auth.currentUser
-            let userId = user.uid
+        </script>
+        <div id="mainViewDiv" style="display: none;">
+            <div>
+                <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
+                    <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                </div>
+                <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newFeedback.html" style="height: 100vh; width: 100%;"></iframe>
+                </div>
+                <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newTools.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="mainViews/newAdmin.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
+                    <iframe src="mainViews/newProfile.html" style="height: 100vh; width: 100%;"></iframe>
+                </div>
+            </div>
+            <footer>
+                <nav>
+                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="30px" width="30px"></a> 
+                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/clipboard.svg" height="30px" width="30px"></a> 
+                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="30px" width="30px"></a> 
+                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="30px" width="30px"></a>-->      
+                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="30px" width="30px"></a>  
+                    
+                </nav>
+            </footer>
+        </div>
+        <div class="form-container" id="registerView" style="display: none; background-color: red;">
+            <div>
+                <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
+                <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
+                <div id="myModal"  class="modal">
+                    <div class="modal-content" style="width: 80%; height: 40vh;">
+                        <button class="close" onclick="closeModal()">&times;</button>
+                        <h2 id="">Log In</h2>
+                        <label for="logInEmail">Email</label>
+                        <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+                
+                        <label for="logInPassword">Password</label>
+                        <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+                        <div style="float: right;">
+                            <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
+                            <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+                <label for="registerName">Name</label>
+                <input type="text" id="registerName" placeholder="Enter your name"><br>
+        
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email"><br>
+        
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Enter your password"><br>
+        
+                <label for="registerBio">Bio</label>
+                <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
+        
+                <label for="registerPhone">Phone</label>
+                <input type="tel" id="registerPhone" placeholder="Enter your phone number"><br>
+        
+                <label for="registerX">X</label>
+                <input type="text" id="registerX" placeholder="Enter X"><br>
+        
+                <label for="registerSnapchat">Snapchat</label>
+                <input type="text" id="registerSnapchat" placeholder="Enter your Snapchat username"><br>
+        
+                <label for="registerIg">IG</label>
+                <input type="text" id="registerIg" placeholder="Enter your Instagram username"><br>
+        
+                <label for="registerFacebook">Facebook</label>
+                <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>
+        
+                <label for="image">Select image:</label>
+                <input type="file" id="image" name="img" accept="image/*"><br>
+        
+                <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
+            </div>
+        
+            <div id="logInView" style="display: none;">
+                <label for="logInEmail">Email</label>
+                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+        
+                <label for="logInPassword">Password</label>
+                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+        
+                <button id="logInBtn" class="secondary">Log-In</button>
+            </div>
+        
+            <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
+        </div>
+        <div id="welcomeView">
+            <p style="text-align: left; margin-left: 5%;">Discover...
+                <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
+                    "How To Master<br> Public Speaking"
+                </span>
+                <span style="display: block;text-align: center; ">
+                    <mark>With the TM Experience App</mark>
+                </span>
+            </p>
+            <!--<iframe style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white;" src="https:www.youtube.com/embed/383gehepo8M"></iframe>-->
+            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%;">
+                Do you want to be a better speaker?<br>
+                Do you want to be able to express yourself?<br>
+                Do you want to be able to help others?<br>
+                <br>
+                Do you like receving feedback on your speeches?<br>
+                Do you like preparing throughly before a speeches?<br>
+                Do you like improving your speeches?<br>
+                <br>
+                Do you want the #1 app to master public speaking?
+            </p>
+            <br>
+            <a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
+                TM Experience App </a>
+        </div>
+    
+        <script>
+            // Function to change iframe src
+            var calendarView = document.getElementById('calendarView');
+            var feedbackView = document.getElementById('feedbackView')
+            var toolsView = document.getElementById('toolsView')
+            var adminView = document.getElementById('adminView')
+            var profileView = document.getElementById('profileView')
 
-            let bestSpeakerValue = bestSpeaker.options[bestSpeaker.selectedIndex].text
-            let bestEvaluatorValue = bestEvaluator.options[bestEvaluator.selectedIndex].text
-            let bestTableValue = bestTable.value
+            let views = [calendarView, feedbackView, toolsView, adminView, profileView]
 
+        
             
-            setDoc(doc(voteRef, userId), {
-                bestSpeaker : `${bestSpeakerValue}`,
-                bestEvaluator : `${bestEvaluatorValue}`,
-                bestTable : `${bestTableValue}`
-            })
-            alert("your vote has been casted")
-            //close
-            closePopup()
-        }
-
-        feedbackBtn.onclick = () => {
-            addFeedback()
-            
-        } 
-
-        castVoteBtn.onclick = () => {
-            castVote()
-        }
-        /*->
-        firstSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[0], idHolder[0])
-            console.log(`the id should be the first ${idHolder[0]} and name ${nameHolder[0]}`)
-        }
-
-        secondSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[1], idHolder[1])
-            console.log(`the id should be the second ${idHolder[1]} and name ${nameHolder[1]}`)
-        }
-
-        thirdSpeakerFeedbackBtn.onclick = () => {
-            showModal(nameHolder[2], idHolder[2])
-            console.log(`the id should be the third ${idHolder[2]} and name ${nameHolder[2]}`)
-        }*/
-
-        let rightBtn = document.getElementById("rightBtn")
-        let leftBtn = document.getElementById("leftBtn")
-
-        rightBtn.onclick = () => {
-            updateSpeaker(1)
-        }
-
-        leftBtn.onclick = () => {
-            updateSpeaker(-1)
-        }
-
-        function updateSpeaker(positionChange)
-        {
-            if(index == 0 && positionChange == -1){
-                index = 2;
-            }else if(index == 2 && positionChange == 1){
-                index = 0;
-            }else{
-                index = (index + positionChange)
+            function changeTo(destination)
+            {
+                views.forEach((view, index) => {
+                    if (index === destination) {
+                        view.style.display = 'inline';
+                    } else {
+                        view.style.display = 'none';
+                    }
+                });
+                selectedBtn(destination)
             }
 
-            showSelectedSpeaker(index)
-        }
+            function logIn()
+            {
+                let mainView = document.getElementById("mainView")
+                let welcomeView = document.getElementById("welcomeView")
 
-        function showSelectedSpeaker(index)
-        {
-            let firstSpeakerSelector = document.getElementById("firstSpeakerSelector")
-            let secondSpeakerSelector = document.getElementById("secondSpeakerSelector")
-            let thirdSpeakerSelector = document.getElementById("thirdSpeakerSelector")
+                welcomeView.style.display = 'none'
+                mainView.style.display = 'inline'
+            }
 
-            let views = [firstSpeakerSelector, secondSpeakerSelector, thirdSpeakerSelector]
+            //showMainView()
+            logInBtn.onclick = () => {
+                alert('Welcome To The Protetype')
+                logIn()
+            }
 
-            firstSpeakerSelector.style.backgroundColor = '#024165'
-            secondSpeakerSelector.style.backgroundColor = '#024165'
-            thirdSpeakerSelector.style.backgroundColor = '#024165'
+            function selectedBtn(destination)
+            {
+                let calendarBtn = document.getElementById("calendarBtn")
+                let feedbackBtn = document.getElementById("feedbackBtn")
+                let toolsBtn = document.getElementById("toolsBtn")
+                let adminView = document.getElementById("adminView")
+                let profileBtn = document.getElementById("profileBtn")
 
-            views[index].style.backgroundColor = '#7D2128'
-            setSpeaker(index);
-        }
+                calendarBtn.src = "mainViews/assets/calendar.svg"
+                feedbackBtn.src = "mainViews/assets/clipboard.svg"
+                toolsBtn.src = "mainViews/assets/tools.svg"
+                //adminBtn.src = "mainViews/assets/admin.svg"
+                profileBtn.src = "mainViews/assets/person.svg"
+                
+                switch (destination){
+                    case 0:
+                        calendarBtn.src = "mainViews/assets/calendar_b.svg"
+                        break
+                    case 1:
+                        feedbackBtn.src = "mainViews/assets/clipboard_b.svg"
+                        break
+                    case 2:
+                        toolsBtn.src = "mainViews/assets/tools_b.svg"
+                        break
+                    case 3:
+                        //adminBtn.src = "mainViews/assets/admin_b.svg"
+                        break
+                    case 4:
+                        profileBtn.src = "mainViews/assets/person_b.svg"
+                        break
+                }
+            }
+            changeTo(0)
 
-
-        //fetchSpeakers()
-       // getSpeaker("DxsaOr7Vy9gInmo6s7iDV2AFwMs1")
-        theSpeakers()
-
-        let leaveFeedbackBtn = document.getElementById("leaveFeedbackBtn")
-        let feedbackTV = document.getElementById("feedbackTV")
-        let feedbackDialog = document.getElementById("feedbackDialog")
-
-
-
-        leaveFeedbackBtn.onclick = () => {
-            feedbackDialog.style.display = 'none'
-            addFeedback()
+            //logIn()
+        </script>
+        <script>
+            let startX;
+                let currentX;
+                const threshold = 50; // Minimum swipe distance for visibility change
             
-        }
-    </script>
-    
-    
-</body>
+                let voteDiv = document.getElementById("voteDiv")
+                let speakerDiv = document.getElementById("speakerDiv")
+                let voteBtn = document.getElementById("voteBtn")
+                let speakerBtn = document.getElementById("speakerBtn")
+            
+                document.addEventListener('touchstart', handleTouchStart, false);
+                document.addEventListener('touchmove', handleTouchMove, false);
+
+                var modal = document.getElementById("myModal");
+                //var modalName = document.getElementById('modalName')
+                var modalId = document.getElementById("modalId")
+
+                // Get the button that opens the modal
+                var btn = document.getElementById("signInDialogBtn");
+
+                // Get the <span> element that closes the modal
+                //var span = document.getElementsByClassName("close")[0];
+
+                // When the user clicks on the button, open the modal
+                btn.onclick = function() {
+                    modal.style.display = "block";
+
+                }
+
+                // When the user clicks on <span> (x), close the modal
+                //span.onclick = function() {
+                //modal.style.display = "none";
+                //}
+
+                function closeModal()
+                {
+                    modal.style.display = "none"
+                }
+
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                    }
+                }
+
+                function showModal(name, id){
+                    modal.style.display = "block"
+                    //modalName.innerText = `provide feedback to ${name}`
+                    //modalId.innerText = id
+                }
+            
+                function handleTouchStart(event) {
+                    startX = event.touches[0].pageX;
+                }
+
+                function handleTouchMove(event) {
+                    if (!startX) return;
+            
+                    currentX = event.touches[0].pageX;
+            
+                    let deltaX = currentX - startX;
+            
+                    if (Math.abs(deltaX) > threshold) {
+                        if (deltaX > 0) {
+                            showView('view2');
+                        } else {
+                            showView('view1');
+                        }
+                        startX = null;
+                    }
+                }
+        </script>
+    </body>
 </html>
