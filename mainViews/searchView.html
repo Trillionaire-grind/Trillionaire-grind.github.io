@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Holder</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align: center; margin-top: 16px; display: flex; padding-left: 5%;padding-right: 5%;">
+            <input style="width: 90%;" type="text" class="search-input" placeholder="rechèch…">
+            <!--<button>🔍</button>-->
+            <button style="background: none; border: none; cursor: pointer; margin-top: 8px;"><img src="assets/search.svg"></button>
+
+        </div>
+        <p style="text-align: center;">-ou-</p>
+        <p style="font-size: 24px; margin-left: 5%; font-weight: bold;">Chwazi ane an ak sijè an</p>
+        <p style="font-size: 24px; margin-left: 5%; font-weight: bold;">Ané</p>
+        <div>
+            <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">1e</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double; margin-left: 5%; margin-right: 5%;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">2èm</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">3èm</p>
+                </div>
+            </div>
+            <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; margin-top: 16px;">
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">4èm</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double; margin-left: 5%; margin-right: 5%;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">5èm</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">6èm</p>
+                </div>
+            </div>
+            <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; margin-top: 16px;">
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">7èm</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double; margin-left: 5%; margin-right: 5%;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">8èm</p>
+                </div>
+                <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                    <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">9èm</p>
+                </div>
+            </div>
+        </div>
+        <p style="font-size: 24px; margin-left: 5%; font-weight: bold;">Sijè</p>
+        <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; margin-top: 16px;">
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Ayiti</p>
+            </div>
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double; margin-left: 5%; margin-right: 5%;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Sante</p>
+            </div>
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Syans</p>
+            </div>
+        </div>
+        <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; margin-top: 16px;">
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Lang</p>
+            </div>
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double; margin-left: 5%; margin-right: 5%;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Relijyon</p>
+            </div>
+            <div class="button" style="width: 30%; height: 6vh; background-color: white; border-radius: 10px; border-color: #2ABF5B; border-style: double;">
+                <p style="text-align: center; padding-top: auto; padding-bottom: auto; cursor: pointer;">Kapitalis</p>
+            </div>
+        </div>
+        <button style="margin-top: 32px;width: 90%; margin-left: 5%; margin-right: 5%; background-color: #2ABF5B; color: #fff; padding-top: 8px; padding-bottom: 8px; font-weight: bold; font-size: 16px; cursor: pointer; border-radius: 4px; border-color: #2ABF5B;">
+            Fè rechèch
+        </button>
+    </body>
+    <script>
+        let buttons = document.getElementsByClassName("button")
+
+        for (let i = 0; i < buttons.length; i++) 
+        {
+            buttons[i].addEventListener('click', () => {
+            //alert(`his was clicked yo ${buttons[i].innerText}`);
+            if(buttons[i].style.backgroundColor == '#fff' || buttons[i].style.backgroundColor == 'white')
+            {
+                buttons[i].style.backgroundColor = '#76C584'
+            }
+            else{
+                buttons[i].style.backgroundColor = '#fff'
+            }
+            
+            });
+        }
+
+      
+    </script>
+</html>

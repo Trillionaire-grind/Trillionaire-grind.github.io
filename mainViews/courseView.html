@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Holder</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 10px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+            border-bottom: 2px solid green;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        @media (max-width: 600px) {
+            table {
+                border: 0;
+            }
+            thead {
+                display: none;
+            }
+            tr {
+                display: block;
+                margin-bottom: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+            td {
+                display: block;
+                text-align: right;
+                position: relative;
+                padding: 10px;
+                border: none;
+                border-bottom: 1px solid #ddd;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 10px;
+                font-weight: bold;
+                text-align: left;
+                white-space: nowrap;
+            }
+            td:last-child {
+                border-bottom: 0;
+            }
+        }
+        </style>
+    </head>
+    <body>
+        <button style="margin-left:5%; border: none; background-color: none; color:#2ABF5B; margin-top: 16px; cursor: pointer;">&#x25c0; retounen</button>
+        <div style="text-align: center; margin-bottom: 32px;" >
+            <img src="assets/douglass.jpg" style="margin-top: 16px; border-radius: 10px;" width="90%">
+            <p style="margin-top: 32px; width: 90%; margin-left:5%; text-align: left;">Learn about the life of Frederick Douglass. 
+                A man born a slave, who won his freedom 
+                and became the first american ambassador to haiti
+            </p>
+            <p style="margin-top: 32px; width: 90%; margin-left:5%; text-align: left;" >
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Dicta molestias
+                expedita ullam cum itaque optio qui illo similique fuga laboriosam ipsam, 
+                quaerat eius esse alias dolorem dignissimos. Consectetur, laborum eveniet?
+            </p>
+
+            <p style="margin-left: 5%; text-align: left; margin-top: 32px; color: #282828; font-weight: lighter;">Modules</p>
+            <p style="margin-left: 5%; text-align: left; margin-top: 8px; color: #000; font-weight: bold; font-size: 24px;">What you will learn in this course.</p>
+            <div style="margin-left: 5%; margin-top: 8px; background-color: #fff; width: 90%; border-style: dashed none; margin-right: 5%;">
+                <p style="margin-left: 5%; background-color: #E7F9ED; width: 10vh; margin-top: 16px; padding: 8px;">Lesson 1</p>
+                <p style="margin-left: 5%; font-weight: bold; text-align: left; padding-top: 16px;">Course 1: Introduction</p>
+            </div>
+            <div>
+                <div style="display: flex; width: 90%; margin-left: 5%; margin-right:5%; background-color: white; cursor: pointer;">
+                    <img style="margin-left: 5%; margin-top:auto; margin-bottom: auto;" src="assets/video.fill.svg" height="20px" width="36px">
+                    <p style="margin-left: 8px;">Lesson 1: How To Do It</p>
+                 
+                </div>
+                <hr style="width: 90%; margin-top: 0px; margin-bottom: 0px;">
+                <div style="display: flex; width: 90%; margin-left: 5%; margin-right:5%; background-color: white; cursor: pointer;">
+                    <img style="margin-left: 5%; margin-top:auto; margin-bottom: auto;" src="assets/video.fill.svg" height="20px" width="36px">
+                    <p style="margin-left: 8px;">Lesson 1: How To Do It</p>
+                 
+                </div>
+                <hr style="width: 90%; margin-top: 0px;">
+            </div>
+        </div>
+    </body>
+</html>

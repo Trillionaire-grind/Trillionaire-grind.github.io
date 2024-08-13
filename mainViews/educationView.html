@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Liv Lakay</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                cursor: pointer;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card:hover{
+                background-color: #2ABF5B;
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 90%) {
+                .card {
+                    width: 45%;
+                }
+            }
+            
+            .search-container {
+                display: flex;
+                width: 100%;
+                max-width: 600px;
+                margin: 2px;
+            }
+
+            .search-input {
+                flex: 1;
+                padding: 10px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                outline: none;
+            }
+
+            .search-button {
+                padding: 10px 20px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-left: none;
+                border-radius: 0 5px 5px 0;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .search-button:hover {
+                background-color: #0056b3;
+            }
+
+            .chip-container {
+                display: flex;
+                justify-content: space-between; /* Distribute space evenly between chips */
+                width: 80vw; /* 80% of the viewport width */
+                margin: 20px auto; /* Center container horizontally and add margin */
+            }
+
+            .chip {
+                display: flex;
+                align-items: center;
+                background-color: #fff;
+                border-radius: 16px;
+                padding: 8px 12px;
+                font-size: 14px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                white-space: nowrap;
+                cursor: pointer;
+            }
+
+            .chip:hover{
+                background-color: #2ABF5B;
+            }
+
+            /* Text inside the chip */
+            .chip-text {
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+        </style>
+    </head>
+    <body>
+        <p style="font-size: 26px; background-color: #2ABF5B;  margin-top: 0px; padding-left: 8px; padding-top: 24px; padding-bottom: 24px; color: white;">Edikasyon<br> Adisyonèl</p>
+        <div style="margin-right: auto;margin-left: auto; width: 90%; background-color: #fff;">
+            
+        </div>
+        <div style="text-align: center; margin-top: 16px; display: flex; padding-left: 5%;padding-right: 5%;">
+            <input style="width: 80%;" type="text" class="search-input" placeholder="rechèch…">
+            <!--<button>🔍</button>-->
+            <button style="background: none; border: none; cursor: pointer; margin-top: 8px;"><img src="assets/search.svg"></button>
+        </div>
+        <div class="chip-container">
+            <div class="chip">
+                <span class="chip-text">Agrikilti</span>
+            </div>
+            <div class="chip">
+                <span class="chip-text">Teknoloji</span>
+            </div>
+            <div class="chip">
+                <span class="chip-text">Finance</span>
+            </div>
+            <!-- Add more chips here -->
+        </div>
+        <div class="card-container" style="margin-top: 32px;">
+            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;"></div>
+        </div>
+        <div class="card-container" style="margin-top: 16px;">
+            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;"></div>
+        </div>
+        <div class="card-container" style="margin-top: 16px;">
+            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;"></div>
+        </div>
+        
+        
+        <div style="height: 40px; background-color: #2ABF5B;">
+    </body>
+    <script>
+        let cards = document.getElementsByClassName("card")
+
+        for(let i=0; i<cards.length;  i++)
+        {
+            cards[i].addEventListener('click', () => {
+                newTab()
+            })
+        }
+
+        function newTab() {
+            window.open("courseView.html");
+        }
+    </script>
+</html>

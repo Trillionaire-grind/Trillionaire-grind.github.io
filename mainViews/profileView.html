@@ -3,418 +3,112 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Naples Sunrise Bay</title>
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Profile</title>
         <style>
-            /* Add your CSS styles here */
+            /* General reset and basic styles */
             body {
-                font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
             }
-            .content {
-                padding: 20px;
-            }
-            .bottom-nav {
+            footer {
                 position: fixed;
                 bottom: 0;
-                left: 0;
                 width: 100%;
-                background-color: #fff;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
                 display: flex;
                 justify-content: space-around;
-                align-items: center;
-                padding: 10px 0;
-                border-top: 1px solid #ccc; /* Add border on top */
+            
             }
-            .bottom-nav a {
-                color: #333; /* Change text color */
+            footer nav a {
                 text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
                 padding: 10px;
-                border-right: 1px solid #ccc; /* Add border between buttons */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                width: 25%; /* Equal width for each button */
-                box-sizing: border-box; /* Include padding in the width calculation */
-            }
-            .bottom-nav a:last-child {
-                border-right: none; /* Remove border on last button */
-            }
-            .bottom-nav img {
-                width: 24px;
-                height: 24px;
-                margin-bottom: 5px; /* Add spacing between icon and text */
-            }
-            .header{
-                position: absolute;
-                left: 0px;
-                right: 0px;
-                top: 0px;
-                display: flex;
-                justify-content: center; /* Center horizontally */
-                align-items: center; 
-                margin-bottom: 20px; 
             }
 
-            .btn {
-            border: none;
-            background-color: inherit;
-            padding: 14px 28px;
-            font-size: 16px;
-            cursor: pointer;
-            display: inline-block;
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
             }
-
-            .userImage{
-                display: block;
-                margin-top: 8vh; 
-                text-align: center;
-            }
-
-            
-
         </style>
-         <script type="module">
-            // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
-            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-            import { getStorage, ref} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
-
-
-            const firebaseConfig = {
-              apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-              authDomain: "naples-sunrise-bay.firebaseapp.com",
-              projectId: "naples-sunrise-bay",
-              storageBucket: "naples-sunrise-bay.appspot.com",
-              messagingSenderId: "39028676552",
-              appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-              measurementId: "G-L0QCNW7C6W"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const auth = getAuth(app)
-            const db = getFirestore(app);
-
-            function getUser() {
-            const auth = getAuth();
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    const uid = user.uid;
-                    fetchUserInfo(uid)
-                    fetchSpeeches(uid)
-                    // You can perform further actions with the user object here
-                } else {
-                    // User is signed out
-                    alert('No user signed in');
-                }
-            });
-        }
-
-
-            async function fetchUserInfo(userId)
-            {
-                const docRef = doc(db, "users", userId)
-                const docSnap = await getDoc(docRef)
-
-                if(docSnap.exists()){
-                    setData(docSnap.data())
-                }else{
-                    alert("there was an error")
-                }
-            }
-
-            function setData(data)
-            {
-                let nameTV = document.getElementById("nameTV")
-                let phoneTV = document.getElementById("phoneTV")
-                let bioTV = document.getElementById("bioTV")
-                let xTV = document.getElementById("xTV")
-                let instagramTV = document.getElementById("instagramTV")
-                let facebookTV = document.getElementById("facebookTV")
-                let emailTV = document.getElementById("emailTV")
-                let snapTV = document.getElementById("snapTV")
-
-                let profileImage = document.getElementById("profileImage")
-
-                nameTV.innerText = data.name
-                phoneTV.innerText = data.phone
-                bioTV.innerText = data.bio
-                xTV.innerText = data.x
-                instagramTV.innerText = data.instagram
-                facebookTV.innerText = data.facebook
-                emailTV.innerText = data.email
-                snapTV.innerText = data.snapchat
-                profileImage.src = data.imageUrl
-
-            }
-
-            async function fetchSpeeches(userId)
-            {
-                //const testSpeakerRef = collection(db, "meeting/currentMeeting/speakers")
-            
-                let speechesDiv = document.getElementById("speechesDiv")
-                const querySnapshot =  await getDocs(collection(db, `users/${userId}/speeches`));
-                querySnapshot.forEach((doc) => {
-                    console.log(`${doc.id} => ${doc.data().bio}`);
-                    speechesDiv.appendChild(createSpeechDiv())
-                });
-            }
-
-            function createSpeechDiv()
-            {
-                let div = document.createElement('div');
-                div.innerHTML = 
-                `<div style="width: 150px; display: inline-block; height: 160px; 
-                            background-color: #DEE2E1; margin: 10px; border-radius: 10%;"
-                    onmouseover="this.style.background='#7D2128';" 
-                    onmouseout="this.style.background='#DEE2E1';">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" 
-                        style="height: 30px; width: 40px;
-                                display: block;
-                                margin-left: auto;
-                                margin-right: auto;"
-                    />
-                    <p style="text-align: center; font-size: 16px;">pooping</p>
-                </div>`
-                
-                return div
-            }
-
-            getUser()
-
-        </script>
     </head>
-    <body>  
-        <div class="header">
-            <!--<p style="display: inline-block; font-size: 24px;  margin-left: auto;">Your Toastmasters Experience</p>-->
-            <p style="display: inline-block; font-size: 24px;  margin-left: auto; margin-right: auto;">Your Toastmasters Experience</p>
-            <!--<button class="btn" style="display: inline-block; background: none; margin-left: auto; padding-right: 8px;">edit</button>-->
+    <body>
+        
+    
+        <p style="font-size: 16px; padding-left: 5%; font-weight: bold;">Profil Mwen</p>
+        <div style="width: 90%; height: 10vh; background-color: #fff; border-radius: 10px; margin-right: auto; margin-left: auto; display: flex;">
+            <img src="assets/person.svg" height="30px" width="30px" style="border-radius: 50%; margin-top: auto; margin-bottom: auto; margin-left: 8px;">
+            <p style="font-size: 16px; font-weight: bold; margin-left: 32px; margin-top: auto; margin-bottom: auto;">Jean-Phillipe <br> <span style="font-size: 12px; font-weight: normal;">Jeanphillipe@gmail.com</span></p>
+            <p style="cursor: pointer; color: #2ABF5B; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: 16px;">Modifye</p>
         </div>
-        <br>
-        <div class="userImage">
-            <img id="profileImage" src="person.png" style="border-radius: 50%; height: 20v; width: 20vh;">
-            <h1 id="nameTV" style="font-size: 24px;"></h1>
-            <p id="bioTV"> </p>
+        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 64px; display: flex; cursor: pointer;">
+            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Chwazi Liv Ou Yo</p>
+            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
         </div>
-        <p style="text-align: start; padding-left: 8px;">Communication</p>
-        <div style="width: 80%; margin-right: auto; margin-left: auto; background-color: #ccc; height: 20vh;display: flex ">
-            <div class="leftDiv" style=" height: 100%;  width: 50%;">
-                <div class="communicationMedium" style="display: flex;">
-                    <img src="assets/phone.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="phoneTV"></p>
-                </div>
-                <div class="communicationMedium" style="display: flex;">
-                    <img src="assets/x.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="xTV"></p>
-                </div>
-                <div class="communicationMedium" style="display: flex;">
-                    <img src="assets/instagram.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="instagramTV"></p>
-                </div>
-            </div>
-            <div class="rightDiv" style=" height: 100%; width: 50%;"> 
-                <div class="communicationMedium" style="display: flex; overflow-y: hidden;">
-                    <img src="assets/mail.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="emailTV" style="font-size: 1.5vh"></p>
-                </div>
-                <div class="communicationMedium" style="display: flex;">
-                    <img src="assets/facebook.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="facebookTV"></p>
-                </div>
-                <div class="communicationMedium" style="display: flex;">
-                    <img src="assets/snap.png" height="24px" width="24px" style="padding-top: 12px; padding-left: 8px; padding-right: 8px;">
-                    <p id="snapTV"></p>
-                </div>
-            </div>
+         <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
+            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Chanje Lang</p>
+            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
         </div>
-
-        <p style="text-align: start; padding-left: 8px;">Speaking History</p>
-  
-        <div style="margin-bottom: 20vh;">
-            <div id="speechesDiv" style="display: flexbox; overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;"  onmouseover="this.style.background='#7D2128';" onmouseout="this.style.background='#DEE2E1';" onclick="showDetails('tester')">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-                
-                <div style="width: 150px; display: inline-block; height: 160px; 
-                background-color: #DEE2E1; margin: 10px; border-radius: 10%;">
-                    <p style="text-align: center; font-weight: bold;">4/20/69</p>
-                    <img src="person.png" style="height: 30px; width: 40px;
-                    display: block;
-                    margin-left: auto;
-                    margin-right: auto"/>
-                    <p style="text-align: center; font-size: 16px;">Best Prepared Speech</p>
-                </div>
-            </div>
+         <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
+            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Rezilta Devwa Ou Yo</p>
+            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
         </div>
-        <script>
-            function showDetails(tester)
-            {
-                alert("This worked")
-                let url = `./individualSpeech.html?speech=${tester}`
-                //let e
-                window.open(url, '_blank').focus();
-
-                //location.replace(url)
-
-            }
-        </script>
+         <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
+            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Sou Aplikasyon An</p>
+            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
+        </div>
+        
     </body>
 </html>
