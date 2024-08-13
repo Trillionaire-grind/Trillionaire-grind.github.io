@@ -148,6 +148,10 @@
                 margin-left: 8px;
                 margin-right: 8px;
             }
+
+            .chip.active, .chip:hover {
+                background-color: #2ABF5B; /* Primary color */
+            }
         </style>
     </head>
     <body>
@@ -199,7 +203,30 @@
         }
 
         function newTab() {
-            window.open("courseView.html");
+            window.location.replace("courseView.html");
         }
+
+        function replaceTab()
+        {
+            window.location.replace(
+                "primaryView.html");
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const chips = document.querySelectorAll('.chip');
+
+        chips.forEach(chip => {
+            chip.addEventListener('click', () => {
+                // Remove 'active' class from all tabs
+                chips.forEach(t => t.classList.remove('active'));
+
+                // Add 'active' class to the clicked tab
+                chip.classList.add('active');
+                });
+            });
+        });
+
+        
+
     </script>
 </html>
