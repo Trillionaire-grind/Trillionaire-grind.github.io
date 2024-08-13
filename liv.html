@@ -3,14 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Liv Lakay</title>
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Profile</title>
         <style>
             /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
+                background-color: #F9FAFC;
             }
             footer {
                 position: fixed;
@@ -83,78 +85,64 @@
         </style>
     </head>
     <body>
-        <div>
-            <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
-                <iframe src="mainViews/homeView.html" style="height: 100vh; width: 100%;"   ></iframe>
-            </div>
-            <div  style="display: none;"  id="libraryView" style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/libraryView.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
-            <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/educationView.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
-            <div style="display: none;"  id="profileView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/profileView.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
-        
+        <div style="text-align: center; margin-top: 16px;">
+            <img src="mainViews/assets/coats.svg.png" height="200px" width="300px">
         </div>
-        <footer>
-            <nav>
-                <a href="#"><img id="homeBtn" src="mainViews/assets/house_g.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
-                <a href="#"><img id="libraryBtn" src="mainViews/assets/books.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
-                <a href="#"><img id="educationBtn" src="mainViews/assets/brain.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
-                <a href="#"><img id="profileBtn" src="mainViews/assets/person.svg" height="24px" width="24px" onclick="changeTo(3)"></a>     
-            </nav>
-           <!--<div class="fab">+</div>--> 
-        </footer>
+        <p style="margin-left: 5%; margin-right: 5%;">
+            "Premye responsabiltie leta se travay pou 
+            tout moun ale lekol. Se sèl sa ki kapab
+            pèmèt peyi a devlope. Leta dwe ankouraje 
+            epi bay gwoup prive ki antreprann travay sa 
+            a tout kout men y’ap beswen”
+            <br>         
+            -Atik 32-2
+        <p>
+  
+        <p style="margin-left: 5%; margin-right: 5%;">
+            “ansèyman primè obligatwa pou tout mon. 
+            Lalwa sa fikse sanksyon pou sa. Leta va bay
+            elèv primè founninti klasik ak lòt materyèl 
+            y’ap bezwen gratis.” 
+            <br>
+            -Atik 32-3
+        <p>
+        <div style="width: 80%; margin-right: 10%; margin-left: 10%; background-color: #E7F9ED; border-radius: 10px; text-align: center;">
+            <p style="font-size: 32px; padding-top:16px; font-weight: bold;">
+               Liv Lekol Pou<br>
+                Avni Ayiti 
+            </p>
+            <p>
+                Jwen aksè a edikasyon
+            </p>
+            <button onclick="alert('only log in works for now')" style="margin-top: 16px; width: 80%; background-color: #2ABF5B; color: white; border-color: #2ABF5B; font-size: 16px; 
+            padding-top: 8px; padding-bottom: 8px; cursor: pointer; border-radius: 8px;">
+                Kreye Yon Kont
+            </button>
+            <br>
+            <button onclick="replaceTab()" style="margin-top: 16px; width: 80%; background-color: #E7F9ED; color: #2ABF5B; border-color: #2ABF5B; font-size: 16px; 
+            padding-top: 8px; padding-bottom: 8px; cursor: pointer; margin-bottom: 16px; border-radius: 8px;">
+                Konekte
+            </button>
+        </div>
     </body>
     <script>
-        var homeView = document.getElementById('homeView');
-        var libraryView = document.getElementById('libraryView')
-        var educationView = document.getElementById('educationView')
-        var profileView = document.getElementById('profileView')
-
-        let views = [homeView, libraryView, educationView, profileView]
-        function changeTo(destination)
-        {
-            views.forEach((view, index) => {
-                if (index === destination) {
-                    view.style.display = 'inline';
-                } else {
-                    view.style.display = 'none';
-                }
-            });
-            selectedBtn(destination)
+        function newTab() {
+            window.open("primaryView.html");
         }
 
-        function selectedBtn(destination)
+        function replaceTab()
         {
-            let homeBtn = document.getElementById("homeBtn")
-            let libraryBtn = document.getElementById("libraryBtn")
-            let educationView = document.getElementById("educationBtn")
-            let profileBtn = document.getElementById("profileBtn")
+            window.location.replace(
+                "primaryView.html");
+        }
 
-            homeBtn.src = "mainViews/assets/house.svg"
-            libraryBtn.src = "mainViews/assets/books.svg"
-            educationView.src = "mainViews/assets/brain.svg"
-            profileBtn.src = "mainViews/assets/person.svg"
-            
-            switch (destination){
-                case 0:
-                    homeBtn.src = "mainViews/assets/house_g.svg"
-                    break
-                case 1:
-                    libraryBtn.src = "mainViews/assets/books_g.svg"
-                    break
-                case 2:
-                    educationView.src = "mainViews/assets/brain_g.svg"
-                    break
-                case 3:
-                    profileBtn.src = "mainViews/assets/person_g.svg"
-                    break
-             
+        let cards = document.getElementsByClassName("card")
+
+        for(let i = 0; i < cards.length; i++) {
+            cards[i].onclick = function () {
+                newTab()
             }
         }
-        changeTo(0)
     </script>
+    
 </html>
