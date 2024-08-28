@@ -53,7 +53,7 @@
                 color: #007bff;
             }
 
-            .card-container {
+            /*.card-container {
                 display: flex;
                 width: 90%;
                 margin: 0 auto;
@@ -81,7 +81,42 @@
                 .card {
                     width: 100%;
                 }
+            }*/
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
             }
+
+            .card {
+                width: 45%;
+                height: 300px; /* Set a fixed height */
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card img {
+                width: 100%;
+                height: 60%; /* Fixed height as a percentage of the card height */
+                object-fit: cover; /* Ensures the image covers the area */
+            }
+
+            .card-content {
+                padding: 10px;
+                height: 40%; /* Adjust based on your design */
+                display: flex;
+                flex-direction: column;
+                justify-content: center; /* Centers text vertically */
+            }
+
         </style>
     </head>
     <body>
@@ -93,19 +128,20 @@
             <img src="assets/book_cover.svg" height="60px" width="50px" style="margin-top: auto; margin-bottom: auto; margin-left: 10px;">
             <div style="margin: auto; margin-bottom: auto; margin-left: 4%;">
                 <p style="font-size: 16px; font-weight: bold;">KONTINYE LEKTI<br>
-                    <span style="font-size: 10px;">Wi! Mwen konn li</span></p>
+                    <span style="font-size: 10px;">Wi! Mwen konn li</span>
+                </p>
             </div>
             <button style="background:none;
             border:none;
             margin:0;
             padding:0;
-            cursor: pointer; color: #2ABF5B; margin-right: 10px; margin-bottom: auto; margin-top: auto;" onclick="openChapter()">Kontinye</button>
+            cursor: pointer; color: #2ABF5B; margin-right: 10px; margin-bottom: auto; margin-top: auto;" onclick="openPage('book1','chapter1')">Kontinye</button>
         </div>
         <div style="display: flex;">
             <p style="font-weight: bold; margin-left: 5%;">Liv 5èm ané</p>
             <!--<p style="color: #2ABF5B; margin-left: auto; margin-right: 5%;">Wè tout</p><br>-->
         </div>
-        <div class="cardView" style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
+        <!--<div class="cardView" style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
             <div class="card" id="firstCard">
                 <img src="assets/book_cover.svg" alt="Book Cover">
                 <div class="card-content">
@@ -119,11 +155,102 @@
                 </div>
             </div>
         </div>
+        <div id="cardsDiv" style="display: flex; flex-wrap: wrap; justify-content: left;  overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
 
-        </div>
-      
-        
+        </div>-->  
+        <div class="card-container" id="cardsDiv">
+            <!-- Dynamic card content will be inserted here -->
+        </div> 
     </body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function getBooks()
+        {
+            const querySnapshot = await getDocs(collection(db, "Books"));
+
+            for(let i=0; i<querySnapshot.size; i++){
+
+            }
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                insertBook(doc.data().bookTitle, doc.data().bookAuthor, doc.data().bookImg, doc.id)
+            });
+        }
+        getBooks()
+
+        function insertBook(title, author,img, id)
+        {
+            let contentDiv = document.getElementById("cardsDiv")
+
+            contentDiv.appendChild(createBookDiv(title, author, img,  id))
+        }
+
+        function createBookDiv(title, author, img, id) {
+            let div = document.createElement('div');
+            div.className = 'card'; // Ensure it matches the CSS class
+
+            div.innerHTML = `
+                <img src="${img}" alt="Book Cover">
+                <div class="card-content">
+                    <p style="font-weight: bold;">${title}<br><span style="font-size: 12px;">${author}</span></p>
+                </div>`;
+            div.addEventListener('click', () => {
+                openIndividualBook(id);
+            });
+
+            return div;
+        }
+
+        /*function createBookDiv(title,  author,  img, id)
+        {
+            let div = document.createElement('div');
+            div.className = 'speechCard';
+            div.dataset.speechId = id;
+
+            div.innerHTML = `
+                <div class="card">
+                    <img src="${img}" width="100vh" alt="Book Cover">
+                    <div class="card-content">
+                        <p style="font-weight: bold;">${title}<br><span style="font-size: 12px;">${author}</span></p>
+                    </div>
+                </div>`;
+            div.addEventListener('click', () => {
+                    openIndividualBook(id);
+                });   
+
+            return div;
+        }*/
+
+        function openIndividualBook(id)
+        {
+            let url = `./individualBookView.html?id=${id}`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+    </script>
     <script>
         function newTab() {
             window.open("individualBookView.html");
@@ -132,6 +259,13 @@
         function openChapter()
         {
             window.open("chapterView.html");
+        }
+
+        function openPage(bookId, chapterName)
+        {
+            let url = `./pagesView.html?id=${bookId}?chapter=${chapterName}`
+            //let e
+            window.open(url, '_blank').focus();
         }
 
         let card = document.getElementById("firstCard")
