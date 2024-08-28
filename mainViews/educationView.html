@@ -69,14 +69,19 @@
                 overflow: hidden;
                 cursor: pointer;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+   
             }
 
             .card:hover{
                 background-color: #2ABF5B;
             }
             .card img {
-                width: 100%;
-                height: auto;
+                flex-shrink: 0;
+                width: 96%;
+                height: 96%
             }
             .card-content {
                 padding: 10px;
@@ -177,16 +182,28 @@
             <!-- Add more chips here -->
         </div>
         <div class="card-container" style="margin-top: 32px;">
-            <div class="card" style="height:20vh;"></div>
-            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/douglass.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
         </div>
         <div class="card-container" style="margin-top: 16px;">
-            <div class="card" style="height:20vh;"></div>
-            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
         </div>
         <div class="card-container" style="margin-top: 16px;">
-            <div class="card" style="height:20vh;"></div>
-            <div class="card" style="height:20vh;"></div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
         </div>
         
         
@@ -225,8 +242,6 @@
                 });
             });
         });
-
-        
 
     </script>
 </html>
