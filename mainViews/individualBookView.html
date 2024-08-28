@@ -24,8 +24,8 @@
             }
             .fab {
                 position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
+                bottom: 40px; /* Adjust as needed */
+                right:  40px;
                 background-color: #2ABF5B;
                 color: white;
                 width: 50px;
@@ -36,7 +36,6 @@
                 font-size: 24px;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
                 cursor: pointer;
-                transform: translateX(50%);
             }
             /* Styling for icons in the bottom navigation bar */
             footer{
@@ -82,56 +81,318 @@
                     width: 100%;
                 }
             }
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+            }
         </style>
     </head>
     <body>
         <div style="text-align: center;">
-            <img style="margin-top: 32px;" src="assets/book_cover.svg"  width="50%">
+            <!--<img style="margin-top: 32px;" id="bookIV" src="assets/book_cover.svg"  width="50%">-->
+            <img style="margin-top: 32px;" id="bookIV"   width="50%">
+
 
         </div>
         <div style="margin-left: 5%; margin-right: 5%;">
-            <p style="font-size: 24px;">Wi! Mwen Konn Li</p>
+            <p style="font-size: 24px;" id="titleTV"></p>
             <div style="background-color: #fff; width: 100%; height: 10vh; display: flex; border-radius: 10px;">
                 <div style="width: 30%; text-align: center; margin-bottom: 30%;">
-                    <p style="color: #BCBDC1; ">Auteur<br>
-                    <span style="color: black;">Toussaint L'Ouverture</span></p>
+                    <p style="color: #BCBDC1; " >Otè<br>
+                    <span style="color: black;" id="authorTV"></span></p>
                 </div>
                 <hr style="background-color: black; margin-top: auto; margin-bottom: auto;" width="1" size="60%" >
                 <div style="width: 30%; text-align: center; margin-bottom: 30%;">
-                    <p style=" color: #BCBDC1;">Sijè<br> <span style=" color: black;">Literature</span></p>
+                    <p style=" color: #BCBDC1;" >Sijè<br> <span id="subjectTV" style=" color: black;"></span></p>
                 </div>
                 <hr style="background-color: black; margin-top: auto; margin-bottom: auto;" width="1" size="60%" >
                 <div style="width: 30%; text-align: center; margin-bottom: 30%;">
-                    <p style="color: #BCBDC1;">Ané<br> <span style="color: black;">1e-2èm</span></p>
+                    <p style="color: #BCBDC1;" >Ané<br> <span id="yearTV" style="color: black;"></span></p>
                 </div>
                 
             </div>
             <p style="font-weight: bold; font-size: 24px;">Kontni</p>
-            <div class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; cursor: pointer;">
-                <p style="font-weight: bold; margin-left: 8px; ">Chapitre 1: <span style="font-weight: normal;">Kòmanse Lekti</span></p>
+            <div id="chaptersDiv">
+                <!--<div id="pressableDiv" class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; cursor: pointer;">
+                    <p style="font-weight: bold; margin-left: 8px; ">Chapitre 1: <span style="font-weight: normal;">Kòmanse Lekti</span></p>
+                </div>
+                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
+                    <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto; ">Chapitre 2: <span style="font-weight: normal;">Kontinye Lekti</span></p>
+                </div>
+                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
+                    <p style="font-weight: bold; margin-left: 8px; ">Chapitre 3: <span style="font-weight: normal;">Fini Lekti</span></p>
+                </div>-->
             </div>
-            <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
-                <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto; ">Chapitre 2: <span style="font-weight: normal;">Kontinye Lekti</span></p>
-            </div>
-            <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
-                <p style="font-weight: bold; margin-left: 8px; ">Chapitre 3: <span style="font-weight: normal;">Fini Lekti</span></p>
+            
+            <!--Programatically add the chapters with ID that will open a  new page that shows all  the pages-->
+        </div>
+        <div class="fab" onclick="openDialog()">+</div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeDialog()">&times;</span>
+                <h2>Ajouté Yon Chapit</h2>
+                <div>
+                    <label for="titleTV">Tit Chapit  lan:</label>
+                    <input type="text" id="chapterTV" name="title" placeholder="Meté tit chapit lan"><br><br>
+                    
+                    <label for="">Kombien paj:</label>
+                    <input type="number" id="pageTV" name="description" placeholder="Menté kantité paj"><br><br>
+                    <p>(# paj...max 15)</p>
+                    
+                    <button id="submitBtn">Submit</button>
+                </div>
             </div>
         </div>
         
     </body>
 
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        let titleTV = document.getElementById("titleTV")
+        let authorTV = document.getElementById("authorTV")
+        let bookIV = document.getElementById("bookIV")
+        let subjectTV = document.getElementById("subjectTV")
+        let yearTV = document.getElementById("yearTV")
+
+        let book = "";
+
+        //this will fetch the book based on the parimeter set up from the previous view...
+        //it will also fetch the name of all the chapters. onclick will fetch the pages and show the first one, that will have an
+        //arrow to go next if not last page,  and back if not first page. Since it is text we can fetch all the data at the same 
+        //time. With that besides bugs that will pop up the primary feature of the app is set up
+        async function getBook(id)
+        {
+            const chaptersRef = collection(db, `Books/${id}/chapters`)
+            const bookSnapshot = await getDoc(doc(db, `Books/${id}`))
+            let chaptersDiv = document.getElementById("chaptersDiv")
+
+
+            const chaptersSnapshot = await getDocs(chaptersRef)
+
+            let chapters = ""
+
+
+            if (bookSnapshot.exists()) {
+                console.log("Document data:", bookSnapshot.data());
+
+                titleTV.textContent = `"${bookSnapshot.data().bookTitle}"`
+                authorTV.textContent = `${bookSnapshot.data().bookAuthor}` 
+                bookIV.src = `${bookSnapshot.data().bookImg}`
+                yearTV.textContent = `${bookSnapshot.data().bookYear}`
+                subjectTV.textContent = `"${bookSnapshot.data().bookSubject}"`
+
+                chaptersSnapshot.forEach((doc) => {
+                    console.log(`Chapter name ${doc.id}`)
+                    chaptersDiv.appendChild(createChapterDiv(bookSnapshot.id, doc.id))
+                    
+                })
+
+            } else {
+                // docSnap.data() will be undefined in this case
+                console.log("No such document!");
+            
+            }
+        }
+
+        function addChapter(bookId, chapterName)
+        {
+            let titleTV = document.getElementById("titleTV")
+            let pageTV = document.getElementById("pageTV")
+
+            let pages = []
+            for(let i=0; i<pageTV.value; i++){
+                pages.push({i: "no text transcribed"})
+            }
+            const chapterRef = doc(db,'Books', `${bookId}`,'chapters',`${chapterName}`)
+            setDoc(
+                chapterRef,{
+                    chapter_name : `${chapterName}`,
+                    chapter_pages : `${pageTV.value}`
+                }
+            ) 
+            createPages(bookId, chapterName, pageTV.value)
+            closeDialog()
+        }
+
+        let submitBtn = document.getElementById("submitBtn")
+
+        submitBtn.onclick = () => {
+            let chapter = document.getElementById('chapterTV').value
+            addChapter(book, chapter)
+        }
+
+        function extractParamsFromUrl(url) {
+            // Extract the query string part from the URL
+            const bookId = url.split('?')[1];
+            
+            console.log(`queryString${bookId} `)
+            
+            // Split the query string into individual key-value pairs
+            const bookParams = bookId.split('&');
+            console.log(`params ${bookParams} `)
+            
+            // Initialize an object to store the extracted parameters
+            const extractedParams = {};
+            
+    
+            bookParams.forEach(param => {
+                const [key, value] = param.split('=');
+                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+            })
+            
+
+            
+            //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
+            // Return an array with values of 'speech' and 'user'
+            //return [extractedParams['speech'], extractedParams['user']];
+            book = extractedParams[`id`]
+            getBook(extractedParams['id'])
+        }
+
+        extractParamsFromUrl(window.location.href);
+
+        function createChapterDiv(bookId, chapterName)
+        {
+            let div = document.createElement('div');
+            div.className = 'chapterDiv';
+            div.dataset.speechId = bookId;
+            div.innerHTML = `
+                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
+                    <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto; ">${chapterName} <span style="font-weight: normal;"></span></p>
+                </div>`;
+            div.addEventListener('click', () => {
+                openPage(bookId, chapterName);
+            });
+
+            let pressTimer;
+
+            div.addEventListener('mousedown', () => {
+                pressTimer = setTimeout(() => {
+                    openEdit(bookId, chapterName)
+                }, 500); // 1000 ms = 1 second
+            });
+
+            div.addEventListener('mouseup', () => {
+                clearTimeout(pressTimer);
+            });
+
+            div.addEventListener('mouseleave', () => {
+                clearTimeout(pressTimer);
+            });
+
+            return div;
+        }
+
+        function openPage(bookId, chapterName)
+        {
+            let url = `./pagesView.html?id=${bookId}?chapter=${chapterName}`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+
+        function createPages(bookId, chapterName, pages){
+            let data = {text: "no text transcribed"}
+            for(let i=1; i<=pages; i++){
+                const pagesRef = doc(db,'Books', `${bookId}`,'chapters',`${chapterName}`, 'pages', `page${i}`)
+                setDoc(
+                    pagesRef,{
+                        text : `no text transcribed`
+                    }
+                ) 
+            }
+            let chaptersDiv = document.getElementById("chaptersDiv")
+
+            chaptersDiv.appendChild(createChapterDiv(bookId, chapterName))
+            //location.reload();
+        }
+
+    </script>
+
     <script>
         let chapterDivs = document.getElementsByClassName("chapterDiv")
+
+        function openDialog() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeDialog() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+
 
         for(let i=0; i < chapterDivs.length; i++)
         {
             chapterDivs[i].addEventListener('click', () => {
                 newTab()
+                
             })
+            
         }
 
         function newTab() {
             window.open("chapterView.html");
+        }
+
+        function openEdit(bookId, chapterName)
+        {
+            let url = `./editView.html?id=${bookId}?chapter=${chapterName}`
+            //let e
+            window.open(url, '_blank').focus();
+            //window.open("editView.html")
         }
     </script>
 </html>
