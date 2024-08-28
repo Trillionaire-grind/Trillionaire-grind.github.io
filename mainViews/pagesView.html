@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Page</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+          
+        }
+
+        .book-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            display: flex;
+            align-items: center;
+            height: 90%;
+        }
+
+        .book-page {
+            width: 100%;
+            background-color: #fff;
+            padding: 2rem;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            line-height: 1.6;
+            z-index: 1;
+        }
+
+      
+
+        .book-page h1, .book-page h2, .book-page h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .book-page p {
+            text-align: justify;
+        }
+
+        .arrow {
+            position: absolute;
+            top: 50%;
+            font-size: 2rem;
+            color: #333;
+            cursor: pointer;
+            user-select: none;
+            z-index: 2;
+        }
+
+        .arrow-left {
+            left: -40px;
+        }
+
+        .arrow-right {
+            right: -40px;
+        }
+
+        .arrow:hover {
+            color: #555;
+        }
+    </style>
+    </head>
+    <body>
+        <div class="book-container">
+            <div id="leftBtn" class="arrow arrow-left">&#9664;</div>
+            <div class="book-page">
+                <h1 id="chapterTV" ></h1>
+                <p id="contentTV"></p>
+                <h2 id="pageTV"></h2>
+            </div>
+            <div id="rightBtn" class="arrow arrow-right">&#9654;</div>
+        </div>
+    </body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+
+
+        let leftBtn = document.getElementById("leftBtn")
+        let rightBtn = document.getElementById("rightBtn")
+
+        let pageDiv = document.getElementById("pageDiv")
+
+        let pagePosition = 0
+        let chapterTV = document.getElementById("chapterTV")
+        let pageTV = document.getElementById("pageTV")
+
+        let pagesContent = []
+        let pageNames = []
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function getPages(id, chapterName)
+        {
+            const pageReference = collection(db, `Books/${id}/chapters/${chapterName}/pages`)
+
+            const pageCollectionSnap = await getDocs(pageReference)
+
+            chapterTV.innerText = chapterName
+
+            pageCollectionSnap.forEach((doc) => {
+                    console.log(`page name ${doc.id}`)
+                    pageNames.push(doc.id)
+                    //chaptersDiv.appendChild(createChapterDiv(bookSnapshot.id, doc.id))
+                    pagesContent.push(doc.data().text)
+                })
+
+            pageNames.sort((a, b) => {
+                const numA = extractNumber(a);
+                const numB = extractNumber(b);
+                return numA - numB;
+            });    
+            
+            showPage(0)
+
+        }
+
+        function extractNumber(pageString) {
+            return parseInt(pageString.replace('page', ''), 10);
+        }
+
+        // Sorting function
+       
+
+        function showPage(position)
+        {
+            let contentTV = document.getElementById("contentTV")
+            let pageTV = document.getElementById("pageTV")
+
+            pageTV.innerText = pageNames[position]
+            
+            if(position == 0 && pagesContent.length == 1){
+                leftBtn.style.display = "none"
+                rightBtn.style.display = "none"
+            }
+            else if(position == 0){
+                leftBtn.style.display = "none"
+                rightBtn.style.display = "block"
+            }
+            else if(position == pagesContent.length-1)
+            {
+                leftBtn.style.display = "block"
+                rightBtn.style.display = "none"
+            }
+            else{
+                leftBtn.style.display = "block"
+                rightBtn.style.display = "block"
+            }
+
+            contentTV.innerText = pagesContent[position]
+        }
+
+        leftBtn.onclick = () => {
+            showPage(pagePosition-1)
+            pagePosition--;
+        }
+
+        rightBtn.onclick = () => {
+            showPage(pagePosition+1)
+            pagePosition++;
+        }
+        
+        function getParameter(sParam)
+        {
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++) 
+            {
+                var sParameterName = sURLVariables[i].split('=');
+                console.log(`the value of parameter ${sParameterName}`)
+                if (sParameterName[0] == sParam) 
+                {
+                    return sParameterName[1];
+                }
+            }
+        }
+
+        function extractParamsFromUrl(url) {
+            // Extract the query string part from the URL
+            const bookId = url.split('?')[1];
+            const chapterId = url.split('?')[2];
+            console.log(`queryString${bookId} and  pool  ${chapterId}`)
+            
+            // Split the query string into individual key-value pairs
+            const bookParams = bookId.split('&');
+            const chapterParams = chapterId.split('&');
+            console.log(`params ${bookParams} ${chapterParams}`)
+            
+            // Initialize an object to store the extracted parameters
+            const extractedParams = {};
+            
+            // Loop through each key-value pair and extract the values
+            /*params.forEach(param => {
+                const [key, value] = param.split('=');
+                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '));
+            });*/
+            
+            bookParams.forEach(param => {
+                const [key, value] = param.split('=');
+                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+            })
+            chapterParams.forEach(param => {
+                const [key, value] = param.split('=');
+                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+            })
+
+            
+            //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
+            // Return an array with values of 'speech' and 'user'
+            //return [extractedParams['speech'], extractedParams['user']];
+            getPages(extractedParams['id'], extractedParams['chapter'])
+        }
+        extractParamsFromUrl(window.location.href);
+
+        //getPages("book1", "chapter1")
+        
+
+    </script>
+</html>

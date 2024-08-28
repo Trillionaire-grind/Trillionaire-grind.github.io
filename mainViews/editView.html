@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Holder</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+            .standardText{
+                margin-left: 5%
+            }
+            .standardHeadline{
+                margin-left: 5%;
+                font-weight: bold;
+                font-size: 24px;
+            }
+
+            .pageCardContainer{
+                background-color: #F0F1F3;
+                display: flex;
+                height: 30vh;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .pageCard{
+                width: calc(30% - 10px); /* Adjust width and account for gap */
+                height: 30vh;
+                border-radius: 10px;
+                background-color: white;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+                display: flex;
+                flex-direction: column; /* Align content vertically */
+                padding: 10px; /* Add padding inside the card */
+                box-sizing: border-box;
+                cursor: pointer;
+            }
+           
+            .pageCard p {
+                margin: 0; /* Remove default margins */
+                overflow: auto; /* Handle overflow of text */
+            }
+
+            .pageCard:hover{
+                box-shadow: 0px 4px 12px #2ABF5B;
+            }
+            
+            .plusImg{
+                margin: 30%;
+                margin-top: 70%;
+                height: 20%;
+            }
+            .individualContainer{
+                width: 30%; 
+                height: 32vh
+            }
+
+            .individualContainer :hover{
+                box-shadow: 0px 4px 12px #2ABF5B;
+            }
+
+            .pageCard :hover{
+                box-shadow: 0px 4px 12px #fff;
+            }
+
+            .overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000; /* Ensure it appears above other content */
+            }
+
+            /* Styling for the dialog */
+            .dialog {
+                width: 90%;
+                height: 80%;
+                background: white;
+                border-radius: 8px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                overflow: auto; /* Add scroll if content overflows */
+                display: flex;
+                flex-direction: column; /* Allow content to stack vertically */
+            }
+
+            /* Optional: Styling for dialog header */
+            .dialog-header {
+                padding: 15px;
+                border-bottom: 1px solid #ddd;
+                font-weight: bold;
+            }
+
+            /* Optional: Styling for dialog body */
+            .dialog-body {
+                padding: 15px;
+                flex: 1; /* Allow the body to grow and take up available space */
+            }
+
+            /* Optional: Styling for dialog footer */
+            .dialog-footer {
+                padding: 1px;
+                margin: 1px;
+                border-top: 1px solid #ddd;
+                text-align: center;
+            }
+
+            /* Styling for the close button */
+            .close-btn {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: #ddd;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            .loadingDialog {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: white;
+                border: 1px solid #ddd;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                padding: 20px;
+                width: 300px;
+                text-align: center;
+            }
+
+            .loadingDialog-content {
+                position: relative;
+            }
+
+            .step {
+                display: none;
+                margin-bottom: 20px;
+            }
+
+            .spinner {
+                border: 4px solid rgba(0,0,0,0.1);
+                border-left-color: #2ABF5B;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                animation: spin 1s linear infinite;
+                margin: 0 auto;
+            }
+
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+
+            button {
+                padding: 10px 20px;
+                border: none;
+                background-color: #2ABF5B;
+                color: white;
+                cursor: pointer;
+                border-radius: 4px;
+                font-size: 16px;
+            }
+
+            button:hover {
+                background-color: white;
+                color: #2ABF5B;
+            }
+
+            p:hover{
+                box-shadow: 0px 4px 12px #fff;
+            }
+
+            .test:hover{
+                box-shadow: 0px 4px 12px #2ABF5B;
+            }
+        </style>
+    </head>
+    <body>
+        <p class="standardText" id="chapterTV">Chapit #1</p>
+        <p class="standardHeadline" id="bookTV">Wi...Ou Ka Li!</p>
+
+        <div id="pagesDiv" style="display: flex; flex-wrap: wrap; justify-content: center;  overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
+
+        </div>
+
+        <div class="overlay" id="dialog" style="display: none;" >
+            <div class="dialog" >
+                <button class="close-btn" onclick="closeDialog()">✕</button>
+                <div class="dialog-header">
+                    <div style="display: flex;">
+                        <p id="dialogPageTV">Ajouté Yon Paj</p>
+                        <p style="color: #2ABF5B; cursor: pointer; margin-left: auto;" id="doneBtn">Fini</p>
+                    </div>
+                </div>
+                <div class="dialog-body">
+                    <input type="file" id="fileInput" accept="image/*" style="margin-bottom: 10px; display: none;">
+                    <img id="dialogImage" style="width: 100%; height: 40vh;">
+
+                </div>
+                <div class="dialog-footer">
+                    <p  style="cursor: pointer;width: 90%; background-color: #2ABF5B; color: white;padding: 8px; margin-left: auto; margin-right: auto; border-radius: 10px;" id="addPageBtn">Ajouté Paj</p>
+                </div>
+            </div>
+        </div>
+        <div id="loadingDialog" class="loadingDialog">
+            <div class="loadingDialog-content">
+                <h2>Progress</h2>
+                <div id="step1" class="step">
+                    <p>Step 1: Loading...</p>
+                    <div class="spinner"></div>
+                </div>
+                <div id="step2" class="step">
+                    <p>Step 2: Loading...</p>
+                    <div class="spinner"></div>
+                </div>
+                <div id="step3" class="step">
+                    <p>fini!</p>
+                    <p id="close-btn" style=" margin-top:32px; background-color: #2ABF5B; padding:8px; color: white;cursor: pointer;  font-weight: bold; font-size: 24px;">Okay</p>
+                </div>
+                
+            </div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@2.0.0/dist/tesseract.min.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        document.getElementById('addPageBtn').addEventListener('click', function(event){
+            document.getElementById("fileInput").click()
+        })
+
+        document.getElementById('fileInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const dialogImage = document.getElementById('dialogImage');
+            const pageCardImg = document.querySelector('.pageCard img');
+
+            if (file) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    dialogImage.src = e.target.result;
+
+                    if (pageCardImg) {
+                        pageCardImg.src = e.target.result;
+                    } else {
+                        console.error('Image element inside pageCards not found.');
+                    }
+                };
+                reader.readAsDataURL(file);
+                //Railroad (his business)
+                //industrial dev - real estate (his son)
+            }
+        });
+
+        function createEmptyPageDiv(pageNumber)
+        {
+            let pagesDiv = document.getElementById("pagesDiv")
+
+            let div = document.createElement('div');
+            div.className = 'chapterDiv';
+            //div.dataset.speechId = bookId;
+            div.innerHTML = `
+                <div style="padding: 5%;">
+                    <div class="pageCard" style="width: 100%;">
+                        <img src="assets/plus.svg"  height="70%" style="border-radius: 10px; margin-top: auto; margin-bottom: auto;">
+
+                    </div>
+                    <p class="pageTV" style="text-align: center;">${pageNumber}</p>
+                </div>`;
+            div.addEventListener('click', () => {
+                //openPage(bookId, chapterName);
+                document.getElementById("addPageBtn").innerHTML = "Ajouté Yon Paj"
+                document.getElementById("dialogPageTV").innerHTML = pageNumber
+                showDialog()
+            });
+
+            pagesDiv.appendChild(div)
+            //return div;
+        }
+
+        function createFilledPageDiv(pageNumber)
+        {
+            let pagesDiv = document.getElementById("pagesDiv")
+
+            let div = document.createElement('div');
+            div.className = 'chapterDiv';
+            //div.dataset.speechId = bookId;
+            div.innerHTML = `
+                <div style="padding: 5%;">
+                    <div class="pageCard" style="width: 100%;">
+                        <img src="assets/page.png" height="70%" style="margin-top: auto; margin-bottom: auto;"  style="border-radius: 10px;">
+
+                    </div>
+                    <p class="pageTV" style="text-align: center;">${pageNumber}</p>
+                </div>`;
+            div.addEventListener('click', () => {
+                //openPage(bookId, chapterName);
+                document.getElementById("addPageBtn").innerHTML = "Chajé paj lan"
+                document.getElementById("dialogPageTV").innerHTML = pageNumber
+                showDialog()
+               
+            });
+        
+            pagesDiv.appendChild(div)
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const loadingDialog = document.getElementById('loadingDialog');
+            const openBtn = document.getElementById('open-btn');
+            const closeBtn = document.getElementById('close-btn');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3')
+
+            closeBtn.style.display = "none"
+
+
+            closeBtn.addEventListener('click', () => {
+                loadingDialog.style.display = 'none';
+            });
+
+            function showStep1() {
+                step1.style.display = 'block';
+            }
+
+            function showStep2() {
+                step1.style.display = 'none';
+                step2.style.display = 'block';
+                // Simulate loading time for step 2
+            }
+
+            function showStep3(){
+                step3.style.display = "block"
+                step2.style.display = "none"
+                closeBtn.style.display = "inline"
+            }
+
+            function processFile()
+            {
+                let dialogImage = document.getElementById('fileInput');
+                let file = dialogImage.files[0];
+
+                if (file) {
+                    Tesseract.recognize(
+                        file,
+                        'eng', // Language code
+                        {
+                            logger: info => console.log(info) // Optional logging
+                        }
+                    ).then(({ data: { text } }) => {
+                        //document.getElementById('resultText').value = text;
+                        showStep2()
+                        let tester = extractParamsFromUrl(window.location.href);
+                        let pageNumber = document.getElementById("dialogPageTV").innerText
+                        uploadPage(tester[0], tester[1], pageNumber, text)
+                        //uploadPage(text)
+                    }).catch(error => {
+                        console.error('Error:', error);
+
+                    });
+                }
+            }
+
+            function uploadPage(bookId, chapterName, pageNumber, text)
+            {
+                const pagesRef = doc(db, "Books", `${bookId}`, "chapters", `${chapterName}`, "pages", `${pageNumber}`)
+                const docRef =  setDoc(pagesRef, 
+                {
+                    text: `${text}`
+                    }).then(() => {
+                        //loseModal()
+                        showStep3()
+                });
+            }
+
+            let doneBtn = document.getElementById("doneBtn")
+            doneBtn.onclick = () => {
+                showStep1()
+                loadingDialog.style.display = 'block';
+                dialog.style.display = 'none'
+                processFile()
+            }
+
+            async function getPages(bookId, chapterName)
+            {
+                let chapterTV = document.getElementById("chapterTV")
+                let bookTV = document.getElementById("bookTV")
+
+                chapterTV.innerText = chapterName 
+                bookTV.innerText = bookId
+
+                const pagesCol = collection(db, "Books", `${bookId}`, 'chapters', `${chapterName}`, 'pages')
+            
+                let pagesSnapshot = await getDocs(pagesCol)
+            
+                pagesSnapshot.forEach((doc) => {
+                    console.log(`Chapter name ${doc.id} and data ${doc.data().text}`)
+                    if(doc.data().text == 'no text transcribed'){
+                       createEmptyPageDiv(doc.id)
+                    }else{
+                        createFilledPageDiv(doc.id)
+                    }
+                    
+                })
+            }
+
+            function getParameter(sParam)
+            {
+                var sPageURL = window.location.search.substring(1);
+                var sURLVariables = sPageURL.split('&');
+                for (var i = 0; i < sURLVariables.length; i++) 
+                {
+                    var sParameterName = sURLVariables[i].split('=');
+                    if (sParameterName[0] == sParam) 
+                    {
+                        return sParameterName[1];
+                    }
+                }
+            }
+
+            function extractParamsFromUrl(url) {
+                // Extract the query string part from the URL
+                const bookId = url.split('?')[1];
+                const chapterId = url.split('?')[2];
+                console.log(`queryString${bookId} and  pool  ${chapterId}`)
+                
+                // Split the query string into individual key-value pairs
+                const bookParams = bookId.split('&');
+                const chapterParams = chapterId.split('&');
+                console.log(`params ${bookParams} ${chapterParams}`)
+                
+                // Initialize an object to store the extracted parameters
+                const extractedParams = {};
+
+                
+                bookParams.forEach(param => {
+                    const [key, value] = param.split('=');
+                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+                })
+                chapterParams.forEach(param => {
+                    const [key, value] = param.split('=');
+                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
+                })
+
+                return [extractedParams['id'], extractedParams['chapter']];
+
+            }
+            getPages(extractParamsFromUrl(window.location.href)[0],extractParamsFromUrl(window.location.href)[1] );
+            
+        });
+    </script>
+    <script>
+        
+        function closeDialog() {
+            document.getElementById('dialog').style.display = 'none';
+        }
+
+        function showDialog()
+        {
+            document.getElementById('dialog').style.display = 'inline';
+        }
+    </script>
+</html>
