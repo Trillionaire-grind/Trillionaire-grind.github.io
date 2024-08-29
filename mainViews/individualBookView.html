@@ -334,6 +334,20 @@
                 clearTimeout(pressTimer);
             });
 
+            div.addEventListener('touchstart', () => {
+                pressTimer = setTimeout(() => {
+                    openEdit(bookId, chapterName)
+                }, 500); // 500 ms = 0.5 second
+            }, { passive: true });
+
+            div.addEventListener('touchend', () => {
+                clearTimeout(pressTimer);
+            });
+
+            div.addEventListener('touchcancel', () => {
+                clearTimeout(pressTimer);
+            });
+
             return div;
         }
 
@@ -391,7 +405,13 @@
         {
             let url = `./editView.html?id=${bookId}?chapter=${chapterName}`
             //let e
-            window.open(url, '_blank').focus();
+            let newWindow = window.open(url, '_blank');
+            if (newWindow) {
+                newWindow.focus();
+            } else {
+                console.error('Failed to open new window.');
+            }
+            //window.open(url, '_blank').focus();
             //window.open("editView.html")
         }
     </script>
