@@ -351,11 +351,11 @@
                 let password = document.getElementById("registerPassword").value
 
                 let bio = document.getElementById("registerBio").value
-                let phone = document.getElementById("registerPhone").value
+                /*let phone = document.getElementById("registerPhone").value
                 let x = document.getElementById("registerX").value
                 let snapchat = document.getElementById("registerSnapchat").value
                 let ig = document.getElementById("registerIg").value
-                let facebook = document.getElementById("registerFacebook").value
+                let facebook = document.getElementById("registerFacebook").value*/
                 let image = document.getElementById("image")
 
                 if(name.length < 1)
@@ -374,7 +374,7 @@
                 {
                     return false;
                 }
-                if(phone.length < 1)
+                /*if(phone.length < 1)
                 {
                     return false;
                 }
@@ -393,7 +393,7 @@
                 if(facebook.length < 1)
                 {
                     return false;
-                }
+                }*/
                 if(image.files < 1)
                 {
                     return false;
@@ -426,12 +426,9 @@
             }
 
             function uploadImage(file, userId)
-                {
+            {
                     const storage = getStorage();
                     const moutainsRef = ref(storage, `${userId}.jpg`)
-
-                    
-
                     uploadBytes(moutainsRef, file).then((snapshot) => {
                         console.log('Uploaded a blob or file!');
                         getDownloadURL(moutainsRef).then((downloadURL) => {
@@ -444,7 +441,7 @@
                             alert('Error getting download URL');
                         });
                     });
-                }
+            }
 
             function createUser(userId, imageUrl)
             {
@@ -455,15 +452,15 @@
                 let password = document.getElementById("registerPassword").value
 
                 let bio = document.getElementById("registerBio").value
-                let phone = document.getElementById("registerPhone").value
+                /*let phone = document.getElementById("registerPhone").value
                 let x = document.getElementById("registerX").value
                 let snapchat = document.getElementById("registerSnapchat").value
                 let ig = document.getElementById("registerIg").value
-                let facebook = document.getElementById("registerFacebook").value
+                let facebook = document.getElementById("registerFacebook").value*/
 
 
 
-                setDoc(doc(usersRef, userId), {
+                /*setDoc(doc(usersRef, userId), {
                     name: `${name}`, x: `${x}`, instagram: `${ig}`,
                     facebook: `${facebook}`, snapchat: `${snapchat}`,email: `${email}`,
                     phone: `${phone}`, bio:`${bio}`, imageUrl: `${imageUrl}`,speeches: [] }).then(()=>{
@@ -471,7 +468,16 @@
                         //signIn(email, password)
                         window.location.reload();
                         alert('Sign-In to confirm account')
-                    });
+                    });*/
+                setDoc(doc(usersRef, userId), {
+                    name: `${name}`,email: `${email}`, bio:`${bio}`, 
+                    imageUrl: `${imageUrl}`,speeches: [] }
+                ).then(()=>{
+                    alert("created account")
+                    //signIn(email, password)
+                    window.location.reload();
+                    alert('Sign-In to confirm account')
+                });
             }
 
             async function checkRole(userId)
@@ -623,7 +629,7 @@
                 <label for="registerBio">Bio</label>
                 <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
         
-                <label for="registerPhone">Phone</label>
+               <!-- <label for="registerPhone">Phone</label>
                 <input type="tel" id="registerPhone" placeholder="Enter your phone number"><br>
         
                 <label for="registerX">X</label>
@@ -636,7 +642,7 @@
                 <input type="text" id="registerIg" placeholder="Enter your Instagram username"><br>
         
                 <label for="registerFacebook">Facebook</label>
-                <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>
+                <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>-->
         
                 <label for="image">Select image:</label>
                 <input type="file" id="image" name="img" accept="image/*"><br>
