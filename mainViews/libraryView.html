@@ -55,30 +55,6 @@
                 color: #007bff;
             }
 
-            /*.card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-            }
-            .card img {
-                width: 100%;
-                min-height: 260px;
-            }
-            .card-content {
-                padding: 10px;
-            }*/
-
-            /* Card container */
             /* Card container */
             .card-container {
                 display: flex;
@@ -125,8 +101,6 @@
                     width: calc(100% - 20px); /* Full width with gap adjustment */
                 }
             }
-
-
 
             .fab {
                 position: fixed;
@@ -193,48 +167,7 @@
             <!-- Dynamic card content will be inserted here -->
         </div> 
         <div id="contentDiv">
-            <!--<div class="cardView" style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="cardView" style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="cardView" style="display: flex; width: 90%; margin-left: auto; margin-right: auto;">
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-                <div class="card">
-                    <img src="assets/book_cover.svg" alt="Book Cover">
-                    <div class="card-content">
-                        <p style="font-weight: bold;">Wi! Mwen Konn Li<br><span style="font-size: 12px;">Toussaint L'Ouverture</span></p>
-                    </div>
-                </div>
-            </div>-->
+            
         </div>
         
         <div style="height: 40px; background-color: #2ABF5B;">
@@ -327,7 +260,6 @@
             book.subject = subject.options[subject.selectedIndex].text
 
 
-            alert(`title ${title.value}`)
             const bookRef = doc(db,'Books', `${title.value}`);
 
             setDoc(bookRef, { 
@@ -338,11 +270,10 @@
                  bookSubject: `${subject.options[subject.selectedIndex].text}`
             
             });
-            //alert('book added succesfuly')
-            //doc.data().bookTitle, doc.data().bookAuthor, doc.data().bookImg, doc.id
-            insertBook(title.value, author.value,downloadURL, 'hold')
+    
+
+            insertBook(title.value, author.value,downloadURL, title.value)
             closeDialog()
-            //window.location.reload();        
         }
 
         let submitBtn = document.getElementById("submitBtn")
@@ -362,8 +293,6 @@
             uploadBytes(moutainsRef, file).then((snapshot) => {
                 console.log('Uploaded a blob or file!');
                 getDownloadURL(moutainsRef).then((downloadURL) => {
-                    //create dialog
-                    //alert('done successfully')
                     addBook(downloadURL)
                 }).catch((error) => {
                     console.error('Error getting download URL', error);
@@ -449,12 +378,7 @@
         function closeDialog() {
             document.getElementById('myModal').style.display = 'none';
         }
-
-        /*window.onclick = function(event) {
-            if (event.target == document.getElementById('myModal')) {
-                closeDialog();
-            }
-        }*/
+        
     </script>
     
 </html>
