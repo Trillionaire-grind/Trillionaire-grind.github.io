@@ -282,6 +282,9 @@
                 <div class="dialog-body">
                     <input type="file" id="fileInput" accept="image/*" style="margin-bottom: 10px; display: none;">
                     <img id="dialogImage" style="width: 100%; height: 40vh;">
+                    <textarea readonly  id="dialogContentTV" style="margin-top: auto; margin-bottom: auto; border-radius: 10px; height: 70%; resize: none; width: 100%;">
+                        
+                    </textarea>
 
                 </div>
                 <div class="dialog-footer">
@@ -334,6 +337,11 @@
         const db = getFirestore(app);
 
         document.getElementById('addPageBtn').addEventListener('click', function(event){
+            let dialogContentTV = document.getElementById("dialogContentTV")
+            let dialogImage = document.getElementById("dialogImage")
+
+            dialogContentTV.style.display = "none"
+            dialogImage.style.display = "inline"
             document.getElementById("fileInput").click()
         })
 
@@ -348,11 +356,11 @@
                 reader.onload = function(e) {
                     dialogImage.src = e.target.result;
 
-                    if (pageCardImg) {
+                    /*if (pageCardImg) {
                         pageCardImg.src = e.target.result;
                     } else {
                         console.error('Image element inside pageCards not found.');
-                    }
+                    }*/
                 };
                 reader.readAsDataURL(file);
                 //Railroad (his business)
@@ -379,33 +387,31 @@
                 //openPage(bookId, chapterName);
                 document.getElementById("addPageBtn").innerHTML = "Ajouté Yon Paj"
                 document.getElementById("dialogPageTV").innerHTML = pageNumber
-                showDialog()
+                showDialog("no text transcribed")
             });
 
             pagesDiv.appendChild(div)
-            //return div;
         }
 
-        function createFilledPageDiv(pageNumber)
+        function createFilledPageDiv(pageNumber, text)
         {
             let pagesDiv = document.getElementById("pagesDiv")
 
             let div = document.createElement('div');
             div.className = 'chapterDiv';
-            //div.dataset.speechId = bookId;
             div.innerHTML = `
                 <div style="padding: 5%;">
                     <div class="pageCard" style="width: 100%;">
-                        <img src="assets/page.png" height="70%" style="margin-top: auto; margin-bottom: auto;"  style="border-radius: 10px;">
+                        <img src="assets/page.png"  height="70%" style="border-radius: 10px; margin-top: auto; margin-bottom: auto;">
 
                     </div>
                     <p class="pageTV" style="text-align: center;">${pageNumber}</p>
                 </div>`;
             div.addEventListener('click', () => {
                 //openPage(bookId, chapterName);
-                document.getElementById("addPageBtn").innerHTML = "Chajé paj lan"
+                document.getElementById("addPageBtn").innerHTML = "Chanjé paj lan"
                 document.getElementById("dialogPageTV").innerHTML = pageNumber
-                showDialog()
+                showDialog(text)
                
             });
         
@@ -422,9 +428,10 @@
 
             closeBtn.style.display = "none"
 
-
             closeBtn.addEventListener('click', () => {
                 loadingDialog.style.display = 'none';
+                window.location.reload();
+
             });
 
             function showStep1() {
@@ -434,7 +441,6 @@
             function showStep2() {
                 step1.style.display = 'none';
                 step2.style.display = 'block';
-                // Simulate loading time for step 2
             }
 
             function showStep3(){
@@ -456,15 +462,12 @@
                             logger: info => console.log(info) // Optional logging
                         }
                     ).then(({ data: { text } }) => {
-                        //document.getElementById('resultText').value = text;
                         showStep2()
                         let tester = extractParamsFromUrl(window.location.href);
                         let pageNumber = document.getElementById("dialogPageTV").innerText
                         uploadPage(tester[0], tester[1], pageNumber, text)
-                        //uploadPage(text)
                     }).catch(error => {
                         console.error('Error:', error);
-
                     });
                 }
             }
@@ -476,7 +479,6 @@
                 {
                     text: `${text}`
                     }).then(() => {
-                        //loseModal()
                         showStep3()
                 });
             }
@@ -506,9 +508,8 @@
                     if(doc.data().text == 'no text transcribed'){
                        createEmptyPageDiv(doc.id)
                     }else{
-                        createFilledPageDiv(doc.id)
+                        createFilledPageDiv(doc.id, doc.data().text)
                     }
-                    
                 })
             }
 
@@ -567,5 +568,23 @@
         {
             document.getElementById('dialog').style.display = 'inline';
         }
+
+        function showDialog(text)
+        {
+            let imageTV = document.getElementById("dialogImage")
+            let dialogContentTV = document.getElementById("dialogContentTV")
+
+            if(text == "no text transcribed"){
+                dialogContentTV.style.display = "none"
+                imageTV.style.display = "inline"
+            }else{
+                dialogContentTV.style.display = "inline"
+                imageTV.style.display = "none"
+                dialogContentTV.innerText = text
+            }
+            document.getElementById('dialog').style.display = 'inline';
+        }
     </script>
+
+    <!--There's a problem with getting the correct chapter name and fetching it-->
 </html>
