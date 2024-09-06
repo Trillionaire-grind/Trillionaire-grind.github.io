@@ -143,17 +143,7 @@
                 
             </div>
             <p style="font-weight: bold; font-size: 24px;">Kontni</p>
-            <div id="chaptersDiv">
-                <!--<div id="pressableDiv" class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; cursor: pointer;">
-                    <p style="font-weight: bold; margin-left: 8px; ">Chapitre 1: <span style="font-weight: normal;">Kòmanse Lekti</span></p>
-                </div>
-                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
-                    <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto; ">Chapitre 2: <span style="font-weight: normal;">Kontinye Lekti</span></p>
-                </div>
-                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
-                    <p style="font-weight: bold; margin-left: 8px; ">Chapitre 3: <span style="font-weight: normal;">Fini Lekti</span></p>
-                </div>-->
-            </div>
+            <div id="chaptersDiv"> </div>
             
             <!--Programatically add the chapters with ID that will open a  new page that shows all  the pages-->
         </div>
@@ -293,12 +283,7 @@
                 const [key, value] = param.split('=');
                 extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
             })
-            
-
-            
-            //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
-            // Return an array with values of 'speech' and 'user'
-            //return [extractedParams['speech'], extractedParams['user']];
+        
             book = extractedParams[`id`]
             getBook(extractedParams['id'])
         }
@@ -391,10 +376,8 @@
         for(let i=0; i < chapterDivs.length; i++)
         {
             chapterDivs[i].addEventListener('click', () => {
-                newTab()
-                
-            })
-            
+                newTab()  
+            })  
         }
 
         function newTab() {
@@ -411,8 +394,6 @@
             } else {
                 console.error('Failed to open new window.');
             }
-            //window.open(url, '_blank').focus();
-            //window.open("editView.html")
         }
     </script>
 </html>
