@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Individual Chat</title>
+        <style>
+            /* styles.css */
+            /* styles.css */
+            /* styles.css */
+            /* styles.css */
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #F3F3F3;
+                margin: 0;
+                padding: 0;
+            }
+
+            .chat-container {
+                width: 100%;
+                height: 90vh;
+                border: 1px solid #ccc;
+                background-color: #fff;
+                display: flex;
+                flex-direction: column;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                margin-top: 0px;
+            }
+
+            .messages {
+                flex: 1;
+                padding: 10px;
+                overflow-y: auto;
+                background-color: #999;
+            }
+
+            .message {
+                margin: 10px 0;
+                padding: 10px;
+                border-radius: 10px;
+                max-width: 80%;
+            }
+
+            .receiver {
+                background-color: black;
+                color: white;
+                align-self: flex-end;
+                border:1px solid white;
+                margin-left: auto;
+                margin-right: 8px;
+            }
+
+            .sender {
+                background-color: #fff;
+                color: black;
+                align-self: flex-start;
+                border:1px solid black;
+
+            }
+
+            .input-container {
+                display: flex;
+                padding: 10px;
+                background-color: #f1f1f1;
+            }
+
+            #chatInput {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            #sendButton {
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                background-color: #AF2D0B;
+                color: white;
+                cursor: pointer;
+                margin-left: 10px;
+            }
+
+            #sendButton:hover {
+                background-color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="display: flex; height:10vh;">
+            <img src="assets/person.svg" height="30px" width="30px" style="margin-left:8px; margin-top: auto;margin-bottom: auto;">
+            <p style="font-weight: bold; font-size: 40px; margin-top:16px; margin-left: auto; margin-right: auto; margin-bottom: 0px;">V.I.P. Group Chat</p>
+        </div> 
+
+        <div class="chat-container">
+            <div class="messages" id="messages">
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <div class="message sender">Hello, how are you?</div>
+                </div>
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <div class="message receiver">I'm good, thanks! How about you?</div>
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                </div>
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <div class="message sender">Just working on a project.</div>
+                </div>
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <div class="message receiver">What is it about?</div>
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                </div>
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <div class="message sender">We are helping content creators to add value to their audience and earn money from their audience. The chatrooom that we 
+                        are using right now, is one of the feature of this app. This will help create a community for the audience. 
+                    </div>
+                </div>
+                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                    <div class="message receiver">Sounds interesting!</div>
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                </div>
+                <!-- Add more messages as needed -->
+            </div>
+            <div class="input-container">
+                <input type="text" placeholder="Type a message..." id="chatInput">
+                <button id="sendButton">Send</button>
+            </div>
+        </div>
+    </body>
+    <script>
+        document.getElementById('sendButton').addEventListener('click', function() 
+        {
+            const input = document.getElementById('chatInput');
+            const messagesContainer = document.getElementById('messages');
+
+            if (input.value.trim() !== "") 
+            {
+                const newMessage = document.createElement('div');
+                newMessage.classList.add('message', 'sender');
+                newMessage.textContent = input.value;
+                messagesContainer.appendChild(newMessage);
+                input.value = ""; // Clear the input
+                messagesContainer.scrollTop = messagesContainer.scrollHeight; // Scroll to bottom
+            }
+        });
+
+    </script>
+</html>

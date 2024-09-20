@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Minorities</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            .fab {
+                position: fixed;
+                bottom: 20px;
+                /* Adjust as needed */
+                right: 5%;
+                background-color: #000;
+                color: #fff;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                
+            }
+
+            /* Styling for icons in the bottom navigation bar */
+            footer {
+                background-color: white;
+            }
+
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+
+            }
+
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            /*Filter dialog*/
+            .dialog {
+                display: none; /* Hidden by default */
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+                justify-content: center;
+                align-items: center;
+            }
+
+            .dialog-content {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                width: 300px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .dialog-title {
+                margin-top: 0;
+            }
+
+            .dialog-buttons {
+                margin-top: 20px;
+                text-align: right;
+            }
+
+            .dialog-buttons button {
+                margin-left: 10px;
+            }
+            /*filter dialog*/
+
+            .contentCard{
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+            }
+            .contentCard:hover{
+                box-shadow: 0 4px 8px #AF2D0B, 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            /*bottom sheet*/
+            .bottom-sheet {
+                display: none; /* Hidden by default */
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 80vh; /* 60% of viewport height */
+                background: white;
+                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+                border-radius: 16px 16px 0 0;
+                transform: translateY(100%); /* Start off-screen */
+                transition: transform 0.3s ease-out; /* Smooth transition */
+                z-index: 1000; /* Ensure it's on top */
+            }
+
+            .bottom-sheet.show {
+                transform: translateY(0); /* Slide up */
+            }
+
+            .bottom-sheet-content {
+                padding: 20px;
+                height: 100%; /* Make the content take full height */
+                overflow-y: auto; /* Allow scrolling if content overflows */
+            }
+
+            .bottom-sheet-buttons {
+                margin-top: 20px;
+                text-align: right;
+            }
+
+            .bottom-sheet-buttons button {
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+
+    <body style="margin-bottom: 44px;">
+        <div style="display: flex;">
+            <img src="assets/logo_site.png" height="60px" width="60px" style="padding: 8px;">
+            <p style="padding-left: 16px; font-size: 24px;">the minorities</p>
+            <img id="profileBtn" src="assets/person.svg" height="50px" width="50px" style="margin-left:auto; padding: 8px; cursor: pointer;">
+        </div>
+        <div style="display: flex; ">
+            <div style="margin-left: auto;">
+                <p style="cursor: pointer;" id="homeBtn">Home</p>
+                <hr id="homeHr">
+            </div>
+            <div style="padding-left: 8px; margin-right: auto;">
+                <p style="cursor: pointer;" id="postsBtn">Posts</p>
+                <hr style="display: none;" id="postsHr">
+            </div>
+        </div>
+        <hr>
+        <div id="homeDiv" style="display: inline;">
+            <div
+                style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
+                <div style="display: flex;">
+                    <img src="assets/lock_open.svg" height="28px" width="30px"
+                        style="padding-left: 16px; margin-top: auto; margin-bottom: auto;">
+                    <p style="font-weight: bold; margin-left: 16px; ">Upgrade for full access<br><span
+                            style="font-weight: normal;">support the vision</span></p>
+                    <p
+                        style="margin-top: auto; margin-bottom: auto; font-size: 32px; font-weight: bold; margin-left: auto; margin-right: 16px;">
+                        ></p>
+                </div>
+            </div>
+            <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Content</p>
+            <div class="contentCard"
+                style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; ">
+                <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
+                <p style="font-weight: bold; padding-left: 8px;">First to Pick-Up at HOOTERS WINS!</p>
+                <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
+                    <p style="margin-top: 0px;margin-bottom: 8px;">Thu 12, 2024 - 44</p><img src="assets/message_r.svg"
+                        width="15px" height="12px" style=" margin-bottom: auto;">
+                </div>
+            </div>
+            
+        </div>
+        <div id="postsDiv" style="display: none;">
+            <!--<div style="margin-left:5%; display: flex; background-color: #000; border-radius: 10px; width: 30%; padding: 8px;">
+                <img style="margin-top: 8px;" src="assets/filter.svg" width="40px" height="40px">
+                <p style="margin-left: 16px; color: #808080;">Filter</p>
+            </div>-->
+            <img id="filterBtn" style="margin-top: 8px; margin-left: 5%; cursor: pointer;" src="assets/filter.svg" width="40px" height="40px">
+
+            <div style="background-color:#fff; height:30vh; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;box-shadow: 0px 4px 8px #AF2D0B;">
+            </div>
+            <div style="background-color:#fff; height:30vh; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 32px;box-shadow: 0px 4px 8px #000000;"></div>
+            <div id="addBtn" class="fab">+</div>
+             <!-- Dialog -->
+            <div id="filterDialog" class="dialog">
+                <div class="dialog-content">
+                    <h2 class="dialog-title">Filter</h2>
+                    <form id="filter-form">
+                        <label>
+                            <input type="radio" name="filter" value="all" checked> All Posts
+                        </label><br>
+                        <label>
+                            <input type="radio" name="filter" value="community"> Community Posts
+                        </label><br>
+                        <label>
+                            <input type="radio" name="filter" value="minorities"> Minorities Posts
+                        </label>
+                    </form>
+                    <div class="dialog-buttons">
+                        <button style="cursor: pointer; padding: 8px;" id="filterCancelBtn">Cancel</button>
+                        <button style="background-color: #000; color: #fff; cursor: pointer; padding: 8px;" id="filterDoneBtn">Done</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Sheet -->
+            <div id="bottom-sheet" class="bottom-sheet">
+                <div class="bottom-sheet-content">
+                    <div style="display: flex;">
+                        <button class="mdc-button" id="closeSheetBtn" style="color: #000;">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Cancel</span>
+                        </button>
+                        <h2 class="dialog-title" style=" margin-left: auto;">Create Post</h2>
+                        <button class="mdc-button" style=" margin-left: auto; color: #AF2D0B;">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">Done</span>
+                        </button>
+                    </div>
+                  
+                    
+                    <label class="mdc-text-field mdc-text-field--outlined" style="width: 100%;">
+                        <span class="mdc-notched-outline">
+                          <span class="mdc-notched-outline__leading"></span>
+                          <span class="mdc-notched-outline__notch">
+                            
+                          </span>
+                          <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                        <input type="text" class="mdc-text-field__input" aria-labelledby="my-label-id">
+                    </label>
+                    <div style="text-align: center;">
+                        <button class="mdc-button" style=" margin-left: auto; color: #AF2D0B; margin-top: 24px">
+                            <span class="mdc-button__ripple"></span>
+                            <span class="mdc-button__label">+ add picture</span>
+                        </button>
+                    </div>
+                    <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--no-label" style="width: 100%; margin-top: 24px;" >
+                        <span class="mdc-notched-outline">
+                          <span class="mdc-notched-outline__leading"></span>
+                          <span class="mdc-notched-outline__trailing"></span>
+                        </span>
+                        <span class="mdc-text-field__resizer">
+                          <textarea style="resize: none;" class="mdc-text-field__input" rows="8" cols="40" aria-label="Label"></textarea>
+                        </span>
+                      </label>
+                </div>
+            </div>
+        </div>
+        <div id="profileBottomSheet" class="bottom-sheet" style="text-align: center;">
+            <p style="text-align: left; cursor: pointer; margin-left: 16px;" id="profileCloseBtn">close</p>
+            <div class="bottom-sheet-content">
+                <img src="assets/person.svg" style="margin-top: 0px;" height="70px" width="70px" >
+                <p style="font-size: 32px; font-weight: bold; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
+                <p style="margin-top: 0px; padding-top: 0px;">Member</p>
+                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 32px;">
+                    <img src="assets/dollar.svg" height="40px" width="40px" >
+                    <p style="margin-left: 24px; font-size: 16px; ">Subscriptions</p>
+                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                </div>
+                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
+                    <img src="assets/signature.svg" height="40px" width="40px" >
+                    <p style="margin-left: 24px; font-size: 16px; ">Personal Info</p>
+                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                </div>
+                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
+                    <img src="assets/stack.svg" height="40px" width="40px" >
+                    <p style="margin-left: 24px; font-size: 16px; ">Social Media</p>
+                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                </div> <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
+                    <img src="assets/profile.svg" height="40px" width="40px" >
+                    <p style="margin-left: 24px; font-size: 16px; ">Log Out</p>
+                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                </div>
+            </div>
+        </div>
+      
+    </body>
+    <script>
+        let homeBtn = document.getElementById("homeBtn")
+        let postsBtn = document.getElementById("postsBtn")
+
+        let homeHr = document.getElementById("homeHr")
+        let postsHr = document.getElementById("postsHr")
+
+        let homeDiv = document.getElementById("homeDiv")
+        let postsDiv = document.getElementById("postsDiv")
+
+        homeBtn.onclick = () => {
+            homeHr.style.display = 'block'
+            postsHr.style.display = 'none'
+
+            homeDiv.style.display = 'inline'
+            postsDiv.style.display = 'none'
+        }
+
+        postsBtn.onclick = () => {
+            homeHr.style.display = 'none'
+            postsHr.style.display = 'block'
+
+            homeDiv.style.display = 'none'
+            postsDiv.style.display = 'inline'
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const filterBtn = document.getElementById('filterBtn');
+            const cancelBtn = document.getElementById('filterCancelBtn');
+            const doneBtn = document.getElementById('filterDoneBtn');
+            const profileBtn = document.getElementById("profileBtn")
+
+            const filterDialog = document.getElementById("filterDialog")
+
+            const addBtn = document.getElementById('addBtn');
+            const bottomSheet = document.getElementById('bottom-sheet');
+            const profileBottomSheet = document.getElementById("profileBottomSheet")
+            const closeSheetBtn = document.getElementById('closeSheetBtn');
+            const profileCloseBtn = document.getElementById("profileCloseBtn")
+
+            // Show the dialog
+            filterBtn.addEventListener('click', () => {
+                filterDialog.style.display = 'flex';
+            });
+
+            // Hide the dialog
+            cancelBtn.addEventListener('click', () => {
+                filterDialog.style.display = 'none';
+            });
+
+            profileBtn.addEventListener('click', () => {
+                profileBottomSheet.style.display = 'block'
+                setTimeout(() => profileBottomSheet.classList.add('show'), 10); // Delay to ensure display:block takes effect
+
+            })
+
+            doneBtn.addEventListener('click', () => {
+                const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
+                alert(`Selected filter: ${selectedFilter}`);
+                filterDialog.style.display = 'none';
+            });
+
+            // Show the bottom sheet
+            addBtn.addEventListener('click', () => {
+                bottomSheet.style.display = 'block';
+                setTimeout(() => bottomSheet.classList.add('show'), 10); // Delay to ensure display:block takes effect
+            });
+
+            // Hide the bottom sheet
+            closeSheetBtn.addEventListener('click', () => {
+                bottomSheet.classList.remove('show');
+                setTimeout(() => bottomSheet.style.display = 'none', 300); // Match the duration of the transition
+            });
+
+            profileCloseBtn.addEventListener('click', () => {
+                profileBottomSheet.classList.remove('show');
+                setTimeout(() => profileBottomSheet.style.display = 'none', 300); 
+            })
+        });
+
+        function openIndividualPost()
+        {
+            let url = `./individualPost.html`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+
+        function openSubscriptionView()
+        {
+            let url = `./subscriptionView.html`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+    </script>
+</html>
