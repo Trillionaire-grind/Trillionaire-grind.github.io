@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Minorities</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="padding-bottom: 44px;">
+            <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
+                <iframe src="minoritiesView/homeView.html" style="height: 100vh; width: 100%;"   ></iframe>
+            </div>
+            <div  style="display: none;"  id="chatView" style="height: 100vh;  width: 100%;">
+                <iframe src="minoritiesView/chatView.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+            <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
+                <iframe src="minoritiesView/educationView.html" style="height: 100vh; width: 100%;" ></iframe>
+            </div>
+            <div style="display: none;"  id="shopView"  style="height: 100vh;  width: 100%;">
+                <iframe src="minoritiesView/shopView.html" style="height: 100vh; width: 100%;" ></iframe>
+            </div>
+        </div>
+        <footer>
+            <nav>
+                <a href="#"><img id="homeBtn" src="minoritiesView/assets/house.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
+                <a href="#"><img id="chatBtn" src="minoritiesView/assets/message.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
+                <a href="#"><img id="educationBtn" src="minoritiesView/assets/graduation.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
+                <a href="#"><img id="shopBtn" src="minoritiesView/assets/basket.svg" height="24px" width="24px" onclick="changeTo(3)"></a>     
+            </nav>
+           <!--<div class="fab">+</div>--> 
+        </footer>
+    </body>
+    <script>
+        var homeView = document.getElementById('homeView');
+        var chatView = document.getElementById('chatView')
+        var educationView = document.getElementById('educationView')
+        var shopView = document.getElementById('shopView')
+
+        let views = [homeView, chatView, educationView, shopView]
+        function changeTo(destination)
+        {
+            views.forEach((view, index) => {
+                if (index === destination) {
+                    view.style.display = 'inline';
+                } else {
+                    view.style.display = 'none';
+                }
+            });
+            selectedBtn(destination)
+        }
+
+        function selectedBtn(destination)
+        {
+            let homeBtn = document.getElementById("homeBtn")
+            let chatBtn = document.getElementById("chatBtn")
+            let educationBtn = document.getElementById("educationBtn")
+            let shopBtn = document.getElementById("shopBtn")
+
+            homeBtn.src = "minoritiesView/assets/house.svg"
+            chatBtn.src = "minoritiesView/assets/message.svg"
+            educationBtn.src = "minoritiesView/assets/graduation.svg"
+            shopBtn.src = "minoritiesView/assets/basket.svg"
+            
+            switch (destination){
+                case 0:
+                    homeBtn.src = "minoritiesView/assets/house_b.svg"
+                    break
+                case 1:
+                    chatBtn.src = "minoritiesView/assets/message_b.svg"
+                    break
+                case 2:
+                    educationBtn.src = "minoritiesView/assets/graduation_b.svg"
+                    break
+                case 3:
+                    shopBtn.src = "minoritiesView/assets/basket_b.svg"
+                    break
+            }
+        }
+        changeTo(0)
+    </script>
+</html>
