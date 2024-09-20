@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Notes</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            .tabs {
+                display: flex;
+                background-color: #ffffff;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .tab {
+                flex: 1;
+                text-align: center;
+                padding: 16px;
+                cursor: pointer;
+                display:flex;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            .tab i {
+                font-size: 24px;
+                display: block;
+                margin-bottom: 4px;
+            }
+
+            .tab span {
+                font-size: 14px;
+            }
+
+            .tab.active, .tab:hover {
+                color: #DAA123; /* Primary color */
+            }
+
+            .tab.active {
+                border-bottom: 2px solid #DAA123; /* Active indicator */
+            }
+
+            /* Optional: You can add a slight shadow to the tab bar for a raised effect */
+            .tabs {
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-container {
+                display: flex;
+                align-items: center;
+                width: 90%;
+                margin: 50px auto;
+                padding: 0 10px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                background-color: #EDEDED;
+                
+            }
+
+            /* Search input */
+            #search-input {
+                border: none;
+                padding: 10px 20px;
+                border-radius: 25px;
+                width: 100%;
+                font-size: 16px;
+                outline: none;
+                background-color: #EDEDED;
+
+            }
+
+            /* Search button */
+            #search-button {
+                background: none;
+                border: none;
+                padding: 10px;
+                border-radius: 25px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            /* Search button icon */
+            #search-button i {
+                font-size: 24px;
+                color: #888;
+            }
+
+            /* Button hover effect */
+            #search-button:hover {
+                background-color: #f0f0f0;
+            }
+
+            .noteCard{
+                background-color: #fff;
+            }
+            .noteCard:hover{
+                background-color: #DAA123;
+            }
+        </style>
+    </head>
+    <body style="background-color: #F7F7F7;">
+        <p style="text-align: left; background-color: white; margin: 0px; padding-left: 8px; padding-top: 32px; font-size: 32px;">Notes</p>
+        <div class="tabs" style="margin-bottom: 32px;">
+            <div class="tab active" data-icon-default="assets/app.svg" data-icon-active="assets/app_y.svg">
+                <img src="assets/app_y.svg" height="20px" width="20px">
+                <span style="padding-left: 8px;">Apps</span>
+            </div>
+            <div class="tab"  data-icon-default="assets/banknote.svg" data-icon-active="assets/banknote_y.svg">
+                <img src="assets/banknote.svg" height="20px" width="40px">
+                <span style="padding-left: 8px;">Businesses</span>
+            </div>
+            <div class="tab" data-icon-default="assets/building.svg" data-icon-active="assets/building_y.svg">
+                <img src="assets/building.svg" height="20px" width="20px">
+                <span style="padding-left: 8px;">Cities</span>
+            </div>
+        </div>
+        <!--<div class="search-container">
+            <input type="text" id="search-input" placeholder="Search...">
+            <button id="search-button">
+                <i class="material-icons">search</i>
+            </button>
+        </div>-->
+        <div style="width: 90%; margin: auto; display: flex;">
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build An App</h1>
+                <p>In this thing we are talkig about how to build an app...</p>
+            </div>
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build An App</h1>
+                <p>In this thing we are talkig about how to build an app...</p>
+            </div>
+        </div>
+    </body>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    // Remove 'active' class from all tabs and revert icons
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                        const icon = t.querySelector('img');
+                        if (icon) {
+                            icon.src = t.getAttribute('data-icon-default');
+                        }
+                    });
+
+                    // Add 'active' class to the clicked tab and change icon
+                    tab.classList.add('active');
+                    const icon = tab.querySelector('img');
+                    if (icon) {
+                        icon.src = tab.getAttribute('data-icon-active');
+                    }
+                });
+            });
+        });
+
+        function openIndividualNote()
+        {
+            let url = `./individualNoteView.html`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+
+        
+    </script>
+</html>

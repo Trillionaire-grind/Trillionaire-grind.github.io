@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Home</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            @keyframes bounce {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px); /* Adjust the height of the bounce */
+                }
+            }
+
+            hr {
+                width: 80px;
+                height: 4px;
+                background-color: black;
+                border: none;
+                animation: bounce 6s infinite; /* Infinite animation */
+            }
+        </style>
+    </head>
+    <body>
+        <div id="homeDiv" style="height: 100vh;">
+            <div id="introDiv">
+                <div style="display: flex; margin-bottom:0px; padding: 0px; height:12vh;">
+                    <p style="font-size: 10vw; margin-left: 5%;">Képler Siguineau</p>
+                    <audio id="audio" src="assets/name.mp3"></audio>
+        
+                    <img src="assets/ear.svg" onclick="playAudio()" style="margin-top: auto;  cursor: pointer;" height="22vw" width="20vw">
+                </div>
+                <p style="margin-left: 5%; margin-top: 16px;">(cape-lair)</p>
+                <div style="text-align: center; margin-top: 40%;">
+                    <p style="color: #D31034;">Apps</p>
+                    <p style="color: #0020A0;">Businesses</p>
+                    <p style="color: #005315;">Cities</p>
+                    <p style="margin-top: 20%;">Swipe Up</p>
+                    <hr>
+                </div>
+            </div>
+            <div id="kotfeDiv" style="display: none;">
+                <p style=" font-size: 32px; text-align: center; margin-top: 32px;">Discover the "Kotfè Fund"</p>
+                <div style="text-align: center;">
+                    <button style="background-color: #000; color: white;">Test</button>
+
+                </div>
+            </div>
+        </div>
+       
+        
+    </body>
+
+    <script>
+        function playAudio()
+        {
+            const audio = document.getElementById('audio');
+            audio.play();
+        }
+
+        let startY;
+
+        const swipeArea = document.getElementById('homeDiv');
+        const introDiv = document.getElementById("introDiv")
+        const kotfeDiv = document.getElementById("kotfeDiv")
+
+        swipeArea.addEventListener('touchstart', function(event) {
+            startY = event.touches[0].clientY; // Get the initial touch position
+        });
+
+        swipeArea.addEventListener('touchend', function(event) {
+            const endY = event.changedTouches[0].clientY; // Get the final touch position
+            if (startY - endY > 50) {
+                alert('Swipe Up Detected!'); // Swipe up
+                if(kotfeDiv.style.display == 'none'){
+                    kotfeDiv.style.display = 'inline'
+                    introDiv.style.display = 'none'
+                }
+            } else if (endY - startY > 50) {
+                //alert('Swipe Down Detected!'); // Swipe down
+                if(introDiv.style.display == 'none'){
+                    kotfeDiv.style.display = 'none'
+                    introDiv.style.display = 'inline'
+                }
+            }
+        });
+
+        // Mouse swipe detection
+        let isMouseDown = false;
+
+        swipeArea.addEventListener('mousedown', function(event) {
+            isMouseDown = true;
+            startY = event.clientY;
+        });
+
+        swipeArea.addEventListener('mouseup', function(event) {
+            if (isMouseDown) {
+                const endY = event.clientY;
+                if (startY - endY > 50) {
+                    if(kotfeDiv.style.display == 'none')
+                    {
+                        kotfeDiv.style.display = 'inline'
+                        introDiv.style.display = 'none'
+                    } // Swipe up
+                } else if (endY - startY > 50) {
+                    if(introDiv.style.display == 'none')
+                    {
+                        kotfeDiv.style.display = 'none'
+                        introDiv.style.display = 'inline'
+                    }// Swipe down
+                }
+                isMouseDown = false;
+            }
+        });
+
+        swipeArea.addEventListener('mouseleave', function() {
+            isMouseDown = false; // Reset on mouse leave
+        });
+
+    </script>
+</html>

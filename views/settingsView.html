@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <title>Settings</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="display: flex; margin-top: 8px;">
+            <button class="mdc-button" id="cancelBtn" style="color: #000; margin-left: 8px;">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label">Cancel</span>
+            </button>
+            <button class="mdc-button" id="doneBtn" style="color: #D31034; margin-left:auto; margin-right: 8px;">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__label">Done</span>
+            </button>
+        </div>
+        <div style="text-align: center;">
+            <img src="assets/bag.svg" height="160" width="160px">
+            <p style="font-weight: bold; font-size: 24px; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
+            <p style="margin-top: 0px;">Member</p>
+            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--no-label" style="background-color: #fff;">
+                <span class="mdc-notched-outline">
+                  <span class="mdc-notched-outline__leading"></span>
+                  <span class="mdc-notched-outline__trailing"></span>
+                </span>
+                <span >
+                  <textarea class="mdc-text-field__input" rows="5" cols="50" aria-label="Label"></textarea>
+                </span>
+            </label>
+            <div style="width: 90%; margin-left: auto; margin-right: auto; background-color: white; border: 1px #D31034; border-radius: 10px;">
+                <p style="background-color: #000; padding: 16px; color: white; border-radius: 10px 10px 0px 0px; ">Current Subscription</p>
+                <div style="display: flex;">
+                    <img src="assets/house.svg" width="30%" style="padding: 8px;">
+                    <div style="margin-left: auto; margin-right: auto;">
+                        <p style="font-weight: bold;">The <span style="color: #D31034;">Prince</span></p>
+                        <p style="text-align: start;">
+                            connect with other princes<br>
+                            grow your kingdom<br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <button class="mdc-button mdc-button--raised" style="background-color: #000; margin-top: 16px; margin-bottom: 16px;">
+                <span class="mdc-button__label">Upgrade</span>
+            </button>
+        </div>
+      
+    </body>
+</html>
