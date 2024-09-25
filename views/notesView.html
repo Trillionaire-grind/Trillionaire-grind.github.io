@@ -195,7 +195,7 @@
                 <i class="material-icons">search</i>
             </button>
         </div>-->
-        <div style="width: 90%; margin: auto; display: flex;">
+        <div style="width: 90%; margin: auto; display: flex;" id="appDiv">
             <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
                 <h1>How To Build An App</h1>
                 <p>In this thing we are talkig about how to build an app...</p>
@@ -205,12 +205,32 @@
                 <p>In this thing we are talkig about how to build an app...</p>
             </div>
         </div>
+        <div style="width: 90%; margin: auto; display: none;" id="businessDiv">
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build A Business</h1>
+                <p>In this article we are talking about how to build a city...</p>
+            </div>
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build A Business</h1>
+                <p>In this article we are talking about how to build a city...</p>
+            </div>
+        </div>
+        <div style="width: 90%; margin: auto; display: none;" id="cityDiv">
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build A City</h1>
+                <p>In this article we are talking about how to build a city...</p>
+            </div>
+            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Build A City</h1>
+                <p>In this article we are talking about how to build a city...</p>
+            </div>
+        </div>
     </body>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.tab');
 
-            tabs.forEach(tab => {
+            tabs.forEach((tab, index) => {
                 tab.addEventListener('click', () => {
                     // Remove 'active' class from all tabs and revert icons
                     tabs.forEach(t => {
@@ -227,6 +247,9 @@
                     if (icon) {
                         icon.src = tab.getAttribute('data-icon-active');
                     }
+
+                    showContent(index);
+
                 });
             });
         });
@@ -236,6 +259,28 @@
             let url = `./individualNoteView.html`
             //let e
             window.open(url, '_blank').focus();
+        }
+
+        function showContent(type)
+        {
+            //type 0 == apps
+            //type 1 == business
+            //type 2 == cities
+            let appDiv = document.getElementById("appDiv")
+            let businessDiv = document.getElementById("businessDiv")
+            let cityDiv = document.getElementById("cityDiv")
+
+            appDiv.style.display = 'none'
+            businessDiv.style.display = 'none'
+            cityDiv.style.display = 'none'
+
+            if(type == 0){
+                appDiv.style.display = 'flex'
+            }else if(type == 1){
+                businessDiv.style.display = 'flex'
+            }else if(type == 2){
+                cityDiv.style.display = 'flex'
+            }
         }
 
         
