@@ -190,7 +190,7 @@
             </div>
         </div>
   
-        <div style="width: 90%; margin: auto; display: flex; margin-top: 32px;">
+        <!--<div style="width: 90%; margin: auto; display: flex; margin-top: 32px;">
             <div class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);" onclick="openIndividualOffer()">
                 <h1>How To Build An App</h1>
                 <p>In this thing we are talkig about how to build an app...</p>
@@ -199,13 +199,28 @@
                 <h1>How To Build An App</h1>
                 <p>In this thing we are talkig about how to build an app...</p>
             </div>
+        </div>-->
+        <div id="educationDiv">
+            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+                <p style="font-size: 24px; margin-left: 8px;">How To Sell...</p>
+            </div>
+        </div>
+        <div id="appDiv" style="display: none;">
+            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+                <p style="font-size: 24px; margin-left: 8px;">How To Never Forget A Name</p>
+            </div>
+        </div>
+        <div id="serviceDiv" style="display: none;">
+            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+                <p style="font-size: 24px; margin-left: 8px;">Build Your Billion Dollar Idea</p>
+            </div>
         </div>
     </body>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
         const tabs = document.querySelectorAll('.tab');
 
-        tabs.forEach(tab => {
+        tabs.forEach((tab, index) => {
                 tab.addEventListener('click', () => {
                     // Remove 'active' class from all tabs and revert icons
                     tabs.forEach(t => {
@@ -222,6 +237,8 @@
                     if (icon) {
                         icon.src = tab.getAttribute('data-icon-active');
                     }
+
+                    showOffer(index)
                 });
             });
         });
@@ -231,6 +248,28 @@
             let url = `./individualOfferView.html`
             //let e
             window.open(url, '_blank').focus();
+        }
+
+        function showOffer(type)
+        {
+            //type 0 == education
+            //type 1 == apps
+            //type 2 == services
+            let educationDiv = document.getElementById("educationDiv")
+            let appDiv = document.getElementById("appDiv")
+            let serviceDiv = document.getElementById("serviceDiv")
+
+            educationDiv.style.display = 'none'
+            appDiv.style.display = 'none'
+            serviceDiv.style.display = 'none'
+
+            if(type == 0){
+                educationDiv.style.display = 'flex'
+            }else if(type == 1){
+                appDiv.style.display = 'flex'
+            }else if(type == 2){
+                serviceDiv.style.display = 'flex'
+            }
         }
     </script>
 </html>
