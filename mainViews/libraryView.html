@@ -55,208 +55,340 @@
                 color: #007bff;
             }
 
+            /* Card container */
             .card-container {
-                display: flex;
+                display: block;
                 width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-                padding: 2px;
-                gap: 10%;
+                margin: 0 auto; /* Center horizontally */
             }
+
+            /* Individual card */
             .card {
-                width: 45%;
+                width: calc(50% - 20px); /* Adjust width to account for gap */
+                height: 400px; /* Fixed height */
                 background-color: white;
                 border-radius: 6px;
                 overflow: hidden;
-                cursor: pointer;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-   
+                flex-direction: column;
+                margin-bottom: 10%;
             }
 
-            .card:hover{
-                background-color: #2ABF5B;
-            }
+            /* Image inside the card */
             .card img {
-                flex-shrink: 0;
-                width: 96%;
-                height: 96%
+                width: 100%;
+                height: 70%; /* Fixed height as a percentage of the card height */
+                object-fit: cover; /* Ensures the image covers the area */
+                display: block; /* Removes any extra space below the image */
             }
+
+            /* Card content */
+            /*
             .card-content {
                 padding: 10px;
+                height: 30%; /* Adjust based on your design 
+                display: flex;
+                flex-direction: column;
+                justify-content: center; /* Centers text vertically 
+            }*/
+
+            .test{
+                width: 100%;
             }
 
-            @media (max-width: 90%) {
+            /* Responsive adjustments */
+            @media (max-width: 768px) {
                 .card {
-                    width: 45%;
+                    width: calc(100% - 20px); /* Full width with gap adjustment */
                 }
             }
-            
-            .search-container {
-                display: flex;
-                width: 100%;
-                max-width: 600px;
-                margin: 2px;
-            }
 
-            .search-input {
-                flex: 1;
-                padding: 10px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                outline: none;
-            }
-
-            .search-button {
-                padding: 10px 20px;
-                font-size: 16px;
-                border: 1px solid #ccc;
-                border-left: none;
-                border-radius: 0 5px 5px 0;
-                background-color: #007bff;
-                color: white;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            .search-button:hover {
-                background-color: #0056b3;
-            }
-
-            .chip-container {
-                display: flex;
-                justify-content: space-between; /* Distribute space evenly between chips */
-                width: 80vw; /* 80% of the viewport width */
-                margin: 20px auto; /* Center container horizontally and add margin */
-            }
-
-            .chip {
-                display: flex;
-                align-items: center;
-                background-color: #fff;
-                border-radius: 16px;
-                padding: 8px 12px;
-                font-size: 14px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-                white-space: nowrap;
-                cursor: pointer;
-            }
-
-            .chip:hover{
+            .fab {
+                position: fixed;
+                bottom: 10vh; /* Adjust as needed */
+                right:  40px;
                 background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
             }
 
-            /* Text inside the chip */
-            .chip-text {
-                margin-left: 8px;
-                margin-right: 8px;
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 1; /* Sit on top */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
             }
 
-            .chip.active, .chip:hover {
-                background-color: #2ABF5B; /* Primary color */
+            .modal-content {
+                background-color: #fefefe;
+                margin: 15% auto; /* 15% from the top and centered */
+                padding: 20px;
+                border: 1px solid #888;
+                width: 80%; /* Could be more or less, depending on screen size */
+            }
+
+            .close {
+                color: #aaa;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
             }
         </style>
     </head>
-    <body>
-        <p style="font-size: 26px; background-color: #2ABF5B;  margin-top: 0px; padding-left: 8px; padding-top: 24px; padding-bottom: 24px; color: white;">Edikasyon<br> Adisyonèl</p>
-        <div style="margin-right: auto;margin-left: auto; width: 90%; background-color: #fff;">
+    <body >
+        <header>
+            <p style="font-size: 26px; padding-left: 5%; text-align: center;">Biblioyotèk</p>
+        </header>
+    
+        <div style="display: flex;">
+            <p style="font-size: 26px; padding-left: 5%; font-weight: bold;">5èm Ané</p>
+            <button style="color: #2ABF5B; background-color: none; border: none; cursor: pointer; margin-left: auto; margin-right: 5%;" onclick="openSearch()">rechèch</button>
+        </div>
+        <div class="card-container" id="cardsDiv" style="margin-bottom: 32px;">
+            <!-- Dynamic card content will be inserted here -->
+        </div> 
+        <div id="contentDiv">
             
         </div>
-        <div style="text-align: center; margin-top: 16px; display: flex; padding-left: 5%;padding-right: 5%;">
-            <input style="width: 80%;" type="text" class="search-input" placeholder="rechèch…">
-            <!--<button>🔍</button>-->
-            <button style="background: none; border: none; cursor: pointer; margin-top: 8px;"><img src="assets/search.svg"></button>
-        </div>
-        <div class="chip-container">
-            <div class="chip">
-                <span class="chip-text">Agrikilti</span>
-            </div>
-            <div class="chip">
-                <span class="chip-text">Teknoloji</span>
-            </div>
-            <div class="chip">
-                <span class="chip-text">Finance</span>
-            </div>
-            <!-- Add more chips here -->
-        </div>
-        <div class="card-container" style="margin-top: 32px;">
-            <div class="card" style="height:20vh;">
-                <img src="assets/douglass.jpg">
-            </div>
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-        </div>
-        <div class="card-container" style="margin-top: 16px;">
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-        </div>
-        <div class="card-container" style="margin-top: 16px;">
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-        </div>
-        <div class="card-container" style="margin-top: 16px;">
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-            <div class="card" style="height:20vh;">
-                <img src="assets/course_thumb.jpg">
-            </div>
-        </div>
-        
-        
         
         <div style="height: 40px; background-color: #2ABF5B;">
+        <div class="fab" onclick="openDialog()">+</div>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeDialog()">&times;</span>
+                <h2>Ajouté Yon Liv</h2>
+                <div>
+                    <label for="imageUpload">Imag Liv La</label>
+                    <input type="file" id="image" name="imageUpload" accept="image/*"><br><br>
+                    
+                    <label for="titleTV">Tit Liv Lan:</label>
+                    <input type="text" id="titleTV" name="title" placeholder="Meté tit liv lan"><br><br>
+                    
+                    <label for="">Otè:</label>
+                    <input type="text" id="authorTV" name="description" placeholder="Meté nom otè an"><br><br>
+                    
+                    <label for="subject">Sijè:</label>
+                    <select id="subjectDD" name="subject">
+                        <option value="ayiti">Ayiti</option>
+                        <option value="sante">Sante</option>
+                        <option value="syans">Syans</option>
+                        <option value="lang">Lang</option>
+                        <option value="relijyon">Relijyon</option>
+                        <option value="kapitalis">Kapitalis</option>
+                        <!-- Add more options as needed -->
+                    </select><br><br>
+
+                    <label for="year">Ané:</label>
+                    <select id="yearDD" name="year">
+                        <option value="1e">1e</option>
+                        <option value="nonfiction">2èm</option>
+                        <option value="science">3èm</option>
+                        <option value="history">4èm</option>
+                        <option value="history">5èm</option>
+                        <option value="history">6èm</option>
+                        <option value="history">7èm</option>
+                        <option value="history">8èm</option>
+                        <option value="history">9èm</option>
+                        <!-- Add more options as needed -->
+                    </select><br><br>
+                    
+                    <button id="submitBtn">fini</button>
+                </div>
+            </div>
+        </div>
     </body>
-    <script>
-        let cards = document.getElementsByClassName("card")
 
-        for(let i=0; i<cards.length;  i++)
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        //const bookCol = collection(db, "books")
+
+        function addBook(downloadURL)
         {
-            cards[i].addEventListener('click', () => {
-                newTab()
-            })
+            let book = new Object()
+            let title = document.getElementById("titleTV")
+            let author = document.getElementById("authorTV")
+            let subject = document.getElementById("subjectDD")
+            let year = document.getElementById("yearDD")
+
+
+            book.title = title.value 
+            book.author = author.value 
+            book.img = downloadURL
+            book.year = year.options[year.selectedIndex].text
+            book.subject = subject.options[subject.selectedIndex].text
+
+
+            const bookRef = doc(db,'Books', `${title.value}`);
+
+            setDoc(bookRef, { 
+                 bookTitle: `${title.value}`,
+                 bookAuthor: `${author.value}`,
+                 bookImg: `${downloadURL}`,
+                 bookYear: `${year.options[year.selectedIndex].text}`,
+                 bookSubject: `${subject.options[subject.selectedIndex].text}`
+            
+            });
+    
+
+            insertBook(title.value, author.value,downloadURL, title.value)
+            closeDialog()
         }
 
-        function newTab() {
-            window.location.replace("courseView.html");
+        let submitBtn = document.getElementById("submitBtn")
+
+        submitBtn.onclick = () => {
+            uploadImage()
         }
 
-        function replaceTab()
+        function uploadImage()
         {
-            window.location.replace(
-                "primaryView.html");
-        }
+            let file = document.getElementById("image").files[0]
 
-        document.addEventListener('DOMContentLoaded', () => {
-        const chips = document.querySelectorAll('.chip');
-
-        chips.forEach(chip => {
-            chip.addEventListener('click', () => {
-                // Remove 'active' class from all tabs
-                chips.forEach(t => t.classList.remove('active'));
-
-                // Add 'active' class to the clicked tab
-                chip.classList.add('active');
+            const storage = getStorage();
+            let firstNumber = Math.floor(Math.random() * 900);
+            let secondNumber = Math.floor(Math.random() * 900);
+            const moutainsRef = ref(storage, `${firstNumber}image${secondNumber}.jpg`)
+            uploadBytes(moutainsRef, file).then((snapshot) => {
+                console.log('Uploaded a blob or file!');
+                getDownloadURL(moutainsRef).then((downloadURL) => {
+                    addBook(downloadURL)
+                }).catch((error) => {
+                    console.error('Error getting download URL', error);
+                    alert('Error getting download URL');
                 });
             });
-        });
+        }
 
+        async function getBooks()
+        {
+            const querySnapshot = await getDocs(collection(db, "Books"));
+            querySnapshot.forEach((doc) => {
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+                insertBook(doc.data().bookTitle, doc.data().bookAuthor, doc.data().bookImg, doc.id)
+            });
+        }
 
-        
+        //use the constructor with a title, imgSrc
+        //oncick  will have to open the book, so that value of that can be "has to be" the ID of the book. In our case its book1
+        //after we add a book, see what happens regularly, or simply refresh the page so that it calls that function, as we grow however though
+        //will need to just put the book into the view manually. Hoow to do it so that it allows only 2 books without doing what it is now...
+        function createBookDiv(title,  author,  img, id)
+        {
+            let div = document.createElement('div');
+            div.className = 'speechCard';
+            div.dataset.speechId = id;
 
-        
+            /*div.innerHTML = `
+                <div class="card">
+                    <img src="${img}" alt="Book Cover">
+                    <div class="card-content">
+                        <p style="font-weight: bold;">${title}<br><span style="font-size: 12px;">${author}</span></p>
+                    </div>
+                </div>`;*/
+            div.innerHTML = `
+                <div class="card">
+                    <img src="${img}" alt="Book Cover">
+                    <div class="test">
+                        <p style="font-weight: bold; padding-left: 8px">${title}<br><span style="font-size: 12px;">${author}</span></p>
+                    </div>
+                </div>`;
+            div.addEventListener('click', () => {
+                openIndividualBook(id);
+            });   
+
+            return div;
+        }
+
+        function insertBook(title, author,img, id)
+        {
+            //let contentDiv = document.getElementById("contentDiv")
+            let contentDiv = document.getElementById("cardsDiv")
+
+            contentDiv.appendChild(createBookDiv(title, author, img,  id))
+        }
+
+        function openIndividualBook(id)
+        {
+            let url = `./individualBookView.html?id=${id}`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+
+        getBooks()
 
     </script>
+    <script>
+        function newTab() {
+            window.open("individualBookView.html");
+        }
+
+        function openSearch(){
+            window.location.replace("searchView.html");
+
+        }
+
+        let cards = document.getElementsByClassName("card")
+
+        for(let i = 0; i < cards.length; i++) {
+            cards[i].onclick = function () {
+                newTab()
+            }
+        }
+
+        function openDialog() {
+            document.getElementById('myModal').style.display = 'block';
+        }
+
+        function closeDialog() {
+            document.getElementById('myModal').style.display = 'none';
+        }
+        
+    </script>
+    
 </html>
