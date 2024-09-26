@@ -111,19 +111,22 @@
     <body>
         <div id="homeDiv" style="height: 100vh;">
             <div id="introDiv">
-                <div style="display: flex; margin-bottom:0px; padding: 0px; height:12vh;">
-                    <p style="font-size: 56px; margin-left: 5%;">Képler Siguineau</p>
-                    <audio id="audio" src="assets/name.mp3"></audio>
+                <div style="display: block; margin-bottom:0px; padding: 0px;">
+                    <p style="font-size: 56px; margin-left: 5%; margin-bottom: 0px;">Képler Siguineau</p>
+                    <div style="display: flex; margin-top: 0px;">
+                        <p style="margin-left: 5%; margin-top: 0px;">(cape-lair see-gee-no)</p>
+                        <audio id="audio" src="assets/name.mp3"></audio>
+                        <img src="assets/ear.svg" onclick="playAudio()" style="cursor: pointer;" height="20px" width="20px">
+                    </div>
+                    
         
-                    <img src="assets/ear.svg" onclick="playAudio()" style="margin-top: 10vh;  cursor: pointer;" height="20px" width="20px">
                 </div>
                 <br>
-                <p style="margin-left: 5%; margin-top: 16px;">(cape-lair see-gee-no)</p>
-                <div style="text-align: center; margin-top: 30vh;">
+                <div style="text-align: center; margin-top: 16vh;">
                     <p style="color: #D31034;">Apps</p>
                     <p style="color: #0020A0;">Businesses</p>
                     <p style="color: #005315;">Cities</p>
-                    <p style="margin-top: 20vh;">Swipe Up</p>
+                    <p style="margin-top: 14vh;">Swipe Up</p>
                     <hr>
                 </div>
             </div>
@@ -159,7 +162,6 @@
         swipeArea.addEventListener('touchend', function(event) {
             const endY = event.changedTouches[0].clientY; // Get the final touch position
             if (startY - endY > 50) {
-                alert('Swipe Up Detected!'); // Swipe up
                 if(kotfeDiv.style.display == 'none'){
                     kotfeDiv.style.display = 'inline'
                     introDiv.style.display = 'none'
