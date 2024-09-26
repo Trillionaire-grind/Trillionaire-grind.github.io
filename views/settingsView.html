@@ -70,7 +70,7 @@
             }
 
             .subscriptionCard{
-                width: 31%;
+                width: 30%;
                 margin-left: auto; 
                 margin-right: auto;
                 background-color: white; 
@@ -88,7 +88,9 @@
 
             @media (max-width: 768px) {
                 .card {
-                    width: 100%;
+                    width: 90%;
+                    margin-left: auto;
+                    margin-right: auto;
                 }
             }
 
@@ -118,8 +120,9 @@
             <img src="assets/bag.svg" height="160" width="160px">
             <p style="font-weight: bold; font-size: 24px; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
             <p style="margin-top: 0px;">Member</p>
-            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--no-label" style="background-color: #fff;">
-                <span class="mdc-notched-outline">
+
+            <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--no-label" style="background-color: #fff; width: 90%; margin-left: auto;  border-radius: auto;">
+                <span class="mdc-notched-outline" >
                   <span class="mdc-notched-outline__leading"></span>
                   <span class="mdc-notched-outline__trailing"></span>
                 </span>
@@ -127,6 +130,7 @@
                   <textarea id="bioTA" readonly class="mdc-text-field__input" rows="5" cols="50" aria-label="Label"></textarea>
                 </span>
             </label>
+
             <div class="subscriptionCard" >
                 <p style="background-color: #000; padding: 16px; color: white; border-radius: 10px 10px 0px 0px; ">Current Subscription</p>
                 <div style="display: flex;">
@@ -140,7 +144,7 @@
                     </div>
                 </div>
             </div>
-            <button class="mdc-button mdc-button--raised" style="background-color: #000; margin-top: 16px; margin-bottom: 16px;" onclick="openSubscriptionView()">
+            <button class="mdc-button mdc-button--raised" style="background-color: #000; margin-top: 16px; margin-bottom: 48px;" onclick="openSubscriptionView()">
                 <span class="mdc-button__label">Upgrade</span>
             </button>
         </div>
