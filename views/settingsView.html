@@ -118,7 +118,7 @@
         </div>
         <div style="text-align: center; margin-top: 8px;">
             <img src="assets/bag.svg" height="160" width="160px">
-            <p style="font-weight: bold; font-size: 24px; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
+            <p id="nameTF" style="font-weight: bold; font-size: 24px; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
             <p style="margin-top: 0px;">Member</p>
 
             <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--textarea mdc-text-field--no-label" style="background-color: #fff; width: 90%; margin-left: auto;  border-radius: auto;">
@@ -156,23 +156,35 @@
         let editBtn = document.getElementById("editBtn")
         let editBar = document.getElementById("editBar")
         let bioTA = document.getElementById("bioTA")
+        let nameTF = document.getElementById("nameTF")
 
         editBtn.onclick = () => {
             editBar.style.display = 'flex'
             editBtn.style.display = 'none'
+
             bioTA.readOnly = false
+            bioTA.style.backgroundColor = "#DAA123"
+
+            nameTF.contentEditable = true
+            nameTF.style.backgroundColor = "#DAA123"
         }
 
         cancelBtn.onclick = () => {
             editBar.style.display = 'none'
             editBtn.style.display = 'inline'
             bioTA.readOnly = true
+            nameTF.contentEditable = false
+            bioTA.style.backgroundColor = "#fff"
+            nameTF.style.backgroundColor = "#F0F1F3"
         }
 
         doneBtn.onclick = () => {
             editBar.style.display = 'none'
             editBtn.style.display = 'inline'
             bioTA.readOnly = true
+            nameTF.contentEditable = false
+            bioTA.style.backgroundColor = "#fff"
+            nameTF.style.backgroundColor = "#F0F1F3"
         }
 
         function openSubscriptionView()
