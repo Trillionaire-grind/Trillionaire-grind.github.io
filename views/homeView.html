@@ -13,77 +13,6 @@
                 background-color: #F0F1F3;
             }
 
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-
-            .card-content {
-                padding: 10px;
-            }
-
             @media (max-width: 768px) {
                 .card {
                     width: 100%;
@@ -111,7 +40,6 @@
     <body>
         <div id="homeDiv" style="height: 100vh;">
             <div id="introDiv">
-
                 <img src="assets/profile.png" style="margin-left: 5%; margin-top: 8px;" height="130px" width="70px">
                 <div style="display: block; margin-bottom:0px; padding: 0px; margin-top: 0px;">
                     <p style="font-size: 24px; margin-left: 5%; margin-bottom: 0px; margin-top: 0px;">Képler<br> Siguineau</p>
@@ -130,13 +58,14 @@
                     <hr>
                 </div>
             </div>
-            <div id="kotfeDiv" style="display: none;">
+            <div id="kotfeDiv" style="display: none; height: 100vh;">
                 <p style=" font-size: 32px; text-align: center; margin-top: 32px;">Discover the "Kotfè Fund"</p>
                 <div style="text-align: center;">
                     <button style="background-color: #000; color: white;">Test</button>
 
                 </div>
             </div>
+            <p>Version 0.1</p>
         </div>
        
         
