@@ -106,12 +106,15 @@
                 font-size: 14px;
             }
 
-            .tab.active, .tab:hover {
+            .tab.active {
+                color: black; /* Primary color */
+            }
+            .tab:hover {
                 color: #DAA123; /* Primary color */
             }
 
             .tab.active {
-                border-bottom: 2px solid #DAA123; /* Active indicator */
+                border-bottom: 2px solid red; /* Active indicator */
             }
 
             /* Optional: You can add a slight shadow to the tab bar for a raised effect */
@@ -239,6 +242,19 @@
                         if (icon) {
                             icon.src = t.getAttribute('data-icon-default');
                         }
+                        t.style.borderBottomColor = '#000';
+                      
+                         // Default color
+                        if(index == 0){
+                            t.style.borderBottomColor = 'red'
+                        }
+                        if(index == 1){
+                            t.style.borderBottomColor = 'blue'
+                        }
+                        else if(index == 2){
+                            t.style.borderBottomColor = 'green'
+                        }
+
                     });
 
                     // Add 'active' class to the clicked tab and change icon
@@ -247,6 +263,19 @@
                     if (icon) {
                         icon.src = tab.getAttribute('data-icon-active');
                     }
+
+                   
+                    //border-bottom: 2px solid #DAA123;
+                    if(index == 0){
+                        tab.style.color = 'black'
+                    } else if(index == 1)
+                    {
+                        tab.style.color = 'black'
+                    } else if(index == 2)
+                    {
+                        tab.style.color = 'black'
+                    }
+                    
 
                     showContent(index);
 
