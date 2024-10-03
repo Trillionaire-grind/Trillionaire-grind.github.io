@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>The Minorities</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+         
+            .card {
+                width: 60%;
+                background-color: #fff;
+                border-radius: 6px;
+                overflow: hidden;
+                margin-left: auto;
+                margin-right: auto;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                border-color: #000;
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+         
+            @media (max-width: 768px) {
+                .card {
+                    width: 80%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align: center;">
+            <p style="font-size: 32px; font-weight: bold;">Subscription Options</p>
+            
+            <div class="card">
+                <p style="color: white; background-color: #000; margin-top: 0px; padding: 16px;">Current Subscription</p>
+                <img src="assets/girls.png">
+                <p style="text-align: start; margin-left: 8px;">Starter</p>
+                <p style="text-align: start; margin-left: 8px;">US$10/<span style="font-size: 10px; color: #333;">month</span></p>
+                <p style="text-align: start; margin-left: 8px;">
+                    You get access to podcasts and X RATED exlusive content. In addition,
+                    you will be able to suggest topics, personal relationship questions, and 
+                    hypotheticals for episodes (includes benefits of bench player)
+                </p>
+                <!--<button class="mdc-button mdc-button--raised" style="width: 100%; background-color: black; margin: 8px;" >
+                    <span class="mdc-button__label">Join</span>
+                </button>-->
+            </div>
+        
+           
+            <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Update Subscription</p>
+            <div class="card">
+                <img src="assets/girls.png">
+                <p style="text-align: start; margin-left: 8px;">Waterboy</p>
+                <p style="text-align: start; margin-left: 8px;">US$2/<span style="font-size: 10px; color: #333;">month</span></p>
+                <p style="text-align: start; margin-left: 8px;">
+                    You don't get any access to content (no playtime), you simmply are helping support the 
+                    movement. ((no content))(ugrade to Bench player for content)
+                </p>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
+                    <span class="mdc-button__label">Join</span>
+                </button>
+            </div>
+            <div class="card" style="margin-top: 24px;">
+                <img src="assets/girls.png">
+                <p style="text-align: start; margin-left: 8px;">Waterboy</p>
+                <p style="text-align: start; margin-left: 8px;">US$2/<span style="font-size: 10px; color: #333;">month</span></p>
+                <p style="text-align: start; margin-left: 8px;">
+                    You don't get any access to content (no playtime), you simmply are helping support the 
+                    movement. ((no content))(ugrade to Bench player for content)
+                </p>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
+                    <span class="mdc-button__label">Join</span>
+                </button>
+            </div>
+        </div>
+        
+   
+    </body>
+    
+</html>
