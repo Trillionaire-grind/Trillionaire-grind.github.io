@@ -112,7 +112,7 @@
         <div id="homeDiv" style="height: 100vh;">
             <div id="introDiv">
 
-                <img src="assets/profile.png" style="margin-left: 5%; margin-top: 8px;" height="30%" width="20%%">
+                <img src="assets/profile.png" style="margin-left: 5%; margin-top: 8px;" height="130px" width="70px">
                 <div style="display: block; margin-bottom:0px; padding: 0px; margin-top: 0px;">
                     <p style="font-size: 24px; margin-left: 5%; margin-bottom: 0px; margin-top: 0px;">Képler<br> Siguineau</p>
                     <div style="display: flex; margin-top: 0px;">
@@ -156,10 +156,12 @@
         const kotfeDiv = document.getElementById("kotfeDiv")
 
         swipeArea.addEventListener('touchstart', function(event) {
+            event.preventDefault();
             startY = event.touches[0].clientY; // Get the initial touch position
         });
 
         swipeArea.addEventListener('touchend', function(event) {
+            event.preventDefault();
             const endY = event.changedTouches[0].clientY; // Get the final touch position
             if (startY - endY > 50) {
                 if(kotfeDiv.style.display == 'none'){
@@ -179,11 +181,13 @@
         let isMouseDown = false;
 
         swipeArea.addEventListener('mousedown', function(event) {
+            event.preventDefault();
             isMouseDown = true;
             startY = event.clientY;
         });
 
         swipeArea.addEventListener('mouseup', function(event) {
+            event.preventDefault();
             if (isMouseDown) {
                 const endY = event.clientY;
                 if (startY - endY > 50) {
@@ -205,6 +209,7 @@
         });
 
         swipeArea.addEventListener('mouseleave', function() {
+            event.preventDefault(); // Prevent default behavior
             isMouseDown = false; // Reset on mouse leave
         });
 
