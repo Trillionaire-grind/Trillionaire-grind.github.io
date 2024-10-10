@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Képler Siguineau</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+           <p style="font-size: 32px; font-weight: bold; width: 90%; margin-left: auto; margin-right: auto; text-align: center;">"How To Build An App"</p>
+           <div style="text-align: center;">
+                <iframe style="text-align: center;" height="300px" width="90%" 
+                    src="https://www.youtube.com/embed/AZVQ2W6nr44">
+                </iframe>
+                <p style="text-align: start; margin-left: 5%; margin-right: 5%; text-align: start;">
+                    If you want to do something the best way, the way to do that is by practicing. 
+                    This video is to help you practice the skill of building apps. 
+                    In this video, we're going to build Fanny's app—it's a super easy and 
+                    simple app that can be built in less than one hour, 
+                    especially because most of the bugs have been fixed over the years.
+                    I say most because there might be some bugs that I have yet to encounter. 
+                    So, if you encounter them, then you have to fix them. 
+                    It’s going to be really great for you to learn how to actually debug stuff. 
+                    I’ll make a video on debugging if you want that.<br><br>
+
+                    The video is split into three major sections:
+                    before building, building the app, and post-build. 
+                    Things are not always fully built, so even if the app looks perfect after your 
+                    internal testing, there are almost always going to be improvements. 
+                    There will always be new technologies and updates. 
+                    Post-building is actually going to be the longest process because it's ongoing. 
+                    To make your life easier, if you want to have access to the full source code of 
+                    this project and any project shared on this channel, 
+                    then you can get the full source code for only $1 a month. 
+                    If you're interested, there’s a link below in the subscription description 
+                    for you to access it. Once you purchase the subscription, 
+                    I will send that to you—please give us up to 24 hours just to make sure you get access.<br><br>
+
+                    Now, before we get started, I'd like to share the difficulty of this project.
+                    If you have already built an Android app, then this is going to be super easy. 
+                    If you know Java but have never built an Android app, 
+                    then I would say this is still going to be easy. If you don’t know Java,
+                    it falls into the medium area of difficulty. If you do not know how to code,
+                    then yes, this will be difficult—you'll have to rewatch this video multiple times. 
+                    If you're watching this and you didn’t get the source code, 
+                    then you're going to have to rewind and pause a lot. 
+                    If you have the source code, then it's easy; 
+                    you just download it and follow along as I explain.<br><br>
+
+                    That being said, I do think that if you know Java, 
+                    it’s not going to be a big deal because this app is built in Java. 
+                    If you don't know any programming, you should still watch. However, 
+                    this video does not cover the programming basics; 
+                    we go over the logic of what we're building, not the basics. 
+                    If you feel stuck and want to understand more about programming, 
+                    I highly recommend going on YouTube to find some tutorials on how to code, 
+                    specifically looking for Java. There is a plethora of free information on YouTube; 
+                    that's how I was able to build apps—mostly from YouTube. I did learn programming 
+                    from professors and teachers, but most of what I know is from people on YouTube, 
+                    which is also the reason why I’m doing this: to provide value to others.<br><br>
+
+                    There’s a nice YouTube video titled 
+                    "Introduction to Programming and Computer Science: A Full Course,"
+                    and I will include that in the description. They also have a website
+                     for more structured learning called freecodecamp.org, 
+                     so you can check that out and learn.<br><br>
+
+                    Before we get started, I’m going to show you guys what we're going to be building. 
+                    Let’s take a look at the app currently so that we know what we're going to build. 
+                    It’s called Fanny after our client. There are categories of quotes that she can click on,
+                    and she also has a new category button. For example, 
+                    if she wants to create a category around sales, then she just writes "sales" 
+                    here and adds it. That will be there. If she wants to get quotes when she’s feeling angry,
+                    then she would click here, and this way she'll get the quote. 
+                    If she wants to get a new quote, then she clicks "New Quote." 
+                    As you can see, there are the quotes here and the actual source.
+                    If she wants to edit this quote, she just clicks on "Edit" right down below,
+                    and she's able to edit. Once she's done, she presses "Save," and it saves,
+                    so she can’t edit it anymore.<br><br>
+
+                    Now, this is what the code is actually going to show. If we click "New Quote" multiple times, 
+                    we can see that it actually saved. This is what the new quote is. If she wants to delete it, 
+                    she should press the delete button right below, and it's going to give her an alert dialogue 
+                    to make sure she wants to actually delete it. If she presses "Yes," 
+                    we’re going to delete all the quotes. There are only five, so now there are no more quotes. 
+                    Because of the way the app is built, technically there is one quote—it's just an empty quote. 
+                    What she can do is either edit that one quote by clicking "Edit" again
+                    or add a new quote by pressing the "New Quote" button. It will show a dialogue with two edit texts:
+                    one for the quote and one for the source. For that, we’re going to do another new quote. 
+                    She'll type "New Quote" as the source, and then she presses "Add."<br><br>
+
+                    If we press "New Quote," it doesn’t always show up randomly, but we can check it. 
+                    Right here, you can see it actually got saved. If we go back, unfortunately, 
+                    it is erased because everything is hardcoded, so whenever something gets closed, 
+                    it is completely gone. We’re going to talk about this later in the video regarding how we can fix this. 
+                    This project is a simple project for you to learn some skills and lessons. 
+                    In this case, some of the things you’re going to learn are how to add onClick listeners, 
+                    how to add an onLongClick listener, how to create an alert dialogue, and how to add a RecyclerView,
+                    which is what this is—a RecyclerView.<br><br> 
+
+                    Keep watching, and you will learn how to do this. 
+                    If you want to get the source code for easy reference, 
+                    you can do so for this project and all the projects shared on this channel for only $1 a month.
+                    If you want access, there’s a link down below for you to get it, so do that if you’re interested, 
+                    and keep watching so you can build this app.<br><br>
+
+                    As I shared in the previous section of this video, there are a couple of things you're going to learn 
+                    throughout this process that you'll use in any of your projects. Most projects will actually end up 
+                    using these things, and it’s going to be really beneficial.
+                    The RecyclerView is a great way to display data with a good UI. 
+                    Any scrolling action usually uses some kind of RecyclerView. We’re going to use ArrayAdapters,
+                    which are the way to attach data to the UI of the RecyclerView so people can see the information
+                    you're displaying.<br><br>
+
+                    We’re going to use onClick listeners for buttons. 
+                    If you ever have a button in your project, you will have to use an onClick listener. 
+                    The onLongClick listener, I'm not sure if it's called press or click; I think it's click. 
+                    That’s also something you're going to implement. It’s not used as much as the onClick listener, 
+                    but it is used—it's essentially the double-click on phones. You're going to learn about intents; 
+                    that’s the way we navigate from one activity to another. You need to do that because 
+                    if you use different activities, then it’s essential to go from one to the other.<br><br>
+
+                    We’re going to learn to use alert dialogues; a simple alert dialogue will be used for prompts. 
+                    If you want to prompt the user before they do something—like deleting something, 
+                    for example—you want to ask them for confirmation. This two-step method is essential
+                    because sometimes users might accidentally delete something and then regret it. You don’t want 
+                    to do that, especially when deleting. If someone is writing something and just presses delete 
+                    without warning, that’s frustrating. So, you want to provide a warning for your users.<br><br>
+
+                    I’ll include timestamps in the description so you can refer back to them for any other projects 
+                    you’re building, not just this one. Like I said, these concepts will be used quite often, 
+                    so make sure to refer back to this video if you're struggling. There are obviously many 
+                    resources available for different learning styles, and this is just one way to learn. 
+                    I like videos too, which is why I’m doing this.<br><br>
+
+                    The reason I say this app is easy is that the logic is super simple. 
+                    It's not a fully fledged product, and the UI is very basic,
+                    which is why this app can be built in such a short time. Since I've already built it out, 
+                    it makes it even faster because you don’t have to think too much about the logic 
+                    as you go through the project. As you implement some of the things, 
+                    you’ll have everything there, and you can improve it. I also include a section in this video
+                    on how to improve the app, so you can enhance it however you want—you could improve the UI, 
+                    the functions, or anything and everything because it is very basic. 
+                    The intent is just for learning and practice, so you can build something relatively quickly. 
+                    It’s going to take you less than an hour, really. If you have the source code, 
+                    it’s just going to take the time it takes to actually run the app—maybe a couple of minutes.<br><br>
+
+                    **Section 1: Before Building**<br><br>
+
+                    This is a necessary step. You don’t want to start building without any idea of what you're going to build.
+                    The first thing you want to know is what we’re building. In our case, a friend of mine, aka Fanny, 
+                    mentioned she wanted an app like this. She wanted an inspiration app with categories, 
+                    the ability to add quotes, and the ability to edit those quotes—that's what we’re building. 
+                    This conversation happened a while ago, so I’m extrapolating from memory; 
+                    I'm not exactly sure what she wants exactly.<br><br>
+ 
+                    Exactly which I will also mention in how we can improve the app. 
+                    A really good way to improve it is by having a conversation with our client. 
+                    So, if you're thinking of consulting or things of that nature, then this is a very important step: 
+                    talk to your client and figure out what it is that they want. Sometimes they struggle, 
+                    and I've noticed that because they've never built software, they don't know what they want. 
+                    They might just think, "Oh, software is cool."<br><br>
+
+                    A really good way to do this is by providing them examples of things, which could be 
+                    from major companies. Make sure when you explain these things to them, you remember your limitations, 
+                    especially in terms of time. Don’t mention complex AI models if you cannot implement them in a 
+                    timely manner or if the customer doesn’t have the budget to hire outside consultants to help with 
+                    the project. Keep those limitations in mind. If they have the budget and time, feel free to share all 
+                    the greatest ideas. If they have a budget that allows for X, make sure you only show them X—don’t 
+                    show them Y or Z.<br><br>
+
+                    From our conversation, I remember she wanted to be able to edit, delete, and add, so that’s what the 
+                    app will do. Another important question before I start building is: does this exist now? 
+                    This question is especially crucial if you're looking to create a solution for a problem. 
+                    The reason for this is that if there’s a solution that already exists and works well, 
+                    there’s no point in investing your time or money into building something else. As they say, 
+                    you don’t have to reinvent the wheel. So if the wheel already exists, you don’t have to do it.<br><br>
+
+                    That being said, if it exists and you notice that the wheel is actually square instead of round, 
+                    you know there’s a market for it. People are downloading it, and if you can improve it and make 
+                    it much better, then people will go to your product. However, I’m not saying you’re just going 
+                    to find your product; you’ll have to market and sell it. If it’s just a slightly better square wheel, 
+                    then no one will want that because it’s hard to get people to move away from what they already have.<br><br> 
+
+                    If you’re asking them to switch from a square wheel to a slightly better square wheel, 
+                    that’s a hard sell. But if you tell them, "Hey, this thing is actually a square wheel. 
+                    I have a round wheel that goes way further and is more efficient," 
+                    then it’s a much easier sell, and people will actually leave what they already have.<br><br> 
+
+                    Now, regarding what you’re building, the best way to figure this out is actually by writing down a
+                    pen-and-paper wireframe of the app. It’s very simple; you might not be able to see this clearly.
+                    Essentially, it’s a RecyclerView. They click it, and it opens another screen that shows the category, 
+                    the quotes, the buttons here, and the dialogues that come in if they want to delete or add a new quote.<br><br>
+
+                    Once you've done that, there are a couple of benefits: first, you can figure out what the flow is going 
+                    to be like, which is very important. Second, you can actually share it with people. 
+                    If you're building this as a business, this is a really important step because it allows you to 
+                    share it with potential customers. This way, they can tell you what would make it better.<br><br> 
+
+                    That being said, people don’t always know what they want. 
+                    However, it will still give you a hint about what could improve the app.
+                    If they see something that doesn’t make sense, you know it doesn't work. 
+                    If they’re like, "Oh wow, this is great; I understand this," then you know you’re on the right track.<br><br>
+
+                    Another thing is that it allows you to collaborate. If you're working with a client, 
+                    for example, it helps you understand if what you think they're talking about makes sense because now 
+                    it’s visual. It’s easier to interpret, and they can clarify their ideas more effectively.<br><br> 
+
+                    You want to make sure to do this on pen and paper first. It’s really cheap and quick, 
+                    and you can edit easily. It allows you to visualize how the database should interact 
+                    and how the UX will be structured. This helps with user experience and collaboration, 
+                    so if you’re working with a team, you can give each other feedback and figure out how to 
+                    structure everything.<br><br>
+
+                    Once you’ve finalized the pen-and-paper version, the next step would be to actually design it. 
+                    I’ve realized that sometimes on paper, dimensions can be odd, and things that seem to make sense 
+                    could look ugly in a proper design. That's why you would do the digital design and test colors; 
+                    on paper, you might not see the actual colors.<br><br>
+
+                    I don’t have the Adobe XD files for this project, so I won’t be able to share the original version, 
+                    which is slightly different from the final product. You’ll notice that you refine your designs as 
+                    you build out the project, and the final product may differ from the initial design due to 
+                    limitations or time constraints.<br><br>
+
+                    ### Tools for Design<br><br>
+
+                    What tools can you actually use to design? You can use Adobe's suite, like Photoshop or Adobe XD. 
+                    I do use Adobe XD, but I don't recommend the free version because it used to work well, 
+                    and now it’s not as reliable. You can also use PowerPoint, Sketch, or Figma.
+                    I haven’t really looked into Figma because I don’t like web apps, but it seems to have some advantages.<br><br>
+
+                    ### Section Two: Building<br><br>
+
+                    Now that we know what we want to build and what it should look like, we can actually start building it.
+                    For this particular project, it’s already been coded. You’ll have a view of the code and 
+                    an explanation of what each snippet does. If you're interested in getting the full source code, 
+                    you can find a link in the description below. It’s only a dollar a month, 
+                    and you get access to this project’s source code and any others shared on this channel.<br><br>
+
+                    The project is structured into three packages: activities, array adapters, and objects. 
+                    The activities package has two activities: the main activity and the quote activity. 
+                    Our array adapter only has one, which is the categories adapter, 
+                    and our objects folder contains two objects: the category object and the quote object.<br><br>
+
+                    So, what’s in our main activity? Our main activity has just two UI components: 
+                    a RecyclerView and a button. The RecyclerView shows the categories of quotes, 
+                    and the new button is for adding a new category. After we set up these two components, 
+                    I’ll show you the XML layout.<br><br> 
+
+                    So, here’s the activity_main XML layout. I’ll do a screen split so you can see it clearly.<br><br> 
+
+                    It shows the button and the RecyclerView, with their respective IDs. After setting up the UI, 
+                    the next step was to populate the RecyclerView with data. We did this by creating a 
+                    hardcoded array list of categories.<br><br> 
+
+                    We created an ArrayList called "data" for categories, initialized it, and then added one to six categories.
+                    The next step is to implement the CategoriesAdapter, which will connect our data to the RecyclerView and allow 
+                    us to manage the display of categories effectively.
+                    Sure! Here’s your text with improved formatting, spelling, and grammar while keeping the 
+                    original wording as much as possible:<br><br>
+
+
+                    Categories—now the next step is actually to know what a category is. It’s one of the objects 
+                    that we've created, among the two objects. A category is a very simple object; 
+                    all it does is contain a string title. That’s all it has. So when you initialize a category,
+                    you can initialize it as an empty object or with a title. We have a getter and a setter: getTitle 
+                    and setTitle. We don’t use setTitle, so we can erase that, and getTitle we do use throughout the project.<br><br>
+
+                    So the next step in the RecyclerView is to set the adapter to be a new CategoriesAdapter.
+                    We'll go over that a little bit later. For now, we're going to cover the item decoration. 
+                    The item decoration is pretty simple; it adds some space between each element. 
+                    In the project, when you saw the buttons, there was space in between—that's what the item decoration 
+                    is for. We also added a GridLayoutManager so that it’s not just a list that’s one by one; 
+                    it becomes a grid. We set it to two columns. If we set it to three, it would be three columns. 
+                    Since we have eight elements, it would be 3 by 2.5, basically 3 by 3, and one row would only have two rows.<br><br>
+
+                    This is the class for the item decoration. If you want to use this,
+                     I’ll share it with you on the screen so you can copy and paste it. 
+                     If you don't have the source code, you can always get it for just a buck. 
+                     You can pause it if you want; this is just to show you the actual code.<br><br>
+
+                    Since the CategoriesAdapter is more intricate, we’re going to go over the actual setOnClickListener 
+                    with the new button. When we created the setOnClickListener, it just means that once the button sees that 
+                    the user clicked on it, it’s going to do something. In our case, we’re going to show the category dialogue. 
+                    The category dialogue is an alert dialog, a material alert dialog that we created. It’s very simple; 
+                    we’ve also included a category EditText and added it to the builder. 
+                    So we set builder.setView(categoryEditText). This way, when Fanny puts in a new category, 
+                    we’re actually able to read it.<br><br> 
+
+                    After she presses add, we create a new category based on whatever she wrote, 
+                    and we just add it to the data. Very simple! Once that’s done, it gets added to the data and now 
+                    becomes a new category. Now we can move on to the actual CategoriesAdapter because this one is a 
+                    little different—it’s a little more intricate.<br><br>
+
+                    I’m going to open that up. This is the code for the constructor: `public CategoriesAdapter(ArrayList<Category> data)`.
+                    In our case, we just call it data to make it easier. An ArrayAdapter is a way to tie the data to the UI. 
+                    In our case, we've created a ViewHolder (VH item). Here, we're creating a VH item—that's 
+                    the UI component that we're going to attach it to. I’ll show you what the VH item is; 
+                    it just has two components: a title TextView (TV) and a CardView.<br><br> 
+
+                    The XML that goes with it is called `cell_category`. We’re going to split this to the right so you can 
+                    see it clearly. It’s very simple, just two UI components: the CardView here that contains a TextView. 
+                    So that's where we actually initialize it, and now we want to get the specific category and attach 
+                    it to the UI. In the list of UI, when we open the project, there are eight boxes with text. 
+                    This is where we actually get that.<br><br>
+
+                    The first thing we do is get the current data. Whichever one we're supposed to get is done 
+                    through here in the `onBindViewHolder` method. The easiest way to do it is: 
+                    `Category category = data.get(position);` So the current position that we’re at. 
+                    This is a list of colors that we've added, as you remember from the final project—there are 
+                    different colors for each little box.<br><br> 
+
+                    Again, we just did a random thing to get the colors; there’s no complex algorithm—it's 
+                    just randomly selected color from here. We call it through here to get a random number. 
+                    You can change the colors that you want. I'll show you that later, but for now, we’re going 
+                    to finalize the `onBindViewHolder` method.<br><br>
+
+                    The next thing we do is in the title TextView: we’re going to set the text. 
+                    The text will be what the title of the category is. Remember that the category only has one variable,
+                    which is title, and that’s how we get it. We get the title and set the text to it.<br><br> 
+
+                    Next, we’re going to set the card background color to be `colors.random()`, using a random index 
+                    from the list of colors we have. I’m going to skip this for now and we’ll come back to it after 
+                    I explain this section of the code.<br><br> 
+
+                    We created an onClickListener for the CardView, so if we want to remove the category, 
+                    it calls the `removeCategory` function. The `removeCategory` function is another alert dialog. 
+                    This time it doesn’t have any EditText—it's just an alert dialog with a yes or no option. 
+                    If the user clicks yes, then we’re going to remove the current data at our position from the 
+                    ArrayList of data. We’ll also notify the ArrayAdapter that we did this so it can update the UI with 
+                    `notifyItemRemoved(position)`. This updates the UI so that the user can see the changes they’ve made.<br><br>
+
+                    Now we can go back to the regular setOnClickListener. What we want to do here is create an intent for 
+                    the QuoteActivity because that's the activity we want to open. After they click the category, we want 
+                    to show them all the quotes for that category.<br><br> 
+
+                    Another thing we’re going to do is put an extra in the intent. This is the data that the category 
+                    will be able to listen to and get. Lastly, we start the activity with this intent and the data, 
+                    which means we can now open the QuoteActivity.<br><br>
+
+                    I’m just going to close some of these files and we’re going to start from the beginning. 
+                    The QuoteActivity has six UI components: a category TextView (that’s going to be populated by the 
+                    data sent from the intent from the MainActivity), two EditTexts (quoteEditText and sourceEditText), 
+                    and three buttons.<br><br> 
+
+                    The new button is supposed to do two things: it’s supposed to allow the user to add a new quote. 
+                    The other button is for editing the quote, and the delete button is for deleting the quote. 
+                    We also have two variables: an ArrayList of Quote called quotes, and an int position to keep 
+                    track of the quote we’re working with.<br><br>
+
+                    The next thing we did was initialize our ArrayList and set up our UI components, 
+                    attaching them to the actual XML with the correct IDs. We’ve got to make sure that the 
+                    IDs match; otherwise, it’s not going to run—it’s not going to work. The next thing we actually did 
+                    was disable the EditTexts. We don’t want them to make any changes.<br><br>
+
+                    We have to add a setOnClickListener for the new quote button and an onLongClickListener for it. 
+                    We’re going to go over the function of the new quote button. When you click on the new quote button, 
+                    it’s going to show them a new quote, and that’s done through the setQuote method.<br><br> 
+
+                    We’re going to go and see what that is. The setQuote method takes a Quote and sets the 
+                    category TextView to `setText(quote.getCategory())`. Then the quoteEditText is set to `quote.getQuote()`,
+                    and the sourceEditText is set to `quote.getSource()`.<br><br> 
+
+                    Now, if you remember, here we called the function `getQuote` instead of `setQuote`, 
+                    so getQuote returns a Quote. We’re going to go over what getQuote is.<br><br> 
+
+                    We create a temporary Quote here; we didn’t give it any value. We check if 
+                    `quotes.size() == 1`. If it only equals one, we just return `quotes.get(0)`. 
+                    The reason for this is because quotes will never be less than one; it can always be greater than one. 
+                    If it's one, we return the first quote, which would be `quotes.get(0)`.<br><br> 
+
+                    If there’s more than one quote, we just randomize and set the position to be random so we can keep 
+                    track of which quote we’re going to serve. Then we set the tempQuote to `quotes.get(random)`, 
+                    and we’re going to return that quote, which will be displayed to the user.<br><br>
+
+                    Now I will actually go over the Quote object so we can have a better understanding of what 
+                    the Quote object does. The Quote has three components: a category, a quote, and a source. 
+                    Very simple. We need a category so we can keep track of what it belongs to. Does it belong to anger, 
+                    loneliness, wealth? What does it belong to? The quote is what the text of the quote is, and the 
+                    source is whoever shared the quote with people.<br><br> 
+
+                    We actually don’t use the setter methods; these are auto-generated. 
+                    You can delete them or keep them in case you end up using them. Now we are actually going to go to 
+                    the new quote’s onLongClickListener. If the user holds the new quote button for a while, 
+                    it’s going to show the add quote dialogue, where they can actually add a new quote.<br><br>
+
+                    Add two; they can actually add a new quote, not two quotes, just a new quote. 
+                    So, we're going to go to the short quote add quote dialogue. 
+                    It's again going to be a new material alert dialog builder, and it's going to be slightly different 
+                    from the new category dialogue that we created in the main activity since we want to add two edit texts.<br><br> 
+
+                    The alert dialog doesn't allow for two views to be added. The way we were able to handle this 
+                    was actually by just adding a linear layout as the set view in this method here. 
+                    So, we created a new layout and set the view here because it can only have one view. 
+                    That being said, the linear layout can have multiple child views, and that's what we did.
+                    We set the orientation to vertical; we want them to stack up on top of each other.<br><br> 
+
+                    We created two edit texts and added them to the linear layout. We added the hint, 
+                    and we did `builder.setView(linearLayout)`, so it still technically is considered just one view. 
+                    This way, we can actually have both edit texts. Then, we call the function, so if the user does decide 
+                    to actually add the quote, we call the function `addNewQuote` and get the quote edit text and the 
+                    source edit text.<br><br>
+
+                    Now we're going to go over the `addNewQuote` function. So, `addNewQuote` takes the message and the 
+                    source, creates a new quote, and takes the category from the edit category text view, 
+                    which is actually from the array adapter. So when they clicked on the category they wanted to see, 
+                    we got that information and set it up into the category text view.<br><br> 
+
+                    Now, we're checking if the quotes array list can never be less than one. We check if it's one and 
+                    if at the index of zero, which would be the first quote, we check if it's empty. If it's empty, 
+                    then we set the quote at index zero to be this new quote here. If it's not empty, 
+                    that means there's an actual quote there; then we just add it to the array list and append it. 
+                    Now it becomes a size of two here, it stays as size one here, and it becomes size two.<br><br>
+
+                    Now, the next button we're actually going to talk about is the edit button. 
+                    The edit button has a little bit longer logic. I'm just going to go over it quickly. 
+                    If `editButton.getText().toString().equals("Save")`, that means if they already pressed edit and it 
+                    turns to save, it's going to execute this block. For now, we're just going to go over what 
+                    will actually happen if they just click edit for the first time.<br><br> 
+
+                    It's going to allow editing to happen, so it's going to enable editing to true and set the text to save. 
+                    So, `enableEditing` I will show you what that means; it just turns quote edit text and source edit 
+                    text to be enabled based on this boolean value here. In that case, it's going to be true, 
+                    so now they can actually edit the quote. Once they're ready to save, it's going to check here that 
+                    says yes, the text is save.<br><br> 
+
+                    The first thing it's going to do is change it back to edit. It's going to create a new quote based 
+                    on the category text view, getting the text to string for whatever the quote is that they've 
+                    updated and the source. So once again, we're going to check if the quotes size is one. If it is, 
+                    just like earlier, we're going to set the quote at index zero to be the new quote that 
+                    we just created here. Otherwise, we're going to find the position, which is why we have this 
+                    position here, because once we got the quote, it gave us the position, 
+                    and we saved it as a position from the random number.<br><br> 
+
+                    Now we're going to update the quote at this position to the new quote that we just edited, and lastly, 
+                    we disable editing. So, in `enableEditing`, we pass the value of false.<br><br>
+
+                    Then we have the delete button. The delete button has its own set on click listener 
+                    and calls the show delete dialogue. The show delete dialogue is going to be another 
+                    alert dialogue, and it's very simple. Once you click delete, we want to make sure they actually want 
+                    to delete. We go to the delete quote function and call it.<br><br>
+
+                    The delete quote function is right here. The first thing we do is check if the size is one. 
+                    That means there's only one quote. We remove the quote at index zero. We can actually set that; 
+                    that's something I just realized. We could do `setQuote` instead of `setAtIndex` and then 
+                    add whatever quote. For now, what we did here was that we removed it, then we created a new empty 
+                    quote and added it to the array list of quotes. That's why the size is never zero, really; 
+                    it's part of the reason why.<br><br>
+
+                    The quote function we went over earlier ensures that if the size is greater than one, 
+                    we just find the quote at the current position from `getQuote` and remove it. 
+                    Then we just set a new quote, so a new random quote is going to be set so the user can see a quote. 
+                    That's what `deleteQuote` does.<br><br>
+
+                    Now, as we are on this `deleteQuote` function, I'll explain why it never turns to zero. 
+                    There are two reasons for this. The first one is that we want the user to be able to easily add a 
+                    quote when there's not one. So that means if there are no quotes, they can just go to the edit text,
+                    press edit, and start typing.<br><br> 
+
+                    The second reason, which is actually the biggest reason, is because when I was building this project, 
+                    I ended up putting myself in a pigeonhole with the code. If I wanted to make sure that the quotes' size 
+                    would be equal to zero, I would have to refactor the code, which would add more time to it. 
+                    So, I decided not to do that. This function works properly, and the user doesn't really know that 
+                    there's still an empty quote. They don't really care; they just want to use it.<br><br> 
+
+                    I would advise you, as you do this project, to find a way to have the array list of quotes be empty 
+                    so you don't have to have a size of one all the time. You can refactor that and do that to improve 
+                    the code itself. That being said, you don't necessarily have to.<br><br>
+
+                    Now that I'm talking about this, I do think there's an area where this would create an issue. 
+                    If the user, when there are no quotes, instead of editing the empty quote, decides to long press 
+                    the new quote and add a new quote, that would create an issue. So, that's actually a bug I just 
+                    realized while filming this right now.<br><br> 
+
+                    That would be a reason why you want to refactor it. When I was building this, I ran into some different bugs
+                    that I fixed, and that was one of the solutions. But now that we're going over the logic, 
+                    it turns out this is another bug too. And that's the beauty of programming: you can find bugs 
+                    until you didn't realize it.<br><br>
+
+                    We are almost done with the building. It's a very simple project. Everything is pretty simple about it. 
+                    The next thing we're actually going to do is, because I spoke about the category text view, 
+                    when we get the text, whenever we get a quote, we set a quote. The way we actually get this is by 
+                    calling `Intent intent = getIntent();`, so it's calling for the intent that was created when this 
+                    activity was created.<br><br> 
+
+                    That was when, if you remember, in our array adapter, we did `context.startActivity(intent);` 
+                    with the extras. This is where it gets called. This is where we catch that intent, 
+                    and here we actually get the string with `getStringExtra()`; that's where we get the actual value. 
+                    So, that becomes the category with `intent.getStringExtra("category")`.<br><br> 
+
+                    It has to be the exact same, so we have to use the exact name. If it's lowercase, 
+                    you have to make sure it's lowercase; if it's uppercase in programming, based on your experience, 
+                    if you're not new to programming, then you know everything is case sensitive. 
+                    If you are new to programming and this is your first video pertaining to programming, 
+                    then everything is very case sensitive when it comes to programming. So, make sure that everything 
+                    is done properly with the case.<br><br>
+
+                    Now, what we are doing here is to populate the quotes array list. The first thing we do is check 
+                    if the category is not null, so that means there's a value. We create a switch statement 
+                    for the category. We find the case; for instance, 
+                    we can have anxiety, loneliness, anger, depression, being broke, or happy. If the case is anxiety, 
+                    for example, then we're going to call the function `addAnxietyQuotes()`, and then we're going to 
+                    call `setQuote()`.<br><br> 
+
+                    The `addAnxietyQuotes` function populates the quotes array list with these quotes, 
+                    so it's five quotes about anxiety. Once it does that, it calls the `setQuote` function, 
+                    which just finds a random quote from the anxiety quotes array list. The same thing applies for 
+                    loneliness and happiness; it’s just hardcoded.<br><br>
+
+                    That's essentially the bulk of the project. It was very simple; I believe it took less than 30 minutes 
+                    to film the logic behind it. I'm going to go over some details that you may want to know about. 
+                    For example, you see here there's a yellow underline below "save." If you're on a Mac, 
+                    you press Option and then press Enter. What you can do is actually extract a string resource. 
+                    The reason why you would want to do this is because it's easier to change text if it's all in one area. 
+                    So, for example, if we want to change "save" to "saved," we just add a "d."<br><br> 
+
+                    like if we have a bunch of those texts throughout a project, we'll have to manually do it. 
+                    If we do this and put it as a string resource, then we just have to change it in one place, 
+                    which is going to be on the left side in the strings file. Here, you see it says "save." 
+                    If we just want to change it, we can update every single string throughout the project.<br><br>
+
+                    Another added benefit, which I believe is the reason why they want us to do this and why 
+                    Android Studio scolds us, is because of translation. If you're creating a project for a global audience, 
+                    then you will want to do this. You will be able to create different locales, I believe, is the word for it. 
+                    Yes, that’s what they use here. So, if you want to add Spanish, it will automatically update the 
+                    language based on the user's phone settings, which is very beneficial for your users if they speak 
+                    a different language from what you coded in. Again, it adds the benefit that you don’t have to 
+                    implement logic inside your project to figure out what language you're using; it just automatically 
+                    does it for each and every string that uses the actual string resource.<br><br>
+
+                    So, that's the added benefit. Another detail that I will mention here is when we created this 
+                    alert dialog, we also included a style for the alert dialog theme. I'll show it to you in the themes 
+                    folder here. The reason why I ended up doing this is because the positive button was not showing properly; 
+                    it was white. This is the alert dialog theme. I would advise you to just copy and paste it and then 
+                    change it accordingly to whatever you need. Right here, you set the negative button style to black 
+                    and the positive button to red, so users know what to click. You can set it to whatever color you want.<br><br>
+
+                    This leads to another detail: actually adding colors to your project. In your colors XML file, 
+                    if you want to add a color, for example, from the top of my head, I believe gray is represented 
+                    as `#303030`. So, if you want to add gray or whatever color you want, you would just do that and 
+                    then specify the hex code. This way, you can use these colors throughout the project, making it 
+                    easier to read. For example, if we had used hex values for colors in the categories adapter, 
+                    it could have been quite confusing. Using the actual color names makes it easy to understand what 
+                    it will look like. If it's wrong, you can always refer back to the colors.<br><br>
+
+                    Again, one of the reasons to do this is so everything can be consistent throughout the project, 
+                    just like with string resources. If you're using orange and end up using different hex values for 
+                    orange, it can create an ugly situation. You want to avoid that, and that’s why you would want to 
+                    add these elements to your XML files—your strings, your colors, and your themes.<br><br>
+
+                    Now we’re in Section 3: Post-Building. The first question we need to answer is whether the app has 
+                    been able to accomplish the goals we set out to achieve. The answer for this app is yes and no. 
+                    The app comes hardcoded with values like categories and quotes, and Fanny is able to edit the quotes, 
+                    add quotes, and delete quotes. That’s why I say yes; we did accomplish those goals because that 
+                    was one of the primary objectives.<br><br>
+
+                    However, the reason I said no is that there's something else beyond that, and it’s actually 
+                    about saving. The app we built does not save the information that she has done, either locally 
+                    or externally on some kind of server. I do think that’s frustrating—if you do some work and it 
+                    just erases every single day, it’s not useful.<br><br>
+
+                    The best way to improve that is, which leads to the next question: how can we improve it? 
+                    The app has a lot of room for improvement. To be completely clear, I think it's a simple app, 
+                    but there are three sections of improvement: the UI and UX, the logic (the technical aspect of the app), 
+                    and lastly, communication with the customer, a.k.a. Fanny.<br><br>
+
+                    Starting with UI and UX, I think the app logo is fine; I actually really like it. 
+                    However, the main activity—the first thing the user sees—is too simple, in my opinion. 
+                    I think an easy addition would be to have a text view that says, "Hey, user! Hey, Fanny! 
+                    What do you need help with today?" Then she could respond, "Oh, I need help with feeling angry," 
+                    and click on anger to see the quotes for that category. This would add a nice aesthetic without 
+                    complicating anything.<br><br>
+
+                    Another easy fix is the colors in the app. I believe the randomness of it is not 
+                    aesthetically pleasing. While I do like the colors, the randomness can lead to situations 
+                    where all tiles are red or a weird color combination. There could be an algorithm to limit duplicates, 
+                    especially since there are only a limited number of colors for the categories. 
+                    If there are more categories than colors, it’s understandable that there will be duplicates, 
+                    but we should ensure that there are no duplicates before reaching that limit.<br><br>
+
+                    Something further that would add more complexity to the building would be allowing the user 
+                    to color coordinate their own categories. I think that's a good idea. Additionally, since we’re 
+                    on the topic of color, the text color is white, which makes it difficult to read against 
+                    certain backgrounds. Finding a solution to improve legibility would be greatly beneficial. 
+                    There are a couple of solutions I found online, but I chose not to implement them because 
+                    this project was intended to be super simple and easy for you to complete in less than one hour.<br><br>
+
+                    Next, we look at the Quote Activity, where we see the quotes. 
+                    The biggest improvement is in the UX department, particularly regarding the editing of the quotes. 
+                    I think it’s very unclear how you can edit. When users click edit, it doesn't really show them what to do; 
+                    it just says "edit" and "save." This is bad for user experience because they can't understand how to 
+                    use it without any instructions.<br><br> 
+
+                    You’ve seen the app in action, so you know how it works, but if someone has never seen this video
+                    or hasn’t been told how to do it, they won’t be able to figure it out. One simple way to implement
+                    an improvement would be to autofocus on the edit text when they press edit. 
+                    This way, they know they can edit.<br><br> 
+
+                    I don't think you can focus on two edit texts at the same time, as there's only one cursor. 
+                    While this wouldn’t be a full fix, it would be a lot better because users would see the cursor and 
+                    understand they can edit both the quote and the source text. Another improvement could be to 
+                    highlight both fields when they press edit, making it clear that they can edit them.<br><br>
+
+                    Another area for UX improvement is with the new quote button. It has a similar issue;
+                    an easy fix would be to split it into two buttons: one for generating a new random quote and 
+                    another for adding a new quote. This way, users would know exactly what each button does. 
+                    Currently, the "new quote" button is confusing because clicking it could lead to the assumption 
+                    that they are either going to see a new quote or add a new quote. Right now, the "new quote" 
+                    button does both, but users have to long-press to access the add functionality, which isn't intuitive.<br><br>
+
+                    That which I think makes UX the UX is that it can be poorly designed. In this case, 
+                    the scenario—like this app—is not fully done. It’s a very short, simple app to build. 
+                    That’s why I’m taking this section to talk about how we can improve it, 
+                    because it’s something you’re going to figure out for almost all your projects. 
+                    There are always going to be improvements that could be made.<br><br>
+
+                    We’re also going to be talking about improving the logic. The biggest problem, 
+                    which you can probably tell, is that nothing is saved in this app. 
+                    If a user makes a change—like adding a category—once they close it, it’s gone. 
+                    If they add a quote and then leave the quote activity, it’s also gone; it’s no longer saved.<br><br>
+
+                    The way to actually make this work is to use the Room API on Android, 
+                    which is essentially just an SQL database that saves locally on the phone. 
+                    For example, if Fanny uses the app, she’ll actually keep the categories she’s 
+                    edited and the quotes she’s added. Alternatively, it could be something saved on an external server.
+                    You can create your own Node.js server—that’s what I know how to use, so that’s why I use that example. 
+                    There are other frameworks you could use, like AWS or any cloud server, or you could use Firebase.
+                    I’ve used Firebase, and I think it’s really quick and easy to implement.<br><br> 
+
+                    Another thing that could definitely be improved in the app’s logic is the quote object. 
+                    Currently, the quote object only has a title and nothing else; that’s all the object holds. 
+                    I think it would be great to implement an array list of quote objects into the category. 
+                    For example, if Fanny no longer feels angry and decides to delete the "Angry" category, 
+                    it should also delete the associated list of quotes. Otherwise, those quotes will just 
+                    be there without any way to access them, since the only way for her to access them is 
+                    through clicking on the category. It takes up space for no reason, which I think is bad practice.<br><br>
+
+                    I highly recommend that if you implement this, you should edit the category object 
+                    to allow a list of quotes to be associated, so they can be edited and deleted. 
+                    If you want access to the project file, you can get it along with all the 
+                    other projects on this channel. Just click the link below in the description; 
+                    you can access all of it for only a buck a month. It’s very cheap, and you can cancel anytime you want. 
+                    If you just want it for this project or the previous ones and don’t want it for future projects, 
+                    you can just buy it for a buck. The link is down in the description, 
+                    and you should definitely check it out because you won’t have to pause, rewind, and pause again.<br><br>
+
+                    The most important way to improve this app, though? Drum roll, please... 
+                    it’s actually talking to the customer. Especially if you’re consulting, your client is the 
+                    primary person you need to serve because they know what they want—or maybe they don’t fully know. 
+                    You’re there to provide value and guide them to the treasure they’re seeking. 
+                    If they don’t understand the differences between black and gray, you can show them. 
+                    The best way to determine their needs is to ask them questions to figure out exactly what they are seeking.<br><br>
+
+                    For example, if there’s miscommunication, it’s going to cost you a lot of time, 
+                    and unfortunately, it’ll be your fault. If you build something the client doesn’t want due to 
+                    miscommunication, that could cost you, so you want to avoid that. If you’re building 
+                    something for yourself or your business, consider this an MVP. Once you have an MVP, 
+                    spend about an hour building it, then go out to customers and ask them to use the product. 
+                    This way, you can see what makes sense to the customer and what doesn’t. 
+                    Then you can update it accordingly. If they tell you it’s perfect, then you know you have a winner, 
+                    and all you have to do is promote it, sell it, and enjoy your profits.<br><br>
+
+                    Now that we have this product, the next question is: how can we monetize this idea? I didn’t 
+                    build this app with the intent of selling it, but it’s important to try to sell it because 
+                    it builds the skill to sell, especially when you build something yourself. It’s how you
+                    generate revenue, and you never know; it might be something people really enjoy. 
+                    You could create a nice stream of income, and who says no to that, 
+                    especially when you created something from your imagination that provides value to others? 
+                    It’s an amazing feeling, and I hope you experience it. 
+                    It’s truly rewarding when people pay you for something you created.<br><br> 
+
+                    Here are some ideas I’ve come up with to monetize it. If you have any other ideas, 
+                    let me know! If you want to build this product out and change it, and actually monetize it, 
+                    it’s up to you. I’m not against it; it’s yours, and you can do whatever you want with it.<br><br>
+
+                    These are the three business models I came up with rather quickly.
+                    I didn’t sit down for hours thinking of ideas; these are quick ideas that I came up with, 
+                    and you can implement them if you want.<br><br>
+
+                    The first one involves selling the app as a pack of quotes for a low cost. 
+                    Obviously, you’d need a good headline and a sales pitch to encourage purchases. 
+                    For example, "How to Deal with the Daily Battles of Life" could be the headline,
+                    and you could tell them they have a collection of quotes to inspire them throughout 
+                    the day when they’re feeling down. This could be a low-cost, one-time fee option.<br><br>
+
+                    In addition to that, you could offer premium packs of quotes. For example,
+                    quotes for anxiety could be 99 cents, quotes on happiness could be 99 cents, and so on. 
+                    You could even provide quotes from various sources, like Eastern or Western philosophers, 
+                    the Bible, or the Quran. This could target different niches effectively.<br><br>
+
+                    The second idea aligns more with the vision Fanny had in mind: user-generated content. 
+                    This would mean allowing users to save their own quotes and content. 
+                    I’m thinking this could be a premium model where users get a limited number of categories and quotes 
+                    for free, and if they want more, they would pay a monthly or one-time fee. 
+                    Monthly might be nicer, but you’d need to play around with the pricing strategy to find what people want.<br><br>
+
+                    The third business model would be B2B—selling to influencers. 
+                    This could generate more revenue quickly because you could approach an influencer and say, 
+                    "Hey, I have this product. You need it!" This would essentially be a white-label product. 
+                    You’d talk to the influencer to find out their preferences, such as specific quotes.<br><br> 
+
+                    For example, if you were to have this as a technical tool, you could offer a cheat sheet of
+                    Android development concepts for them to refer back to. 
+                    This would require more coding adjustments based on the influencer’s needs, 
+                    but it’s definitely doable. The influencer could then provide this to their audience 
+                    for free or charge for it, which would require additional coding, possibly using the Google Play 
+                    billing library or Stripe for payment processing.<br><br>
+
+    
+                    If you don’t want to handle the server aspect yourself, you can go with Google and have them manage it.
+                    Just so you know, they do take 30%. Those are really the three ways I thought of to monetize this idea.
+                    I would probably write some sales letters based on these three ideas to see if anyone is 
+                    actually interested in purchasing them. Essentially, this is just a test, because that’s how we get better. 
+                    Remember, practice makes perfect.<br><br> 
+
+                    If you want access to the source code so you don’t have to do everything by hand, you can get access
+                    to this project’s source code and all the projects on this channel for just one dollar a month. 
+                    That’s a very low cost! If you want to access it, the link is in the description below.<br><br>
+
+                    I hope you enjoyed this video! Let me know how you plan to implement this and how you’ve improved this app,
+                    because it’s very basic. I’d love to see what you’ve built! Film a YouTube video or show us what it is on 
+                    the Play Store. We love to see what you’ve accomplished with your imagination.<br><br>
+           </div>
+        </div>
+    </body>
+</html>
