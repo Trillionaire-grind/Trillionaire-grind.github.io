@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>The Kool Kids Klub</title>
+        <title>Home</title>
         <style>
             /* General reset and basic styles */
             body {
@@ -12,157 +12,142 @@
                 font-family: Arial, sans-serif;
                 background-color: #F0F1F3;
             }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
 
             @media (max-width: 768px) {
                 .card {
                     width: 100%;
                 }
             }
+
+            @keyframes bounce {
+                0%, 100% {
+                    transform: translateY(0);
+                }
+                50% {
+                    transform: translateY(-10px); /* Adjust the height of the bounce */
+                }
+            }
+
+            hr {
+                width: 80px;
+                height: 4px;
+                background-color: black;
+                border: none;
+                animation: bounce 6s infinite; /* Infinite animation */
+            }
+
+            .versionTV{
+                position: absolute;
+                bottom: 39px;
+                left: 5%;
+
+            }
         </style>
     </head>
-    <body> 
-        <div style="margin-bottom: 16px;">
-            <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
-                <iframe src="views/homeView.html" style="height: 100vh; width: 100%;"></iframe>
+    <body>
+        <div id="homeDiv" style="height: 100vh;">
+            <div id="introDiv">
+                <img src="assets/profile.png" style="margin-left: 5%; margin-top: 8px;" height="130px" width="70px">
+                <div style="display: block; margin-bottom:0px; padding: 0px; margin-top: 0px;">
+                    <p style="font-size: 24px; margin-left: 5%; margin-bottom: 0px; margin-top: 0px;">Képler<br> Siguineau</p>
+                    <div style="display: flex; margin-top: 0px;">
+                        <p style="margin-left: 5%; font-size: 16px; margin-top: 0px;">(cape-lair see-gee-no)</p>
+                        <audio id="audio" src="assets/name.mp3"></audio>
+                        <img src="assets/ear.svg" onclick="playAudio()" style="cursor: pointer; margin-left: 8px;" height="20px" width="20px">
+                    </div>
+                </div>
+                <br>
+                <div style="text-align: center; margin-top: 14vh;">
+                    <p style="color: #D31034;">Apps</p>
+                    <p style="color: #0020A0;">Businesses</p>
+                    <p style="color: #005315;">Cities</p>
+                    <p style="margin-top: 10vh;">Swipe Up</p>
+                    <hr>
+                </div>
             </div>
-            <div  style="display: none;"  id="notesView" style="height: 100vh;  width: 100%;">
-                <iframe src="views/notesView.html" style="height: 100vh; width: 100%;"></iframe>
+            <div id="kotfeDiv" style="display: none; height: 100vh;">
+                <p style=" font-size: 32px; text-align: center; margin-top: 32px;">Discover the "Kotfè Fund"</p>
+                <div style="text-align: center;">
+                    <button style="background-color: #000; color: white;">Test</button>
+
+                </div>
             </div>
-            <div style="display: none;"  id="speakView"  style="height: 100vh;  width: 100%;">
-                <iframe src="views/speakView.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
-            <div style="display: none;"  id="offersView"  style="height: 100vh;  width: 100%;">
-                <iframe src="views/offersView.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
-            <div style="display: none;"  id="settingsView"  style="height: 100vh; width: 100%;">
-                <iframe src="views/settingsView.html" style="height: 100vh; width: 100%;"></iframe>
-            </div>
+            <p class="versionTV" style="margin-left: 8px;">Version 0.3</p>
         </div>
-        <footer>
-            <nav>
-                <a href="#"><img id="homeBtn" src="views/assets/house.svg" height="24px"  onclick="changeTo(0)"></a>            
-                <a href="#"><img id="notesBtn" src="views/assets/clipboard.svg" height="24px"  onclick="changeTo(1)"></a> 
-                <a href="#"><img id="speakBtn" src="views/assets/bubble.svg" height="24px"  onclick="changeTo(2)"></a>            
-                <a href="#"><img id="offersBtn" src="views/assets/tag.svg" height="24px" onclick="changeTo(3)"></a> 
-                <a href="#"><img id="settingsBtn" src="views/assets/gearshape.svg" height="24px"  onclick="changeTo(4)"></a>     
-    
-            </nav>
-        </footer>
+       
+        
     </body>
+
     <script>
-        var homeView = document.getElementById('homeView');
-        var notesView = document.getElementById('notesView')
-        var speakView = document.getElementById('speakView')
-        var offersView = document.getElementById('offersView')
-        var settingsView = document.getElementById('settingsView')
-
-        let views = [homeView, notesView, speakView, offersView, settingsView]
-        function changeTo(destination)
+        function playAudio()
         {
-            views.forEach((view, index) => {
-                if (index === destination) {
-                    view.style.display = 'inline';
-                } else {
-                    view.style.display = 'none';
+            const audio = document.getElementById('audio');
+            audio.play();
+        }
+
+        let startY;
+
+        const swipeArea = document.getElementById('homeDiv');
+        const introDiv = document.getElementById("introDiv")
+        const kotfeDiv = document.getElementById("kotfeDiv")
+
+        swipeArea.addEventListener('touchstart', function(event) {
+            event.preventDefault();
+            startY = event.touches[0].clientY; // Get the initial touch position
+        });
+
+        swipeArea.addEventListener('touchend', function(event) {
+            event.preventDefault();
+            const endY = event.changedTouches[0].clientY; // Get the final touch position
+            if (startY - endY > 50) {
+                if(kotfeDiv.style.display == 'none'){
+                    kotfeDiv.style.display = 'inline'
+                    introDiv.style.display = 'none'
                 }
-            });
-            selectedBtn(destination)
-        }
-
-        function selectedBtn(destination)
-        {
-            let homeBtn = document.getElementById("homeBtn")
-            let notesBtn = document.getElementById("notesBtn")
-            let speakBtn = document.getElementById("speakBtn")
-            let offersBtn = document.getElementById("offersBtn")
-            let settingsBtn = document.getElementById("settingsBtn")
-
-            homeBtn.src = "views/assets/house.svg"
-            notesBtn.src = "views/assets/clipboard.svg"
-            speakBtn.src = "views/assets/bubble.svg"
-            offersBtn.src = "views/assets/tag.svg"
-            settingsBtn.src = "views/assets/gearshape.svg"
-            
-            switch (destination){
-                case 0:
-                    homeBtn.src = "views/assets/house_b.svg"
-                    break
-                case 1:
-                    notesBtn.src = "views/assets/clipboard_b.svg"
-                    break
-                case 2:
-                    speakBtn.src = "views/assets/bubble_b.svg"
-                    break
-                case 3:
-                    offersBtn.src = "views/assets/tag_b.svg"
-                    break
-                case 4:
-                    settingsBtn.src = "views/assets/gearshape_b.svg"
-                    break
+            } else if (endY - startY > 50) {
+                //alert('Swipe Down Detected!'); // Swipe down
+                if(introDiv.style.display == 'none'){
+                    kotfeDiv.style.display = 'none'
+                    introDiv.style.display = 'inline'
+                }
             }
-        }
-        changeTo(0)
+        });
+
+        // Mouse swipe detection
+        let isMouseDown = false;
+
+        swipeArea.addEventListener('mousedown', function(event) {
+            event.preventDefault();
+            isMouseDown = true;
+            startY = event.clientY;
+        });
+
+        swipeArea.addEventListener('mouseup', function(event) {
+            event.preventDefault();
+            if (isMouseDown) {
+                const endY = event.clientY;
+                if (startY - endY > 50) {
+                    if(kotfeDiv.style.display == 'none')
+                    {
+                        kotfeDiv.style.display = 'block'
+                        introDiv.style.display = 'none'
+                    } // Swipe up
+                } else if (endY - startY > 50) {
+                    if(introDiv.style.display == 'none')
+                    {
+                        kotfeDiv.style.display = 'none'
+                        introDiv.style.display = 'block'
+                    }// Swipe down
+                    //change from 'inline' -> 'block'
+                }
+                isMouseDown = false;
+            }
+        });
+
+        swipeArea.addEventListener('mouseleave', function() {
+            event.preventDefault(); // Prevent default behavior
+            isMouseDown = false; // Reset on mouse leave
+        });
+
     </script>
 </html>
