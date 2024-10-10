@@ -199,33 +199,22 @@
             </button>
         </div>-->
         <div style="width: 90%; margin: auto; display: flex;" id="appDiv">
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                <h1>How To Build An App</h1>
-                <p>In this thing we are talkig about how to build an app...</p>
-            </div>
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+            <div onclick="openIndividualNote(0)" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
                 <h1>How To Build An App</h1>
                 <p>In this thing we are talkig about how to build an app...</p>
             </div>
         </div>
         <div style="width: 90%; margin: auto; display: none;" id="businessDiv">
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                <h1>How To Build A Business</h1>
-                <p>In this article we are talking about how to build a city...</p>
-            </div>
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                <h1>How To Build A Business</h1>
-                <p>In this article we are talking about how to build a city...</p>
+            <div onclick="openIndividualNote(1)" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>How To Sell Anything</h1>
+                <p>Selling is an important skillset</p>
             </div>
         </div>
         <div style="width: 90%; margin: auto; display: none;" id="cityDiv">
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                <h1>How To Build A City</h1>
-                <p>In this article we are talking about how to build a city...</p>
-            </div>
-            <div onclick="openIndividualNote()" class="noteCard" style="width: 45%; margin-left: 10%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                <h1>How To Build A City</h1>
-                <p>In this article we are talking about how to build a city...</p>
+            <div onclick="openIndividualNote(2)" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
+                <h1>Is Capitalism Pro-Slavery?</h1>
+                <p>"wage labor you are renting yourself.
+                    which is not very different from being a slave..."</p>
             </div>
         </div>
     </body>
@@ -283,9 +272,17 @@
             });
         });
 
-        function openIndividualNote()
+        function openIndividualNote(index)
         {
-            let url = `./individualNoteView.html`
+            //let url = `./individualNoteView.html`
+            let url = ""
+            if(index == 0){
+                url = `./content/apps/fannyApp.html`
+            } else if(index == 1){
+                url = `./content/businesses/howSell.html`
+            } else if(index == 2){
+                url = `./content/cities/capitalismSlavery.html`
+            }
             //let e
             window.open(url, '_blank').focus();
         }
