@@ -121,7 +121,7 @@
         
         
         <div style="text-align: center; margin-bottom: 16px;">
-            <button style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
+            <button onclick="openApp()" style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
                 <p style="color: #fff; font-size: 16px;">Register</p>
             </button>
         </div>
@@ -140,6 +140,12 @@
             if (file) {
                 reader.readAsDataURL(file);
             }
+        }
+
+        function openApp(){
+
+            let url = `../minorities.html`
+            window.location.replace(url);
         }
     </script>
 </html>
