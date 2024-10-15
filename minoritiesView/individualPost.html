@@ -1,98 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>The Minorities</title>
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-        </style>
-    </head>
-    <body>
-      
-   
-    </body>
-    <script>
-        function openIndividualPost()
-        {
-            let url = `./individualPost.html`
-            //let e
-            window.open(url, '_blank').focus();
+<head>
+    <link rel="stylesheet" href="../index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Minorities</title>
+    <style>
+        /* General reset and basic styles */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #F0F1F3;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling when bottom sheet is open */
         }
+
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top-left-radius: 16px;
+            border-top-right-radius: 16px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+            transition: height 0.3s ease;
+            height: 100px; /* Initial height */
+            overflow: hidden; /* Prevent overflow when collapsed */
+        }
+
+        .bottom-sheet.expanded {
+            height:100vh; /* Expanded height */
+        }
+
+        .divider {
+            margin: 0 auto;
+            margin-top: 8px;
+            width: 64px;
+            background-color: #000;
+            height: 4px;
+        }
+
+        .comment-section {
+            display: flex;
+            align-items: center;
+            
+            padding: 10px;
+            color: white; /* Comment section text color */
+        }
+
+        .test {
+            padding: 10px;
+            color: black; /* Comments text color */
+            display: none; /* Initially hidden */
+        }
+
+        .bottom-sheet.expanded .comments {
+            display: block; /* Show comments when expanded */
+        }
+
+        .bottom-sheet.expanded .test {
+            display: block; /* Show comments when expanded */
+        }
+
+        .comment {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <p style="margin-left: 5%; text-align: center; font-weight: bold;font-size: 24px;">First To Pick Up At HOOTERS WINS!</p>
+    <img src="assets/girls.png" style="border-radius: 10px; width: 90%; margin-left: 5%; margin-right: 5%; margin-top: 16px;">
+    <p style="margin-left: 5%; margin-right: 5%;">This is the kind of content that will be posted. This is all
+        going to be for the use of being like a text posts thing. 
+        Nothing here will be like home which will contain content and sales for the company</p>
+
+    <div id="bottom-sheet" class="bottom-sheet" style="cursor: pointer;" >
+        <hr class="divider">
+        <div class="comment-section">
+            <p style="color: black;">20 Comments</p> 
+            <p onclick="expandBottomSheet()" id="expandBtn"style="text-align: center; color: #000; margin-left: 20%; cursor: pointer;">(tap to open)</p>
+            <img style="margin-left:auto; margin-right: 8px;" src="assets/heart.fill.svg" alt="Likes">
+            <p style="color: black;  margin-right: 8px;">12</p>
+        </div>
+        <!--<div class="comments">
+            <div class="comment">Comment 1: This is a great post!</div>
+            <div class="comment">Comment 2: I love Hooters!</div>
+            <div class="comment">Comment 3: Can't wait for the event!</div>
+            <div class="comment">Comment 4: Sounds exciting!</div>
+            <div class="comment">Comment 5: Wish I could be there!</div>
+        </div>-->
+        <div class="test">
+            <div class="comments"></div>
+                <div class="commentbox">
+                    <img src="assets/profile.svg" alt="">
+                    <div class="content">
+                        <h2>Comment as: </h2>
+                        <input type="text" value="Adam Smith" class="user">
+        
+                        <div class="commentinput">
+                            <input type="text" placeholder="Enter comment" class="usercomment">
+                            <div class="buttons">
+                                <button type="submit" disabled id="publish">Publish</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+        <!--<div>
+            <div class="container">
+                
+                <div class="comments"></div>
+                <div class="commentbox">
+                    <img src="user1.png" alt="">
+                    <div class="content">
+                        <h2>Comment as: </h2>
+                        <input type="text" value="Anonymous" class="user">
+        
+                        <div class="commentinput">
+                            <input type="text" placeholder="Enter comment" class="usercomment">
+                            <div class="buttons">
+                                <button type="submit" disabled id="publish">Publish</button>
+                                <div class="notify">
+                                    <input type="checkbox" class="notifyinput"> <span>Notify me</span>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="policy">This site is procted by reCAPTCHA and the Google <a href="">privacy policy</a> and <a href="">Terms of Service</a> apply.</p>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+
+    <script>
+        let isExpanded = false;
+        let expandBtn = document.getElementById("expandBtn")
+        const expandBottomSheet = () => {
+            isExpanded = !isExpanded;
+            const bottomSheet = document.getElementById('bottom-sheet');
+            if (isExpanded) {
+                bottomSheet.classList.add('expanded');
+                expandBtn.innerText = "(tap to close)"
+
+            } else {
+                bottomSheet.classList.remove('expanded');
+                expandBtn.innerText = "(tap to open)"
+
+            }
+        };
+
+        const USERID = {
+            name: null,
+            identity: null,
+            image: null,
+            message: null,
+            date: null
+        }
+
+        const userComment = document.querySelector(".usercomment");
+        const publishBtn = document.querySelector("#publish");
+        const comments = document.querySelector(".comments");
+        const userName = document.querySelector(".user");
+        const notify = document.querySelector(".notifyinput");
+
+        userComment.addEventListener("input", e => {
+            if(!userComment.value) {
+                publishBtn.setAttribute("disabled", "disabled");
+                publishBtn.classList.remove("abled")
+            }else {
+                publishBtn.removeAttribute("disabled");
+                publishBtn.classList.add("abled")
+            }
+        })
+
+        function addPost() {
+            if(!userComment.value) return;
+            USERID.name = userName.value;
+            if(USERID.name === "Anonymous") {
+                USERID.identity = false;
+                USERID.image = "anonymous.png"
+            }else {
+                USERID.identity = true;
+                USERID.image = "user.png"
+            }
+
+            USERID.message = userComment.value;
+            USERID.date = new Date().toLocaleString();
+            let published = 
+            /*`<div class="parents">
+                <img src="${USERID.image}">
+                <div>
+                    <h1>${USERID.name}</h1>
+                    <p>${USERID.message}</p>
+                    <div class="engagements"><img src="like.png" id="like"><img src="share.png" alt=""></div>
+                    <span class="date">${USERID.date}</span>
+                </div>    
+            </div>`*/
+            `<div class="parents">
+                <img  src="assets/profile.svg">
+                <div>
+                    <h1>${USERID.name}</h1>
+                    <p>${USERID.message}</p>
+                    <div class="engagements">
+                        <img src="assets/heart.fill.svg" id="like">
+                        <p> 12 </p>
+                    </div>
+                    <span class="date">${USERID.date}</span>
+                </div>    
+            </div>`
+          
+
+            comments.innerHTML += published;
+            userComment.value = "";
+            publishBtn.classList.remove("abled")
+
+            let commentsNum = document.querySelectorAll(".parents").length;
+            document.getElementById("comment").textContent = commentsNum;
+
+        }
+
+        publishBtn.addEventListener("click", addPost);
+
     </script>
-    
+</body>
 </html>
