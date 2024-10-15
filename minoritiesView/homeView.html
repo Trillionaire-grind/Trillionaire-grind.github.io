@@ -25,8 +25,8 @@
             }
 
             .fab {
-                position: fixed;
-                bottom: 20px;
+                position: absolute;
+                bottom: 5%;
                 /* Adjust as needed */
                 right: 5%;
                 background-color: #000;
@@ -143,7 +143,7 @@
                 bottom: 0;
                 left: 0;
                 width: 100%;
-                height: 80vh; /* 60% of viewport height */
+                height: 90%; /* 60% of viewport height */
                 background: white;
                 box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
                 border-radius: 16px 16px 0 0;
@@ -173,7 +173,7 @@
         </style>
     </head>
 
-    <body style="margin-bottom: 44px; height: 100vh">
+    <body style="height: 100vh;">
         <div style="display: flex;">
             <img src="assets/logo_site.png" height="60px" width="60px" style="padding: 8px;">
             <p style="padding-left: 16px; font-size: 24px;">the minorities</p>
@@ -190,7 +190,7 @@
             </div>
         </div>
         <hr>
-        <div id="homeDiv" style="display: inline;">
+        <div id="homeDiv" style="display: inline; background-color: red;">
             <div
                 style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
                 <div style="display: flex;">
@@ -204,8 +204,7 @@
                 </div>
             </div>
             <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Content</p>
-            <div class="contentCard"
-                style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; ">
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; ">
                 <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
                 <p style="font-weight: bold; padding-left: 8px;">First to Pick-Up at HOOTERS WINS!</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
@@ -213,15 +212,41 @@
                         width="15px" height="12px" style=" margin-bottom: auto;">
                 </div>
             </div>
-            <div class="contentCard"
-                style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; ">
-                <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; ">
+                <p style="font-weight: bold; font-size: 24px; padding: 8px; padding-top: 16px;">
+                    How to edit your content the right way to get more views
+                </p>
+                <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
+                    <p style="margin-top: 0px;margin-bottom: 8px;">
+                        Thu 12, 2024 - 44
+                    </p>
+                    <img src="assets/message_r.svg" width="15px" height="12px" style=" margin-bottom: auto;">
+                </div>
+            </div>
+           
+            <div style="background-color: white; width: 90%; margin-top: 24px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                <div style="display: flex; height: 100%;">
+                    <div style="width: 50%; background-color: #fff; border-radius: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <p style="color: #FF0C11; font-weight: bold; font-size: 32px; text-align: center; margin-top: 2px; margin-bottom: 0;">Sale</p>
+                            <p style="color: #FF0C11; text-align: center; margin-top: 4px;">Get your new "University" Hoodie</p>
+                        </div>
+                        <div style="background-color: #FF0C11; width: 90%; border-radius: 10px; text-align: center; margin-bottom: 2px; margin-left: auto; margin-right: auto; cursor: pointer;">
+                            <p style="color: #fff;">Yes, I want to get my hoodie for 10% off by December 12th</p>
+                        </div>
+                    </div>
+                    <img src="assets/basket.svg" style="width: 50%; background-color: transparent;">
+                </div>
+            </div>
+            
+            <div class="contentCard" style="padding-bottom: 16px; background-color: white; width: 90%; margin-top: 24px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;   filter: blur(8px);" onclick="openIndividualPost()">
                 <p style="font-weight: bold; padding-left: 8px;">First to Pick-Up at HOOTERS WINS!</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">Thu 12, 2024 - 44</p><img src="assets/message_r.svg"
                         width="15px" height="12px" style=" margin-bottom: auto;">
+                </div>
             </div>
-        </div>
             
         </div>
         <div id="postsDiv" style="display: none;">
@@ -230,10 +255,53 @@
                 <p style="margin-left: 16px; color: #808080;">Filter</p>
             </div>-->
             <img id="filterBtn" style="margin-top: 8px; margin-left: 5%; cursor: pointer;" src="assets/filter.svg" width="40px" height="40px">
-
-            <div style="background-color:#fff; height:30vh; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;box-shadow: 0px 4px 8px #AF2D0B;">
+           <!--Regular post (just text)-->  
+            <div style="width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; align-items: center; padding: 8px;">
+                    <img src="assets/person.svg" height="50px" width="50px" style="margin-right: 8px; cursor: pointer;">
+                    <div style="flex-grow: 1;">
+                        <p style="font-weight: bold; margin: 0;">Adam Smith</p>
+                        <p style="margin: 0; font-size: 12px; color: #666;">10/10/24</p>
+                    </div>
+                </div>
+                <p style="padding: 8px; margin: 0;">
+                    This is the kind of content that will be posted. This is all
+                    going to be for the use of being like a text posts thing. 
+                    Nothing here will be like home which will contain con-
+                    tent and sales for the company.
+                </p>
+                <div style="display: flex; align-items: center; padding: 8px;">
+                    <img src="assets/heart.fill.svg" width="16px" height="12px">
+                    <p style="margin: 0; margin-left: 4px;">12</p>
+                    <img src="assets/message_r.svg" width="16px" height="12px" style="margin-left: 16px;">
+                    <p style="margin: 0; margin-left: 4px;">12</p>
+                </div>
             </div>
-            <div style="background-color:#fff; height:30vh; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 32px;box-shadow: 0px 4px 8px #000000;"></div>
+       
+            <!--Regular post (text & image)-->
+            <div style="width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);">
+                <div style="display: flex; align-items: center; padding: 8px;">
+                    <img src="assets/person.svg" height="50px" width="50px" style="margin-right: 8px; cursor: pointer;">
+                    <div style="flex-grow: 1;">
+                        <p style="font-weight: bold; margin: 0;">Adam Smith</p>
+                        <p style="margin: 0; font-size: 12px; color: #666;">10/10/24</p>
+                    </div>
+                </div>
+                <p style="padding: 8px; margin: 0;">
+                    This is the kind of content that will be posted. This is all
+                    going to be for the use of being like a text posts thing. 
+                    Nothing here will be like home which will contain con-
+                    tent and sales for the company.
+                </p>
+                <img src="assets/girls.png" style="width: 90%; margin-left: auto; margin-right: auto;">
+                <div style="display: flex; align-items: center; padding: 8px;">
+                    <img src="assets/heart.fill.svg" width="16px" height="12px">
+                    <p style="margin: 0; margin-left: 4px;">12</p>
+                    <img src="assets/message_r.svg" width="16px" height="12px" style="margin-left: 16px;">
+                    <p style="margin: 0; margin-left: 4px;">12</p>
+                </div>
+            </div>
+
             <div id="addBtn" class="fab">+</div>
              <!-- Dialog -->
             <div id="filterDialog" class="dialog">
@@ -302,7 +370,7 @@
             </div>
         </div>
         <div id="profileBottomSheet" class="bottom-sheet" style="text-align: center;">
-            <p style="text-align: left; cursor: pointer; margin-left: 16px;" id="profileCloseBtn">close</p>
+            <p style="text-align: right; cursor: pointer; margin-right: 16px;" id="profileCloseBtn">close</p>
             <div class="bottom-sheet-content">
                 <img src="assets/person.svg" style="margin-top: 0px;" height="70px" width="70px" >
                 <p style="font-size: 32px; font-weight: bold; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
