@@ -31,7 +31,7 @@
         }
 
         .bottom-sheet.expanded {
-            height:100vh; /* Expanded height */
+            height:90vh; /* Expanded height */
         }
 
         .divider {
@@ -78,9 +78,10 @@
 
     <div id="bottom-sheet" class="bottom-sheet" style="cursor: pointer;" >
         <hr class="divider">
+        <p onclick="expandBottomSheet()" id="expandBtn"style="text-align: center; color: #000; margin: auto; cursor: pointer; margin-top: 8px">(tap to open)</p>
+
         <div class="comment-section">
             <p style="color: black;">20 Comments</p> 
-            <p onclick="expandBottomSheet()" id="expandBtn"style="text-align: center; color: #000; margin-left: 20%; cursor: pointer;">(tap to open)</p>
             <img style="margin-left:auto; margin-right: 8px;" src="assets/heart.fill.svg" alt="Likes">
             <p style="color: black;  margin-right: 8px;">12</p>
         </div>
