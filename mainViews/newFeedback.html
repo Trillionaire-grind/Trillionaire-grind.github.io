@@ -395,6 +395,8 @@
 
             let feedbackValue = feedbackTV.value
 
+            alert(`feedback value: ${feedbackValue}`)
+
             id = speakers[index].id
 
             const date = new Date();
@@ -417,7 +419,7 @@
             let displayedDate = `${date.getFullYear()}-${month}-${day}`
 
             const docRef =  addDoc(collection(db, "users",`${id}`,"speeches",`${displayedDate}`,"feedback"), {
-                feedback: `${feedbackTV}`
+                feedback: `${feedbackValue}`
                 }).then(() => {
                     alert('feedback given successfully')
                     feedbackTV.value = ""
