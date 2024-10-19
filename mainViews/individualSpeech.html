@@ -86,7 +86,7 @@
             
         </div>-->
 
-        <div class="feedbackView" style="margin-top: 32px;">
+        <div class="feedbackView" style="margin-top: 32px; width: 90%; margin-right: auto; margin-left: auto;">
             <div style="display: flex; border:1px solid black;">
                 <p style="display: inline; ">feedback</p>
                 <button style="display: inline;margin-left: auto; padding-top: 8px;" id="feedbackBtn" class="button" onclick="minimizeFeedback()">-</button>
@@ -128,47 +128,6 @@
             //users/id/speeches/feedback.getDocs()
 
 
-            async function getFeedback(userId, speechId)
-            {
-                //to do this, we will have to fetch an Id from the URL that helps us get that speech 
-                // and 
-                let titleTV = document.getElementById("titleTV")
-                let pathTV = document.getElementById("pathTV")
-                let dateTV = document.getElementById("dateTV")
-                let feedbackTV = document.getElementById("feedbackTV")
-
-
-                const feedbackRef = collection(db, `speeches/${speechId}/feedback`)
-
-                const feedbackSnapshot = await getDocs(feedbackRef)
-                const speechSnapshot = await getDoc(doc(db, `speeches/${speechId}`))
-
-                let name = ``
-                
-                feedbackSnapshot.forEach((doc) => {
-                    console.log(`feedback ${doc.data().feedback}`)
-                    name += doc.data().feedback
-                    
-                })
-                feedbackTV.innerText = name
-
-                if (speechSnapshot.exists()) {
-                    console.log("Document data:", speechSnapshot.data());
-
-                    titleTV.textContent = `"${speechSnapshot.data().title}"`
-                    dateTV.textContent = `${speechId}` 
-
-                    pathTV.textContent = `${speechSnapshot.data().path}`
-                   
-
-                } else {
-                    // docSnap.data() will be undefined in this case
-                    console.log("No such document!");
-                    alert("does not exist")
-              
-                }
-            }
-
             function getParameter(sParam)
             {
                 var sPageURL = window.location.search.substring(1);
@@ -197,13 +156,7 @@
                 
                 // Initialize an object to store the extracted parameters
                 const extractedParams = {};
-                
-                // Loop through each key-value pair and extract the values
-                /*params.forEach(param => {
-                    const [key, value] = param.split('=');
-                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '));
-                });*/
-                
+
                 speechParams.forEach(param => {
                     const [key, value] = param.split('=');
                     extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
@@ -213,17 +166,8 @@
                     extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
                 })
 
-                
-                //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
-                // Return an array with values of 'speech' and 'user'
-                //return [extractedParams['speech'], extractedParams['user']];
                 getSpeech(extractedParams['speech'], extractedParams['user'])
             }
-
-            //function 
-
-
-          
 
             async function getSpeech(speechId,  userId)
             {
@@ -232,38 +176,30 @@
                 let dateTV = document.getElementById("dateTV")
                 let feedbackTV = document.getElementById("feedbackTV")
 
-
                 const feedbackRef = collection(db, `users/${userId}/speeches/${speechId}/feedback`)
                 const speechSnapshot = await getDoc(doc(db, `users/${userId}/speeches/${speechId}`))
-
                 const feedbackSnapshot = await getDocs(feedbackRef)
 
-
                 if (speechSnapshot.exists()) {
-                    console.log("Document data:", speechSnapshot.data());
 
                     titleTV.textContent = `"${speechSnapshot.data().title}"`
-                    dateTV.textContent = `${speechSnapshot.id}` 
+                    dateTV.textContent = ` ${speechSnapshot.id}` 
 
-                    pathTV.textContent = `${speechSnapshot.data().path}`
+                    pathTV.textContent = `${speechSnapshot.data().path} : `
 
                     feedbackSnapshot.forEach((doc) => {
                         console.log(`feedback ${doc.data().feedback}`)
-                        name += doc.data().feedback
+                        name += doc.data().feedback + '\n\n'
                     })
-
                     feedbackTV.innerText = name
 
                 } else {
                     // docSnap.data() will be undefined in this case
                     console.log("No such document!");
-              
                 }
             }
-
             //const [speechValue, userValue] = 
             extractParamsFromUrl(window.location.href);
-
         </script>
      
         <script>
@@ -273,9 +209,7 @@
                 if(evaluationBtn.innerHTML == "-")
                 {
                     evaluationBtn.innerHTML = "+"
-                  
                     console.log("evaluation text should be gone")
-                    
                 }
                 else{
                     evaluationBtn.innerHTML = "-"
@@ -288,7 +222,6 @@
                 var feedbackBtn = document.getElementById("feedbackBtn")
                 var feedbackText = document.getElementById("feedbackTV")
 
-               
                 if (feedbackBtn.innerHTML == "-") {
                     feedbackBtn.innerHTML = "+";
                     console.log("should minimize");
@@ -298,9 +231,7 @@
                     console.log("should maximize");
                     feedbackText.style.visibility = 'visible'; // Ensure visibility is set to 'visible' when maximizing
                 }
-               
             }
         </script>
-
     </body>
 </html>
