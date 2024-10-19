@@ -275,6 +275,29 @@
                 text-decoration: none;
                 cursor: pointer;
             }
+
+            .upgrade-container {
+                margin: 8px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-family: Arial, sans-serif;
+            }
+
+            .checkbox-label {
+                display: flex;
+                align-items: center;
+                font-size: 1.1em;
+            }
+
+            .checkbox-label input[type="checkbox"] {
+                width: 20px;
+                height: 20px;
+                margin-right: 10px;
+                accent-color: #024165; /* Change color to blue */
+                cursor: pointer;
+                transform: scale(1.5); /* Make checkbox larger */
+            }
         </style>
     </head>
     <body>
@@ -420,7 +443,7 @@
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
-                    //console.log(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
+                    alert(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
                     // ..
                 });
             }
@@ -473,10 +496,18 @@
                     name: `${name}`,email: `${email}`, bio:`${bio}`, 
                     imageUrl: `${imageUrl}`,speeches: [] }
                 ).then(()=>{
-                    alert("created account")
+                    alert("created account successfully")
                     //signIn(email, password)
-                    window.location.reload();
-                    alert('Sign-In to confirm account')
+                    let myModal = document.getElementById('myModal');
+                   
+                    const checkbox = document.getElementById('upgradeCheckbox');
+                    if(checkbox.checked){
+                        //go to the website stripe. 
+                    }else{
+                        localStorage.removeItem('showModal'); // Remove the flag
+                        myModal.style.display = 'inline'; 
+                    }
+                    
                 });
             }
 
@@ -566,7 +597,14 @@
             }
 
             showRegister(false)
+            window.onload = function() {
+                if (localStorage.getItem('showModal') === 'true') {
+                    let myModal = document.getElementById('myModal');
+                    localStorage.removeItem('showModal'); // Remove the flag
+                    myModal.style.display = 'inline'; // Show the modal
 
+                }
+            };
         
         </script>
         <div id="mainViewDiv" style="display: none;">
@@ -589,11 +627,11 @@
             </div>
             <footer>
                 <nav>
-                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="30px" width="30px"></a> 
-                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/clipboard.svg" height="30px" width="30px"></a> 
-                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="30px" width="30px"></a> 
-                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="30px" width="30px"></a>-->      
-                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="30px" width="30px"></a>  
+                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="24px" width="24px"></a> 
+                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
+                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="24px" width="24px"></a> 
+                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="24px" width="24px"></a>-->      
+                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="24px" width="24px"></a>  
                     
                 </nav>
             </footer>
@@ -646,6 +684,14 @@
         
                 <label for="image">Select image:</label>
                 <input type="file" id="image" name="img" accept="image/*"><br>
+
+                <div class="upgrade-container">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="upgradeCheckbox">
+                        Yes, I want to upgrade to the TMExperience Pro, to record my speeches and to improve my speeches even better.
+                    </label>
+                </div>
+                
         
                 <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
             </div>
@@ -735,18 +781,18 @@
                 let adminView = document.getElementById("adminView")
                 let profileBtn = document.getElementById("profileBtn")
 
-                calendarBtn.src = "mainViews/assets/calendar.svg"
-                feedbackBtn.src = "mainViews/assets/clipboard.svg"
+                calendarBtn.src = "mainViews/assets/calendar.circle.svg"
+                feedbackBtn.src = "mainViews/assets/list.clipboard.svg"
                 toolsBtn.src = "mainViews/assets/tools.svg"
                 //adminBtn.src = "mainViews/assets/admin.svg"
                 profileBtn.src = "mainViews/assets/person.svg"
                 
                 switch (destination){
                     case 0:
-                        calendarBtn.src = "mainViews/assets/calendar_b.svg"
+                        calendarBtn.src = "mainViews/assets/calendar_fill.svg"
                         break
                     case 1:
-                        feedbackBtn.src = "mainViews/assets/clipboard_b.svg"
+                        feedbackBtn.src = "mainViews/assets/list.clipboard.fill.svg"
                         break
                     case 2:
                         toolsBtn.src = "mainViews/assets/tools_b.svg"
