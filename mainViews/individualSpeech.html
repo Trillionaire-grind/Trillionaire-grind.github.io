@@ -61,18 +61,19 @@
             .evaluationText{
                 height: 250px;
                 background: #DFDFDF;
+                padding: 8px;
             }
         </style>
     </head>
     <body style="margin-bottom: 30vh;">
         <h1 id="titleTV" style="text-align: center; padding-left: 8px; font-size: 5vw;"></h1>
-        <div style="display: flex; margin-left: 80%;   margin-top: 8px;">
+        <div style=" margin-left: 80%;   margin-top: 8px;">
             <p id="pathTV"> </p>
             <p id="dateTV"></p>
         </div>
-        <div style="text-align: center; padding-top: 32px;">
+        <!--<div style="text-align: center; padding-top: 32px;">
             <iframe style="width: 60%; margin-left: auto; margin-right: auto;text-align: center; background-color: #333;" height="80%"></iframe>
-        </div>
+        </div>-->
       
         <p id="pathTV" style="text-align: center;"></p>
         
@@ -86,13 +87,14 @@
             
         </div>-->
 
-        <div class="feedbackView" style="margin-top: 32px; width: 90%; margin-right: auto; margin-left: auto;">
-            <div style="display: flex; border:1px solid black;">
-                <p style="display: inline; ">feedback</p>
-                <button style="display: inline;margin-left: auto; padding-top: 8px;" id="feedbackBtn" class="button" onclick="minimizeFeedback()">-</button>
+        <div class="feedbackView" style="margin-top: 32px; width: 90%; margin-right: auto; margin-left: auto;;">
+            <div style="display: flex; border:1px solid black;  border-radius: 10px 10px 0px 0px">
+                <p style="display: inline; padding-top: 0px; padding-left: 8px;">feedback</p>
+                <button style="display: inline;margin-left: auto; margin-top: 8px; margin-right: 8px; " id="feedbackBtn" class="button" onclick="minimizeFeedback()">-</button>
             </div>
             <div class="window">
-                <div style="visibility: visible;" class="evaluationText" id="feedbackTV"  >  
+                <div style="visibility: visible; border-radius: 0px 0px 10px 10px;" class="evaluationText" id="feedbackTV"  >  
+                
                 </div>
             </div>
         </div>
@@ -185,7 +187,7 @@
                     titleTV.textContent = `"${speechSnapshot.data().title}"`
                     dateTV.textContent = ` ${speechSnapshot.id}` 
 
-                    pathTV.textContent = `${speechSnapshot.data().path} : `
+                    pathTV.textContent = `${speechSnapshot.data().path}`
 
                     feedbackSnapshot.forEach((doc) => {
                         console.log(`feedback ${doc.data().feedback}`)
