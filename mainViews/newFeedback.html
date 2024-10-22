@@ -227,7 +227,7 @@
     
         <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
        <!--This is the view of the speaker-->
-        <div>
+        <!--<div>
             <div style="display: flex;">
                 <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; color: white; border-radius: 50%; cursor: pointer; "> &larr;</button>
             
@@ -241,7 +241,28 @@
                 <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
                 <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
             </div>
+        </div>-->
+        <div>
+            <div style="display: flex; align-items: center;">
+                <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; color: white; border-radius: 50%; cursor: pointer;">&larr;</button>
+                
+                <div style="background-color: white; border-radius: 5%; margin: 0 auto; padding: 10px; width: 300px; height: 300px; overflow: hidden;">
+                    <img id="currentSpeakerImg" src="assets/khan.jpeg" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                
+                <button class="selectorBtn" id="rightBtn" style="margin-right: 5%; border: none; height: 40px; width: 40px; color: white; border-radius: 50%; cursor: pointer; margin-left: 16px;">&rarr;</button>
+            </div>
+            
+            <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #fff; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
+                <button id="firstSpeakerSelector" style="border: none; border-radius: 50%; background-color: #7D2128; height: 16px; width: 16px;"></button>
+                <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
+                <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
+            </div>
         </div>
+        
+        <!--<div style=" background-color: white; border-radius: 5%; margin-left: auto; margin-right: auto; padding: 10px; width: 90%;">
+                    <img id="currentSpeakerImg" src="assets/khan.jpeg" height="300px" width="100%" style="background-color: #024165; margin-left: auto; margin-right: auto; ">
+                </div>-->
         <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
             <p id="currentSpeakerName" style="font-weight: bold; margin-top: 64px;">Genghis Khan</p>
             <button onclick="openFeedbackDialog()" style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
