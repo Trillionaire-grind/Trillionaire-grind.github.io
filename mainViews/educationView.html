@@ -57,14 +57,14 @@
 
             .card-container {
                 display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between; /* Adjusts spacing between cards */
                 width: 90%;
                 margin: 0 auto;
-                flex-wrap: wrap;
-                padding: 2px;
-                gap: 10%;
             }
+
             .card {
-                width: 45%;
+                width: 45%; /* Ensures two cards per row */
                 background-color: white;
                 border-radius: 6px;
                 overflow: hidden;
@@ -73,8 +73,9 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
-   
+                margin-bottom: 16px; /* Space between rows */
             }
+
 
             .card:hover{
                 background-color: #2ABF5B;
@@ -214,6 +215,29 @@
                 <img src="assets/course_thumb.jpg">
             </div>
         </div>
+
+
+        <div class="card-container" style="margin-top: 32px;">
+            <div class="card" style="height:20vh;">
+                <img src="assets/douglass.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+            <div class="card" style="height:20vh;">
+                <img src="assets/course_thumb.jpg">
+            </div>
+        </div>
+        
         <div style="height: 40px; background-color: #2ABF5B;">
     </body>
     <script>
