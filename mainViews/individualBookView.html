@@ -290,7 +290,7 @@
 
         extractParamsFromUrl(window.location.href);
 
-        function createChapterDiv(bookId, chapterName)
+        /*function createChapterDiv(bookId, chapterName)
         {
             let div = document.createElement('div');
             div.className = 'chapterDiv';
@@ -334,7 +334,47 @@
             });
 
             return div;
+        }*/ 
+        
+        function createChapterDiv(bookId, chapterName) {
+            let div = document.createElement('div');
+            div.className = 'chapterDiv';
+            div.dataset.speechId = bookId;
+            div.innerHTML = `
+                <div class="chapterDiv" style="width: 100%; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
+                    <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto;">${chapterName} <span style="font-weight: normal;"></span></p>
+                </div>`;
+            
+            div.addEventListener('click', () => {
+                openPage(bookId, chapterName);
+            });
+
+            let pressTimer;
+
+            const startPress = (event) => {
+                event.preventDefault(); // Prevent default actions like scrolling
+                pressTimer = setTimeout(() => {
+                    openEdit(bookId, chapterName);
+                }, 500); // Adjust the duration as needed
+            };
+
+            const endPress = () => {
+                clearTimeout(pressTimer);
+            };
+
+            // Desktop mouse events
+            div.addEventListener('mousedown', startPress);
+            div.addEventListener('mouseup', endPress);
+            div.addEventListener('mouseleave', endPress);
+
+            // Touch events for mobile devices
+            div.addEventListener('touchstart', startPress, { passive: false });
+            div.addEventListener('touchend', endPress);
+            div.addEventListener('touchcancel', endPress);
+
+            return div;
         }
+
 
         function openPage(bookId, chapterName)
         {
