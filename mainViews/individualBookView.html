@@ -6,6 +6,8 @@
         <link rel="stylesheet" href="assets/styles.css">
 
         <title>Liv Lakay</title>
+        <script type="text/javascript"
+        src="https://raw.github.com/pisi/Longclick/master/jquery.longclick-min.js"></script>
         <style>
             /* General reset and basic styles */
             body {
@@ -125,6 +127,7 @@
 
 
         </div>
+        <p>version 0.01</p>
         <div style="margin-left: 5%; margin-right: 5%;">
             <p style="font-size: 24px;" id="titleTV"></p>
             <div style="background-color: #fff; width: 100%; height: 10vh; display: flex; border-radius: 10px;">
@@ -361,6 +364,9 @@
             const endPress = () => {
                 clearTimeout(pressTimer);
             };
+
+
+            div.longclick(250, alert('worked maybe'));
 
             // Desktop mouse events
             div.addEventListener('mousedown', startPress);
