@@ -344,7 +344,7 @@
                 <div class="chapterDiv" style="width: 100%; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
                     <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto;">${chapterName} <span style="font-weight: normal;"></span></p>
                 </div>`;
-            
+
             div.addEventListener('click', () => {
                 openPage(bookId, chapterName);
             });
@@ -372,8 +372,14 @@
             div.addEventListener('touchend', endPress);
             div.addEventListener('touchcancel', endPress);
 
+            // Prevent context menu on long press (iOS)
+            div.addEventListener('contextmenu', (event) => {
+                event.preventDefault(); // Prevent the context menu from appearing
+            });
+
             return div;
         }
+
 
 
         function openPage(bookId, chapterName)
