@@ -1,16 +1,16 @@
 We have 4 apps that needs to be worked on and a few sales pages
 1) Learn App:
-    1) re-route "learn_mobile" [in-review]
+    1) re-route "learn_mobile" [done]
     2) Add Copy for the Kotfè Fund
     3) Make Test Allow them to buy a stock 
-    4) Fix The Bottom Nav Bar Icons [in-review]
+    4) Fix The Bottom Nav Bar Icons [done]
     5) Fix the Notes Icons [done]
-    6) Fix the individual Notes Open [in-review]
+    6) Fix the individual Notes Open [done]
     7) Talk To Me (Add real times)
-    8) Fix Icons For The Offers Page [in-review]
-    9) Fix The individual Page [in-review]
-    10) Make Learn the subdomain for the app (sales copy) [in-review]
-    11) Make the "Learn" Button open the app [in-review]
+    8) Fix Icons For The Offers Page [done]
+    9) Fix The individual Page [done]
+    10) Make Learn the subdomain for the app (sales copy) [not working]
+    11) Make the "Learn" Button open the app [done]
 2) Liv App:
     1) Fix primary view routing
     2) Fix Bottom Nav Bar Icons 

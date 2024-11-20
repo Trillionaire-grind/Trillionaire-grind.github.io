@@ -163,7 +163,7 @@
     <div class="spacer">
 
     </div>
-    <a id="dynamicLink" href="" style="text-decoration: none; ">
+    <a id="dynamicLink" onclick="openApp()" style="text-decoration: none; ">
       <div class="cta">
         <div class="ctaContainer">
             <div class="tester">
@@ -183,20 +183,12 @@
      let info = navigator.userAgent 
      let regex = /android|iphone|kindle|ipad/i;
      let isMobile = regex.test(details)
-   
-    if (window?.navigator?.platform === "iPhone"){ 
-        console.log("This is the iPhone plaltform")
-        link.href = "https://www.Apple.com"
-    }
-    else if(isMobile ||  window.innerWidth < 600){
-      console.log();
-      link.href = "https://store.google.com/us/category/phones?pli=1&hl=en-US"
-    }
-    else{
-      console.log("This is not the iPhone platform")
-      console.log(`the platform ${window?.navigator?.platform}`)
-      link.href = "http://www.google.com"
-    }
+    
+     function openApp()
+     {
+        let url = 'learn.html'
+        window.location.replace(url)
+     }
     //(window?navigator?.platform == "Android"){
     /*else{
         

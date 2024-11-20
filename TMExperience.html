@@ -610,28 +610,28 @@
         <div id="mainViewDiv" style="display: none;">
             <div>
                 <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
-                    <iframe src="mainViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                    <iframe src="TMExperienceViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
                 </div>
                 <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
-                    <iframe src="mainViews/newFeedback.html" style="height: 100vh; width: 100%;"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html" style="height: 100vh; width: 100%;"></iframe>
                 </div>
                 <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="mainViews/newTools.html" style="height: 100vh; width: 100%;" ></iframe>
+                    <iframe src="TMExperienceViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
                 </div>
                 <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="mainViews/newAdmin.html" style="height: 100vh; width: 100%;" ></iframe>
+                    <iframe src="TMExperienceViews/adminView.html" style="height: 100vh; width: 100%;" ></iframe>
                 </div>
                 <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
-                    <iframe src="mainViews/newProfile.html" style="height: 100vh; width: 100%;"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html" style="height: 100vh; width: 100%;"></iframe>
                 </div>
             </div>
             <footer>
                 <nav>
-                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="mainViews/assets/calendar.svg"  height="24px" width="24px"></a> 
-                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="mainViews/assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
-                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="mainViews/assets/tools.svg" height="24px" width="24px"></a> 
+                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="assets/calendar.svg"  height="24px" width="24px"></a> 
+                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
+                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="assets/tools.svg" height="24px" width="24px"></a> 
                     <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="24px" width="24px"></a>-->      
-                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="mainViews/assets/person.svg"  height="24px" width="24px"></a>  
+                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="assets/person.svg"  height="24px" width="24px"></a>  
                     
                 </nav>
             </footer>
@@ -782,27 +782,27 @@
                 let adminView = document.getElementById("adminView")
                 let profileBtn = document.getElementById("profileBtn")
 
-                calendarBtn.src = "mainViews/assets/calendar.circle.svg"
-                feedbackBtn.src = "mainViews/assets/list.clipboard.svg"
-                toolsBtn.src = "mainViews/assets/tools.svg"
+                calendarBtn.src = "TMExperienceViews/assets/calendar.circle.svg"
+                feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.svg"
+                toolsBtn.src = "TMExperienceViews/assets/tools.svg"
                 //adminBtn.src = "mainViews/assets/admin.svg"
-                profileBtn.src = "mainViews/assets/person.svg"
+                profileBtn.src = "TMExperienceViews/assets/person.svg"
                 
                 switch (destination){
                     case 0:
-                        calendarBtn.src = "mainViews/assets/calendar_fill.svg"
+                        calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
                         break
                     case 1:
-                        feedbackBtn.src = "mainViews/assets/list.clipboard.fill.svg"
+                        feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
                         break
                     case 2:
-                        toolsBtn.src = "mainViews/assets/tools_b.svg"
+                        toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
                         break
                     case 3:
                         //adminBtn.src = "mainViews/assets/admin_b.svg"
                         break
                     case 4:
-                        profileBtn.src = "mainViews/assets/person_b.svg"
+                        profileBtn.src = "TMExperienceViews/assets/person_b.svg"
                         break
                 }
             }

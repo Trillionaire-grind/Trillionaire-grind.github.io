@@ -85,25 +85,25 @@
     <body>
         <div>
             <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
-                <iframe src="mainViews/homeView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                <iframe src="homeView.html" style="height: 100vh; width: 100%;"   ></iframe>
             </div>
             <div  style="display: none;"  id="libraryView" style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/libraryView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="libraryView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/educationView.html" style="height: 100vh; width: 100%;" ></iframe>
+                <iframe src="educationView.html" style="height: 100vh; width: 100%;" ></iframe>
             </div>
             <div style="display: none;"  id="profileView"  style="height: 100vh;  width: 100%;">
-                <iframe src="mainViews/profileView.html" style="height: 100vh; width: 100%;" ></iframe>
+                <iframe src="profileView.html" style="height: 100vh; width: 100%;" ></iframe>
             </div>
         
         </div>
         <footer>
             <nav>
-                <a href="#"><img id="homeBtn" src="mainViews/assets/house_g.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
-                <a href="#"><img id="libraryBtn" src="mainViews/assets/books.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
-                <a href="#"><img id="educationBtn" src="mainViews/assets/brain.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
-                <a href="#"><img id="profileBtn" src="mainViews/assets/person.svg" height="24px" width="24px" onclick="changeTo(3)"></a>     
+                <a href="#"><img id="homeBtn" src="assets/house_g.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
+                <a href="#"><img id="libraryBtn" src="assets/books.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
+                <a href="#"><img id="educationBtn" src="assets/brain.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
+                <a href="#"><img id="profileBtn" src="assets/person.svg" height="24px" width="24px" onclick="changeTo(3)"></a>     
             </nav>
            <!--<div class="fab">+</div>--> 
         </footer>
@@ -134,23 +134,23 @@
             let educationView = document.getElementById("educationBtn")
             let profileBtn = document.getElementById("profileBtn")
 
-            homeBtn.src = "mainViews/assets/house.svg"
-            libraryBtn.src = "mainViews/assets/books.svg"
-            educationView.src = "mainViews/assets/brain.svg"
-            profileBtn.src = "mainViews/assets/person.svg"
+            homeBtn.src = "assets/house.svg"
+            libraryBtn.src = "assets/books.svg"
+            educationView.src = "assets/brain.svg"
+            profileBtn.src = "assets/person.svg"
             
             switch (destination){
                 case 0:
-                    homeBtn.src = "mainViews/assets/house_g.svg"
+                    homeBtn.src = "assets/house_g.svg"
                     break
                 case 1:
-                    libraryBtn.src = "mainViews/assets/books_g.svg"
+                    libraryBtn.src = "assets/books_g.svg"
                     break
                 case 2:
-                    educationView.src = "mainViews/assets/brain_g.svg"
+                    educationView.src = "assets/brain_g.svg"
                     break
                 case 3:
-                    profileBtn.src = "mainViews/assets/person_g.svg"
+                    profileBtn.src = "assets/person_g.svg"
                     break
              
             }
