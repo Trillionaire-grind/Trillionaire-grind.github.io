@@ -85,19 +85,19 @@
     <body> 
         <div style="margin-bottom: 16px;">
             <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
-                <iframe src="views/homeView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="homeView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div  style="display: none;"  id="notesView" style="height: 100vh;  width: 100%;">
-                <iframe src="views/notesView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="notesView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div style="display: none;"  id="speakView"  style="height: 100vh;  width: 100%;">
-                <iframe src="views/speakView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="speakView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div style="display: none;"  id="offersView"  style="height: 100vh;  width: 100%;">
-                <iframe src="views/offersView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="offersView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div style="display: none;"  id="settingsView"  style="height: 100vh; width: 100%;">
-                <iframe src="views/settingsView.html" style="height: 100vh; width: 100%;"></iframe>
+                <iframe src="settingsView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
         </div>
         <footer>
@@ -140,24 +140,24 @@
             let offersBtn = document.getElementById("offersBtn")
             //let settingsBtn = document.getElementById("settingsBtn")
 
-            homeBtn.src = "views/assets/house.svg"
-            notesBtn.src = "views/assets/clipboard.svg"
-            speakBtn.src = "views/assets/bubble.svg"
-            offersBtn.src = "views/assets/tag.svg"
+            homeBtn.src = "assets/house.svg"
+            notesBtn.src = "assets/clipboard.svg"
+            speakBtn.src = "assets/bubble.svg"
+            offersBtn.src = "assets/tag.svg"
             //settingsBtn.src = "views/assets/gearshape.svg"
             
             switch (destination){
                 case 0:
-                    homeBtn.src = "views/assets/house_b.svg"
+                    homeBtn.src = "assets/house_b.svg"
                     break
                 case 1:
-                    notesBtn.src = "views/assets/clipboard_b.svg"
+                    notesBtn.src = "assets/clipboard_b.svg"
                     break
                 case 2:
-                    speakBtn.src = "views/assets/bubble_b.svg"
+                    speakBtn.src = "assets/bubble_b.svg"
                     break
                 case 3:
-                    offersBtn.src = "views/assets/tag_b.svg"
+                    offersBtn.src = "assets/tag_b.svg"
                     break
                 /*case 4:
                     settingsBtn.src = "views/assets/gearshape_b.svg"

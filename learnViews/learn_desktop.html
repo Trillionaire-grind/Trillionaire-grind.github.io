@@ -144,7 +144,7 @@
         <p style="margin-left: 2%; margin-bottom: 0px; padding-bottom: 0px; font-size: 64px;">Képler Siguineau</p>
         <p style="margin-left: 2%; margin-top: 0px; padding-bottom: 0px; font-size: 40px;">(Cape-Lair See-Gee-No)</p>
         <div style="text-align: center;">
-            <img src="build_logo.png" style="width: 300px; height: 300px; align-self: center;">
+            <img src="../generalAssets/build_logo.png" style="width: 300px; height: 300px; align-self: center;">
         </div>
         
         <p class="headline" style="font-size: 64px; font-weight: bold;">
@@ -170,7 +170,17 @@
             src="https://www.youtube.com/embed/SC4xMk98Pdc">
         </iframe>-->
         <!--CTA for stripe-->
-        <a href="https://buy.stripe.com/test_14k4h1dch6uEdPO6ov" style="text-decoration: none; ">
+        <!--<a href="https://buy.stripe.com/test_14k4h1dch6uEdPO6ov" style="text-decoration: none; ">
+            <div class="cta">
+              <div >
+                  <div style="color: white;">
+                    <h1 style="text-align: center; padding: 8px;">YES! I WANT TO LEARN
+                    </h1>
+                  </div>
+              </div>
+            </div>
+          </a>-->
+          <a onclick="openApp()" style="text-decoration: none; ">
             <div class="cta">
               <div >
                   <div style="color: white;">
@@ -182,4 +192,17 @@
           </a>
         <br>
     </body>  
+
+    <script>
+        function openApp()
+        {
+            //let url = `./individualNoteView.html`
+            let url = ""
+            
+            url = `learn.html`
+            
+            //let e
+            window.open(url, '_blank').focus();
+        }
+    </script>
 </html>
