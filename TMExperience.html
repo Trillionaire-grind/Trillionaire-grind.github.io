@@ -397,26 +397,6 @@
                 {
                     return false;
                 }
-                /*if(phone.length < 1)
-                {
-                    return false;
-                }
-                if(x.length < 1)
-                {
-                    return false;
-                }
-                if(snapchat.length < 1)
-                {
-                    return false;
-                }
-                if(ig.length < 1)
-                {
-                    return false;
-                }
-                if(facebook.length < 1)
-                {
-                    return false;
-                }*/
                 if(image.files < 1)
                 {
                     return false;
@@ -475,23 +455,7 @@
                 let password = document.getElementById("registerPassword").value
 
                 let bio = document.getElementById("registerBio").value
-                /*let phone = document.getElementById("registerPhone").value
-                let x = document.getElementById("registerX").value
-                let snapchat = document.getElementById("registerSnapchat").value
-                let ig = document.getElementById("registerIg").value
-                let facebook = document.getElementById("registerFacebook").value*/
-
-
-
-                /*setDoc(doc(usersRef, userId), {
-                    name: `${name}`, x: `${x}`, instagram: `${ig}`,
-                    facebook: `${facebook}`, snapchat: `${snapchat}`,email: `${email}`,
-                    phone: `${phone}`, bio:`${bio}`, imageUrl: `${imageUrl}`,speeches: [] }).then(()=>{
-                        alert("created account")
-                        //signIn(email, password)
-                        window.location.reload();
-                        alert('Sign-In to confirm account')
-                    });*/
+                
                 setDoc(doc(usersRef, userId), {
                     name: `${name}`,email: `${email}`, bio:`${bio}`, 
                     imageUrl: `${imageUrl}`,speeches: [] }
@@ -666,21 +630,6 @@
         
                 <label for="registerBio">Bio</label>
                 <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
-        
-               <!-- <label for="registerPhone">Phone</label>
-                <input type="tel" id="registerPhone" placeholder="Enter your phone number"><br>
-        
-                <label for="registerX">X</label>
-                <input type="text" id="registerX" placeholder="Enter X"><br>
-        
-                <label for="registerSnapchat">Snapchat</label>
-                <input type="text" id="registerSnapchat" placeholder="Enter your Snapchat username"><br>
-        
-                <label for="registerIg">IG</label>
-                <input type="text" id="registerIg" placeholder="Enter your Instagram username"><br>
-        
-                <label for="registerFacebook">Facebook</label>
-                <input type="text" id="registerFacebook" placeholder="Enter your Facebook profile link"><br>-->
         
                 <label for="image">Select image:</label>
                 <input type="file" id="image" name="img" accept="image/*"><br>
