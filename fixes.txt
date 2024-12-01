@@ -9,16 +9,25 @@ We have 4 apps that needs to be worked on and a few sales pages
     7) Talk To Me (Add real times)
     8) Fix Icons For The Offers Page [done]
     9) Fix The individual Page [done]
-    10) Make Learn the subdomain for the app (sales copy) [not working]
+    10) Make Learn the subdomain for the app (sales copy) [changed it to index] [done]
     11) Make the "Learn" Button open the app [done]
 2) Liv App:
-    1) Fix primary view routing
-    2) Fix Bottom Nav Bar Icons 
-    3) Fix Home View 
-    4) Fix All The Views 
+    1) Fix primary view routing [done]
+    2) Fix Bottom Nav Bar Icons [done]
+    3) Fix Home View [done]
+    4) Fix All The Views [done]
 3) TMExperience
     1) Fix Feedback View 
     2) Fix Tools View 
     3) Fix Profile View 
 4) Minorities App:
     1) Seems fine! 
+5) Tech Mastery For Seniors Academy
+    1) Create UX/UI for Tech Mastery For Seniors Academy 
+    2) Implement Zoom into app 
+    3) Create a backend for it 
+    4) Create logic for the App
+    5) Add payment option for it 
+    6) Create Copy 
+    7) Make a VSL For it
+    8) Create the content for it 
