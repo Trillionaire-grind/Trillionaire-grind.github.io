@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <title>Tech Mastery For Seniors Academy</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F3F3F3;
+            }
+
+            .ctaBtn{
+                background-color: #FF0C11;
+                color: white;
+            }
+            .ctaBtn:hover{
+                background-color: black;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <p style="font-weight: bold; font-size: 32px; margin-left: 5%; text-align: center; margin: 8px;">
+            Do You Love<br> Your Grandchildren More Than<br> You Hate Technology<br>
+        </p>
+
+        <div style="margin-left:5%; width: 90%; height: 40px; color: #fff; margin-bottom: 0px; margin-top: 32px; background-color: #FF0C11; border-top-left-radius:10px; border-top-right-radius: 10px;">
+            <p style="color: #fff;margin: 8px; padding-top: 10px; padding-bottom: 10px;">Press play to learn more</p>
+        </div>
+        <iframe style="margin-left: 5%;margin-top: 0px; height:30vh; width: 90%; background-color: #fff; border: none;">
+        </iframe>
+      
+
+        <button class="ctaBtn" onclick="openPayment()" style=" cursor:pointer; font-size: 24px; text-align: start; margin-left: 5%; width: 90%; margin-top:32px; border: none; border-radius: 10px; padding: 10px; height: 10vh; font-weight: bold;">
+            <p style=" margin: 8px; font-size: 18px;">Yes, I want to gain access to the <br> app + bonuses for only $1/month</p>
+        </button>
+   
+    </body>
+    <script>
+        function openPayment(){
+            window.location.replace("https://buy.stripe.com/test_14k8xh7RXg5e6nmdQZ")
+        }
+    </script>
+</html>

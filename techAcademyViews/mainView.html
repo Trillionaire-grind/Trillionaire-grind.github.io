@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>The Minorities</title>
+        <title>Tech Mastery For Seniors Academy</title>
         <style>
             /* General reset and basic styles */
             body {
@@ -85,21 +85,20 @@
     <body>
         <div style="padding-bottom: 58px;" >
             <div style="display: inline;" id="homeView" style="height: 100vh; width: 100%; ">
-                <iframe src="homeView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                <iframe src="homeView.html" style="height: 100vh; width: 100%;"></iframe>
+            </div>
+            <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
+                <iframe src="educationView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
             <div  style="display: none;"  id="chatView" style="height: 100vh;  width: 100%;">
                 <iframe src="chatView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
-            <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
-                <iframe src="educationView.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
-         
         </div>
         <footer >
             <nav>
-                <a href="#"><img id="homeBtn" src="assets/basket.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
+                <a href="#"><img id="homeBtn" src="assets/house.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
                 <a href="#"><img id="educationBtn" src="assets/basket.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
-                <a href="#"><img id="chatBtn" src="assets/basket.svg" height="24px" width="24px"  onclick="changeTo(1)"></a>            
+                <a href="#"><img id="chatBtn" src="assets/message.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
            
             </nav>
            <!--<div class="fab">+</div>--> 
@@ -108,8 +107,9 @@
     <script>
         var homeView = document.getElementById('homeView');
         var educationView = document.getElementById('educationView')
+        var chatView = document.getElementById("chatView")
 
-        let views = [homeView, educationView]
+        let views = [homeView, educationView, chatView]
         function changeTo(destination)
         {
             views.forEach((view, index) => {
@@ -126,17 +126,23 @@
         {
             let homeBtn = document.getElementById("homeBtn")
             let educationBtn = document.getElementById("educationBtn")
+            let chatBtn = document.getElementById("chatBtn")
 
-            homeBtn.src = "academyViews/assets/house.svg"
-            educationBtn.src = "academyViews/assets/graduation.svg"
+            homeBtn.src = "assets/house.svg"
+            educationBtn.src = "assets/graduation.svg"
+            chatBtn.src = "assets/message.svg"
             
             switch (destination){
                 case 0:
-                    homeBtn.src = "academyViews/assets/house_b.svg"
+                    homeBtn.src = "assets/house_b.svg"
                     break
                 case 1:
-                    educationBtn.src = "academyViews/assets/graduation_b.svg"
+                    educationBtn.src = "assets/graduation_b.svg"
                     break
+                case 2:
+                    chatBtn.src = "assets/message_b.svg"
+                    break
+
             }
         }
         changeTo(0)

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>Tech Mastery For Seniors Academy</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F3F3F3;
+            }
+            .headline{
+                font-size: 32px;
+                font-weight: bold;
+                margin-left: 5%;
+            }
+            p{
+                font-size: 12px;
+            }
+            .profile-picture {
+                width: 150px; /* Set width */
+                height: 150px; /* Set height */
+                border-radius: 50%; /* Make it circular */
+                margin-bottom: 16px;
+                object-fit: cover; /* Crop image if needed */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+            }
+
+            .file-input {
+                display: none; /* Hide the actual file input */
+            }
+
+            .change-picture-button {
+                margin-top: 16px; /* Space between image and button */
+                padding: 10px 20px; /* Button padding */
+                background-color: #fff;
+                 /* Button background color */
+                color: black; /* Button text color */
+                border: none; /* No border */
+                border-radius: 5px; /* Slightly rounded corners */
+                cursor: pointer; /* Pointer cursor on hover */
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+            }
+
+            .change-picture-button:hover {
+                background-color: #000; /* Darker green on hover */
+                color: white;
+            }
+
+            .form-container {
+                max-width: 400px; /* Set a max width for the form */
+                margin: 20px auto; /* Center the form */
+                padding: 20px; /* Add padding */
+                border: 1px solid #ccc; /* Add border */
+                border-radius: 8px; /* Rounded corners */
+                background-color: #f9f9f9; /* Light background color */
+            }
+
+            .form-row {
+                margin-bottom: 15px; /* Space between rows */
+            }
+
+            .formLabel {
+                display: block; /* Make labels block elements */
+                margin-bottom: 5px; /* Space between label and input */
+                font-weight: bold; /* Make labels bold */
+            }
+
+            input[type="text"], input[type="email"], input[type="password"] {
+                width: 100%; /* Full width inputs */
+                padding: 8px; /* Input padding */
+                border: 1px solid #ccc; /* Input border */
+                border-radius: 4px; /* Slightly rounded corners */
+                box-sizing: border-box; /* Include padding and border in width */
+            }
+        </style>
+    </head>
+    <body>
+        <p class="headline">
+            Register for...<br>
+            The Tech Mastery For Seniors Academy
+        </p>
+        <div class="form-container">
+            <div style="text-align: center;">
+                <input type="file" class="file-input" id="file-input" accept="image/*" onchange="previewImage(event)">
+                <label for="file-input">
+                    <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profile-picture">
+                </label>
+                <br>
+                <label for="file-input" class="change-picture-button">Change Picture</label>
+            </div>
+            <div class="form-row" style="margin-top: 24px;">
+                <label for="name">Name:</label>
+                <input class="formLabel" type="text" id="name" name="name" placeholder="Enter your name">
+            </div>
+            <div class="form-row">
+                <label for="password">Email:</label>
+                <input class="formLabel" type="email" id="email" name="email" placeholder="Enter your email">
+            </div>
+            <div class="form-row">
+                <label for="password">Password:</label>
+                <input class="formLabel" type="password" id="password" name="password" placeholder="Enter your password">
+            </div>
+        </div>
+        
+        
+        
+        <div style="text-align: center; margin-bottom: 16px;">
+            <button onclick="openApp()" style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
+                <p style="color: #fff; font-size: 16px;">Register</p>
+            </button>
+        </div>
+       
+    </body>
+    <script>
+        function previewImage(event) {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function() {
+                const img = document.getElementById('profile-picture');
+                img.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function openApp(){
+
+            let url = `mainView.html`
+            window.location.replace(url);
+        }
+    </script>
+</html>
