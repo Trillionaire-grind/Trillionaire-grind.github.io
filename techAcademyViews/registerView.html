@@ -87,32 +87,38 @@
             The Tech Mastery For Seniors Academy
         </p>
         <div class="form-container">
-            <div style="text-align: center;">
+            <!--This is to allow the user to create a profile picture with their profile. Since we 
+                are not going to have storage for now, we will be removing that feature...May have
+                to implement it soon however
+                <div style="text-align: center;">
                 <input type="file" class="file-input" id="file-input" accept="image/*" onchange="previewImage(event)">
                 <label for="file-input">
                     <img src="https://via.placeholder.com/150" alt="Profile Picture" class="profile-picture" id="profile-picture">
                 </label>
                 <br>
                 <label for="file-input" class="change-picture-button">Change Picture</label>
-            </div>
+            </div>-->
             <div class="form-row" style="margin-top: 24px;">
                 <label for="name">Name:</label>
-                <input class="formLabel" type="text" id="name" name="name" placeholder="Enter your name">
+                <input class="formLabel" type="text" id="nameET" name="name" placeholder="Enter your name">
             </div>
             <div class="form-row">
                 <label for="password">Email:</label>
-                <input class="formLabel" type="email" id="email" name="email" placeholder="Enter your email">
+                <input class="formLabel" type="email" id="emailET" name="email" placeholder="Enter your email">
             </div>
             <div class="form-row">
                 <label for="password">Password:</label>
-                <input class="formLabel" type="password" id="password" name="password" placeholder="Enter your password">
+                <input class="formLabel" type="password" id="passwordET" name="password" placeholder="Enter your password">
             </div>
         </div>
         
         
         
         <div style="text-align: center; margin-bottom: 16px;">
-            <button onclick="openApp()" style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
+            <!--<button onclick="openApp()" style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
+                <p style="color: #fff; font-size: 16px;">Register</p>
+            </button>-->
+            <button id="registerBtn" style=" background-color:  #FF0C11; color:white; border-radius: 5px; border: none; cursor: pointer; padding: 1px 2px; width: 30%;"> 
                 <p style="color: #fff; font-size: 16px;">Register</p>
             </button>
         </div>
@@ -138,5 +144,81 @@
             let url = `mainView.html`
             window.location.replace(url);
         }
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+            import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js"; 
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+          authDomain: "tech-mastery-academy.firebaseapp.com",
+          projectId: "tech-mastery-academy",
+          storageBucket: "tech-mastery-academy.firebasestorage.app",
+          messagingSenderId: "205345673412",
+          appId: "1:205345673412:web:d8970165489c414745b991",
+          measurementId: "G-KLKCTD047P"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+        const db = getFirestore(app)
+
+        let registerBtn = document.getElementById("registerBtn")
+
+        
+
+        function createAccount()
+        {
+            let nameValue = document.getElementById('nameET').value 
+            let emailValue = document.getElementById('emailET').value 
+            let passwordValue = document.getElementById('passwordET').value 
+
+            if(nameValue.length > 1 && emailValue.length > 6 && passwordValue.length > 7){
+                createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        let id = user.uid 
+                        if(id != null){
+                            addMember(nameValue, emailValue, id)
+                        }
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code 
+                        const errorMessage = error.message; 
+                        alert(`RV: 191: There was an error ${errorMessage}`)
+                    })
+            }else{
+                alert('make sure to include your name, or email, or password')
+            }
+        }
+
+
+        function addMember(name, email,id){
+            const usersRef = collection(db, "users")
+
+            setDoc(doc(usersRef, id), {
+                name : `${name}`,
+                email : `${email}`,
+                premium : true 
+            }).then(() => {
+                alert("the member was added to the database")
+                openApp()
+            });
+        }
+
+        registerBtn.onclick = () => {
+            createAccount()
+        }
+
     </script>
 </html>

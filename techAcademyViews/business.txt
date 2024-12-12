@@ -14,3 +14,14 @@ $34,997 Premium ------       30 sales
 
 Their will be online and in-person classes. Monthly classes based on certain topics that will be rotated 
 every year, plus added content about things that are more complicated. 
+
+
+The Logic is pretty simple 
+If FREE -> We send them to a specific sales page that leads them directly to registration, which will create
+them a profile that will give their accout thing with "Premium:false", which make some of the content hidden 
+and will ask them if they want to upgrade. 
+
+if PAID -> paid sales page -> stripe link -> registration page with create user with "premium:true" does not 
+show the things, they cannot upgrade. 
+
+What needs to be figured out, how the heck do we get them 
