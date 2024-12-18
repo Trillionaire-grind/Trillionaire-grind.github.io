@@ -167,6 +167,12 @@
 
             .noteCard{
                 background-color: #fff;
+                width: 90%;  
+                margin: 16px;
+                padding: 8px;
+                border-radius: 10px; cursor: pointer;  
+                box-shadow: 0 5px 10px rgba(154,160,185,.05),
+                0 15px 40px rgba(166,173,201,.2);
             }
             .noteCard:hover{
                 background-color: #DAA123;
@@ -201,17 +207,17 @@
             </div>
         </div>-->
         <div id="educationDiv">
-            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+            <div class="noteCard" onclick="openIndividualOffer()">
                 <p style="font-size: 24px; margin-left: 8px;">How To Sell...</p>
             </div>
         </div>
         <div id="appDiv" style="display: none;">
-            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+            <div class="noteCard" onclick="openIndividualOffer()">
                 <p style="font-size: 24px; margin-left: 8px;">How To Never Forget A Name</p>
             </div>
         </div>
         <div id="serviceDiv" style="display: none;">
-            <div style="width: 90%; margin-right: auto; margin-left: auto; border: 1px solid red; background-color: #fff; color: black; border-radius: 10px; cursor: pointer; margin-top: 16px;" onclick="openIndividualOffer()">
+            <div class="noteCard" onclick="openIndividualOffer()">
                 <p style="font-size: 24px; margin-left: 8px;">Build Your Billion Dollar Idea</p>
             </div>
         </div>
@@ -219,6 +225,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
         const tabs = document.querySelectorAll('.tab');
+       
 
         tabs.forEach((tab, index) => {
                 tab.addEventListener('click', () => {

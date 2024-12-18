@@ -11,23 +11,38 @@ We have 4 apps that needs to be worked on and a few sales pages
     9) Fix The individual Page [done]
     10) Make Learn the subdomain for the app (sales copy) [changed it to index] [done]
     11) Make the "Learn" Button open the app [done]
+    12) OnHover: Offers (yellow) [in-review]
+    13) swipe down btn 
+    14) write copy for "How To Sell..."
+    15) write copy for "How To Never..."
+    16) write copy for "Build your billion..."
+    17) cursor:pointer for "Yes, I want to learn" [in-review]
+
 2) Liv App:
     1) Fix primary view routing [done]
     2) Fix Bottom Nav Bar Icons [done]
     3) Fix Home View [done]
     4) Fix All The Views [done]
+    5) Fix the desktop of the app 
+    6) Make a video of the app 
+    7) Remove the worked maybe text [in-review]
 3) TMExperience
-    1) Fix Feedback View 
-    2) Fix Tools View 
-    3) Fix Profile View 
+    1) Fix Feedback View (UI update for dialog)
+    2) Fix Tools View [in-review]
+    3) Fix Profile View [in-review]
+    4) Create An Account For Everyone [in-review]
 4) Minorities App:
     1) Seems fine! 
+    2) Follow up with them and other influencers
+    3) fix the FAB in posts [in-review]
+    4) Build the media management system (for lectures)
 5) Tech Mastery For Seniors Academy
     1) Create UX/UI for Tech Mastery For Seniors Academy 
-    2) Implement Zoom into app 
-    3) Create a backend for it 
+    2) Implement Zoom into app [in-review]
+    3) design a backend for it 
     4) Create logic for the App
     5) Add payment option for it 
     6) Create Copy 
     7) Make a VSL For it
     8) Create the content for it 
+    9) Write the corriculum
