@@ -1,48 +1,82 @@
 We have 4 apps that needs to be worked on and a few sales pages
 1) Learn App:
+    [part 1]
     1) re-route "learn_mobile" [done]
     2) Add Copy for the Kotfè Fund
-    3) Make Test Allow them to buy a stock 
+    3) Make Test Allow them to buy a stock [in-review]
     4) Fix The Bottom Nav Bar Icons [done]
     5) Fix the Notes Icons [done]
     6) Fix the individual Notes Open [done]
-    7) Talk To Me (Add real times)
+    7) Talk To Me (Add real times) 
     8) Fix Icons For The Offers Page [done]
     9) Fix The individual Page [done]
     10) Make Learn the subdomain for the app (sales copy) [changed it to index] [done]
     11) Make the "Learn" Button open the app [done]
-    12) OnHover: Offers (yellow) [in-review]
-    13) swipe down btn 
+    12) OnHover: Offers (yellow) [done]
+    13) swipe down btn [in-review]
     14) write copy for "How To Sell..."
     15) write copy for "How To Never..."
     16) write copy for "Build your billion..."
-    17) cursor:pointer for "Yes, I want to learn" [in-review]
+    17) cursor:pointer for "Yes, I want to learn" [done]
+
+    [part 2]
 
 2) Liv App:
+    [part 1]
     1) Fix primary view routing [done]
     2) Fix Bottom Nav Bar Icons [done]
     3) Fix Home View [done]
     4) Fix All The Views [done]
-    5) Fix the desktop of the app 
-    6) Make a video of the app 
+    5) Fix the desktop of the app  
+    6) Make a video of the app [done]
     7) Remove the worked maybe text [in-review]
+
+    [part 2]
+
 3) TMExperience
-    1) Fix Feedback View (UI update for dialog)
+    [part 1]
+    1) Fix Feedback View (UI update for dialog) [fucked up - gotta revert]
     2) Fix Tools View [in-review]
     3) Fix Profile View [in-review]
     4) Create An Account For Everyone [in-review]
+
+    [part 2]
+
 4) Minorities App:
-    1) Seems fine! 
+    [part 1]
+    1) Seems fine! [false]
     2) Follow up with them and other influencers
-    3) fix the FAB in posts [in-review]
-    4) Build the media management system (for lectures)
+    3) fix the FAB in posts [in-review] 
+    4) Build the media management system (for lectures) [done]
+
+    [part 2]
+
 5) Tech Mastery For Seniors Academy
-    1) Create UX/UI for Tech Mastery For Seniors Academy 
+    [part 1]
+    1) Create UX/UI for Tech Mastery For Seniors Academy [in-review]
     2) Implement Zoom into app [in-review]
-    3) design a backend for it 
-    4) Create logic for the App
-    5) Add payment option for it 
+    3) design a backend for it [in-review]
+    4) Create logic for the App [in-review]
+    5) Add payment option for it  [in-review]
     6) Create Copy 
+        - FREE Guides 
+        - Paid Guides 
+        - Tech Master 
+        - Tech Expert 
     7) Make a VSL For it
-    8) Create the content for it 
-    9) Write the corriculum
+        - FREE Guides 
+        - Paid Guides 
+        - Tech Master 
+        - Tech Expert 
+    8) Create the content for it (no B.S. Guide)
+        - Secret To Tech Mastery 
+        - How To Use Zoom 
+        - How To Legally Print Money On The Internet 
+        - How To Use The Basic Features Of Your Cell Phone 
+        - How To Avoid Scams 
+        - Top 5 Things You Need To Know About A.I.  
+    9) Write the corriculum [done]
+
+    focus for part 2 or until paid completion 
+    [part 2]
+

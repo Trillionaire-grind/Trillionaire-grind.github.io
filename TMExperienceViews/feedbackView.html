@@ -82,6 +82,20 @@
             }
         }
 
+
+        #feedbackDialog{
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scrolling if needed */
+            background-color: rgba(0,0,0,0.4); /* Black with opacity */
+
+        }
+
         /* Styles for the popup */
         .popup {
             display: none; /* Hidden by default */
@@ -334,18 +348,19 @@
                 </div>
         </div>
     </div>-->
-    <div id="feedbackDialog" class="popup">
-        <div class="popup-content">
+    <div id="feedbackDialog" >
+        <div>
+
             <span class="close" onclick="closeFeebackDialog()">&times;</span>
             <p id="feedbackId" style="visibility: hidden;"></p>
-
+    
             <div style="margin-top: 16px;">
                 <label style="margin-bottom: 16px; display: block;">Leave Feedback</label>
                 <div style=" align-items: center;">
                     <textarea id="feedbackTV" name="story" rows="4" style="flex: 1; width: 95%; min-width: 100px; height: 100px; margin-right: 16px;"></textarea>
                 </div>
                 <button id="leaveFeedbackBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: 5%; width: 100px; height: 40px; margin-bottom: 16px;" > Leave Feedback</button>
+                    cursor: pointer; float: right; margin-right: 16px; width: 100px; height: 40px; margin-bottom: 16px; margin-top: 24px;" > Leave Feedback</button>
                 <br>
                 <br>
             </div>

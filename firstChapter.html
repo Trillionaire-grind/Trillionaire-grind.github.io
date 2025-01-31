@@ -1,620 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>A Secret Attraction</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y62Q36WJF"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    <head>
+        <link rel="shortcut icon" type="image/x-icon" href="assets/heart_icon.ico" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Get Your Copy of 'A Secret Attraction Between Mentor and Mentee'</title>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Y62Q36WJF"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
 
-        gtag('config', 'G-3Y62Q36WJF');
-    </script>
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1047835253811906');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
+                gtag('config', 'G-3Y62Q36WJF');
+        </script>
+        <!-- Meta Pixel Code -->
+        <script>
+            !function(f,b,e,v,n,t,s)
+            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+            fbq('init', '1047835253811906');
+            fbq('track', 'PageView');
+        </script>
+        <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1"/>
+        </noscript>
+        <!-- End Meta Pixel Code -->
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            input[type="text"], input[type="email"] {
+                width: 100%;
+                padding: 16px;
+                margin-bottom: 15px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                background-color: #E9EDF5;
+                color: #333;
+                font-size: 16px;
+                max-width: 600px;
+            }
+
+            input[type="text"]::placeholder {
+                color: #707070;
+            }
+
+            button {
+                width: 100%;
+                padding: 16px;
+                background-color: #FF0C21;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                font-size: 16px;
+                cursor: pointer;
+                max-width: 600px;
+            }
+
+            button:hover {
+                background-color: #e50917;
+            }
+
+            .container {
+                width: 90%;
+                max-width: 400px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div style="text-align: center;">
+            <p style="font-weight: bold; width: 100%; margin-top: 8px; text-align: center; margin-bottom: 0px; font-size: 6vh; ">A Secret Attraction</p>
+            <p style="text-align: center; margin-top: 0px; font-size: 4vh;">Between Mentor and Mentee</p>
+            <img height="300vh" width="190vh" src="assets/book_cover.jpg"/>
+            <p style="font-weight: bold; font-size: 4vh; margin-bottom: 0px;">Download the first chapter</p>
+            <p style="margin-top: 0px; font-size: 2vh;">Take advantage of my latest boook with a FREE preview</p>
+            <input type="text" id="nameET" placeholder="Enter your name">
+            <br>
+            <input type="email" id="emailET" placeholder="Enter your email">
+            <br>
+            <button id="requestBtn" style="font-weight: bold; font-size: 3vh;">Yes, I want my FREE chapter</button>
+        </div>
+    </body>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js"; 
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
     
-    <!-- External CSS for styling -->
-    <style>
-        /* Global reset for consistency */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyCvdbEnz-WTuJdH4sF3lV3Y-wgOZurHHqM",
+        authDomain: "secret-attraction-3eff4.firebaseapp.com",
+        projectId: "secret-attraction-3eff4",
+        storageBucket: "secret-attraction-3eff4.firebasestorage.app",
+        messagingSenderId: "12436460437",
+        appId: "1:12436460437:web:8c6dc8e083635481055c9c",
+        measurementId: "G-GT9YFDM1RT"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app)
+
+        function newTab() {
+            window.location.replace("downloadPreview.html");
         }
 
-        /* Body styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            line-height: 1.6;
-            padding: 20px;
+        async function addLead(name, email)
+        {
+            let lead = new Object()
+
+            lead.name = name 
+            lead.email = email 
+
+            const leadRef = await addDoc(collection(db, 'leads'), {
+                lead
+            });
+
+            //alert(`document writtenn with ID: ${leadRef.id}`)
+            newTab()
         }
 
-        /* Container for the chapter content */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        let requestBtn = document.getElementById("requestBtn")
+
+        requestBtn.onclick = () => {
+            let name = nameET.value 
+            let email = emailET.value
+            addLead(name, email)
         }
-
-        /* Title styling */
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            text-align: center;
-        }
-
-        /* Chapter subtitle */
-        h2 {
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            color: #34495e;
-        }
-
-        /* Chapter content paragraph */
-        p {
-            font-size: 1.1em;
-            margin-bottom: 15px;
-            text-align: justify;
-            color: #555;
-        }
-
-        /* Navigation links (if any) */
-        .nav-links {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .nav-links a {
-            font-size: 1.2em;
-            color: white;
-            text-decoration: none;
-            margin: 10px;
-            padding: 5px 10px;
-            background-color: red;
-            border-radius: 5px;
-        }
-
-        .nav-links a:hover {
-            background-color: black;
-            color: #fff;
-        }
-
-        /* Responsive layout */
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2em;
-            }
-
-            h2 {
-                font-size: 1.5em;
-            }
-
-            p {
-                font-size: 1em;
-            }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <p>Do you want the full book?</p>
-        <div class="nav-links" style="margin-top: 2px; margin-bottom: 16px;">
-            <a href="https://buy.stripe.com/bIY8xteWJ1Yo8ko28a">Get The Book</a>
-        </div>
-
-        <h1>A Secret Attraction Between Mentor And Mentee</h1>
-
-        <h2>Chapter 1: Attraction At First Sight</h2>
-        <h2>[NYC, 8 P.M.]</h2>
-        <p>
-            In the office of Michael Katz, the young CEO of New York’s latest tech startup, Tech & Tech, we find two men standing over a round table in the dark, staring at a laptop screen. 
-            The two men are Michael himself and his co-founder and best friend, Chris. They are reviewing this year's winner of the WEM (Women in Entrepreneurship Mentorship) program.
-        </p>
-
-        <p>
-            Why are two men leading WEM?<br>
-            As Michael climbed the ladder of success, he faced many trials and tribulations—both internal and external battles. One of those battles was being Black in America. 
-            After reaching a certain level of success, he stopped to look around. He saw other Black people—though few, they were there, thriving in the pool of financial success in America. 
-            Within that pool of Black excellence, there were nearly no women. Women who reminded him of his mother—a single mother who worked hard to provide for her children, yet lacked the knowledge, mindset, or environment to succeed.
-        </p>
-        <p>
-            Michael knew that when he made it, he had to help. Four years ago, after their company hit $1M in ARR (Annual Recurring Revenue), they launched WEM.
-        </p>
-        <p>
-            In the four years since its inception, WEM has helped four Black women go from earning as little as $20,000 a year to over $3M annually in their businesses.
-        </p>
-        <p>
-            Now, with $20M in ARR, their new goal is to grow to $100M in the next two years. For their business to continue growing, they need a physical presence in the world—and that is exactly what they are set to do. 
-            This year, they’re looking for a candidate who excels at providing an outstanding customer experience in a brick-and-mortar environment.
-        </p>
-
-        <p>
-            They were still looking for the usual qualities in a candidate—creativity, resilience, coachability. Most importantly, they needed someone who would benefit from their mentorship and, in turn, help grow Tech & Tech.
-        </p>
-        <p>
-            “Chris, who is this year’s winner?” Michael asked (Chris leads the WEM recruitment).
-        </p>
-        <p>
-            “Her name is LaShana, and she is much better than all of the candidates. The second I read her submission, I knew she was the winner.”
-        </p>
-        <p>
-            “Okay, Chris, you’re hyping her up! Let’s hear her speech.”
-        </p>
-        <p>
-            And just like that, Michael presses play. On the screen, he sees a woman exit the podium, followed by a beautiful woman approaching it. Once she reaches the podium, the screen displaying the speaker’s name changes. What was once “Diane” becomes “LaShana.”
-        </p>
-
-        <p>
-            The moment Michael sees the new name, he quickly pauses the video, looks at Chris, and says, “We have a problem.”
-        </p>
-        <p>
-            Chris, confused, asks, “What’s the problem?”
-        </p>
-        <p>
-            “She’s beautiful!”
-        </p>
-        <p>
-            “What?! You find her attractive? How? Why? Since when?” 
-        </p>
-        <p>
-            “She’s exactly my type. We can’t have her join the mentorship.”
-        </p>
-        <p>
-            Chris was sure Michael wouldn’t be attracted to her. He didn’t think she was ugly—he just didn’t think she’d be Michael’s type. She was a tomboy, and Michael had never shown interest in tomboys before. 
-            Michael enjoyed working with women, well, only with women he didn’t find attractive. Over the years, Michael had asked Chris to interview the mentees and make sure of two things:
-        </p>
-        <p>
-            <ul style="padding-left: 64px; font-size: 1.1em;">
-                <li>They were qualified for the mentorship.</li>
-                <li>Michael was not attracted to them.</li>
-            </ul>
-        </p>
-        <p>
-            Chris had always been successful at fulfilling this request. Except this time, something was different. He was confused. He thought he knew Michael’s type inside and out. Chris knew Michael had basic—and sometimes questionable—taste. 
-            Chris’s wife, Alexandra, was, in his eyes, the most beautiful woman in the world. When they first started dating, Chris wanted to show off, so he showed Michael a picture of Alexandra and asked, 
-            “How hot is this woman?”
-        </p>
-        <p>
-            Expecting Michael to say, “She’s a 9,” he was stunned when Michael responded with, “Like a 6?”
-        </p>
-        <p>
-            Chris was speechless. Was his friend blind? Did he have terrible taste? He couldn’t understand it at all, so he decided to let it go.
-        </p>
-
-        <p>
-            “What did you just say? No. That would be completely stupid, unfair, and we can’t do that. We already told her that she won. We’ve also sent rejection letters to all the other candidates. 
-            She completely stood out from the others. We’re not going to lose talent just because you find this particular woman attractive. There are probably ten women more beautiful than her messaging you right now.”
-        </p>
-        <p>
-            Michael paused and realized that Chris was right—they couldn’t cancel the mentorship. Michael also realized that Chris had made a mistake. There were no women more beautiful than LaShana texting him… 
-            because LaShana wasn’t texting him.
-        </p>
-        <p>
-            Chris: “She slipped through because your attraction scale is out of whack.”
-        </p>
-        <p>
-            Michael: “Nah, she’s beautiful. Well, since you’re going to mentor her, there’s nothing to worry about.”
-        </p>
-        <p>
-            Chris: “Already defending your wife’s honor, I see.” He said, laughing.
-        </p>
-        <p>
-            Michael: “Shut up. Can you send her the email for the LDA meeting?”
-        </p>
-
-        <h2>What is an LDA Meeting?</h2>
-        <p>
-            L -unch<br>
-            D -inner<br>
-            A -fter party<br>
-            Meeting
-        </p>
-        <p>
-            The Lunch Dinner After Party was Chris’ invention for their mentees. It starts with a light lunch, followed by a three-hour meeting. Then there's dinner with Michael, Chris, and their mentee. 
-            The evening ends with an after-party where the mentee bonds with the team they’ll work closely with (in LaShana’s case, it’s the retail store development team). This happens once a month. 
-            The goal is to provide the mentees with undivided attention, answer their questions, and help them bond with the team.
-        </p>
-        
-        <p>
-            June 1st, LaShana has her first L.D.A. meeting. She’s meeting with Chris, who warns her that the restaurant tends to be cold, so she might want to dress warmly. 
-            She chooses a simple, cute outfit—a white long-sleeve shirt, a light brown sweater, beige pants, a cute beige purse, and black boots. In her purse, she carries her essentials, including her success notebook. 
-            This notebook is where she writes anything and everything that could help her achieve her dreams.
-        </p>
-        <p>
-            She arrives at the restaurant 10 minutes early, as her motto is, “If you’re on time, you’re 10 minutes late.” She’s surprised to see that Chris is already there with a glass of water and his laptop open, working. 
-            That gives her a good first impression—he was there even earlier than she was and was already hard at work!
-        </p>
-        <p>
-            “Hi, Chris! It’s great seeing you again.”<br>
-            “Likewise, it’s been a couple of weeks. I’m glad you didn’t run away yet. Sorry for the mess.” He gestures to the laptop on the desk, the papers sprawled across the table, his notepad, and the company pen engraved with “Tech & Tech” in green.<br>
-            “You’re forgiven,” she replies.<br>
-            That made Chris chuckle. “Ha, thank you for your kindness, your highness.” He got up from the table to shake her hand, then added, “Wow, I got to shake hands with loyalty. 
-            I’m gonna brag to my wife, though I hope she doesn’t get jealous that she didn’t get to do the same.”
-        </p>
-        <p>
-            “Give me a second, I’ll clean up. Well, except for this notepad—I want to take notes during our conversation. Is that okay with you?”
-        </p>
-        <p>
-            “Yes, that’s fine,” she replied. “As long as you let me do the same.” She pulled out her success notebook and her favorite pen from her purse. The pen was her favorite because it was the only one her dad ever used when he was working.
-        </p>
-        <p>
-            “Yes, please do! I love it when people take notes, too. It makes it seem like they care about what I have to say, haha.”
-        </p>
-        <p>
-            Chris cleared everything from the table, and now only two notepads and two pens remained between the mentor and the mentee.
-        </p>
-        <p>
-            “Have you ever had an ‘LDA meeting’ before?”<br>
-            “No, first time.”<br>
-            “I thought so! It’s my invention!” The way he said that, LaShana could tell he felt proud of his idea. She knew better than to say, “The name sounds kinda stupid,” so instead, she asked, “How did you come up with it?”
-        </p>
-        <p>
-            He beamed at the question. “Well, eating lunch is always a great way for people to bond and have a conversation. Lunch is just between us, so we can discuss what the program entails. 
-            We’re gonna have a long lunch—let’s make it fun! It’s scheduled for three hours. After lunch, we’ll go to dinner with Michael. The point of these dinners is to do status updates with him, 
-            and he’ll share some observations and advice with both of us. He sometimes has great ideas—ideas that I could never think of. His brain is really good at improving things. 
-            I’m still smarter than him, though. Tell him I said that.”
-        </p>
-        <p>
-            “I will,” LaShana quickly replied, making him smile. He continued, “There are things that he does better than I do. That’s why we’ve been partners for so long and why we’ve been able to grow the company to what it is now. 
-            After our dinner with Michael, we’ll join the team at the after party.”
-        </p>
-        <p>
-            “Sounds fun! Is it an actual party?” she asked.
-        </p>
-        <p>
-            “Yes, just not a rowdy one. We rent out a bar from a friend on a slow day like today. We set up board games, video games, food, and alcohol. It’s Tuesday, so it’s not a busy club night unless you’re into Drake.”
-        </p>
-        <p>
-            “The party will be just us, Michael, and the team. Secret tip: Michael is super friendly when he’s tipsy, so it’s a great time to get to know him personally. I’m friendly whenever, wherever!”
-        </p>
-        <p>
-            “Roger that,” she replied.
-        </p>
-        <p>
-            “Do you want to eat now, or do you want to eat later?” he continued.
-        </p>
-        <p>
-            “Well, since we’re going to be here for three hours and have dinner after, let’s definitely start by eating!”
-        </p>
-        
-        <p>
-            “LaShana, what is your goal with your business?” Chris asked.
-        </p>
-        <p>
-            “I want to build a lot of great value hotels and one super luxurious hotel.”
-        </p>
-        <p>
-            “Why do you have two different goals in the same industry? Fortunately, they wouldn’t compete with each other; they seem like completely different business models. Can you explain that to me?”
-        </p>
-        <p>
-            She answered:<br>
-            “Well, the great value chain of hotels is to provide the best experience possible for working Americans who want to spend the weekend with their partners, away from their children, 
-            without being too far in case of an emergency. It also has to be affordable. Everything is centered around providing a fantastic, laid-back experience. We even have adult-only amenities. 
-            The luxurious hotel is about providing the best experience possible to our guests, without cutting any corners for the sake of price. They get the best experience on the planet. The value will be reflected in the price.”
-        </p>
-        <p>
-            “Okay, I like those goals. Why the hotel industry?”
-        </p>
-        <p>
-            “Well, almost my entire family has worked in the hotel industry. My parents actually met in a hotel—my dad was a custodian, and my mom was a consultant. I’m the only one who started a business, though. 
-            That’s why I applied for the mentorship. Also, I want to learn to market and sell to the affluent crowd.”
-        </p>
-        <p>
-            Chris was happy to hear her motivation. It affirmed that they made the right call in picking her. “Well, we can definitely help you with business knowledge. We sell our services to CEOs, 
-            so you’ll definitely get experience there. On your application, you mentioned that you were able to keep your hotel occupancy high year-round, right?”
-        </p>
-        <p>
-            “Yes, our team keeps our hotel at near capacity all year. We plan to improve the process and eventually franchise it.”
-        </p>
-        <p>
-            “That’s fantastic. As you know, we’re opening our own retail stores soon. Your experience driving traffic will help our brick-and-mortar locations tremendously.”
-        </p>
-        <p>
-            “How far along are you guys with the retail locations?”
-        </p>
-        <p>
-            “Not very far. We don’t even have locations in mind yet. We just know we want to have stores.”
-        </p>
-        <p>
-            “Okay, I can definitely help with picking the right locations. There’s a science and art to it. Location isn’t the only thing that matters; we also have to make sure the interior is designed properly.”
-        </p>
-        <p>
-            “Well, that’s why we have you, LaShana, as our guru.”
-        </p>
-        <p>
-            “Ha! Okay, I’ll be the guru you guys need.” LaShana grinned. “Chris, I have a question.”
-        </p>
-        <p>
-            “Go ahead, you can ask me anything.”
-        </p>
-
-        <p>
-            “Looking at your bio on the website, it says you have a child, and that your wife is pregnant. Did she give birth yet?”
-        </p>
-        <p>
-            “Almost! She’s actually eight months pregnant. So in less than a month, we’ll add another cute monster to our family. You don’t have to worry about it. My wife and I already had a long discussion about it. 
-            For our firstborn, Aaron, I stayed home with Jessica. Turns out, I wasn’t really needed. Our family and friends were there to support us. This time around, we’re doing things differently. I’ll continue working. 
-            You get to have me as your mentor, and don’t worry! The mentorship program is fluid. If she needs me, I can be there quickly and then get back to you.”
-        </p>
-        <p>
-            After several hours, the lunch part of the LDA meeting was coming to an end.
-        </p>
-        <p>
-            “LaShana, the restaurant we’re going to is only one mile away. We can walk or take the Metro. Walking will take us about 20 minutes, and the Metro, 4. What would you prefer?”
-        </p>
-        <p>
-            “I prefer walking.”
-        </p>
-        <p>
-            LaShana thought the walk would give her more time to ask him more about Michael, and the walk was necessary to calm her nerves. She had attended Michael’s seminar, “How to Grow Your Business with Massive Vision,” 
-            and after implementing some of the information he shared, she’d grown her business to $24K/month. She’d also developed a small crush on him ever since. She didn’t think much of it—he was just another handsome, 
-            rich guy—until she got accepted into the mentorship. As they walked, she concluded, “It’s like having a crush on a professor in college. It’s okay to have, you just can’t act on it. After all, he’s technically my teacher. 
-            He’s 100% popular with women. He’s tall, handsome, ambitious, super rich, and kind. Well, whatever, even if I wa-”
-        </p>
-        <p>
-            “We’re here.” Chris’s voice interrupted her train of thought as he pointed to the small, unassuming restaurant in front of them.
-        </p>
-        <p>
-            It was a mom-and-pop shop, one that looked identical to all the small Italian restaurants in her hometown. She was surprised when she looked at the sign and didn’t see Italian, instead she saw the plain, unremarkable sign 
-            that simply read “Your Restaurant” on the door.
-        </p>
-        <p>
-            As soon as they walked in, the host greeted them. “You must be Chris and LaShana. Michael is waiting for you.” The host led them to their table. He could have simply pointed to the table, however, he chose to walk them over 
-            as if they were VIPs.
-        </p>
-        <p>
-            The restaurant was so small that it was impossible to miss the only man sitting at a table among the ten empty ones.
-        </p>
-        <p>
-            They found Michael typing away at his keyboard, an image that made a strong first impression on LaShana. He was early and already working while waiting. As soon as Michael saw them approach, he closed the lid of his laptop 
-            and placed it in a backpack sitting on the floor next to him. Then he asked the host if he could please take the backpack back with him. The host answered, “Sure.”
-        </p>
-        <p>
-            Michael rose from his seat, turned to LaShana, and said with a grin, “You must be LaShana, the woman unlucky enough to have to work with Chris.” He walked toward her, extended his hand for a handshake, and then shook Chris’s hand. 
-            With a gesture toward the chairs, he added, “You guys can go ahead and take a seat.”
-        </p>
-        <p>
-            They complied, settling in. Michael sat across from them, directly facing LaShana, while Chris took the seat to her left.
-        </p>
-        <p>
-            “I was just kidding earlier,” Michael said. “Chris is an awesome guy. He’s been a great business partner, friend, and mentor. You’ll definitely enjoy working with him.”
-        </p>
-        <p>
-            “Michael is right. I am all of the above,” Chris said with a chuckle. LaShana could tell that they had a genuine mutual respect and admiration for one another.
-        </p>
-        <p>
-            The waiter arrived at their table, asking, “Are you folks eating now or in 30 minutes?”
-        </p>
-        <p>
-            Michael looked at LaShana and said, “We usually like to start talking first, then start eating 30 minutes later. If you prefer, we can start by eating right away. What would you prefer?”
-        </p>
-        <p>
-            “Let’s talk first and eat later,” LaShana replied.
-        </p>
-        <p>
-            Chris turned to the waiter and asked, “What’s your name? It’s my first time seeing you here.”
-        </p>
-        <p>
-            “My name is David, sir.”
-        </p>
-        <p>
-            “Hi, David, my name is Chris. Nice to meet you. You heard the lady, we’ll eat in 30 minutes. Thanks.”
-        </p>
-        <p>
-            “No problem, sir.” David nodded and walked off.
-        </p>
-        <p>
-            Michael clapped his hands together. “Okay, guys. Let’s play an icebreaker for team building. We’ll each share our greatest strength and our biggest weakness when it comes to achieving our goals. We’ll start with the goal first.”
-        </p>
-        <p>
-            “Do you guys want me to get started?” Chris asked.
-        </p>
-        <p>
-            “Go ahead,” Michael and LaShana replied in unison.
-        </p>
-        <p>
-            “Alright. My goal is to grow Tech & Tech to $100M ARR using retail store experiences. My strength is my ability to create systems and processes for businesses. My weakness? Creativity. I often feel like I’m not creative enough.” 
-            Chris paused for a moment. “I tried all the affirmations to overcome that, nothing worked until I started partnering with creative people like Michael. He and I have great synergy—that’s why we’ve been partners for so long.”
-        </p>
-        <p>
-            “Would you like to go next?” Michael asked LaShana.
-        </p>
-        <p>
-            “Yes,” she said confidently. “My goal is to reach $3M ARR by franchising our current hotel. My strength? Customer experience. And my biggest weakness? Mindset. That’s what I struggle with the most. The solution I’ve found? 
-            This mentorship! Thank you so much for having me!”
-        </p>
-        <p>
-            Then it was Michael’s turn. “My goal, just like Chris’s, is to grow Tech & Tech to $100M ARR using retail stores. My strong suit? Mindset and sales. My weakness? Business building. You can probably tell already why we work so 
-            well together. His weakness is my strong suit, and my weakness is his strong suit.” He leaned in a bit closer. “Do you know why we picked you over all the other candidates?”
-        </p>
-        <p>
-            “Over 10,000 candidates,” Chris added with a grin.
-        </p>
-        <p>
-            LaShana felt a bit nervous. “No, I don’t know.”
-        </p>
-        <p>
-            “There are a lot of reasons,” Michael began, “the most important one is that we believe we can provide you with value—and you can do the same for us. You’re strong where we’re weak, and we’re strong where you’re weak. 
-            Since we’ve passed the $3M ARR mark, we’re confident we can help you get there and stretch that goal to $30M. We can’t promise $300M just yet—we haven’t reached that milestone ourselves— we are glad that we’ll be able to 
-            help you achieve your dreams. And, in turn, you’ll help us grow our company with your experience. We don’t have any experience in the hospitality business, and retail stores are all about creating a welcoming, customer-focused 
-            experience. Your hotel has that down perfectly, and we want the same for our brick-and-mortar locations.”
-        </p>
-        <p>
-            Chris chimed in, “Michael is our crazy big thinker. The first time we set a big sales goal, my suggestion was to set the target at a comfortable stretch of $100K for the day.”
-        </p>
-        <p>“That was big for us, considering our ARR was around $800K at the time. An eighth of our previous year’s income in a single day. Crazy, right?”</p>
-
-        <p>“Yep,” LaShana replied with a raised eyebrow.</p>
-
-        <p>“I thought so too,” Chris said. “Then Michael said we should set the goal at $1 million in a single day. I thought he was joking. Then I realized he was serious.”</p>
-
-        <p>Michael took over the story. “I told him it was possible because I saw someone do it at a conference. This guy did $3 million in sales—in two hours. Seeing him do that made me realize just what’s possible. I wanted us to do the same thing.” Michael smiled. “I got Chris to believe we could do it, and we set our plan in motion. Well, more like Chris set the plan in motion—he’s great at that, right Chris?”</p>
-
-        <p>“Yes, sir.” Chris nodded with a smile.</p>
-
-        <p>“So… were you guys able to hit $1 million in a day?” LaShana asked, leaning in, eager to know how it turned out.</p>
-
-        <p>They both exchanged a look, then answered in unison: “No.”</p>
-
-        <p>“We only made $400K,” Michael said with a chuckle. “Thanks to Chris’s planning, we’re now able to have two big sales days a month, usually ranging between $200K and $700K in sales.”</p>
-
-        <p>“Ooo, that’s awesome,” LaShana replied. She still couldn’t wrap her head around how they could be so nonchalant about making $400K in a single day. She had to remind herself that these were the kinds of numbers people in their position dealt with regularly. “Yeah, Chris is an awesome guy. Without him, I don’t think this company would even exist.”</p>
-
-        <p>“Ah, Michael, you’re gonna make me blush,” Chris laughed. “He's right, though. Without me, this company would crash. Without him, the company would just stay stagnant. That’s basically how our partnership works. Michael guides us with his crazy ideas, sells for us, and I just make sure we build the right systems so our boat can go where he wants it to go. It’s a good partnership, and it’s working.”</p>
-
-        <p>Hearing their stories made LaShana feel like she was in good company, and she was glad she’d taken the chance to apply for the mentorship. She could see now that they weren’t just successful—they were passionate and had fun playing the entrepreneurship game.</p>
-
-        <p>The waiter returned to the table. “Are you ready to order?”</p>
-
-        <p>“Yes, thank you, David,” Chris answered for the group.</p>
-
-        <p>Then he turned to LaShana with a grin. “We asked a silly question on your application about ranking your top three favorite things to eat for dinner. Do you remember your answer?”</p>
-
-        <p>“Umm, Gyros, Lomo, and my mom’s cooking,” LaShana answered, a little sheepishly.</p>
-
-        <p>“That’s what you wrote on your application—only the order was different. It was Gyros first, your mom’s cooking second, and Lomo third. Your current ranking is kinder to your mom’s cooking. I always thought of second place as the ‘first loser.’ Now, her cooking is no longer the first loser, and she’s still in your top three.”</p>
-
-        <p>“Well, if you put it that way, I’ll write that in a birthday card for her!”</p>
-
-        <p>“We should do that,” Michael interjected, jotting down the idea in his notebook.</p>
-
-        <p>“Did my mom cook for you?” LaShana asked, now even more surprised.</p>
-
-        <p>“Well, Chris really wanted to bother your mom to cook for us as a surprise. I told him that if we asked your mom, it wouldn’t be much of a surprise. So, we opted out of that idea. On the menu tonight, we’ve got Lomo and Gyros. Which would you like?”</p>
-
-        <p>“Both!” LaShana said enthusiastically.</p>
-
-        <p>“Both for the young lady,” the waiter replied, smiling. “And what about the gentlemen?”</p>
-
-        <p>“I also want both,” Michael said.</p>
-
-        <p>Chris followed suit, “Well, I guess I’ll take both too.” Michael was surprised—Chris was usually a picky eater, and he hated wasting food. Normally, Chris only ordered what he was sure he would love. Today, it seemed like he was stepping out of his comfort zone. Michael smiled to himself, amused. He concluded that Chris’s pickiness worked well in business, but it could sometimes be a bit frustrating in social situations like this.</p>
-
-        <p>“Okay, your orders are coming right up.” The waiter nodded and left.</p>
-
-        <p>Within minutes of taking their orders, the waiter returned to their table with enough food to feed a small army. LaShana blinked in surprise, looking at the massive spread of Lomo Saltado, Gyros, and an array of other dishes. She could barely comprehend how everything had arrived so quickly—and in such large quantities.</p>
-
-        <p>“How was this done so quickly? And why so much food?” she asked, puzzled.</p>
-
-        <p>Michael gave her a knowing smile. “It pays to have friends in high places. We’re close friends with the owner here, so we pre-ordered the meal. That's why it came out so fast.”</p>
-
-        <p>Chris added, “And as for the quantity, we like to give food to soup kitchens whenever we go to fine dining places. It’s our way of giving back.”</p>
-
-        <p>LaShana’s eyes softened as she listened. “That’s really thoughtful of you guys.”</p>
-
-        <p>Michael nodded. “Yeah, when we first got into business and capitalism, we read Adam Smith’s <em>Wealth of Nations</em>. He said that both poor and rich people eat the same amount of food—the difference is the rich just buy more expensive food more often. So when we do eat ‘rich people’s food,’ we like to share it with those who can’t easily afford it.”</p>
-
-        <p>Chris continued, “I hated that whenever my mom and I had to go to food banks, we only got canned food. It felt like there was never any variety, just the same thing over and over. In a way, we’re trying to bring the change we want to see in the world. I want the next kid who has to go to a shelter with their mom to eat something good, like Lomo Saltado or Gyros. It's about giving people a taste of something better.”</p>
-        <p>LaShana smiled softly, touched by their generosity. "Well, that's very kind of you both."</p>
-
-    <p>"We try," Michael said with a modest shrug.</p>
-
-    <p>As they dug into their meal, the waiter dimmed the lights slightly and added some soft ambient music to the dining room. The atmosphere became more intimate, allowing them to continue their conversation about business, life lessons, and shared wisdom. The time flew by as they exchanged thoughts, strategies, and stories of their journeys.</p>
-
-    <p>About 40 minutes into their conversation, LaShana’s phone started ringing. She initially ignored it, however, the calls kept coming, persistent and urgent. She continued to decline them then she received several text messages in quick succession. Michael noticed the tension in her face as she read them, sensing it was something important. He turned to her with a gentle and understanding smile.</p>
-
-    <p>"Hey, you should pick that up," he said, his tone reassuring. "It’s not rude. You’re a business owner, sometimes you’ve got to put out some fires."</p>
-
-    <p>LaShana hesitated for a moment, grateful for the suggestion. "Thank you," she said, then answered the call, stepping outside the restaurant to talk.</p>
-
-    <p>As soon as LaShana stepped out, Michael turned to Chris with a serious look.</p>
-
-    <p>"What’s up, man? Why do you look so tense?" Chris asked, sensing a shift in his friend’s demeanor.</p>
-
-    <p>"I’m not going to the after-party," Michael said, his voice low.</p>
-
-    <p>"Huh? Why not? Something come up?"</p>
-
-    <p>Michael shifted uncomfortably in his chair. "She’s too cute, bro. I can’t be spending that much time so close to her. It feels like a date, and I’m a little nervous." He caught himself, realizing how ridiculous that sounded. "I mean, I—uh, I just... I can’t. I’ve got some stuff to deal with at home." He pulled out his phone and added, "My mom needs my help urgently, too."</p>
-
-    <p>Chris raised an eyebrow however, he didn't push him further. "Okay. You don’t have to go. You do need to wait for her to finish her call first though."</p>
-
-    <p>"Yeah, that's what I was planning on doing," Michael muttered, his eyes shifting back to the table.</p>
-
-    <p>"Good."</p>
-
-    <p>About 30 minutes later, LaShana returned to the restaurant. She looked over at the table and saw Michael and Chris typing away on their laptops, clearly settled back into their business model.</p>
-
-    <p>"Thanks for your patience, guys. Sorry it took so long," she said as she sat back down.</p>
-
-    <p>"No worries," Chris replied, putting his laptop away. "Things happen. Did everything get resolved?"</p>
-
-    <p>LaShana nodded with relief. "Yeah, it’s all good. Just a mix-up with a new employee. Nothing too serious."</p>
-
-    <p>As she sat down, the waiter came with two large platters of chocolate chip cookies, accompanied by jugs of warm and cold milk.</p>
-
-    <p>"LaShana," Michael said with a wide grin, "chocolate chip cookies are my favorite. I’d love to share them with you. I made them from scratch."</p>
-
-    <p>LaShana’s eyes widened in surprise. "You baked these yourself?"</p>
-
-    <p>Michael’s face lit up at the question. "Yep! And there’s not just one kind. I made four flavors!" He gestured to the two platters. "This plate," he pointed to one, "has classic chocolate chips and chocolate galaxy cookies. And the other one has a choconut chip and mint chocolate chip."</p>
-
-    <p>"Wow, you really went all out," LaShana said, impressed by the variety and quantity.</p>
-
-    <p>Chris leaned back in his chair, smiling fondly at his friend. "Yeah, he always does when he bakes. You know Michael—he can’t just make one kind."</p>
-
-    <p>LaShana reached for one of each cookie, using the tongs the waiter had provided. "I’ll just take one of each then."</p>
-
-    <p>Michael chuckled. "You’re a smart woman. That’s exactly why you won the mentorship."</p>
-
-    <p>Chris nodded, grinning. "Yeah, picking the right cookie is an essential business skill."</p>
-
-    <p>They all laughed, enjoying the lighthearted moment. After another 10 minutes of conversation, Michael’s phone rang. He glanced at the screen and sighed.</p>
-
-    <p>"Sorry, guys. It’s time for me to head out," he said, standing up. "Chris, as always, it was great having dinner with you. It’s been too long. We’ve been busy, I’m glad we finally got to catch up."</p>
-
-    <p>He turned to LaShana, his voice warm with appreciation. "It was a great meeting you today. I’m excited to work with you. You’re a phenomenal individual, and I look forward to seeing both of our businesses grow together during this mentorship."</p>
-
-    <p>LaShana smiled brightly. "Thank you for the opportunity. You guys are super cool. I’m really looking forward to working with both of you."</p>
-
-    <p>Chris cleared his throat and smirked. "Especially with me."</p>
-
-    <p>LaShana laughed, and Michael joined in, shaking his head.</p>
-
-    <p>"Yes, especially with you," she said, a twinkle in her eye.</p>
-
-    <p>The three of them stood up. Michael reached for Chris’s hand, shaking it firmly. Then he turned to LaShana. He subconsciously started to go for a hug, at the last moment, he realized what he was doing and awkwardly dropped his arm. He extended his hand instead, and they shook hands, both chuckling at the moment.</p>
-
-    <p>"I’ll see you both next week," Michael said, giving each of them a nod before heading toward the door.</p>
-
-    <p>To be continued…<br></p>
-    <h1>  
-        Do You Want To Continue Reading<br>
-        “A Secret Attraction Between Mentor And Mentee”?
-    </h1>
-
-        <!-- Navigation Links -->
-        <div class="nav-links">
-           
-            <a href="https://buy.stripe.com/bIY8xteWJ1Yo8ko28a">Get The Book</a>
-        </div>
-    </div>
-
-</body>
+  </script>
 </html>
