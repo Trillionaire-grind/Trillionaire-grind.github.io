@@ -141,10 +141,12 @@
             }
         }
 
-        function openApp(){
+       
 
-            let url = `mainView.html`
-            window.location.replace(url);
+        function openScheduleBuilder()
+        {
+            let url = `classes.html`
+            window.location.replace(url)
         }
     </script>
     <script type="module">
@@ -214,7 +216,7 @@
                 premium : true 
             }).then(() => {
                 alert("the member was added to the database")
-                openApp()
+                openScheduleBuilder()
             });
         }
 
