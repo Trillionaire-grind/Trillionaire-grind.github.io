@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tech Mastery For Seniors</title>
+        <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F0F1F3;
+            }
+
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+
+            .fab {
+                position: fixed;
+                bottom: 56px;
+                /* Adjust as needed */
+                right: 8px;
+                background-color: #000;
+                color: #fff;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                
+            }
+
+            /* Styling for icons in the bottom navigation bar */
+            footer {
+                background-color: white;
+            }
+
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+
+            }
+
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            
+
+            .contentCard{
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+            }
+            .contentCard:hover{
+                box-shadow: 0 4px 8px #AF2D0B, 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            /*bottom sheet*/
+            .bottom-sheet {
+                display: none; /* Hidden by default */
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 90%; /* 60% of viewport height */
+                background: white;
+                box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+                border-radius: 16px 16px 0 0;
+                transform: translateY(100%); /* Start off-screen */
+                transition: transform 0.3s ease-out; /* Smooth transition */
+                z-index: 1000; /* Ensure it's on top */
+            }
+
+            .bottom-sheet.show {
+                transform: translateY(0); /* Slide up */
+            }
+
+            .bottom-sheet-content {
+                padding: 20px;
+                height: 100%; /* Make the content take full height */
+                overflow-y: auto; /* Allow scrolling if content overflows */
+            }
+
+            .bottom-sheet-buttons {
+                margin-top: 20px;
+                text-align: right;
+            }
+
+            .bottom-sheet-buttons button {
+                margin-left: 10px;
+            }
+        </style>
+    </head>
+
+    <body style="height: 100vh;">
+        <p style="color: #000; font-weight: bold; font-size: 42px; margin-bottom: 8px; text-align: center;">Have a question?</p>
+        <p style="margin-left: 12%; margin-right:auto; font-size: 24px;">Receive help from your own<br> 
+            Concierge I.T. desk support<br>
+            Tuesday through Friday<br> 
+            (8 AM - 8 PM)
+        </p>
+        <p style="margin-left: 12%; font-size: 24px;">P.S.<br>There's always a human on the other side</p>
+        <div style="margin-left: auto; cursor: pointer; margin-right: auto; width: 60%; height: 16%; background-color: white; text-align: center; border-radius: 10px; 
+        border: 2px solid black; box-shadow: 0 3px 10px gray">
+            <img style="width: 60px; margin-top: 16px;" src="assets/envelope.png">
+            <p>techmasteryforseniors@gmail.com</p>
+        </div>
+        <div style="display: flex; align-items: center; cursor: pointer;">
+            <div style="margin-left: auto; margin-right: auto; width: 30%; height: 16%; background-color: white; text-align: center; border-radius: 10px; 
+            border: 2px solid black; box-shadow: 0 3px 10px gray; margin-top: 16px;">
+                <img style="width: 60px; margin-top: 16px;" src="assets/text.png">
+                <p>786-309-8510</p>
+            </div>
+            <div style="margin-left: auto; cursor: pointer; margin-right: auto; width: 30%; height: 16%; background-color: white; text-align: center; border-radius: 10px; 
+            border: 2px solid black; box-shadow: 0 3px 10px gray; margin-top: 16px;">
+                <img style="width: 60px; margin-top: 16px;" src="assets/phone.png">
+                <p>786-309-8510</p>
+            </div>
+        </div>
+        
+    </body>
+    <script type="module">
+        // Firebase SDK and login code
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+            authDomain: "tech-mastery-academy.firebaseapp.com",
+            projectId: "tech-mastery-academy",
+            storageBucket: "tech-mastery-academy.firebasestorage.app",
+            messagingSenderId: "205345673412",
+            appId: "1:205345673412:web:d8970165489c414745b991",
+            measurementId: "G-KLKCTD047P"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+
+        const db = getFirestore(app);
+        const userUID = localStorage.getItem('userUID');
+
+        getAccount(userUID)
+       
+        async function getAccount(userId) {
+            const docRef = doc(db, "users", userId);
+            try {
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) 
+                {
+                    const docData = docSnap.data();
+                    var memberTV = document.getElementById("memberTV")
+                    var nameTV = document.getElementById("nameTV")
+                    if(docData.level == 0){ memberTV.innerText = 'The Secret To Tech Mastery' }
+                    if(docData.level == 1){ memberTV.innerText = 'No B.S. Guide To Tech Mastery For Seniors' }
+                    if(docData.level == 2){ memberTV.innerText = 'Tech Mastery For Seniors Academy' }
+                    if(docData.level == 3){ memberTV.innerText = 'Tech Mastery VIP Mastermind' }
+
+                    nameTV.innerText = docData.name
+                } else {
+                    alert("No document found with the given ID");
+                  
+                }
+            } catch (error) {
+                console.error("Error fetching document:", error);
+                alert("There was an error fetching the document.");
+            }
+        }
+                
+
+    
+        function openZoom()
+        {
+            let url = `./subscriptionView.html`
+            //let e
+            window.open(url, '_blank').focus();
+        }
+
+      
+    </script>
+</html>

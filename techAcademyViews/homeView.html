@@ -5,7 +5,8 @@
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tech Mastery For Seniors Academy</title>
+        <title>Tech Mastery For Seniors</title>
+        <link rel="icon" type="image/x-icon" href="assets/icon.ico">
         <style>
             /* General reset and basic styles */
             body {
@@ -93,40 +94,7 @@
                 }
             }
 
-            /*Filter dialog*/
-            .dialog {
-                display: none; /* Hidden by default */
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-                justify-content: center;
-                align-items: center;
-            }
-
-            .dialog-content {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                width: 300px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-
-            .dialog-title {
-                margin-top: 0;
-            }
-
-            .dialog-buttons {
-                margin-top: 20px;
-                text-align: right;
-            }
-
-            .dialog-buttons button {
-                margin-left: 10px;
-            }
-            /*filter dialog*/
+            
 
             .contentCard{
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
@@ -176,7 +144,7 @@
     <body style="height: 100vh;">
         <div style="display: flex;">
             <!--<img src="assets/logo_site.png" height="60px" width="60px" style="padding: 8px;">-->
-            <p style="padding-left: 16px; font-size: 24px;">Tech Mastery For Seniors <br><span style="text-align: center; font-weight: bold;">Academy</span></p>
+            <p style="padding-left: 16px; font-size: 24px;">Tech Mastery For Seniors</p>
             <img id="profileBtn" src="assets/person.svg" height="50px" width="50px" style="margin-left:auto; padding: 8px; cursor: pointer;">
         </div>
         <div style="display: flex; ">
@@ -193,8 +161,7 @@
         <div id="homeDiv" style="display: inline; background-color: red;">
             <div style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
                 <div style="display: flex;">
-                    <img src="assets/lock_open.svg" height="28px" width="30px"
-                        style="padding-left: 16px; margin-top: auto; margin-bottom: auto;">
+                    <img src="assets/lock_open.svg" height="28px" width="30px" style="padding-left: 16px; margin-top: auto; margin-bottom: auto;">
                     <p style="font-weight: bold; margin-left: 16px; ">Upgrade for full access<br><span
                             style="font-weight: normal;">become tech savvy</span></p>
                     <p
@@ -202,65 +169,62 @@
                         ></p>
                 </div>
             </div>
-            <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Guides</p>
+            <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">The NO B.S. Guide To Tech Mastery</p>
             <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="assets/mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">The Amazing Secret To Master Technology</p>
+                <img src="assets/guide/secret_1.png" style="width: 100%;border-bottom: solid black; border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openIndividualPost()">
+                <p style="font-weight: bold; padding-left: 8px;">The Secret To Tech Mastery</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p> 
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="assets/mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">How To Manage Your Contacts</p>
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; position: relative;">
+                <img src="assets/lock.png"  style="position: absolute;  left: 50%; top:30%; transform: translateX(-50%); width: 50px;  z-index: 10;">
+                <img src="assets/guide/secret_2.png" style="width: 100%;border-bottom: solid black; border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openSubscriptionView()">
+                <p style="font-weight: bold; padding-left: 8px;">Master The Basics Of Your Cell Phone</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p> 
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="assets/mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">How To Access Your Voicemail</p>
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px;  position: relative;">
+                <img src="assets/lock.png"  style="position: absolute;  left: 50%; top:30%; transform: translateX(-50%); width: 50px;  z-index: 10;">
+                <img src="assets/guide/secret_3.png" style="width: 100%;border-bottom: solid black;border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openSubscriptionView()">
+                <p style="font-weight: bold; padding-left: 8px;">How To Avoid Scams</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p> 
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">How To Access Your Settings</p>
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px;  position: relative;">
+                <img src="assets/lock.png"  style="position: absolute;  left: 50%; top:30%; transform: translateX(-50%); width: 50px;  z-index: 10;">
+                <img src="assets/guide/secret_4.png" style="width: 100%;border-bottom: solid black; border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openSubscriptionView()">
+                <p style="font-weight: bold; padding-left: 8px;">How To Use Zoom</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p> 
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="assets/mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">How To Make A Phone Call</p>
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px;  position: relative;">
+                <img src="assets/lock.png"  style="position: absolute;  left: 50%; top:30%; transform: translateX(-50%); width: 50px;  z-index: 10;">
+                <img src="assets/guide/secret_5.png" style="width: 100%;border-bottom: solid black; border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openSubscriptionView()">
+                <p style="font-weight: bold; padding-left: 8px;">5 Things You Need To Know About A.I.</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p> 
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px; ">
-                <img src="assets/mock/senior_mock.jpeg" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
-                <p style="font-weight: bold; padding-left: 8px;">Do You Need A New Device?</p>
+            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 24px;  position: relative;">
+                <img src="assets/lock.png"  style="position: absolute;  left: 50%; top:30%; transform: translateX(-50%); width: 50px;  z-index: 10;">
+                <img src="assets/guide/secret_bonus.png" style="width: 100%;border-bottom: solid black; border-top-left-radius: 10px;
+                border-top-right-radius: 10px" onclick="openSubscriptionView()">
+                <p style="font-weight: bold; padding-left: 8px;">How To Legally Print Money On The Internet</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">find out now!</p>
                 </div>
             </div>
-            <div class="contentCard" style="background-color: white; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; filter: blur(2px); ">
-                <p style="font-weight: bold; font-size: 24px; padding: 8px; padding-top: 16px;">
-                    Q&A : How To Create A YouTube Account
-                </p>
-                <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
-                    <p style="margin-top: 0px;margin-bottom: 8px;">
-                        Thu 12, 2024 - 44
-                    </p>
-                </div>
-            </div>
         </div>
         <div id="postsDiv" style="display: none;">
-            <!--<div style="margin-left:5%; display: flex; background-color: #000; border-radius: 10px; width: 30%; padding: 8px;">
-                <img style="margin-top: 8px;" src="assets/filter.svg" width="40px" height="40px">
-                <p style="margin-left: 16px; color: #808080;">Filter</p>
-            </div>-->
 
             <div style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
                 <div style="display: flex;">
@@ -273,7 +237,6 @@
                         ></p>
                 </div>
             </div>
-            <img id="filterBtn" style="margin-top: 32px; margin-left: 5%; cursor: pointer;" src="assets/filter.svg" width="40px" height="40px">
            <!--Regular post (just text)-->  
             <div style="width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1); filter: blur(6px);">
                 <div style="display: flex; align-items: center; padding: 8px;">
@@ -322,26 +285,7 @@
             </div>
 
              <!-- Dialog -->
-            <div id="filterDialog" class="dialog">
-                <div class="dialog-content">
-                    <h2 class="dialog-title">Filter</h2>
-                    <form id="filter-form">
-                        <label>
-                            <input type="radio" name="filter" value="all" checked> Full Episodes
-                        </label><br>
-                        <label>
-                            <input type="radio" name="filter" value="community"> Just Lectures 
-                        </label><br>
-                        <label>
-                            <input type="radio" name="filter" value="minorities"> Q&A 
-                        </label>
-                    </form>
-                    <div class="dialog-buttons">
-                        <button style="cursor: pointer; padding: 8px;" id="filterCancelBtn">Cancel</button>
-                        <button style="background-color: #000; color: #fff; cursor: pointer; padding: 8px;" id="filterDoneBtn">Done</button>
-                    </div>
-                </div>
-            </div>
+            
 
             <!-- Bottom Sheet -->
             <div id="bottom-sheet" class="bottom-sheet">
@@ -391,11 +335,11 @@
             <p style="text-align: right; cursor: pointer; margin-right: 16px;" id="profileCloseBtn">close</p>
             <div class="bottom-sheet-content">
                 <img src="assets/person.svg" style="margin-top: 0px;" height="70px" width="70px" >
-                <p style="font-size: 32px; font-weight: bold; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
-                <p style="margin-top: 0px; padding-top: 0px;">Member</p>
-                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 32px;">
+                <p style="font-size: 32px; font-weight: bold; margin-bottom: 0px; padding-bottom: 0px;" id="nameTV">Képler Siguineau</p>
+                <p style="margin-top: 0px; padding-top: 0px;" id="memberTV">Member</p>
+                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 32px;" onclick="openSubscriptionView()">
                     <img src="assets/dollar.svg" height="40px" width="40px" >
-                    <p style="margin-left: 24px; font-size: 16px; ">Subscriptions</p>
+                    <p style="margin-left: 24px; font-size: 16px; ">Access Level</p>
                     <p style="margin-left: auto;  font-size: 16px;">></p>
                 </div>
                 <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
@@ -403,15 +347,75 @@
                     <p style="margin-left: 24px; font-size: 16px; ">Personal Info</p>
                     <p style="margin-left: auto;  font-size: 16px;">></p>
                 </div>
-                <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
+                <!--<div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;" id="logOutBtn">
                     <img src="assets/profile.svg" height="40px" width="40px" >
                     <p style="margin-left: 24px; font-size: 16px; ">Log Out</p>
                     <p style="margin-left: auto;  font-size: 16px;">></p>
-                </div>
+                </div>-->
+                <!--Log Out Fuction Seems to be too complicated for what its worth for now-->
             </div>
         </div>
       
     </body>
+    <script type="module">
+        // Firebase SDK and login code
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+            authDomain: "tech-mastery-academy.firebaseapp.com",
+            projectId: "tech-mastery-academy",
+            storageBucket: "tech-mastery-academy.firebasestorage.app",
+            messagingSenderId: "205345673412",
+            appId: "1:205345673412:web:d8970165489c414745b991",
+            measurementId: "G-KLKCTD047P"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+
+        const db = getFirestore(app);
+        const userUID = localStorage.getItem('userUID');
+
+        getAccount(userUID)
+       
+        async function getAccount(userId) {
+            const docRef = doc(db, "users", userId);
+            try {
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) 
+                {
+                    const docData = docSnap.data();
+                    var memberTV = document.getElementById("memberTV")
+                    var nameTV = document.getElementById("nameTV")
+                    if(docData.level == 0){ memberTV.innerText = 'The Secret To Tech Mastery' }
+                    if(docData.level == 1){ memberTV.innerText = 'No B.S. Guide To Tech Mastery For Seniors' }
+                    if(docData.level == 2){ memberTV.innerText = 'Tech Mastery For Seniors Academy' }
+                    if(docData.level == 3){ memberTV.innerText = 'Tech Mastery VIP Mastermind' }
+
+                    nameTV.innerText = docData.name
+                } else {
+                    alert("No document found with the given ID");
+                  
+                }
+            } catch (error) {
+                console.error("Error fetching document:", error);
+                alert("There was an error fetching the document.");
+            }
+        }
+                
+    </script>
     <script>
         let homeBtn = document.getElementById("homeBtn")
         let postsBtn = document.getElementById("postsBtn")
@@ -439,27 +443,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const filterBtn = document.getElementById('filterBtn');
-            const cancelBtn = document.getElementById('filterCancelBtn');
-            const doneBtn = document.getElementById('filterDoneBtn');
+            
             const profileBtn = document.getElementById("profileBtn")
 
-            const filterDialog = document.getElementById("filterDialog")
 
             const bottomSheet = document.getElementById('bottom-sheet');
             const profileBottomSheet = document.getElementById("profileBottomSheet")
             const closeSheetBtn = document.getElementById('closeSheetBtn');
             const profileCloseBtn = document.getElementById("profileCloseBtn")
 
-            // Show the dialog
-            filterBtn.addEventListener('click', () => {
-                filterDialog.style.display = 'flex';
-            });
-
-            // Hide the dialog
-            cancelBtn.addEventListener('click', () => {
-                filterDialog.style.display = 'none';
-            });
+           
 
             profileBtn.addEventListener('click', () => {
                 profileBottomSheet.style.display = 'block'
@@ -467,12 +460,7 @@
 
             })
 
-            doneBtn.addEventListener('click', () => {
-                const selectedFilter = document.querySelector('input[name="filter"]:checked').value;
-                alert(`Selected filter: ${selectedFilter}`);
-                filterDialog.style.display = 'none';
-            });
-
+          
             // Show the bottom sheet
            
 
@@ -500,6 +488,12 @@
             let url = `./subscriptionView.html`
             //let e
             window.open(url, '_blank').focus();
+        }
+
+        function goToMainView()
+        {
+            window.location.replace("../techAcademy.html");
+            
         }
     </script>
 </html>
