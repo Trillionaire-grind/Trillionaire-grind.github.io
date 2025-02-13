@@ -188,19 +188,7 @@
             </p>
         </div>
     </body>
-    <script>
-
-       
-        function updateUser()
-        {
-
-        }
-
-        function openApp(){
-            let url = `mainView.html`
-            window.location.replace(url);
-        }
-    </script>
+    
     <script type="module">
         // Firebase SDK and login code
         // Import the functions you need from the SDKs you need
@@ -231,19 +219,30 @@
         const db = getFirestore(app);
         const userUID = localStorage.getItem('userUID');
 
+        var selectedWorkshop = document.querySelector('input[name = "workshopRadio"]:checked')
+        var selectedClass = document.querySelector(`input[name = "classRadio"]:checked`)
+
         let userId = '00vLJF4VM7ZBFoXMtfgpr6Mha6N2'
 
+        function openApp(){
+            let url = `mainView.html`
+            window.location.replace(url);
+        }
+
+        
+
         let doneBtn = document.getElementById("doneBtn")
-        async function udateClasses(userId)
+        async function udateClasses(userId, classChoice, workshopChoice)
         {
             const testRef = doc(db, "users", userId);
 
             try {
                 await updateDoc(testRef, {
-                    classChoice: "class1", 
-                    workshopChoice: "workshop1"
+                    classChoice: `${classChoice}`, 
+                    workshopChoice: `${workshopChoice}`
                 });
-                alert("Document updated successfully");
+                alert("prefrences updated successfully");
+                openApp();
             } catch (error) {
                 alert(`Error updating document: ${error}`);
             }
@@ -253,7 +252,8 @@
         function workshopAndClass()
         {
             var selectedWorkshop = document.querySelector('input[name = "workshopRadio"]:checked')
-            var selectedClass = document.querySelector(`input[name = "classRadio"]:checked`)
+            var selectedClass = document.querySelector('input[name = "classRadio"]:checked')
+            alert(`this is the value ${selectedWorkshop.value}`)
             if(selectedWorkshop == null && selectedClass == null){
                 alert('Please select a class and a workshop')
             }else if(selectedWorkshop == null){
@@ -262,7 +262,7 @@
             else if(selectedClass == null){
                 alert('please select a class')
             }else{
-                udateClasses()            
+                udateClasses(userId, selectedClass.value, selectedWorkshop.value)            
             }
            
         }
