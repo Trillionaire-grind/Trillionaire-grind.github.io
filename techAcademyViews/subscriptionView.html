@@ -112,23 +112,23 @@
                     BONUS "How To Legally Print Money On The Internet"<br>
                     A total <strong>Value of $3,998</strong> for only <strong>$397</strong>
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
-                    <span class="mdc-button__label">Join</span>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                    <span class="mdc-button__label">Get The Full Guide</span>
                 </button>
             </div>
             <div class="card" style="margin-top: 24px;">
                 <img src="assets/access/educated.webp">
                 <p style="text-align: start; margin-left: 8px;">Tech Master For Seniors Academy</p>
-                <p style="text-align: start; margin-left: 8px;">US $7,997</p>
+                <p style="text-align: start; margin-left: 8px;">US $,997</p>
                 <p style="text-align: start; margin-left: 8px;">
                    Get monthly seminars...<br>
                    Get monthly workshops...<br>
                    Get weekly open Q&A sessions...<br>
                    Get access to Tuesday - Friday I.T. Help Desk...<br>
-                   A 12 month program to master technology...a total value of X for only $7,997
+                   A 12 month program to master technology...a total value of X for only $8,997
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
-                    <span class="mdc-button__label">Join</span>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                    <span class="mdc-button__label">Join Now</span>
                 </button>
             </div>
             <div class="card" style="margin-top: 24px;">
@@ -143,10 +143,19 @@
                     Be Better than 99% Of the world in Technology...<br>
                     Limited to only 11 members for 
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
-                    <span class="mdc-button__label">Join</span>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                    <span class="mdc-button__label">Call To Reserve</span>
                 </button>
             </div>
         </div>
     </body>
+    <script>
+        function openStripe()
+        {
+            let url = "https://buy.stripe.com/test_8wMeW54DFbs58YodQQ"
+            //window.location.replace(url);
+
+            window.open(url, '_blank').focus();
+        }
+    </script>
 </html>
