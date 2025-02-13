@@ -151,7 +151,7 @@
         <iframe style="margin-left: 5%;margin-top: 0px; height:30vh; width: 90%; background-color: #fff; border: none;" src="https://www.youtube.com/embed/LJ-Uteo2H5w"></iframe>
 
         <button class="ctaBtn" onclick="openPayment()" style="cursor:pointer; font-size: 24px; text-align: start; margin-left: 5%; width: 90%; margin-top:32px; border: none; border-radius: 10px; padding: 10px; height: 10vh; font-weight: bold;">
-            <p style=" margin: 8px; font-size: 18px;">Yes, I want to join the academy for only $6,997</p>
+            <p style=" margin: 8px; font-size: 18px;">Yes, I want to join the academy for only $8,997</p>
         </button>
 
         <div id="myModal" class="modal">
@@ -161,6 +161,7 @@
                 <input type="email" id="emailET" placeholder="Enter your email"><br>
                 <label for="logInPassword">Password</label>
                 <input type="password" id="passwordET" placeholder="Enter your password"><br>
+                <p style="text-align: center; cursor: pointer;" onclick="alert('password reset!')">forgot password?</p>
                 <div style="float: right; margin-top: 8px;">
                     <button id="cancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
                     <button id="signInBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer;">Sign In</button>
@@ -178,7 +179,7 @@
             // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-            import { getAuth, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+            import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -240,6 +241,11 @@
                     const errorMessage = error.message
                     alert(`there was an error ${errorMessage}`)
                 })
+
+            }
+
+            function requestEmail()
+            {
 
             }
 

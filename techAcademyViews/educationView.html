@@ -146,10 +146,12 @@
 
        <p id="lessonHeadlineTV" style="text-align: center; font-weight: bold; font-size: 24px; margin-top: 16px;">"How To Use Your Phone's Basic Features"</p>
        <p id="lessonDateTV" style="text-align: center; font-weight: bold; font-size: 16px;">next class on<br>Tuesday 28th<br>at 4:00 EST</p>
-        <!--<div style="margin-left: auto; margin-right: auto; width: 20%; background-color: #000; border-radius: 10px;"><p style="color: white; text-align: center; padding: 8px;">Join Now</p></div> This is good-->
-        <div style="width: 80%; height: 14vh; border: 2px solid black; background-color: white; margin-left: auto; margin-right: auto; border-radius: 10px;">
-            <p style="text-align: center; font-weight: bold; font-size: 18px; margin-top: 2px;">Collier County Public Library<br>(South Regional)</p>
-            <p style="text-align: center; font-size: 14px;">8065 Lely Cultural Pkwy, Naples, FL 34114<br> phone# 239.252.7542</p>
+        <div id="joinClassBtn" style="display: none; margin-left: auto; margin-right: auto; width: 20%; background-color: #000; border-radius: 10px; cursor: pointer;">
+            <p style="color: white; text-align: center; padding: 8px;">Join Now</p>
+        </div>
+        <div id="locationDiv" style="display: none; width: 80%; height: 14vh; border: 2px solid black; background-color: white; margin-left: auto; margin-right: auto; border-radius: 10px;">
+            <p id="locationNameTV" style="text-align: center; font-weight: bold; font-size: 18px; margin-top: 2px;">Collier County Public Library<br>(South Regional)</p>
+            <p id="locationAddressTV" style="text-align: center; font-size: 14px;">8065 Lely Cultural Pkwy, Naples, FL 34114<br> phone# 239.252.7542</p>
         </div>
         <p style="text-align: center; margin-bottom: 64px;">can't make it?<br>check <span style="color: red;">classes </span>for<br>space</p>
         <div>
@@ -161,8 +163,8 @@
                 <!--<div style="width: 20%; height: 6vh; background-color: black; border-radius: 10px; display: flex; align-items: center;">
                     <p style="padding: 2px; color: white;cursor: pointer;">Join Now</p>
                 </div>-->
-                <div style="width: 20%; height: 6vh; background-color: black; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
-                    <p style="padding: 2px; color: white; text-align: center; cursor: pointer;">Join Now</p>
+                <div id="joinOfficeBtn" style="width: 20%; height: 6vh; background-color: black; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                    <p style="padding: 2px; color: white; text-align: center;">Join Now</p>
                 </div>
 
             </div>
@@ -198,6 +200,13 @@
         const db = getFirestore(app);
         const userUID = localStorage.getItem('userUID');
 
+        let lessonNumberTV = document.getElementById("lessonNumberTV")
+        let lessonHeadlineTV = document.getElementById("lessonHeadlineTV")
+        let lessonDateTV = document.getElementById("lessonDateTV")
+
+        let joinClassBtn = document.getElementById("joinClassBtn")
+        let locationDiv = document.getElementById("locationDiv")
+        const shakingSomeAss = true
         getLesson("lesson_1")
        
         async function getLesson(lesson) {
@@ -207,7 +216,14 @@
 
                 if (docSnap.exists()) 
                 {
-                    
+                    alert(`alert headline ${docSnap.data()}`)
+                    lessonNumberTV.innerText = docSnap.data().lesson 
+                    lessonHeadlineTV.innerText = docSnap.data().headline
+                    if(docSnap.data().type == 0){
+                        joinClassBtn.style.display = 'block'
+                    }else{
+                        locationDiv.style.display = 'block'
+                    }
                 } else {
                     alert("No document found with the given ID");
                   
@@ -227,4 +243,6 @@
         }
       
     </script>
+
+
 </html>
