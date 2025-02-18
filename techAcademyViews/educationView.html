@@ -205,6 +205,7 @@
         let lessonDateTV = document.getElementById("lessonDateTV")
 
         let joinClassBtn = document.getElementById("joinClassBtn")
+        let joinOfficeBtn = document.getElementById("joinOfficeBtn")
         let locationDiv = document.getElementById("locationDiv")
 
         getLesson("lesson_1")
@@ -216,7 +217,6 @@
 
                 if (docSnap.exists()) 
                 {
-                    alert(`alert headline ${docSnap.data()}`)
                     lessonNumberTV.innerText = docSnap.data().lesson 
                     lessonHeadlineTV.innerText = docSnap.data().headline
                     if(docSnap.data().type == 0){
@@ -234,10 +234,17 @@
             }
         }
                 
+        joinClassBtn.onclick = () => {
+            openZoom()
+        }
+
+        joinOfficeBtn.onclick = () => {
+            openZoom()
+        }
 
         function openZoom()
         {
-            let url = `./subscriptionView.html`
+            let url = `https://zoom.us/j/95519936799?pwd=IhE04VLgQbhMESe6qBIIBvvryp1itU.1#success`
             //let e
             window.open(url, '_blank').focus();
         }

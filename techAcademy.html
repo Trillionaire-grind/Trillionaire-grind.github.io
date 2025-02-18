@@ -161,10 +161,22 @@
                 <input type="email" id="emailET" placeholder="Enter your email"><br>
                 <label for="logInPassword">Password</label>
                 <input type="password" id="passwordET" placeholder="Enter your password"><br>
-                <p style="text-align: center; cursor: pointer;" onclick="alert('password reset!')">forgot password?</p>
+                <p style="text-align: center; cursor: pointer;" id="forgotBtn">forgot password?</p>
                 <div style="float: right; margin-top: 8px;">
                     <button id="cancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
                     <button id="signInBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer;">Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resetModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Reset Your Password</h2>
+                <label for="resetEmailTV">Enter Your Email </label>
+                <input type="email" id="resetEmailET" placeholder="Enter your email"><br>
+                <div style="float: right; margin-top: 8px;">
+                    <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="resetSendBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer;">Reset Password</button>
                 </div>
             </div>
         </div>
@@ -202,13 +214,17 @@
 
 
             let logInBtn = document.getElementById("logInBtn")
+
+            let myModal = document.getElementById("myModal")
+            let emailET = document.getElementById("emailET")
+            let passwordET = document.getElementById("passwordET")
             let signInBtn = document.getElementById("signInBtn")
             let cancelBtn = document.getElementById("cancelBtn")
 
-            let emailET = document.getElementById("emailET")
-            let passwordET = document.getElementById("passwordET")
-
-            let myModal = document.getElementById("myModal")
+            let resetModal = document.getElementById("resetModal")
+            let forgotBtn = document.getElementById("forgotBtn")
+            let resetEmailET = document.getElementById("resetEmailET")
+            let resetSendBtn = document.getElementById("resetSendBtn")
 
             logInBtn.onclick = () => {
                 myModal.style.display = 'inline'
@@ -224,6 +240,18 @@
                 logIn(email, password)
             }
             
+
+            forgotBtn.onclick = () => {
+                myModal.style.display = 'none'
+                resetModal.style.display = 'inline'
+            }
+
+            resetSendBtn.onclick = () => {
+               
+                let email = resetEmailET.value
+                alert(`touched ${email}`)
+                requestEmail(email)
+            }
 
             function logIn(email, password)
             {
@@ -244,9 +272,22 @@
 
             }
 
-            function requestEmail()
+            function requestEmail(email)
             {
-
+                alert('request was called')
+                sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    // Password reset email sent!
+                    // ..
+                    alert('check your email to reset your password!')
+                    resetModal.style.display = 'none'
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(`there was an error ${error}`)
+                    // ..
+                })
             }
 
             function openMainView()

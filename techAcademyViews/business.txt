@@ -1,20 +1,25 @@
-Our goal is to hit $12 Million a year with the company
-or 1 million a month 
+Our goal is to hit $6 Million a year with the company
+or $500K a month 
 
 We have offers (monthly)
-FREE -----------------        ∞ sales
-$197 / month ---------    5,100 sales 
-$497 per seminar -----    2,012 sales 
-$34,997 Premium ------       30 sales 
+FREE - $19.97  -------         ∞ sales
+$24 / month    -------    20,834 sales 
+$750 / month   -------        56 sales 
+$8K / month    -------         6 sales 
 
 
 10 Million Men   (55+)
 10 Million Women (55+)
 
+Offers - 
+The Secret To Tech Mastery - $1 
+The NO B.S. Guide To Tech Mastery For Seniors - $297 or $24 / month  
+Tech Mastery For Seniors Academy - $8,997 or $750 / month 
+Tech Mastery VIP Experience - $97,000 or $8K / month 
+
 
 Their will be online and in-person classes. Monthly classes based on certain topics that will be rotated 
 every year, plus added content about things that are more complicated. 
-
 
 The Logic is pretty simple 
 If FREE -> We send them to a specific sales page that leads them directly to registration, which will create
@@ -25,3 +30,13 @@ if PAID -> paid sales page -> stripe link -> registration page with create user 
 show the things, they cannot upgrade. 
 
 What needs to be figured out, how the heck do we get them 
+
+create the app so that all of our users can get the
+copy -> payment -> registration -> access
+
+there needs to be 4 different copy to sell our products/services 
+
+sell on stage for Tech Mastery For Seniors Academy...
+The goal is to break all their negative self beliefs and make them believe that we are the best solution 
+
+want $12 Million after taxes and other fees  
