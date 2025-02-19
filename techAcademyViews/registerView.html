@@ -148,6 +148,12 @@
             let url = `classes.html`
             window.location.replace(url)
         }
+
+        function openApp()
+        {
+            let url = 'mainView.html'
+            window.location.replace(url)
+        }
     </script>
     <script type="module">
         // Import the functions you need from the SDKs you need
@@ -206,6 +212,22 @@
             }
         }
 
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        let accessLevel = null;
+        // Run this when the page loads
+        window.onload = function() {
+            accessLevel = getQueryParam("accessLevel");
+
+            /*if (accessLevel === "0") {
+                alert(`Access level: ${accessLevel}`);
+            }*/
+
+        }
+
 
         function addMember(name, email,id){
             const usersRef = collection(db, "users")
@@ -213,10 +235,14 @@
             setDoc(doc(usersRef, id), {
                 name : `${name}`,
                 email : `${email}`,
-                premium : true 
+                accessLevel : accessLevel
             }).then(() => {
                 alert("Account Created Successfully")
-                openScheduleBuilder()
+                if(accessLevel == 2){
+                    openScheduleBuilder()
+                }else{
+                    openApp()
+                }
             });
         }
 
@@ -225,4 +251,9 @@
         }
 
     </script>
+    <script>
+        // Function to get query parameter by name
+       
+    </script>
+
 </html>
