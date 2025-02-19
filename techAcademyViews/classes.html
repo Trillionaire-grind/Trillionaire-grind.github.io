@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Register</title>
+        <title>Tech Mastery For Seniors - Register</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -124,25 +124,25 @@
                         <p style="font-weight: bold; margin-bottom: 0px;">8:00 AM - 11:00 AM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop1" name="workshopRadio" value="workshop1" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop1" name="workshopRadio" value="workshop1" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>                
                     <td>
-                        <p style="font-weight: bold; margin-bottom: 0px;">1:00 AM - 4:00 PM</p>
+                        <p style="font-weight: bold; margin-bottom: 0px;">8:00 AM - 11:00 AM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop2" name="workshopRadio" value="workshop2" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop2" name="workshopRadio" value="workshop2" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <p style="font-weight: bold; margin-bottom: 0px;">8:00 AM - 11:00 AM</p>
+                        <p style="font-weight: bold; margin-bottom: 0px;">1:00 PM - 4:00 PM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop3" name="workshopRadio" value="workshop3" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop3" name="workshopRadio" value="workshop3" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>
@@ -150,7 +150,7 @@
                         <p style="font-weight: bold; margin-bottom: 0px;">1:00 PM - 4:00 PM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop4" name="workshopRadio" value="workshop4" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop4" name="workshopRadio" value="workshop4" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>
@@ -165,7 +165,7 @@
                         <p style="font-weight: bold; margin-bottom: 0px;">8:00 AM - 11:00 AM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop5" name="workshopRadio" value="workshop5" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop5" name="workshopRadio" value="workshop5" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>                
@@ -175,7 +175,7 @@
                         <p style="font-weight: bold; margin-bottom: 0px;">1:00 PM -  4:00 PM</p>
                         <div style="display: flex; margin-top: 0px;">
                             <label style="font-size: 14px; margin-top: 0px; margin-left: auto;">
-                                <input style="vertical-align: baseline;" type="radio" id="workshop6" name="workshopRadio" value="workshop6" /> only 220 spots left
+                                <input style="vertical-align: baseline;" type="radio" id="workshop6" name="workshopRadio" value="workshop6" /> only 60 spots left
                             </label>                   
                         </div>
                     </td>   
@@ -244,7 +244,7 @@
             }
         }
 
-        function workshopAndClass()
+        function workshopAndClass(userUID)
         {
             var selectedWorkshop = document.querySelector('input[name = "workshopRadio"]:checked')
             var selectedClass = document.querySelector('input[name = "classRadio"]:checked')
@@ -256,12 +256,12 @@
             else if(selectedClass == null){
                 alert('please select a class')
             }else{
-                udateClasses(userId, selectedClass.value, selectedWorkshop.value)            
+                udateClasses(userUID, selectedClass.value, selectedWorkshop.value)            
             }
         }
 
         doneBtn.onclick = () => {
-            workshopAndClass()
+            workshopAndClass(userUID)
         }
     </script>
 </html>
