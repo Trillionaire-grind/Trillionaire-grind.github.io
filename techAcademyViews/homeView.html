@@ -159,10 +159,10 @@
         </div>
         <hr>
         <div id="homeDiv" style="display: inline; background-color: red;">
-            <div style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
+            <div id="upgradeDiv" style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
                 <div style="display: flex;">
                     <img src="assets/lock_open.svg" height="28px" width="30px" style="padding-left: 16px; margin-top: auto; margin-bottom: auto;">
-                    <p style="font-weight: bold; margin-left: 16px; ">Upgrade for full access<br><span
+                    <p id="upgradeHealdineTV" style="font-weight: bold; margin-left: 16px; ">Upgrade for full access<br><span
                             style="font-weight: normal;">become tech savvy</span></p>
                     <p
                         style="margin-top: auto; margin-bottom: auto; font-size: 32px; font-weight: bold; margin-left: auto; margin-right: 16px;">
@@ -222,7 +222,7 @@
         <div id="postsDiv" style="display: none;">
 
             <div style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
-                <div style="display: flex;">
+                <div id="secondUpgradeDiv" style="display: flex;">
                     <img src="assets/lock_open.svg" height="28px" width="30px"
                         style="padding-left: 16px; margin-top: auto; margin-bottom: auto;">
                     <p style="font-weight: bold; margin-left: 16px; ">Upgrade for full access<br><span
@@ -382,6 +382,11 @@
         const db = getFirestore(app);
         const userUID = localStorage.getItem('userUID');
 
+        let upgradeDiv = document.getElementById("upgradeDiv")
+        let secondUpgradeDiv = document.getElementById("secondUgradeDiv")
+
+        let upgradeHealdineTV = document.getElementById("upgradeHeadlineTV")
+
         getAccount(userUID)
        
         async function getAccount(userId) {
@@ -394,14 +399,22 @@
                     const docData = docSnap.data();
                     var memberTV = document.getElementById("memberTV")
                     var nameTV = document.getElementById("nameTV")
-                    if(docData.level == 0){ memberTV.innerText = 'The Secret To Tech Mastery' }
-                    if(docData.level == 1){ memberTV.innerText = 'No B.S. Guide To Tech Mastery For Seniors' }
-                    if(docData.level == 2){ memberTV.innerText = 'Tech Mastery For Seniors Academy' }
-                    if(docData.level == 3){ memberTV.innerText = 'Tech Mastery VIP Mastermind' }
+                    if(docData.accessLevel == 0){ memberTV.innerText = 'The Secret To Tech Mastery' }
+                    if(docData.accessLevel == 1){ memberTV.innerText = 'No B.S. Guide To Tech Mastery For Seniors' }
+                    if(docData.accessLevel == 2){ memberTV.innerText = 'Tech Mastery For Seniors Academy'
+                        secondUpgradeDiv.style.display = "none"
+                        upgradeHealdineTV.innerHTML = `Ugrade for full in-person experience<br>Join The VIP Mastermind`
+                     }
+                    if(docData.accessLevel == 3){ memberTV.innerText = 'Tech Mastery VIP Mastermind' 
+                        upgradeDiv.style.display = "none"
+                        secondUpgradeDiv.style.display = "none"
+                    }
 
-                    if(docData.level == 0){
+                    if(docData.accessLevel == 0){
                         lockCourses();
                     }
+
+
 
                     nameTV.innerText = docData.name
                 } else {
