@@ -261,27 +261,33 @@
             }
         }
 
-        try
+        async function populateScreen()
         {
-            const docSnap = await getDoc(docRef)
+            try
+            {
+                const docSnap = await getDoc(docRef)
 
-            let copyDiv = document.getElementById("copyDiv")
-            let lessonDiv = document.getElementById("lessonDiv")
+                let copyDiv = document.getElementById("copyDiv")
+                let lessonDiv = document.getElementById("lessonDiv")
 
-            if(docSnap.exists()){
-                const docData = docSnap.data()
-                if(docData.accessLevel < 2){
-                    copyDiv.style.display = 'block'
+                if(docSnap.exists()){
+                    const docData = docSnap.data()
+                    alert(`level ${docData.accessLevel}`)
+                    if(docData.accessLevel < 2){
+                        copyDiv.style.display = 'block'
+                    }
+                    else
+                    {
+                        lessonDiv.style.display = 'block'
+                        getLesson(1)
+                    }
                 }
-                else
-                {
-                    lessonDiv.style.display = 'block'
-                    getLesson(1)
-                }
+            } catch (error) {
+                alert(`error EV-268 ${error}`)
             }
-        } catch (error) {
-            alert(`error EV-268 ${error}`)
         }
+        
+        populateScreen()
                 
         joinClassBtn.onclick = () => {
             openZoom()
