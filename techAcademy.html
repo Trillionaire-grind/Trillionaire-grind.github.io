@@ -7,7 +7,6 @@
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
-
         <title>Tech Mastery For Seniors - Tech Academy</title>
         <style>
             /* General reset and basic styles */
@@ -124,7 +123,6 @@
         </style>
     </head>
     <body>
-        
         <header>
             <div class="container">
                 <div style="display: flex;">
@@ -224,6 +222,7 @@
             let resetModal = document.getElementById("resetModal")
             let forgotBtn = document.getElementById("forgotBtn")
             let resetEmailET = document.getElementById("resetEmailET")
+            let resetCancelBtn = document.getElementById("resetCancelBtn")
             let resetSendBtn = document.getElementById("resetSendBtn")
 
             logInBtn.onclick = () => {
@@ -251,6 +250,10 @@
                 let email = resetEmailET.value
                 alert(`touched ${email}`)
                 requestEmail(email)
+            }
+
+            resetCancelBtn.onclick = () => {
+                resetModal.style.display = 'none'
             }
 
             function logIn(email, password)
@@ -293,9 +296,7 @@
             function openMainView()
             {
                 window.location.replace("techAcademyViews/mainView.html");
-
             }
         </script>
     </body>
-    
 </html>

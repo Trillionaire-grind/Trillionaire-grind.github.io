@@ -83,12 +83,11 @@
         <div style="text-align: center;">
             <p style="font-size: 32px; font-weight: bold;">Change Your Access Level</p>
             
-            <div class="card">
-                <p style="color: white; background-color: #000; margin-top: 0px; padding: 16px;">Current Class</p>
-                <img src="assets/access/file.png">
-                <p style="text-align: start; margin-left: 8px;">The SECRET...</p>
-                <p style="text-align: start; margin-left: 8px;">US $1</p>
-                <p style="text-align: start; margin-left: 8px;">
+            <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Current Level</p>
+            <div id="currentDiv" class="card">
+                <img id="currentImg" src="assets/access/file.png">
+                <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
+                <p id="currentCopyTV" style="text-align: start; margin-left: 8px;">
                     You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
                     <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
                 </p>
@@ -99,7 +98,18 @@
         
            
             <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Update Access</p>
-            <div class="card">
+            <div id="secretDiv" class="card" style="margin-top: 24px;">
+                <img id="currentImg" src="assets/access/file.png">
+                <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
+                <p id="currentCopyTV" style="text-align: start; margin-left: 8px;">
+                    You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
+                    <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
+                </p>
+                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
+                    <span class="mdc-button__label">Buy Now</span>
+                </button>
+            </div>
+            <div id="guideDiv" class="card" style="margin-top: 24px;">
                 <img src="assets/access/guide.png">
                 <p style="text-align: start; margin-left: 8px;">The NO B.S. Guide To Tech Mastery For Seniors</p>
                 <p style="text-align: start; margin-left: 8px;">US $397</p>
@@ -116,7 +126,7 @@
                     <span class="mdc-button__label">Get The Full Guide</span>
                 </button>
             </div>
-            <div class="card" style="margin-top: 24px;">
+            <div id="academyDiv" class="card" style="margin-top: 24px;">
                 <img src="assets/access/educated.webp">
                 <p style="text-align: start; margin-left: 8px;">Tech Master For Seniors Academy</p>
                 <p style="text-align: start; margin-left: 8px;">US $,997</p>
@@ -131,7 +141,7 @@
                     <span class="mdc-button__label">Join Now</span>
                 </button>
             </div>
-            <div class="card" style="margin-top: 24px;">
+            <div id="vipDiv" class="card" style="margin-top: 24px;">
                 <img src="assets/access/vip.png">
                 <p style="text-align: start; margin-left: 8px;">Tech Mastery VIP Mastermind</p>
                 <p style="text-align: start; margin-left: 8px;">US $97,000</p>
@@ -157,5 +167,77 @@
 
             window.open(url, '_blank').focus();
         }
+    </script>
+    <script type="module">
+        // Firebase SDK and login code
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+            authDomain: "tech-mastery-academy.firebaseapp.com",
+            projectId: "tech-mastery-academy",
+            storageBucket: "tech-mastery-academy.firebasestorage.app",
+            messagingSenderId: "205345673412",
+            appId: "1:205345673412:web:d8970165489c414745b991",
+            measurementId: "G-KLKCTD047P"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+
+        const db = getFirestore(app);
+        const userUID = localStorage.getItem('userUID');
+
+        const docRef = doc(db, "users", userUID)
+
+        let currentDiv = document.getElementById("currentDiv")
+
+        let secretDiv = document.getElementById("secretDiv")
+        let guideDiv = document.getElementById("guideDiv")
+        let academyDiv = document.getElementById("academyDiv")
+        let vipDiv = document.getElementById("vipDiv")
+    
+        try
+        {
+            const docSnap = await getDoc(docRef)
+            
+            if(docSnap.exists())
+            {
+                
+                const docData = docSnap.data();
+                if(docData.accessLevel == 0){
+                    secretDiv.style.display = 'none'
+                    currentDiv.innerHTML = secretDiv.innerHTML;
+                }
+                if(docData.accessLevel == 1){
+                    guideDiv.style.display = 'none'
+                    currentDiv.innerHTML = guideDiv.innerHTML;
+                }  
+                if(docData.accessLevel == 2){
+                    academyDiv.style.display = 'none'
+                    currentDiv.innerHTML = academyDiv.innerHTML;
+                }
+                if(docData.accessLevel == 3){
+                    vipDiv.style.display = 'none'
+                    currentDiv.innerHTML = vipDiv.innerHTML;
+                }
+            }else{
+                alert('there was an error SV-228')
+            }  
+        } catch (error){
+            alert(`there was an error SV-231 ${error}`)
+            
+        }
+
     </script>
 </html>
