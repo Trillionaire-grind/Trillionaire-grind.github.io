@@ -246,6 +246,7 @@
                 {
                     lessonNumberTV.innerText = docSnap.data().lesson 
                     lessonHeadlineTV.innerText = docSnap.data().headline
+                    lessonDateTV.innerText = docSnap.data().date
                     if(docSnap.data().type == 0){
                         joinClassBtn.style.display = 'block'
                     }else{
@@ -261,33 +262,38 @@
             }
         }
 
-        async function populateScreen()
-        {
-            try
-            {
-                const docSnap = await getDoc(docRef)
+        async function getAccount(userId) {
 
-                let copyDiv = document.getElementById("copyDiv")
-                let lessonDiv = document.getElementById("lessonDiv")
-
-                if(docSnap.exists()){
-                    const docData = docSnap.data()
-                    alert(`level ${docData.accessLevel}`)
-                    if(docData.accessLevel < 2){
+            let copyDiv = document.getElementById("copyDiv")
+            let lessonDiv = document.getElementById("lessonDiv")
+            const docRef = doc(db, "users", userId);
+            try {
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) 
+                {
+                    const docData = docSnap.data();
+                   
+                    if(docData.accessLevel < 2)
+                    {
                         copyDiv.style.display = 'block'
                     }
-                    else
-                    {
+                    else{
                         lessonDiv.style.display = 'block'
-                        getLesson(1)
+                        getLesson("lesson_2")
                     }
+                } else {
+                    alert("No document found with the given ID");
+                  
                 }
             } catch (error) {
-                alert(`error EV-268 ${error}`)
+                console.error("Error fetching document:", error);
+                alert(`There was an error fetching the document. HM-414 ${error}`);
             }
         }
         
-        populateScreen()
+        //populateScreen()
+
+        getAccount(userUID)
                 
         joinClassBtn.onclick = () => {
             openZoom()

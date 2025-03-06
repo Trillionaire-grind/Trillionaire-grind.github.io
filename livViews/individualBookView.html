@@ -189,7 +189,16 @@
           appId: "1:896987078937:web:acc868befefa57564fa588",
           measurementId: "G-YP58T0S16P"
         };
+
+
+        //simple function
       
+        function welcome()
+        {
+            alert("Hello, World")
+        }
+
+
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
@@ -292,52 +301,6 @@
         }
 
         extractParamsFromUrl(window.location.href);
-
-        /*function createChapterDiv(bookId, chapterName)
-        {
-            let div = document.createElement('div');
-            div.className = 'chapterDiv';
-            div.dataset.speechId = bookId;
-            div.innerHTML = `
-                <div  class="chapterDiv" style="width: 100%d; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
-                    <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto; ">${chapterName} <span style="font-weight: normal;"></span></p>
-                </div>`;
-            div.addEventListener('click', () => {
-                openPage(bookId, chapterName);
-            });
-
-            let pressTimer;
-
-            div.addEventListener('mousedown', () => {
-                pressTimer = setTimeout(() => {
-                    openEdit(bookId, chapterName)
-                }, 500); // 1000 ms = 1 second
-            });
-
-            div.addEventListener('mouseup', () => {
-                clearTimeout(pressTimer);
-            });
-
-            div.addEventListener('mouseleave', () => {
-                clearTimeout(pressTimer);
-            });
-
-            div.addEventListener('touchstart', () => {
-                pressTimer = setTimeout(() => {
-                    openEdit(bookId, chapterName)
-                }, 500); // 500 ms = 0.5 second
-            }, { passive: true });
-
-            div.addEventListener('touchend', () => {
-                clearTimeout(pressTimer);
-            });
-
-            div.addEventListener('touchcancel', () => {
-                clearTimeout(pressTimer);
-            });
-
-            return div;
-        }*/ 
         
         function createChapterDiv(bookId, chapterName) {
             let div = document.createElement('div');
