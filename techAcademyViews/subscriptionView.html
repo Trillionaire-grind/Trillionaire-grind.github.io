@@ -84,13 +84,13 @@
             <p style="font-size: 32px; font-weight: bold;">Change Your Access Level</p>
             
             <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Current Level</p>
-            <div id="currentDiv" class="card">
-                <img id="currentImg" src="assets/access/file.png">
+            <div id="currentDiv" style="display: none" class="card">
+                <!--<img id="currentImg" src="assets/access/file.png">
                 <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
                 <p id="currentCopyTV" style="text-align: start; margin-left: 8px;">
                     You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
                     <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
-                </p>
+                </p>-->
                 <!--<button class="mdc-button mdc-button--raised" style="width: 100%; background-color: black; margin: 8px;" >
                     <span class="mdc-button__label">Join</span>
                 </button>-->
@@ -105,7 +105,7 @@
                     You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
                     <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
+                <button id="secretCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
                     <span class="mdc-button__label">Buy Now</span>
                 </button>
             </div>
@@ -122,14 +122,14 @@
                     BONUS "How To Legally Print Money On The Internet"<br>
                     A total <strong>Value of $3,998</strong> for only <strong>$397</strong>
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                <button id="guideCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
                     <span class="mdc-button__label">Get The Full Guide</span>
                 </button>
             </div>
             <div id="academyDiv" class="card" style="margin-top: 24px;">
                 <img src="assets/access/educated.webp">
                 <p style="text-align: start; margin-left: 8px;">Tech Master For Seniors Academy</p>
-                <p style="text-align: start; margin-left: 8px;">US $,997</p>
+                <p style="text-align: start; margin-left: 8px;">US $8,997</p>
                 <p style="text-align: start; margin-left: 8px;">
                    Get monthly seminars...<br>
                    Get monthly workshops...<br>
@@ -137,7 +137,7 @@
                    Get access to Tuesday - Friday I.T. Help Desk...<br>
                    A 12 month program to master technology...a total value of X for only $8,997
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                <button id="academyCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
                     <span class="mdc-button__label">Join Now</span>
                 </button>
             </div>
@@ -153,7 +153,7 @@
                     Be Better than 99% Of the world in Technology...<br>
                     Limited to only 11 members for 
                 </p>
-                <button class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
+                <button id="vipCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
                     <span class="mdc-button__label">Call To Reserve</span>
                 </button>
             </div>
@@ -206,6 +206,17 @@
         let guideDiv = document.getElementById("guideDiv")
         let academyDiv = document.getElementById("academyDiv")
         let vipDiv = document.getElementById("vipDiv")
+
+        let secretCta = document.getElementById("secretCta")
+        let guideCta = document.getElementById("guideCta")
+        let academyCta = document.getElementById("academyCta")
+        let vipCta = document.getElementById("vipCta")
+
+
+        secretCta.style.display = 'inline'
+        guideCta.style.display = 'inline'
+        academyCta.style.display = 'inline'
+        vipCta.style.display = 'inline'
     
         try
         {
@@ -218,19 +229,26 @@
                 if(docData.accessLevel == 0){
                     secretDiv.style.display = 'none'
                     currentDiv.innerHTML = secretDiv.innerHTML;
+                    secretCta.style.display = 'none'
                 }
                 if(docData.accessLevel == 1){
                     guideDiv.style.display = 'none'
+                    guideCta.style.display = 'none'
                     currentDiv.innerHTML = guideDiv.innerHTML;
                 }  
                 if(docData.accessLevel == 2){
-                    academyDiv.style.display = 'none'
+                    academyDiv.style.display = 'none'                   
+                    academyCta.style.display = 'none'
                     currentDiv.innerHTML = academyDiv.innerHTML;
+
                 }
                 if(docData.accessLevel == 3){
                     vipDiv.style.display = 'none'
                     currentDiv.innerHTML = vipDiv.innerHTML;
+                    guideCta.style.display = 'none'
                 }
+
+                currentDiv.style.display = 'block'
             }else{
                 alert('there was an error SV-228')
             }  

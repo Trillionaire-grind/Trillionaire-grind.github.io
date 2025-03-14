@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open XLSX with JavaScript</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+</head>
+<body>
+  <h1>Upload an XLSX File</h1>
+  <input type="file" id="file-input" />
+  <pre id="output"></pre>
+
+  <script>
+    document.getElementById('file-input').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+          const data = e.target.result;
+          const workbook = XLSX.read(data, { type: 'binary' });
+          
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(sheet);
+          
+          document.getElementById('output').textContent = JSON.stringify(jsonData, null, 2);
+        };
+
+        reader.readAsBinaryString(file);
+      }
+    });
+  </script>
+</body>
+</html>
