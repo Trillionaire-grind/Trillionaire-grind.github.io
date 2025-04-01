@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+
+        <title>Poop</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F9FAFC;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #2ABF5B;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <p style="font-size: 48px; color: black; text-align: center; font-weight: bold; margin-top: 24px;">Gas Tracker</p>
+        <p style="margin-left: 5%; margin-top: 20%; color: black;">Car Info</p>
+        <div style="display: flex;">
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+                <option value="" disabled selected>Make</option>
+                <option value="toyota">Rolls-Royce</option>
+                <option value="ford">Rolls-Royce</option>
+                <option value="honda">Rolls-Royce</option>
+                <option value="chevrolet">Rolls-Royce</option>
+                <!-- Add more car makes here -->
+            </select>
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+                <option value="" disabled selected>Year</option>
+                <option value="toyota">2016</option>
+                <option value="ford">2004</option>
+                <option value="honda">2002</option>
+                <option value="chevrolet">1997</option>
+                <!-- Add more car makes here -->
+            </select>
+        </div>
+        <div style="display: flex; margin-top: 32px;">
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+                <option value="" disabled selected>Model</option>
+                <option value="toyota">Ghost</option>
+                <option value="ford">Wraith</option>
+                <option value="honda">Phantom</option>
+                <option value="chevrolet">Dawn</option>
+                <option value="chevrolet">Cullinan</option>
+                <!-- Add more car makes here -->
+            </select>
+            <input style="margin-left: 5%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Enter mileage">
+        </div>
+        <p style="margin-left: 5%; margin-top: 20%; color: black; width: 40%;">Registration Info</p>
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Name">
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Email">
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Password">
+        <div style="text-align: center;">
+            <button style="cursor: pointer;background-color: black; color: white; margin-top: 32px; border-radius: 10px; padding-left: 16px; padding-right: 16px;" onclick="newTab()">
+                <p>Register</p>
+            </button>
+        </div>
+       
+    </body>
+    <script>
+        function newTab() {
+            window.open("gasViews/homeView.html");
+        }
+
+        function replaceTab()
+        {
+            window.location.replace(
+                "livViews/primaryView.html");
+        }
+
+        let cards = document.getElementsByClassName("card")
+
+        for(let i = 0; i < cards.length; i++) {
+            cards[i].onclick = function () {
+                newTab()
+            }
+        }
+    </script>
+    
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="assets/styles.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <title>Poop</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F9FAFC;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
+                width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+           
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 45%;
+                margin: 10px;
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            .fab {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background-color: #000; /* Green color */
+                color: white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px; /* Icon size */
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+                border: none;
+                cursor: pointer;
+            }
+
+            .fab:hover {
+                background-color: #333; /* Darker green on hover */
+            }
+
+            .dialog {
+            display: none; /* Initially hidden */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        /* Title bar styles */
+        .dialog-header {
+            background-color: black;
+            color: white;
+            padding: 16px;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Close button in the header */
+        .close-btn {
+            color: white;
+            float: right;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Image inside the dialog */
+        .dialog-img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* Form styling */
+        .dialog-form {
+            padding: 20px;
+        }
+
+        .dialog-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .dialog-form input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Buttons container */
+        .dialog-footer {
+            display: flex;
+            margin-bottom: 8px;
+            float: right;
+        }
+
+        .dialog-footer button {
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 8px;
+        }
+
+
+        .dialog-footer button:hover {
+            opacity: 0.9;
+        }
+        </style>
+    </head>
+    <body style="margin-bottom: 32px;">
+        <div style="width: 100%; background-color: black; height: 64px; border-radius: 0px 0px 10px 10px;">
+            <p style="color: white; margin-top: 0px; padding-top: 16px; font-size: 24px; text-align: center;">My Trips</p>
+        </div>
+        <div style="margin-top: 32px; text-align: center;">
+            <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                <div style="display: flex; margin-top: 0px;">
+                    <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
+                    <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
+                    <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+                </div>
+                <img src="assets/map.jpg"  height="200px" width="100%">
+                <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
+                <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
+                <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
+                <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
+            </div>
+        </div>
+        <div style="margin-top: 32px; text-align: center;">
+            <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                <div style="display: flex; margin-top: 0px;">
+                    <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
+                    <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
+                    <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+                </div>
+                <img src="assets/map.jpg"  height="200px" width="100%">
+                <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
+                <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
+                <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
+                <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
+            </div>
+        </div>
+        <button class="fab" onclick="openDialog()">
+            <i class="fas fa-plus"></i> <!-- Plus icon from Font Awesome -->
+        </button>
+
+        
+        <div class="dialog" id="new-entry-dialog">
+            <div class="dialog-header">
+                New Entry
+                <span class="close-btn" id="close-btn">&times;</span>
+            </div>
+            <img src="assets/map.jpg" style="margin-top: 16px;" alt="Trip Image" class="dialog-img">
+            <div class="dialog-form">
+                <form id="entry-form">
+                    <div style="display: flex;flex-direction: row; align-items: center;">
+                        <label style="margin-top: auto; margin-bottom: auto;" for="name">Name:</label>
+                        <input type="text" id="name" name="name" required>
+
+                        <label for="gallons">Gallons:</label>
+                        <input type="number" id="gallons" name="gallons" required>
+                    </div>
+                    <div style="display: flex; flex-direction: row; align-items: center;"> 
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                   
+                    <div style="display: flex; flex-direction: row; align-items: center;">
+                        <label for="cost">Cost:</label>
+                        <input type="number" id="cost" name="cost" required>
+                        <label for="mileage">Mileage:</label>
+                        <input type="number" id="mileage" name="mileage" required>
+                    </div>
+                </form>
+            </div>
+            <div class="dialog-footer">
+                <p style="margin-right: 16px; cursor: pointer;" id="cancel-btn">Cancel</p>
+                <button id="save-btn">Save</button>
+            </div>
+        </div>
+        
+        <!-- Background Overlay -->
+        <div class="overlay" id="overlay" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 999;"></div>
+        
+        <!-- Button to open dialog -->
+        <!--<button onclick="openDialog()">Open New Entry Dialog</button>-->
+       
+    </body>
+    <script>
+        function newTab() {
+            window.open("gasViews/homeView.html");
+        }
+
+        function replaceTab()
+        {
+            window.location.replace(
+                "livViews/primaryView.html");
+        }
+
+        let cards = document.getElementsByClassName("card")
+
+        for(let i = 0; i < cards.length; i++) {
+            cards[i].onclick = function () {
+                newTab()
+            }
+        }
+
+        function openDialog() {
+            document.getElementById('new-entry-dialog').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // Close the dialog
+        function closeDialog() {
+            document.getElementById('new-entry-dialog').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // Cancel button functionality
+        document.getElementById('cancel-btn').addEventListener('click', function() {
+            closeDialog();
+        });
+
+        // Close dialog when clicking on close button (X)
+        document.getElementById('close-btn').addEventListener('click', function() {
+            closeDialog();
+        });
+
+        // Save button functionality (Example)
+        document.getElementById('save-btn').addEventListener('click', function() {
+            // Get form data (just logging in this example)
+            const formData = new FormData(document.getElementById('entry-form'));
+            for (let [key, value] of formData.entries()) {
+                console.log(`${key}: ${value}`);
+            }
+            // After saving, close the dialog
+            closeDialog();
+        });
+    </script>
+    
+</html>

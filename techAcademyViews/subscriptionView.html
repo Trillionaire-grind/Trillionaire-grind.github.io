@@ -84,7 +84,7 @@
         <div style="text-align: center;">
             <p style="font-size: 32px; font-weight: bold;">Change Your Access Level</p>
             
-            <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Current Level</p>
+            <p style="text-align: start;font-size: 16px; font-weight: bold; width: 100%; text-align: center;">Current Level</p>
             <div id="currentDiv" style="display: none" class="card">
                 <!--<img id="currentImg" src="assets/access/file.png">
                 <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
@@ -98,7 +98,7 @@
             </div>
         
            
-            <p style="text-align: start;font-size: 16px; font-weight: bold; margin-left: 8px;">Update Access</p>
+            <p style="text-align: start;font-size: 16px; font-weight: bold; width: 100%; text-align: center;">Update Access</p>
             <div id="secretDiv" class="card" style="margin-top: 24px;">
                 <img id="currentImg" src="assets/access/file.png">
                 <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
@@ -229,8 +229,8 @@
                 const docData = docSnap.data();
                 if(docData.accessLevel == 0){
                     secretDiv.style.display = 'none'
-                    currentDiv.innerHTML = secretDiv.innerHTML;
                     secretCta.style.display = 'none'
+                    currentDiv.innerHTML = secretDiv.innerHTML;
                 }
                 if(docData.accessLevel == 1){
                     guideDiv.style.display = 'none'
