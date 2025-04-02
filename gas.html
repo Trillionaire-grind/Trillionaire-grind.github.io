@@ -82,13 +82,66 @@
                     width: 100%;
                 }
             }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 80%;
+             
+                height: 90%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .close {
+                color: white;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background-color: black;
+                border: none;
+                cursor: pointer;
+            }
+
+            .close:hover {
+                color: red;
+            }
+
+            .modal-content input {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
         </style>
     </head>
     <body>
+        <div style="background-color: black;">
+            <div style="display: flex;">
+                <p id="logInBtn" style="margin-top: 0px; text-align: center; color: white; margin-left: 8px; padding-top: 8px; cursor: pointer;">Already have an account <u> log in</u></p>
+             
+            </div>
+        </div>
         <p style="font-size: 48px; color: black; text-align: center; font-weight: bold; margin-top: 24px;">Gas Tracker</p>
         <p style="margin-left: 5%; margin-top: 20%; color: black;">Car Info</p>
         <div style="display: flex;">
-            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="makeSelect" name="car-make">
                 <option value="" disabled selected>Make</option>
                 <option value="toyota">Rolls-Royce</option>
                 <option value="ford">Rolls-Royce</option>
@@ -96,7 +149,7 @@
                 <option value="chevrolet">Rolls-Royce</option>
                 <!-- Add more car makes here -->
             </select>
-            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="yearSelect" name="car-make">
                 <option value="" disabled selected>Year</option>
                 <option value="toyota">2016</option>
                 <option value="ford">2004</option>
@@ -106,7 +159,7 @@
             </select>
         </div>
         <div style="display: flex; margin-top: 32px;">
-            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="car-make" name="car-make">
+            <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="modelSelect" name="car-make">
                 <option value="" disabled selected>Model</option>
                 <option value="toyota">Ghost</option>
                 <option value="ford">Wraith</option>
@@ -115,16 +168,31 @@
                 <option value="chevrolet">Cullinan</option>
                 <!-- Add more car makes here -->
             </select>
-            <input style="margin-left: 5%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Enter mileage">
+            <input style="margin-left: 5%; height: 32px; border-radius: 10px;" type="text" id="mileageET" name="mileage" placeholder="Enter mileage">
         </div>
         <p style="margin-left: 5%; margin-top: 20%; color: black; width: 40%;">Registration Info</p>
-        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Name">
-        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Email">
-        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="mileage" name="mileage" placeholder="Password">
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="nameET" name="name" placeholder="Name">
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="text" id="emailET" name="email" placeholder="Email">
+        <input style="margin-left: 5%; margin-top:24px; width: 84%; height: 32px; border-radius: 10px;" type="password" id="passwordET" name="password" placeholder="Password">
         <div style="text-align: center;">
-            <button style="cursor: pointer;background-color: black; color: white; margin-top: 32px; border-radius: 10px; padding-left: 16px; padding-right: 16px;" onclick="newTab()">
+            <button id="registerBtn" style="cursor: pointer;background-color: black; color: white; margin-top: 32px; border-radius: 10px; padding-left: 16px; padding-right: 16px;" >
                 <p>Register</p>
             </button>
+        </div>
+
+         <div id="myModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Log In</h2>
+                <label for="logInEmail">Email</label>
+                <input type="email" id="logInEmailET" placeholder="Enter your email"><br>
+                <label for="logInPassword">Password</label>
+                <input type="password" id="logInPasswordET" placeholder="Enter your password"><br>
+                <!--<p style="text-align: center; cursor: pointer;" id="forgotBtn">forgot password?</p>-->
+                <div style="float: right; margin-top: 8px;">
+                    <button id="cancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="signInBtn" style="background-color: black; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Sign In</button>
+                </div>
+            </div>
         </div>
        
     </body>
@@ -147,5 +215,130 @@
             }
         }
     </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+        import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"; 
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCn1HLSz9-TH4rHHnHpWgHavv7wh-Vju4I",
+          authDomain: "gas-tracker-91ae5.firebaseapp.com",
+          projectId: "gas-tracker-91ae5",
+          storageBucket: "gas-tracker-91ae5.firebasestorage.app",
+          messagingSenderId: "243507296128",
+          appId: "1:243507296128:web:45ea40627a4a81a6127365",
+          measurementId: "G-ZVB79HRSV9"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        const auth = getAuth(app)
+        const db = getFirestore(app)
+
+        let registerBtn = document.getElementById("registerBtn")
+        let myModal = document.getElementById("myModal")
+        let logInBtn = document.getElementById("logInBtn")
+        let cancelBtn = document.getElementById("cancelBtn")
+        let signInBtn = document.getElementById("signInBtn")
+
+        
+
+
+        function openMainView()
+        {
+            window.location.replace("gasViews/homeView.html");
+        }
+
+        
+
+        function addMember(name, email,id){
+            const usersRef = collection(db, "users")
+
+            setDoc(doc(usersRef, id), {
+                name : `${name}`,
+                email : `${email}`,
+                car : { make:"Rolls-Royce", year: "2004", model: "Phantom", mileage: 123000}
+            }).then(() => {
+                alert("Account Created Successfully")
+                newTab()
+            });
+        }
+
+        
+
+        function logIn(email, password)
+        {
+            signInWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                myModal.style.display = 'none'
+                localStorage.setItem('userUID', user.uid);
+                localStorage.setItem('userEmail', user.email);
+                myModal.style.display = "none"
+                alert('welcome back')
+                openMainView()
+            })
+            .catch((error) => {
+                const errorode = error.code 
+                const errorMessage = error.message
+                alert(`there was an error ${errorMessage}`)
+            })
+
+        }
+
+        function createAccount()
+        {
+            let nameValue = document.getElementById('nameET').value 
+            let emailValue = document.getElementById('emailET').value 
+            let passwordValue = document.getElementById('passwordET').value 
+            alert(`name ${nameValue}`)
+            if(nameValue.length > 1 && emailValue.length > 6 && passwordValue.length > 7){
+                createUserWithEmailAndPassword(auth, emailValue, passwordValue)
+                    .then((userCredential) => {
+                        const user = userCredential.user;
+                        let id = user.uid 
+                        if(id != null){
+                            addMember(nameValue, emailValue, id)
+                        }
+                    })
+                    .catch((error) => {
+                        const errorCode = error.code 
+                        const errorMessage = error.message; 
+                        alert(`RV: 191: There was an error ${errorMessage}`)
+                    })
+            }else{
+                alert('make sure to include your name, or email, or password')
+            }
+        }
+
+        registerBtn.onclick = ()  => {
+            createAccount()
+        }
+
+        logInBtn.onclick = ()  => {
+            myModal.style.display = "inline"
+        }
+
+        cancelBtn.onclick = () => {
+            myModal.style.display = "none"
+        }
+
+        signInBtn.onclick = () => {
+            let emailValue = document.getElementById('logInEmailET').value 
+            let passwordValue = document.getElementById('logInPasswordET').value 
+
+            alert(`the values ${emailValue} and ${passwordValue}`)
+            logIn(emailValue, passwordValue)
+        }
+      </script>
     
 </html>

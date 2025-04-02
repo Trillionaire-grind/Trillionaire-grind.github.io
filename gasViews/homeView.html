@@ -175,34 +175,36 @@
         <div style="width: 100%; background-color: black; height: 64px; border-radius: 0px 0px 10px 10px;">
             <p style="color: white; margin-top: 0px; padding-top: 16px; font-size: 24px; text-align: center;">My Trips</p>
         </div>
-        <div style="margin-top: 32px; text-align: center;">
-            <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
-                <div style="display: flex; margin-top: 0px;">
-                    <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
-                    <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
-                    <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+        <div id="tripsDiv">
+            <div style="margin-top: 32px; text-align: center;">
+                <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                    <div style="display: flex; margin-top: 0px;">
+                        <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
+                        <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
+                        <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+                    </div>
+                    <img src="assets/map.jpg"  height="200px" width="100%">
+                    <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
+                    <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
+                    <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
+                    <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
                 </div>
-                <img src="assets/map.jpg"  height="200px" width="100%">
-                <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
-                <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
-                <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
-                <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
             </div>
-        </div>
-        <div style="margin-top: 32px; text-align: center;">
-            <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
-                <div style="display: flex; margin-top: 0px;">
-                    <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
-                    <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
-                    <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+            <div style="margin-top: 32px; text-align: center;">
+                <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                    <div style="display: flex; margin-top: 0px;">
+                        <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
+                        <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
+                        <p style="margin-top: 8px; margin-right: 8px;">12/12/25</p>
+                    </div>
+                    <img src="assets/map.jpg"  height="200px" width="100%">
+                    <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
+                    <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
+                    <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
+                    <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
                 </div>
-                <img src="assets/map.jpg"  height="200px" width="100%">
-                <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
-                <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: 12.0</p>
-                <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
-                <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
             </div>
-        </div>
+        </div> 
         <button class="fab" onclick="openDialog()">
             <i class="fas fa-plus"></i> <!-- Plus icon from Font Awesome -->
         </button>
@@ -218,27 +220,27 @@
                 <form id="entry-form">
                     <div style="display: flex;flex-direction: row; align-items: center;">
                         <label style="margin-top: auto; margin-bottom: auto;" for="name">Name:</label>
-                        <input type="text" id="name" name="name" required>
+                        <input type="text" id="entryNameET" name="name" required>
 
                         <label for="gallons">Gallons:</label>
-                        <input type="number" id="gallons" name="gallons" required>
+                        <input type="number" id="entryGallonsET" name="gallons" required>
                     </div>
                     <div style="display: flex; flex-direction: row; align-items: center;"> 
                         <label for="address">Address:</label>
-                        <input type="text" id="address" name="address" required>
+                        <input type="text" id="entryAddressET" name="address" required>
                     </div>
                    
                     <div style="display: flex; flex-direction: row; align-items: center;">
                         <label for="cost">Cost:</label>
-                        <input type="number" id="cost" name="cost" required>
+                        <input type="number" id="entryCostET" name="cost" required>
                         <label for="mileage">Mileage:</label>
-                        <input type="number" id="mileage" name="mileage" required>
+                        <input type="number" id="entryMileageET" name="mileage" required>
                     </div>
                 </form>
             </div>
             <div class="dialog-footer">
                 <p style="margin-right: 16px; cursor: pointer;" id="cancel-btn">Cancel</p>
-                <button id="save-btn">Save</button>
+                <button id="saveBtn">Save</button>
             </div>
         </div>
         
@@ -290,15 +292,109 @@
         });
 
         // Save button functionality (Example)
-        document.getElementById('save-btn').addEventListener('click', function() {
+        /*document.getElementById('save-btn').addEventListener('click', function() {
             // Get form data (just logging in this example)
             const formData = new FormData(document.getElementById('entry-form'));
             for (let [key, value] of formData.entries()) {
                 console.log(`${key}: ${value}`);
             }
             // After saving, close the dialog
+            
             closeDialog();
-        });
+        });*/
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+        import { collection, doc, setDoc, getDoc, addDoc, getDocs} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js"; 
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+    
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+        apiKey: "AIzaSyCn1HLSz9-TH4rHHnHpWgHavv7wh-Vju4I",
+        authDomain: "gas-tracker-91ae5.firebaseapp.com",
+        projectId: "gas-tracker-91ae5",
+        storageBucket: "gas-tracker-91ae5.firebasestorage.app",
+        messagingSenderId: "243507296128",
+        appId: "1:243507296128:web:45ea40627a4a81a6127365",
+        measurementId: "G-ZVB79HRSV9"
+        };
+    
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        const db = getFirestore(app)
+
+        let saveBtn = document.getElementById("saveBtn")
+        let tripsDiv = document.getElementById("tripsDiv")
+
+        function createTripDiv(name, address, date, gallons, cost, mileage)
+        {
+            let div = document.createElement('div');
+
+            div.innerHTML = 
+            `
+                    <div style="margin-top: 32px; text-align: center;">
+                    <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                        <div style="display: flex; margin-top: 0px;">
+                            <p style="margin-top: 8px; margin-left: 8px;">${name}</p>
+                            <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">${address}</p>
+                            <p style="margin-top: 8px; margin-right: 8px;">${date}</p>
+                        </div>
+                        <img src="assets/map.jpg"  height="200px" width="100%">
+                        <p style="margin-left: 8px;font-size: 24px; margin-top:0px; font-weight: bold; text-align: start;">Trip details </p>
+                        <p style="margin-left: 8px; margin-top: 8px; text-align: start;">Gallons: ${gallons}</p>
+                        <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: ${cost}</p>
+                        <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: ${mileage}</p>
+                    </div>
+                </div>
+            `
+
+            return div
+        }
+
+        function addTrip(){
+            const usersRef = collection(db, "users", "2HNg2gpXcsbV44j5BoAchneTU7k2", "trips")
+
+            addDoc((usersRef), {
+                date : `${new Date()}`,
+                location : `${document.getElementById('entryAddressET').value}`,
+                name : `${document.getElementById('entryNameET').value }`, 
+                gallons : `${document.getElementById('entryGallonsET').value }`, 
+                cost : `${document.getElementById('entryCostET').value }`, 
+                mileage : `${document.getElementById('entryMileageET').value }`
+            }).then(() => {
+                document.getElementById("overlay").style.display = "none"
+                document.getElementById("new-entry-dialog").style.display = "none"
+                alert("Successfully Recorded Trip")
+                
+            });
+        }
+
+        async function fetchTrips()
+        {
+            const tripsSnapshot = await getDocs(collection(db, "users","2HNg2gpXcsbV44j5BoAchneTU7k2", "trips"))
+            tripsSnapshot.forEach((doc) => {
+
+                let tempDiv = createTripDiv(doc.data().name, doc.data().location, 
+                doc.data().date, doc.data().gallons, doc.data().cost, doc.data().mileage)
+
+                tripsDiv.appendChild(tempDiv)
+            })
+        }   
+
+        saveBtn.onclick = () => {
+            addTrip()
+        }
+
+        fetchTrips()
+       
     </script>
     
 </html>
