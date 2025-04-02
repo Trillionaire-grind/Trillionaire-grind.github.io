@@ -176,8 +176,8 @@
             <p style="color: white; margin-top: 0px; padding-top: 16px; font-size: 24px; text-align: center;">My Trips</p>
         </div>
         <div id="tripsDiv">
-            <div style="margin-top: 32px; text-align: center;">
-                <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+            <!--<div style="margin-top: 32px; text-align: center;">
+                <div style="width: 90%; border: 2px solid #333; height: 500px; margin-left: auto; margin-right: auto; border-radius: 10px;">
                     <div style="display: flex; margin-top: 0px;">
                         <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
                         <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
@@ -191,7 +191,7 @@
                 </div>
             </div>
             <div style="margin-top: 32px; text-align: center;">
-                <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                <div style="width: 90%; border: 2px solid #333; height: 500px; margin-left: auto; margin-right: auto; border-radius: 10px;">
                     <div style="display: flex; margin-top: 0px;">
                         <p style="margin-top: 8px; margin-left: 8px;">Wawa</p>
                         <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">112 Collier Blv, Naples FL</p>
@@ -203,7 +203,7 @@
                     <p style="margin-left: 8px; margin-bottom: 0px;margin-top:0px; padding-top:0px; padding-bottom:0px; text-align: start;">Cost: $25.50</p>
                     <p style="margin-left: 8px; padding-top: 2px; text-align: start;">Mileage: 300</p>
                 </div>
-            </div>
+            </div>-->
         </div> 
         <button class="fab" onclick="openDialog()">
             <i class="fas fa-plus"></i> <!-- Plus icon from Font Awesome -->
@@ -341,7 +341,7 @@
             div.innerHTML = 
             `
                     <div style="margin-top: 32px; text-align: center;">
-                    <div style="width: 90%; border: 2px solid #333; height: 400px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+                    <div style="width: 90%; border: 2px solid #333; height: 500px; margin-left: auto; margin-right: auto; border-radius: 10px;">
                         <div style="display: flex; margin-top: 0px;">
                             <p style="margin-top: 8px; margin-left: 8px;">${name}</p>
                             <p style="margin-left: auto; margin-right: auto; margin-top: 8px;">${address}</p>
@@ -379,7 +379,9 @@
 
         async function fetchTrips()
         {
-            const tripsSnapshot = await getDocs(collection(db, "users","2HNg2gpXcsbV44j5BoAchneTU7k2", "trips"))
+            const userUID = localStorage.getItem('userUID');
+
+            const tripsSnapshot = await getDocs(collection(db, "users",userUID, "trips"))
             tripsSnapshot.forEach((doc) => {
 
                 let tempDiv = createTripDiv(doc.data().name, doc.data().location, 

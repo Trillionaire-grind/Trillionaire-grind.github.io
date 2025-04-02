@@ -336,7 +336,8 @@
             let emailValue = document.getElementById('logInEmailET').value 
             let passwordValue = document.getElementById('logInPasswordET').value 
 
-            alert(`the values ${emailValue} and ${passwordValue}`)
+            localStorage.setItem('userUID', user.uid);
+
             logIn(emailValue, passwordValue)
         }
       </script>
