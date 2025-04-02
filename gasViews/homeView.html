@@ -360,7 +360,9 @@
         }
 
         function addTrip(){
-            const usersRef = collection(db, "users", "2HNg2gpXcsbV44j5BoAchneTU7k2", "trips")
+            const userUID = localStorage.getItem('userUID');
+
+            const usersRef = collection(db, "users", userUID, "trips")
 
             addDoc((usersRef), {
                 date : `${new Date()}`,
