@@ -122,7 +122,7 @@
             }
 
             .modal-content input {
-                width: calc(100% - 20px);
+                width: calc(90% - 20px);
                 margin-bottom: 10px;
                 padding: 8px;
                 font-size: 16px;
@@ -336,7 +336,6 @@
             let emailValue = document.getElementById('logInEmailET').value 
             let passwordValue = document.getElementById('logInPasswordET').value 
 
-            localStorage.setItem('userUID', user.uid);
 
             logIn(emailValue, passwordValue)
         }
