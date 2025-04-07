@@ -87,13 +87,15 @@
                 display: none;
                 position: fixed;
                 z-index: 1;
-                left: 0;
+                left: auto;
+                right: auto;
                 top: 0;
-                width: 80%;
-             
-                height: 90%;
+                width: 100%;
+                
+                height: 100%;
                 overflow: auto;
-                background-color: rgba(0, 0, 0, 0.4);
+                background-color: #333;
+                
             }
 
             .modal-content {
@@ -101,7 +103,7 @@
                 margin: 10% auto;
                 padding: 20px;
                 border: 1px solid #888;
-                width: 50%;
+                width: 70%;
                 max-width: 400px;
                 border-radius: 8px;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -143,10 +145,8 @@
         <div style="display: flex;">
             <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="makeSelect" name="car-make">
                 <option value="" disabled selected>Make</option>
-                <option value="toyota">Rolls-Royce</option>
-                <option value="ford">Rolls-Royce</option>
-                <option value="honda">Rolls-Royce</option>
-                <option value="chevrolet">Rolls-Royce</option>
+                <option value="Rolls-Royce">Rolls-Royce</option>
+                
                 <!-- Add more car makes here -->
             </select>
             <select style="margin-left: 5%; font-size: 16px; width: 40%; height: 32px; border-radius: 10px;" id="yearSelect" name="car-make">
@@ -282,6 +282,7 @@
                 const user = userCredential.user;
                 myModal.style.display = 'none'
                 localStorage.setItem('userUID', user.uid);
+                alert(`the user id${user.uid}`)
                 localStorage.setItem('userEmail', user.email);
                 myModal.style.display = "none"
                 alert('welcome back')
@@ -300,7 +301,6 @@
             let nameValue = document.getElementById('nameET').value 
             let emailValue = document.getElementById('emailET').value 
             let passwordValue = document.getElementById('passwordET').value 
-            alert(`name ${nameValue}`)
             if(nameValue.length > 1 && emailValue.length > 6 && passwordValue.length > 7){
                 createUserWithEmailAndPassword(auth, emailValue, passwordValue)
                     .then((userCredential) => {

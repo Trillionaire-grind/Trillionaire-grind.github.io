@@ -97,7 +97,8 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: #fff;
-            width: 400px;
+            width: 50%;
+            max-width: 300px;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
@@ -375,6 +376,7 @@
                 document.getElementById("overlay").style.display = "none"
                 document.getElementById("new-entry-dialog").style.display = "none"
                 alert("Successfully Recorded Trip")
+                location.reload();
                 
             });
         }
