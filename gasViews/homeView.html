@@ -367,7 +367,7 @@
             const usersRef = collection(db, "users", userUID, "trips")
 
             addDoc((usersRef), {
-                date : `${new Date()}`,
+                date : `${formatDate(new Date())}`,
                 location : `${document.getElementById('entryAddressET').value}`,
                 name : `${document.getElementById('entryNameET').value }`, 
                 gallons : `${document.getElementById('entryGallonsET').value }`, 
@@ -381,6 +381,18 @@
                 
             });
         }
+
+        function formatDate(date) {
+            let day = date.getDate();
+            let month = date.getMonth() + 1; // Months are zero-based
+            let year = date.getFullYear();
+            
+            // Add leading zero to day and month if needed
+            day = day < 10 ? '0' + day : day;
+            month = month < 10 ? '0' + month : month;
+            
+            return `${day}/${month}/${year}`;
+        }       
 
         async function fetchTrips()
         {
