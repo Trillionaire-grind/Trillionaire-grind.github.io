@@ -662,6 +662,26 @@
         function openCourse(courseNumber)
         {
             let url = `./individualSecret.html?courseNumber=${courseNumber}`
+            switch(courseNumber){
+                case 0: 
+                    url = './secrets/firstSecret.html'
+                    break 
+                case 1:
+                    url = './secrets/secondSecret.html'
+                    break 
+                case 2:
+                    url = './secrets/thirdSecret.html'
+                    break 
+                case 3:
+                    url  = './secrets/fourthSecret.html'
+                    break 
+                case 4:
+                    url = './secrets/fifthSecret.html'
+                    break
+                case 5: 
+                    url = './secrets/bonusSecret.html'
+                    break
+            }
             window.open(url, '_blank').focus()
         }
     </script>
