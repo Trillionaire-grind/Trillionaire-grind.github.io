@@ -604,23 +604,6 @@
             startY = event.touches[0].clientY; // Get the initial touch position
         });
 
-        /*swipeArea.addEventListener('touchend', function(event) {
-            event.preventDefault();
-            const endY = event.changedTouches[0].clientY; // Get the final touch position
-            if (startY - endY > 50) {
-                if(kotfeDiv.style.display == 'none'){
-                    kotfeDiv.style.display = 'inline'
-                    introDiv.style.display = 'none'
-                }
-            } else if (endY - startY > 50) {
-                //alert('Swipe Down Detected!'); // Swipe down
-                if(introDiv.style.display == 'none'){
-                    kotfeDiv.style.display = 'none'
-                    introDiv.style.display = 'inline'
-                }
-            }
-        });*/
-
         swipeArea.addEventListener('touchstart', function(event) {
             startY = event.touches[0].clientY;
         });
@@ -633,13 +616,7 @@
                     introDiv.style.display = 'none';
                     window.scrollTo(0, 0); // Optional: Scroll to top
                 }
-            } /*else if (endY - startY > 50) {
-                if (introDiv.style.display === 'none') {
-                    kotfeDiv.style.display = 'none';
-                    introDiv.style.display = 'block';
-                    window.scrollTo(0, 0); // Optional: Scroll to top
-                }
-            }*/
+            } 
         });
 
 
@@ -662,16 +639,10 @@
                         kotfeDiv.style.display = 'block'
                         introDiv.style.display = 'none'
                     } // Swipe up
-                } /*else if (endY - startY > 50) {
-                    if(introDiv.style.display == 'none')
-                    {
-                        kotfeDiv.style.display = 'none'
-                        introDiv.style.display = 'block'
-                    }// Swipe down
-                    //change from 'inline' -> 'block'
-                }*/
+                } 
                 isMouseDown = false;
             }
+        })
     
 
         swipeArea.addEventListener('mouseleave', function() {
@@ -684,6 +655,6 @@
             //let e
             window.open(url, '_blank').focus();
         }
-        })
+       
     </script>
 </html>
