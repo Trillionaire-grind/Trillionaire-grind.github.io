@@ -84,12 +84,12 @@
                     <p style="color: #005315;">Cities</p>
                     <p style="margin-top: 10vh;">Swipe Up</p>
                     <hr>
-                    <p>Version 0.2.5</p>
+                    <p>Version 0.2.6</p>
                 </div>
             </div>
             <div id="kotfeDiv" style="display: none; min-height: 100vh; overflow-y: auto;
             -webkit-overflow-scrolling: touch; ">
-                <p style="margin-bottom: 0px; margin-left: 8px"> Discover the <strong>NEW...</strong></p>
+                <p style="margin-bottom: 0px; margin-left: 8px; margin-top: 16px;"> Discover the <strong>NEW...</strong></p>
                 <p style="font-size: 32px; text-align: center; margin-top: 0px; font-weight: bold;">"Mangé Lakay" Project</p>
                 <blockquote class="highlighted-quote" style="color: black;">
                     “...if Haiti could be kept free from revolutions, she might easily become, in proportion to her territory and population, the richest country in the world...” - Frederick Douglass
@@ -569,7 +569,7 @@
 
                 </p>
                
-                <div style="text-align: center;">
+                <div style="text-align: center; margin-bottom: 32px;">
                     <button style="background-color: #000; color: white;" onclick="openPayment()">Test</button>
 
                 </div>
@@ -662,14 +662,14 @@
                         kotfeDiv.style.display = 'block'
                         introDiv.style.display = 'none'
                     } // Swipe up
-                } else if (endY - startY > 50) {
+                } /*else if (endY - startY > 50) {
                     if(introDiv.style.display == 'none')
                     {
                         kotfeDiv.style.display = 'none'
                         introDiv.style.display = 'block'
                     }// Swipe down
                     //change from 'inline' -> 'block'
-                }
+                }*/
                 isMouseDown = false;
             }
     
