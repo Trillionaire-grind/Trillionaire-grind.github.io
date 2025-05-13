@@ -84,7 +84,7 @@
                     <p style="color: #005315;">Cities</p>
                     <p style="margin-top: 10vh;">Swipe Up</p>
                     <hr>
-                    <p>Version 0.2.4</p>
+                    <p>Version 0.2.5</p>
                 </div>
             </div>
             <div id="kotfeDiv" style="display: none; min-height: 100vh; overflow-y: auto;
@@ -600,7 +600,7 @@
         const kotfeDiv = document.getElementById("kotfeDiv")
 
         swipeArea.addEventListener('touchstart', function(event) {
-            event.preventDefault();
+            //event.preventDefault();
             startY = event.touches[0].clientY; // Get the initial touch position
         });
 
@@ -647,13 +647,13 @@
         let isMouseDown = false;
 
         swipeArea.addEventListener('mousedown', function(event) {
-            event.preventDefault();
+            //event.preventDefault();
             isMouseDown = true;
             startY = event.clientY;
         });
 
         swipeArea.addEventListener('mouseup', function(event) {
-            event.preventDefault();
+            //event.preventDefault();
             if (isMouseDown) {
                 const endY = event.clientY;
                 if (startY - endY > 50) {
@@ -675,7 +675,7 @@
     
 
         swipeArea.addEventListener('mouseleave', function() {
-            event.preventDefault(); // Prevent default behavior
+            //event.preventDefault(); // Prevent default behavior
             isMouseDown = false; // Reset on mouse leave
         });
 
