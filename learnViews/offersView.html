@@ -181,7 +181,7 @@
     </head>
     <body style="background-color: #F7F7F7;">
         <p style="text-align: left; background-color: white; margin: 0px; padding-left: 8px; padding-top: 32px; font-size: 32px;">Offers</p>
-        <div class="tabs" >
+        <!--<div class="tabs" >
             <div class="tab active" class="tab active" data-icon-default="assets/books.svg" data-icon-active="assets/books_y.svg">
                 <img src="assets/books_y.svg" height="20px" width="20px">
                 <span style="padding-left: 8px;">Education</span>
@@ -194,7 +194,7 @@
                 <img src="assets/bag.svg" height="20px" width="20px">
                 <span style="padding-left: 8px;">Services</span>
             </div>
-        </div>
+        </div>-->
   
         <!--<div style="width: 90%; margin: auto; display: flex; margin-top: 32px;">
             <div class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);" onclick="openIndividualOffer()">
@@ -206,7 +206,7 @@
                 <p>In this thing we are talkig about how to build an app...</p>
             </div>
         </div>-->
-        <div id="educationDiv">
+        <!--<div id="educationDiv">
             <div class="noteCard" onclick="openIndividualOffer()">
                 <p style="font-size: 24px; margin-left: 8px;">How To Sell...</p>
             </div>
@@ -220,63 +220,18 @@
             <div class="noteCard" onclick="openIndividualOffer()">
                 <p style="font-size: 24px; margin-left: 8px;">Build Your Billion Dollar Idea</p>
             </div>
+        </div>-->
+        <div class="noteCard" onclick="openIndividualOffer()">
+            <p style="font-size: 24px; margin-left: 8px;">A Secret Attraction</p>
         </div>
     </body>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-        const tabs = document.querySelectorAll('.tab');
-       
-
-        tabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => {
-                    // Remove 'active' class from all tabs and revert icons
-                    tabs.forEach(t => {
-                        t.classList.remove('active');
-                        const icon = t.querySelector('img');
-                        if (icon) {
-                            icon.src = t.getAttribute('data-icon-default');
-                        }
-                    });
-
-                    // Add 'active' class to the clicked tab and change icon
-                    tab.classList.add('active');
-                    const icon = tab.querySelector('img');
-                    if (icon) {
-                        icon.src = tab.getAttribute('data-icon-active');
-                    }
-
-                    showOffer(index)
-                });
-            });
-        });
-
-        function openIndividualOffer()
-        {
-            let url = `./individualOfferView.html`
-            //let e
-            window.open(url, '_blank').focus();
-        }
-
-        function showOffer(type)
-        {
-            //type 0 == education
-            //type 1 == apps
-            //type 2 == services
-            let educationDiv = document.getElementById("educationDiv")
-            let appDiv = document.getElementById("appDiv")
-            let serviceDiv = document.getElementById("serviceDiv")
-
-            educationDiv.style.display = 'none'
-            appDiv.style.display = 'none'
-            serviceDiv.style.display = 'none'
-
-            if(type == 0){
-                educationDiv.style.display = 'flex'
-            }else if(type == 1){
-                appDiv.style.display = 'flex'
-            }else if(type == 2){
-                serviceDiv.style.display = 'flex'
-            }
-        }
+   
+   function openIndividualOffer()
+    {
+        let url = `./individualOfferView.html`
+        //let e
+        window.open(url, '_blank').focus();
+    }
     </script>
 </html>

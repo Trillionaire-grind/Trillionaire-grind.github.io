@@ -88,10 +88,10 @@
 
         <footer>
             <nav>
-            <a href="#"><img id="homeBtn" src="views/assets/house.svg" height="24px" onclick="changeTo(0)"></a>
-            <a href="#"><img id="notesBtn" src="views/assets/clipboard.svg" height="24px" onclick="changeTo(1)"></a>
-            <a href="#"><img id="speakBtn" src="views/assets/bubble.svg" height="24px" onclick="changeTo(2)"></a>
-            <a href="#"><img id="offersBtn" src="views/assets/tag.svg" height="24px" onclick="changeTo(3)"></a>
+            <a href="#"><img id="homeBtn" src="assets/house.svg" height="24px" onclick="changeTo(0)"></a>
+            <a href="#"><img id="notesBtn" src="assets/clipboard.svg" height="24px" onclick="changeTo(1)"></a>
+            <a href="#"><img id="speakBtn" src="assets/bubble.svg" height="24px" onclick="changeTo(2)"></a>
+            <a href="#"><img id="offersBtn" src="assets/tag.svg" height="24px" onclick="changeTo(3)"></a>
             <!-- <a href="#"><img id="settingsBtn" src="views/assets/gearshape.svg" height="24px" onclick="changeTo(4)"></a> -->
             </nav>
         </footer>
@@ -114,40 +114,42 @@
             ];
 
             function changeTo(destination) {
-            views.forEach((view, index) => {
-                if (index === destination) {
-                view.classList.add('active');
-                } else {
-                view.classList.remove('active');
-                }
-            });
+                views.forEach((view, index) => {
+                    if (index === destination) {
+                    view.classList.add('active');
+                    } else {
+                    view.classList.remove('active');
+                    }
+                });
 
             updateIcons(destination);
             }
 
-            function updateIcons(destination) {
-            btns[0].src = "assets/house.svg";
-            btns[1].src = "assets/clipboard.svg";
-            btns[2].src = "assets/bubble.svg";
-            btns[3].src = "assets/tag.svg";
-            // btns[4].src = "assets/gearshape.svg";
+            function updateIcons(destination) 
+            {
+                btns[0].src = "assets/house.svg";
+                btns[1].src = "assets/clipboard.svg";
+                btns[2].src = "assets/bubble.svg";
+                btns[3].src = "assets/tag.svg";
+                // btns[4].src = "assets/gearshape.svg";
 
-            switch (destination) {
-                case 0:
-                btns[0].src = "assets/house_b.svg";
-                break;
-                case 1:
-                btns[1].src = "assets/clipboard_b.svg";
-                break;
-                case 2:
-                btns[2].src = "assets/bubble_b.svg";
-                break;
-                case 3:
-                btns[3].src = "assets/tag_b.svg";
-                break;
-                // case 4:
-                //   btns[4].src = "assets/gearshape_b.svg";
-                //   break;
+                switch (destination) 
+                {
+                    case 0:
+                    btns[0].src = "assets/house_b.svg";
+                    break;
+                    case 1:
+                    btns[1].src = "assets/clipboard_b.svg";
+                    break;
+                    case 2:
+                    btns[2].src = "assets/bubble_b.svg";
+                    break;
+                    case 3:
+                    btns[3].src = "assets/tag_b.svg";
+                    break;
+                    // case 4:
+                    //   btns[4].src = "assets/gearshape_b.svg";
+                    //   break;
                 }
             }
 
