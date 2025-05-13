@@ -84,7 +84,7 @@
                     <p style="color: #005315;">Cities</p>
                     <p style="margin-top: 10vh;">Swipe Up</p>
                     <hr>
-                    <p>Version 0.2.3</p>
+                    <p>Version 0.2.4</p>
                 </div>
             </div>
             <div id="kotfeDiv" style="display: none; min-height: 100vh; overflow-y: auto;
@@ -604,7 +604,7 @@
             startY = event.touches[0].clientY; // Get the initial touch position
         });
 
-        swipeArea.addEventListener('touchend', function(event) {
+        /*swipeArea.addEventListener('touchend', function(event) {
             event.preventDefault();
             const endY = event.changedTouches[0].clientY; // Get the final touch position
             if (startY - endY > 50) {
@@ -619,7 +619,29 @@
                     introDiv.style.display = 'inline'
                 }
             }
+        });*/
+
+        swipeArea.addEventListener('touchstart', function(event) {
+            startY = event.touches[0].clientY;
         });
+
+        swipeArea.addEventListener('touchend', function(event) {
+            const endY = event.changedTouches[0].clientY;
+            if (startY - endY > 50) {
+                if (kotfeDiv.style.display === 'none') {
+                    kotfeDiv.style.display = 'block';
+                    introDiv.style.display = 'none';
+                    window.scrollTo(0, 0); // Optional: Scroll to top
+                }
+            } else if (endY - startY > 50) {
+                if (introDiv.style.display === 'none') {
+                    kotfeDiv.style.display = 'none';
+                    introDiv.style.display = 'block';
+                    window.scrollTo(0, 0); // Optional: Scroll to top
+                }
+            }
+        });
+
 
         // Mouse swipe detection
         let isMouseDown = false;
@@ -650,7 +672,7 @@
                 }
                 isMouseDown = false;
             }
-        });
+    
 
         swipeArea.addEventListener('mouseleave', function() {
             event.preventDefault(); // Prevent default behavior
@@ -662,6 +684,6 @@
             //let e
             window.open(url, '_blank').focus();
         }
-
+        })
     </script>
 </html>
