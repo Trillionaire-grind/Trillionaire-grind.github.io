@@ -48,12 +48,13 @@
 
             .highlighted-quote {
                 all: revert; /* resets inherited styles if needed */
-                border-left: 4px solid yellow; /* Yellow line on the left */
+                border-left: 4px solid #DAA123; /* Yellow line on the left */
                 color: #333;                   /* Text color */
                 font-style: italic;           /* Optional styling */
                 width: 80%;
                 margin-left: auto;
                 margin-right: auto;
+                margin-top: 16px;
             }
 
             .salesCopy{
@@ -61,6 +62,25 @@
                 width: 90%; 
                 margin-left: auto; 
                 margin-right: auto;
+            }
+
+            .ctaBtn{
+                background-color: #FF0C36; 
+                color: white; 
+                cursor: pointer; 
+                padding: 8px; 
+                padding-bottom:16px; 
+                padding-top:16px; 
+                text-align: left; 
+                border-radius: 10px; 
+                width: 60%; 
+                margin-left: auto; 
+                margin-right: auto; 
+                font-size: 16px;
+            }
+
+            .ctaBtn:hover{
+                background-color: black;
             }
             
         </style>
@@ -84,17 +104,28 @@
                     <p style="color: #005315;">Cities</p>
                     <p style="margin-top: 10vh;">Swipe Up</p>
                     <hr>
-                    <p>Version 0.2.9</p>
+                    <p>Version 0.2.9.1</p>
                 </div>
             </div>
             <div id="kotfeDiv" style="display: none; min-height: 100vh; overflow-y: auto;
             -webkit-overflow-scrolling: touch; ">
-                <p style="margin-bottom: 0px; margin-left: 8px; margin-top: 16px;"> Discover the <strong>NEW...</strong></p>
-                <p style="font-size: 32px; text-align: center; margin-top: 0px; font-weight: bold;">"Mangé Lakay" Project</p>
+                <div style="margin: 0px; display: flex;">
+                    <p style="margin-bottom: 0px; margin-left: 8px; margin-top: 16px;"> Discover the <strong>NEW...</strong></p>
+                    <p style="margin-left: auto; margin-right: 8px; font-size: 10px; cursor: pointer" onclick="showIntro()">go back</p>
+                </div>
+                <p style="font-size: 32px; text-align: center; margin-top: 16px; margin-bottom:16px; font-weight: bold;">"Mangé Lakay" Project</p>
                 <blockquote class="highlighted-quote" style="color: black;">
                     “...if Haiti could be kept free from revolutions, she might easily become, in proportion to her territory and population, the richest country in the world...” - Frederick Douglass
                     (First American Minister to Haiti)
                 </blockquote>
+                <!--<div style="margin-left:auto; margin-right: auto; width: 90%; max-width: 700px; height: 36px; color: #fff; margin-bottom: 0px; margin-top: 24px; background-color: #FF0C36; border-top-left-radius:10px; border-top-right-radius: 10px;">
+                    <p style="color: #fff;margin: 8px; padding-top: 10px; padding-bottom: 10px;">Press play to learn more</p>
+                </div>
+                <iframe style="display: block; margin-left:auto; margin-right: auto; margin-top: 0px; height:40vh; max-width: 700px; width: 90%; background-color: #fff; border: none;" 
+                    src="https://www.youtube.com/embed/LJ-Uteo2H5w">
+                </iframe>-->
+                <div class="ctaBtn" style="margin-top: 24px;" onclick="openPayment()">Yes, I want to support the "Mangé Lakay" Project</div>
+
                 <p class="salesCopy">
                     Do you want to know what Singapore, China, South Korea, and Botswana have in common?<br><br>
 
@@ -139,7 +170,7 @@
 
                     They adopted capitalism and allocated their capital properly<br><br>
 
-                    With the “Mangé  Lakay,” we are implementing their examples to generate a lot of value for the people of Kotfè, Haiti, and our shareholders<br><br> 
+                    With the “Mangé Lakay,” we are implementing their examples to generate a lot of value for the people of Kotfè, Haiti, and our shareholders<br><br> 
 
                     Right now, the economy of Kotfè is in dire conditions, in fact, its economy has regressed since the 70s<br><br>
 
@@ -570,7 +601,7 @@
                 </p>
                
                 <div style="text-align: center; margin-bottom: 32px;">
-                    <button style="background-color: #000; color: white; cursor: pointer;" onclick="openPayment()">Test</button>
+                    <div class="ctaBtn" onclick="openPayment()">Yes, I want to support the "Mangé Lakay" Project</div>
 
                 </div>
                 <!--<div style="position: fixed; bottom: 16px; left: 0; right: 0; margin: auto; text-align: center;">
@@ -656,5 +687,10 @@
             window.open(url, '_blank').focus();
         }
        
+        function showIntro()
+        {
+            kotfeDiv.style.display = "none"
+            introDiv.style.display = 'block'
+        }
     </script>
 </html>

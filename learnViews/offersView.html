@@ -224,7 +224,7 @@
                 <p style="font-size: 24px; margin-left: 8px;">Build Your Billion Dollar Idea</p>
             </div>
         </div>-->
-        <div class="noteCard" style="margin-top: 24px;" onclick="openIndividualOffer()">
+        <div class="noteCard" style="margin-top: 24px;" onclick="openBookListing()">
             <p style="font-size: 24px; margin-left: 8px;">A Secret Attraction</p>
         </div>
     </body>
@@ -235,6 +235,13 @@
         let url = `./individualOfferView.html`
         //let e
         window.open(url, '_blank').focus();
+    }
+
+    function openBookListing()
+    {
+        let url = "https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H"
+
+        window.open(url, '_blank').focus()
     }
     </script>
 </html>
