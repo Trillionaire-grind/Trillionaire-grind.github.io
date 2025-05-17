@@ -109,9 +109,10 @@
             .tab.active {
                 color: black; /* Primary color */
             }
-            .tab:hover {
-                color: #DAA123; /* Primary color */
-            }
+            /*.tab:hover {
+                //removed due to bug...fix later?
+                color: #DAA123; /* Primary color 
+            }*/
 
             .tab.active {
                 border-bottom: 2px solid red; /* Active indicator */
@@ -175,9 +176,10 @@
                 background-color: #DAA123;
             }
 
-            span:hover{
+            /*span:hover{
                 color: #DAA123;
-            }
+                //removed due to bug...fix later?
+            }*/
         </style>
     </head>
     <body style="background-color: #F7F7F7;">
@@ -185,7 +187,7 @@
         <div class="tabs" style="margin-bottom: 32px;">
             <div class="tab active" data-icon-default="assets/app.svg" data-icon-active="assets/app_r.svg">
                 <img src="assets/app_r.svg" height="20px" width="20px">
-                <span id="appSpan" style="padding-left: 8px;">Apps</span>
+                <span id="appSpan" style="padding-left: 8px; color: red;">Apps</span>
             </div>
             <div class="tab"  data-icon-default="assets/banknote.svg" data-icon-active="assets/banknote_b.svg">
                 <img src="assets/banknote.svg" height="20px" width="40px">
