@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
         <title>Your TM Experience</title>
         <style>
             /* General reset and basic styles */
@@ -301,11 +302,136 @@
         </style>
     </head>
     <body>
+        
+        <div id="mainViewDiv" style="display: none;">
+            <div>
+                <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
+                    <iframe src="TMExperienceViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+                </div>
+                <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
+                    <iframe src="TMExperienceViews/feedbackView.html" style="height: 100vh; width: 100%;"></iframe>
+                </div>
+                <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="TMExperienceViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
+                    <iframe src="TMExperienceViews/adminView.html" style="height: 100vh; width: 100%;" ></iframe>
+                </div>
+                <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
+                    <iframe src="TMExperienceViews/profileView.html" style="height: 100vh; width: 100%;"></iframe>
+                </div>
+            </div>
+            <footer>
+                <nav>
+                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="assets/calendar.svg"  height="24px" width="24px"></a> 
+                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
+                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="assets/tools.svg" height="24px" width="24px"></a> 
+                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="24px" width="24px"></a>-->      
+                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="assets/person.svg"  height="24px" width="24px"></a>  
+                    
+                </nav>
+            </footer>
+        </div>
+        <div class="form-container" id="registerView" style="display: none; background-color: red;">
+            <div>
+                <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
+                <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
+                <div id="myModal"  class="modal">
+                    <div class="modal-content" style="width: 80%; height: 40vh;">
+                        <button class="close" onclick="closeModal()">&times;</button>
+                        <h2 id="">Log In</h2>
+                        <label for="logInEmail">Email</label>
+                        <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+                
+                        <label for="logInPassword">Password</label>
+                        <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+                        <p id="resetEmailBtn" style="cursor: pointer; color: #024165; text-align: center; margin-top: 2px; margin-bottom: 4px;">reset your password?</p>
+                        <div style="float: right;">
+                            <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
+                            <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="resetModal" class="modal">
+                    <div class="modal-content" style="padding-bottom: 64px;">
+                        <h2>Reset Your Password</h2>
+                        <label for="resetEmailTV">Enter Your Email </label>
+                        <input type="email" id="resetEmailET" placeholder="Enter your email"><br>
+                        <div style="float: right; margin-top: 8px;">
+                            <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                            <button id="resetSendBtn" style="background-color: #024165; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
+                        </div>
+                    </div>
+                </div>
+                <label for="registerName">Name</label>
+                <input type="text" id="registerName" placeholder="Enter your name"><br>
+        
+                <label for="registerEmail">Email</label>
+                <input type="email" id="registerEmail" placeholder="Enter your email"><br>
+        
+                <label for="registerPassword">Password</label>
+                <input type="password" id="registerPassword" placeholder="Enter your password"><br>
+        
+                <label for="registerBio">Bio</label>
+                <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
+        
+                <label for="image">Select image:</label>
+                <input type="file" id="image" name="img" accept="image/*"><br>
+
+                <div class="upgrade-container">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="upgradeCheckbox">
+                        Yes, I want to upgrade to the TMExperience Pro, to record my speeches and to improve my speeches even better.
+                    </label>
+                </div>
+                
+        
+                <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
+            </div>
+        
+            <div id="logInView" style="display: none;">
+                <label for="logInEmail">Email</label>
+                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+        
+                <label for="logInPassword">Password</label>
+                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+        
+                <button id="logInBtn" class="secondary">Log-In</button>
+            </div>
+        
+            <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
+        </div>
+        <div id="welcomeView">
+            <p style="text-align: left; margin-left: 5%;">Discover...
+                <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
+                    "How To Master<br> Public Speaking"
+                </span>
+                <span style="display: block;text-align: center; ">
+                    <mark>With the TM Experience App</mark>
+                </span>
+            </p>
+            <!--<iframe style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white;" src="https:www.youtube.com/embed/383gehepo8M"></iframe>-->
+            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%;">
+                Do you want to be a better speaker?<br>
+                Do you want to be able to express yourself?<br>
+                Do you want to be able to help others?<br>
+                <br>
+                Do you like receiving feedback on your speeches?<br>
+                Do you like preparing throughly before a speech?<br>
+                Do you like improving your speeches?<br>
+                <br>
+                Do you want the #1 app to master public speaking?
+            </p>
+            <br>
+            <div style="margin-top: 16px;"></div>
+            <a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
+                TM Experience App </a>
+        </div>
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
             import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
 
@@ -341,6 +467,28 @@
 
             //buttons
             let logInBtn = document.getElementById("logInBtn")
+           
+            let resetModal = document.getElementById("resetModal")
+            let resetEmailBtn = document.getElementById("resetEmailBtn")
+            let resetEmailET = document.getElementById("resetEmailET")
+            let resetSendBtn = document.getElementById("resetSendBtn")
+            let resetCancelBtn = document.getElementById("resetCancelBtn")
+
+
+            resetEmailBtn.onclick = () => {
+                let myModal = document.getElementById('myModal')
+                resetModal.style.display = "inline"
+                myModal.style.display = 'none'
+            }
+
+
+            resetSendBtn.onclick = () => {
+                let emailText = resetEmailET.value
+                requestEmail(emailText)
+            }
+
+            
+
             
             function changeTo(destination)
             {
@@ -518,6 +666,23 @@
                 
             }
 
+            function requestEmail(email)
+            {
+                sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    // Password reset email sent!
+                    // ..
+                    alert('check your email to reset your password!')
+                    resetModal.style.display = 'none'
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(`there was an error ${error}`)
+                    // ..
+                })
+            }
+
             function showRegister(bool)
             {
                 let registerView = document.getElementById("registerView")
@@ -570,118 +735,6 @@
             };
         
         </script>
-        <div id="mainViewDiv" style="display: none;">
-            <div>
-                <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
-                    <iframe src="TMExperienceViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
-                </div>
-                <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/feedbackView.html" style="height: 100vh; width: 100%;"></iframe>
-                </div>
-                <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
-                </div>
-                <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/adminView.html" style="height: 100vh; width: 100%;" ></iframe>
-                </div>
-                <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
-                    <iframe src="TMExperienceViews/profileView.html" style="height: 100vh; width: 100%;"></iframe>
-                </div>
-            </div>
-            <footer>
-                <nav>
-                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="assets/calendar.svg"  height="24px" width="24px"></a> 
-                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
-                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="assets/tools.svg" height="24px" width="24px"></a> 
-                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="24px" width="24px"></a>-->      
-                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="assets/person.svg"  height="24px" width="24px"></a>  
-                    
-                </nav>
-            </footer>
-        </div>
-        <div class="form-container" id="registerView" style="display: none; background-color: red;">
-            <div>
-                <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
-                <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
-                <div id="myModal"  class="modal">
-                    <div class="modal-content" style="width: 80%; height: 40vh;">
-                        <button class="close" onclick="closeModal()">&times;</button>
-                        <h2 id="">Log In</h2>
-                        <label for="logInEmail">Email</label>
-                        <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-                
-                        <label for="logInPassword">Password</label>
-                        <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-                        <div style="float: right;">
-                            <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
-                            <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
-                        </div>
-                    </div>
-                </div>
-                <label for="registerName">Name</label>
-                <input type="text" id="registerName" placeholder="Enter your name"><br>
-        
-                <label for="registerEmail">Email</label>
-                <input type="email" id="registerEmail" placeholder="Enter your email"><br>
-        
-                <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" placeholder="Enter your password"><br>
-        
-                <label for="registerBio">Bio</label>
-                <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
-        
-                <label for="image">Select image:</label>
-                <input type="file" id="image" name="img" accept="image/*"><br>
-
-                <div class="upgrade-container">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="upgradeCheckbox">
-                        Yes, I want to upgrade to the TMExperience Pro, to record my speeches and to improve my speeches even better.
-                    </label>
-                </div>
-                
-        
-                <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
-            </div>
-        
-            <div id="logInView" style="display: none;">
-                <label for="logInEmail">Email</label>
-                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-        
-                <label for="logInPassword">Password</label>
-                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-        
-                <button id="logInBtn" class="secondary">Log-In</button>
-            </div>
-        
-            <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
-        </div>
-        <div id="welcomeView">
-            <p style="text-align: left; margin-left: 5%;">Discover...
-                <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
-                    "How To Master<br> Public Speaking"
-                </span>
-                <span style="display: block;text-align: center; ">
-                    <mark>With the TM Experience App</mark>
-                </span>
-            </p>
-            <!--<iframe style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white;" src="https:www.youtube.com/embed/383gehepo8M"></iframe>-->
-            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%;">
-                Do you want to be a better speaker?<br>
-                Do you want to be able to express yourself?<br>
-                Do you want to be able to help others?<br>
-                <br>
-                Do you like receiving feedback on your speeches?<br>
-                Do you like preparing throughly before a speech?<br>
-                Do you like improving your speeches?<br>
-                <br>
-                Do you want the #1 app to master public speaking?
-            </p>
-            <br>
-            <div style="margin-top: 16px;"></div>
-            <a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
-                TM Experience App </a>
-        </div>
     
         <script>
             // Function to change iframe src
