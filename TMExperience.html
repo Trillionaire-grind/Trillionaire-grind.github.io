@@ -299,6 +299,60 @@
                 cursor: pointer;
                 transform: scale(1.5); /* Make checkbox larger */
             }
+
+            .custom-form-container {
+                margin-left: 5%;
+                margin-right: 5%;
+                text-align: center;
+                max-width: 400px;
+                margin: auto;
+            }
+
+            .custom-form-group {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 1rem;
+            }
+
+            .custom-form-label {
+                margin-bottom: 0.4rem;
+                font-weight: bold;
+            }
+
+            .custom-form-input {
+                width: 100%;
+                padding: 0.5rem;
+                box-sizing: border-box;
+                border-radius: 5px;
+            }
+
+            .custom-reset-link {
+                cursor: pointer;
+                color: #024165;
+                margin-top: -8px;
+                margin-bottom: 10px;
+                text-align: center;
+                width: 100%;
+            }
+
+            .custom-login-button {
+                background-color: #024165;
+                border: none;
+                color: white;
+                height: 8vh;
+                width: 100%;
+                max-width: 150px;
+                cursor: pointer;
+                margin-top: 10px;
+                border-radius: 5px;
+            }
+
+            .custom-button-wrapper {
+                display: flex;
+                justify-content: center;
+            }
+
         </style>
     </head>
     <body>
@@ -401,7 +455,7 @@
         
             <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
         </div>
-        <div id="welcomeView">
+        <div id="welcomeView" style="text-align: center;">
             <p style="text-align: left; margin-left: 5%;">Discover...
                 <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
                     "How To Master<br> Public Speaking"
@@ -411,7 +465,7 @@
                 </span>
             </p>
             <!--<iframe style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white;" src="https:www.youtube.com/embed/383gehepo8M"></iframe>-->
-            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%;">
+            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%; text-align: start;">
                 Do you want to be a better speaker?<br>
                 Do you want to be able to express yourself?<br>
                 Do you want to be able to help others?<br>
@@ -420,12 +474,44 @@
                 Do you like preparing throughly before a speech?<br>
                 Do you like improving your speeches?<br>
                 <br>
-                Do you want the #1 app to master public speaking?
+                Do you want the #1 app to master public speaking?<br><br>
+                Then...Log In!
             </p>
             <br>
             <div style="margin-top: 16px;"></div>
-            <a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
-                TM Experience App </a>
+            <!--<a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
+                TM Experience App </a>-->
+            <!--This is the code for the log in of the app-->
+            <!--<div style="margin-left: 5%; margin-right: 5%; text-align: center;">
+                <label for="logInEmail">Email</label>
+                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+        
+                <label for="logInPassword">Password</label>
+                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
+                <p id="resetEmailBtn" style="cursor: pointer; color: #024165; text-align: center; margin-top: 2px; margin-bottom: 4px;">reset your password?</p>
+                <div style="float: right;">
+                    <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
+                </div>
+            </div>-->
+            <div class="custom-form-container">
+                <div class="custom-form-group">
+                  <label for="customEmail" class="custom-form-label">Email</label>
+                  <input type="email" id="customEmail" class="custom-form-input" placeholder="Enter your email">
+                </div>
+              
+                <div class="custom-form-group">
+                  <label for="customPassword" class="custom-form-label">Password</label>
+                  <input type="password" id="customPassword" class="custom-form-input" placeholder="Enter your password">
+                </div>
+              
+                <p id="customResetPassword" class="custom-reset-link">Reset your password?</p>
+              
+                <div class="custom-button-wrapper">
+                  <button id="customLoginButton" class="custom-login-button">Log In</button>
+                </div>
+            </div>
+           
+            
         </div>
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
