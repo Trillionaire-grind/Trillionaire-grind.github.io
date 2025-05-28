@@ -178,12 +178,12 @@
             }
 
             .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-          
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-width: 600px;
+                margin: 0 auto;
+                background-color: #fff;
+                border-radius: 8px;
+            
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             }
 
             .form-container label {
@@ -229,14 +229,14 @@
 
 
             @media (max-width: 600px) {
-            .form-container input[type="text"],
-            .form-container input[type="email"],
-            .form-container input[type="password"],
-            .form-container textarea,
-            .form-container input[type="tel"],
-            .form-container input[type="file"] {
-                width: 100%;
-            }
+                .form-container input[type="text"],
+                .form-container input[type="email"],
+                .form-container input[type="password"],
+                .form-container textarea,
+                .form-container input[type="tel"],
+                .form-container input[type="file"] {
+                    width: 100%;
+                }
             }
 
             .modal {
@@ -318,13 +318,16 @@
             .custom-form-label {
                 margin-bottom: 0.4rem;
                 font-weight: bold;
+                margin-left: 5%;
             }
 
             .custom-form-input {
-                width: 100%;
+                width: 90%;
                 padding: 0.5rem;
                 box-sizing: border-box;
                 border-radius: 5px;
+                margin-left: auto;
+                margin-right: auto;
             }
 
             .custom-reset-link {
@@ -340,7 +343,7 @@
                 background-color: #024165;
                 border: none;
                 color: white;
-                height: 8vh;
+                height: 6vh;
                 width: 100%;
                 max-width: 150px;
                 cursor: pointer;
@@ -390,33 +393,8 @@
             <div>
                 <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
                 <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
-                <div id="myModal"  class="modal">
-                    <div class="modal-content" style="width: 80%; height: 40vh;">
-                        <button class="close" onclick="closeModal()">&times;</button>
-                        <h2 id="">Log In</h2>
-                        <label for="logInEmail">Email</label>
-                        <input type="email" id="logInEmail" placeholder="Enter your email"><br>
+               
                 
-                        <label for="logInPassword">Password</label>
-                        <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-                        <p id="resetEmailBtn" style="cursor: pointer; color: #024165; text-align: center; margin-top: 2px; margin-bottom: 4px;">reset your password?</p>
-                        <div style="float: right;">
-                            <button onclick="closeModal()" style="color: #024165; background-color: #fff;" >Cancel</button>
-                            <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
-                        </div>
-                    </div>
-                </div>
-                <div id="resetModal" class="modal">
-                    <div class="modal-content" style="padding-bottom: 64px;">
-                        <h2>Reset Your Password</h2>
-                        <label for="resetEmailTV">Enter Your Email </label>
-                        <input type="email" id="resetEmailET" placeholder="Enter your email"><br>
-                        <div style="float: right; margin-top: 8px;">
-                            <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
-                            <button id="resetSendBtn" style="background-color: #024165; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
-                        </div>
-                    </div>
-                </div>
                 <label for="registerName">Name</label>
                 <input type="text" id="registerName" placeholder="Enter your name"><br>
         
@@ -438,34 +416,19 @@
                         Yes, I want to upgrade to the TMExperience Pro, to record my speeches and to improve my speeches even better.
                     </label>
                 </div>
-                
-        
                 <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
             </div>
-        
-            <div id="logInView" style="display: none;">
-                <label for="logInEmail">Email</label>
-                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-        
-                <label for="logInPassword">Password</label>
-                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-        
-                <button id="logInBtn" class="secondary">Log-In</button>
-            </div>
-        
-            <!--<button id="swapBtn" class="danger" style="margin-top: 20px;">Log In</button>-->
         </div>
         <div id="welcomeView" style="text-align: center;">
             <p style="text-align: left; margin-left: 5%;">Discover...
                 <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
-                    "How To Master<br> Public Speaking"
+                    "How To Master<br>Public Speaking"
                 </span>
                 <span style="display: block;text-align: center; ">
                     <mark>With the TM Experience App</mark>
                 </span>
             </p>
-            <!--<iframe style="width: 90%; margin-left: 5%; margin-right: 5%; background-color: white;" src="https:www.youtube.com/embed/383gehepo8M"></iframe>-->
-            <p style="width: 90%; height: 24vh; margin-left: 5%; margin-right: 5%; text-align: start;">
+            <p style="width: 90%; margin-left: 5%; margin-right: 5%; text-align: start;">
                 Do you want to be a better speaker?<br>
                 Do you want to be able to express yourself?<br>
                 Do you want to be able to help others?<br>
@@ -477,37 +440,32 @@
                 Do you want the #1 app to master public speaking?<br><br>
                 Then...Log In!
             </p>
-            <br>
-            <div style="margin-top: 16px;"></div>
-            <!--<a style=" width: 80%;  margin-left: 10%; margin-right: 10%; margin-top: 24px;" id="yesBtn"  onclick="showRegister(true)" class="button">Yes, I want the<br>
-                TM Experience App </a>-->
-            <!--This is the code for the log in of the app-->
-            <!--<div style="margin-left: 5%; margin-right: 5%; text-align: center;">
-                <label for="logInEmail">Email</label>
-                <input type="email" id="logInEmail" placeholder="Enter your email"><br>
-        
-                <label for="logInPassword">Password</label>
-                <input type="password" id="logInPassword" placeholder="Enter your password"><br>
-                <p id="resetEmailBtn" style="cursor: pointer; color: #024165; text-align: center; margin-top: 2px; margin-bottom: 4px;">reset your password?</p>
-                <div style="float: right;">
-                    <button id="logInBtn" style="background-color: #024165; width:100vh; border-color: #fff; color: white; height:8vh; width: 12vh;">Log In</button>
+            <div id="resetModal" class="modal">
+                <div class="modal-content" style="padding-bottom: 64px;">
+                    <h2 style="text-align: center;">Reset Your Password</h2>
+                    <p style="text-align: start; margin-bottom: 0px;">Enter Your Email </p><br>
+                    <input type="email" id="resetEmailET" style="width: 100%; height: 40px; margin-left: auto; margin-right: auto; margin-top: 0px;" placeholder="Enter your email"><br>
+                    <div style="float: right; margin-top: 12px;">
+                        <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                        <button id="resetSendBtn" style="float: right; background-color: #024165; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
+                    </div>
                 </div>
-            </div>-->
+            </div>
             <div class="custom-form-container">
                 <div class="custom-form-group">
                   <label for="customEmail" class="custom-form-label">Email</label>
-                  <input type="email" id="customEmail" class="custom-form-input" placeholder="Enter your email">
+                  <input type="email" id="logInEmail" class="custom-form-input" placeholder="Enter your email">
                 </div>
               
                 <div class="custom-form-group">
                   <label for="customPassword" class="custom-form-label">Password</label>
-                  <input type="password" id="customPassword" class="custom-form-input" placeholder="Enter your password">
+                  <input type="password" id="logInPassword" class="custom-form-input" placeholder="Enter your password">
                 </div>
               
-                <p id="customResetPassword" class="custom-reset-link">Reset your password?</p>
+                <p id="resetEmailBtn" class="custom-reset-link">Reset your password?</p>
               
                 <div class="custom-button-wrapper">
-                  <button id="customLoginButton" class="custom-login-button">Log In</button>
+                  <button id="logInBtn" class="custom-login-button">Log In</button>
                 </div>
             </div>
            
@@ -562,20 +520,18 @@
 
 
             resetEmailBtn.onclick = () => {
-                let myModal = document.getElementById('myModal')
-                resetModal.style.display = "inline"
-                myModal.style.display = 'none'
+                resetModal.style.display = 'inline'
             }
-
 
             resetSendBtn.onclick = () => {
                 let emailText = resetEmailET.value
                 requestEmail(emailText)
             }
 
-            
+            resetCancelBtn.onclick = () => {
+                resetModal.style.display = 'none'
+            }
 
-            
             function changeTo(destination)
             {
                 let views = [calendarView, feedbackView, toolsView, adminView, profileView]
@@ -595,9 +551,11 @@
                 let mainView = document.getElementById("mainViewDiv")
                 let registerView = document.getElementById("registerView")
                 let formContainer = document.getElementById("form-container")
+                let welcomeView = document.getElementById("welcomeView")
 
                 mainView.style.display = 'inline'
                 registerView.style.display = 'none'
+                welcomeView.style.display = 'none'
                 
             }
 
@@ -794,21 +752,11 @@
                 }
             }
 
-            signInDialogBtn.onclick = () => {
-                
-            }
-
             logInBtn.onclick = () => {
-                    let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
-                    let password = document.getElementById("logInPassword").value
-                    signIn(email, password)
+                let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
+                let password = document.getElementById("logInPassword").value
+                signIn(email, password)
             } 
-
-            let yesBtn = document.getElementById("yesBtn")
-
-            yesBtn.onclick = () => {
-                showRegister(true)
-            }
 
             showRegister(false)
             window.onload = function() {
@@ -816,7 +764,6 @@
                     let myModal = document.getElementById('myModal');
                     localStorage.removeItem('showModal'); // Remove the flag
                     myModal.style.display = 'inline'; // Show the modal
-
                 }
             };
         
@@ -831,8 +778,6 @@
             var profileView = document.getElementById('profileView')
 
             let views = [calendarView, feedbackView, toolsView, adminView, profileView]
-
-        
             
             function changeTo(destination)
             {
@@ -844,21 +789,6 @@
                     }
                 });
                 selectedBtn(destination)
-            }
-
-            function logIn()
-            {
-                let mainView = document.getElementById("mainView")
-                let welcomeView = document.getElementById("welcomeView")
-
-                welcomeView.style.display = 'none'
-                mainView.style.display = 'inline'
-            }
-
-            //showMainView()
-            logInBtn.onclick = () => {
-                alert('Welcome To The Protetype')
-                logIn()
             }
 
             function selectedBtn(destination)
@@ -894,8 +824,6 @@
                 }
             }
             changeTo(0)
-
-            //logIn()
         </script>
         <script>
             let startX;
@@ -925,11 +853,6 @@
                     modal.style.display = "block";
 
                 }
-
-                // When the user clicks on <span> (x), close the modal
-                //span.onclick = function() {
-                //modal.style.display = "none";
-                //}
 
                 function closeModal()
                 {
