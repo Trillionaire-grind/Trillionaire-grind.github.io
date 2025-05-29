@@ -145,6 +145,25 @@
 
             /* Change the background color of the dropdown button when the dropdown content is shown */
             .dropdown:hover .dropbtn {background-color: #7D2128; color: white;}
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light grey for even rows */
+            }
+            tr:nth-child(odd) {
+                background-color: #ffffff; /* White for odd rows */
+            }
         </style>
     </head>
     <body>
@@ -162,7 +181,7 @@
             </div>-->
             <p id="titleLbl" style="font-size: 2vh; margin-right: auto; margin-left: auto;" >This Week's Agenda</p>
             <button id="rightBtn" style=" background-color: #fff; color: #024165; padding: 10px; 
-            font-size: 16px; border: none; visibility: hidden;"  onclick="showAgenda()">Curent Meeting</button>
+            font-size: 16px; border: none; visibility: hidden;"  onclick="showAgenda()">Current Meeting</button>
         </div>
         <!--<div id="agendaView" style="width: 100%; height: 100vh;">
             <iframe id="frame" style="width: 100%; height: 100vh;" src="https://firebasestorage.googleapis.com/v0/b/naples-sunrise-bay.appspot.com/o/agendas%2FPrinted%20Agenda.pdf?alt=media&token=8406a231-8e0d-4701-8fc2-e6dc7b4dd62f" frameborder="0"></iframe>
@@ -174,7 +193,168 @@
           <!--<iframe id="frame" style="visibility: hidden; height: fill; width: 100%;" src="https://css4.pub/2015/icelandic/dictionary.pdf">
 
           </iframe>-->
-         
+
+        <h2>Agenda</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Role</th>
+                    <th>Member</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7:30AM</td>
+                    <td>
+                        <strong>Presiding Officer</strong>  <br>
+                        Presiding Officer (President or other officer if President unavailable) -
+                        opens the meeting and leads the pledge.  
+                        Welcomes Members and Guests.  
+                        Introduces the Toastmaster
+                    </td>
+                    <td>Debbie Wildrick, PM3</td>
+                </tr>
+                <tr>
+                    <td>7:34AM</td>
+                    <td>
+                        <strong>Toastmaster</strong><br>
+                        The Toastmaster is responsible for organizing the meeting; confirming speaking roles,
+                        and emceeing the meeting. Toastmaster will introduce the Grammarian, Ah Counter,
+                        Timer, and Vote Counter and ask them to let the audience know what they'll be doing.
+                    </td>
+                    <td>Sue Kisiday</td>
+                </tr>
+                <tr>
+                    <td>7:36AM</td>
+                    <td>
+                        <strong>Grammarian</strong><br>
+                        Evaluates the usage of grammar, selects and announces the word of the day and reports on both at the end of the meeting. 
+                    </td>
+                    <td>Stephen C. Groves</td>
+                </tr>
+                <tr>
+                    <td>7:37AM</td>
+                    <td>
+                        <strong>Ah-Counter</strong><br>
+                        Ah-Counter
+                        The Ah Counter listens for ahs, ums, and other filler words.  They report the results at the end of the meeting
+                    </td>
+                    <td>Jennifer Hanks</td>
+                </tr>
+                <tr>
+                    <td>7:38AM</td>
+                    <td>
+                        <strong>Timer</strong><br>
+                        The timer, times the speeches, table topics, and evaluations and reports accordingly at the end of each section of the meeting.  The timer also times the one minute of silence following each speaker.
+                    </td>
+                    <td>Mariana Beckner</td>
+                </tr>
+                <tr>
+                    <td>7:40AM</td>
+                    <td>
+                        <strong>Vote Counter</strong><br>
+                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
+                    </td>
+                    <td>Carlene Marie</td>
+                </tr>
+                <tr>
+                    <td>7:41AM</td>
+                    <td>
+                        <strong>Speaker #1</strong><br>
+                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
+                    </td>
+                    <td>Mars Desire</td>
+                </tr>
+                <tr>
+                    <td>7:48AM</td>
+                    <td>
+                        <strong>Speaker #2</strong><br>
+                    </td>
+                    <td>Scott Markowitz, EC3</td>
+                </tr>
+                <tr>
+                    <td>7:55AM</td>
+                    <td>
+                        <strong>Speaker #3</strong><br>
+                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
+                        <strong>Path / Project / Time:</strong> PATHWAYS - Presentation Mastery: (L1) Writing a Speech with Purpose (5-7 min) <br>
+                        <strong>Project Title:</strong> We Came, We Matched, We Conquered.
+                    </td>
+                    <td>Vlad Popovic</td>
+                </tr>
+                <tr>
+                    <td>8:02AM</td>
+                    <td>
+                        <strong>Table Topics Master</strong><br>
+                        The Table Topics Masters calls upon members without other duties on the agenda to deliver 1-2 minute impromptu talks on a topic announced right before the member is chosen.  The role is introduced by the Toastmaster and control is returned to the Toastmaster after TT.
+                    </td>
+                    <td>Anne Hagan</td>
+                </tr>
+                <tr>
+                    <td>8:10AM</td>
+                    <td>
+                        <strong>General Evaluator</strong><br>
+                        General evaluator introduces each evaluator to do their evaluation.  At the end of the evaluations, the GE calls for reports of helpers and provides meeting, evaluator, and leader evaluations.  This role is introduced by the Toastmaster.
+                    </td>
+                    <td>Steve McCann,CC, CL</td>
+                </tr>
+                <tr>
+                    <td>8:11AM</td>
+                    <td>
+                        <strong>Evaluator #1</strong><br>
+                        Evaluates speaker #1 and is introduced by the General Evaluato
+                    </td>
+                    <td>Jennifer Johnson, PM5</td>
+                </tr>
+                <tr>
+                    <td>8:14AM</td>
+                    <td>
+                        <strong>Evaluator #2</strong><br>
+                        Evaluates speaker #2 and is introduced by the General Evaluator
+                    </td>
+                    <td>April O'Leary, PM3</td>
+                </tr>
+                <tr>
+                    <td>8:17AM</td>
+                    <td>
+                        <strong>Evaluator #3</strong><br>
+                    </td>
+                    <td>Michelle Borders</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <strong>General Evaluator Meeting Evaluation</strong><br>
+                    </td>
+                    <td>Steve McCann, CC, CL</td>
+                </tr>
+                <tr>
+                    <td>8:28AM</td>
+                    <td>
+                        <strong>Toastmaster Presents Awards</strong><br>
+                        Toastmaster receives final votes from the vote counter and presents awards.  Toastmaster returns control of the meeting to the Presiding Officer.
+                    </td>
+                    <td>Sue Kisiday</td>
+                </tr>
+                <tr>
+                    <td>8:29AM</td>
+                    <td>
+                        <strong>Moments of Truth - Education Tips</strong><br>
+                        Tips to help build on the success of our club.
+                    </td>
+                    <td>  Mary Lynn Vierling, DTM</td>
+                </tr>
+                <tr>
+                    <td>8:31AM<br>8:34AM(end)</td>
+                    <td>
+                        <strong>Presiding Officer Makes Closing Remarks / Adjourns Meeting
+                        </strong><br>
+                    </td>
+                    <td>Debbie Wildrick, PM3</td>
+                </tr>
+            </tbody>
+        </table>
     </body>
 
     <script type="module">
