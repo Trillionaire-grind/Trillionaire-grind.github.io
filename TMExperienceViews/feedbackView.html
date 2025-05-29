@@ -344,9 +344,8 @@
                     </div>
             </div>
         </div>-->
-        <div id="feedbackDialog" >
+        <!-- older dialog <div id="feedbackDialog" >
             <div>
-
                 <span class="close" onclick="closeFeebackDialog()">&times;</span>
                 <p id="feedbackId" style="visibility: hidden;"></p>
         
@@ -361,7 +360,41 @@
                     <br>
                 </div>
             </div>
+        </div>-->
+        <!-- Feedback Dialog -->
+        <div id="feedbackDialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" 
+        style="width: 40%; height: auto; background-color: #fff; border-radius: 8px; 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: fixed; z-index: 1000;
+        top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 24px;">    
+            
+            <!-- Close Button -->
+            <button class="close" onclick="closeFeebackDialog()" aria-label="Close feedback dialog"
+                style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
+                &times;
+            </button>
+
+            <!-- Hidden Feedback ID (if needed) -->
+            <p id="feedbackId" style="display: none;"></p>
+
+            <!-- Title -->
+            <h2 id="feedbackTitle" style="margin-top: 0;">Leave Feedback</h2>
+
+            <!-- Feedback Text Area -->
+            <div style="margin: 16px 0;">
+                <label for="feedbackTV" style="display: block; margin-bottom: 8px;">Your feedback:</label>
+                <textarea id="feedbackTV" name="feedback" rows="4"
+                    style="width: 90%; margin-left:auto; margin-right: auto; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div style="text-align: right;">
+                <button id="leaveFeedbackBtn"
+                    style="background-color: #024165; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                    Submit
+                </button>
+            </div>
         </div>
+
         <script type="module">
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
@@ -523,10 +556,6 @@
                 let secondSpeakerOption = document.getElementById("secondSpeakerOption")
                 let thirdSpeakerOption = document.getElementById("thirdSpeakerOption")
                 if(docSnap.exists()){
-                    
-
-                    console.log(`first Eval ${firstEval}`)
-
                     getSpeaker(firstSpeakerOption, docSnap.data().first_speaker)
                     getSpeaker(secondSpeakerOption,docSnap.data().second_speaker)
                     getSpeaker(thirdSpeakerOption,docSnap.data().third_speaker)

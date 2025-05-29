@@ -348,7 +348,6 @@
         </style>
     </head>
     <body>
-        
         <div id="mainViewDiv" style="display: none;">
             <div>
                 <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
@@ -677,16 +676,12 @@
 
             function signIn(email, password) {
                 signOut(auth).then(() => {
-                    // Sign-out successful.
                     signInWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                         const user = userCredential.user;
                         console.log(`User signed in: ${user.uid}`);
                         alert("Welcome back!")
                         checkRole(user.uid)
-                    
-                        // Perform actions after successful sign-in
-                    
                     })
                     .catch((error) => {
                         const errorCode = error.code;
@@ -704,8 +699,6 @@
             {
                 sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    // Password reset email sent!
-                    // ..
                     alert('check your email to reset your password!')
                     resetModal.style.display = 'none'
                 })
@@ -713,7 +706,6 @@
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     alert(`there was an error ${error}`)
-                    // ..
                 })
             }
 
