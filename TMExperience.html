@@ -2,11 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
         <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
         <title>Your TM Experience</title>
         <style>
             /* General reset and basic styles */
+        
             body {
                 margin: 0;
                 padding: 0;
@@ -29,11 +30,14 @@
                 margin: 0;
                 width: 100%;
                 padding: 10px 0;
+                max-width: 100vw;
+                overflow-x: hidden;
 
             }
             footer nav {
                 display: flex;
                 justify-content: space-around;
+                
             
             }
             footer nav a {
@@ -455,7 +459,7 @@
                 <div class="custom-button-wrapper">
                   <button id="logInBtn" class="custom-login-button">Log In</button>
                 </div>
-                <p style="text-align: center;">version 1.0.0.8</p>
+                <p style="text-align: center;">version 1.0.0.9</p>
             </div>
            
             
