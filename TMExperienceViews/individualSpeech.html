@@ -59,34 +59,21 @@
                 cursor:pointer;
             }
             .evaluationText{
-                height: 250px;
+                min-height: 250px;
                 background: #DFDFDF;
                 padding: 8px;
             }
         </style>
     </head>
     <body style="margin-bottom: 30vh;">
-        <h1 id="titleTV" style="text-align: center; padding-left: 8px; font-size: 5vw;"></h1>
-        <div style=" margin-left: 80%;   margin-top: 8px;">
-            <p id="pathTV"> </p>
+        <h1 id="titleTV" style="text-align: center; padding-left: 8px; font-size: 36px; margin-bottom: 0px;"></h1>
+        <div style="display: flex; justify-content: flex-end; margin-right: 5%;  margin-top: 2px; margin-right: 5%;">
+            <p id="pathTV" style="margin-right: 16px;"></p>
             <p id="dateTV"></p>
         </div>
-        <!--<div style="text-align: center; padding-top: 32px;">
-            <iframe style="width: 60%; margin-left: auto; margin-right: auto;text-align: center; background-color: #333;" height="80%"></iframe>
-        </div>-->
       
         <p id="pathTV" style="text-align: center;"></p>
         
-        <!--<div class="evaluatorView">
-            <div class="evaluatorName" style="display: flex; border:1px solid black;">
-                <p style="display: inline; ">Evaluated By Hov</p>
-                <button style="display: inline;margin-left: auto; padding-top: 8px;" id="evaluationBtn" class="button" onclick="minimizeEvaluator()">-</button>
-            </div>
-            <div id="evaluationText" class="evaluationText">
-            </div>
-            
-        </div>-->
-
         <div class="feedbackView" style="margin-top: 32px; width: 90%; margin-right: auto; margin-left: auto;;">
             <div style="display: flex; border:1px solid black;  border-radius: 10px 10px 0px 0px">
                 <p style="display: inline; padding-top: 0px; padding-left: 8px;">feedback</p>
@@ -124,11 +111,6 @@
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
             const db = getFirestore(app);
-
-            //use the userId and the date to get the speech
-            //users/id/speeches.getDoc(date.data()){.title, .date, .path};
-            //users/id/speeches/feedback.getDocs()
-
 
             function getParameter(sParam)
             {
@@ -196,11 +178,9 @@
                     feedbackTV.innerText = name
 
                 } else {
-                    // docSnap.data() will be undefined in this case
                     console.log("No such document!");
                 }
             }
-            //const [speechValue, userValue] = 
             extractParamsFromUrl(window.location.href);
         </script>
      

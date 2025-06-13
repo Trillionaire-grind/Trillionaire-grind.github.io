@@ -371,11 +371,10 @@
                 </div>
             </div>
             <footer>
-                <nav>
+                <nav id="navBar">
                     <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="assets/calendar.svg"  height="24px" width="24px"></a> 
                     <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
                     <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="assets/tools.svg" height="24px" width="24px"></a> 
-                    <!--<a href="#"><img id="adminBtn" onclick="changeTo(3)"  src="mainViews/assets/admin.svg"  height="24px" width="24px"></a>-->      
                     <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="assets/person.svg"  height="24px" width="24px"></a>  
                     
                 </nav>
@@ -459,7 +458,7 @@
                 <div class="custom-button-wrapper">
                   <button id="logInBtn" class="custom-login-button">Log In</button>
                 </div>
-                <p style="text-align: center;">version 1.0.0.9</p>
+                <p style="text-align: center;">version 1.0.1.0</p>
             </div>
            
             
@@ -499,7 +498,7 @@
             let calendarBtn = document.getElementById("calendarBtn")
             let feedbackBtn = document.getElementById("feedbackBtn")
             let toolsBtn = document.getElementById("toolsBtn")
-            //let adminBtn = document.getElementById("adminBtn")
+            let adminBtn = document.getElementById("adminBtn")
             let profileBtn = document.getElementById("profileBtn")
 
             //buttons
@@ -557,13 +556,7 @@
                 let name = document.getElementById("registerName").value
                 let email = document.getElementById("registerEmail").value
                 let password = document.getElementById("registerPassword").value
-
                 let bio = document.getElementById("registerBio").value
-                /*let phone = document.getElementById("registerPhone").value
-                let x = document.getElementById("registerX").value
-                let snapchat = document.getElementById("registerSnapchat").value
-                let ig = document.getElementById("registerIg").value
-                let facebook = document.getElementById("registerFacebook").value*/
                 let image = document.getElementById("image")
 
                 if(name.length < 1)
@@ -622,8 +615,6 @@
                         getDownloadURL(moutainsRef).then((downloadURL) => {
                             console.log('File available at', downloadURL);
                             createUser(userId, downloadURL)
-                            // Now you can use downloadURL as needed, for example, save it to Firestore
-                            // or display it to the user.
                         }).catch((error) => {
                             console.error('Error getting download URL', error);
                             alert('Error getting download URL');
@@ -646,7 +637,6 @@
                     imageUrl: `${imageUrl}`,speeches: [] }
                 ).then(()=>{
                     alert("created account successfully")
-                    //signIn(email, password)
                     let myModal = document.getElementById('myModal');
                    
                     const checkbox = document.getElementById('upgradeCheckbox');
@@ -668,8 +658,19 @@
                 if (docSnap.exists()) {
                     if(docSnap.data().role == 'admin'){
                         alert(`admin user`)
-                        //let adminBtn = document.getElementById("adminBtn")
-                        //adminBtn.style.display = 'inline'
+                        const adminLink = document.createElement('a');
+                        adminLink.href = '#';
+
+                        const adminImg = document.createElement('img');
+                        adminImg.id = 'adminBtn';
+                        adminImg.src = 'TMExperienceViews/assets/admin.svg';
+                        adminImg.height = 24;
+                        adminImg.width = 24;
+                        adminImg.setAttribute('onclick', 'changeTo(3)');
+
+                        adminLink.appendChild(adminImg);
+
+                        document.getElementById('navBar').appendChild(adminLink);
                     }
                     showMainView()
                 } else {
@@ -788,8 +789,8 @@
                 calendarBtn.src = "TMExperienceViews/assets/calendar.circle.svg"
                 feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.svg"
                 toolsBtn.src = "TMExperienceViews/assets/tools.svg"
-                //adminBtn.src = "mainViews/assets/admin.svg"
                 profileBtn.src = "TMExperienceViews/assets/person.svg"
+                adminBtn.src = "TMExperienceViews/assets/admin.svg"
                 
                 switch (destination){
                     case 0:
@@ -802,7 +803,7 @@
                         toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
                         break
                     case 3:
-                        //adminBtn.src = "mainViews/assets/admin_b.svg"
+                        adminBtn.src = "TMExperienceViews/assets/admin_b.png"
                         break
                     case 4:
                         profileBtn.src = "TMExperienceViews/assets/person_b.svg"
@@ -825,16 +826,10 @@
                 document.addEventListener('touchmove', handleTouchMove, false);
 
                 var modal = document.getElementById("myModal");
-                //var modalName = document.getElementById('modalName')
                 var modalId = document.getElementById("modalId")
 
-                // Get the button that opens the modal
                 var btn = document.getElementById("signInDialogBtn");
 
-                // Get the <span> element that closes the modal
-                //var span = document.getElementsByClassName("close")[0];
-
-                // When the user clicks on the button, open the modal
                 btn.onclick = function() {
                     modal.style.display = "block";
 
@@ -845,7 +840,6 @@
                     modal.style.display = "none"
                 }
 
-                // When the user clicks anywhere outside of the modal, close it
                 window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
@@ -854,8 +848,7 @@
 
                 function showModal(name, id){
                     modal.style.display = "block"
-                    //modalName.innerText = `provide feedback to ${name}`
-                    //modalId.innerText = id
+                   
                 }
             
                 function handleTouchStart(event) {

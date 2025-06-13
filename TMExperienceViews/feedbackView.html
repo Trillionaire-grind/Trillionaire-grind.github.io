@@ -96,42 +96,6 @@
 
             }
 
-            /* Styles for the popup 
-            .popup {
-                display: none;
-                position: fixed; 
-                z-index: 1;
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%;
-                overflow: auto; 
-                background-color: rgba(0,0,0,0.4); /
-            }
-
-        
-            .popup-content {
-                background-color: #fefefe;
-                margin: 15% auto;
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%; /
-            }
-
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }*/
-
             .popup {
             display: none;
             position: fixed;
@@ -277,9 +241,7 @@
         
         <script>
             // Function to open the popup
-            function openPopup() {
-                document.getElementById('popup').style.display = 'block';
-            }
+           
             //openPopup()
             // Function to close the popup
             function closePopup() {
@@ -287,9 +249,7 @@
             }
 
 
-            function openFeedbackDialog() {
-                document.getElementById('feedbackDialog').style.display = 'block'
-            }
+           
 
             function closeFeebackDialog()
             {
@@ -300,7 +260,7 @@
     </head>
     <body>
         <div>
-            <button onclick="openPopup()" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
+            <button id="voteBtn" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
             padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
 
             <div id="myModal"  class="modal">
@@ -318,22 +278,7 @@
             </div>
         
             <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
-        <!--This is the view of the speaker-->
-            <!--<div>
-                <div style="display: flex;">
-                    <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto; color: white; border-radius: 50%; cursor: pointer; "> &larr;</button>
-                
-                    <div style=" background-color: white; border-radius: 5%; margin-left: auto; margin-right: auto; padding: 10px;">
-                        <img id="currentSpeakerImg" src="assets/khan.jpeg" height="300px" style="background-color: #024165;  ">
-                    </div>
-                    <button class="selectorBtn" id="rightBtn" style="margin-right: 5%; border: none; height: 40px; width: 40px; margin-top: auto; margin-bottom: auto;  color: white; border-radius: 50%; cursor: pointer; margin-left: 16px;" > &rarr; </button>
-                </div>
-                <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #fff; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
-                    <button id="firstSpeakerSelector" style="border: none; border-radius: 50%; background-color: #7D2128; height: 16px; width: 16px;"></button>
-                    <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
-                    <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
-                </div>
-            </div>-->
+        
             <div>
                 <div style="display: flex; align-items: center;">
                     <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; color: white; border-radius: 50%; cursor: pointer;">&larr;</button>
@@ -352,12 +297,9 @@
                 </div>
             </div>
             
-            <!--<div style=" background-color: white; border-radius: 5%; margin-left: auto; margin-right: auto; padding: 10px; width: 90%;">
-                        <img id="currentSpeakerImg" src="assets/khan.jpeg" height="300px" width="100%" style="background-color: #024165; margin-left: auto; margin-right: auto; ">
-                    </div>-->
             <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
                 <p id="currentSpeakerName" style="font-weight: bold; margin-top: 64px;">Genghis Khan</p>
-                <button onclick="openFeedbackDialog()" style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
+                <button id="openFeedbackBtn"  style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
             </div>
             <div class="" style="display: flex; width: 90%; margin-right: auto;  margin-left: auto;  margin-bottom: 64px; overflow-y: auto;">
                     <p id="currentSpeakerBio" style="margin: 0;" >Genghis Khan, also known as Chinggis Khan, was the founder and 
@@ -368,47 +310,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!-- The vote popup dialog -->
-        <!--<div id="popup" class="popup">
-            <div class="popup-content">
-                <span class="close" onclick="closePopup()">&times;</span>
-                <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                    <p>Choose best speaker</p>
-                    <div style="padding-top: 16px; padding-left: 16px;">
-                        <select id="bestSpeaker">  
-                            <option id="firstSpeakerOption"></option>  
-                            <option id="secondSpeakerOption"></option>  
-                            <option id="thirdSpeakerOption"></option> 
-                        </select> 
-                    </div>
-                </div>
-                <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                    <p>Choose best Evaluator</p>
-                    <div style="padding-top: 16px; padding-left: 16px; margin-right: 5%;">
-                        <select id="bestEvaluator">  
-                            <option id="firstEval">Alex</option>  
-                            <option id="secondEval">Khan</option>  
-                            <option id="thirdEval">Napoleon</option> 
-                        </select> 
-                    </div>
-                </div>
-                <div style="margin-right: auto; margin-left: auto; margin-right: 5%;">
-                    <div style="width: 100%;display: flex; padding-left: 8px; margin-left: auto; margin-right: auto;" >
-                        <p>Choose Best Table Topics Speaker</p>
-
-                        <input type="text" id="bestTable" name="fname">
-                    </div>
-                </div>
-                <p id="revealBtn" style="cursor: pointer; text-align: center; color: #024165;">reveal votes</p>
-                <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                    <button id="castVoteBtn" style="background-color: #024165; color: white; 
-                    cursor: pointer; float: right; margin-right: auto;" > Cast Votes</button>
-                
-                </div>
-            </div>
-        </div>-->
 
         <div id="popup" class="popup">
             <div class="popup-content">
@@ -447,38 +348,6 @@
             </div>
         </div>
 
-        <!-- The feedback popup dialog -->
-        <!--<div id="feedbackDialog" class="popup">
-            <div class="popup-content">
-                <span class="close" onclick="closeFeebackDialog()">&times;</span>
-                <div style="display: flex; padding-left: 8px; margin-left: auto; margin-right: auto; margin-top: 32px;" >
-                    <p>Leave Feedback</p>
-                    <textarea style="margin-left: 8px; margin-right: 5%;" id="bestTable" name="story" rows="1" cols="16">
-                        
-                    </textarea>
-                    <div style="padding-top: 16px; margin-bottom: 5%; margin-right: 5%;">
-                        <button id="giveFeedbackBtn" style="background-color: #024165; color: white; 
-                        cursor: pointer; float: right; margin-right: auto;" > Give Feedback</button>
-                    </div>
-            </div>
-        </div>-->
-        <!-- older dialog <div id="feedbackDialog" >
-            <div>
-                <span class="close" onclick="closeFeebackDialog()">&times;</span>
-                <p id="feedbackId" style="visibility: hidden;"></p>
-        
-                <div style="margin-top: 16px;">
-                    <label style="margin-bottom: 16px; display: block;">Leave Feedback</label>
-                    <div style=" align-items: center;">
-                        <textarea id="feedbackTV" name="story" rows="4" style="flex: 1; width: 95%; min-width: 100px; height: 100px; margin-right: 16px;"></textarea>
-                    </div>
-                    <button id="leaveFeedbackBtn" style="background-color: #024165; color: white; 
-                        cursor: pointer; float: right; margin-right: 16px; width: 100px; height: 40px; margin-bottom: 16px; margin-top: 24px;" > Leave Feedback</button>
-                    <br>
-                    <br>
-                </div>
-            </div>
-        </div>-->
         <!-- Feedback Dialog -->
         <div id="feedbackDialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" 
         style="width: 60%; height: auto; background-color: #fff; border-radius: 8px; 
@@ -522,6 +391,7 @@
 
 
             let feedbackBtn = document.getElementById("feedbackBtn")
+            let voteBtn = document.getElementById("voteBtn")
             let castVoteBtn = document.getElementById("castVoteBtn")
             let bestSpeaker = document.getElementById("bestSpeaker")
             let bestEvaluator = document.getElementById("bestEvaluator")
@@ -540,14 +410,15 @@
             let speakerHolder = [];
             let evaluatorHolder = [];
 
+            let agendaEditable = false 
+
             let revealBtn = document.getElementById('revealBtn')
+
 
 
             let index = 0;
             let speakers = [];
-            //view elements ^
-
-            //definently not safe to share 
+          
             const firebaseConfig = {
             apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
             authDomain: "naples-sunrise-bay.firebaseapp.com",
@@ -582,6 +453,13 @@
                     alert("you entered the wrong password...")
                 }
             }
+            function openPopup() {
+                document.getElementById('popup').style.display = 'block';
+            }
+
+            function openFeedbackDialog() {
+                document.getElementById('feedbackDialog').style.display = 'block'
+            }
 
             function addFeedback()
             {
@@ -604,9 +482,9 @@
                 }
 
                 if(date.getMonth() < 10){
-                    month = `0${date.getMonth()}`
+                    month = `0${date.getMonth()+1}`
                 }else{
-                    month = `${date.getMonth()}`
+                    month = `${date.getMonth()+1}`
                 }
 
                 let displayedDate = `${date.getFullYear()}-${month}-${day}`
@@ -657,14 +535,15 @@
                 const evaluatorObj = Object.fromEntries(evaluatorMap);
                 const evaluatorStr = JSON.stringify(evaluatorObj);
 
-            // const tableObj = Object.fromEntries(tableValues);
                 const tableStr = JSON.stringify(tableValues);
 
                 alert(`speaker choices ${speakerStr}, evaluator choices ${evaluatorStr} and ${tableStr} `)
             }
 
             async function theSpeakers(){
-                const docSnap = await getDoc(doc(db, `meeting/currentMeeting`))
+                const docSnap = await getDoc(doc(db, `test/date`))
+
+                let openFeedbackBtn = document.getElementById("openFeedbackBtn")
 
                 let firstEval = document.getElementById("firstEval")
                 let secondEval = document.getElementById("secondEval")
@@ -673,20 +552,23 @@
                 let firstSpeakerOption = document.getElementById("firstSpeakerOption")
                 let secondSpeakerOption = document.getElementById("secondSpeakerOption")
                 let thirdSpeakerOption = document.getElementById("thirdSpeakerOption")
+
                 if(docSnap.exists()){
-                    getSpeaker(firstSpeakerOption, docSnap.data().first_speaker)
-                    getSpeaker(secondSpeakerOption,docSnap.data().second_speaker)
-                    getSpeaker(thirdSpeakerOption,docSnap.data().third_speaker)
+                    let data = docSnap.data()
+                    getSpeaker(firstSpeakerOption, data.data[5].userId)
+                    getSpeaker(secondSpeakerOption,data.data[6].userId)
+                    getSpeaker(thirdSpeakerOption, data.data[7].userId)
 
-                    firstEval.value = docSnap.data().first_evaluator
-                    firstEval.innerText = docSnap.data().first_evaluator
-                    //
-                    secondEval.value = docSnap.data().second_evaluator
-                    secondEval.innerText = docSnap.data().second_evaluator
-                    //
-                    thirdEval.value = docSnap.data().third_evaluator
-                    thirdEval.innerText = docSnap.data().third_evaluator
+                    agendaEditable = data.data[15].editable 
 
+                    firstEval.value = data.data[10].member
+                    firstEval.innerText = data.data[10].member
+                    //
+                    secondEval.value = data.data[11].member
+                    secondEval.innerText = data.data[11].member
+                    //
+                    thirdEval.value = data.data[12].member
+                    thirdEval.innerText = data.data[12].member 
 
                 }else{
                     alert(`docSnap does not exist`)
@@ -707,6 +589,7 @@
                     speaker.id = id
                     speakers.push(speaker)
                     speakerOption.innerText = docSnap.data().name
+                
                     setSpeaker(0)
                 }else{
                     //alert(`there was an issue in FBV-363`)
@@ -716,7 +599,7 @@
             function setSpeaker(index){
 
                 let speaker = speakers[index]
-                
+                                
                 let currentSpeakerName = document.getElementById("currentSpeakerName")
                 let currentSpeakerBio = document.getElementById("currentSpeakerBio")
                 let currentSpeakerImg = document.getElementById("currentSpeakerImg")
@@ -748,27 +631,12 @@
 
             feedbackBtn.onclick = () => {
                 addFeedback()
-                
             } 
 
             castVoteBtn.onclick = () => {
                 castVote()
             }
-            /*->
-            firstSpeakerFeedbackBtn.onclick = () => {
-                showModal(nameHolder[0], idHolder[0])
-                console.log(`the id should be the first ${idHolder[0]} and name ${nameHolder[0]}`)
-            }
-
-            secondSpeakerFeedbackBtn.onclick = () => {
-                showModal(nameHolder[1], idHolder[1])
-                console.log(`the id should be the second ${idHolder[1]} and name ${nameHolder[1]}`)
-            }
-
-            thirdSpeakerFeedbackBtn.onclick = () => {
-                showModal(nameHolder[2], idHolder[2])
-                console.log(`the id should be the third ${idHolder[2]} and name ${nameHolder[2]}`)
-            }*/
+            
 
             let rightBtn = document.getElementById("rightBtn")
             let leftBtn = document.getElementById("leftBtn")
@@ -819,8 +687,25 @@
             leaveFeedbackBtn.onclick = () => {
                 feedbackDialog.style.display = 'none'
                 addFeedback()
-                
             }
+
+            openFeedbackBtn.onclick = () =>{
+                if(agendaEditable){
+                    openFeedbackDialog()
+                }else{
+                    alert(`Meeting is not live`)
+                }
+            }
+
+            voteBtn.onclick = () => {
+                if(agendaEditable){
+                    openPopup()
+                }else {
+                    alert('meeting is not live')
+                }
+            }
+
+           
         </script>
     </body>
 </html>

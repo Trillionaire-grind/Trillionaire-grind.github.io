@@ -1,140 +1,725 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liv Lakay</title>
-    <style>
-        /* General reset and basic styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            /*background-color: #F0F1F3;*/
-            background-color: #DEE2E1;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #f0f0f0;
-            text-align: center;
-            padding: 10px 0;
-        }
-        .fab {
-            position: fixed;
-            bottom: 20px; /* Adjust as needed */
-            right: 50%;
-            background-color: #024165;
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 50px;
-            font-size: 24px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transform: translateX(50%);
-        }
-        /* Styling for icons in the bottom navigation bar */
-        footer{
-            background-color: white;
-        }
-        footer nav {
-            display: flex;
-            justify-content: space-around;
-          
-        }
-        footer nav a {
-            text-decoration: none;
-            color: #333;
-        }
-        footer nav a:hover {
-            color: #007bff;
-        }
-
-        .card-container {
-            display: flex;
-            width: 90%;
-            margin: 0 auto;
-            flex-wrap: wrap;
-        }
-        .card {
-            width: 40%;
-            /*margin: 10;*/
-            background-color: white;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        .card img {
-            width: 100%;
-            height: auto;
-        }
-        .card-content {
-            padding: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .card {
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Liv Lakay</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                /*background-color: #F0F1F3;*/
+                background-color: #DEE2E1;
+            }
+            footer {
+                position: fixed;
+                bottom: 0;
                 width: 100%;
+                background-color: #f0f0f0;
+                text-align: center;
+                padding: 10px 0;
+            }
+            .fab {
+                position: fixed;
+                bottom: 20px; /* Adjust as needed */
+                right: 50%;
+                background-color: #024165;
+                color: white;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 50px;
+                font-size: 24px;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+                cursor: pointer;
+                transform: translateX(50%);
+            }
+            /* Styling for icons in the bottom navigation bar */
+            footer{
+                background-color: white;
+            }
+            footer nav {
+                display: flex;
+                justify-content: space-around;
+            
+            }
+            footer nav a {
+                text-decoration: none;
+                color: #333;
+            }
+            footer nav a:hover {
+                color: #007bff;
+            }
+
+            .card-container {
+                display: flex;
+                width: 90%;
+                margin: 0 auto;
+                flex-wrap: wrap;
+            }
+            .card {
+                width: 40%;
+                /*margin: 10;*/
+                background-color: white;
+                border-radius: 6px;
+                overflow: hidden;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+            .card img {
+                width: 100%;
+                height: auto;
+            }
+            .card-content {
+                padding: 10px;
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    width: 100%;
+                }
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 8px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            tr:nth-child(even) {
+            background-color: #f9f9f9; /* Light grey for even rows */
+            }
+            tr:nth-child(odd) {
+                background-color: #ffffff; /* White for odd rows */
+            }
+            dialog {
+                padding: 20px;
+                border: none;
+                border-radius: 5px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                font-family: Arial, sans-serif;
+            }
+            .dialog-buttons {
+                margin-top: 20px;
+                text-align: right;
+            }
+            button {
+                margin-left: 10px;
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="updateBtn" style="cursor: pointer;  float: right; margin-top: 16px; margin-right:8px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background-color: #024165; color: white; border-radius: 10px;">Update</p>
+        <div style="clear: both;"></div>
+        <div id="roleBar" style="display: none; align-items: center; justify-content: space-between; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+            <!-- Title -->
+            <div style="margin-left: 8px;">
+                <p style="font-weight: bold; margin: 0;">Set Roles</p>
+            </div>
+        
+            <!-- Date Selector -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <label for="meetingDate" style="margin: 0; font-weight: 500;">Date:</label>
+                <input 
+                    type="date" id="meetingDate" name="meetingDate" style="padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px;">
+            </div>
+        
+            <!-- Clear Button -->
+            <button id="clearBtn" style="cursor: pointer; margin-right: 8px; padding: 6px 12px; background-color: #024165; color: white; border: none; border-radius: 10px; font-weight: 500;">
+                Clear
+            </button>
+        </div> 
+        <table id="agenda" style="margin-bottom: 48px; pointer-events: none;" >
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Role</th>
+                    <th>Member</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>7:30AM</td>
+                    <td>
+                        <strong>Presiding Officer</strong>  <br>
+                        Presiding Officer (President or other officer if President unavailable) -
+                        opens the meeting and leads the pledge.  
+                        Welcomes Members and Guests.  
+                        Introduces the Toastmaster
+                    </td>
+                    <td>
+                        Debbie  Wildrick, PM3
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:34AM</td>
+                    <td>
+                        <strong>Toastmaster</strong><br>
+                        The Toastmaster is responsible for organizing the meeting; confirming speaking roles,
+                        and emceeing the meeting. Toastmaster will introduce the Grammarian, Ah Counter,
+                        Timer, and Vote Counter and ask them to let the audience know what they'll be doing.
+                    </td>
+                    <td >
+                        <select id="tmRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:36AM</td>
+                    <td>
+                        <strong>Grammarian</strong><br>
+                        Evaluates the usage of grammar, selects and announces the word of the day and reports on both at the end of the meeting. 
+                    </td>
+                    <td >
+                        <select id="grammarianRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:37AM</td>
+                    <td>
+                        <strong>Ah-Counter</strong><br>
+                        Ah-Counter
+                        The Ah Counter listens for ahs, ums, and other filler words.  They report the results at the end of the meeting
+                    </td>
+                    <td >
+                        <select id="ahRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:38AM</td>
+                    <td>
+                        <strong>Timer</strong><br>
+                        The timer, times the speeches, table topics, and evaluations and reports accordingly at the end of each section of the meeting.  The timer also times the one minute of silence following each speaker.
+                    </td>
+                     <td >
+                        <select id="timerRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:40AM</td>
+                    <td>
+                        <strong>Vote Counter</strong><br>
+                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
+                    </td>
+                    <td >
+                        <select id="voteRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:41AM</td>
+                    <td>
+                        <strong>Speaker #1</strong><br>
+                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
+                        <br>
+                        <strong>Path / Project / Time:</strong> <input type="text" id="firstSpeakerPath"><br>
+                        <strong>Project Title:</strong> <input type="text" id="firstSpeakerTitle" ><br>
+                    </td>
+                     <td >
+                        <select id="firstSpeaker">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:48AM</td>
+                    <td>
+                        <strong>Speaker #2</strong><br>
+                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
+                        <strong>Path / Project / Time:</strong> <input type="text" id="secondSpeakerPath"><br>
+                        <strong>Project Title:</strong> <input type="text" id="secondSpeakerTitle" ><br>
+                    </td>
+                     <td >
+                        <select id="secondSpeaker">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>7:55AM</td>
+                    <td>
+                        <strong>Speaker #3</strong><br>
+                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
+                        <strong>Path / Project / Time:</strong> <input type="text" id="thirdSpeakerPath"><br>
+                        <strong>Project Title:</strong> <input type="text" id="thirdSpeakerTitle" ><br>
+                    </td>
+                     <td >
+                        <select id="thirdSpeaker">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:02AM</td>
+                    <td>
+                        <strong>Table Topics Master</strong><br>
+                        The Table Topics Masters calls upon members without other duties on the agenda to deliver 1-2 minute impromptu talks on a topic announced right before the member is chosen.  The role is introduced by the Toastmaster and control is returned to the Toastmaster after TT.
+                    </td>
+                    <td >
+                        <select id="tableRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:10AM</td>
+                    <td>
+                        <strong>General Evaluator</strong><br>
+                        General evaluator introduces each evaluator to do their evaluation.  At the end of the evaluations, the GE calls for reports of helpers and provides meeting, evaluator, and leader evaluations.  This role is introduced by the Toastmaster.
+                    </td>
+                     <td >
+                        <select id="generalRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:11AM</td>
+                    <td>
+                        <strong>Evaluator #1</strong><br>
+                        Evaluates speaker #1 and is introduced by the General Evaluator
+                    </td>
+                    <td >
+                        <select id="firstEvaluator">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:14AM</td>
+                    <td>
+                        <strong>Evaluator #2</strong><br>
+                        Evaluates speaker #2 and is introduced by the General Evaluator
+                    </td>
+                     <td >
+                        <select id="secondEvaluator">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:17AM</td>
+                    <td>
+                        <strong>Evaluator #3</strong><br>
+                        Evaluates speaker #3 and is introduced by the General Evaluator
+                    </td>
+                    <td >
+                        <select id="thirdEvaluator">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:24AM</td>
+                    <td>
+                        <strong>General Evaluator Meeting Evaluation</strong><br>
+                    </td>
+                    <td id="generalRoleCopy">
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:28AM</td>
+                    <td>
+                        <strong>Toastmaster Presents Awards</strong><br>
+                        Toastmaster receives final votes from the vote counter and presents awards.  Toastmaster returns control of the meeting to the Presiding Officer.
+                    </td>
+                     <td id="tmRoleCopy" >
+                     
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:29AM</td>
+                    <td>
+                        <strong>Moments of Truth - Education Tips</strong><br>
+                        Tips to help build on the success of our club.
+                    </td>
+                    <td >
+                        <select id="educationRole">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:31AM<br>8:34AM(end)</td>
+                    <td>
+                        <strong>Presiding Officer Makes Closing Remarks / Adjourns Meeting
+                        </strong><br>
+                    </td>
+                    <td >Debbie Wildrick, PM3</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <dialog id="clearDialog">
+            <form method="dialog">
+              <h3>Are you sure you want to clear the table?</h3>
+              <div class="dialog-buttons">
+                <button id="clearDialogCancelBtn" value="cancel">Cancel</button>
+                <button id="clearDialogYesBtn" value="yes">Yes</button>
+              </div>
+            </form>
+          </dialog>
+          
+        <div id="editBar" style="display: none; float: right; margin-right: 8px; margin-bottom: 48px; margin-top: 8px;">
+            <div id="cancelBtn" style="margin-right: 8px; cursor: pointer;">
+                <p>Cancel</p>
+            </div>
+            <div id="setBtn" style="background-color: #024165; color: white; padding-left: 8px; padding-right: 8px; border-radius: 10px; cursor: pointer;">
+                <p>Set Calendar</p>
+            </div>
+        </div>
+    </body>
+  
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, doc, setDoc, getDoc, getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+            authDomain: "naples-sunrise-bay.firebaseapp.com",
+            projectId: "naples-sunrise-bay",
+            storageBucket: "naples-sunrise-bay.appspot.com",
+            messagingSenderId: "39028676552",
+            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+            measurementId: "G-L0QCNW7C6W"
+        };
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+        const db = getFirestore(app);
+
+
+        let updateBtn = document.getElementById("updateBtn")
+        let clearBtn = document.getElementById('clearBtn')
+
+        let roleBar = document.getElementById("roleBar")
+
+        let editBar = document.getElementById("editBar")
+        let cancelBtn = document.getElementById("cancelBtn")
+        let setBtn = document.getElementById("setBtn")
+
+        let clearDialogCancelBtn = document.getElementById("clearDialogCancelBtn")
+        let clearDialogYesBtn = document.getElementById("clearDialogYesBtn")
+
+        updateBtn.onclick = () => {
+            updateBtn.style.display = "none"
+            editBar.style.display = "flex"
+            roleBar.style.display = "flex"
+            document.getElementById("agenda").style.pointerEvents = "all"
+        }
+
+        cancelBtn.onclick = () => {
+            fetchAgenda()
+            updateBtn.style.display = "flex"
+            editBar.style.display = "none"
+            roleBar.style.display = "none"
+            document.getElementById("agenda").style.pointerEvents = "none"
+        }   
+
+        setBtn.onclick = () => {
+            
+            let result = isFilledOut()
+            if(result){
+                updateBtn.style.display = "flex"
+                editBar.style.display = "none"
+                roleBar.style.display = "none"
+                document.getElementById("agenda").style.pointerEvents = "none"
+                uploadToServer(getTableValues())
+
+            }else{
+                alert('make sure to fill out the entire agenda')
+            }
+            
+        }
+
+        function openVerifyDialog()
+        {
+            document.getElementById('clearDialog').showModal();
+        }
+
+        function isFilledOut(){
+            let filled = true; 
+            const table = document.getElementById("agenda");
+            if (!table) {
+                console.warn(`Table not found with selector: ${tableSelector}`);
+            }
+
+            const selects = table.querySelectorAll("select");
+            selects.forEach(select => {
+                const id = select.id;
+                const member = select.value.trim();
+                if(member == "" || null)
+                {
+                    filled =  false;
+                }
+            })
+
+            return filled
+        }
+
+        clearBtn.onclick = () => {
+            openVerifyDialog()
+            //resetSelects()
+        }
+
+        
+
+        clearDialogYesBtn.onclick = () => {
+            resetSelects()
+        }
+
+        let members = []
+        async function getMembers()
+        {
+            const usersRef = collection(db, "users");
+            const querySnapshot = await getDocs(usersRef)
+
+            let tmRole = document.getElementById("tmRole")
+            let tmRoleCopy = document.getElementById("tmRoleCopy")
+            let grammarianRole = document.getElementById("grammarianRole")
+            let ahRole = document.getElementById("ahRole")
+            let timerRole = document.getElementById("timerRole")
+            let voteRole = document.getElementById("voteRole")
+            let firstSpeaker = document.getElementById("firstSpeaker")
+            let secondSpeaker = document.getElementById("secondSpeaker")
+            let thirdSpeaker = document.getElementById("thirdSpeaker")
+            let tableRole = document.getElementById("tableRole")
+            let generalRole = document.getElementById("generalRole")
+            let generalRoleCopy = document.getElementById("generalRoleCopy")
+            let firstEvaluator = document.getElementById("firstEvaluator")
+            let secondEvaluator = document.getElementById("secondEvaluator")
+            let thirdEvaluator = document.getElementById("thirdEvaluator")
+            let educationRole = document.getElementById("educationRole")
+
+            querySnapshot.forEach((doc) => {
+                const name = doc.data().name;
+                members.push({ name: name, id: doc.id });
+
+                function createOption(name) {
+                    const opt = document.createElement("option");
+                    opt.value = name;
+                    opt.textContent = name;
+                    return opt;
+                }
+
+                tmRole.appendChild(createOption(name));
+                grammarianRole.appendChild(createOption(name));
+                ahRole.appendChild(createOption(name));
+                timerRole.appendChild(createOption(name));
+                voteRole.appendChild(createOption(name));
+                firstSpeaker.appendChild(createOption(name));
+                secondSpeaker.appendChild(createOption(name));
+                thirdSpeaker.appendChild(createOption(name));
+                tableRole.appendChild(createOption(name));
+                generalRole.appendChild(createOption(name));
+                firstEvaluator.appendChild(createOption(name));
+                secondEvaluator.appendChild(createOption(name));
+                thirdEvaluator.appendChild(createOption(name));
+                educationRole.appendChild(createOption(name));
+            });
+        }
+
+        getMembers()
+
+        document.getElementById("tmRole").addEventListener("change", function  () {
+            const value = this.value 
+            document.getElementById("tmRoleCopy").textContent = value
+        })
+
+        document.getElementById("generalRole").addEventListener("change", function  () {
+            const value = this.value 
+            document.getElementById("generalRoleCopy").textContent = value
+        })
+
+        function getTableValues() {
+            const table = document.getElementById("agenda");
+            if (!table) {
+                console.warn(`Table not found with selector: ${tableSelector}`);
+                return [];
+            }
+
+            const selects = table.querySelectorAll("select");
+            const assignments = [];
+
+            let meetingDate = document.getElementById("meetingDate")
+            let dateValue = meetingDate.value
+
+            selects.forEach(select => {
+                const id = select.id;
+                const member = select.value.trim();
+                const assignment = { id, member };
+                
+                // Handle extra data for specific IDs
+                if (id === "firstSpeaker") {
+                    const pathInput = document.getElementById("firstSpeakerPath");
+                    const titleInput = document.getElementById("firstSpeakerTitle");
+
+                    var speakerIndex= document.getElementById("firstSpeaker").selectedIndex
+                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
+                    let titleValue = titleInput ? titleInput.value.trim() : "";
+
+                    let speakerId = members[speakerIndex-1].id
+
+                    assignment.path = pathValue
+                    assignment.title = titleValue
+                    assignment.userId = speakerId
+                    
+                    addSpeech(speakerId, pathValue, titleValue, dateValue);
+                }
+
+                if (id === "secondSpeaker") {
+                    const pathInput = document.getElementById("secondSpeakerPath");
+                    const titleInput = document.getElementById("secondSpeakerTitle");
+
+                    var speakerIndex= document.getElementById("secondSpeaker").selectedIndex
+                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
+                    let titleValue = titleInput ? titleInput.value.trim() : "";
+
+                    let speakerId = members[speakerIndex-1].id
+
+                    assignment.path = pathValue
+                    assignment.title = titleValue
+                    assignment.userId = speakerIds
+
+                    addSpeech(speakerId, pathValue, titleValue, dateValue);
+                }
+
+                if (id === "thirdSpeaker") {
+                    const pathInput = document.getElementById("thirdSpeakerPath");
+                    const titleInput = document.getElementById("thirdSpeakerTitle");
+
+                    var speakerIndex= document.getElementById("thirdSpeaker").selectedIndex
+                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
+                    let titleValue = titleInput ? titleInput.value.trim() : "";
+
+                    let speakerId = members[speakerIndex-1].id
+
+                    assignment.path = pathValue
+                    assignment.title = titleValue
+                    assignment.userId = speakerId
+
+                    addSpeech(speakerId, pathValue, titleValue, dateValue);
+                }
+                
+                assignments.push(assignment);
+            });
+            const value = meetingDate.value
+            assignments.push({"date": value})
+            assignments.push({"editable": true})
+
+            
+            return assignments;
+            
+        }
+
+        async function uploadToServer(data)
+        {
+            await setDoc(doc(db, "test", "date"), {
+                data
+            });
+        }
+
+        async function fetchAgenda()
+        {
+            const docRef = doc(db, "test", "date")
+            const docSnap = await getDoc(docRef)
+
+            if(docSnap.exists()){
+
+                let data = docSnap.data()
+                
+                
+                for(var i=0; i<14; i++){
+                    let element = document.getElementById(data.data[i].id);
+                    element.value = data.data[i].member
+                    if(data.data[i].id == "tmRole"){
+                       
+                        
+                        document.getElementById("tmRoleCopy").innerText = data.data[i].member
+                    }
+
+                    if(data.data[i].id == "generalRole"){
+                        document.getElementById("generalRoleCopy").innerText = data.data[i].member
+                    }
+
+                    if(data.data[i].id == "firstSpeaker")
+                    {
+                        document.getElementById("firstSpeakerPath").value = data.data[i].path
+                        document.getElementById("firstSpeakerTitle").value = data.data[i].title
+                    }
+                    if(data.data[i].id == "secondSpeaker")
+                    {
+                        document.getElementById("secondSpeakerPath").value = data.data[i].path 
+                        document.getElementById("secondSpeakerTitle").value = data.data[i].title 
+                    }
+                    if(data.data[i].id == "thirdSpeaker")
+                    {
+                        document.getElementById("thirdSpeakerPath").value = data.data[i].path 
+                        document.getElementById("thirdSpeakerTitle").value = data.data[i].title 
+                    }
+                }    
+                
+            }else{
+                alert(`error CV-500`)
             }
         }
-    </style>
-</head>
-<body>
-    <div style="width: 100%; height: 10vh; background-color: #024165;">
-        <p style="margin-top: 0%; padding-top: 3vh; color: white; font-weight: bold; text-align: center; font-size: 32px;">Admin</p>
-    </div>
 
-    <p style="margin-left: 5%; font-weight: bold;">Set Speakers</p>
-    <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; ">
-        <div style="width: 30%;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Speaker 1)</p>
-        </div>
-        <div style="width: 30%; margin-left: auto; margin-right: auto;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Speaker 2)</p>
-        </div>
-        <div style="width: 30%;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Speaker 3)</p>
-        </div>
-    </div>
+        fetchAgenda()
 
-    <p style="margin-left: 5%; font-weight: bold; margin-top: 32px;">Set Evaluators</p>
-    <div style="display: flex; width: 90%; margin-left: auto; margin-right: auto; ">
-        <div style="width: 30%;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Evaluator 1)</p>
-        </div>
-        <div style="width: 30%; margin-left: auto; margin-right: auto;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Evaluator 2)</p>
-        </div>
-        <div style="width: 30%;">
-            <button style=" width: 100%; height:8vh; background-color: #024165; color: white; text-align: center;">Text</button>
-            <p style="height: 10%; margin-top: 8px; text-align: center;">(Evaluator 3)</p>
-        </div>
-    </div>
+        function resetSelects() {
+            const table = document.getElementById("agenda");
+            const selects = table.querySelectorAll("select");
 
-    <div style="display: flex; margin-top: 32px;">
-        <button style="margin-left: auto; margin-right: 16px;">Clear Speakers</button>
-        <button style="margin-right: 5%;">Update Speakers</button>
-    </div>
+            selects.forEach(select => {
+                select.value = ""; // Resets to the option with value=""
+            });
 
-    <footer>
-        <nav>
-            <a style="cursor: pointer;" onclick="alert('worked?')"> <img src="assets/calendar_b.svg" height="20px" width="20px"></a>            
-            <a href="#"><img src="assets/clipboard.svg" height="20px" width="20px"></a> 
-            <a href="#"><img src="assets/tools.svg" height="20px" width="20px"></a> 
-            <a href="#"><img src="assets/admin.svg" height="20px" width="20px"></a>            
-            <a href="#"><img src="assets/person.svg" height="20px" width="20px"></a>  
-             
-        </nav>
+            document.getElementById("tmRoleCopy").textContent = ""
+            document.getElementById("generalRoleCopy").textContent = ""
+            document.getElementById("meetingDate").innerText = ""
 
-    </footer>
-</body>
+            document.getElementById("firstSpeakerPath").value = ""
+            document.getElementById("firstSpeakerTitle").value = ""
+
+            document.getElementById("secondSpeakerPath").value = ""
+            document.getElementById("secondSpeakerTitle").value = ""
+
+            document.getElementById("thirdSpeakerPath").value = ""
+            document.getElementById("thirdSpeakerTitle").value = ""
+
+        }
+
+        async function addSpeech(id, path, title, date)
+        {
+            let result = await setDoc(doc(db, "users", id, "speeches" , `${date}`), {
+                path: `${path}`, 
+                title: `${title}`, 
+            })
+        }
+
+        
+    </script>
 </html>

@@ -169,30 +169,11 @@
     <body>
 
         <div class="header">
-            <!--<button class="arrow">&#8249;</button>-->
-            <!--<button id="leftBtn" style="width: 40px; height: 40px; background: none; color: white;" onclick="showRecap(1)"> 
-                &lt;
-            </button>-->
-           <!-- <div class="dropdown">
-                <button class="dropbtn">Past Meetings</button>
-                <div id="dropdown-content" class="dropdown-content">
-                This is where all the previous meetings go
-                </div>
-            </div>-->
             <p id="titleLbl" style="font-size: 18px; text-align: center; width: 100%; font-weight: bold;" >Meeting Agenda for June 3, 2025</p>
-            <!--<button id="rightBtn" style=" background-color: #fff; color: #024165; padding: 10px; 
-            font-size: 16px; border: none; visibility: hidden;"  onclick="showAgenda()">Current Meeting</button>-->
         </div>
-        <!--<div id="agendaView" style="width: 100%; height: 100vh;">
-            <iframe id="frame" style="width: 100%; height: 100vh;" src="https://firebasestorage.googleapis.com/v0/b/naples-sunrise-bay.appspot.com/o/agendas%2FPrinted%20Agenda.pdf?alt=media&token=8406a231-8e0d-4701-8fc2-e6dc7b4dd62f" frameborder="0"></iframe>
-        </div>-->
         <div id="recapView" style="width: 100%; height: 100vh; display: none;">
             <iframe id="recapFrame" style="width: 100%; height: 100vh;" frameborder="0"></iframe>
         </div>
-          <!--PDF Viewer-->
-          <!--<iframe id="frame" style="visibility: hidden; height: fill; width: 100%;" src="https://css4.pub/2015/icelandic/dictionary.pdf">
-
-          </iframe>-->
 
         <h2 style="padding: 8px">Agenda</h2>
         <table style="margin-bottom: 48px;">
@@ -213,7 +194,7 @@
                         Welcomes Members and Guests.  
                         Introduces the Toastmaster
                     </td>
-                    <td>Debbie Wildrick, PM3</td>
+                    <td class="presidentRole">Debbie Wildrick, PM3</td>
                 </tr>
                 <tr>
                     <td>7:34AM</td>
@@ -223,7 +204,7 @@
                         and emceeing the meeting. Toastmaster will introduce the Grammarian, Ah Counter,
                         Timer, and Vote Counter and ask them to let the audience know what they'll be doing.
                     </td>
-                    <td>Sue Kisiday</td>
+                    <td id="tmRole"></td>
                 </tr>
                 <tr>
                     <td>7:36AM</td>
@@ -231,7 +212,7 @@
                         <strong>Grammarian</strong><br>
                         Evaluates the usage of grammar, selects and announces the word of the day and reports on both at the end of the meeting. 
                     </td>
-                    <td>Stephen C. Groves</td>
+                    <td id="grammarianRole"></td>
                 </tr>
                 <tr>
                     <td>7:37AM</td>
@@ -240,7 +221,7 @@
                         Ah-Counter
                         The Ah Counter listens for ahs, ums, and other filler words.  They report the results at the end of the meeting
                     </td>
-                    <td>Jennifer Hanks</td>
+                    <td id="ahRole"></td>
                 </tr>
                 <tr>
                     <td>7:38AM</td>
@@ -248,7 +229,7 @@
                         <strong>Timer</strong><br>
                         The timer, times the speeches, table topics, and evaluations and reports accordingly at the end of each section of the meeting.  The timer also times the one minute of silence following each speaker.
                     </td>
-                    <td>Mariana Beckner</td>
+                    <td id="timerRole"></td>
                 </tr>
                 <tr>
                     <td>7:40AM</td>
@@ -256,33 +237,37 @@
                         <strong>Vote Counter</strong><br>
                         The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
                     </td>
-                    <td>Carlene Marie</td>
+                    <td id="voteRole"></td>
                 </tr>
                 <tr>
                     <td>7:41AM</td>
                     <td>
                         <strong>Speaker #1</strong><br>
-                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote.  The vote counter also collects the notes to speakers and passes the notes to them accordingly.
+                        The vote counter will collect the votes at the end of each section and tally accordingly.  The vote counter assumes the role of tie-breaker should there be a tie.  Prepared speaches over or under time do not qualify for vote. The vote counter also collects the notes to speakers and passes the notes to them accordingly.<br>
+                        <strong>Path / Project / Time:</strong> <span id="firstSpeakerPath">PATHWAYS - Presentation Mastery: (L1) Writing a Speech with Purpose (5-7 min)</span> <br>
+                        <strong>Project Title:</strong> <span id="firstSpeakerTitle">We Came, We Matched, We Conquered.</span> 
                     </td>
-                    <td>Mars Desire</td>
+                    <td id="firstSpeaker"></td>
                 </tr>
                 <tr>
                     <td>7:48AM</td>
                     <td>
                         <strong>Speaker #2</strong><br>
-                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.
+                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
+                        <strong>Path / Project / Time:</strong> <span id="secondSpeakerPath">PATHWAYS - Presentation Mastery: (L1) Writing a Speech with Purpose (5-7 min)</span> <br>
+                        <strong>Project Title:</strong> <span id="secondSpeakerTitle">We Came, We Matched, We Conquered.</span> 
                     </td>
-                    <td>Scott Markowitz, EC3</td>
+                    <td id="secondSpeaker"></td>
                 </tr>
                 <tr>
                     <td>7:55AM</td>
                     <td>
                         <strong>Speaker #3</strong><br>
                         The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
-                        <strong>Path / Project / Time:</strong> PATHWAYS - Presentation Mastery: (L1) Writing a Speech with Purpose (5-7 min) <br>
-                        <strong>Project Title:</strong> We Came, We Matched, We Conquered.
+                        <strong>Path / Project / Time:</strong> <span id="thirdSpeakerPath">PATHWAYS - Presentation Mastery: (L1) Writing a Speech with Purpose (5-7 min)</span> <br>
+                        <strong>Project Title:</strong> <span id="thirdSpeakerTitle">We Came, We Matched, We Conquered.</span> 
                     </td>
-                    <td>Vlad Popovic</td>
+                    <td id="thirdSpeaker"></td>
                 </tr>
                 <tr>
                     <td>8:02AM</td>
@@ -290,7 +275,7 @@
                         <strong>Table Topics Master</strong><br>
                         The Table Topics Masters calls upon members without other duties on the agenda to deliver 1-2 minute impromptu talks on a topic announced right before the member is chosen.  The role is introduced by the Toastmaster and control is returned to the Toastmaster after TT.
                     </td>
-                    <td>Anne Hagan</td>
+                    <td id="tableRole"></td>
                 </tr>
                 <tr>
                     <td>8:10AM</td>
@@ -298,7 +283,7 @@
                         <strong>General Evaluator</strong><br>
                         General evaluator introduces each evaluator to do their evaluation.  At the end of the evaluations, the GE calls for reports of helpers and provides meeting, evaluator, and leader evaluations.  This role is introduced by the Toastmaster.
                     </td>
-                    <td>Steve McCann,CC, CL</td>
+                    <td id="generalRole"></td>
                 </tr>
                 <tr>
                     <td>8:11AM</td>
@@ -306,7 +291,7 @@
                         <strong>Evaluator #1</strong><br>
                         Evaluates speaker #1 and is introduced by the General Evaluator
                     </td>
-                    <td>Jennifer Johnson, PM5</td>
+                    <td id="firstEvaluator"></td>
                 </tr>
                 <tr>
                     <td>8:14AM</td>
@@ -314,7 +299,7 @@
                         <strong>Evaluator #2</strong><br>
                         Evaluates speaker #2 and is introduced by the General Evaluator
                     </td>
-                    <td>April O'Leary, PM3</td>
+                    <td id="secondEvaluator"></td>
                 </tr>
                 <tr>
                     <td>8:17AM</td>
@@ -322,14 +307,14 @@
                         <strong>Evaluator #3</strong><br>
                         Evaluates speaker #3 and is introduced by the General Evaluator
                     </td>
-                    <td>Michelle Borders</td>
+                    <td id="thirdEvaluator"></td>
                 </tr>
                 <tr>
                     <td>8:24AM</td>
                     <td>
                         <strong>General Evaluator Meeting Evaluation</strong><br>
                     </td>
-                    <td>Steve McCann, CC, CL</td>
+                    <td id="generalRoleCopy"></td>
                 </tr>
                 <tr>
                     <td>8:28AM</td>
@@ -337,7 +322,7 @@
                         <strong>Toastmaster Presents Awards</strong><br>
                         Toastmaster receives final votes from the vote counter and presents awards.  Toastmaster returns control of the meeting to the Presiding Officer.
                     </td>
-                    <td>Sue Kisiday</td>
+                    <td id="tmRoleCopy"></td>
                 </tr>
                 <tr>
                     <td>8:29AM</td>
@@ -345,7 +330,7 @@
                         <strong>Moments of Truth - Education Tips</strong><br>
                         Tips to help build on the success of our club.
                     </td>
-                    <td>  Mary Lynn Vierling, DTM</td>
+                    <td id="educationRole"></td>
                 </tr>
                 <tr>
                     <td>8:31AM<br>8:34AM(end)</td>
@@ -353,7 +338,7 @@
                         <strong>Presiding Officer Makes Closing Remarks / Adjourns Meeting
                         </strong><br>
                     </td>
-                    <td>Debbie Wildrick, PM3</td>
+                    <td class="presidentRole">Debbie Wildrick, PM3</td>
                 </tr>
             </tbody>
         </table>
@@ -363,7 +348,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { collection, doc, setDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+        import { collection, doc, setDoc, getDoc ,getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
 
         const firebaseConfig = {
               apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
@@ -380,113 +365,63 @@
         const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-
         var agendaView = document.getElementById("agendaView")
         var recapView = document.getElementById("recapView")
         var recapFrame = document.getElementById("recapFrame")
         var titleLbl = document.getElementById("titleLbl")
         var menu = document.getElementById("dropdown-content")
-        var rightBtn = document.getElementById("rightBtn")
 
-        rightBtn.onclick = () => showAgenda()
-       
-        function showPreviousAgenda(url, date)
-        {
-
-            var rightBtn = document.getElementById("rightBtn")
-            
-            recapFrame.src = url 
-            rightBtn.style.visibility = "visible"
-            titleLbl.innerText = date 
-            recapView.style.display = "inline"
-            agendaView.style.display = "none"
-
-        }
 
         function showAgenda()
         {
-            //titleLbl.innerText = "This Week's Agenda"
             agendaView.style.display = "inline"
             recapView.style.display = "none"
-            rightBtn.style.visibility = "hidden"
         }
 
-        async function fetchGuestSpeaker()
+        async function fetchAgenda()
         {
-            //const testSpeakerRef = collection(db, "meeting/currentMeeting/speakers")
-            
-            const querySnapshot =  await getDocs(collection(db, "meeting/currentMeeting/speakers"));
-            querySnapshot.forEach((doc) => {
-                console.log(`${doc.id} => ${doc.data().bio}`);
-            });
-        }
+            const docRef = doc(db, "test", "date")
+            const docSnap = await getDoc(docRef)
 
-        function showRecap(amount)
-        {
-            var titleLbl = document.getElementById("titleLbl")
-            var rightBtn = document.getElementById("rightBtn")
-            var agendaView = document.getElementById("agendaView")
-            var recapView = document.getElementById("recapView")
-            
-            rightBtn.style.visibility = "visible"
-            
-            titleLbl.innerText = "May 14, 2024"
-            agendaView.style.display = "none"
-            recapView.style.display = "inline"
-        }
+            if(docSnap.exists()){
 
-        /*async function getPreviousAgendas()
-        {
-            const agendasRef = collection(db, "pastMeetings")
-
-            const querySnapshot =  await getDocs(collection(db, "pastMeetings"));
-            querySnapshot.forEach((doc) => {
-                //console.log(`${doc.id} => ${doc.data().agenda}`);
-            });
-
-            const q = query(collection(db, "pastMeetings"), orderBy("date", "desc"));
-
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-            ];
-
-
-            const testSnapshot = await getDocs(q);
-            testSnapshot.forEach((doc) => 
-            {
-                // doc.data() is never undefined for query doc snapshots
-                console.log(doc.id, " => ", doc.data().date);
-                let seconds = doc.data().date.seconds
-
-                let time = seconds * 1000
-                let date = new Date(time)
-
-                let anchor = document.createElement('a')
-                let day = ""
-                let month = ""
-                if(date.getDate() < 10)
-                {
-                    day = `0${date.getDate()}`
-                }
-                else{
-                    day = `${date.getDate()}`
-                }
-                if(date.getMonth() < 10){
-                    month = `0${date.getMonth()}`
-                }
-                else{
-                    month = date.getMonth()
-                }
-       
-                let displayedDate = `${date.getFullYear()}-${month}-${day}`
-                anchor.innerHTML = displayedDate
-                anchor.style.cursor = "pointer"
-                anchor.onclick = () => showPreviousAgenda(doc.data().agenda,displayedDate)
-                menu.appendChild(anchor)
+                let data = docSnap.data()
                 
-            });
+                let titleLbl = document.getElementById("titleLbl")
+                for(var i=0; i<14; i++){
+                    let element = document.getElementById(data.data[i].id);
+                    element.innerText = data.data[i].member
+                    if(data.data[i].id == "tmRole"){
+                        document.getElementById("tmRoleCopy").innerText = data.data[i].member
+                    }
+
+                    if(data.data[i].id == "generalRole"){
+                        document.getElementById("generalRoleCopy").innerText = data.data[i].member
+                    }
+
+                    if(data.data[i].id == "firstSpeaker")
+                    {
+                        document.getElementById("firstSpeakerPath").innerText = data.data[i].path 
+                        document.getElementById("firstSpeakerTitle").innerText = data.data[i].title 
+                    }
+                    if(data.data[i].id == "secondSpeaker")
+                    {
+                        document.getElementById("secondSpeakerPath").innerText = data.data[i].path 
+                        document.getElementById("secondSpeakerTitle").innerText = data.data[i].title 
+                    }
+                    if(data.data[i].id == "thirdSpeaker")
+                    {
+                        document.getElementById("thirdSpeakerPath").innerText = data.data[i].path 
+                        document.getElementById("thirdSpeakerTitle").innerText = data.data[i].title 
+                    }
+                }    
+                titleLbl.innerText = "Meeting Agenda For "+data.data[14].date
+
+            }else{
+                alert(`error CV-500`)
+            }
         }
-    
-        getPreviousAgendas()*/
+
+        fetchAgenda()
     </script>
 </html>

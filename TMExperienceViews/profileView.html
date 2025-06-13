@@ -99,22 +99,9 @@
             </div>
         </div>
         <p style="font-weight: bold; margin-left: 5%;">Your Speeches</p>
-        <!--<div class="cardView" style="display: flex; width: 90%; margin-left: 5%; margin-right: 5%; ">
-            <div class="card">
-                <div class="card-content">
-                    <p style="font-weight: bold; text-align: center;">2021-03-12<br><span style="font-size: 12px;">My Ice Breaker</span></p>
-                </div>
-            </div>
-            <div class="card" style="margin-left: 10%; float: right">
-                <div class="card-content">
-                    <p style="font-weight: bold; text-align: center;">2022-01-10<br><span style="font-size: 12px;">How To Dance</span></p>
-                </div>
-            </div>
-        </div>-->
+      
         <div style="margin-bottom: 20vh;">
-            <!--<div id="speechesDiv" style="display: flexbox; overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
-            
-            </div>-->
+        
             <div id="speechesDiv" style="display: flex; flex-wrap: wrap; justify-content: left;  overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
 
             </div>
@@ -154,19 +141,15 @@
                         uid = user.uid;
                         fetchUserInfo(uid)
                         fetchSpeeches(uid)
-                        // You can perform further actions with the user object here
                     } else {
-                        // User is signed out
-                       // alert('No user signed in');
+                       alert('No user signed in');
                     }
                 });
             }
-
             
             function openIndividualSpeech(speechId, uid)
             {
                 let url = `./individualSpeech.html?speech=${speechId}?user=${uid}`
-                //let e
                 window.open(url, '_blank').focus();
             }
 
@@ -185,30 +168,12 @@
             function setData(data)
             {
                 let nameTV = document.getElementById("nameTV")
-                //let phoneTV = document.getElementById("phoneTV")
                 let bioTV = document.getElementById("bioTV")
-                //let xTV = document.getElementById("xTV")
-                //let instagramTV = document.getElementById("instagramTV")
-                //let facebookTV = document.getElementById("facebookTV")
-                //let emailTV = document.getElementById("emailTV")
-                //let snapTV = document.getElementById("snapTV")
-
                 let profileImage = document.getElementById("profileImage")
-
-
-                //alert(`bio ${data.bio}`)
 
                 nameTV.innerText = data.name
                 bioTV.innerText = data.bio
-                /*phoneTV.innerText = data.phone
-           
-                xTV.innerText = data.x
-                instagramTV.innerText = data.instagram
-                facebookTV.innerText = data.facebook
-                emailTV.innerText = data.email
-                snapTV.innerText = data.snapchat*/
                 profileImage.src = data.imageUrl
-
             }
 
             async function fetchSpeeches(userId) {
@@ -218,7 +183,6 @@
                     const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
                     console.log("Query snapshot size:", querySnapshot.size);
                     
-
                     querySnapshot.forEach((doc) => {
                         
                         speechesDiv.appendChild(createSpeechDiv(doc.id, doc.data().title, userId));
@@ -227,11 +191,9 @@
                     console.log("Speeches fetched successfully.");
                 } catch (error) {
                     console.error("Error fetching speeches:", error);
-                    // Optionally, display an error message in speechesDiv
                     speechesDiv.innerText = "Failed to fetch speeches. Please try again later.";
                 }
             }
-
 
             function createSpeechDiv(id, title, userId) {
                 let div = document.createElement('div');
@@ -253,12 +215,7 @@
 
                 return div;
             }
-
-
             getUser()
-            //fetchSpeeches("7XUaLIrBJAZQWaIuoT013j6wJ2H2")
-
         </script>
-    
     </body>
 </html>

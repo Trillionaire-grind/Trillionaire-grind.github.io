@@ -1,0 +1,9 @@
+fetch the speeches. - done 
+set a speech to calendar - done
+have a date set up for the speech - done
+check that there is a date selected - done 
+remove the values of agenda on clear - done
+Yes or No dialog before clear - done
+set calendar - done
+check if editable - done
+
