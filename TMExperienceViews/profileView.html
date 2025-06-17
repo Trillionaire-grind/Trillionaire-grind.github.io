@@ -88,7 +88,6 @@
         <header>
             <p style="font-size: 26px; padding-left: 5%;">Hello <br><span id="nameTV" style="font-size: 32px; font-weight: bold;  color: #024165;">Michael</span></p>
         </header>
-    
 
         <p style="margin-left: 5%; font-weight: bold;">Your Bio</p>
         <div style="width: 90; background-color: white; margin-left: 5%; margin-right: 5%;  border-radius: 6px; display: flex;">
@@ -107,7 +106,6 @@
             </div>
         </div>
         <script type="module">
-            // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
@@ -161,7 +159,7 @@
                 if(docSnap.exists()){
                     setData(docSnap.data())
                 }else{
-                   // alert(`PV: there was an error ${userId}`)
+                    alert(`PV:162 there was an error ${userId}`)
                 }
             }
 
@@ -178,19 +176,15 @@
 
             async function fetchSpeeches(userId) {
                 let speechesDiv = document.getElementById("speechesDiv");
-                speechesDiv.innerHTML = ''; // Clear previous content if any
+                speechesDiv.innerHTML = ''; 
                 try {
                     const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
-                    console.log("Query snapshot size:", querySnapshot.size);
-                    
+
                     querySnapshot.forEach((doc) => {
                         
                         speechesDiv.appendChild(createSpeechDiv(doc.id, doc.data().title, userId));
                     });
-
-                    console.log("Speeches fetched successfully.");
                 } catch (error) {
-                    console.error("Error fetching speeches:", error);
                     speechesDiv.innerText = "Failed to fetch speeches. Please try again later.";
                 }
             }

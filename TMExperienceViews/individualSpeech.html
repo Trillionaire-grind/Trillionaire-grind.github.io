@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Your Speech</title>
         <style>
-            /* Add your CSS styles here */
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -24,27 +23,27 @@
                 justify-content: space-around;
                 align-items: center;
                 padding: 10px 0;
-                border-top: 1px solid #ccc; /* Add border on top */
+                border-top: 1px solid #ccc;
             }
             .bottom-nav a {
-                color: #333; /* Change text color */
+                color: #333; 
                 text-decoration: none;
                 padding: 10px;
-                border-right: 1px solid #ccc; /* Add border between buttons */
+                border-right: 1px solid #ccc;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                width: 25%; /* Equal width for each button */
-                box-sizing: border-box; /* Include padding in the width calculation */
+                width: 25%;
+                box-sizing: border-box;
             }
             .bottom-nav a:last-child {
-                border-right: none; /* Remove border on last button */
+                border-right: none; 
             }
             .bottom-nav img {
                 width: 24px;
                 height: 24px;
-                margin-bottom: 5px; /* Add spacing between icon and text */
+                margin-bottom: 5px; 
             }
             .titleBar{
                 background: #FEFEFE;
@@ -87,10 +86,8 @@
         </div>
 
         <script type="module">
-            // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
             import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
             import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
@@ -119,7 +116,6 @@
                 for (var i = 0; i < sURLVariables.length; i++) 
                 {
                     var sParameterName = sURLVariables[i].split('=');
-                    console.log(`the value of parameter ${sParameterName}`)
                     if (sParameterName[0] == sParam) 
                     {
                         return sParameterName[1];
@@ -128,17 +124,12 @@
             }
 
             function extractParamsFromUrl(url) {
-                // Extract the query string part from the URL
                 const speechId = url.split('?')[1];
                 const userId = url.split('?')[2];
-                console.log(`queryString${speechId} and  pool  ${userId}`)
                 
-                // Split the query string into individual key-value pairs
                 const speechParams = speechId.split('&');
                 const userParams = userId.split('&');
-                console.log(`params ${speechParams} ${userParams}`)
                 
-                // Initialize an object to store the extracted parameters
                 const extractedParams = {};
 
                 speechParams.forEach(param => {
@@ -172,13 +163,12 @@
                     pathTV.textContent = `${speechSnapshot.data().path}`
 
                     feedbackSnapshot.forEach((doc) => {
-                        console.log(`feedback ${doc.data().feedback}`)
                         name += doc.data().feedback + '\n\n'
                     })
                     feedbackTV.innerText = name
 
                 } else {
-                    console.log("No such document!");
+                    alert("Error IV:177 - No such document!");
                 }
             }
             extractParamsFromUrl(window.location.href);
@@ -191,11 +181,9 @@
                 if(evaluationBtn.innerHTML == "-")
                 {
                     evaluationBtn.innerHTML = "+"
-                    console.log("evaluation text should be gone")
                 }
                 else{
                     evaluationBtn.innerHTML = "-"
-                    console.log("this worked? -")
                     evaluationText.style.display = "inline"
                 }
                
@@ -206,12 +194,10 @@
 
                 if (feedbackBtn.innerHTML == "-") {
                     feedbackBtn.innerHTML = "+";
-                    console.log("should minimize");
-                    feedbackText.style.visibility = 'hidden'; // Correctly set visibility to 'hidden'
+                    feedbackText.style.visibility = 'hidden'; 
                 } else {
                     feedbackBtn.innerHTML = "-";
-                    console.log("should maximize");
-                    feedbackText.style.visibility = 'visible'; // Ensure visibility is set to 'visible' when maximizing
+                    feedbackText.style.visibility = 'visible'; 
                 }
             }
         </script>

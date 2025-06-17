@@ -1,16 +1,15 @@
 <!DOCTYPE html>
+<!--H1 and H2 headers for SEO-->
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Liv Lakay</title>
         <style>
-            /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
-                /*background-color: #F0F1F3;*/
                 background-color: #DEE2E1;
             }
             footer {
@@ -23,7 +22,7 @@
             }
             .fab {
                 position: fixed;
-                bottom: 20px; /* Adjust as needed */
+                bottom: 20px; 
                 right: 50%;
                 background-color: #024165;
                 color: white;
@@ -37,7 +36,6 @@
                 cursor: pointer;
                 transform: translateX(50%);
             }
-            /* Styling for icons in the bottom navigation bar */
             footer{
                 background-color: white;
             }
@@ -62,7 +60,6 @@
             }
             .card {
                 width: 40%;
-                /*margin: 10;*/
                 background-color: white;
                 border-radius: 6px;
                 overflow: hidden;
@@ -95,10 +92,10 @@
                 background-color: #f2f2f2;
             }
             tr:nth-child(even) {
-            background-color: #f9f9f9; /* Light grey for even rows */
+            background-color: #f9f9f9; 
             }
             tr:nth-child(odd) {
-                background-color: #ffffff; /* White for odd rows */
+                background-color: #ffffff;
             }
             dialog {
                 padding: 20px;
@@ -122,19 +119,16 @@
         <p id="updateBtn" style="cursor: pointer;  float: right; margin-top: 16px; margin-right:8px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background-color: #024165; color: white; border-radius: 10px;">Update</p>
         <div style="clear: both;"></div>
         <div id="roleBar" style="display: none; align-items: center; justify-content: space-between; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
-            <!-- Title -->
             <div style="margin-left: 8px;">
                 <p style="font-weight: bold; margin: 0;">Set Roles</p>
             </div>
         
-            <!-- Date Selector -->
             <div style="display: flex; align-items: center; gap: 8px;">
                 <label for="meetingDate" style="margin: 0; font-weight: 500;">Date:</label>
                 <input 
                     type="date" id="meetingDate" name="meetingDate" style="padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px;">
             </div>
         
-            <!-- Clear Button -->
             <button id="clearBtn" style="cursor: pointer; margin-right: 8px; padding: 6px 12px; background-color: #024165; color: white; border: none; border-radius: 10px; font-weight: 500;">
                 Clear
             </button>
@@ -452,7 +446,6 @@
             }else{
                 alert('make sure to fill out the entire agenda')
             }
-            
         }
 
         function openVerifyDialog()
@@ -464,7 +457,7 @@
             let filled = true; 
             const table = document.getElementById("agenda");
             if (!table) {
-                console.warn(`Table not found with selector: ${tableSelector}`);
+                alert(`Table not found with selector: ${tableSelector}`);
             }
 
             const selects = table.querySelectorAll("select");
@@ -482,10 +475,7 @@
 
         clearBtn.onclick = () => {
             openVerifyDialog()
-            //resetSelects()
         }
-
-        
 
         clearDialogYesBtn.onclick = () => {
             resetSelects()
@@ -557,7 +547,7 @@
         function getTableValues() {
             const table = document.getElementById("agenda");
             if (!table) {
-                console.warn(`Table not found with selector: ${tableSelector}`);
+                alert(`Table not found with selector: ${tableSelector}`);
                 return [];
             }
 
@@ -572,7 +562,6 @@
                 const member = select.value.trim();
                 const assignment = { id, member };
                 
-                // Handle extra data for specific IDs
                 if (id === "firstSpeaker") {
                     const pathInput = document.getElementById("firstSpeakerPath");
                     const titleInput = document.getElementById("firstSpeakerTitle");
@@ -629,10 +618,7 @@
             const value = meetingDate.value
             assignments.push({"date": value})
             assignments.push({"editable": true})
-
-            
             return assignments;
-            
         }
 
         async function uploadToServer(data)
@@ -650,7 +636,6 @@
             if(docSnap.exists()){
 
                 let data = docSnap.data()
-                
                 
                 for(var i=0; i<14; i++){
                     let element = document.getElementById(data.data[i].id);
@@ -694,7 +679,7 @@
             const selects = table.querySelectorAll("select");
 
             selects.forEach(select => {
-                select.value = ""; // Resets to the option with value=""
+                select.value = ""; 
             });
 
             document.getElementById("tmRoleCopy").textContent = ""
@@ -719,7 +704,5 @@
                 title: `${title}`, 
             })
         }
-
-        
     </script>
 </html>

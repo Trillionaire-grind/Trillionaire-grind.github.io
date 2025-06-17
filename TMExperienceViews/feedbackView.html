@@ -5,12 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Our Speakers</title>
         <style>
-            /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
-                /*background-color: #F0F1F3;*/
                 background-color: #DEE2E1;
             }
             footer {
@@ -23,7 +21,7 @@
             }
             .fab {
                 position: fixed;
-                bottom: 20px; /* Adjust as needed */
+                bottom: 20px;  
                 right: 50%;
                 background-color: #024165;
                 color: white;
@@ -37,7 +35,7 @@
                 cursor: pointer;
                 transform: translateX(50%);
             }
-            /* Styling for icons in the bottom navigation bar */
+
             footer{
                 background-color: white;
             }
@@ -62,7 +60,6 @@
             }
             .card {
                 width: 40%;
-                /*margin: 10;*/
                 background-color: white;
                 border-radius: 6px;
                 overflow: hidden;
@@ -82,17 +79,16 @@
                 }
             }
 
-
             #feedbackDialog{
-                display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1; /* Sit on top */
+                display: none; 
+                position: fixed;
+                z-index: 1; 
                 left: 0;
                 top: 0;
-                width: 100%; /* Full width */
-                height: 100%; /* Full height */
-                overflow: auto; /* Enable scrolling if needed */
-                background-color: rgba(0,0,0,0.4); /* Black with opacity */
+                width: 100%; 
+                height: 100%; 
+                overflow: auto; 
+                background-color: rgba(0,0,0,0.4); 
 
             }
 
@@ -193,28 +189,26 @@
             }
 
             .modal {
-                display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1; /* Sit on top */
+                display: none; 
+                position: fixed; 
+                z-index: 1; 
                 left: 0;
                 top: 0;
-                width: 100%; /* Full width */
-                height: 100%; /* Full height */
-                overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
-                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                width: 100%; 
+                height: 100%;
+                overflow: auto; 
+                background-color: rgb(0,0,0);
+                background-color: rgba(0,0,0,0.4); 
             }
 
-            /* Modal Content/Box */
             .modal-content {
                 background-color: #fefefe;
-                margin: 15% auto; /* 15% from the top and centered */
+                margin: 15% auto; 
                 padding: 20px;
                 border: 1px solid #888;
-                width: 80%; /* Could be more or less, depending on screen size */
+                width: 80%; 
             }
 
-            /* The Close Button */
             .close {
                 color: #aaa;
                 float: right;
@@ -240,16 +234,9 @@
         </style>
         
         <script>
-            // Function to open the popup
-           
-            //openPopup()
-            // Function to close the popup
             function closePopup() {
                 document.getElementById('popup').style.display = 'none';
             }
-
-
-           
 
             function closeFeebackDialog()
             {
@@ -264,7 +251,6 @@
             padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
 
             <div id="myModal"  class="modal">
-                <!-- Modal content -->
                 <div class="modal-content" style="width: 80%; height: 30vh;">
                     <button class="close" onclick="closeModal()">&times;</button>
                     <p id="modalName">Provide your feedback for </p>
@@ -348,32 +334,26 @@
             </div>
         </div>
 
-        <!-- Feedback Dialog -->
         <div id="feedbackDialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" 
         style="width: 60%; height: auto; background-color: #fff; border-radius: 8px; 
         box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: fixed; z-index: 1000;
         top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 24px;">    
             
-            <!-- Close Button -->
             <button class="close" onclick="closeFeebackDialog()" aria-label="Close feedback dialog"
                 style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
                 &times;
             </button>
 
-            <!-- Hidden Feedback ID (if needed) -->
             <p id="feedbackId" style="display: none;"></p>
 
-            <!-- Title -->
             <h2 id="feedbackTitle" style="margin-top: 0;">Leave Feedback</h2>
 
-            <!-- Feedback Text Area -->
             <div style="margin: 16px 0;">
                 <label for="feedbackTV" style="display: block; margin-bottom: 8px;">Your feedback:</label>
                 <textarea id="feedbackTV" name="feedback" rows="4"
                     style="width: 90%; margin-left:auto; margin-right: auto; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
             </div>
 
-            <!-- Submit Button -->
             <div style="text-align: right;">
                 <button id="leaveFeedbackBtn"
                     style="background-color: #024165; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
@@ -414,8 +394,6 @@
 
             let revealBtn = document.getElementById('revealBtn')
 
-
-
             let index = 0;
             let speakers = [];
           
@@ -429,7 +407,6 @@
             measurementId: "G-L0QCNW7C6W"
             };
         
-            // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
             const db = getFirestore(app);
@@ -495,7 +472,6 @@
                         alert('feedback given successfully')
                         feedbackTV.value = ""
                         closeFeebackDialog()
-                    
                     });
             }
 
@@ -563,10 +539,10 @@
 
                     firstEval.value = data.data[10].member
                     firstEval.innerText = data.data[10].member
-                    //
+                    
                     secondEval.value = data.data[11].member
                     secondEval.innerText = data.data[11].member
-                    //
+                 
                     thirdEval.value = data.data[12].member
                     thirdEval.innerText = data.data[12].member 
 
@@ -578,8 +554,7 @@
             async function getSpeaker(speakerOption, id)
             {
                 const docSnap = await getDoc(doc(db, `users/${id}`))
-                console.log(`what is the id ${id}`)
-            
+
                 if(docSnap.exists())
                 {
                     let speaker = {};
@@ -592,7 +567,7 @@
                 
                     setSpeaker(0)
                 }else{
-                    //alert(`there was an issue in FBV-363`)
+                    alert(`there was an issue in FBV-595`)
                 }
             }
 
@@ -625,7 +600,6 @@
                     bestTable : `${bestTableValue}`
                 })
                 alert("your vote has been casted")
-                //close
                 closePopup()
             }
 
@@ -637,7 +611,6 @@
                 castVote()
             }
             
-
             let rightBtn = document.getElementById("rightBtn")
             let leftBtn = document.getElementById("leftBtn")
 
@@ -704,8 +677,6 @@
                     alert('meeting is not live')
                 }
             }
-
-           
         </script>
     </body>
 </html>

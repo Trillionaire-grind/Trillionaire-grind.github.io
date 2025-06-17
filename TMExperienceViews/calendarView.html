@@ -5,7 +5,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Naples Sunrise Bay</title>
         <style>
-            /* Add your CSS styles here */
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
@@ -34,27 +33,27 @@
                 justify-content: space-around;
                 align-items: center;
                 padding: 10px 0;
-                border-top: 1px solid #ccc; /* Add border on top */
+                border-top: 1px solid #ccc;  
             }
             .bottom-nav a {
-                color: #333; /* Change text color */
+                color: #333;
                 text-decoration: none;
                 padding: 10px;
-                border-right: 1px solid #ccc; /* Add border between buttons */
+                border-right: 1px solid #ccc; 
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                width: 25%; /* Equal width for each button */
-                box-sizing: border-box; /* Include padding in the width calculation */
+                width: 25%; 
+                box-sizing: border-box; 
             }
             .bottom-nav a:last-child {
-                border-right: none; /* Remove border on last button */
+                border-right: none;
             }
             .bottom-nav img {
                 width: 24px;
                 height: 24px;
-                margin-bottom: 5px; /* Add spacing between icon and text */
+                margin-bottom: 5px;
             }
 
             .profileContainer {
@@ -97,7 +96,6 @@
             padding: 16px 32px;
             }
 
-            /* Dropdown Button */
             .dropbtn {
             background-color: #fff;
             color: #024165;
@@ -106,13 +104,11 @@
             border: none;
             }
 
-            /* The container <div> - needed to position the dropdown content */
             .dropdown {
             position: relative;
             display: inline-block;
             }
 
-            /* Dropdown Content (Hidden by Default) */
             .dropdown-content {
             display: none;
             position: absolute;
@@ -122,7 +118,6 @@
             z-index: 1;
             }
 
-            /* Links inside the dropdown */
             .dropdown-content a {
             color: black;
             padding: 12px 16px;
@@ -137,13 +132,10 @@
             display: block;
             }
 
-            /* Change color of dropdown links on hover */
             .dropdown-content a:hover {background-color: #ddd;}
 
-            /* Show the dropdown menu on hover */
             .dropdown:hover .dropdown-content {display: block;}
 
-            /* Change the background color of the dropdown button when the dropdown content is shown */
             .dropdown:hover .dropbtn {background-color: #7D2128; color: white;}
 
             table {
@@ -159,10 +151,10 @@
                 background-color: #f2f2f2;
             }
             tr:nth-child(even) {
-            background-color: #f9f9f9; /* Light grey for even rows */
+            background-color: #f9f9f9; 
             }
             tr:nth-child(odd) {
-                background-color: #ffffff; /* White for odd rows */
+                background-color: #ffffff; 
             }
         </style>
     </head>
@@ -360,7 +352,6 @@
               measurementId: "G-L0QCNW7C6W"
         };
           
-            // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const db = getFirestore(app);

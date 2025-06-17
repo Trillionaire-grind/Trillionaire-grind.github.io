@@ -5,9 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
         <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
         <title>Your TM Experience</title>
-        <style>
-            /* General reset and basic styles */
-        
+        <style>        
             body {
                 margin: 0;
                 padding: 0;
@@ -24,7 +22,6 @@
                 box-sizing: border-box;
             }
             
-            /* Styling for icons in the bottom navigation bar */
             footer{
                 background-color: white;
                 margin: 0;
@@ -37,8 +34,6 @@
             footer nav {
                 display: flex;
                 justify-content: space-around;
-                
-            
             }
             footer nav a {
                 text-decoration: none;
@@ -56,7 +51,6 @@
             }
             .card {
                 width: 40%;
-                /*margin: 10;*/
                 background-color: white;
                 border-radius: 6px;
                 overflow: hidden;
@@ -233,28 +227,26 @@
             }
 
             .modal {
-                display: none; /* Hidden by default */
-                position: fixed; /* Stay in place */
-                z-index: 1; /* Sit on top */
+                display: none; 
+                position: fixed; 
+                z-index: 1; 
                 left: 0;
                 top: 0;
-                width: 100%; /* Full width */
-                height: 100%; /* Full height */
-                overflow: auto; /* Enable scroll if needed */
-                background-color: rgb(0,0,0); /* Fallback color */
-                background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+                width: 100%;
+                height: 100%; 
+                overflow: auto; 
+                background-color: rgb(0,0,0); 
+                background-color: rgba(0,0,0,0.4); 
             }
 
-            /* Modal Content/Box */
             .modal-content {
                 background-color: #fefefe;
-                margin: 15% auto; /* 15% from the top and centered */
+                margin: 15% auto; 
                 padding: 20px;
                 border: 1px solid #888;
-                width: 80%; /* Could be more or less, depending on screen size */
+                width: 80%;
             }
 
-            /* The Close Button */
             .close {
                 color: #aaa;
                 float: right;
@@ -288,9 +280,9 @@
                 width: 20px;
                 height: 20px;
                 margin-right: 10px;
-                accent-color: #024165; /* Change color to blue */
+                accent-color: #024165; 
                 cursor: pointer;
-                transform: scale(1.5); /* Make checkbox larger */
+                transform: scale(1.5); 
             }
 
             .custom-form-container {
@@ -458,7 +450,7 @@
                 <div class="custom-button-wrapper">
                   <button id="logInBtn" class="custom-login-button">Log In</button>
                 </div>
-                <p style="text-align: center;">version 1.0.1.0</p>
+                <p style="text-align: center;">version 1.0.1.1</p>
             </div>
            
             
@@ -487,21 +479,18 @@
 
             let mainViewDiv = document.getElementById("mainViewDiv")
 
-            //views
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
             var toolsView = document.getElementById('toolsView')
             var adminView = document.getElementById('adminView')
             var profileView = document.getElementById('profileView')
 
-            //nav buttons
             let calendarBtn = document.getElementById("calendarBtn")
             let feedbackBtn = document.getElementById("feedbackBtn")
             let toolsBtn = document.getElementById("toolsBtn")
             let adminBtn = document.getElementById("adminBtn")
             let profileBtn = document.getElementById("profileBtn")
 
-            //buttons
             let logInBtn = document.getElementById("logInBtn")
            
             let resetModal = document.getElementById("resetModal")
@@ -532,9 +521,6 @@
                     views[i].style.display = "none"
                 }
                 views[destination].style.display = "inline"
-
-                console.log(`view to be visible ${destination}`)
-
                 selectedBtn(destination)
             }
 
@@ -596,13 +582,11 @@
                     {
                         uploadImage(file, id)
                     }
-                    // ...
                 })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                     alert(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
-                    // ..
                 });
             }
 
@@ -611,12 +595,9 @@
                     const storage = getStorage();
                     const moutainsRef = ref(storage, `${userId}.jpg`)
                     uploadBytes(moutainsRef, file).then((snapshot) => {
-                        console.log('Uploaded a blob or file!');
                         getDownloadURL(moutainsRef).then((downloadURL) => {
-                            console.log('File available at', downloadURL);
                             createUser(userId, downloadURL)
                         }).catch((error) => {
-                            console.error('Error getting download URL', error);
                             alert('Error getting download URL');
                         });
                     });
@@ -643,10 +624,9 @@
                     if(checkbox.checked){
                         //go to the website stripe. 
                     }else{
-                        localStorage.removeItem('showModal'); // Remove the flag
+                        localStorage.removeItem('showModal'); 
                         myModal.style.display = 'inline'; 
                     }
-                    
                 });
             }
 
@@ -674,9 +654,8 @@
                     }
                     showMainView()
                 } else {
-                    console.log("No such document!");
+                    alert("No such document!");
                 }
-
             }
 
             function signIn(email, password) {
@@ -684,20 +663,17 @@
                     signInWithEmailAndPassword(auth, email, password)
                     .then((userCredential) => {
                         const user = userCredential.user;
-                        console.log(`User signed in: ${user.uid}`);
                         alert("Welcome back!")
                         checkRole(user.uid)
                     })
                     .catch((error) => {
                         const errorCode = error.code;
                         const errorMessage = error.message;
-                        console.error(`Sign-in error: ${errorCode} - ${errorMessage}`);
                         alert(`Logged in failed ${errorMessage}`)
                     });
                         }).catch((error) => {
-                        // An error happened.
+                        alert(`TME-690: ${error}`)
                 });
-                
             }
 
             function requestEmail(email)
@@ -740,7 +716,7 @@
             }
 
             logInBtn.onclick = () => {
-                let email = document.getElementById("logInEmail").value; // Corrected: "logInEmail" instead of "LogInEmail"
+                let email = document.getElementById("logInEmail").value; 
                 let password = document.getElementById("logInPassword").value
                 signIn(email, password)
             } 
@@ -749,15 +725,14 @@
             window.onload = function() {
                 if (localStorage.getItem('showModal') === 'true') {
                     let myModal = document.getElementById('myModal');
-                    localStorage.removeItem('showModal'); // Remove the flag
-                    myModal.style.display = 'inline'; // Show the modal
+                    localStorage.removeItem('showModal'); 
+                    myModal.style.display = 'inline';
                 }
             };
         
         </script>
     
         <script>
-            // Function to change iframe src
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
             var toolsView = document.getElementById('toolsView')
@@ -786,36 +761,55 @@
                 let adminView = document.getElementById("adminView")
                 let profileBtn = document.getElementById("profileBtn")
 
+
+                let adminBtn = document.getElementById("adminBtn")
                 calendarBtn.src = "TMExperienceViews/assets/calendar.circle.svg"
                 feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.svg"
                 toolsBtn.src = "TMExperienceViews/assets/tools.svg"
                 profileBtn.src = "TMExperienceViews/assets/person.svg"
-                adminBtn.src = "TMExperienceViews/assets/admin.svg"
-                
-                switch (destination){
-                    case 0:
-                        calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
-                        break
-                    case 1:
-                        feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
-                        break
-                    case 2:
-                        toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
-                        break
-                    case 3:
-                        adminBtn.src = "TMExperienceViews/assets/admin_b.png"
-                        break
-                    case 4:
-                        profileBtn.src = "TMExperienceViews/assets/person_b.svg"
-                        break
+                if(adminBtn){
+                    adminBtn.src = "TMExperienceViews/assets/admin.svg"
+                    switch (destination){
+                        case 0:
+                            calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
+                            break
+                        case 1:
+                            feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
+                            break
+                        case 2:
+                            toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
+                            break
+                        case 3:
+                            adminBtn.src = "TMExperienceViews/assets/admin_b.png"
+                            break
+                        case 4:
+                            profileBtn.src = "TMExperienceViews/assets/person_b.svg"
+                            break
+                    }
                 }
+                else{
+                    switch (destination){
+                        case 0:
+                            calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
+                            break
+                        case 1:
+                            feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
+                            break
+                        case 2:
+                            toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
+                            break
+                        case 4:
+                            profileBtn.src = "TMExperienceViews/assets/person_b.svg"
+                            break
+                    }
+                }               
             }
             changeTo(0)
         </script>
         <script>
             let startX;
                 let currentX;
-                const threshold = 50; // Minimum swipe distance for visibility change
+                const threshold = 50;
             
                 let voteDiv = document.getElementById("voteDiv")
                 let speakerDiv = document.getElementById("speakerDiv")
@@ -832,7 +826,6 @@
 
                 btn.onclick = function() {
                     modal.style.display = "block";
-
                 }
 
                 function closeModal()
@@ -841,14 +834,13 @@
                 }
 
                 window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
+                    if (event.target == modal) {
+                        modal.style.display = "none";
                     }
                 }
 
                 function showModal(name, id){
-                    modal.style.display = "block"
-                   
+                    modal.style.display = "block"                  
                 }
             
                 function handleTouchStart(event) {
