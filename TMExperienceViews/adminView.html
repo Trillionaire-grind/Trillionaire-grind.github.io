@@ -82,6 +82,7 @@
             table {
                 width: 100%;
                 border-collapse: collapse;
+                overflow-x: auto;
             }
             th, td {
                 padding: 8px;
@@ -113,12 +114,16 @@
                 padding: 6px 12px;
                 font-size: 14px;
             }
+            input{
+                width: 100%;
+            }
         </style>
     </head>
     <body>
-        <p id="updateBtn" style="cursor: pointer;  float: right; margin-top: 16px; margin-right:8px; padding-left: 8px; padding-right: 8px; padding-top: 4px; padding-bottom: 4px; background-color: #024165; color: white; border-radius: 10px;">Update</p>
+        <p id="updateBtn" style="width: 60px; padding: 8px; text-align: center; margin-left: 8px; background-color: #024165; color: white; border-radius: 10px;">Update</p>
         <div style="clear: both;"></div>
-        <div id="roleBar" style="display: none; align-items: center; justify-content: space-between; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+      
+        <div id="roleBar" style="width: 100%; display: none; align-items: center; justify-content: space-between; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
             <div style="margin-left: 8px;">
                 <p style="font-weight: bold; margin: 0;">Set Roles</p>
             </div>
@@ -641,8 +646,6 @@
                     let element = document.getElementById(data.data[i].id);
                     element.value = data.data[i].member
                     if(data.data[i].id == "tmRole"){
-                       
-                        
                         document.getElementById("tmRoleCopy").innerText = data.data[i].member
                     }
 
