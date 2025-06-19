@@ -11,6 +11,8 @@
                 padding: 0;
                 font-family: Arial, sans-serif;
                 background-color: #DEE2E1;
+                width: 100%;
+                overflow-x: hidden;
             }
             footer {
                 position: fixed;
@@ -79,10 +81,16 @@
                 }
             }
 
-            table {
+            /*table {
                 width: 100%;
                 border-collapse: collapse;
                 overflow-x: auto;
+            } old one*/
+
+            table {
+                width: 100%;
+                overflow-x: hidden;
+
             }
             th, td {
                 padding: 8px;
@@ -117,28 +125,63 @@
             input{
                 width: 100%;
             }
+            #updateBtn{
+                width: 60px;
+                padding: 8px; 
+                text-align: center; 
+                margin-left: 8px;
+                background-color: #024165; 
+                color: white; 
+                border-radius: 10px; 
+                cursor: pointer;
+            }
+            #roleBar{
+                display: flex; 
+                width: 100%; 
+                display: none; 
+            }
+            #agenda{
+                margin-bottom: 48px; 
+                pointer-events: none;
+                width: 100%;
+                padding: 2px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            #clearBtn{
+                cursor: pointer; 
+                margin-left: auto; 
+                margin-right: 8px; 
+                margin-top: auto;
+                margin-bottom: auto;
+                background-color: #024165; 
+                color: white; 
+                border: none; 
+                height: 32px;
+                border-radius: 10px; 
+            }
         </style>
     </head>
     <body>
-        <p id="updateBtn" style="width: 60px; padding: 8px; text-align: center; margin-left: 8px; background-color: #024165; color: white; border-radius: 10px;">Update</p>
+        <p id="updateBtn" >Update</p>
         <div style="clear: both;"></div>
       
-        <div id="roleBar" style="width: 100%; display: none; align-items: center; justify-content: space-between; padding: 8px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px;">
+        <div id="roleBar">
             <div style="margin-left: 8px;">
-                <p style="font-weight: bold; margin: 0;">Set Roles</p>
+                <p style="font-weight: bold; padding-top: auto; padding-bottom: auto; font-size: 24px;">Set Roles</p>
             </div>
         
-            <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="display: flex; align-items: center; margin-left: auto; margin-right: auto;">
                 <label for="meetingDate" style="margin: 0; font-weight: 500;">Date:</label>
                 <input 
                     type="date" id="meetingDate" name="meetingDate" style="padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px;">
             </div>
         
-            <button id="clearBtn" style="cursor: pointer; margin-right: 8px; padding: 6px 12px; background-color: #024165; color: white; border: none; border-radius: 10px; font-weight: 500;">
+            <button id="clearBtn">
                 Clear
             </button>
         </div> 
-        <table id="agenda" style="margin-bottom: 48px; pointer-events: none;" >
+        <table id="agenda" >
             <thead>
                 <tr>
                     <th>Time</th>
