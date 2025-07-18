@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="shortcut icon" type="image/x-icon" href="techAcademyViews/assets/desk.png" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
+        <title>VIP - Tech Mastery For Seniors Academy</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F3F3F3;
+            }
+
+            header {
+                background-color: #000;
+                color: #fff;
+            }
+
+            .header-text {
+                flex: 1; /* Take up all available space */
+                text-align: center;
+            }
+
+            .container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 1px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .line {
+                max-width: 100%;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 4px;
+                background-color: red;
+            }
+
+            img {
+                max-width: 20px;
+                max-height: 20px;
+            }
+
+            .login-btn {
+                background-color: white;
+                color: black;
+                padding: 6px 10px;
+                font-size: 12px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+            }
+
+            .login-btn:hover {
+                background-color: #FF0C11;
+            }
+
+            .ctaBtn {
+                background-color: #FF0C11;
+                color: white;
+            }
+
+            .ctaBtn:hover {
+                background-color: black;
+                color: white;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+             
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .close {
+                color: white;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background-color: black;
+                border: none;
+                cursor: pointer;
+            }
+
+            .close:hover {
+                color: red;
+            }
+
+            .modal-content input {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div style="display: flex;">
+                    <p style="margin-left: auto; margin-right: auto; font-weight: bold; font-size: 18px;">Tech Mastery For Seniors</p>
+                    <div class="image" style="margin-top: auto; margin-bottom: auto; padding: 8px;" >
+                        <img src="techAcademyViews/assets/desk.png">
+                    </div>
+                    <button style="margin-top: auto; margin-bottom: auto;" class="login-btn" id="logInBtn">Log In</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="line"></div>
+        <p style="margin-left: auto; margin-right: auto; background-color: yellow; width: 60%; text-align: center; max-width: 100px; font-size: 24px; margin-bottom: 0px;">finally</p>
+        <p style="font-weight: bold; font-size: 32px; margin-left: 5%; text-align: center; margin: 2px;">
+            The No B.S. Guide To Tech Mastery For Seniors
+        </p>
+
+        <div style="margin-left:auto; margin-right: auto; width: 90%; max-width: 700px; height: 36px; color: #fff; margin-bottom: 0px; margin-top: 16px; background-color: #FF0C11; border-top-left-radius:10px; border-top-right-radius: 10px;">
+            <p style="color: #fff;margin: 8px; padding-top: 10px; padding-bottom: 10px;">Press play to learn more</p>
+        </div>
+        <iframe style="display: block; margin-left:auto; margin-right: auto; margin-top: 0px; height:40vh; max-width: 700px; width: 90%; background-color: #fff; border: none;" 
+            src="https://www.youtube.com/embed/LJ-Uteo2H5w">
+        </iframe>
+
+        <button class="ctaBtn" onclick="openPayment()" style="margin-right: auto; display:block; margin-left: auto; cursor:pointer; width: 90%; max-width: 600px; margin-top:16px; border: none; border-radius: 10px; padding: 8px; height: 8vh; font-weight: bold;">
+            <p style=" font-size: 16px;text-align: start; margin-top: auto; margin-bottom: auto;">Yes, I want the full experience</p>
+        </button>
+
+        <div id="myModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Log In</h2>
+                <label for="logInEmail">Email</label>
+                <input type="email" id="emailET" placeholder="Enter your email"><br>
+                <label for="logInPassword">Password</label>
+                <input type="password" id="passwordET" placeholder="Enter your password"><br>
+                <p style="text-align: center; cursor: pointer;" id="forgotBtn">forgot password?</p>
+                <div style="float: right; margin-top: 8px;">
+                    <button id="cancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="signInBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resetModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Reset Your Password</h2>
+                <label for="resetEmailTV">Enter Your Email </label>
+                <input type="email" id="resetEmailET" placeholder="Enter your email"><br>
+                <div style="float: right; margin-top: 8px;">
+                    <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="resetSendBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openPayment() {
+                window.location.replace("https://buy.stripe.com/test_8wMeW54DFbs58YodQQ");
+            }
+        </script>
+        <script type="module">
+            // Firebase SDK and login code
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+            import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+                authDomain: "tech-mastery-academy.firebaseapp.com",
+                projectId: "tech-mastery-academy",
+                storageBucket: "tech-mastery-academy.firebasestorage.app",
+                messagingSenderId: "205345673412",
+                appId: "1:205345673412:web:d8970165489c414745b991",
+                measurementId: "G-KLKCTD047P"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app)
+
+
+            let logInBtn = document.getElementById("logInBtn")
+
+            let myModal = document.getElementById("myModal")
+            let emailET = document.getElementById("emailET")
+            let passwordET = document.getElementById("passwordET")
+            let signInBtn = document.getElementById("signInBtn")
+            let cancelBtn = document.getElementById("cancelBtn")
+
+            let resetModal = document.getElementById("resetModal")
+            let forgotBtn = document.getElementById("forgotBtn")
+            let resetEmailET = document.getElementById("resetEmailET")
+            let resetCancelBtn = document.getElementById("resetCancelBtn")
+            let resetSendBtn = document.getElementById("resetSendBtn")
+
+            logInBtn.onclick = () => {
+                myModal.style.display = 'inline'
+            }
+
+            cancelBtn.onclick = () => {
+                myModal.style.display = 'none'
+            }
+
+            signInBtn.onclick = () => {
+                let email = emailET.value 
+                let password = passwordET.value
+                logIn(email, password)
+            }
+            
+
+            forgotBtn.onclick = () => {
+                myModal.style.display = 'none'
+                resetModal.style.display = 'inline'
+            }
+
+            resetSendBtn.onclick = () => {
+               
+                let email = resetEmailET.value
+                alert(`touched ${email}`)
+                requestEmail(email)
+            }
+
+            resetCancelBtn.onclick = () => {
+                resetModal.style.display = 'none'
+            }
+
+            function logIn(email, password)
+            {
+                signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    myModal.style.display = 'none'
+                    localStorage.setItem('userUID', user.uid);
+                    localStorage.setItem('userEmail', user.email);
+                    alert('welcome back')
+                    openMainView()
+                })
+                .catch((error) => {
+                    const errorode = error.code 
+                    const errorMessage = error.message
+                    alert(`there was an error ${errorMessage}`)
+                })
+
+            }
+
+            function requestEmail(email)
+            {
+                alert('request was called')
+                sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    // Password reset email sent!
+                    // ..
+                    alert('check your email to reset your password!')
+                    resetModal.style.display = 'none'
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(`there was an error ${error}`)
+                    // ..
+                })
+            }
+
+            function openMainView()
+            {
+                window.location.replace("techAcademyViews/mainView.html");
+            }
+        </script>
+    </body>
+</html>

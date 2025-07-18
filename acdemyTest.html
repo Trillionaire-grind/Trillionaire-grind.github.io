@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="shortcut icon" type="image/x-icon" href="techAcademyViews/assets/desk.png" />
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+        <link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
+        <title>Tech Mastery For Seniors - Tech Academy</title>
+        <style>
+            /* General reset and basic styles */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: #F3F3F3;
+            }
+
+            header {
+                background-color: #000;
+                color: #fff;
+            }
+
+            .header-text {
+                flex: 1; /* Take up all available space */
+                text-align: center;
+            }
+
+            .container {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 1px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .line {
+                max-width: 100%;
+                margin: 0 auto;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 4px;
+                background-color: red;
+            }
+
+            img {
+                max-width: 20px;
+                max-height: 20px;
+            }
+
+            .login-btn {
+                background-color: white;
+                color: black;
+                padding: 6px 10px;
+                font-size: 12px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                text-align: center;
+            }
+
+            .login-btn:hover {
+                background-color: #FF0C11;
+            }
+
+            .ctaBtn {
+                background-color: #FF0C11;
+                color: white;
+            }
+
+            .ctaBtn:hover {
+                background-color: black;
+                color: white;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                z-index: 1;
+                left: 0;
+                top: 0;
+                width: 100%;
+             
+                height: 100%;
+                overflow: auto;
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+
+            .modal-content {
+                background-color: #fefefe;
+                margin: 10% auto;
+                padding: 20px;
+                border: 1px solid #888;
+                width: 50%;
+                max-width: 400px;
+                border-radius: 8px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .close {
+                color: white;
+                float: right;
+                font-size: 28px;
+                font-weight: bold;
+                background-color: black;
+                border: none;
+                cursor: pointer;
+            }
+
+            .close:hover {
+                color: red;
+            }
+
+            .modal-content input {
+                width: calc(100% - 20px);
+                margin-bottom: 10px;
+                padding: 8px;
+                font-size: 16px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            h1, h3 {
+                color: black;
+            }
+
+            h2{
+                color: black;
+                font-size: 16px;
+                margin: 1em;
+                font-weight: normal;
+            }
+            strong {
+                color: #c0392b;
+            }
+            .cta {
+                background-color: #27ae60;
+                color: white;
+                padding: 15px;
+                text-align: center;
+                font-size: 18px;
+                margin: 30px 0;
+            }
+            .cta a {
+                color: white;
+                text-decoration: none;
+                font-weight: bold;
+            }
+            .value-box {
+                background: #ecf0f1;
+                padding: 10px 20px;
+                margin: 10px 0;
+                border-left: 5px solid #3498db;
+            }
+            ul {
+                margin-top: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div style="display: flex;">
+                    <p style="margin-left: auto; margin-right: auto; font-weight: bold; font-size: 18px;">Tech Mastery For Seniors</p>
+                    <div class="image" style="margin-top: auto; margin-bottom: auto; padding: 8px;" >
+                        <img src="techAcademyViews/assets/desk.png">
+                    </div>
+                    <button style="margin-top: auto; margin-bottom: auto;" class="login-btn" id="logInBtn">Log In</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="line"></div>
+        <p style="margin-left: auto; margin-right: auto; background-color: yellow; width: 60%; text-align: center; max-width: 400px;">become tech savvy</p>
+        <p style="font-weight: bold; font-size: 32px; margin-left: 5%; text-align: center; margin: 8px;">
+            How To Use Your Computer And Phone
+        </p>
+
+        <div style="margin-left:auto; margin-right: auto; width: 90%; max-width: 700px; height: 36px; color: #fff; margin-bottom: 0px; margin-top: 16px; background-color: #FF0C11; border-top-left-radius:10px; border-top-right-radius: 10px;">
+            <p style="color: #fff;margin: 8px; padding-top: 10px; padding-bottom: 10px;">Press play to learn more</p>
+        </div>
+        <iframe style="margin-bottom: 2px; display: block; margin-left:auto; margin-right: auto; margin-top: 0px; height:40vh; max-width: 700px; width: 90%; background-color: #fff; border: none;  border-bottom: 8px solid black; border-radius: 0px 0px 12px 12px;" 
+            src="https://www.youtube.com/embed/LJ-Uteo2H5w">
+        </iframe>
+
+        <!--<button class="ctaBtn" onclick="openPayment()" style="margin-right: auto; display:block; margin-left: auto; cursor:pointer; width: 90%; max-width: 600px; margin-top:16px; border: none; border-radius: 10px; padding: 8px; height: 8vh; font-weight: bold;">
+            <p style=" font-size: 16px;text-align: start; margin-top: auto; margin-bottom: auto;">Yes, I want to join the academy call 786-309-8015</p>
+        </button>-->
+        <!-- CTA Section -->
+        <div style="padding: 30px 20px;  text-align: center; font-family: Arial, sans-serif;">
+            <h2 style="font-size: 24px; margin-bottom: 10px; margin-top: 0px; color: #333;">
+            Ready to Master Technology?
+            </h2>
+            <p style="font-size: 16px; margin-bottom: 25px; color: #555;">
+            Call now to reserve your spot for<br> <strong>Tech Mastery For Seniors Academy</strong>.
+            </p>
+            <a href="tel:+17863098015"
+            style="display: inline-block; background-color: #FF0C11; color: white; padding: 15px 30px; font-size: 20px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+            Call Now: (786) 309-8015
+            </a>
+            <p style="margin-top: 15px; font-size: 14px; color: #777;">
+            Limited spaces each month. Don't wait!
+            </p>
+        </div>
+        <!--This is the actual written copy-->
+        <h2>Discover the New…</h2>
+    <h1 style="text-align: center;"0>"Tech Mastery For Seniors Academy"</h1>
+    <blockquote style="font-size: 20px;">
+      “Information is the oxygen of the modern age. It seeps through the walls topped by barbed wire, it wafts across the electrified borders”<br>
+      <strong>-Ronald Reagan</strong>
+    </blockquote>
+    <h2>
+      Reagan said this is in the 80s...<br>
+      Almost two decade before the internet became mainstream<br><br>
+
+      Now in 2025, the internet has improved significantly and so has our access to information<br><br>
+
+      For example, everyday YouTube gains 200,000 hours of information<br>
+      It would take you 22 years, just to learn 1 day’s worth of content on YouTube…<br><br>
+
+      Although it's great that we have access to so much information, <br>
+      there’s two MASSIVE problems…<br><br>
+
+      Before I reveal them, let me ask you a few questions…<br><br>
+      <ul>
+        <li>Do you agree that the world is changing faster than before?</li>
+        <li>Do you agree that technology is affecting every part of modern life?</li>
+        <li>Do you agree that your grandchildren are always using it</li>
+        <li>Do you agree that technology is useful?</li>
+      </ul>
+      <br>
+
+      If you answered yes then we are on the same page, and you must continue reading...<br><br>
+
+      The two MASSIVE with this change is that...<br><br>
+
+      First Problem: You struggle to use technology <br>
+      Second problem: Your grandchildren use it… alot and they are influenced by EVERYONE except you…<br><br>
+
+      That’s why we created the “Tech Mastery For Seniors Academy” where you will learn technology from a software engineer with nearly 20 years of experience with technology<br><br>
+
+      You see, It’s not your fault that you are struggling. You weren’t raised with technology, and you retired before the mass adoption of technology, and you never had someone to actually teach you<br><br>
+
+      You may be asking if I am the right teacher for you...and that's a great question<br><br>
+
+      You can read some of the testimonials of people that I have helped in the world of tech<br><br>
+
+      What people said about working with me:<br><br>
+
+      “What a joy to meet Kepler Siguineau for training and tech support on smart devices. There is so much to learn, but he makes it easy and fun. With a wonderful personable demeanor, he is very easy to understand in learning the latest technology. Kepler stays up to date on the everchanging, expanding technology and brings it down to my level for comprehension. I highly recommend Kepler training and tech support.” - A happy student<br><br>
+
+      The issue with not being able to use technology, is that you are being left behind<br>
+      And because technology keeps taking over everything it's only going to get worse…<br><br>
+
+      unless you decide to finally learn or you will have to rely on people…<br><br>
+
+      And you’re not that type of person right? <br><br>
+
+      You believe in being self-reliant <br>
+      And if you want to continue being self-reliant...<br><br>
+
+      you have to learn…<br><br>
+
+      losing your self-reliance is only the first problem…and that's already a big problem<br>
+      you have another terrible second problem...your grandchildren’s safety<br><br>
+
+      You see, unlike you, they are spending a lot of time on the internet<br>
+      Like 4-8 hours a day, everyday…<br><br>
+
+      Being influenced by everyone, except you<br><br>
+
+      Technology can be a tool for great....<br>
+      and just like everthing else in life, anything that can be used for good, can be used for bad<br>
+      and when it comes to technogy it can be detrimental…to your grandchildren and your family<br><br>
+
+      In fact, according to “Children’s Hospital Association” (CHA) in 2021, 2 million teens attempted suicide and 20% of high school students say that they strongly consider suicide…<br><br>
+
+      Do you want to know why this is happening?<br>
+      unfornentalyu its not just one reason that for that horrile stastic…<br><br>
+
+      Your grandchildren are constantly being told they are not enough <br>
+      and they are constantly bombarded by people that are “better” than them<br>
+      People that are better looking...more successful...more popular <br><br>
+
+      they end up comparing themselves to the highlights of people that they never met<br>
+      which ends up making them feel like they are worthless…<br><br>
+
+      When you went though your teens…you also went through the comparison game<br>
+      Like all teens do…<br><br>
+
+      As a teen you maybe compared yourself to a hundred teens in your town<br>
+      As a teen your grandkids are comparing themselves to millions of other teens across the world...everyday<br><br>
+
+      Not only are your grandchildren through this issue...<br>
+      there's a bigger problem that stems from these issues...who they go for advice<br>
+
+      see right now, yes like this very moment your grandchildren are going through attacks to their self  esteem<br><br>
+
+      They are going to go on their phone to look for an ear to listen to them and reassure them of their self worth<br>
+      that could be you, if you were comfortable with technology and had built a relationship with them online<br>
+      you know...the place they live <br><br>
+      Do you want to be with them? [yes] <br><br>
+      ADD CTA HERE<br><br>
+
+      if you haven't purchased yet and learned to master technology...<br><br>
+
+      your grandchildren will instead go online to seek for an ear to listen to them, to receive advice 
+      
+      and they will receive both...however this is where the REAL danger is...<br>
+      the majority of the people that are giving advice to your grandchildren are children themselves…<br><br>
+
+      they have no life experience and they don't care about your grandchildren<br>
+      that's a distater brewing
+
+      Your grandchild is spending 4 hours a day on the website “Reddit", which has 70+ million people who visit that website daily<br><br>
+
+      Reddit becomes their source of information and everyday help...
+
+      The thing is... the majority of the people on Reddit are below the age of 20…<br>
+      That means when something is going poorly in your grandchildrens’ lives, they are asking other children with no life experience for help<br><br>
+
+      The blind leading the blind<br><br>
+
+      There’s also a third MASSIVE PROBLEM with all of this…<br>
+      Your grandchildren are being indoctrinated by the left<br><br>
+
+      The internet is full of liberals that are promoting <br><br>
+
+        <ul>
+            <li>Communism</li>
+            <li>LGBT+</li>
+            <li>Anti-american values</li>
+        </ul>
+
+      while vilifying conservatives that want to make sure that…<br>
+      America stands tall for for freedom, democracy, and capitalism <br><br>
+
+      As you can see...learning is technology not just about you,<br>
+      Or just about protecting your grandchildren<br>
+      It's also about the future of this country…<br><br>
+
+      If you don’t learn, you will lose your self-reliance,<br>
+      your grandchildren will suffer, and American values will disappear <br><br>
+
+      Now that can all change, if you decide to learn to use technology<br><br>
+
+      You can extend your ability to be self-reliant, gain the benefits of technology, be there for your children, and your country <br><br>
+
+      It’s easier now than ever before…<br><br>
+
+      <ul>
+        <li>To stay connected with loved ones</li>
+        <li>To learn new things </li>
+        <li>To share your wisdom</li>
+        <li>To run a business</li>
+        <li>To create art</li>
+        <li>To influence the youth</li>
+      </ul> 
+     <br><br>
+
+      …if you are tech savvy<br><br>
+
+      Think about it, with billions of hours of information on the internet,<br>
+      You can learn ANYTHING you want and… you can FREE yourself from distance<br><br>
+
+      If your grandchildren live across the country, with tech you can still be there for them without putting yourself in discomfort<br><br>
+
+      You can talk to them everyday on the internet because that’s where they are…<br><br>
+
+      If you wanted to do that before, you would have to change your plans and travel away which feels exhausting… <br><br>
+
+      You can be there when they are feeling like they are not enough, to remind them that they are loved and they are enough <br><br>
+
+      Nowadays most households have two working parents, this means that most children don’t have a parent to speak to…at home<br><br>
+
+      They need a grandparent that is only one FaceTime call away<br><br>
+
+      It’s not only your grandchildren, it's all of America’s grandchildren that are going through this…<br><br>
+
+      You have a lot of wisdom, and we (me and all of America’s youth) need you to share it, without it, America will disappear<br><br>
+
+      You can help fix this by joining the <strong>“Tech Mastery For Seniors Academy”</strong><br>
+      An educational program built for you <br><br>
+
+      You might think that technology is too hard<br><br>
+
+      Well, technology is actually easy to use. It might be hard for you to believe that now because you are struggling, and that’s why you go to a teacher…<br><br>
+
+      If you wanted to learn a new language, you wouldn't just magically learn on your own…<br>
+      You would go to someone who has mastered the language and who is a good teacher to teach you, and that’s exactly what the academy is all about<br><br>
+
+      Now you may think that you are too old and can’t learn like children can<br>
+      Fortunately for you, you are wrong about that<br><br>
+
+      You see, your age is actually a benefit. You have built a foundation of knowledge that young children have not…<br><br>
+
+      Here’s the secret as to why it's so “easy” for children…<br>
+      They don’t care about breaking stuff to get what they want<br><br>
+
+      If your grandchild wants to watch YouTube, they will click on everything on the device until they either find YouTube or break it<br><br>
+
+      As an adult, you don’t do that which is good… however it's also One of the reasons you struggle with learning technology… your fear of breaking things<br><br>
+
+      At first its an intelligent thing, however it becomes crippling because you don’t know what to do next and you get stuck<br><br>
+
+      A kid's brilliance comes from their experience of breaking the technology…<br>
+      or from learning it from someone else…just like they learn new slangs<br><br>
+
+      you don’t have to go through the breaking phase, and you don’t have to continue to struggle…<br><br>
+
+      You must join the “Tech Mastery For Seniors Academy”<br><br>
+
+      You see it's not your fault you struggled, how could you not…<br><br>
+
+      You weren’t raised with technology<br>
+      You left the workplace before all of this technology<br>
+      You were never taught you how to use technology, you were just expected to magically learn it<br><br>
+
+      Our Academy is there to help you master technology, that's it, and that’s why we structured it the way described below…<br><br>
+
+      Now you may be asking, how does the academy work and how much does it cost…<br><br>
+
+      below you will find that answer…<br><br>
+
+      it's a breakdown of the pieces of the way you will learn to master technology and a breakdown on the cost…<br><br>
+
+      However it's not the final price, we bundled it up for you to save you money…<br><br>
+
+      Our academy is structured with…<br><br>
+
+      <div class="value-box">
+        <strong>12 Monthly Online Seminars</strong> (Reg. $297 each)<br>
+        <ul>
+          <li>You will learn the principles of tech mastery in a structured, simple, clear educational format</li>
+          <li>You will go from saying “where do I even begin?” to saying..“let me show you how to…”</li>
+          <li>You will not miss a thing, every seminar is beginner friendly</li>
+          <li>You will also receive extra Q&A session after each seminar</li>
+        </ul>
+      </div>
+
+      <div class="value-box">
+        <strong>12 Monthly in-person workshops</strong> (Reg. $997 each)<br>
+        <ul>
+          <li>You will apply everything that you learn in your seminars through our in-person workshops</li>
+          <li>You will get extra time for questions, practice and eventually mastery</li>
+          <li>You will receive help from our patient and knowledgeable coaches</li>
+          <li>You will be given delicious food…life is too short for bad food</li>
+          <li>You will also be able to network with like minded peers that also believe in lifelong learning</li>
+        </ul>
+      </div>
+
+      <div class="value-box">
+        <strong>52 Weekly Online Q&A sessions	</strong> (Reg. $197 each)<br>
+        <ul>
+          <li>You will be getting help in the comfort of your own home</li>
+          <li>You will be able to ask any questions, no question is too small</li>
+          <li>You will have the ability to ask questions from class and questions that you have from your day to day</li>
+          <li>You will choose whenever you want to attend or not, this is all for your convenience</li>
+        </ul>
+      </div>
+      <div class="value-box">
+        <strong>Unlimited Access To All Recordings</strong> (Reg. $97 each)<br>
+        <ul>
+          <li>You will gain lifetime access to every seminar, workshop, and Q&A</li>
+          <li>You will be able to rewatch any lesson, anytime, whenever you need</li>
+          <li>You will have a great tool for repetition, which is the best tool for learning</li>
+          <li>Easy to access</li>
+        </ul>
+      </div>
+      <div class="value-box">
+        <strong>Monday - Friday (9 AM - 5 PM) Always Human IT Help Desk</strong> (Reg. $43,200)<br>
+        <ul>
+          <li>You will never struggle alone. You get access to a friendly, patient, clear, and knowledgeable tech helper during the week</li>
+          <li>You will be able to ask for help, whether you're stuck on something simple or facing a frustrating problem</li>
+          <li>You will be asked to not take advantage of our Always Human IT Help Desk</li>
+        </ul>
+      </div>
+      <br>
+      To summarize, with the <strong>“Tech Mastery For Seniors Academy”</strong><br>
+      <ul>
+        <li>You will get access to 12 months of seminars a total value of $3,564 +</li>
+        <li>You will get access to 12 months of workshops a total value of $11,964 + </li>
+        <li>You will get access to 52 weeks of Q&A a total value of $10,244 + </li>
+        <li>You will get access to all 76 recordings a total value off $7,372 +</li>
+        <li>You will get access to your own IT help desk a total value of $43,200 </li>
+      </ul>
+      <br>
+      That’s the price of all the pieces of the program…A total value of $76,344<br><br>
+
+      since we bundled it for you, you won’t have to pay the full $76,344…<br>
+      you will instead get a 50% discount which means you only pay $38,172…<br><br>
+
+      Because of the bundle, not only will you save $38,172, you are saving a lot of time… <br>
+      20 years of experience taught in only…12 months<br><br>
+
+      You will gain the principle of mastering technology and mastery of the basics in only a few hours a month…<br><br>
+
+      That’s right, only a few hours a month…<br><br>
+
+      PLUS some BONUSES<br>
+      You will get the “No B.S Guide To Tech Mastery For Seniors” (Value of  $497)<br>
+      You will get the “How To Legally Print Money Online” Course (Value of $1997)<br><br>
+
+      That's righht...you will get over $76,344 of tangible value with the academy and you will get over $2,494 of value in bonuses plus the intangible value of staying self-reliant<br>
+      Would you pay $100,000 to stay self-reliant into your 90s?<br><br>
+      
+      Would you pay $100,000 to saving your grandchildrens’ lives? <br><br>
+      That question was completely rhetorical...their college fund alone will cost more than $100,000 anyways...<br><br>
+
+      Lunkily for you, you don't have to invest $200,000+ or  20 years to be able to stay self-reliant in a tech filled future<br><br> 
+
+      You only have to invest $38,172 and a few hours a month to master technology and you will also get our...<br><br>
+
+      <span style="text-align: center; width: 100%;"><strong>“Full Refund If You Don’t Love Your First Class” Guarantee</strong></span><br>
+      That’s right, if after our first class, you decide that you don’t love the academy then you will get a full refund and you will still be able to keep your $2,494 worth of BONUSES<br><br>
+
+      To see if you quality:<br>
+      Call 786-309-8015 and will see if you are a good fit. We will ask you basic questions like your name, phone number, and your current tech level. If you are a good fit, be ready to have a debit or credit card available for payment. If you reach our mailbox, DO NOT provide your card information wait for us to call you back with the number 786-309-8015<br><br>
+
+      IMPORTANT:<br>
+      Do not register if you don’t have the desire to learn…and want to take advantage of the “Always Human IT Help Desk”. This bonus is worth $43,200, which is more than what you are paying with the “Tech Mastery For Seniors Academy” <br>
+      You will be removed from the program with a refund of future classes<br>
+
+      We only have 12 spots currently available and classes start August 20th, so only those who actually care about learning, their family, and America should join
+
+      Looking forward to meeting you,<br><br>
+
+      Siguineau, Képler<br>
+      786-309-8015<br><br>
+
+      P.S.<br>
+      Not knowing how to use technology today doesn’t just make life inconvenient<br>
+      it makes you invisible, you miss out on conversations, on opportunities, and worst of all…on your grandchildren’s world<br><br>
+
+      While they’re being influenced by strangers on the internet, you’re stuck on the sidelines, unable to guide or protect them<br><br>
+
+      Your independence fades, your connection weakens, and your voice is lost<br><br>
+
+      That’s why we created the <strong>“Tech Mastery For Seniors Academy,”</strong> a 12-month hybrid program that gives you access to…<br><br>
+
+      in-person workshops, online seminars, weekly Q&As, unlimited recordings, and even your own weekday Always Human IT Help Desk…<br><br>
+
+      a curated program that will have you master technology...<br><br>
+
+      That’s $76,344 in real value, however you pay only $38,172…plus get $2,494 in bonuses, and a full refund guarantee after your first class if you don’t absolutely love it…<br>
+      There are only 12 spots available…and they will go quickly<br>
+      hurry classes start August 20th…If you truly care about learning, your family, and this country, don’t wait<br>
+      Call 786-309-8015 now and reserve your seat…<br>
+      This is your moment to reclaim your confidence, your independence, and your influence<br><br>
+
+      P.P.S.<br>
+      You can’t afford to keep procrastinating. Yes, life is busy…<br>
+      Yes it would be easier to just not learn...<br><br>
+
+      However the consequences are so great that you can't afford to not learn<br>
+      It's like burning your hand on your stove and you decide to do it again...<br><br>
+      
+      The only difference is that the consequences are worse than the blistering from a burned hand...
+
+      How long will you delay learning something that will protect your grandchildren, preserve your independence, and reconnect you to the modern world? <br>
+      I have to be honest, I can't guarantee that you will be to actually protect them...you could learn all you need to...and you still don't do it<br><br>
+
+      What I can guarantee is that you have a good fighting chance to protect those around you...<br>
+      Yourself...You won't have to call someone to help you with something that is ridiciously simple<br><br>
+
+      <br>
+
+      One decision today could change the next 20 years of your life...your grandchildren’s lives and your legacy…<br><br>
+
+      
+      You love your independence, right?<br>
+      You love to learn, right?<br>
+      you love your granchildren, right? <br><br>
+      Do you want to protect your grandchildren?<br>
+      Do you care about the future of America?<br><br>
+
+      Then what are you waiting for?<br><br>
+
+      There are only 12 spots available. Once they’re gone, they’re gone. You can choose to act today or regret it later<br>
+     
+
+      If you answered yes to all the questions<br>
+      Call 786-309-8015 now before someone else takes your place
+    </h2>
+        <div id="myModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Log In</h2>
+                <label for="logInEmail">Email</label>
+                <input type="email" id="emailET" placeholder="Enter your email"><br>
+                <label for="logInPassword">Password</label>
+                <input type="password" id="passwordET" placeholder="Enter your password"><br>
+                <p style="text-align: center; cursor: pointer;" id="forgotBtn">forgot password?</p>
+                <div style="float: right; margin-top: 8px;">
+                    <button id="cancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="signInBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="resetModal" class="modal">
+            <div class="modal-content" style="padding-bottom: 64px;">
+                <h2>Reset Your Password</h2>
+                <label for="resetEmailTV">Enter Your Email </label>
+                <input type="email" id="resetEmailET" placeholder="Enter your email"><br>
+                <div style="float: right; margin-top: 8px;">
+                    <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
+                    <button id="resetSendBtn" style="background-color: #FF0C11; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openPayment() {
+                window.location.replace("tel:+2393835236");
+            }
+        </script>
+        <script type="module">
+            // Firebase SDK and login code
+            // Import the functions you need from the SDKs you need
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
+            import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+            // TODO: Add SDKs for Firebase products that you want to use
+            // https://firebase.google.com/docs/web/setup#available-libraries
+
+            // Your web app's Firebase configuration
+            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+            const firebaseConfig = {
+                apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+                authDomain: "tech-mastery-academy.firebaseapp.com",
+                projectId: "tech-mastery-academy",
+                storageBucket: "tech-mastery-academy.firebasestorage.app",
+                messagingSenderId: "205345673412",
+                appId: "1:205345673412:web:d8970165489c414745b991",
+                measurementId: "G-KLKCTD047P"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const analytics = getAnalytics(app);
+            const auth = getAuth(app)
+
+
+            let logInBtn = document.getElementById("logInBtn")
+
+            let myModal = document.getElementById("myModal")
+            let emailET = document.getElementById("emailET")
+            let passwordET = document.getElementById("passwordET")
+            let signInBtn = document.getElementById("signInBtn")
+            let cancelBtn = document.getElementById("cancelBtn")
+
+            let resetModal = document.getElementById("resetModal")
+            let forgotBtn = document.getElementById("forgotBtn")
+            let resetEmailET = document.getElementById("resetEmailET")
+            let resetCancelBtn = document.getElementById("resetCancelBtn")
+            let resetSendBtn = document.getElementById("resetSendBtn")
+
+            logInBtn.onclick = () => {
+                myModal.style.display = 'inline'
+            }
+
+            cancelBtn.onclick = () => {
+                myModal.style.display = 'none'
+            }
+
+            signInBtn.onclick = () => {
+                let email = emailET.value 
+                let password = passwordET.value
+                logIn(email, password)
+            }
+            
+
+            forgotBtn.onclick = () => {
+                myModal.style.display = 'none'
+                resetModal.style.display = 'inline'
+            }
+
+            resetSendBtn.onclick = () => {
+               
+                let email = resetEmailET.value
+                alert(`touched ${email}`)
+                requestEmail(email)
+            }
+
+            resetCancelBtn.onclick = () => {
+                resetModal.style.display = 'none'
+            }
+
+            function logIn(email, password)
+            {
+                signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    myModal.style.display = 'none'
+                    localStorage.setItem('userUID', user.uid);
+                    localStorage.setItem('userEmail', user.email);
+                    alert('welcome back')
+                    openMainView()
+                })
+                .catch((error) => {
+                    const errorode = error.code 
+                    const errorMessage = error.message
+                    alert(`there was an error ${errorMessage}`)
+                })
+
+            }
+
+            function requestEmail(email)
+            {
+                alert('request was called')
+                sendPasswordResetEmail(auth, email)
+                .then(() => {
+                    // Password reset email sent!
+                    // ..
+                    alert('check your email to reset your password!')
+                    resetModal.style.display = 'none'
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert(`there was an error ${error}`)
+                    // ..
+                })
+            }
+
+            function openMainView()
+            {
+                window.location.replace("techAcademyViews/mainView.html");
+            }
+        </script>
+    </body>
+</html>
