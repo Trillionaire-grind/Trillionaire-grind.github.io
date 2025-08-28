@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>How to Build a Dating App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .blogContainer {
+      width: 80%;
+      max-width: 700px;
+      margin: 56px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+
+    h1, h2, h3 {
+      color: #222;
+    }
+
+    pre {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    blockquote {
+      border-left: 4px solid #ccc;
+      padding-left: 12px;
+      color: #666;
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="blogContainer">
+    <h1>❤️ How to Build a Dating App: A Beginner’s Guide</h1>
+
+    <p>Dating apps have revolutionized how people meet, connect, and form relationships. If you’ve ever wondered what it takes to build one yourself, this guide will walk you through the basic steps of creating a simple dating app using modern web technologies.</p>
+
+    <p>We’ll cover both the frontend and backend, giving you a solid foundation to expand into a full-featured app later.</p>
+
+    <h2>💡 What Are We Building?</h2>
+    <p>We’ll build a simple dating web app that lets users:</p>
+    <ul>
+      <li>Create a basic profile</li>
+      <li>Browse other users</li>
+      <li>"Like" profiles they’re interested in</li>
+    </ul>
+    <p>We’ll use in-memory storage for now, just to understand the flow. No logins or databases yet — baby steps!</p>
+
+    <h2>🧰 Tools You’ll Need</h2>
+    <ul>
+      <li><strong>Node.js</strong> (<a href="https://nodejs.org" target="_blank">download</a>)</li>
+      <li><strong>Express.js</strong> for the backend API</li>
+      <li><strong>HTML/CSS/JavaScript</strong> for the frontend</li>
+      <li>A code editor (like <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>)</li>
+    </ul>
+
+    <h2>📁 Step 1: Set Up Your Project</h2>
+    <pre><code>mkdir dating-app
+cd dating-app
+npm init -y
+npm install express</code></pre>
+
+    <h2>🔧 Step 2: Create the Backend</h2>
+    <p>Create a <code>server.js</code> file in your root directory:</p>
+    <pre><code>// server.js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+let users = [];
+let likes = {};
+
+app.use(express.static('public'));
+app.use(express.json());
+
+// Get all users
+app.get('/api/users', (req, res) => {
+  res.json(users);
+});
+
+// Add a new user
+app.post('/api/users', (req, res) => {
+  const { name, bio } = req.body;
+  if (name && bio) {
+    const id = users.length + 1;
+    users.push({ id, name, bio });
+    res.status(201).json({ message: 'User added' });
+  } else {
+    res.status(400).json({ error: 'Name and bio required' });
+  }
+});
+
+// Like a user
+app.post('/api/like', (req, res) => {
+  const { fromId, toId } = req.body;
+  if (!likes[fromId]) likes[fromId] = [];
+  likes[fromId].push(toId);
+  res.json({ message: 'Like recorded' });
+});
+
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
+});</code></pre>
+
+    <h2>🎨 Step 3: Create the Frontend</h2>
+    <p>Inside a <code>public</code> folder, create these three files:</p>
+
+    <h3>1. <code>index.html</code></h3>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Mini Dating App&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;💘 Mini Dating App&lt;/h1&gt;
+
+  &lt;div id="user-list"&gt;&lt;/div&gt;
+
+  &lt;form id="new-user-form"&gt;
+    &lt;input type="text" id="name" placeholder="Your name" required /&gt;
+    &lt;input type="text" id="bio" placeholder="Short bio" required /&gt;
+    &lt;button type="submit"&gt;Join&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <h3>2. <code>style.css</code></h3>
+    <pre><code>body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.user {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  border-radius: 6px;
+}
+
+button {
+  margin-top: 5px;
+}</code></pre>
+
+    <h3>3. <code>app.js</code></h3>
+    <pre><code>async function loadUsers() {
+  const res = await fetch('/api/users');
+  const users = await res.json();
+
+  const container = document.getElementById('user-list');
+  container.innerHTML = '';
+
+  users.forEach(user =&gt; {
+    const div = document.createElement('div');
+    div.className = 'user';
+    div.innerHTML = `&lt;strong&gt;${user.name}&lt;/strong&gt;&lt;br&gt;${user.bio}&lt;br&gt;
+      &lt;button onclick="likeUser(${user.id})"&gt;Like&lt;/button&gt;`;
+    container.appendChild(div);
+  });
+}
+
+document.getElementById('new-user-form').addEventListener('submit', async (e) =&gt; {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const bio = document.getElementById('bio').value;
+
+  await fetch('/api/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, bio }),
+  });
+
+  loadUsers();
+});
+
+async function likeUser(toId) {
+  await fetch('/api/like', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ fromId: 1, toId }), // hardcoded user for demo
+  });
+  alert('You liked this user!');
+}
+
+loadUsers();</code></pre>
+
+    <h2>🚀 Step 4: Run the App</h2>
+    <pre><code>node server.js</code></pre>
+    <p>Visit <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> in your browser to test it out!</p>
+
+    <h2>🧭 Where to Go From Here</h2>
+    <ul>
+      <li>🗃️ Add persistent storage with MongoDB or PostgreSQL</li>
+      <li>🔐 Add user authentication and sessions</li>
+      <li>🧠 Match users based on shared interests or proximity</li>
+      <li>📲 Make it responsive for mobile</li>
+      <li>🌍 Deploy it with Vercel, Heroku, or Render</li>
+    </ul>
+
+    <h2>💬 Final Thoughts

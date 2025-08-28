@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How to Build a Haitian App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #fff9f0;
+      color: #333;
+    }
+    .blogContainer {
+      width: 80%;
+      max-width: 700px;
+      margin: 56px auto;
+      padding: 20px;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      border-radius: 8px;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    a {
+      color: #2980b9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    blockquote {
+      border-left: 4px solid #e67e22;
+      padding-left: 12px;
+      color: #7f8c8d;
+      margin: 20px 0;
+      font-style: italic;
+      background-color: #fcf8f2;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="blogContainer">
+    <h1>🇭🇹 How to Build a Haitian App: Sharing Haitian Culture Through Technology</h1>
+
+    <p>Building an app inspired by Haitian culture is a beautiful way to preserve and share its rich traditions, language, and wisdom. In this tutorial, we’ll create a simple web app that displays Haitian proverbs (pawòl) along with their English translations.</p>
+
+    <h2>🎯 What Will We Build?</h2>
+    <p>A minimal app that shows a list of Haitian proverbs with their meanings. Users can click to reveal the translation.</p>
+
+    <h2>🧰 Tools You’ll Need</h2>
+    <ul>
+      <li>Basic knowledge of <strong>HTML, CSS, and JavaScript</strong></li>
+      <li>A code editor (like <a href="https://code.visualstudio.com/" target="_blank">VS Code</a>)</li>
+      <li>A browser for testing</li>
+    </ul>
+
+    <h2>📁 Step 1: Structure Your HTML</h2>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Haitian Proverbs App&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Haitian Proverbs&lt;/h1&gt;
+  &lt;ul id="proverb-list"&gt;&lt;/ul&gt;
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <h2>🎨 Step 2: Style Your App (style.css)</h2>
+    <pre><code>body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  background-color: #fff9f0;
+  color: #333;
+}
+h1 {
+  text-align: center;
+  color: #e74c3c;
+  margin-bottom: 30px;
+}
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  background: #fef6f0;
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+li:hover {
+  background: #fde6db;
+}
+.translation {
+  margin-top: 10px;
+  color: #7f8c8d;
+  display: none;
+  font-style: italic;
+}</code></pre>
+
+    <h2>🧠 Step 3: Add Functionality with JavaScript (app.js)</h2>
+    <pre><code>const proverbs = [
+  {
+    haitian: "Dèyè mòn gen mòn.",
+    english: "Behind mountains, there are mountains."
+  },
+  {
+    haitian: "Se pa tout zwazo ki chante menm chante.",
+    english: "Not all birds sing the same song."
+  },
+  {
+    haitian: "Piti piti zwazo fè nich li.",
+    english: "Little by little, the bird builds its nest."
+  },
+  {
+    haitian: "Ti zwazo fè nich li nan tèt fènwa.",
+    english: "The little bird builds its nest in the dark."
+  }
+];
+
+const list = document.getElementById('proverb-list');
+
+proverbs.forEach(({ haitian, english }) =&gt; {
+  const li = document.createElement('li');
+  li.textContent = haitian;
+
+  const translation = document.createElement('div');
+  translation.className = 'translation';
+  translation.textContent = english;
+
+  li.appendChild(translation);
+
+  li.addEventListener('click', () =&gt; {
+    const isVisible = translation.style.display === 'block';
+    translation.style.display = isVisible ? 'none' : 'block';
+  });
+
+  list.appendChild(li);
+});</code></pre>
+
+    <h2>🚀 Step 4: Open and Test</h2>
+    <p>Open your <code>index.html</code> in a browser and click on any proverb to see its translation.</p>
+
+    <h2>🌱 Where to Go From Here</h2>
+    <ul>
+      <li>🌐 Add more proverbs, or allow users to submit their own</li>
+      <li>🎙️ Add audio recordings of proverbs in Haitian Creole</li>
+      <li>🎨 Improve styling and add animations</li>
+      <li>📱 Turn this into a mobile app with React Native or Flutter</li>
+    </ul>
+
+    <h2>💬 Final Thoughts</h2>
+    <blockquote>
+      Technology is a powerful tool to celebrate and preserve culture. By creating apps inspired by Haitian heritage, you help keep its stories and wisdom alive for generations to come.
+    </blockquote>
+
+    <p>Want a downloadable version of this app? Just ask!</p>
+  </div>
+</body>
+</html>

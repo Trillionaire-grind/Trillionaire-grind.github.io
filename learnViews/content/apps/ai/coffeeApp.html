@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How To Build A Coffee App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f1ea;
+      color: #4b3832;
+    }
+    .blogContainer {
+      width: 80%;
+      max-width: 700px;
+      margin: 56px auto;
+      padding: 20px;
+      background: #fffefc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+      border-radius: 8px;
+    }
+    h1, h2, h3 {
+      color: #6f4e37;
+    }
+    pre {
+      background-color: #f0e6d2;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-family: monospace;
+    }
+    code {
+      background-color: #e6dbc7;
+      padding: 2px 4px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    a {
+      color: #8b5e3c;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    blockquote {
+      border-left: 4px solid #d2691e;
+      padding-left: 12px;
+      color: #7e5a3a;
+      margin: 20px 0;
+      font-style: italic;
+      background-color: #fff6e8;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="blogContainer">
+    <h1>☕ How To Build A Coffee App</h1>
+
+    <p>If you’re a coffee lover or want to build a simple app around your passion for coffee, this tutorial is for you! We’ll build a basic coffee catalog app where users can add, view, and review different coffee types.</p>
+
+    <h2>🎯 What Are We Building?</h2>
+    <p>A simple web app that lets users:</p>
+    <ul>
+      <li>Add coffee types (name, origin, roast level, notes)</li>
+      <li>View all added coffees</li>
+      <li>Leave short reviews or tasting notes</li>
+    </ul>
+
+    <h2>🧰 Tools You’ll Need</h2>
+    <ul>
+      <li><strong>Node.js</strong> and <strong>Express.js</strong> for backend</li>
+      <li><strong>HTML, CSS, JavaScript</strong> for frontend</li>
+      <li>A text editor like <a href="https://code.visualstudio.com/" target="_blank">VS Code</a></li>
+    </ul>
+
+    <h2>📁 Step 1: Setup Your Project</h2>
+    <pre><code>mkdir coffee-app
+cd coffee-app
+npm init -y
+npm install express</code></pre>
+
+    <h2>🔧 Step 2: Backend with Express</h2>
+    <p>Create <code>server.js</code>:</p>
+    <pre><code>// server.js
+const express = require('express');
+const app = express();
+const PORT = 3000;
+
+let coffees = [];
+
+app.use(express.static('public'));
+app.use(express.json());
+
+app.get('/api/coffees', (req, res) =&gt; {
+  res.json(coffees);
+});
+
+app.post('/api/coffees', (req, res) =&gt; {
+  const { name, origin, roast, notes } = req.body;
+  if (name && origin) {
+    coffees.push({ name, origin, roast, notes, addedAt: new Date() });
+    res.status(201).json({ message: 'Coffee added!' });
+  } else {
+    res.status(400).json({ error: 'Name and origin are required.' });
+  }
+});
+
+app.listen(PORT, () =&gt; {
+  console.log(`Coffee app running at http://localhost:${PORT}`);
+});</code></pre>
+
+    <h2>🎨 Step 3: Frontend</h2>
+    <p>Create a <code>public</code> folder and add these files:</p>
+
+    <h3>1. <code>index.html</code></h3>
+    <pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;title&gt;Coffee Catalog&lt;/title&gt;
+  &lt;link rel="stylesheet" href="style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;☕ Coffee Catalog&lt;/h1&gt;
+
+  &lt;form id="coffee-form"&gt;
+    &lt;input type="text" id="name" placeholder="Coffee Name" required /&gt;&lt;br&gt;
+    &lt;input type="text" id="origin" placeholder="Origin" required /&gt;&lt;br&gt;
+    &lt;input type="text" id="roast" placeholder="Roast Level (e.g., Medium)" /&gt;&lt;br&gt;
+    &lt;input type="text" id="notes" placeholder="Tasting Notes" /&gt;&lt;br&gt;
+    &lt;button type="submit"&gt;Add Coffee&lt;/button&gt;
+  &lt;/form&gt;
+
+  &lt;div id="coffee-list"&gt;&lt;/div&gt;
+
+  &lt;script src="app.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+    <h3>2. <code>style.css</code></h3>
+    <pre><code>body {
+  font-family: Arial, sans-serif;
+  background: #f6f1eb;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  color: #4b3832;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+#coffee-list .coffee-item {
+  background: #fffaf3;
+  border-left: 6px solid #a0522d;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+}</code></pre>
+
+    <h3>3. <code>app.js</code></h3>
+    <pre><code>async function loadCoffees() {
+  const res = await fetch('/api/coffees');
+  const data = await res.json();
+  const container = document.getElementById('coffee-list');
+  container.innerHTML = '';
+
+  data.forEach(coffee =&gt; {
+    const div = document.createElement('div');
+    div.className = 'coffee-item';
+    div.innerHTML = `
+      &lt;strong&gt;${coffee.name}&lt;/strong&gt; (${coffee.origin})&lt;br&gt;
+      Roast: ${coffee.roast || 'N/A'}&lt;br&gt;
+      Notes: ${coffee.notes || 'None'}&lt;br&gt;
+      Added: ${new Date(coffee.addedAt).toLocaleDateString()}
+    `;
+    container.appendChild(div);
+  });
+}
+
+document.getElementById('coffee-form').addEventListener('submit', async (e) =&gt; {
+  e.preventDefault();
+  const name = document.getElementById('name').value;
+  const origin = document.getElementById('origin').value;
+  const roast = document.getElementById('roast').value;
+  const notes = document.getElementById('notes').value;
+
+  await fetch('/api/coffees', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, origin, roast, notes }),
+  });
+
+  e.target.reset();
+  loadCoffees();
+});
+
+loadCoffees();</code></pre>
+
+    <h2>🚀 Step 4: Run Your App</h2>
+    <pre><code>node server.js</code></pre>
+    <p>Then open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> and start adding your favorite coffees!</p>
+
+    <h2>☕ Bonus Ideas</h2>
+    <ul>
+      <li>Add ratings and reviews</li>
+      <li>Include images of coffee beans or cups</li>
+      <li>Filter coffees by origin or roast level</li>
+      <li>Save coffee preferences for different users</li>
+    </ul>
+
+    <h2>💬 Final Thoughts</h2>
+    <blockquote>
+      Building a coffee app is a great way to combine your love for coffee with coding. Start simple, and expand it as you learn more. Happy brewing (and coding)!
+    </blockquote>
+
+    <p>Want this as a downloadable project? Just ask!</p>
+  </div>
+</body>
+</html>
