@@ -90,9 +90,6 @@
             <div  style="display: none;"  id="libraryView" style="height: 100vh;  width: 100%;">
                 <iframe src="libraryView.html" style="height: 100vh; width: 100%;"></iframe>
             </div>
-            <div style="display: none;"  id="educationView"  style="height: 100vh;  width: 100%;">
-                <iframe src="educationView.html" style="height: 100vh; width: 100%;" ></iframe>
-            </div>
             <div style="display: none;"  id="profileView"  style="height: 100vh;  width: 100%;">
                 <iframe src="profileView.html" style="height: 100vh; width: 100%;" ></iframe>
             </div>
@@ -102,7 +99,6 @@
             <nav>
                 <a href="#"><img id="homeBtn" src="assets/house_g.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
                 <a href="#"><img id="libraryBtn" src="assets/books.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
-                <a href="#"><img id="educationBtn" src="assets/brain.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
                 <a href="#"><img id="profileBtn" src="assets/person.svg" height="24px" width="24px" onclick="changeTo(3)"></a>     
             </nav>
            <!--<div class="fab">+</div>--> 
@@ -111,10 +107,9 @@
     <script>
         var homeView = document.getElementById('homeView');
         var libraryView = document.getElementById('libraryView')
-        var educationView = document.getElementById('educationView')
         var profileView = document.getElementById('profileView')
 
-        let views = [homeView, libraryView, educationView, profileView]
+        let views = [homeView, libraryView, profileView]
         function changeTo(destination)
         {
             views.forEach((view, index) => {
@@ -131,12 +126,10 @@
         {
             let homeBtn = document.getElementById("homeBtn")
             let libraryBtn = document.getElementById("libraryBtn")
-            let educationView = document.getElementById("educationBtn")
             let profileBtn = document.getElementById("profileBtn")
 
             homeBtn.src = "assets/house.svg"
             libraryBtn.src = "assets/books.svg"
-            educationView.src = "assets/brain.svg"
             profileBtn.src = "assets/person.svg"
             
             switch (destination){
@@ -147,9 +140,6 @@
                     libraryBtn.src = "assets/books_g.svg"
                     break
                 case 2:
-                    educationView.src = "assets/brain_g.svg"
-                    break
-                case 3:
                     profileBtn.src = "assets/person_g.svg"
                     break
              
