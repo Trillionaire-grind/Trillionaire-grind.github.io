@@ -101,6 +101,54 @@
                 padding: 2rem;
             }
             }
+            .friend-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .friend-card {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .friend-card:hover {
+            background: #00ACEE;
+            color: white;
+        }
+
+        .friend-card:hover p{
+            color: white;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .friend-info h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .friend-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+       
+
     </style>
     </head>
     <body>
@@ -131,40 +179,37 @@
                 <header>
                     <h1>Your Friends</h1>
                 </header>
-                <button onclick="window.location.href='add.html'" >+ New Interaction</button>
-
-                
+                <button onclick="window.location.href='add.html'" >+ New Friend</button>
                 <main>
-                    <section class="friend-list">
-                
-                    <div class="friend-card" onclick="window.location.href='profile.html'">
-                        <img src="avatar1.jpg" alt="Mark Johnson" class="avatar" />
-                        <div class="friend-info">
-                        <h2>Mark Johnson</h2>
-                        <p>📅 2 weeks ago</p>
-                        <p>📍 Coffee Shop</p>
+                    <div class="friend-list">
+                        <div class="friend-card" onclick="window.location.href='newProfile.html'">
+                            <img src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQcbqOH4dzt57bdZ0K36CHrRkhqgtGgwIrA7mHoA4M0cc8x239pMR-h28FlqERzrqW0GVMn1-Ok_LD0-KjYHnQCBki8Hqr50uPbUiPTn5UAhNDJa9Mtu-dp2JjcSYYNptQ97eLLy6_0DFEP" alt="Mark Johnson" class="avatar" />
+                            <div class="friend-info">
+                                <h2>Leornado DiCaprio</h2>
+                                <p>📅 2 weeks ago</p>
+                                <p>📍 Coffee Shop</p>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="friend-card" onclick="window.location.href='profile.html'">
-                        <img src="avatar2.jpg" alt="Priya Shah" class="avatar" />
-                        <div class="friend-info">
-                        <h2>Priya Shah</h2>
-                        <p>📅 5 days ago</p>
-                        <p>📍 Bookstore Meetup</p>
+                    
+                        <div class="friend-card" onclick="window.location.href='newProfile.html'">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Jay-Z_%40_Shawn_%27Jay-Z%27_Carter_Foundation_Carnival_%28crop_2%29.jpg/500px-Jay-Z_%40_Shawn_%27Jay-Z%27_Carter_Foundation_Carnival_%28crop_2%29.jpg" alt="Priya Shah" class="avatar" />
+                            <div class="friend-info">
+                            <h2>Jay-Z</h2>
+                            <p>📅 5 days ago</p>
+                            <p>📍 Bookstore Meetup</p>
+                            </div>
                         </div>
-                    </div>
-                
-                    <div class="friend-card" onclick="window.location.href='profile.html'">
-                        <img src="avatar3.jpg" alt="Leo Park" class="avatar" />
-                        <div class="friend-info">
-                        <h2>Leo Park</h2>
-                        <p>📅 10 days ago</p>
-                        <p>📍 Co-working Space</p>
+                    
+                        <div class="friend-card" onclick="window.location.href='newProfile.html'">
+                            <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcS1KVVa-bpsH56U50mGC5jN3XdvfrMEcwjBYSIbYKIwCicvDqAj5kjviwyVRelbAVGEzGL7b_08-IARlMiUzlio_HSSqnPiIkt8OtCg362WE21cm77Nzeyn0E4X_Zb0l6AnPb0zW5NE4bg" alt="Leo Park" class="avatar" />
+                            <div class="friend-info">
+                            <h2>Warren Buffet</h2>
+                            <p>📅 10 days ago</p>
+                            <p>📍 Co-working Space</p>
+                            </div>
                         </div>
-                    </div>
                 
-                    </section>
+                    </div>
                 </main>
             </section>
 

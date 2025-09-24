@@ -1,256 +1,416 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Friend Profile - Mark Johnson</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: #f9f9f9;
-      color: #333;
-      padding: 1rem;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Friend Profile - Mark Johnson</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        padding: 1rem;
+      }
 
-    header {
-      margin-bottom: 1rem;
-    }
+      header {
+        margin-bottom: 1rem;
+      }
 
-    .back-button {
-      text-decoration: none;
-      color: #0077ff;
-      font-size: 1rem;
-    }
+      .back-button {
+        text-decoration: none;
+        color: #0077ff;
+        font-size: 1rem;
+      }
 
-    .profile-page {
-      max-width: 600px;
-      margin: 0 auto;
-      text-align: center;
-    }
+      .profile-page {
+        max-width: 600px;
+        margin: 0 auto;
+        text-align: center;
+      }
 
-    .avatar-large {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 0.75rem;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    }
+      .avatar-large {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      }
 
-    .profile-name {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+      .profile-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+      }
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+      }
 
-    .tag {
-      background: #e0f0ff;
-      color: #0077ff;
-      padding: 0.3rem 0.6rem;
-      border-radius: 999px;
-      font-size: 0.85rem;
-    }
+      .tag {
+        background: #e0f0ff;
+        color: #0077ff;
+        padding: 0.3rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.85rem;
+      }
 
-    .meta {
-      font-size: 1rem;
-      margin: 0.25rem 0;
-    }
+      .meta {
+        font-size: 1rem;
+        margin: 0.25rem 0;
+      }
 
-    .notes {
-      margin-top: 1.5rem;
-      text-align: left;
-    }
+      .notes {
+        margin-top: 1.5rem;
+        text-align: left;
+      }
 
-    .notes h2 {
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
+      .notes h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
 
-    .notes ul {
-      padding-left: 1.2rem;
-    }
+      .notes ul {
+        padding-left: 1.2rem;
+      }
 
-    .notes li {
-      margin-bottom: 0.5rem;
-    }
+      .notes li {
+        margin-bottom: 0.5rem;
+      }
 
-    .note-edit-area {
-      width: 100%;
-      height: 120px;
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-      margin-top: 0.5rem;
-    }
+      .note-edit-area {
+        width: 100%;
+        height: 120px;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+        margin-top: 0.5rem;
+      }
 
-    .edit-controls {
-      margin-top: 0.75rem;
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-    }
+      .edit-controls {
+        margin-top: 0.75rem;
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+      }
 
-    .edit-controls button {
-      padding: 0.6rem 1rem;
-      font-size: 0.95rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+      .edit-controls button {
+        padding: 0.6rem 1rem;
+        font-size: 0.95rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
 
-    .edit-controls .save {
-      background-color: #0077ff;
-      color: white;
-    }
+      .edit-controls .save {
+        background-color: #0077ff;
+        color: white;
+      }
 
-    .edit-controls .cancel {
-      background-color: #ccc;
-    }
+      .edit-controls .cancel {
+        background-color: #ccc;
+      }
 
-    .profile-actions {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-      margin-top: 2rem;
-    }
+      .profile-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 2rem;
+      }
 
-    .profile-actions button {
-      padding: 0.75rem;
-      font-size: 1rem;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      background-color: #0077ff;
-      color: white;
-      transition: background 0.2s ease;
-    }
+      .profile-actions button {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        background-color: #0077ff;
+        color: white;
+        transition: background 0.2s ease;
+      }
 
-    .profile-actions button:hover {
-      background-color: #005fcc;
-    }
+      .profile-actions button:hover {
+        background-color: #005fcc;
+      }
 
-    .profile-actions .danger {
-      background-color: #ff4d4f;
-    }
+      .profile-actions .danger {
+        background-color: #ff4d4f;
+      }
 
-    .profile-actions .danger:hover {
-      background-color: #d9363a;
-    }
-  </style>
-</head>
-<body>
+      .profile-actions .danger:hover {
+        background-color: #d9363a;
+      }
 
-  <header>
-    <a href="friends.html" class="back-button">← Back</a>
-  </header>
+      .interactions {
+        margin-top: 1.5rem;
+        text-align: left;
+      }
 
-  <main class="profile-page">
-    <img src="https://via.placeholder.com/96" alt="Mark Johnson" class="avatar-large" />
-    <div class="profile-name">Mark Johnson</div>
+      .interactions h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+      }
 
-    <div class="tags">
-      <span class="tag">🏷️ Work</span>
-      <span class="tag">♟️ Chess Club</span>
-    </div>
+      .interaction-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
 
-    <p class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>
-    <p class="meta"><strong>📍 Location:</strong> Cafe Luna, Boston</p>
+      .interaction-item {
+        background: white;
+        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        margin-bottom: 0.75rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: background 0.2s ease;
+      }
 
-    <div class="notes">
-      <h2>📝 Notes</h2>
+      .interaction-item:hover {
+        background: #f0f8ff;
+      }
 
-      <div id="notes-view">
-        <ul id="note-list">
-          <li>Talked about AI and chess</li>
-          <li>Send him the chess link</li>
-          <li>He’s starting a new role at work</li>
-        </ul>
+      .interaction-date {
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #0077ff;
+      }
+
+      .interaction-summary {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #444;
+        display: none; /* hidden until clicked */
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <a href="mainView.html" class="back-button">← Back</a>
+    </header>
+
+    <main class="profile-page">
+      <img src="https://via.placeholder.com/96" alt="Mark Johnson" class="avatar-large" />
+      <div id="nameTV" class="profile-name">Mark Johnson</div>
+
+      <div id="clubDiv" class="tags">
+        <span class="tag">🏷️ Work</span>
+        <span class="tag">♟️ Chess Club</span>
       </div>
 
-      <div id="notes-edit" style="display: none;">
-        <textarea id="note-textarea" class="note-edit-area"></textarea>
-        <div class="edit-controls">
-          <button class="save" onclick="saveNotes()">Save</button>
-          <button class="cancel" onclick="cancelEdit()">Cancel</button>
+      <p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>
+      <p id="locationTV" class="meta"><strong>📍 Location:</strong> Cafe Luna, Boston</p>
+
+      <div class="notes">
+        <h2>📝 Notes</h2>
+
+        <div id="notes-view">
+          <ul id="note-list">
+            <li>Talked about AI and chess</li>
+            <li>Send him the chess link</li>
+            <li>He’s starting a new role at work</li>
+          </ul>
+        </div>
+        <div class="interactions">
+          <h2>🤝 Interactions</h2>
+          <ul id="interaction-list" class="interaction-list">
+            <!-- Will be populated dynamically -->
+          </ul>
+        </div>
+
+        <div id="notes-edit" style="display: none;">
+          <textarea id="note-textarea" class="note-edit-area"></textarea>
+          <div class="edit-controls">
+            <button class="save" onclick="saveNotes()">Save</button>
+            <button class="cancel" onclick="cancelEdit()">Cancel</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="profile-actions">
-      <button onclick="editProfile()">✏️ Edit Profile</button>
-      <button onclick="addInteraction()">➕ Add Interaction</button>
-      <button onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
-    </div>
-  </main>
+      <div class="profile-actions">
+        <button onclick="editProfile()">✏️ Edit Profile</button>
+        <button onclick="addInteraction()">➕ Add Interaction</button>
+        <button onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
+      </div>
+    </main>
 
-  <script>
-    const notes = [
-      "Talked about AI and chess",
-      "Send him the chess link",
-      "He’s starting a new role at work"
-    ];
+    <script>
+      const notes = [
+        "Talked about AI and chess",
+        "Send him the chess link",
+        "He’s starting a new role at work"
+      ];
 
-    const noteListEl = document.getElementById('note-list');
-    const noteTextarea = document.getElementById('note-textarea');
-    const notesView = document.getElementById('notes-view');
-    const notesEdit = document.getElementById('notes-edit');
+      const noteListEl = document.getElementById('note-list');
+      const noteTextarea = document.getElementById('note-textarea');
+      const notesView = document.getElementById('notes-view');
+      const notesEdit = document.getElementById('notes-edit');
 
-    function editProfile() {
-      // Show textarea with current notes
-      noteTextarea.value = notes.join('\n');
-      notesView.style.display = 'none';
-      notesEdit.style.display = 'block';
-    }
-
-    function cancelEdit() {
-      notesEdit.style.display = 'none';
-      notesView.style.display = 'block';
-    }
-
-    function saveNotes() {
-      const updatedText = noteTextarea.value.trim();
-      const updatedNotes = updatedText.split('\n').filter(line => line.trim() !== '');
-      notes.length = 0;
-      notes.push(...updatedNotes);
-      renderNotes();
-      cancelEdit();
-    }
-
-    function renderNotes() {
-      noteListEl.innerHTML = '';
-      notes.forEach(note => {
-        const li = document.createElement('li');
-        li.textContent = note;
-        noteListEl.appendChild(li);
-      });
-    }
-
-    function addInteraction() {
-      alert("Redirecting to add interaction...");
-    }
-
-    function deleteFriend() {
-      if (confirm("Are you sure you want to delete this friend?")) {
-        alert("Friend deleted.");
-        // You could redirect or update state here
+      function editProfile() {
+        // Show textarea with current notes
+        noteTextarea.value = notes.join('\n');
+        notesView.style.display = 'none';
+        notesEdit.style.display = 'block';
       }
-    }
 
-    // Initial render
-    renderNotes();
+      function cancelEdit() {
+        notesEdit.style.display = 'none';
+        notesView.style.display = 'block';
+      }
+
+      function saveNotes() {
+        const updatedText = noteTextarea.value.trim();
+        const updatedNotes = updatedText.split('\n').filter(line => line.trim() !== '');
+        notes.length = 0;
+        notes.push(...updatedNotes);
+        renderNotes();
+        cancelEdit();
+      }
+
+      function renderNotes() {
+        noteListEl.innerHTML = '';
+        notes.forEach(note => {
+          const li = document.createElement('li');
+          li.textContent = note;
+          noteListEl.appendChild(li);
+        });
+      }
+
+      function addInteraction() {
+        alert("Redirecting to add interaction...");
+      }
+
+      function deleteFriend() {
+        if (confirm("Are you sure you want to delete this friend?")) {
+          alert("Friend deleted.");
+          // You could redirect or update state here
+        }
+      }
+
+      // Initial render
+      renderNotes();
+    </script>
+    <script type="module">
+      // Import the necessary Firebase SDK functions
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+      // You would also typically import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+      // to get the actual current user's ID.
+
+      // Your Firebase project configuration
+      // Replace "YOUR_API_KEY", "YOUR_AUTH_DOMAIN", etc. with your actual project details
+      // Note: projectId 'win-friends-app' is already set based on your project details!
+      const firebaseConfig = {
+          apiKey: "YOUR_API_KEY", // Get this from your Firebase Project settings -> Project settings -> General
+          authDomain: "YOUR_AUTH_DOMAIN", // Also from Project settings
+          projectId: "win-friends-app",
+          storageBucket: "YOUR_STORAGE_BUCKET",
+          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+          appId: "YOUR_APP_ID"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app); // Get a reference to your Firestore database
+
+      // Function to fetch friend data
+      async function getFriendData() {
+          // IMPORTANT: In a real app, 'currentLoggedInUserId' would come from Firebase Authentication
+          // For this example, we'll use a placeholder.
+          // Example: const currentLoggedInUserId = firebase.auth().currentUser.uid;
+          const currentLoggedInUserId = "test_user"; // Replace with an actual user's UID in your database
+
+          // The ID of the friend document you want to fetch
+          const friendIdToFetch = "test_friend";
+
+          // Construct the Firestore document reference
+          // This points to: /users/{currentLoggedInUserId}/friends/{friendIdToFetch}
+          const friendDocRef = doc(db, "users", currentLoggedInUserId, "friends", friendIdToFetch);
+
+          try {
+              const docSnap = await getDoc(friendDocRef); // Attempt to get the document
+
+              if (docSnap.exists()) {
+                  console.log("Friend data found:", docSnap.data());
+                  //alert(`${ JSON.stringify(docSnap.data(), null, 2)}`)
+                  setProfile(docSnap.data())
+              } else {
+                  // doc.data() will be undefined in this case
+                  console.log("No data available for friend with ID:", friendIdToFetch);
+                  alert('error 301')
+              }
+          } catch (error) {
+              console.error("Error fetching friend data:", error);
+              alert('error 307')
+          }
+      }
+
+      function setProfile(data){
+          let nameTV = document.getElementById("nameTV")
+          let noteList = document.getElementById("note-list")
+
+          nameTV.innerText = data.name
+          //have to just set name,
+          //have to set notes chronologically 
+      }
+
+      // Call the function to fetch data when the HTML content is fully loaded
+      document.addEventListener('DOMContentLoaded', getFriendData);
   </script>
+    <script>
+      const interactions = [
+        {
+          date: "2025-09-10",
+          type: "Coffee Meetup ☕",
+          summary: "Talked about his new role and upcoming project. Shared some tips on productivity apps."
+        },
+        {
+          date: "2025-08-28",
+          type: "Phone Call 📞",
+          summary: "He mentioned traveling to New York soon. Discussed keeping in touch with the Chess Club."
+        },
+        {
+          date: "2025-08-15",
+          type: "Lunch 🍽️",
+          summary: "Caught up after 3 months. Talked about AI, work stress, and his chess strategies."
+        }
+      ];
 
-</body>
+      const interactionListEl = document.getElementById("interaction-list");
+
+      function renderInteractions() {
+        interactionListEl.innerHTML = '';
+        interactions.forEach((interaction, index) => {
+          const li = document.createElement("li");
+          li.className = "interaction-item";
+          li.innerHTML = `
+            <div class="interaction-date">${interaction.date} — ${interaction.type}</div>
+            <div class="interaction-summary">${interaction.summary}</div>
+          `;
+          
+          li.addEventListener("click", () => {
+            const summaryEl = li.querySelector(".interaction-summary");
+            const isVisible = summaryEl.style.display === "block";
+            summaryEl.style.display = isVisible ? "none" : "block";
+          });
+
+          interactionListEl.appendChild(li);
+        });
+      }
+
+      // Render when page loads
+      renderInteractions();
+    </script>
+
+  </body>
 </html>
