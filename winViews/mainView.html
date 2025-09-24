@@ -154,33 +154,13 @@
     <body>
         <main>
 
-            <section id="home" class="active">
+            <section id="friends" class="active">
                 <header>
                     <h1>Win Friends 👋</h1>
-                    <button onclick="window.location.href='add.html'" >+ New Interaction</button>
+                    <button onclick="window.location.href='add.html'" >+ New Friend</button>
                 </header>
-                <div>
-                    <h2>📍 Near You</h2>
-                    <ul>
-                    <li>Mark @ Coffee House</li>
-                    <li>Jen @ Yoga Class</li>
-                    </ul>
-                </div>
-                <div>
-                    <h2>🔁 Follow-up Soon</h2>
-                    <ul>
-                        <li>Alex (14 days ago)</li>
-                        <li>Priya (30 days ago)</li>
-                    </ul>
-                </div>
-            </section>
-
-            <section id="friends">
-                <header>
-                    <h1>Your Friends</h1>
-                </header>
-                <button onclick="window.location.href='add.html'" >+ New Friend</button>
                 <main>
+                    
                     <div class="friend-list">
                         <div class="friend-card" onclick="window.location.href='newProfile.html'">
                             <img src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQcbqOH4dzt57bdZ0K36CHrRkhqgtGgwIrA7mHoA4M0cc8x239pMR-h28FlqERzrqW0GVMn1-Ok_LD0-KjYHnQCBki8Hqr50uPbUiPTn5UAhNDJa9Mtu-dp2JjcSYYNptQ97eLLy6_0DFEP" alt="Mark Johnson" class="avatar" />
@@ -211,6 +191,30 @@
                 
                     </div>
                 </main>
+
+               
+            </section>
+
+            <section id="crm">
+                <header>
+                    <h1>Keep Friends</h1>
+                </header>
+                <button onclick="window.location.href='add.html'" >+ New Interaction</button>
+                <div>
+                    <h2>📍 Near You</h2>
+                    <ul>
+                    <li>Mark @ Coffee House</li>
+                    <li>Jen @ Yoga Class</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>🔁 Follow-up Soon</h2>
+                    <ul>
+                        <li>Alex (14 days ago)</li>
+                        <li>Priya (30 days ago)</li>
+                    </ul>
+                </div>
+                
             </section>
 
             
@@ -219,9 +223,9 @@
 
         <footer>
             <nav>
-            <a href="#home" class="nav-link active-link"><span class="material-symbols-outlined">
-                home </span> Home</a>
-            <a href="#friends" class="nav-link"><span class="material-symbols-outlined">person</span>Friends</a>
+            <a href="#friends" class="nav-link active-link"><span class="material-symbols-outlined">
+                group </span> Friends</a>
+            <a href="#crm" class="nav-link"><span class="material-symbols-outlined">track_changes</span>CRM</a>
             </nav>
         </footer>
 
