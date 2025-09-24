@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Interaction</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f9f9f9;
+    }
+
+    header {
+      margin-bottom: 1rem;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: #CE191F;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    form {
+      background: #ffffff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+
+    form label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+
+    form textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    form button[type="submit"] {
+      margin-top: 1.5rem;
+      background-color: #CE191F;
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      width: 100%;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    form button[type="submit"]:hover {
+      background-color: #00ACEE;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      text-decoration: none;
+      text-align: start;
+      color: #00ACEE;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .modal input[type="text"],
+    .modal input[type="email"],
+    .modal input[type="tel"],
+    .modal input[type="file"] {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      box-sizing: border-box;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .modal-buttons button:first-child {
+      background-color: #CE191F;
+      color: white;
+    }
+
+    .modal-buttons button:last-child {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    #imagePreview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-top: 0.5rem;
+    }
+
+    /* Optional fields container */
+    #optionalFields {
+      display: none;
+      margin-top: 1rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+
+    #toggleOptionalBtn {
+      background: #00ACEE;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      width: auto;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="back-button" href="homeView.html">← Back</a>
+    <h1 style="text-align: center;">Add Interaction</h1>
+  </header>
+
+  <main>
+    <form id="interactionForm">
+      <label>Who?
+        <input type="text" name="name" required placeholder="Enter friend's name" />
+      </label>
+
+      <!-- Add Friend Button -->
+      <button type="button" onclick="openAddFriend()">+ Add a New Friend</button>
+
+      <label>Where?
+        <input type="text" id="location" name="location" placeholder="Auto-detecting..." />
+      </label>
+
+      <label>Date?
+        <input type="date" name="date" />
+      </label>
+
+      <label>Notes:
+        <textarea name="notes" rows="4" placeholder="What did you talk about? Any follow-up?"></textarea>
+      </label>
+
+      <button type="submit">Save Interaction</button>
+    </form>
+  </main>
+
+  <!-- Add Friend Modal -->
+  <div class="modal-overlay" id="friendModal">
+    <div class="modal">
+      <h2>Add New Friend</h2>
+
+      <label>Name *</label>
+      <input type="text" id="friendName" required placeholder="e.g., Sarah">
+
+      <label>Fun Fact *</label>
+      <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
+
+      <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields ▼</button>
+
+      <div id="optionalFields">
+        <label>Email (optional)</label>
+        <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
+
+        <label>Phone (optional)</label>
+        <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
+
+        <label>Group (optional)</label>
+        <input type="text" id="friendGroup" placeholder="e.g., Book Club">
+
+        <label>Picture (optional)</label>
+        <input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
+        <div id="imagePreview"></div>
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" onclick="saveFriend()">Save Friend</button>
+        <button type="button" onclick="closeAddFriend()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openAddFriend() {
+      document.getElementById('friendModal').style.display = 'flex';
+    }
+
+    function closeAddFriend() {
+      document.getElementById('friendModal').style.display = 'none';
+      document.getElementById('imagePreview').innerHTML = '';
+      document.getElementById('friendPic').value = ''; // reset file input
+
+      // Reset optional fields hidden & toggle button text
+      const optional = document.getElementById('optionalFields');
+      optional.style.display = 'none';
+      document.getElementById('toggleOptionalBtn').textContent = 'Show Optional Fields ▼';
+
+      // Clear all fields
+      document.getElementById('friendName').value = '';
+      document.getElementById('friendFact').value = '';
+      document.getElementById('friendEmail').value = '';
+      document.getElementById('friendPhone').value = '';
+      document.getElementById('friendGroup').value = '';
+    }
+
+    function saveFriend() {
+      const name = document.getElementById('friendName').value.trim();
+      const fact = document.getElementById('friendFact').value.trim();
+
+      if (!name || !fact) {
+        alert("Name and Fun Fact are required.");
+        return;
+      }
+
+      // You could extend this to save data somewhere
+      alert(`Friend "${name}" added!`);
+
+      // Autofill "Who?" input in the main form
+      document.querySelector('input[name="name"]').value = name;
+
+      closeAddFriend();
+    }
+
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.alt = "Uploaded photo";
+        document.getElementById("imagePreview").innerHTML = '';
+        document.getElementById("imagePreview").appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function toggleOptionalFields() {
+      const optional = document.getElementById('optionalFields');
+      const btn = document.getElementById('toggleOptionalBtn');
+      if (optional.style.display === 'none' || optional.style.display === '') {
+        optional.style.display = 'block';
+        btn.textContent = 'Hide Optional Fields ▲';
+      } else {
+        optional.style.display = 'none';
+        btn.textContent = 'Show Optional Fields ▼';
+      }
+    }
+  </script>
+
+</body>
+</html>

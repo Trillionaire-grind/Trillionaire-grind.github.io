@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Win Friends - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24;
+        }
+
+        footer a .material-symbols-outlined {
+            vertical-align: middle; /* or try -2px for pixel-perfect */
+            font-size: 20px;
+            margin-right: 4px;
+            display: inline-block;
+            line-height: 1;
+        }
+    </style>
+    <style>
+            body {
+            margin: 0;
+            font-family: sans-serif;
+            padding: 1rem;
+            background: #f9f9f9;  
+            }
+
+            main section {
+            display: none;
+            padding: 1rem;
+            }
+
+            main section.active {
+            display: block;
+            }
+            header {
+            text-align: center;
+            margin-bottom: 1rem;
+            }
+
+            main {
+            max-width: 600px;
+            margin: 0 auto;
+            }
+
+            button {
+                width: 100%;
+                padding: 0.75rem;
+                margin: 0.5rem 0;
+                background: #CE191F;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+
+            ul {
+                list-style: none;
+                padding-left: 0;
+            }
+
+            li {
+                background: white;
+                padding: 0.75rem;
+                margin: 0.25rem 0;
+                border-radius: 6px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+
+            footer nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background: #ffffff;
+                display: flex;
+                justify-content: space-around;
+                padding: 0.75rem 0;
+                border-top: 1px solid #ccc;
+
+            }
+
+            footer a {
+            text-decoration: none;
+            color: #000;
+            font-size: 1.2rem;
+            }
+
+            nav a.active-link {
+            color: #00ACEE;
+            }
+
+            @media (min-width: 768px) {
+            body {
+                padding: 2rem;
+            }
+            }
+    </style>
+    </head>
+    <body>
+        <main>
+
+            <section id="home" class="active">
+                <header>
+                    <h1>Win Friends 👋</h1>
+                    <button onclick="window.location.href='add.html'" >+ New Interaction</button>
+                </header>
+                <div>
+                    <h2>📍 Near You</h2>
+                    <ul>
+                    <li>Mark @ Coffee House</li>
+                    <li>Jen @ Yoga Class</li>
+                    </ul>
+                </div>
+                <div>
+                    <h2>🔁 Follow-up Soon</h2>
+                    <ul>
+                        <li>Alex (14 days ago)</li>
+                        <li>Priya (30 days ago)</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="friends">
+                <header>
+                    <h1>Your Friends</h1>
+                </header>
+                <button onclick="window.location.href='add.html'" >+ New Interaction</button>
+
+                
+                <main>
+                    <section class="friend-list">
+                
+                    <div class="friend-card" onclick="window.location.href='profile.html'">
+                        <img src="avatar1.jpg" alt="Mark Johnson" class="avatar" />
+                        <div class="friend-info">
+                        <h2>Mark Johnson</h2>
+                        <p>📅 2 weeks ago</p>
+                        <p>📍 Coffee Shop</p>
+                        </div>
+                    </div>
+                
+                    <div class="friend-card" onclick="window.location.href='profile.html'">
+                        <img src="avatar2.jpg" alt="Priya Shah" class="avatar" />
+                        <div class="friend-info">
+                        <h2>Priya Shah</h2>
+                        <p>📅 5 days ago</p>
+                        <p>📍 Bookstore Meetup</p>
+                        </div>
+                    </div>
+                
+                    <div class="friend-card" onclick="window.location.href='profile.html'">
+                        <img src="avatar3.jpg" alt="Leo Park" class="avatar" />
+                        <div class="friend-info">
+                        <h2>Leo Park</h2>
+                        <p>📅 10 days ago</p>
+                        <p>📍 Co-working Space</p>
+                        </div>
+                    </div>
+                
+                    </section>
+                </main>
+            </section>
+
+            
+            
+        </main>
+
+        <footer>
+            <nav>
+            <a href="#home" class="nav-link active-link"><span class="material-symbols-outlined">
+                home </span> Home</a>
+            <a href="#friends" class="nav-link"><span class="material-symbols-outlined">person</span>Friends</a>
+            </nav>
+        </footer>
+
+        <script>
+            const links = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+
+            links.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+
+                // Remove active styles
+                links.forEach(l => l.classList.remove('active-link'));
+                sections.forEach(s => s.classList.remove('active'));
+
+                // Add active to clicked link
+                link.classList.add('active-link');
+
+                // Show corresponding section
+                const targetId = link.getAttribute('href').substring(1); // removes the #
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) targetSection.classList.add('active');
+            });
+            });
+        </script>
+    </body>
+</html>
