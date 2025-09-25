@@ -323,7 +323,7 @@
 
         extractParamsFromUrl(window.location.href);
         
-        function createChapterDiv(bookId, chapterName) {
+        /*function createChapterDiv(bookId, chapterName) {
             let div = document.createElement('div');
             div.className = 'chapterDiv';
             div.dataset.speechId = bookId;
@@ -367,7 +367,55 @@
             });
 
             return div;
-        }
+        }*/
+
+        function createChapterDiv(bookId, chapterName) {
+        let div = document.createElement('div');
+        div.className = 'chapterDiv';
+        div.dataset.speechId = bookId;
+        div.innerHTML = `
+            <div class="chapterDiv" style="width: 100%; background-color: #E7F9ED; height: 8vh; border:1px solid #2ABF5B; border-radius: 10px; margin-top: 8px; cursor: pointer;">
+                <p style="font-weight: bold; margin-left: 8px; padding-top: auto; margin-bottom: auto;">${chapterName}</p>
+            </div>`;
+
+        let pressTimer;
+        let longPressed = false;
+
+        const startPress = (event) => {
+            event.preventDefault(); // stops weird iOS behaviors
+            longPressed = false;
+
+            pressTimer = setTimeout(() => {
+                longPressed = true;
+                openEdit(bookId, chapterName); // long press action
+            }, 500); // threshold
+        };
+
+        const endPress = () => {
+            clearTimeout(pressTimer);
+
+            // If not long pressed → treat as click
+            if (!longPressed) {
+                openPage(bookId, chapterName); // short tap / click
+            }
+        };
+
+        // Desktop events
+        div.addEventListener("mousedown", startPress);
+        div.addEventListener("mouseup", endPress);
+        div.addEventListener("mouseleave", endPress);
+
+        // Mobile touch events
+        div.addEventListener("touchstart", startPress, { passive: false });
+        div.addEventListener("touchend", endPress);
+        div.addEventListener("touchcancel", endPress);
+
+        // Prevent iOS context menu
+        div.addEventListener("contextmenu", (e) => e.preventDefault());
+
+        return div;
+    }
+
 
 
 
