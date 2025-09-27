@@ -10,11 +10,10 @@
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
-            display: flex;
+            display: block;
             justify-content: center;
-            align-items: center;
             height: 100vh;
-          
+            flex-direction: column;
         }
 
         .book-container {
@@ -23,7 +22,9 @@
             max-width: 800px;
             display: flex;
             align-items: center;
-            height: 90%;
+            margin-left: auto;
+            margin-right: auto;
+            height: 80%;
         }
 
         .book-page {
@@ -36,8 +37,6 @@
             line-height: 1.6;
             z-index: 1;
         }
-
-      
 
         .book-page h1,  .book-page h3 {
             margin-top: 0;
@@ -79,9 +78,11 @@
         }
 
         #pageTV{
-            position: fixed;
-            margin-left: auto;
-            margin-right: auto;
+            margin-top: 8px; /* Add some space between the book container and the page number */
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center; 
         }
     </style>
     </head>
@@ -91,10 +92,10 @@
             <div class="book-page">
                 <h1 id="chapterTV" ></h1>
                 <p id="contentTV"></p>
-                <h2 id="pageTV"></h2>
             </div>
             <div id="rightBtn" class="arrow arrow-right">&#9654;</div>
         </div>
+        <h2 id="pageTV"></h2>
     </body>
     <script type="module">
         // Import the functions you need from the SDKs you need
