@@ -30,7 +30,7 @@
             width: 100%;
             background-color: #fff;
             padding: 2rem;
-            height: 90%;
+            height: 80%;
             border: 1px solid #ddd;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             line-height: 1.6;
@@ -76,6 +76,12 @@
 
         .arrow:hover {
             color: #555;
+        }
+
+        #pageTV{
+            position: fixed;
+            margin-left: auto;
+            margin-right: auto;
         }
     </style>
     </head>
@@ -133,7 +139,6 @@
             const pageCollectionSnap = await getDocs(pageReference)
 
             chapterTV.innerText = chapterName
-
             pageCollectionSnap.forEach((doc) => {
                     console.log(`page name ${doc.id}`)
                     pageNames.push(doc.id)
@@ -152,12 +157,11 @@
         }
 
         function extractNumber(pageString) {
-            return parseInt(pageString.replace('page', ''), 10);
+            return parseInt(pageString.replace('page ', ''), 10);
         }
 
         // Sorting function
        
-
         function showPage(position)
         {
             let contentTV = document.getElementById("contentTV")
@@ -215,13 +219,11 @@
             // Extract the query string part from the URL
             const bookId = url.split('?')[1];
             const chapterId = url.split('?')[2];
-            console.log(`queryString${bookId} and  pool  ${chapterId}`)
             
             // Split the query string into individual key-value pairs
             const bookParams = bookId.split('&');
             const chapterParams = chapterId.split('&');
-            console.log(`params ${bookParams} ${chapterParams}`)
-            
+
             // Initialize an object to store the extracted parameters
             const extractedParams = {};
             
@@ -249,7 +251,5 @@
         extractParamsFromUrl(window.location.href);
 
         //getPages("book1", "chapter1")
-        
-
     </script>
 </html>
