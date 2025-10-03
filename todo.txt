@@ -1,0 +1,13 @@
+1: Kepler Siguineau 
+    1) Add VSL for Kotfè
+    2) Re-write Kotfè 
+    3) Add project tree
+    4) Change profile picture
+    5) Center "go back" btn with arrow up
+    6) Add all Tech Academy Offers 
+    7) Add A Secret Attraction Offer 
+    8) Make Visuals for offers 
+    9) Change swipe more to learn more arrow facing down
+
+2: TM Experience
+    1) 
