@@ -114,9 +114,10 @@
             background: #fff;
             border-radius: 8px;
             padding: 0.75rem;
+            margin-top: 16px;
             box-shadow: 0 1px 4px rgba(0,0,0,0.05);
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.3s ease;
         }
 
         .friend-card:hover {
@@ -147,27 +148,232 @@
             color: #555;
         }
 
-       
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 0.75rem;
+        }
 
+        .search-bar input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: none;
+            height: 36px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .search-bar input:focus {
+            border-color: #00ACEE;
+            box-shadow: 0 1px 3px #00ACEE;
+        }
+
+         /* Modal styles */
+        .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 10;
+        justify-content: center;
+        align-items: center;
+        }
+
+        .modal {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        width: 90%;
+        max-width: 480px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        max-height: 90vh;
+        overflow-y: auto;
+        }
+
+        .modal h2 {
+        margin-top: 0;
+        text-align: center;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="email"],
+        .modal input[type="tel"],
+        .modal input[type="file"] {
+        width: 100%;
+        padding: 0.65rem;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1rem;
+        margin-bottom: 0.75rem;
+        box-sizing: border-box;
+        }
+
+        .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        }
+
+        .modal-buttons button {
+        flex: 1;
+        padding: 0.75rem;
+        font-size: 1rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        }
+
+        .modal-buttons button:first-child {
+        background-color: #ccc;
+        color: #333;
+        }
+
+        .modal-buttons button:last-child {
+        background-color: #CE191F;
+        color: white;
+        }
+
+        #imagePreview img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        margin-top: 0.5rem;
+        }
+
+        /* Optional fields container */
+        #optionalFields {
+        display: none;
+        margin-top: 1rem;
+        border-top: 1px solid #ddd;
+        padding-top: 1rem;
+        }
+
+        #toggleOptionalBtn {
+        background: #00ACEE;
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        padding: 0.5rem;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        color: white;
+        width: auto;
+        display: inline-block;
+        }
+
+        .nearUl:hover{
+          background-color: #00ACEE;
+          color: white;
+          cursor: pointer;
+        }
+
+        .nearLi{
+          cursor: pointer;
+        }
+
+        .nearLi:hover{
+          background-color: #00ACEE;
+          color: #fff;
+        }
+        
     </style>
+    <script>
+        function toggleOptionalFields() {
+          const optional = document.getElementById('optionalFields');
+          const btn = document.getElementById('toggleOptionalBtn');
+          if (optional.style.display === 'none' || optional.style.display === '') {
+            optional.style.display = 'block';
+            btn.textContent = 'Hide Optional Fields ▲';
+          } else {
+            optional.style.display = 'none';
+            btn.textContent = 'Show Optional Fields ▼';
+          }
+        }
+
+        function closeAddFriend() {
+          document.getElementById('friendModal').style.display = 'none';
+          document.getElementById('imagePreview').innerHTML = '';
+          document.getElementById('friendPic').value = ''; // reset file input
+    
+          // Reset optional fields hidden & toggle button text
+          const optional = document.getElementById('optionalFields');
+          optional.style.display = 'none';
+          document.getElementById('toggleOptionalBtn').textContent = 'Show Optional Fields ▼';
+    
+          // Clear all fields
+          document.getElementById('friendName').value = '';
+          document.getElementById('friendFact').value = '';
+          document.getElementById('friendEmail').value = '';
+          document.getElementById('friendPhone').value = '';
+          document.getElementById('friendGroup').value = '';
+        }
+    </script>
+    
     </head>
     <body>
+      
         <main>
+            <div class="modal-overlay" id="friendModal">
+                <div class="modal">
+                  <h2>Add New Friend</h2>
+            
+                  <label>Name *</label>
+                  <input type="text" id="friendName" required placeholder="e.g., Sarah">
+            
+                  <label>Fun Fact *</label>
+                  <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
+            
+                  <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields ▼</button>
+            
+                  <div id="optionalFields">
+                    <label>Email (optional)</label>
+                    <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
+            
+                    <label>Phone (optional)</label>
+                    <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
+            
+                    <label>Group (optional)</label>
+                    <input type="text" id="friendGroup" placeholder="e.g., Book Club">
+            
+                    <label>Picture (optional)</label>
+                    <input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
+                    <div id="imagePreview"></div>
+                  </div>
+            
+                  <div class="modal-buttons">
+                    <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
+                    <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
+                  </div>
+                </div>
+              </div>
 
             <section id="friends" class="active">
                 <header>
                     <h1>Win Friends 👋</h1>
-                    <button onclick="window.location.href='add.html'" >+ New Friend</button>
+                    <button id="newFriendBtn" onclick="window.location.href='add.html'" >+ New Friend</button>
+                    <div class="search-bar" style="margin-top: 16px;">
+                      <input 
+                        type="text" 
+                        id="interaction-search" 
+                        placeholder="🔍 Search friends..." 
+                      />
+                    </div>
                 </header>
                 <main>
-                    
-                    <div class="friend-list">
-                        <div class="friend-card" onclick="window.location.href='newProfile.html'">
+                    <!--<ul id="friend-list" class="interaction-list">
+                      Interactions dynamically populated 
+                      </ul>
+                    <div class="friend-list"> -->
+                        <div id="friendList" >
+
+                        </div>
+                        <!--<div class="friend-card" onclick="window.location.href='newProfile.html'">
                             <img src="https://encrypted-tbn3.gstatic.com/licensed-image?q=tbn:ANd9GcQcbqOH4dzt57bdZ0K36CHrRkhqgtGgwIrA7mHoA4M0cc8x239pMR-h28FlqERzrqW0GVMn1-Ok_LD0-KjYHnQCBki8Hqr50uPbUiPTn5UAhNDJa9Mtu-dp2JjcSYYNptQ97eLLy6_0DFEP" alt="Mark Johnson" class="avatar" />
                             <div class="friend-info">
                                 <h2>Leornado DiCaprio</h2>
-                                <p>📅 2 weeks ago</p>
-                                <p>📍 Coffee Shop</p>
+                                <p>Was in Django</p>
                             </div>
                         </div>
                     
@@ -175,8 +381,7 @@
                             <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Jay-Z_%40_Shawn_%27Jay-Z%27_Carter_Foundation_Carnival_%28crop_2%29.jpg/500px-Jay-Z_%40_Shawn_%27Jay-Z%27_Carter_Foundation_Carnival_%28crop_2%29.jpg" alt="Priya Shah" class="avatar" />
                             <div class="friend-info">
                             <h2>Jay-Z</h2>
-                            <p>📅 5 days ago</p>
-                            <p>📍 Bookstore Meetup</p>
+                            <p>Made the Black Album</p>
                             </div>
                         </div>
                     
@@ -184,41 +389,49 @@
                             <img src="https://encrypted-tbn1.gstatic.com/licensed-image?q=tbn:ANd9GcS1KVVa-bpsH56U50mGC5jN3XdvfrMEcwjBYSIbYKIwCicvDqAj5kjviwyVRelbAVGEzGL7b_08-IARlMiUzlio_HSSqnPiIkt8OtCg362WE21cm77Nzeyn0E4X_Zb0l6AnPb0zW5NE4bg" alt="Leo Park" class="avatar" />
                             <div class="friend-info">
                             <h2>Warren Buffet</h2>
-                            <p>📅 10 days ago</p>
-                            <p>📍 Co-working Space</p>
+                            <p>Student of Ben Graham</p>
                             </div>
-                        </div>
-                
+                        </div>-->
                     </div>
                 </main>
-
-               
             </section>
 
-            <section id="crm">
+            <section id="crm" >
                 <header>
                     <h1>Keep Friends</h1>
                 </header>
                 <button onclick="window.location.href='add.html'" >+ New Interaction</button>
-                <div>
-                    <h2>📍 Near You</h2>
-                    <ul>
-                    <li>Mark @ Coffee House</li>
-                    <li>Jen @ Yoga Class</li>
+                    <h2>📍 Near You<span style="margin-left: 8px;font-size: 14px; font-weight: normal;">(within 1 mile)</span></h2>
+                    <ul id="nearUl">
+                      <li class="nearLi" onclick="window.location.href='newProfile.html?id=L9BZzfBEgTaqBRKUZs9V'">Sarah </li>
+                      <li class="nearLi" onclick="window.location.href='newProfile.html?id=rv2dofQgOKMJUqFoP88u'">Adam</li>
                     </ul>
-                </div>
-                <div>
+                <!--<div>
                     <h2>🔁 Follow-up Soon</h2>
                     <ul>
                         <li>Alex (14 days ago)</li>
                         <li>Priya (30 days ago)</li>
                     </ul>
-                </div>
-                
-            </section>
+                </div>-->
 
-            
-            
+                <div class="interactions">
+                    <h2>🤝 Interactions</h2>
+                    <div class="search-bar">
+                      <input 
+                        type="text" 
+                        id="interaction-search" 
+                        placeholder="🔍 Search interactions..." 
+                      />
+                    </div>
+                    <ul id="interaction-list" class="interaction-list">
+                      <!-- Interactions dynamically populated -->
+                      <ul>
+                        <li class="nearLi">Alex (14 days ago)</li>
+                        <li class="nearLi">Priya (30 days ago)</li>
+                      </ul>
+                    </ul>
+                </div>
+            </section>
         </main>
 
         <footer>
@@ -251,5 +464,200 @@
             });
             });
         </script>
-    </body>
+        <script>
+            const searchInput = document.getElementById("interaction-search");
+            // Filter logic
+            searchInput.addEventListener("input", (e) => {
+              const query = e.target.value.toLowerCase();
+              const filtered = interactions.filter(interaction =>
+                interaction.type.toLowerCase().includes(query) ||
+                interaction.date.toLowerCase().includes(query) ||
+                interaction.summary.toLowerCase().includes(query)
+              );
+              renderFilteredInteractions(filtered);
+            });
+          
+            function renderFilteredInteractions(filteredList) {
+              interactionListEl.innerHTML = '';
+              filteredList.forEach(interaction => {
+                const li = document.createElement("li");
+                li.className = "interaction-item";
+                li.innerHTML = `
+                  <div class="interaction-date">${interaction.date} — ${interaction.type}</div>
+                  <div class="interaction-summary" style="display:none;">${interaction.summary}</div>
+                `;
+                li.addEventListener("click", () => {
+                  const summaryEl = li.querySelector(".interaction-summary");
+                  summaryEl.style.display = summaryEl.style.display === "block" ? "none" : "block";
+                });
+                interactionListEl.appendChild(li);
+              });
+          
+              if (filteredList.length === 0) {
+                const li = document.createElement("li");
+                li.style.textAlign = "center";
+                li.style.color = "#888";
+                li.textContent = "No interactions found.";
+                interactionListEl.appendChild(li);
+              }
+            }
+          </script>        
+      </body>
+      <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyB_1iwdvhIPZ6wbtlFft_vvfRjASUb_XyY",
+          authDomain: "win-friends-app.firebaseapp.com",
+          projectId: "win-friends-app",
+          storageBucket: "win-friends-app.firebasestorage.app",
+          messagingSenderId: "1006457660053",
+          appId: "1:1006457660053:web:b1b104becc2f590a21319c",
+          measurementId: "G-0H4L7PK4L9"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        const db = getFirestore(app)
+
+        const newFriendBtn = document.getElementById("newFriendBtn")
+
+        newFriendBtn.onclick = () => {
+            openAddFriend()
+        }
+        function openAddFriend() {
+          document.getElementById('friendModal').style.display = 'flex';
+        }
+
+
+        function updateDiv(name, funFact, imageUrl, id)
+        {
+            const friendListDiv = document.getElementById("friendList")
+
+            if(imageUrl == null){
+              imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
+            }
+
+            let tester = `<div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
+                            <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
+                            <div class="friend-info">
+                                <h2>${name}</h2>
+                                <p>${funFact}</p>
+                                <p id="userId" style="display: none;"> ${id} </p>
+                            </div>
+                        </div>`
+            friendListDiv.innerHTML = friendListDiv.innerHTML + tester 
+        }
+     
+        function closeAddFriend() {
+          document.getElementById('friendModal').style.display = 'none';
+          document.getElementById('imagePreview').innerHTML = '';
+          document.getElementById('friendPic').value = ''; // reset file input
+    
+          // Reset optional fields hidden & toggle button text
+          const optional = document.getElementById('optionalFields');
+          optional.style.display = 'none';
+          document.getElementById('toggleOptionalBtn').textContent = 'Show Optional Fields ▼';
+    
+          // Clear all fields
+          document.getElementById('friendName').value = '';
+          document.getElementById('friendFact').value = '';
+          document.getElementById('friendEmail').value = '';
+          document.getElementById('friendPhone').value = '';
+          document.getElementById('friendGroup').value = '';
+        }
+    
+      
+        function previewImage(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+    
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.alt = "Uploaded photo";
+            document.getElementById("imagePreview").innerHTML = '';
+            document.getElementById("imagePreview").appendChild(img);
+          };
+          reader.readAsDataURL(file);
+        }
+    
+        function toggleOptionalFields() {
+          const optional = document.getElementById('optionalFields');
+          const btn = document.getElementById('toggleOptionalBtn');
+          if (optional.style.display === 'none' || optional.style.display === '') {
+            optional.style.display = 'block';
+            btn.textContent = 'Hide Optional Fields ▲';
+          } else {
+            optional.style.display = 'none';
+            btn.textContent = 'Show Optional Fields ▼';
+          }
+        }
+
+        async function addFriend(name, fact){
+          const docRef = await addDoc(collection(db, "users/micheal_uid/friends"), {
+            name: `${name}`,
+            funFact: `${fact}`
+          });
+          alert('friend added sucessfuly')
+          closeAddFriend();
+        }
+
+        async function fetchFriends(userId){
+          const friendsRef = collection(db, "users/micheal_uid/friends")
+          const first = query(friendsRef, orderBy("name"), limit(10))
+          const documentSnapshots = await getDocs(first);
+
+          documentSnapshots.forEach((doc) => {
+            let name = doc.data().name
+            let imageUrl = doc.data().imageUrl
+            let funFact = doc.data().funFact
+            let id = doc.id
+            updateDiv(name, funFact, imageUrl, id)
+          })
+
+          
+          //alert(`last value ${lastVisible.data().name}`)
+
+          //const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1]
+
+
+          /*const next = query(collection(db, "users/micheal_uid/friends"), 
+            orderBy("name"),
+            startAfter(lastVisible), 
+            //limit(2)
+            //might not have to include a limit
+          );*/
+        }
+
+        saveFriendBtn.onclick = () => {
+          const name = document.getElementById('friendName').value.trim();
+          const fact = document.getElementById('friendFact').value.trim();
+
+          alert(`${name}`)
+    
+          if (!name || !fact) {
+            return;
+          }
+    
+          // You could extend this to save data somewhere
+          addFriend(name, fact)
+          //addFriend()
+        }
+
+        fetchFriends('tester')
+
+        
+      </script>
 </html>

@@ -1,7 +1,7 @@
 1: Kepler Siguineau 
     1) Add VSL for Kotfè
     2) Re-write Kotfè 
-    3) Add project tree
+    3) Add project tree - done 
     4) Change profile picture
     5) Center "go back" btn with arrow up
     6) Add all Tech Academy Offers 
@@ -11,3 +11,53 @@
 
 2: TM Experience
     1) 
+
+3: Liv Lakay
+    1) show CTA (on mobile cannot see CTA)
+    2) make Kreye yon Kont make a dialog that says "test only"
+    3) upper right make it change language ht/en
+    4) change the books (3 different books added)
+    5) Fix author, make it expand the view when its too big (fix this before adding new books)
+    6) Kontinye goes to a poorly formatted page 
+    7) rermove rechèch btn 
+    8) mock up books in the library 
+    9) goes to -> book not yet 
+    10) show a profile page ??? 
+    11) remove buttons that will make more featurers from the profile page, except language 
+    12) on desktop make home page book img bigger 
+    13) library, center books in desktop view 
+    14) add icon to the website 
+    15) on desktop make the img smaller, inverse problem with problem #12
+
+4: Tech Academy
+    1) make full screen allowed 
+    2) "Limited spaces each month. Don't wait!" -> "Limited spaces. Don't wait!"
+    3) if (access == 0) {showCTA "Yes I want to learn the secret to tech mastery"}
+
+5: Strangest Secret 
+    1) make the btn go to the right app 
+    2) 
+
+6: Win Friends
+    1) Keep all the color as red - [done?]
+    2) make log-in hover blue - [done?]
+    3) implement the "Fun Fact" in the friend page 
+    4) Have a query thing for searching friend 
+    5) Create salescopy for Win Frieds App (either online, mail, or speaking)
+    6) Struture the back end of product 
+    7) implemet the back end
+    8) Follow-up Soon set as future update [done?]
+    9) implement "Follow-up Soon" -> recent interactios
+    10) feature to implement anybody within a mile -> smaller in the future
+    11) near you add text that says ("within 1 mile) [done?]
+    12) cancel and save friend change in "new friend" modal 
+    13) Add new friend opens "add new friend" modal 
+    14) make who field query users 
+    15) make X to clear selected user in who query field 
+    16) "search interactions" -> "search friends" [done?]
+
+7: A Secret Attraction 
+    1) Figure out what we are selling...the deluxe book+poems+FREE Chocolate ($10 chocolate per order + $2 FF) - 
+    2) do the math 
+    3) create a sales letter 
+    4) go to cafés, book stores, libraries, book signing (not important)

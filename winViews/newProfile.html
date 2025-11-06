@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Friend Profile - Mark Johnson</title>
+    <title>Friend Profile </title>
     <style>
       body {
         margin: 0;
@@ -192,33 +192,101 @@
         color: #444;
         display: none; /* hidden until clicked */
       }
+
+      .profile-img-wrapper {
+        position: relative;
+        display: inline-block;
+      }
+
+      .avatar-large {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+      }
+
+      .edit-img-btn {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        padding: 6px;
+        cursor: pointer;
+        display: none; /* Hidden by default */
+      }
+
+      .edit-img-btn:hover {
+        background-color: #007bff;
+      }
+
+      .profile-name, .funFactTV, #funFactTV  {
+        padding: 6px;
+        border-radius: 6px;
+        transition: all 0.3s;
+      }
+
+      .editable {
+        background-color: #eef6ff;
+        border: 1px dashed #007bff;
+        outline: none;
+      }
+
+      .profile-name:focus,
+      .funFactTV:focus , #funFactTV:focus {
+        background-color: #dcefff;
+        border: 1px solid #007bff;
+      }
     </style>
   </head>
   <body>
     <header>
-      <a href="mainView.html" class="back-button">← Back</a>
+      <a href="mainView.html" id="backBtn" style="display: inline;"  class="back-button">← Back</a>
+      <div id="editBar" style="display: none; justify-content: space-between; width: 100%;">
+        <a href="mainView.html" id="cancelBtn" style="color: #333;" class="back-button">Cancel</a>
+        <a href="mainView.html" id="saveBtn" class="back-button">Save</a>
+      </div>
     </header>
 
     <main class="profile-page">
-      <img src="https://keplersiguineau.com/learnViews/assets/profile.png" alt="Mark Johnson" class="avatar-large" />
-      <div id="nameTV" class="profile-name">Mark Johnson</div>
+      <div class="profile-img-wrapper">
+        <img id="userImg" src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80" alt="Mark Johnson" class="avatar-large" />
+        <button id="editImgBtn" class="edit-img-btn">✏️</button>
+      </div>
+      <div id="nameTV" class="profile-name"></div>
+      <textarea  id="nameET" class="note-edit-area" style="width: 240px; height: 40px; resize: none; margin: 8px; display: none;"></textarea>
+
+      <p id="funFactTV"></p>
+      <textarea  id="funFactET" class="note-edit-area" style="width: 240px; height: 40px; resize: none; margin: 8px; display: none;"></textarea>
+
+
 
       <div id="clubDiv" class="tags">
-        <span class="tag">🏷️ Work</span>
-        <span class="tag">♟️ Chess Club</span>
+     
       </div>
 
-      <p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>
-      <p id="locationTV" class="meta"><strong>📍 Location:</strong> Cafe Luna, Boston</p>
+      <!--<p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>-->
+      
+      <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+        <strong>📍 Location </strong> 
+        <span id="locationTV"></span> 
+        <textarea  id="locationET" class="note-edit-area" style="width: 240px; height: 40px; display: none;  resize: none;"></textarea>
+      </div>
+
 
       <div class="notes">
         <h2>📝 Notes</h2>
 
+        <div id="notes-edit" style="display: none;">
+          <textarea id="note-textarea" class="note-edit-area"></textarea>
+          
+        </div>
+
         <div id="notes-view">
           <ul id="note-list">
-            <li>Talked about AI and chess</li>
-            <li>Send him the chess link</li>
-            <li>He’s starting a new role at work</li>
+         
           </ul>
         </div>
         <div class="interactions">
@@ -228,40 +296,97 @@
           </ul>
         </div>
 
-        <div id="notes-edit" style="display: none;">
-          <textarea id="note-textarea" class="note-edit-area"></textarea>
-          <div class="edit-controls">
-            <button class="save" onclick="saveNotes()">Save</button>
-            <button class="cancel" onclick="cancelEdit()">Cancel</button>
-          </div>
-        </div>
       </div>
 
       <div class="profile-actions">
-        <button onclick="editProfile()">✏️ Edit Profile</button>
-        <button onclick="addInteraction()">➕ Add Interaction</button>
-        <button onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
+        <button id="editBtn" onclick="editProfile()">✏️ Edit Profile</button>
+        <button id="interactionBtn" onclick="addInteraction()">➕ Add Interaction</button>
+        <button id="deleteBtn" onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
       </div>
     </main>
+    <script type="module">
+      // Import the necessary Firebase SDK functions
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
+      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+      import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"
+   
+      const firebaseConfig = {
+          apiKey: "AIzaSyB_1iwdvhIPZ6wbtlFft_vvfRjASUb_XyY",
+          authDomain: "win-friends-app.firebaseapp.com",
+          projectId: "win-friends-app",
+          storageBucket: "win-friends-app.firebasestorage.app",
+          messagingSenderId: "1006457660053",
+          appId: "1:1006457660053:web:b1b104becc2f590a21319c",
+          measurementId: "G-0H4L7PK4L9"
+      };
 
-    <script>
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
       const notes = [
         "Talked about AI and chess",
         "Send him the chess link",
         "He’s starting a new role at work"
       ];
 
+      const editBar = document.getElementById("editBar")
+      const backBtn = document.getElementById("backBtn")
+      const saveBtn = document.getElementById("saveBtn")
+      const cancelBtn = document.getElementById("cancelBtn")
+
+      const locationTV = document.getElementById("locationTV")
+      const locationET = document.getElementById("locationET")
+
       const noteListEl = document.getElementById('note-list');
       const noteTextarea = document.getElementById('note-textarea');
       const notesView = document.getElementById('notes-view');
       const notesEdit = document.getElementById('notes-edit');
 
+      const editBtn = document.getElementById("editBtn")
+      const interactionBtn = document.getElementById("interactionBtn")
+      const deleteBtn = document.getElementById("deleteBtn")
+
+      editBtn.onclick = () => {
+        editProfile()
+        
+      }
+
+      cancelBtn.onclick = () => {
+        cancelEdit()
+      }
+
+      interactionBtn.onclick = () => {
+        addInteraction()
+      }
+
+      deleteBtn.onclick = () => {
+        deleteFriend()
+      }
+
+
       function editProfile() {
         // Show textarea with current notes
-        noteTextarea.value = notes.join('\n');
+        editBar.style.display = 'flex'
+        deleteBtn.style.display = 'none'
+
+        locationET.style.display = "block"
+        locationTV.style.display = "none"
+
+        editBtn.style.display = 'none'
+        interactionBtn.style.display = 'none'
+        noteTextarea.value = notesView.innerText;
+     
         notesView.style.display = 'none';
         notesEdit.style.display = 'block';
+        backBtn.style.display = "none"
+        editImgBtn.style.display = 'block';
+
+        editBtn.style.display = 'none';
+        saveBtn.style.display = 'inline-block';
+        cancelBtn.style.display = 'inline-block';
       }
+
+     
 
       function cancelEdit() {
         notesEdit.style.display = 'none';
@@ -277,7 +402,12 @@
         cancelEdit();
       }
 
-      function renderNotes() {
+      function uploadNotes()
+      {
+        
+      }
+
+      function renderNotes(notes) {
         noteListEl.innerHTML = '';
         notes.forEach(note => {
           const li = document.createElement('li');
@@ -286,8 +416,20 @@
         });
       }
 
+      function renderClubs(clubs) {
+        //noteListEl.innerHTML = '';
+        let clubDiv = document.getElementById("clubDiv")
+        clubDiv.innerHTML = ''
+        clubs.forEach(note => {
+          const span = document.createElement('span');
+          span.classList.add('tag');
+          span.textContent = note.name;
+          clubDiv.appendChild(span);
+        });
+      }
+
       function addInteraction() {
-        alert("Redirecting to add interaction...");
+        window.location.href='add.html'
       }
 
       function deleteFriend() {
@@ -298,62 +440,55 @@
       }
 
       // Initial render
-      renderNotes();
-    </script>
-    <script type="module">
-      // Import the necessary Firebase SDK functions
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-      import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
-      // You would also typically import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
-      // to get the actual current user's ID.
+      //renderNotes();
 
-      // Your Firebase project configuration
-      // Replace "YOUR_API_KEY", "YOUR_AUTH_DOMAIN", etc. with your actual project details
-      // Note: projectId 'win-friends-app' is already set based on your project details!
-      const firebaseConfig = {
-          apiKey: "YOUR_API_KEY", // Get this from your Firebase Project settings -> Project settings -> General
-          authDomain: "YOUR_AUTH_DOMAIN", // Also from Project settings
-          projectId: "win-friends-app",
-          storageBucket: "YOUR_STORAGE_BUCKET",
-          messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-          appId: "YOUR_APP_ID"
-      };
+      async function getFriendInfo(currentUserId)
+      {
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id');
+
+        let friendRef = doc(db, `users/${currentUserId}/friends/${userId}`)
+
+        const friendSnap = await getDoc(friendRef);
+
+        if(!friendSnap.exists()){
+          alert("error NP: 336")
+        }else{
+          let data = friendSnap.data()
+          let name = data.name
+          let imageUrl = data.imageUrl
+          if(imageUrl == null){
+            imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
+          }
+          let funFact = data.funFact
+          let location = data.location 
+          let notes =  data.notes 
+          let clubs = data.clubs
+
+          populateData(name, imageUrl, funFact, clubs, location, notes)
+        }
+      }
+
+      function populateData(name, imageUrl, funFact, clubs, location, notes)
+      {
+          let funFactTV = document.getElementById("funFactTV")
+          let nameTV = document.getElementById("nameTV")
+          let userImg = document.getElementById("userImg")
+          let locationTV = document.getElementById("locationTV")
+
+          funFactTV.innerText = funFact
+          nameTV.innerText = name 
+          userImg.src = imageUrl
+          locationTV.innerText =  location
+          renderNotes(notes);
+          renderClubs(clubs)
+      }
 
       // Initialize Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app); // Get a reference to your Firestore database
+     // Get a reference to your Firestore database
 
       // Function to fetch friend data
-      async function getFriendData() {
-          // IMPORTANT: In a real app, 'currentLoggedInUserId' would come from Firebase Authentication
-          // For this example, we'll use a placeholder.
-          // Example: const currentLoggedInUserId = firebase.auth().currentUser.uid;
-          const currentLoggedInUserId = "test_user"; // Replace with an actual user's UID in your database
-
-          // The ID of the friend document you want to fetch
-          const friendIdToFetch = "test_friend";
-
-          // Construct the Firestore document reference
-          // This points to: /users/{currentLoggedInUserId}/friends/{friendIdToFetch}
-          const friendDocRef = doc(db, "users", currentLoggedInUserId, "friends", friendIdToFetch);
-
-          try {
-              const docSnap = await getDoc(friendDocRef); // Attempt to get the document
-
-              if (docSnap.exists()) {
-                  console.log("Friend data found:", docSnap.data());
-                  //alert(`${ JSON.stringify(docSnap.data(), null, 2)}`)
-                  setProfile(docSnap.data())
-              } else {
-                  // doc.data() will be undefined in this case
-                  console.log("No data available for friend with ID:", friendIdToFetch);
-                  alert('error 301')
-              }
-          } catch (error) {
-              console.error("Error fetching friend data:", error);
-              alert('error 307')
-          }
-      }
+     
 
       function setProfile(data){
           let nameTV = document.getElementById("nameTV")
@@ -364,10 +499,8 @@
           //have to set notes chronologically 
       }
 
-      // Call the function to fetch data when the HTML content is fully loaded
-      document.addEventListener('DOMContentLoaded', getFriendData);
-  </script>
-    <script>
+      getFriendInfo("micheal_uid")
+
       const interactions = [
         {
           date: "2025-09-10",
@@ -410,7 +543,30 @@
 
       // Render when page loads
       renderInteractions();
-    </script>
+      const editImgBtn = document.getElementById('editImgBtn');
+      const userImg = document.getElementById('userImg');
 
+      // When "Edit Profile" is clicked → show the pencil
+      /*editProfileBtn.addEventListener('click', () => {
+        editImgBtn.style.display = 'block';
+      });*/
+
+      // When the pencil is clicked → open file picker and change image
+      editImgBtn.addEventListener('click', () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+
+        fileInput.onchange = (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            userImg.src = URL.createObjectURL(file);
+          }
+        };
+
+        fileInput.click();
+      });
+
+    </script>
   </body>
 </html>
