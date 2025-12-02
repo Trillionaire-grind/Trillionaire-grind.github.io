@@ -473,7 +473,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
         import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
 
 
         // TODO: Add SDKs for Firebase products that you want to use
@@ -682,7 +682,7 @@
           try {
             const location = await getCurrentLocation();
             const currentUser = auth.currentUser
-            const docRef = await addDoc(collection(db, `users/${currentUser}/friends`), {
+            const docRef = await addDoc(collection(db, `users/${currentUser.uid}/friends`), {
                 name: `${name}`,
                 funFact: `${fact}`,
                 searchIndex: generateSearchIndex(name, fact),
@@ -693,12 +693,12 @@
 
             alert("Friend added successfully!");
             // Optional: refresh the friend list
-            const friends = await fetchFriends(currentUser);
+            const friends = await fetchFriends(currentUser.uid);
             //renderFriends(friends);
             closeAddFriend();
           } catch (err) {
             console.error("Error adding friend:", err);
-            alert("Could not add friend.");
+            alert(`Could not add friend. ${err}`);
           }
         }
 
@@ -741,9 +741,10 @@
           timer = setTimeout(async () => {   // <-- make callback async
             if (value === "") {
                 // Optional: fetch first 10 friends again
-               fetchFriends(auth.currentUser)
+               fetchFriends(auth.currentUser.uid)
             } else {
                 const results = await searchFriends(value);
+                alert(`what is the result ${results}`)
                 renderFriends(results);
             }    // show results properly
           }, 200);
@@ -767,8 +768,10 @@
         async function searchFriends(searchTerm) {
           const q = searchTerm.toLowerCase();
 
+          alert(`id ${auth.currentUser.uid} and search term ${q}`)
+
           const qRef = query(
-            collection(db,`"users/${auth.currentUser}/friends`),
+            collection(db,`users/${auth.currentUser.uid}/friends`),
             where("searchIndex", "array-contains", q)
           );
 
@@ -842,18 +845,21 @@
           });
       }
 
-      function getCurrentUser()
+      onAuthStateChanged(auth, (user) => 
       {
-        let userId = auth.currentUser()
-
-        if(userId == null){
-          alert('no user logged in')
-        }else{
-          alert(`valid user ${userId}`)
-          fetchFriends(userId)
-          showNearby(userId)
+        if (!user) {
+            window.location.href = "winFriends.html";
+            return;
+            //alert(`user not logged in still`)
         }
-      }
-      showNearby()
+        else{
+          
+          fetchFriends(user.uid);
+          showNearby(user.uid);
+        }
+        //fetchFriends(user.uid);
+        //sshowNearby(user.uid);
+      });
+      //getCurrentUser()
       </script>
 </html>

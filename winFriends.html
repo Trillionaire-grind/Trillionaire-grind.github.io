@@ -9,7 +9,7 @@
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
         <link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
-        <title>Win Friends V 0.0.0.5</title>
+        <title>Win Friends V 0.0.0.6</title>
         <style>
             /* General reset and basic styles */
             body {
@@ -217,9 +217,11 @@
         <script type="module">
             // Firebase SDK and login code
             // Import the functions you need from the SDKs you need
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-            import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+            import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+            import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
             // TODO: Add SDKs for Firebase products that you want to use
             // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -239,7 +241,7 @@
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
-
+            const db = getFirestore(app)
 
             let logInBtn = document.getElementById("logInBtn")
             let joinBtn = document.getElementById("joinBtn")
@@ -331,7 +333,7 @@
                     registerModal.style.display = "none"
                     alert(`user created?`)
                     //now gotta open the app with the UID
-                    openMainView()
+                    addUserToDatabase(user.uid, name, email)
                 })
                 .catch((error) => {
                     console.error("Error creating user:", error);
@@ -378,6 +380,24 @@
             function openMainView()
             {
                 window.location.replace("winViews/mainView.html");
+            }
+
+            async function addUserToDatabase(currentUser, name, email)
+            {
+                try {
+                    await setDoc(doc(db, `users/${currentUser}`),
+                        {
+                            name: name,
+                            email: email
+                        }
+                    );
+                    openMainView()
+                } 
+                catch (error) {
+                    console.error("Error adding friend:", error);
+                    alert(`the error ${error}`)
+                    alert("Something went wrong adding the friend.");
+                }
             }
         </script>
     </body>
