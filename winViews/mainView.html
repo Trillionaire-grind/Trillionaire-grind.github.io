@@ -352,8 +352,8 @@
             <section id="friends" class="active">
                 <header>
                     <h1>Win Friends 👋</h1>
-                    <button id="newFriendBtn" onclick="window.location.href='add.html'" >+ New Friend</button>
-                    <div class="search-bar" style="margin-top: 16px;">
+                    <button id="newFriendBtn" >+ New Friend</button>
+                    <div id="searchFriendsInput" class="search-bar" style="margin-top: 16px;">
                       <input 
                         type="text" 
                         id="interaction-search" 
@@ -402,10 +402,13 @@
                 </header>
                 <button onclick="window.location.href='add.html'" >+ New Interaction</button>
                     <h2>📍 Near You<span style="margin-left: 8px;font-size: 14px; font-weight: normal;">(within 1 mile)</span></h2>
-                    <ul id="nearUl">
+                    <div id="nearList" >
+
+                    </div>
+                    <!--<ul id="nearUl">
                       <li class="nearLi" onclick="window.location.href='newProfile.html?id=L9BZzfBEgTaqBRKUZs9V'">Sarah </li>
                       <li class="nearLi" onclick="window.location.href='newProfile.html?id=rv2dofQgOKMJUqFoP88u'">Adam</li>
-                    </ul>
+                    </ul>-->
                 <!--<div>
                     <h2>🔁 Follow-up Soon</h2>
                     <ul>
@@ -463,51 +466,15 @@
                 if (targetSection) targetSection.classList.add('active');
             });
             });
-        </script>
-        <script>
-            const searchInput = document.getElementById("interaction-search");
-            // Filter logic
-            searchInput.addEventListener("input", (e) => {
-              const query = e.target.value.toLowerCase();
-              const filtered = interactions.filter(interaction =>
-                interaction.type.toLowerCase().includes(query) ||
-                interaction.date.toLowerCase().includes(query) ||
-                interaction.summary.toLowerCase().includes(query)
-              );
-              renderFilteredInteractions(filtered);
-            });
-          
-            function renderFilteredInteractions(filteredList) {
-              interactionListEl.innerHTML = '';
-              filteredList.forEach(interaction => {
-                const li = document.createElement("li");
-                li.className = "interaction-item";
-                li.innerHTML = `
-                  <div class="interaction-date">${interaction.date} — ${interaction.type}</div>
-                  <div class="interaction-summary" style="display:none;">${interaction.summary}</div>
-                `;
-                li.addEventListener("click", () => {
-                  const summaryEl = li.querySelector(".interaction-summary");
-                  summaryEl.style.display = summaryEl.style.display === "block" ? "none" : "block";
-                });
-                interactionListEl.appendChild(li);
-              });
-          
-              if (filteredList.length === 0) {
-                const li = document.createElement("li");
-                li.style.textAlign = "center";
-                li.style.color = "#888";
-                li.textContent = "No interactions found.";
-                interactionListEl.appendChild(li);
-              }
-            }
-          </script>        
+        </script>     
       </body>
       <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+
 
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
@@ -529,19 +496,73 @@
         const analytics = getAnalytics(app);
 
         const db = getFirestore(app)
+        const auth = getAuth(app)
 
         const newFriendBtn = document.getElementById("newFriendBtn")
+        let searchFriendsInput= document.getElementById("searchFriendsInput")
 
         newFriendBtn.onclick = () => {
             openAddFriend()
         }
+
         function openAddFriend() {
           document.getElementById('friendModal').style.display = 'flex';
         }
 
+        function getDistanceInMiles(lat1, lon1, lat2, lon2) {
+          const R = 3958.8; // Radius of the Earth in miles
+          const toRad = (deg) => deg * (Math.PI / 180);
 
-        function updateDiv(name, funFact, imageUrl, id)
-        {
+          const dLat = toRad(lat2 - lat1);
+          const dLon = toRad(lon2 - lon1);
+
+          const a =
+              Math.sin(dLat / 2) ** 2 +
+              Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+              Math.sin(dLon / 2) ** 2;
+
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+          return R * c;
+        }
+
+        function areWithinOneMile(loc1, loc2) {
+          const distance = getDistanceInMiles(
+              loc1.latitude,
+              loc1.longitude,
+              loc2.latitude,
+              loc2.longitude
+          );
+
+          return distance <= 1; // true if within 1 mile
+        }
+
+        function renderFriends(friends) {
+          const friendListDiv = document.getElementById("friendList");
+          friendListDiv.innerHTML = ""; // Clear previous results
+
+          friends.forEach(friend => {
+              let { name, funFact, imageUrl, id } = friend;
+
+              if (!imageUrl) {
+                  imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
+              }
+
+              let cardHTML = `
+                  <div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
+                      <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
+                      <div class="friend-info">
+                          <h2>${name}</h2>
+                          <p>${funFact}</p>
+                          <p id="userId" style="display: none;">${id}</p>
+                      </div>
+                  </div>
+              `;
+              friendListDiv.innerHTML += cardHTML;
+          });
+        }
+
+        function updateDiv(name, funFact, imageUrl, id){
             const friendListDiv = document.getElementById("friendList")
 
             if(imageUrl == null){
@@ -605,20 +626,90 @@
           }
         }
 
-        async function addFriend(name, fact){
-          const docRef = await addDoc(collection(db, "users/micheal_uid/friends"), {
-            name: `${name}`,
-            funFact: `${fact}`
+        /*lines below were geerated by chatGpt, creates a search query thing*/
+
+        function generatePrefixTokens(str) {
+          const tokens = new Set();
+
+          const full = `${str}`.toLowerCase().trim();
+          const words = full.split(/\s+/);
+
+          // 1. Prefixes for each individual word
+          for (const word of words) {
+            let prefix = "";
+            for (let i = 0; i < word.length; i++) {
+              prefix += word[i];
+              tokens.add(prefix);
+            }
+          }
+
+          // 2. Prefixes for the full string with spaces removed (cross-word search)
+          const noSpace = full.replace(/\s+/g, "");
+          let prefix = "";
+          for (let i = 0; i < noSpace.length; i++) {
+            prefix += noSpace[i];
+            tokens.add(prefix);
+          }
+
+          return Array.from(tokens);
+        }
+
+        function generateSearchIndex(name, funFact) {
+          const combined = `${name} ${funFact}`.trim();
+          return generatePrefixTokens(combined);
+        }
+
+        function getCurrentLocation() {
+          return new Promise((resolve, reject) => {
+              if (!navigator.geolocation) {
+                  resolve(null); // just return null if unsupported
+              } else {
+                  navigator.geolocation.getCurrentPosition(
+                      (position) => resolve({
+                          latitude: position.coords.latitude,
+                          longitude: position.coords.longitude
+                      }),
+                      (err) => {
+                          console.error("Geolocation error:", err);
+                          resolve(null); // don't block saving friend
+                      }
+                  );
+              }
           });
-          alert('friend added sucessfuly')
-          closeAddFriend();
+        }
+
+        async function addFriend(name, fact){
+          try {
+            const location = await getCurrentLocation();
+            const currentUser = auth.currentUser
+            const docRef = await addDoc(collection(db, `users/${currentUser}/friends`), {
+                name: `${name}`,
+                funFact: `${fact}`,
+                searchIndex: generateSearchIndex(name, fact),
+                imageUrl: null,
+                location: location,
+                createdAt: new Date()
+            });
+
+            alert("Friend added successfully!");
+            // Optional: refresh the friend list
+            const friends = await fetchFriends(currentUser);
+            //renderFriends(friends);
+            closeAddFriend();
+          } catch (err) {
+            console.error("Error adding friend:", err);
+            alert("Could not add friend.");
+          }
         }
 
         async function fetchFriends(userId){
-          const friendsRef = collection(db, "users/micheal_uid/friends")
+          const friendsRef = collection(db, `users/${userId}/friends`)
           const first = query(friendsRef, orderBy("name"), limit(10))
           const documentSnapshots = await getDocs(first);
 
+          const friends = []
+          const friendListDiv = document.getElementById("friendList");
+          friendListDiv.innerHTML = ""; 
           documentSnapshots.forEach((doc) => {
             let name = doc.data().name
             let imageUrl = doc.data().imageUrl
@@ -641,11 +732,27 @@
           );*/
         }
 
+        let timer;
+
+        searchFriendsInput.addEventListener("input", (e) => {
+          const value = e.target.value;
+
+          clearTimeout(timer);
+          timer = setTimeout(async () => {   // <-- make callback async
+            if (value === "") {
+                // Optional: fetch first 10 friends again
+               fetchFriends(auth.currentUser)
+            } else {
+                const results = await searchFriends(value);
+                renderFriends(results);
+            }    // show results properly
+          }, 200);
+        });
+
         saveFriendBtn.onclick = () => {
           const name = document.getElementById('friendName').value.trim();
           const fact = document.getElementById('friendFact').value.trim();
 
-          alert(`${name}`)
     
           if (!name || !fact) {
             return;
@@ -656,8 +763,97 @@
           //addFriend()
         }
 
-        fetchFriends('tester')
+      
+        async function searchFriends(searchTerm) {
+          const q = searchTerm.toLowerCase();
 
-        
+          const qRef = query(
+            collection(db,`"users/${auth.currentUser}/friends`),
+            where("searchIndex", "array-contains", q)
+          );
+
+          const snapshot = await getDocs(qRef);
+
+          return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        }
+
+        async function getNearbyFriends(userId, maxMiles) {
+          const friendsSnapshot = await getDocs(collection(db, `users/${userId}/friends`));
+          
+          const nearby = [];
+
+          friendsSnapshot.forEach(doc => {
+              const friend = doc.data();
+              if (!friend.location) return;
+
+              /*const distance = getDistanceInMiles(
+                  friend.location.latitude,
+                  friend.location.longitude,
+                  currentUserLocation.latitude,
+                  currentUserLocation.longitude
+              );*/ 
+
+              const distance = getDistanceInMiles(
+                  friend.location.latitude,
+                  friend.location.longitude,
+                  26.13067960843199,
+                  -81.80154038641204
+              );
+
+
+              if (distance <= maxMiles) {
+                  nearby.push({ id: doc.id, ...friend, distance });
+              }
+          });
+
+          return nearby;
+        }
+
+
+        async function showNearby(userId)
+        {
+          const nearbyFriends = await getNearbyFriends(`${userId}`, 1)
+          renderNear(nearbyFriends)
+        }
+
+         function renderNear(friends) {
+          const nearList = document.getElementById("nearList");
+          nearList.innerHTML = ""; // Clear previous results
+
+         friends.forEach(friend => {
+              let { name, funFact, imageUrl, id } = friend;
+
+              if (!imageUrl) {
+                  imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
+              }
+
+              let cardHTML = `
+                  <div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
+                      <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
+                      <div class="friend-info">
+                          <h2>${name}</h2>
+                          <p>${funFact}</p>
+                          <p id="userId" style="display: none;">${id}</p>
+                      </div>
+                  </div>
+              `;
+
+              nearList.innerHTML += cardHTML;
+          });
+      }
+
+      function getCurrentUser()
+      {
+        let userId = auth.currentUser()
+
+        if(userId == null){
+          alert('no user logged in')
+        }else{
+          alert(`valid user ${userId}`)
+          fetchFriends(userId)
+          showNearby(userId)
+        }
+      }
+      showNearby()
       </script>
 </html>
