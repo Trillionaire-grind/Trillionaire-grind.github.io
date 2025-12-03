@@ -9,7 +9,7 @@
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
         <link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
-        <title>Win Friends V 0.0.0.6</title>
+        <title>Win Friends V 0.0.0.7</title>
         <style>
             /* General reset and basic styles */
             body {
@@ -293,7 +293,6 @@
             resetSendBtn.onclick = () => {
                
                 let email = resetEmailET.value
-                alert(`touched ${email}`)
                 requestEmail(email)
             }
 
@@ -331,7 +330,6 @@
                     const user = userCredential.user;
                     console.log("User created:", user.uid);
                     registerModal.style.display = "none"
-                    alert(`user created?`)
                     //now gotta open the app with the UID
                     addUserToDatabase(user.uid, name, email)
                 })
@@ -361,7 +359,6 @@
 
             function requestEmail(email)
             {
-                alert('request was called')
                 sendPasswordResetEmail(auth, email)
                 .then(() => {
                     // Password reset email sent!
@@ -395,8 +392,7 @@
                 } 
                 catch (error) {
                     console.error("Error adding friend:", error);
-                    alert(`the error ${error}`)
-                    alert("Something went wrong adding the friend.");
+                    alert(`error:WF-395 ${error}`)
                 }
             }
         </script>

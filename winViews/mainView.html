@@ -294,7 +294,7 @@
 
         function closeAddFriend() {
           document.getElementById('friendModal').style.display = 'none';
-          document.getElementById('imagePreview').innerHTML = '';
+          //document.getElementById('imagePreview').innerHTML = '';
           document.getElementById('friendPic').value = ''; // reset file input
     
           // Reset optional fields hidden & toggle button text
@@ -338,8 +338,9 @@
                     <input type="text" id="friendGroup" placeholder="e.g., Book Club">
             
                     <label>Picture (optional)</label>
-                    <input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
-                    <div id="imagePreview"></div>
+                    <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
+                    <div id="imagePreview"></div>-->
+                    <input type="file" id="friendPic" accept="image/*" capture="environment" >
                   </div>
             
                   <div class="modal-buttons">
@@ -472,8 +473,10 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
+
 
 
         // TODO: Add SDKs for Firebase products that you want to use
@@ -497,6 +500,8 @@
 
         const db = getFirestore(app)
         const auth = getAuth(app)
+        const storage = getStorage(app);
+
 
         const newFriendBtn = document.getElementById("newFriendBtn")
         let searchFriendsInput= document.getElementById("searchFriendsInput")
@@ -582,7 +587,7 @@
      
         function closeAddFriend() {
           document.getElementById('friendModal').style.display = 'none';
-          document.getElementById('imagePreview').innerHTML = '';
+          //document.getElementById('imagePreview').innerHTML = '';
           document.getElementById('friendPic').value = ''; // reset file input
     
           // Reset optional fields hidden & toggle button text
@@ -599,7 +604,7 @@
         }
     
       
-        function previewImage(event) {
+       /* function previewImage(event) {
           const file = event.target.files[0];
           if (!file) return;
     
@@ -612,7 +617,7 @@
             document.getElementById("imagePreview").appendChild(img);
           };
           reader.readAsDataURL(file);
-        }
+        }*/
     
         function toggleOptionalFields() {
           const optional = document.getElementById('optionalFields');
@@ -678,18 +683,55 @@
           });
         }
 
-        async function addFriend(name, fact){
+        async function addFriend(name, fact, email, phone, group, picture){
           try {
             const location = await getCurrentLocation();
             const currentUser = auth.currentUser
+            let groupArray = null
+
+            if(group != null){
+              groupArray = group.split(",")
+            }
+            
             const docRef = await addDoc(collection(db, `users/${currentUser.uid}/friends`), {
                 name: `${name}`,
                 funFact: `${fact}`,
+                email: `${email}`,
+                phone: `${phone}`,
+                group: groupArray,
                 searchIndex: generateSearchIndex(name, fact),
                 imageUrl: null,
                 location: location,
                 createdAt: new Date()
             });
+
+
+            const friendId = docRef.id;
+
+            // 2. If an image was provided → validate & upload
+            if (picture && picture.type.startsWith("image/")) {
+              const storageRef = ref(
+                storage,
+                `users/${currentUser.uid}/friends/${friendId}/${picture.name}`
+              );
+
+              // Upload the file
+              const snapshot = await uploadBytes(storageRef, picture);
+
+              // Get download URL
+              const downloadURL = await getDownloadURL(snapshot.ref);
+
+              // Save URL to Firestore
+              await updateDoc(doc(db, `users/${currentUser.uid}/friends/${friendId}`), {
+                imageUrl: downloadURL
+              });
+
+              console.log("Image uploaded:", downloadURL);
+            }else{
+              alert("not valid file")
+            }
+
+            
 
             alert("Friend added successfully!");
             // Optional: refresh the friend list
@@ -744,7 +786,6 @@
                fetchFriends(auth.currentUser.uid)
             } else {
                 const results = await searchFriends(value);
-                alert(`what is the result ${results}`)
                 renderFriends(results);
             }    // show results properly
           }, 200);
@@ -753,23 +794,25 @@
         saveFriendBtn.onclick = () => {
           const name = document.getElementById('friendName').value.trim();
           const fact = document.getElementById('friendFact').value.trim();
+          const email = document.getElementById('friendEmail').value.trim();
+          const phone = document.getElementById('friendPhone').value.trim();
+          const group = document.getElementById('friendGroup').value.trim();
+          const picture = document.getElementById('friendPic').files[0];
 
     
           if (!name || !fact) {
+            alert('please include a name and fun fact')
             return;
           }
     
           // You could extend this to save data somewhere
-          addFriend(name, fact)
+          addFriend(name, fact, email, phone, group, picture)
           //addFriend()
         }
 
       
         async function searchFriends(searchTerm) {
           const q = searchTerm.toLowerCase();
-
-          alert(`id ${auth.currentUser.uid} and search term ${q}`)
-
           const qRef = query(
             collection(db,`users/${auth.currentUser.uid}/friends`),
             where("searchIndex", "array-contains", q)

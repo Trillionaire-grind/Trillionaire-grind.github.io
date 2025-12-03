@@ -252,20 +252,19 @@
 
     <main class="profile-page">
       <div class="profile-img-wrapper">
-        <img id="userImg" src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80" alt="Mark Johnson" class="avatar-large" />
+        <img id="userImg" alt="Mark Johnson" class="avatar-large" />
         <button id="editImgBtn" class="edit-img-btn">✏️</button>
       </div>
+
       <div id="nameTV" class="profile-name"></div>
+
       <textarea  id="nameET" class="note-edit-area" style="width: 240px; height: 40px; resize: none; margin: 8px; display: none;"></textarea>
 
       <p id="funFactTV"></p>
+
       <textarea  id="funFactET" class="note-edit-area" style="width: 240px; height: 40px; resize: none; margin: 8px; display: none;"></textarea>
 
-
-
-      <div id="clubDiv" class="tags">
-     
-      </div>
+      <div id="clubDiv" class="tags"></div>
 
       <!--<p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>-->
       
@@ -292,7 +291,6 @@
         <div class="interactions">
           <h2>🤝 Interactions</h2>
           <ul id="interaction-list" class="interaction-list">
-            <!-- Will be populated dynamically -->
           </ul>
         </div>
 
@@ -308,7 +306,7 @@
       // Import the necessary Firebase SDK functions
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
       import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
-      import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"
+      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"
    
       const firebaseConfig = {
           apiKey: "AIzaSyB_1iwdvhIPZ6wbtlFft_vvfRjASUb_XyY",
@@ -322,6 +320,7 @@
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
+      const auth = getAuth(app)
 
       const notes = [
         "Talked about AI and chess",
@@ -386,8 +385,6 @@
         cancelBtn.style.display = 'inline-block';
       }
 
-     
-
       function cancelEdit() {
         notesEdit.style.display = 'none';
         notesView.style.display = 'block';
@@ -423,7 +420,7 @@
         clubs.forEach(note => {
           const span = document.createElement('span');
           span.classList.add('tag');
-          span.textContent = note.name;
+          span.textContent = note;
           clubDiv.appendChild(span);
         });
       }
@@ -456,6 +453,8 @@
         }else{
           let data = friendSnap.data()
           let name = data.name
+          let phone = data.phone 
+          let email = data.email
           let imageUrl = data.imageUrl
           if(imageUrl == null){
             imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
@@ -463,13 +462,13 @@
           let funFact = data.funFact
           let location = data.location 
           let notes =  data.notes 
-          let clubs = data.clubs
+          let group = data.group
 
-          populateData(name, imageUrl, funFact, clubs, location, notes)
+          populateData(name, imageUrl, funFact, phone, email, group, location, notes)
         }
       }
 
-      function populateData(name, imageUrl, funFact, clubs, location, notes)
+      function populateData(name, imageUrl, funFact, phone, email, group, location, notes)
       {
           let funFactTV = document.getElementById("funFactTV")
           let nameTV = document.getElementById("nameTV")
@@ -479,16 +478,10 @@
           funFactTV.innerText = funFact
           nameTV.innerText = name 
           userImg.src = imageUrl
-          locationTV.innerText =  location
+          locationTV.innerText =  `lat: ${location.latitude}  lon: ${location.longitude}`
           renderNotes(notes);
-          renderClubs(clubs)
+          renderClubs(group)
       }
-
-      // Initialize Firebase
-     // Get a reference to your Firestore database
-
-      // Function to fetch friend data
-     
 
       function setProfile(data){
           let nameTV = document.getElementById("nameTV")
@@ -498,8 +491,6 @@
           //have to just set name,
           //have to set notes chronologically 
       }
-
-      getFriendInfo("micheal_uid")
 
       const interactions = [
         {
@@ -567,6 +558,17 @@
         fileInput.click();
       });
 
+      onAuthStateChanged(auth, (user) => 
+      {
+        if (!user) {
+            window.location.href = "winFriends.html";
+            return;
+            //alert(`user not logged in still`)
+        }
+        else{
+            getFriendInfo(user.uid)
+        }
+      });
     </script>
   </body>
 </html>
