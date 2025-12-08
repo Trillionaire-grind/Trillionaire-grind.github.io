@@ -315,40 +315,41 @@
     <body>
       
         <main>
-            <div class="modal-overlay" id="friendModal">
-                <div class="modal">
-                  <h2>Add New Friend</h2>
-            
-                  <label>Name *</label>
-                  <input type="text" id="friendName" required placeholder="e.g., Sarah">
-            
-                  <label>Fun Fact *</label>
-                  <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
-            
-                  <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields ▼</button>
-            
-                  <div id="optionalFields">
-                    <label>Email (optional)</label>
-                    <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
-            
-                    <label>Phone (optional)</label>
-                    <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
-            
-                    <label>Group (optional)</label>
-                    <input type="text" id="friendGroup" placeholder="e.g., Book Club">
-            
-                    <label>Picture (optional)</label>
-                    <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
-                    <div id="imagePreview"></div>-->
-                    <input type="file" id="friendPic" accept="image/*" capture="environment" >
-                  </div>
-            
-                  <div class="modal-buttons">
-                    <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
-                    <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
-                  </div>
-                </div>
+          <div class="modal-overlay" id="friendModal">
+            <div class="modal">
+              <h2>Add New Friend</h2>
+        
+              <label>Name *</label>
+              <input type="text" id="friendName" required placeholder="e.g., Sarah">
+        
+              <label>Fun Fact *</label>
+              <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
+        
+              <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields ▼</button>
+        
+              <div id="optionalFields">
+                <label>Email (optional)</label>
+                <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
+        
+                <label>Phone (optional)</label>
+                <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
+        
+                <label>Group (optional)</label>
+                <input type="text" id="friendGroup" placeholder="e.g., Book Club">
+        
+                <label>Picture (optional)</label>
+                <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
+                <div id="imagePreview"></div>-->
+                <input type="file" id="friendPic" accept="image/*" capture="environment" >
               </div>
+        
+              <div class="modal-buttons">
+                <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
+                <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
+              </div>
+            </div>
+          </div>
+
 
             <section id="friends" class="active">
                 <header>
@@ -367,7 +368,7 @@
                       Interactions dynamically populated 
                       </ul>
                     <div class="friend-list"> -->
-                        <div id="friendList" >
+                        <div id="friendList" style="padding-bottom: 24px;" >
 
                         </div>
                         <!--<div class="friend-card" onclick="window.location.href='newProfile.html'">
@@ -727,11 +728,7 @@
               });
 
               console.log("Image uploaded:", downloadURL);
-            }else{
-              alert("not valid file")
             }
-
-            
 
             alert("Friend added successfully!");
             // Optional: refresh the friend list
