@@ -1,848 +1,1028 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Friend Profile </title>
-    <style>
-      body {
-        margin: 0;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background-color: #f9f9f9;
-        color: #333;
-        padding: 1rem;
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Friend Profile </title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 1rem;
+    }
+
+    header {
+      margin-bottom: 1rem;
+    }
+
+    .back-button {
+      text-decoration: none;
+      color: #0077ff;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .profile-page {
+      max-width: 600px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .avatar-large {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tag {
+      background: #e0f0ff;
+      color: #0077ff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+    }
+
+
+    .tag.edit-mode .remove-tag {
+      display: inline;
+      /* show X when editing */
+    }
+
+    .add-tag-btn {
+      display: none;
+      background: #0077ff;
+      color: white;
+      padding: 0.3rem 0.8rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: none;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 2px;
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      font-size: 1rem;
+      margin: 0.25rem 0;
+    }
+
+
+    .edit-controls {
+      margin-top: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .edit-controls button {
+      padding: 0.6rem 1rem;
+      font-size: 0.95rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .edit-controls .save {
+      background-color: #0077ff;
+      color: white;
+    }
+
+    .edit-controls .cancel {
+      background-color: #ccc;
+    }
+
+    .profile-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .profile-actions button {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background-color: #0077ff;
+      color: white;
+      transition: background 0.2s ease;
+    }
+
+    .profile-actions button:hover {
+      background-color: #005fcc;
+    }
+
+    .profile-actions .danger {
+      background-color: #ff4d4f;
+    }
+
+    .profile-actions .danger:hover {
+      background-color: #d9363a;
+    }
+
+    .interactions {
+      margin-top: 1.5rem;
+      text-align: left;
+    }
+
+    .interactions h2 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
+    .interaction-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .interaction-item {
+      background: white;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .interaction-item:hover {
+      background: #f0f8ff;
+    }
+
+    .interaction-date {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #0077ff;
+    }
+
+    .interaction-summary {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #444;
+      display: none;
+      /* hidden until clicked */
+    }
+
+    .profile-img-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .avatar-large {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .edit-img-btn {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      padding: 6px;
+      cursor: pointer;
+      display: none;
+      /* Hidden by default */
+    }
+
+    .edit-img-btn:hover {
+      background-color: #007bff;
+    }
+
+    .profile-name,
+    .funFactTV,
+    #funFactTV {
+      padding: 6px;
+      border-radius: 6px;
+      transition: all 0.3s;
+    }
+
+    .editable {
+      background-color: #eef6ff;
+      border: 1px dashed #007bff;
+      outline: none;
+    }
+
+    .profile-name:focus,
+    .funFactTV:focus,
+    #funFactTV:focus {
+      background-color: #dcefff;
+      border: 1px solid #007bff;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    /* Modal Box */
+    .modal {
+      background: #ffffff;
+      width: 90%;
+      max-width: 380px;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+      animation: pop 0.2s ease-out;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      resize: vertical;
+    }
+
+    @keyframes pop {
+      from {
+        transform: scale(0.9);
+        opacity: 0;
       }
 
-      header {
-        margin-bottom: 1rem;
+      to {
+        transform: scale(1);
+        opacity: 1;
       }
+    }
 
-      .back-button {
-        text-decoration: none;
-        color: #0077ff;
-        font-size: 1rem;
-        cursor: pointer;
-      }
+    /* Title */
+    .modal h2 {
+      margin: 0;
+      font-size: 20px;
+      text-align: center;
+      font-weight: 600;
+      color: #222;
+    }
 
-      .profile-page {
-        max-width: 600px;
-        margin: 0 auto;
-        text-align: center;
-      }
+    /* Labels */
+    .modal label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 14px;
+      color: #333;
+      text-align: left;
+    }
 
-      .avatar-large {
-        width: 96px;
-        height: 96px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-bottom: 0.75rem;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      }
+    /* Inputs */
+    .modal input,
+    .modal textarea {
+      width: 90%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      background: #f9f9f9;
+      transition: 0.2s;
+      margin-left: auto;
+      margin-right: auto;
+    }
 
-      .profile-name {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-      }
+    .modal input:focus,
+    .modal textarea:focus {
+      border-color: #007bff;
+      background: #fff;
+      outline: none;
+    }
 
-      .tags {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
-      }
+    /* Buttons container */
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 10px;
+    }
 
-      .tag {
-        background: #e0f0ff;
-        color: #0077ff;
-        padding: 0.3rem 0.6rem;
-        border-radius: 999px;
-        font-size: 0.85rem;
-      }
+    /* Buttons */
+    .btn {
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      border: none;
+      transition: background 0.2s, transform 0.1s;
+    }
 
+    /* Cancel Button */
+    .btn.cancel {
+      background: #f0f0f0;
+      color: #333;
+    }
 
-      .tag.edit-mode .remove-tag {
-        display: inline; /* show X when editing */
-      }
+    .btn.cancel:hover {
+      background: #e0e0e0;
+    }
 
-      .add-tag-btn {
-        display: none;
-        background: #0077ff;
-        color: white;
-        padding: 0.3rem 0.8rem;
-        border-radius: 999px;
-        font-size: 0.85rem;
-        cursor: pointer;
-        border: none;
-        margin-top: 2px;
-        margin-bottom: 16px;
-      }
+    /* Save Button */
+    .btn.save {
+      background: #CE191F;
+      color: white;
+    }
 
-      .meta {
-        font-size: 1rem;
-        margin: 0.25rem 0;
-      }
+    .btn.save:hover {
+      background: #A21217;
+    }
+  </style>
+</head>
 
+<body>
+  <header>
+    <a href="mainView.html" id="backBtn" style="display: inline;" class="back-button">← Back</a>
+    <div id="editBar" style="display: none; justify-content: space-between; width: 100%;">
+      <a id="cancelBtn" style="color: #333;" class="back-button">Cancel</a>
+      <a id="saveBtn" class="back-button">Save</a>
+    </div>
+  </header>
 
-      .edit-controls {
-        margin-top: 0.75rem;
-        display: flex;
-        gap: 0.5rem;
-        justify-content: center;
-      }
+  <main class="profile-page" id="profileDiv" style="display: none;">
+    <div class="profile-img-wrapper">
+      <img id="userImg" alt="Mark Johnson" class="avatar-large" />
+      <button id="editImgBtn" class="edit-img-btn">✏️</button>
+    </div>
 
-      .edit-controls button {
-        padding: 0.6rem 1rem;
-        font-size: 0.95rem;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-      }
+    <div id="nameTV" class="profile-name"></div>
 
-      .edit-controls .save {
-        background-color: #0077ff;
-        color: white;
-      }
+    <textarea id="nameET" class="note-edit-area"
+      style="width: 240px; height: 20px; resize: none; margin-left: auto; margin-right: auto; display: none; margin-top: 8px;"></textarea>
 
-      .edit-controls .cancel {
-        background-color: #ccc;
-      }
+    <p id="funFactTV"></p>
+    <textarea id="funFactET" class="note-edit-area"
+      style="width: 240px; height: 40px; resize: none;  margin-left: auto; margin-right: auto; display: none; margin-top: 16px;"></textarea>
 
-      .profile-actions {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        margin-top: 2rem;
-      }
+    <div id="clubDiv" style="margin-top: 16px; margin-top: 16px;" class="tags">
+    </div>
+    <button id="addTagBtn" style="display:none" class="add-tag-btn">+ Add Group</button>
 
-      .profile-actions button {
-        padding: 0.75rem;
-        font-size: 1rem;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        background-color: #0077ff;
-        color: white;
-        transition: background 0.2s ease;
-      }
+    <!--<p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>-->
 
-      .profile-actions button:hover {
-        background-color: #005fcc;
-      }
+    <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
+      <strong>📍 Location </strong>
+      <span id="locationTV"></span>
+      <textarea id="locationET" class="note-edit-area"
+        style="width: 200px; height: 40px; margin-left: 16px; display: none;  resize: none; margin-bottom: 16px;"></textarea>
+    </div>
 
-      .profile-actions .danger {
-        background-color: #ff4d4f;
-      }
+    <div class="interactions">
+      <h2>🤝 Interactions</h2>
+      <ul id="interaction-list" class="interaction-list">
+      </ul>
+    </div>
 
-      .profile-actions .danger:hover {
-        background-color: #d9363a;
-      }
+    <div class="profile-actions">
+      <button id="editBtn" onclick="editProfile()">✏️ Edit Profile</button>
+      <button id="interactionBtn">➕ Add Interaction</button>
+      <button id="deleteBtn" onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
+    </div>
 
-      .interactions {
-        margin-top: 1.5rem;
-        text-align: left;
-      }
+    <div class="modal-overlay" id="addGroupModal">
+      <div class="modal">
+        <h2>Add Group</h2>
 
-      .interactions h2 {
-        font-size: 1.2rem;
-        margin-bottom: 0.5rem;
-        text-align: center;
-      }
+        <label>Group Name
+          <input type="text" id="groupNameET">
+        </label>
 
-      .interaction-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      .interaction-item {
-        background: white;
-        border-radius: 8px;
-        padding: 0.75rem 1rem;
-        margin-bottom: 0.75rem;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        cursor: pointer;
-        transition: background 0.2s ease;
-      }
-
-      .interaction-item:hover {
-        background: #f0f8ff;
-      }
-
-      .interaction-date {
-        font-weight: 600;
-        font-size: 0.95rem;
-        color: #0077ff;
-      }
-
-      .interaction-summary {
-        margin-top: 0.5rem;
-        font-size: 0.9rem;
-        color: #444;
-        display: none; /* hidden until clicked */
-      }
-
-      .profile-img-wrapper {
-        position: relative;
-        display: inline-block;
-      }
-
-      .avatar-large {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-      }
-
-      .edit-img-btn {
-        position: absolute;
-        bottom: 8px;
-        right: 8px;
-        background-color: #333;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        padding: 6px;
-        cursor: pointer;
-        display: none; /* Hidden by default */
-      }
-
-      .edit-img-btn:hover {
-        background-color: #007bff;
-      }
-
-      .profile-name, .funFactTV, #funFactTV  {
-        padding: 6px;
-        border-radius: 6px;
-        transition: all 0.3s;
-      }
-
-      .editable {
-        background-color: #eef6ff;
-        border: 1px dashed #007bff;
-        outline: none;
-      }
-
-      .profile-name:focus,
-      .funFactTV:focus , #funFactTV:focus {
-        background-color: #dcefff;
-        border: 1px solid #007bff;
-      }
-
-      .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.45);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 999;
-      }
-
-      /* Modal Box */
-      .modal {
-        background: #ffffff;
-        width: 90%;
-        max-width: 380px;
-        padding: 24px;
-        border-radius: 18px;
-        box-shadow: 0 10px 28px rgba(0,0,0,0.15);
-        animation: pop 0.2s ease-out;
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        resize: vertical;
-      }
-
-      @keyframes pop {
-        from { transform: scale(0.9); opacity: 0; }
-        to   { transform: scale(1); opacity: 1; }
-      }
-
-      /* Title */
-      .modal h2 {
-        margin: 0;
-        font-size: 20px;
-        text-align: center;
-        font-weight: 600;
-        color: #222;
-      }
-
-      /* Labels */
-      .modal label {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        font-size: 14px;
-        color: #333;
-        text-align: left;
-      }
-
-      /* Inputs */
-      .modal input,
-      .modal textarea {
-        width: 90%;
-        padding: 10px 12px;
-        border-radius: 10px;
-        border: 1px solid #ddd;
-        font-size: 14px;
-        background: #f9f9f9;
-        transition: 0.2s;
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .modal input:focus,
-      .modal textarea:focus {
-        border-color: #007bff;
-        background: #fff;
-        outline: none;
-      }
-
-      /* Buttons container */
-      .modal-buttons {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
-        margin-top: 10px;
-      }
-
-      /* Buttons */
-      .btn {
-        padding: 10px 16px;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 14px;
-        border: none;
-        transition: background 0.2s, transform 0.1s;
-      }
-
-      /* Cancel Button */
-      .btn.cancel {
-        background: #f0f0f0;
-        color: #333;
-      }
-
-      .btn.cancel:hover {
-        background: #e0e0e0;
-      }
-
-      /* Save Button */
-      .btn.save {
-        background: #CE191F;
-        color: white;
-      }
-
-      .btn.save:hover {
-        background: #A21217;
-      }
-    </style>
-  </head>
-  <body>
-    <header>
-      <a href="mainView.html" id="backBtn" style="display: inline;"  class="back-button">← Back</a>
-      <div id="editBar" style="display: none; justify-content: space-between; width: 100%;">
-        <a id="cancelBtn" style="color: #333;" class="back-button">Cancel</a>
-        <a id="saveBtn" class="back-button">Save</a>
-      </div>
-    </header>
-
-    <main class="profile-page" id="profileDiv" style="display: none;">
-      <div class="profile-img-wrapper">
-        <img id="userImg" alt="Mark Johnson" class="avatar-large" />
-        <button id="editImgBtn" class="edit-img-btn">✏️</button>
-      </div>
-
-      <div id="nameTV" class="profile-name"></div>
-
-      <textarea id="nameET" class="note-edit-area" style="width: 240px; height: 20px; resize: none; margin-left: auto; margin-right: auto; display: none; margin-top: 8px;"></textarea>
-
-      <p id="funFactTV"></p>
-      <textarea  id="funFactET" class="note-edit-area" style="width: 240px; height: 40px; resize: none;  margin-left: auto; margin-right: auto; display: none; margin-top: 16px;"></textarea>
-
-      <div id="clubDiv" style="margin-top: 16px; margin-top: 16px;" class="tags">
-      </div>
-      <button id="addTagBtn" style="display:none"  class="add-tag-btn">+ Add Group</button>
-
-      
-
-
-      <!--<p id="metTV" class="meta"><strong>📅 Last Met:</strong> 2 weeks ago</p>-->
-      
-      <div style="display: flex; justify-content: center; align-items: center; gap: 6px;">
-        <strong>📍 Location </strong> 
-        <span id="locationTV"></span> 
-        <textarea  id="locationET" class="note-edit-area" style="width: 200px; height: 40px; margin-left: 16px; display: none;  resize: none; margin-bottom: 16px;"></textarea>
-      </div>
-
-
-      <div class="interactions">
-        <h2>🤝 Interactions</h2>
-        <ul id="interaction-list" class="interaction-list">
-        </ul>
-      </div>
-
-      <div class="profile-actions">
-        <button id="editBtn" onclick="editProfile()">✏️ Edit Profile</button>
-        <button id="interactionBtn" >➕ Add Interaction</button>
-        <button id="deleteBtn" onclick="deleteFriend()" class="danger">🗑️ Delete Friend</button>
-      </div>
-
-      <div class="modal-overlay" id="interactionModal">
-        <div class="modal">
-          <h2>Add Interaction</h2>
-      
-          <label>Title
-            <input type="text" id="interactionTitleET">
-          </label>
-      
-          <label>Notes:
-            <textarea id="interactionNotesET" rows="4" placeholder="What did you talk about? Any follow-up?"></textarea>
-          </label>
-      
-          <div class="modal-buttons">
-            <button type="button" class="btn cancel" id="interactionCancelBtn">Cancel</button>
-            <button type="button" class="btn save" id="interactionSaveBtn">Save Interaction</button>
-          </div>
+        <div class="modal-buttons">
+          <button type="button" class="btn cancel" id="groupCancelBtn">Cancel</button>
+          <button type="button" class="btn save" id="groupSaveBtn">Add Group</button>
         </div>
       </div>
-    </main>
-    <script type="module">
-      // Import the necessary Firebase SDK functions
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-      import { getFirestore, doc, getDoc, deleteDoc, getDocs, collection, addDoc, serverTimestamp} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
-      import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"
-      import { ref, deleteObject, getStorage } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
+    </div>
 
-   
-      const firebaseConfig = {
-          apiKey: "AIzaSyB_1iwdvhIPZ6wbtlFft_vvfRjASUb_XyY",
-          authDomain: "win-friends-app.firebaseapp.com",
-          projectId: "win-friends-app",
-          storageBucket: "win-friends-app.firebasestorage.app",
-          messagingSenderId: "1006457660053",
-          appId: "1:1006457660053:web:b1b104becc2f590a21319c",
-          measurementId: "G-0H4L7PK4L9"
-      };
+    <div class="modal-overlay" id="interactionModal">
+      <div class="modal">
+        <h2>Add Interaction</h2>
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const auth = getAuth(app)
-      const storage = getStorage(app);
+        <label>Title
+          <input type="text" id="interactionTitleET">
+        </label>
 
+        <label>Notes:
+          <textarea id="interactionNotesET" rows="4" placeholder="What did you talk about? Any follow-up?"></textarea>
+        </label>
 
-      const editBar = document.getElementById("editBar")
-      const backBtn = document.getElementById("backBtn")
-      const saveBtn = document.getElementById("saveBtn")
-      const cancelBtn = document.getElementById("cancelBtn")
+        <div class="modal-buttons">
+          <button type="button" class="btn cancel" id="interactionCancelBtn">Cancel</button>
+          <button type="button" class="btn save" id="interactionSaveBtn">Save Interaction</button>
+        </div>
+      </div>
+    </div>
+  </main>
 
-      const profileDiv = document.getElementById("profileDiv")
-
-      const userImg = document.getElementById("userImg")
-      const nameTV = document.getElementById("nameTV")
-      const nameET = document.getElementById("nameET")
-      const funFactTV = document.getElementById("funFactTV")
-      const funFactET = document.getElementById("funFactET")
-      const locationTV = document.getElementById("locationTV")
-      const locationET = document.getElementById("locationET")
-      
-
-      const noteListEl = document.getElementById('note-list');
-      const noteTextarea = document.getElementById('note-textarea');
-
-      const editBtn = document.getElementById("editBtn")
-      const interactionBtn = document.getElementById("interactionBtn")
-      const deleteBtn = document.getElementById("deleteBtn")
+  <script type="module">
+    // Import the necessary Firebase SDK functions
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, deleteDoc, getDocs, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"
+    import { ref, deleteObject, getStorage, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
 
-      const interactionModal= document.getElementById("interactionModal")
-      const interactionCancelBtn = document.getElementById("interactionCancelBtn")
-      const interactionSaveBtn = document.getElementById("interactionSaveBtn")
-      const interactionTitleET = document.getElementById("interactionTitleET")
-      const interactionNotesET = document.getElementById("interactionNotesET")
+    const firebaseConfig = {
+      apiKey: "AIzaSyB_1iwdvhIPZ6wbtlFft_vvfRjASUb_XyY",
+      authDomain: "win-friends-app.firebaseapp.com",
+      projectId: "win-friends-app",
+      storageBucket: "win-friends-app.firebasestorage.app",
+      messagingSenderId: "1006457660053",
+      appId: "1:1006457660053:web:b1b104becc2f590a21319c",
+      measurementId: "G-0H4L7PK4L9"
+    };
 
-      const addTagBtn = document.getElementById("addTagBtn");
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app)
+    const storage = getStorage(app);
 
-      const isEditing = false
 
-      let clubs = null
- 
-      let tempImageUrl = null
+    const editBar = document.getElementById("editBar")
+    const backBtn = document.getElementById("backBtn")
+    const saveBtn = document.getElementById("saveBtn")
+    const cancelBtn = document.getElementById("cancelBtn")
 
-      editBtn.onclick = () => {
-        editProfile()
-        
-      }
+    const profileDiv = document.getElementById("profileDiv")
 
-      cancelBtn.onclick = () => {
-        cancelEdit()
-      }
+    const userImg = document.getElementById("userImg")
+    const nameTV = document.getElementById("nameTV")
+    const nameET = document.getElementById("nameET")
+    const funFactTV = document.getElementById("funFactTV")
+    const funFactET = document.getElementById("funFactET")
+    const locationTV = document.getElementById("locationTV")
+    const locationET = document.getElementById("locationET")
 
-      interactionBtn.onclick = () => {
-        showInteractionModal()
-      }
 
-      interactionCancelBtn.onclick = () => {
-        interactionModal.style.display = "none"
-      }
+    const noteListEl = document.getElementById('note-list');
+    const noteTextarea = document.getElementById('note-textarea');
 
-      interactionSaveBtn.onclick = () => {
-        const title = interactionTitleET.value 
-        const notes = interactionNotesET.value 
-        addInteraction(title, notes)
-      }
+    const editBtn = document.getElementById("editBtn")
+    const interactionBtn = document.getElementById("interactionBtn")
+    const deleteBtn = document.getElementById("deleteBtn")
 
-      deleteBtn.onclick = () => {
-        deleteDialog()
-      }
 
-      function editProfile() {
-        editBar.style.display = 'flex'
-        backBtn.style.display = "none"
+    const interactionModal = document.getElementById("interactionModal")
+    const interactionCancelBtn = document.getElementById("interactionCancelBtn")
+    const interactionSaveBtn = document.getElementById("interactionSaveBtn")
+    const interactionTitleET = document.getElementById("interactionTitleET")
+    const interactionNotesET = document.getElementById("interactionNotesET")
 
-        nameET.style.display = "block"
-        nameET.value = nameTV.innerText
-        nameTV.style.display = "none"
+    const addTagBtn = document.getElementById("addTagBtn");
+    const addGroupModal = document.getElementById("addGroupModal")
+    const groupCancelBtn = document.getElementById("groupCancelBtn")
+    const groupSaveBtn = document.getElementById("groupSaveBtn")
 
-        funFactET.style.display = "block"
-        funFactET.value = funFactTV.innerText
-        funFactTV.style.display = "none"
+    let isEditing = false
 
-        locationET.style.display = "block"
-        locationET.value = locationTV.innerText
-        locationTV.style.display = "none"
-        
+    let clubs = null
 
-        editImgBtn.style.display = 'block';
+    let tempImageUrl = null
 
-        editBtn.style.display = 'none'
-        interactionBtn.style.display = 'none'
-        deleteBtn.style.display = 'none'
+    let userInfo = null
 
-        saveBtn.style.display = 'inline-block';
-        cancelBtn.style.display = 'inline-block';
 
-        addTagBtn.style.display = 'inline-block'
+    addTagBtn.onclick = () => {
+      addGroupModal.style.display = "flex"
+    }
 
-        isEditing = true
+    groupCancelBtn.onclick = () => {
+      addGroupModal.style.display = "none"
+    }
 
-        addTagBtn.style.display = 'block'
-        renderClubs(clubs)
-      }
+    groupSaveBtn.onclick = () => {
+      let groupNameET = document.getElementById("groupNameET")
+      clubs.push(groupNameET.value)
+      groupNameET.value = ''
+      renderClubs(clubs)
+      addGroupModal.style.display = 'none'
+    }
 
-      function cancelEdit()
-      {
-        //assuming that we did not have to make any changes besides maybe the picture, we can just return everything else;
-        editBar.style.display = 'none'
-        backBtn.style.display = "flex"
+    editBtn.onclick = () => {
+      editProfile()
 
+    }
+
+    cancelBtn.onclick = () => {
+      cancelEdit()
+    }
+
+    saveBtn.onclick = () => {
+      saveProfile()
+    }
+
+    interactionBtn.onclick = () => {
+      showInteractionModal()
+    }
+
+    interactionCancelBtn.onclick = () => {
+      interactionModal.style.display = "none"
+    }
+
+    interactionSaveBtn.onclick = () => {
+      const title = interactionTitleET.value
+      const notes = interactionNotesET.value
+      addInteraction(title, notes)
+    }
+
+    deleteBtn.onclick = () => {
+      deleteDialog()
+    }
+
+    function editProfile() {
+      editBar.style.display = 'flex'
+      backBtn.style.display = "none"
+
+      nameET.style.display = "block"
+      nameET.value = nameTV.innerText
+      nameTV.style.display = "none"
+
+      funFactET.style.display = "block"
+      funFactET.value = funFactTV.innerText
+      funFactTV.style.display = "none"
+
+      /*locationET.style.display = "block"
+      locationET.value = locationTV.innerText
+      locationTV.style.display = "none"*/
+
+
+      editImgBtn.style.display = 'block';
+
+      editBtn.style.display = 'none'
+      interactionBtn.style.display = 'none'
+      deleteBtn.style.display = 'none'
+
+      saveBtn.style.display = 'inline-block';
+      cancelBtn.style.display = 'inline-block';
+
+      addTagBtn.style.display = 'inline-block'
+
+      isEditing = true
+
+      addTagBtn.style.display = 'flex'
+      renderClubs(clubs)
+
+      renderInteractions(interactionsList, true)
+    }
+
+    function cancelEdit() {
+      //assuming that we did not have to make any changes besides maybe the picture, we can just return everything else;
+      editBar.style.display = 'none'
+      backBtn.style.display = "flex"
+
+      nameET.style.display = "none"
+      nameTV.style.display = "block"
+
+      funFactET.style.display = "none"
+      funFactTV.style.display = "block"
+
+      //locationET.style.display = "none"
+      //locationTV.style.display = "block"
+
+
+      editImgBtn.style.display = 'none';
+
+      editBtn.style.display = 'block'
+      interactionBtn.style.display = 'block'
+      deleteBtn.style.display = 'block'
+
+      saveBtn.style.display = 'none';
+      cancelBtn.style.display = 'none';
+
+      userImg.src = tempImageUrl
+      addTagBtn.style.display = 'none'
+
+      isEditing = false
+
+      renderClubs(clubs)
+      renderInteractions(interactionsList, false)
+
+      //addTagBtn.style.display =
+    }
+
+    async function saveProfile() {
+      const params = new URLSearchParams(window.location.search);
+      const friendId = params.get('id');
+      let picture = document.getElementById("userImg")
+      let currentUserId = auth.currentUser.uid
+
+      try {
+        let friendRef = doc(db, `users/${currentUserId}/friends/${friendId}`)
+        await updateDoc(friendRef, {
+          name: `${nameET.value}`,
+          funFact: `${funFactET.value}`,
+          group: clubs,
+          searchIndex: generateSearchIndex(nameET.value, funFactET.value)
+        })
+
+        if (picture && picture.src.startsWith("blob:")) {
+          const storageRef = ref(
+            storage,
+            `users/${currentUserId}/friends/${friendId}/${picture.name}`
+          );
+
+          const file = await urlToFile(picture.src, "profileImage.jpg");
+
+          // Upload the file
+          const snapshot = await uploadBytes(storageRef, file);
+
+          // Get download URL
+          const downloadURL = await getDownloadURL(snapshot.ref);
+
+          // Save URL to Firestore
+          await updateDoc(doc(db, `users/${currentUserId}/friends/${friendId}`), {
+            imageUrl: downloadURL
+          });
+
+
+
+
+          console.log("Image uploaded:", downloadURL);
+        } else {
+          ///alert('...')
+        }
         nameET.style.display = "none"
         nameTV.style.display = "block"
 
         funFactET.style.display = "none"
         funFactTV.style.display = "block"
 
-        locationET.style.display = "none"
-        locationTV.style.display = "block"
-        
-
-        editImgBtn.style.display = 'none';
-
-        editBtn.style.display = 'block'
-        interactionBtn.style.display = 'block'
-        deleteBtn.style.display = 'block'
-
-        saveBtn.style.display = 'none';
-        cancelBtn.style.display = 'none';
-
-        userImg.src = tempImageUrl
-        addTagBtn.style.display = 'none'
-
+        editBar.style.display = 'none'
+        backBtn.style.display = "flex"
         isEditing = false
-        //addTagBtn.style.display =
+        addTagBtn.style.display = 'none'
+        editImgBtn.style.display = 'none';
+        getFriendInfo(auth.currentUser.uid)
+
+      } catch (err) {
+        alert(`error NP-627 ${err}`)
       }
+    }
 
-      function renderClubs(clubs) {
-        //noteListEl.innerHTML = '';
-        let clubDiv = document.getElementById("clubDiv")
+    async function urlToFile(url, filename) {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return new File([blob], filename, { type: blob.type });
+    }
 
-        clubDiv.innerHTML = ''
-        clubs.forEach(note => {
-          const span = document.createElement('span');
-          span.classList.add('tag');
-          //span.textContent = note;
-          if(isEditing){
-            span.innerHTML = `
-              <div style="display:flex"> 
-                <span> ${note} </span>
-                <button style="background: none; border:none; margin-left:8px; cursor:pointer"> x </button>
-              </div>`
-          }else{
-            span.innerHTML = `<span> ${note}</span>`
-          }
-          
-          clubDiv.appendChild(span);
-        });
+    function renderClubs(clubs) {
+      const clubDiv = document.getElementById("clubDiv");
+      clubDiv.innerHTML = "";
 
-        profileDiv.style.display = "block"
-      }
+      clubs.forEach((note, index) => {
+        const span = document.createElement("span");
+        span.classList.add("tag");
 
-     
-      function deleteDialog() {
-        if (confirm("Are you sure you want to delete this friend?")) {
-          deleteFriend()
+        if (isEditing) {
+          span.innerHTML = `
+              <div style="display:flex; align-items:center;"> 
+                <span>${note}</span>
+                <button 
+                  class="club-delete-btn" 
+                  data-index="${index}"
+                  style="background:none; border:none; margin-left:8px; cursor:pointer; font-size:16px;"
+                >✕</button>
+              </div>`;
+        } else {
+          span.innerHTML = `<span>${note}</span>`;
         }
-      }
 
-      async function getFriendInfo(currentUserId)
-      {
-        const params = new URLSearchParams(window.location.search);
-        const userId = params.get('id');
+        clubDiv.appendChild(span);
 
-        let friendRef = doc(db, `users/${currentUserId}/friends/${userId}`)
+        // Attach delete event
+        const deleteBtn = span.querySelector(".club-delete-btn");
+        if (deleteBtn) {
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation(); // dont trigger parent click events
 
-        const friendSnap = await getDoc(friendRef);
+            const idx = parseInt(deleteBtn.dataset.index);
 
-        if(!friendSnap.exists()){
-          alert("error NP: 336")
-        }else{
-          let data = friendSnap.data()
-          let name = data.name
-          let phone = data.phone 
-          let email = data.email
-          let imageUrl = data.imageUrl
-          
-          if(imageUrl == null){
-            imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
-          }
-          tempImageUrl = imageUrl
-          let funFact = data.funFact
-          let location = data.location 
-          let group = data.group
-          clubs = data.group
-          populateData(name, imageUrl, funFact, phone, email, group, location)
-        }
-      }
+            // Remove from array
+            clubs.splice(idx, 1);
 
-      function populateData(name, imageUrl, funFact, phone, email, group, location)
-      {
-          let funFactTV = document.getElementById("funFactTV")
-          let nameTV = document.getElementById("nameTV")
-          let userImg = document.getElementById("userImg")
-          let locationTV = document.getElementById("locationTV")
+            // Optional: delete from Firestore
+            // await updateDoc(doc(db, `users/${user.uid}/friends/${friendId}`), { clubs });
 
-          funFactTV.innerText = funFact
-          nameTV.innerText = name 
-          userImg.src = imageUrl
-          locationTV.innerText =  `lat: ${location.latitude} \n lon: ${location.longitude}`
-          renderClubs(group)
-      }
-
-      function setProfile(data){
-          let nameTV = document.getElementById("nameTV")
-          let noteList = document.getElementById("note-list")
-
-          nameTV.innerText = data.name
-          //have to just set name,
-      }
-
-      /*const interactions = [
-        {
-          date: "2025-09-10",
-          type: "Coffee Meetup ☕",
-          summary: "Talked about his new role and upcoming project. Shared some tips on productivity apps."
-        },
-        {
-          date: "2025-08-28",
-          type: "Phone Call 📞",
-          summary: "He mentioned traveling to New York soon. Discussed keeping in touch with the Chess Club."
-        },
-        {
-          date: "2025-08-15",
-          type: "Lunch 🍽️",
-          summary: "Caught up after 3 months. Talked about AI, work stress, and his chess strategies."
-        }
-      ];*/
-
-      const interactionListEl = document.getElementById("interaction-list");
-
-      function renderInteractions(interactions, editing) {
-        interactionListEl.innerHTML = '';
-        interactions.forEach((interaction, index) => {
-          const li = document.createElement("li");
-          li.className = "interaction-item";
-          li.innerHTML = `
-
-            <div class="interaction-date"> ${editing ? `<span> x <span>` : ''} ${interaction.date.toDate().getFullYear()}-${interaction.date.toDate().getMonth()+1}-${interaction.date.toDate().getDay()} — ${interaction.title}</div>
-            ${editing ? `
-              <div>
-                <textarea class="interactionET" id="interactionET" class="note-edit-area" 
-                        style="width: 240px; height: 40px; resize: none;  margin-left: auto;
-                        margin-right: auto; 
-                        display: none; margin-top: 16px;">
-                </textarea>
-
-              </div>
-              ` : `
-              <div class="interaction-edit-tools">
-                  <!-- whatever you want to show -->
-                  <div class="interaction-summary">${interaction.notes}</div>
-                </div>
-              `}` 
-          
-          li.addEventListener("click", () => {
-            const summaryEl = li.querySelector(".interaction-summary");
-            const interactionET = li.querySelector(".interactionET")
-            if(summaryEl != null){
-              const isVisible = summaryEl.style.display === "block";
-              summaryEl.style.display = isVisible ? "none" : "block";
-            }
-            else if(interactionET != null){
-              interactionET.style.display = "block";
-            }
+            // Re-render UI
+            renderClubs(clubs);
           });
+        }
+      });
 
-          interactionListEl.appendChild(li);
+      profileDiv.style.display = "block";
+    }
+
+
+    function deleteDialog() {
+      if (confirm("Are you sure you want to delete this friend?")) {
+        deleteFriend()
+      }
+    }
+
+    async function getFriendInfo(currentUserId) {
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get('id');
+
+      let friendRef = doc(db, `users/${currentUserId}/friends/${userId}`)
+
+      const friendSnap = await getDoc(friendRef);
+
+      if (!friendSnap.exists()) {
+        alert("error NP: 336")
+      } else {
+        let data = friendSnap.data()
+        let name = data.name
+        let phone = data.phone
+        let email = data.email
+        let imageUrl = data.imageUrl
+
+        if (imageUrl == null) {
+          imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
+        }
+        tempImageUrl = imageUrl
+        let funFact = data.funFact
+        let location = data.location
+        let group = data.group
+        clubs = data.group
+        populateData(name, imageUrl, funFact, phone, email, group, location)
+      }
+    }
+
+    function populateData(name, imageUrl, funFact, phone, email, group, location) {
+      let funFactTV = document.getElementById("funFactTV")
+      let nameTV = document.getElementById("nameTV")
+      let userImg = document.getElementById("userImg")
+      let locationTV = document.getElementById("locationTV")
+
+      funFactTV.innerText = funFact
+      nameTV.innerText = name
+      userImg.src = imageUrl
+      locationTV.innerText = `lat: ${location.latitude} \n lon: ${location.longitude}`
+      renderClubs(group)
+    }
+
+    function setProfile(data) {
+      let nameTV = document.getElementById("nameTV")
+      let noteList = document.getElementById("note-list")
+
+      nameTV.innerText = data.name
+      //have to just set name,
+    }
+
+    function generatePrefixTokens(str) {
+      const tokens = new Set();
+
+      const full = `${str}`.toLowerCase().trim();
+      const words = full.split(/\s+/);
+
+      // 1. Prefixes for each individual word
+      for (const word of words) {
+        let prefix = "";
+        for (let i = 0; i < word.length; i++) {
+          prefix += word[i];
+          tokens.add(prefix);
+        }
+      }
+
+      // 2. Prefixes for the full string with spaces removed (cross-word search)
+      const noSpace = full.replace(/\s+/g, "");
+      let prefix = "";
+      for (let i = 0; i < noSpace.length; i++) {
+        prefix += noSpace[i];
+        tokens.add(prefix);
+      }
+
+      return Array.from(tokens);
+    }
+
+    function generateSearchIndex(name, funFact) {
+      const combined = `${name} ${funFact}`.trim();
+      return generatePrefixTokens(combined);
+    }
+
+    let interactionsList = []
+
+    const interactionListEl = document.getElementById("interaction-list");
+
+    function renderInteractions(interactions, editing) {
+      interactionListEl.innerHTML = '';
+      interactions.forEach((interaction, index) => {
+        const li = document.createElement("li");
+        li.className = "interaction-item";
+
+        li.innerHTML = `
+            <div class="interaction-date">
+              ${editing ? `<span class="delete-interaction" data-id="${interaction.id}" style="cursor:pointer; font-size: 18px; padding-right: 8px;">✕</span>` : ''}
+              ${interaction.date.toDate().getFullYear()}-${interaction.date.toDate().getMonth() + 1}-${interaction.date.toDate().getDay()} — ${interaction.title}
+            </div>
+
+            ${editing
+            ? `
+                  <div>
+                    <textarea class="interactionET" style="width: 100%; height: 40px; resize: none; display: none; margin-top: 16px;">${interaction.notes}</textarea>
+                  </div>
+                `
+            : `
+                  <div class="interaction-edit-tools">
+                    <div class="interaction-summary">${interaction.notes}</div>
+                  </div>
+                `
+          }
+          `;
+
+        // DELETE BUTTON LOGIC
+        const deleteBtn = li.querySelector(".delete-interaction");
+        if (deleteBtn) {
+          deleteBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            li.remove();
+          });
+        }
+
+        // NORMAL expansion logic
+        li.addEventListener("click", () => {
+          const summaryEl = li.querySelector(".interaction-summary");
+          const interactionET = li.querySelector(".interactionET");
+
+          if (summaryEl) {
+            summaryEl.style.display =
+              summaryEl.style.display === "block" ? "none" : "block";
+          } else if (interactionET) {
+            interactionET.style.display = "block";
+          }
         });
-      }
 
-      // Render when page loads
-      const editImgBtn = document.getElementById('editImgBtn');
+        interactionListEl.appendChild(li);
 
-      // When "Edit Profile" is clicked → show the pencil
-      /*editProfileBtn.addEventListener('click', () => {
-        editImgBtn.style.display = 'block';
-      });*/
-
-      // When the pencil is clicked → open file picker and change image
-      editImgBtn.addEventListener('click', () => {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-
-        fileInput.onchange = (e) => {
-          const file = e.target.files[0];
-          if (file) {
-            userImg.src = URL.createObjectURL(file);
-          }
-        };
-
-        fileInput.click();
       });
+    }
 
-      onAuthStateChanged(auth, (user) => 
-      {
-        if (!user) {
-            window.location.href = "winFriends.html";
-            return;
+    // Render when page loads
+    const editImgBtn = document.getElementById('editImgBtn');
+
+    // When "Edit Profile" is clicked → show the pencil
+    /*editProfileBtn.addEventListener('click', () => {
+      editImgBtn.style.display = 'block';
+    });*/
+
+    // When the pencil is clicked → open file picker and change image
+    editImgBtn.addEventListener('click', () => {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = 'image/*';
+
+      fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          userImg.src = URL.createObjectURL(file);
         }
-        else{
-            getFriendInfo(user.uid)
-            getInterations()
-        }
-      });
+      };
 
-      function showInteractionModal()
-      {
-        interactionModal.style.display = 'flex'
+      fileInput.click();
+    });
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "winFriends.html";
+        return;
       }
-
-      async function getInterations() {
-        try {
-          const params = new URLSearchParams(window.location.search);
-          const friendId = params.get("id");
-          let userId = auth.currentUser.uid;
-          
-          const interactionCol = collection(db, `users/${userId}/friends/${friendId}/interactions`);
-
-          const interactionsSnapshot = await getDocs(interactionCol);
-
-          // FIXED: use the correct snapshot variable
-          const interactions = interactionsSnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-          }));
-
-         
-          renderInteractions(interactions, true);
-
-          console.log("interactions:", interactions);
-          
-        } catch (err) {
-          alert(`error: ${err}`);
-        }
+      else {
+        getFriendInfo(user.uid)
+        await getInterations()
+        renderInteractions(interactionsList, false);
       }
+    });
 
-      //getInterations()
+    function showInteractionModal() {
+      interactionModal.style.display = 'flex'
+    }
 
-     
-      async function deleteFriend() {
-        try {
-          let userId = auth.currentUser.uid 
-          const params = new URLSearchParams(window.location.search);
-          const friendId = params.get('id');
-          const friendRef = doc(db, `users/${userId}/friends/${friendId}`);
+    async function getInterations() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const friendId = params.get("id");
+        let userId = auth.currentUser.uid;
 
-          // 1) Delete storage image if exists
-          const friendSnap = await getDoc(friendRef);
-          const friendData = friendSnap.data();
-          if (friendData?.imageUrl) {
-            try {
-              const storagePath = extractStoragePath(friendData.imageUrl);
-              await deleteObject(ref(storage, storagePath));
-            } catch (e) {
-              alert(`Could not delete image: ${e}`);
-            }
-          }
+        const interactionCol = collection(db, `users/${userId}/friends/${friendId}/interactions`);
 
-          // 2) Delete known subcollections (replace names below)
-          const knownSubcollections = ["interactions"]; // <<-- update to your names
-          for (const subName of knownSubcollections) {
-            const subColRef = collection(db, `users/${userId}/friends/${friendId}/${subName}`);
-            const docsSnap = await getDocs(subColRef);
-            for (const d of docsSnap.docs) {
-              // delete nested docs — if they themselves have subcollections, you'll need to repeat this pattern
-              await deleteDoc(d.ref);
-            }
-          }
+        const interactionsSnapshot = await getDocs(interactionCol);
 
-          // 3) Delete the friend document
-          await deleteDoc(friendRef);
-          alert(`friend deleted successfully`)
-          window.location.href = "mainView.html";
+        // FIXED: use the correct snapshot variable
+        interactionsList = interactionsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
 
-        } catch (err) {
-          console.error("Delete friend error:", err);
-          alert("Error deleting friend: " + err);
-        }
+
+        //renderInteractions(interactions, true);
+
+
+        return interactionsList
+
+        //console.log("interactions:", interactions);
+
+      } catch (err) {
+        alert(`error: ${err}`);
       }
+    }
 
-      function extractStoragePath(downloadUrl) {
-        const encodedPath = downloadUrl.split("/o/")[1].split("?")[0];
-        return decodeURIComponent(encodedPath);
-      }
-
-      async function addInteraction(title, notes)
-      {
+    async function deleteFriend() {
+      try {
+        let userId = auth.currentUser.uid
         const params = new URLSearchParams(window.location.search);
         const friendId = params.get('id');
-        let date = 'poop'
-        try{
-          const docRef = await addDoc(collection(db, `users/${auth.currentUser.uid}/friends/${friendId}/interactions`), {
-            date : serverTimestamp(), 
-            title : `${title}`, 
-            notes : `${notes}`
+        const friendRef = doc(db, `users/${userId}/friends/${friendId}`);
 
-          })
-          interactionModal.style.display = "none"
-        } catch(error){
-          alert(`there was an error NP-733${error}`)
+        // 1) Delete storage image if exists
+        const friendSnap = await getDoc(friendRef);
+        const friendData = friendSnap.data();
+        if (friendData?.imageUrl) {
+          try {
+            const storagePath = extractStoragePath(friendData.imageUrl);
+            await deleteObject(ref(storage, storagePath));
+          } catch (e) {
+            alert(`Could not delete image: ${e}`);
+          }
         }
+
+        // 2) Delete known subcollections (replace names below)
+        const knownSubcollections = ["interactions"]; // <<-- update to your names
+        for (const subName of knownSubcollections) {
+          const subColRef = collection(db, `users/${userId}/friends/${friendId}/${subName}`);
+          const docsSnap = await getDocs(subColRef);
+          for (const d of docsSnap.docs) {
+            // delete nested docs — if they themselves have subcollections, you'll need to repeat this pattern
+            await deleteDoc(d.ref);
+          }
+        }
+
+        // 3) Delete the friend document
+        await deleteDoc(friendRef);
+        alert(`friend deleted successfully`)
+        window.location.href = "mainView.html";
+
+      } catch (err) {
+        console.error("Delete friend error:", err);
+        alert("Error deleting friend: " + err);
       }
-    </script>
-  </body>
+    }
+
+    function extractStoragePath(downloadUrl) {
+      const encodedPath = downloadUrl.split("/o/")[1].split("?")[0];
+      return decodeURIComponent(encodedPath);
+    }
+
+    async function addInteraction(title, notes) {
+      const params = new URLSearchParams(window.location.search);
+      const friendId = params.get('id');
+      let date = 'poop'
+
+      try {
+
+        const docRef = await addDoc(collection(db, `users/${auth.currentUser.uid}/friends/${friendId}/interactions`), {
+          date: serverTimestamp(),
+          title: `${title}`,
+          notes: `${notes}`
+
+        })
+        alert(`${{ date: serverTimestamp(), title: `${title}`, notes: `${notes}` }}`)
+        renderInteractions(interactionsList, false)
+        interactionModal.style.display = "none"
+
+      } catch (error) {
+        alert(`there was an error NP-733${error}`)
+      }
+    }
+  </script>
+</body>
+
 </html>
