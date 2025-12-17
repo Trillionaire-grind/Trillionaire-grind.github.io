@@ -526,7 +526,6 @@
 
   updateBtn.onclick = async () => {
     const location = await getCurrentLocation();
-    
     if(location){
       const nearbyFriends = await getNearbyFriends(`${userId}`, 1, location.latitude, location.longitude)
       renderNear(nearbyFriends)
@@ -861,7 +860,6 @@
           currentUserLocation.latitude,
           currentUserLocation.longitude
       );*/
-
       const distance = getDistanceInMiles(
         friend.location.latitude,
         friend.location.longitude,
@@ -923,7 +921,7 @@
     else {
 
       fetchFriends(user.uid);
-      showNearby(user.uid);
+      //showNearby(user.uid);
     }
     //fetchFriends(user.uid);
     //sshowNearby(user.uid);

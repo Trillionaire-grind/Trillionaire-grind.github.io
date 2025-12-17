@@ -446,7 +446,7 @@
   <script type="module">
     // Import the necessary Firebase SDK functions
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, deleteDoc, getDocs, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    import { getFirestore, doc, getDoc,Timestamp,arrayUnion, deleteDoc, getDocs, collection, addDoc, serverTimestamp, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"
     import { ref, deleteObject, getStorage, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js";
 
@@ -521,6 +521,9 @@
 
     groupSaveBtn.onclick = () => {
       let groupNameET = document.getElementById("groupNameET")
+      if(clubs == null){
+        clubs = []
+      }
       clubs.push(groupNameET.value)
       groupNameET.value = ''
       renderClubs(clubs)
@@ -625,7 +628,6 @@
 
       renderClubs(clubs)
       renderInteractions(interactionsList, false)
-
       //addTagBtn.style.display =
     }
 
@@ -635,12 +637,16 @@
       let picture = document.getElementById("userImg")
       let currentUserId = auth.currentUser.uid
 
+      syncInteractionsFromUI(); // 👈 REQUIRED
+      if(interactionsList == null){interactionsList = []}
+
       try {
         let friendRef = doc(db, `users/${currentUserId}/friends/${friendId}`)
         await updateDoc(friendRef, {
           name: `${nameET.value}`,
           funFact: `${funFactET.value}`,
           group: clubs,
+          interactions : interactionsList,
           searchIndex: generateSearchIndex(nameET.value, funFactET.value)
         })
 
@@ -662,13 +668,8 @@
           await updateDoc(doc(db, `users/${currentUserId}/friends/${friendId}`), {
             imageUrl: downloadURL
           });
-
-
-
-
           console.log("Image uploaded:", downloadURL);
         } else {
-          ///alert('...')
         }
         nameET.style.display = "none"
         nameTV.style.display = "block"
@@ -681,11 +682,25 @@
         isEditing = false
         addTagBtn.style.display = 'none'
         editImgBtn.style.display = 'none';
+
+        editBtn.style.display = 'block'
+        interactionBtn.style.display = 'block'
+        deleteBtn.style.display = 'block'
         getFriendInfo(auth.currentUser.uid)
 
       } catch (err) {
         alert(`error NP-627 ${err}`)
       }
+    }
+
+    async function deleteInteractionFromFirestore(interactionId) {
+      const params = new URLSearchParams(window.location.search);
+      const friendId = params.get("id");
+      const userId = auth.currentUser.uid;
+
+      await deleteDoc(
+        doc(db, `users/${userId}/friends/${friendId}/interactions/${interactionId}`)
+      );
     }
 
     async function urlToFile(url, filename) {
@@ -698,7 +713,8 @@
       const clubDiv = document.getElementById("clubDiv");
       clubDiv.innerHTML = "";
 
-      clubs.forEach((note, index) => {
+      if(clubs != null){
+        clubs.forEach((note, index) => {
         const span = document.createElement("span");
         span.classList.add("tag");
 
@@ -737,6 +753,8 @@
           });
         }
       });
+      }
+      
 
       profileDiv.style.display = "block";
     }
@@ -764,7 +782,8 @@
         let phone = data.phone
         let email = data.email
         let imageUrl = data.imageUrl
-
+        interactionsList  = data.interactions
+        //getInteractions
         if (imageUrl == null) {
           imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
         }
@@ -786,8 +805,12 @@
       funFactTV.innerText = funFact
       nameTV.innerText = name
       userImg.src = imageUrl
-      locationTV.innerText = `lat: ${location.latitude} \n lon: ${location.longitude}`
+      if(location != null){
+        locationTV.innerText = `lat: ${location.latitude} \n lon: ${location.longitude}`
+      }
+      
       renderClubs(group)
+      renderInteractions(interactionsList, false)
     }
 
     function setProfile(data) {
@@ -834,6 +857,7 @@
     const interactionListEl = document.getElementById("interaction-list");
 
     function renderInteractions(interactions, editing) {
+      if(interactionsList == null || interactionsList.length < 1) {return}
       interactionListEl.innerHTML = '';
       interactions.forEach((interaction, index) => {
         const li = document.createElement("li");
@@ -848,7 +872,7 @@
             ${editing
             ? `
                   <div>
-                    <textarea class="interactionET" style="width: 100%; height: 40px; resize: none; display: none; margin-top: 16px;">${interaction.notes}</textarea>
+                    <textarea data-id="${interaction.date.toMillis()}" class="interactionET" style="width: 100%; height: 40px; resize: none; display: none; margin-top: 16px;">${interaction.notes}</textarea>
                   </div>
                 `
             : `
@@ -863,8 +887,14 @@
         const deleteBtn = li.querySelector(".delete-interaction");
         if (deleteBtn) {
           deleteBtn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            li.remove();
+            const idx = parseInt(deleteBtn.dataset.index);
+
+            interactionsList.splice(idx, 1);
+
+            renderInteractions(interactionsList, true);
+
+            //e.stopPropagation();
+            //li.remove();
           });
         }
 
@@ -883,6 +913,23 @@
 
         interactionListEl.appendChild(li);
 
+      });
+    }
+
+    function syncInteractionsFromUI() {
+      const textareas = document.querySelectorAll(".interactionET");
+
+      if(interactionsList == null || interactionsList.length < 1){return}
+      textareas.forEach(textarea => {
+        
+        const interactionId = Number(textarea.dataset.id);
+        const value = textarea.value;
+
+        for(var i=0; i<interactionsList.length; i++){
+          if(interactionsList[i].date.toMillis() == interactionId){
+            interactionsList[i].notes = value
+          }
+        }
       });
     }
 
@@ -917,7 +964,7 @@
       }
       else {
         getFriendInfo(user.uid)
-        await getInterations()
+        //await getInterations() getInteractions
         renderInteractions(interactionsList, false);
       }
     });
@@ -926,7 +973,9 @@
       interactionModal.style.display = 'flex'
     }
 
-    async function getInterations() {
+
+    //the scalable way to it 
+   /* async function getInterations() {
       try {
         const params = new URLSearchParams(window.location.search);
         const friendId = params.get("id");
@@ -954,6 +1003,37 @@
         alert(`error: ${err}`);
       }
     }
+
+
+     //the quick way to it 
+    async function getInterations() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const friendId = params.get("id");
+        let userId = auth.currentUser.uid;
+
+        const interactionDoccc = doc(db, `users/${userId}/friends/${friendId}`);
+
+        const interactionsSnapshot = await getDocs(interactionCol);
+
+        // FIXED: use the correct snapshot variable
+        interactionsList = interactionsSnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+
+        //renderInteractions(interactions, true);
+
+
+        return interactionsList
+
+        //console.log("interactions:", interactions);
+
+      } catch (err) {
+        alert(`error: ${err}`);
+      }
+    }*/
 
     async function deleteFriend() {
       try {
@@ -991,7 +1071,6 @@
         window.location.href = "mainView.html";
 
       } catch (err) {
-        console.error("Delete friend error:", err);
         alert("Error deleting friend: " + err);
       }
     }
@@ -1000,8 +1079,46 @@
       const encodedPath = downloadUrl.split("/o/")[1].split("?")[0];
       return decodeURIComponent(encodedPath);
     }
+  
 
     async function addInteraction(title, notes) {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const friendId = params.get("id");
+        const currentUserId = auth.currentUser.uid;
+
+        const friendRef = doc(
+          db,
+          `users/${currentUserId}/friends/${friendId}`
+        );
+
+        const newInteraction = {
+          // REQUIRED for deletes
+          title: title || "",
+          notes: notes || "",
+          date: Timestamp.now()
+        };
+
+        // 🔥 Firestore-safe append
+        await updateDoc(friendRef, {
+          interactions: arrayUnion(newInteraction)
+        });
+
+        // Update local cache
+
+        if(interactionsList === null){interactionsList = []}
+        interactionsList.push(newInteraction);
+        renderInteractions(interactionsList, false);
+
+        interactionModal.style.display = "none";
+
+      } catch (error) {
+        alert(`NP-733 ${error}`);
+      }
+    }
+     
+    //scalable AddInteraction
+    /*async function addInteraction(title, notes) {
       const params = new URLSearchParams(window.location.search);
       const friendId = params.get('id');
       let date = 'poop'
@@ -1014,14 +1131,16 @@
           notes: `${notes}`
 
         })
-        alert(`${{ date: serverTimestamp(), title: `${title}`, notes: `${notes}` }}`)
-        renderInteractions(interactionsList, false)
+
+        //renderInteractions(interactionsList, false)
+        let testValue = await getInterations()
+        renderInteractions(testValue, false)
         interactionModal.style.display = "none"
 
       } catch (error) {
         alert(`there was an error NP-733${error}`)
       }
-    }
+    }*/
   </script>
 </body>
 
