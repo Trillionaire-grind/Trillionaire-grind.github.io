@@ -347,7 +347,7 @@
             <label>Picture (optional)</label>
             <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
                   <div id="imagePreview"></div>-->
-            <input type="file" id="friendPic" accept="image/*">
+            <input type="file" id="friendPic" capture="environment" accept="image/*">
           </div>
 
           <div class="modal-buttons">
@@ -771,6 +771,14 @@
       }
     }
 
+    function normalizeImageFile(file) {
+      if (!file) return null;
+
+      // Android camera may return Blob instead of File
+      if (file instanceof File) return file;
+
+      return new File([file], "photo.jpg", { type: "image/jpeg" });
+    }
 
     async function resizeImage(file, maxSize = 1280) {
       return new Promise((resolve) => {
