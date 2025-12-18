@@ -348,7 +348,7 @@
           <label>Picture (optional)</label>
           <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
                 <div id="imagePreview"></div>-->
-          <input type="file" id="friendPic" accept="image/*" capture="environment">
+          <input type="file" id="friendPic" accept="image/*">
         </div>
 
         <div class="modal-buttons">
@@ -713,59 +713,144 @@
   async function addFriend(name, fact, email, phone, group, picture) {
     try {
       const location = await getCurrentLocation();
-      const currentUser = auth.currentUser
-      let groupArray = null
+      const currentUser = auth.currentUser;
 
-      if (group != null && group.length > 1) {
-        groupArray = group.split(",")
+      let groupArray = null;
+      if (group && group.length > 1) {
+        groupArray = group.split(",");
       }
 
-      const docRef = await addDoc(collection(db, `users/${currentUser.uid}/friends`), {
-        name: `${name}`,
-        funFact: `${fact}`,
-        email: `${email}`,
-        phone: `${phone}`,
-        group: groupArray,
-        searchIndex: generateSearchIndex(name, fact),
-        imageUrl: null,
-        location: location,
-        createdAt: new Date()
-      });
-
+      // 1️⃣ Create friend first
+      const docRef = await addDoc(
+        collection(db, `users/${currentUser.uid}/friends`),
+        {
+          name,
+          funFact: fact,
+          email,
+          phone,
+          group: groupArray,
+          searchIndex: generateSearchIndex(name, fact),
+          imageUrl: null,
+          location,
+          createdAt: new Date()
+        }
+      );
 
       const friendId = docRef.id;
 
-      // 2. If an image was provided → validate & upload
-      if (picture && picture.type.startsWith("image/")) {
+      // 2️⃣ Handle image safely
+      if (picture) {
+        let safeFile = normalizeImageFile(picture);
+
+        // Guard: Android sometimes gives empty type
+        if (!safeFile.type || !safeFile.type.startsWith("image/")) {
+          throw new Error("Selected file is not an image");
+        }
+
+        // Resize BEFORE upload (Android fix)
+        safeFile = await resizeImage(safeFile);
+
         const storageRef = ref(
           storage,
-          `users/${currentUser.uid}/friends/${friendId}/${picture.name}`
+          `users/${currentUser.uid}/friends/${friendId}/profile.jpg`
         );
 
-        // Upload the file
-        const snapshot = await uploadBytes(storageRef, picture);
-
-        // Get download URL
+        const snapshot = await uploadBytes(storageRef, safeFile);
         const downloadURL = await getDownloadURL(snapshot.ref);
 
-        // Save URL to Firestore
         await updateDoc(doc(db, `users/${currentUser.uid}/friends/${friendId}`), {
           imageUrl: downloadURL
         });
-
-        console.log("Image uploaded:", downloadURL);
       }
 
       alert("Friend added successfully!");
-      // Optional: refresh the friend list
-      const friends = await fetchFriends(currentUser.uid);
-      //renderFriends(friends);
       closeAddFriend();
+
     } catch (err) {
       console.error("Error adding friend:", err);
-      alert(`Could not add friend. ${err}`);
+      alert(`Could not add friend: ${err.message || err}`);
     }
   }
+
+
+  async function resizeImage(file, maxSize = 1280) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = e => img.src = e.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const scale = Math.min(
+          maxSize / img.width,
+          maxSize / img.height,
+          1
+        );
+
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(
+          blob => {
+            resolve(
+              new File([blob], file.name || "photo.jpg", {
+                type: "image/jpeg"
+              })
+            );
+          },
+          "image/jpeg",
+          0.85
+        );
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+
+  async function resizeImage(file, maxSize = 1280) {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const reader = new FileReader();
+
+      reader.onload = e => img.src = e.target.result;
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const scale = Math.min(
+          maxSize / img.width,
+          maxSize / img.height,
+          1
+        );
+
+        canvas.width = img.width * scale;
+        canvas.height = img.height * scale;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        canvas.toBlob(
+          blob => {
+            resolve(
+              new File([blob], file.name || "photo.jpg", {
+                type: "image/jpeg"
+              })
+            );
+          },
+          "image/jpeg",
+          0.85
+        );
+      };
+
+      reader.readAsDataURL(file);
+    });
+  }
+
+
 
   async function fetchFriends(userId) {
     const friendsRef = collection(db, `users/${userId}/friends`)
