@@ -5,6 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Friend Profile </title>
+  <link rel="shortcut icon" type="image/x-icon" href="logo.png" />
+
   <style>
     body {
       margin: 0;
@@ -1080,7 +1082,6 @@
       return decodeURIComponent(encodedPath);
     }
   
-
     async function addInteraction(title, notes) {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -1093,29 +1094,29 @@
         );
 
         const newInteraction = {
-          // REQUIRED for deletes
           title: title || "",
           notes: notes || "",
           date: Timestamp.now()
         };
 
-        // 🔥 Firestore-safe append
         await updateDoc(friendRef, {
           interactions: arrayUnion(newInteraction)
         });
 
-        // Update local cache
+        // ✅ SAFETY GUARANTEE
+        if (!Array.isArray(interactionsList)) {
+          interactionsList = [];
+        }
 
-        if(interactionsList === null){interactionsList = []}
         interactionsList.push(newInteraction);
         renderInteractions(interactionsList, false);
-
         interactionModal.style.display = "none";
 
       } catch (error) {
         alert(`NP-733 ${error}`);
       }
     }
+
      
     //scalable AddInteraction
     /*async function addInteraction(title, notes) {
