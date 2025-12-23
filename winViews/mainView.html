@@ -314,6 +314,8 @@
         document.getElementById('friendEmail').value = '';
         document.getElementById('friendPhone').value = '';
         document.getElementById('friendGroup').value = '';
+
+
       }
     </script>
 
@@ -763,6 +765,8 @@
         }
 
         alert("Friend added successfully!");
+        fetchFriends(auth.currentUser.uid)
+
         closeAddFriend();
 
       } catch (err) {
