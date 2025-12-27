@@ -89,14 +89,6 @@
 
       }
 
-      .nav-link {
-        display: flex;
-        flex-direction: column;
-        align-items: center;   /* centers icon + text */
-        text-align: center;
-        text-decoration: none;
-        }
-
       footer a {
         text-decoration: none;
         color: #000;
@@ -104,7 +96,7 @@
       }
 
       nav a.active-link {
-        color: #39B053;
+        color: #00ACEE;
       }
 
       @media (min-width: 768px) {
@@ -292,146 +284,6 @@
         background-color: #00ACEE;
         color: #fff;
       }
-
-    /* Ensure the scheduleViewer container has a height and correct styling */
-       /* Ensure scheduleViewer has height and is flexible */
-/* Ensure scheduleViewer has height and is flexible */
-.scheduleViewer {
-    background-color: #39B053;
-    height: 60vh; /* Occupy 80% of viewport height */
-    padding: 16px;
-    border-radius: 8px;
-    box-sizing: border-box;
-    overflow-y: auto; /* Scroll if content exceeds the height */
-}
-
-/* Styling for each course cell */
-.courseCellDiv {
-    display: flex;            /* Use Flexbox to align items horizontally */
-    justify-content: space-between; /* Distribute space between <p> and <button> */
-    align-items: center;      /* Vertically center the content */
-    background-color: white;  /* Set background color for the course cell */
-    padding: 8px;            /* Padding inside the course cell */
-    border-radius: 8px;       /* Rounded corners for a modern look */
-    margin-bottom: 16px;      /* Space between course cells */
-    width: 100%;              /* Make the cell take full width */
-    box-sizing: border-box;   /* Ensure padding is included in the width calculation */
-}
-
-/* Paragraph (course name) styling */
-.courseCellDiv p {
-    background-color: white; /* Background color for the course name */
-    color: #328f43;          /* Text color for the course name */
-    font-size: 24px;         /* Font size for course name */
-    margin: 0;               /* Remove default margin */
-                /* Make the <p> take up 70% of the width */
-    box-sizing: border-box;  /* Include padding in width calculation */
-}
-
-/* Button styling inside course cell */
-.courseCellDiv button {
-    background-color: black; /* Button background color */
-    color: white;            /* Button text color */
-    padding: 8px 4px;       /* Button padding */
-    border: none;
-    height: 40px;
-    width: 120px;
-    /* No border for the button */
-    border-radius: 4px;      /* Rounded button corners */
-    cursor: pointer;        /* Pointer cursor on hover */
-}
-        /* Add hover effect for the button */
-        .courseCellDiv button:hover {
-        background-color: #555;
-        }
-
-
-
-
-      .material-symbols-outlined {
-        font-variation-settings:
-            'FILL' 1,   /* ← THIS makes it filled */
-            'wght' 400,
-            'GRAD' 0,
-            'opsz' 24;
-      }
-      .fab {
-        position: fixed;
-        bottom: 80px;        /* above your footer nav */
-        right: 20px;
-
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-
-        background-color: #39B053;
-        border: none;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-        cursor: pointer;
-        }
-
-        /* Dollar icon */
-        .fab .material-symbols-outlined {
-        color: white;
-        font-size: 28px;
-
-        font-variation-settings:
-            'FILL' 1,
-            'wght' 600,
-            'GRAD' 0,
-            'opsz' 24;
-        }
-
-        /* Press effect */
-        .fab:active {
-        transform: scale(0.95);
-        }
-
-                
-
-        .button-container {
-            display: flex;
-            flex-direction: column; /* Stack the buttons vertically */
-            justify-content: center; /* Center buttons vertically */
-            align-items: center; /* Center buttons horizontally */
-            height: 100vh; /* Full viewport height */
-            margin-top: 48px; /* If you want a little top margin */
-        }
-
-            /* Style the buttons */
-        .accountButton {
-            margin: 10px 0; /* Space between buttons */
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #39B053; /* Green background */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-            /* Button hover effect */
-        .accountButton:hover {
-            background-color: #328f43;
-        }
-
-            /* Optional: Make the button active effect */
-        .accountButton:active {
-            transform: scale(0.98);
-        }
-
-        main section {
-            display: none;
-        }
-
-      
-    </style>
     </style>
     <script>
       function toggleOptionalFields() {
@@ -465,12 +317,11 @@
 
 
       }
-     
     </script>
 
   </head>
 
-  <body id="mainFrame">
+  <body>
 
     <main>
       <div class="modal-overlay" id="friendModal">
@@ -509,98 +360,30 @@
       </div>
 
 
-      <section id="transactions" >
-        <p>No transactions yet...</p>
+      <section id="friends" class="active">
+        <header>
+          <h1>Win Friends 👋</h1>
+        </header>
+        <main>
+        
+          <div id="friendList" style="padding-bottom: 24px;">
+
+          </div>
+         
+          </div>
+        </main>
       </section>
 
-      <section id="home">
-       <div class="scheduleViewer">
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-            <div class="courseCellDiv" style="width: 100%;">
-                <p style="background-color: white; color: #328f43; font-size: 24px;" >MATH2020</p>
-                <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
-            </div>  
-       </div>
-       <button class="fab">
-        <span class="material-symbols-outlined">attach_money</span>
-      </button>
-      </section>
+      <section id="crm">
+        <header>
+          <h1>Keep Friends</h1>
+        </header>
+       
 
-      <section id="account">
-        <p style="color: #39B053; font-size: 32px;">Hi, <span id="userNameTV"></span> welcome to <br>Green Books!</p>
-        <p style="color: #39B053; margin-top: 32px;">What would you like us to help you with?</p>
-        <div style="margin-top: 48px;">
-            <button class="accountButton">Schedule</button>
         </div>
-        <div>
-            <button class="accountButton">Subscription</button>
-        </div>
-        <div>
-            <button class="accountButton">Sign Out</button>
-        </div>
+       
       </section>
     </main>
 
-    <footer>
-      <nav>
-        <a href="#transactions" class="nav-link" style="font-size: 14px; margin-top: 8px;"><span class="material-symbols-outlined">
-            receipt</span>Transactions</a>
-        <a href="#home"  class="nav-link active-link"> <span class="material-symbols-outlined">
-            home</span> Home</a>
-        <a href="#account" class="nav-link"><span style="margin-left: auto; margin-right: auto;" class="material-symbols-outlined">person</span>Account</a>
-
-      </nav>
-    </footer>
-
-    <script>
-      const links = document.querySelectorAll('.nav-link');
-      const sections = document.querySelectorAll('main section');
-
-      const homeSection = document.getElementById('home');
-      homeSection.classList.add('active');
-
-      links.forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-
-          // Remove active styles
-          links.forEach(l => l.classList.remove('active-link'));
-          sections.forEach(s => s.classList.remove('active'));
-
-          // Add active to clicked link
-          link.classList.add('active-link');
-
-          // Show corresponding section
-          const targetId = link.getAttribute('href').substring(1); // removes the #
-          const targetSection = document.getElementById(targetId);
-
-          if(targetId == "transactions"){
-            document.getElementById("mainFrame").style.backgroundColor = "#39B053"
-          }else{
-            document.getElementById("mainFrame").style.backgroundColor = '#fff'
-          } 
-          if (targetSection) targetSection.classList.add('active');
-        });
-      });
-    </script>
   </body>
 </html>
