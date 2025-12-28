@@ -7,7 +7,7 @@
         <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
         <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
-        <title>Green Books App V 0.0.0.1</title>
+        <title>Green Books App V 0.0.0.2</title>
         <style>
             /* General reset and basic styles */
             body {
@@ -272,11 +272,13 @@
             ;
 
             logInBtn.onclick = () => {
-                myModal.style.display = 'inline'
+                //myModal.style.display = 'inline'
+                openMainView()
             }
 
             joinBtn.onclick = () => {
-                registerModal.style.display = 'inline'
+                //registerModal.style.display = 'inline'
+                openRegisterView()
             }
 
             cancelBtn.onclick = () => {
@@ -310,6 +312,7 @@
             }
 
             registerRegisterBtn.onclick = () => {
+                
                 let name = registerNameET.value 
                 let email = registerEmailET.value 
                 let password = registerPasswordET.value 
@@ -341,7 +344,18 @@
                 .catch((error) => {
                     console.error("Error creating user:", error);
                 });
+                
+
             }
+
+            function openMainView()
+            {
+                window.location.replace("greenViews/mainView.html");
+            }
+
+            function openRegisterView(){
+                window.location.replace("greenViews/registerView.html");
+            }   
 
             function logIn(email, password)
             {
@@ -379,11 +393,7 @@
                 })
             }
 
-            function openMainView()
-            {
-                window.location.replace("winViews/mainView.html");
-            }
-
+          
             async function addUserToDatabase(currentUser, name, email)
             {
                 try {

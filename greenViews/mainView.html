@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Green Books App - Home</title>
+  <link rel="shortcut icon" type="image/x-icon" href="logo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+
+    footer a .material-symbols-outlined {
+      vertical-align: middle;
+      /* or try -2px for pixel-perfect */
+      font-size: 20px;
+      margin-right: 4px;
+      display: inline-block;
+      line-height: 1;
+    }
+  </style>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      padding: 1rem;
+      background: #f9f9f9;
+    }
+
+    main section {
+      display: none;
+      padding: 1rem;
+    }
+
+    main section.active {
+      display: block;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    main {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      background: #CE191F;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    li {
+      background: white;
+      padding: 0.75rem;
+      margin: 0.25rem 0;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    footer nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-around;
+      padding: 0.75rem 0;
+      border-top: 1px solid #ccc;
+
+    }
+
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* centers icon + text */
+      text-align: center;
+      text-decoration: none;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: #000;
+      font-size: 1.2rem;
+    }
+
+    nav a.active-link {
+      color: #39B053;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        padding: 2rem;
+      }
+    }
+
+    .friend-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .friend-card {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 8px;
+      padding: 0.75rem;
+      margin-top: 16px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .friend-card:hover {
+      background: #00ACEE;
+      color: white;
+    }
+
+    .friend-card:hover p {
+      color: white;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1rem;
+    }
+
+    .friend-info h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .friend-info p {
+      margin: 0.25rem 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .search-bar {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      height: 36px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-bar input:focus {
+      border-color: #00ACEE;
+      box-shadow: 0 1px 3px #00ACEE;
+    }
+
+    /* Modal styles */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 10;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 480px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .modal input[type="text"],
+    .modal input[type="email"],
+    .modal input[type="tel"],
+    .modal input[type="file"] {
+      width: 100%;
+      padding: 0.65rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+      box-sizing: border-box;
+    }
+
+    .modal-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .modal-buttons button {
+      flex: 1;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .modal-buttons button:first-child {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .modal-buttons button:last-child {
+      background-color: #CE191F;
+      color: white;
+    }
+
+    #imagePreview img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      margin-top: 0.5rem;
+    }
+
+    /* Optional fields container */
+    #optionalFields {
+      display: none;
+      margin-top: 1rem;
+      border-top: 1px solid #ddd;
+      padding-top: 1rem;
+    }
+
+    #toggleOptionalBtn {
+      background: #00ACEE;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      color: white;
+      width: auto;
+      display: inline-block;
+    }
+
+    .nearUl:hover {
+      background-color: #00ACEE;
+      color: white;
+      cursor: pointer;
+    }
+
+    .nearLi {
+      cursor: pointer;
+    }
+
+    .nearLi:hover {
+      background-color: #00ACEE;
+      color: #fff;
+    }
+
+    /* Ensure the scheduleViewer container has a height and correct styling */
+    /* Ensure scheduleViewer has height and is flexible */
+    /* Ensure scheduleViewer has height and is flexible */
+    .scheduleViewer {
+      background-color: #39B053;
+      height: 60vh;
+      /* Occupy 80% of viewport height */
+      padding: 16px;
+      border-radius: 8px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      /* Scroll if content exceeds the height */
+    }
+
+    /* Styling for each course cell */
+    .courseCellDiv {
+      display: flex;
+      /* Use Flexbox to align items horizontally */
+      justify-content: space-between;
+      /* Distribute space between <p> and <button> */
+      align-items: center;
+      /* Vertically center the content */
+      background-color: white;
+      /* Set background color for the course cell */
+      padding: 8px;
+      /* Padding inside the course cell */
+      border-radius: 8px;
+      /* Rounded corners for a modern look */
+      margin-bottom: 16px;
+      /* Space between course cells */
+      width: 100%;
+      /* Make the cell take full width */
+      box-sizing: border-box;
+      /* Ensure padding is included in the width calculation */
+    }
+
+    /* Paragraph (course name) styling */
+    .courseCellDiv p {
+      background-color: white;
+      /* Background color for the course name */
+      color: #328f43;
+      /* Text color for the course name */
+      font-size: 24px;
+      /* Font size for course name */
+      margin: 0;
+      /* Remove default margin */
+      /* Make the <p> take up 70% of the width */
+      box-sizing: border-box;
+      /* Include padding in width calculation */
+    }
+
+    /* Button styling inside course cell */
+    .courseCellDiv button {
+      background-color: black;
+      /* Button background color */
+      color: white;
+      /* Button text color */
+      padding: 8px 4px;
+      /* Button padding */
+      border: none;
+      height: 40px;
+      width: 120px;
+      /* No border for the button */
+      border-radius: 4px;
+      /* Rounded button corners */
+      cursor: pointer;
+      /* Pointer cursor on hover */
+    }
+
+    /* Add hover effect for the button */
+    .courseCellDiv button:hover {
+      background-color: #555;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 1,
+        /* ← THIS makes it filled */
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+
+    .fab {
+      position: fixed;
+      bottom: 80px;
+      /* above your footer nav */
+      right: 20px;
+
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+
+      background-color: #39B053;
+      border: none;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+      cursor: pointer;
+    }
+
+    /* Dollar icon */
+    .fab .material-symbols-outlined {
+      color: white;
+      font-size: 28px;
+
+      font-variation-settings:
+        'FILL' 1,
+        'wght' 600,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+
+    /* Press effect */
+    .fab:active {
+      transform: scale(0.95);
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      /* Stack the buttons vertically */
+      justify-content: center;
+      /* Center buttons vertically */
+      align-items: center;
+      /* Center buttons horizontally */
+      height: 100vh;
+      /* Full viewport height */
+      margin-top: 48px;
+      /* If you want a little top margin */
+    }
+
+    /* Style the buttons */
+    .accountButton {
+      margin: 10px 0;
+      /* Space between buttons */
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #39B053;
+      /* Green background */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    /* Button hover effect */
+    .accountButton:hover {
+      background-color: #328f43;
+    }
+
+    /* Optional: Make the button active effect */
+    .accountButton:active {
+      transform: scale(0.98);
+    }
+
+    main section {
+      display: none;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .tag {
+      background: #e3e3e3;
+      color: #000;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-left: 8px;
+
+    }
+  </style>
+  </style>
+  <script>
+    function toggleOptionalFields() {
+      const optional = document.getElementById('optionalFields');
+      const btn = document.getElementById('toggleOptionalBtn');
+      if (optional.style.display === 'none' || optional.style.display === '') {
+        optional.style.display = 'block';
+        btn.textContent = 'Hide Optional Fields ▲';
+      } else {
+        optional.style.display = 'none';
+        btn.textContent = 'Show Optional Fields ▼';
+      }
+    }
+
+    function closeAddFriend() {
+      document.getElementById('friendModal').style.display = 'none';
+      //document.getElementById('imagePreview').innerHTML = '';
+      document.getElementById('friendPic').value = ''; // reset file input
+
+      // Reset optional fields hidden & toggle button text
+      const optional = document.getElementById('optionalFields');
+      optional.style.display = 'none';
+      document.getElementById('toggleOptionalBtn').textContent = 'Show Optional Fields ▼';
+
+      // Clear all fields
+      document.getElementById('friendName').value = '';
+      document.getElementById('friendFact').value = '';
+      document.getElementById('friendEmail').value = '';
+      document.getElementById('friendPhone').value = '';
+      document.getElementById('friendGroup').value = '';
+
+
+    }
+
+  </script>
+
+</head>
+
+<body id="mainFrame">
+
+  <main>
+    <div class="modal-overlay" id="listBookModal">
+      <div class="modal">
+        <h2>List Your Book</h2>
+
+        <label>Course</label><br>
+        <input style="width: 50%;" type="text" id="friendName" required placeholder="e.g., MATH2020"><br>
+
+        <label>Title</label>
+        <input type="text" id="friendFact" required placeholder="e.g., Intro To Collge Algebra">
+        <label>Author</label>
+        <input type="text" id="friendFact" required placeholder="e.g., Matthew Milt">
+
+        <div style="display: flex; margin-bottom: 0px;">
+          <div style="width: 50%;">
+            <label>Quality</label><br>
+            <input type="text" id="friendName" required placeholder="e.g., MATH2020">
+          </div>
+          <div style="width: 40%; margin-left: auto;">
+            <label>Price</label><br>
+            <input type="text" id="friendName" required placeholder="e.g., MATH2020">
+          </div>
+        </div>
+        <p style="width: 100%; text-align: center; color: #39B053; margin-top: 0px; font-size: 10px;">Your
+          Availability<br>(max 4)</p>
+        <div>
+          <div style="display: flex; align-items: center;">
+            <p style="background-color: #39B053; color: white; padding: 8px;">M</p>
+            <div class="tags">
+              <span class="tag">10 AM</span>
+              <span class="tag">1 PM</span>
+              <span class="tag">4 PM</span>
+              <span class="tag">6 AM</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <p style="background-color: #39B053; color: white; padding: 8px;">T</p>
+            <div class="tags">
+              <span class="tag">10 AM</span>
+              <span class="tag">1 PM</span>
+              <span class="tag">4 PM</span>
+              <span class="tag">6 AM</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <p style="background-color: #39B053; color: white; padding: 8px;">W</p>
+            <div class="tags">
+              <span class="tag">10 AM</span>
+              <span class="tag">1 PM</span>
+              <span class="tag">4 PM</span>
+              <span class="tag">6 AM</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <p style="background-color: #39B053; color: white; padding: 8px;">Th</p>
+            <div class="tags">
+              <span class="tag">10 AM</span>
+              <span class="tag">1 PM</span>
+              <span class="tag">4 PM</span>
+              <span class="tag">6 AM</span>
+            </div>
+          </div>
+          <div style="display: flex; align-items: center;">
+            <p style="background-color: #39B053; color: white; padding: 8px;">F</p>
+            <div class="tags">
+              <span class="tag">10 AM</span>
+              <span class="tag">1 PM</span>
+              <span class="tag">4 PM</span>
+              <span class="tag">6 AM</span>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-buttons">
+          <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
+          <button id="saveFriendBtn" style="background-color: #39B053; color: white;" type="button"
+            onclick="saveFriend()">Sell</button>
+        </div>
+      </div>
+    </div>
+
+
+    <section id="transactions">
+      <p style="color: white; font-size: 48px; text-align: center;">No transactions yet...</p>
+    </section>
+
+    <section id="home">
+      <div class="scheduleViewer">
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;" id="findBookBtn">Find Book</button>
+        </div>
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
+        </div>
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
+        </div>
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
+        </div>
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
+        </div>
+        <div class="courseCellDiv" style="width: 100%;">
+          <p style="background-color: white; color: #328f43; font-size: 24px;">MATH2020</p>
+          <button style="background-color: black; color: white; margin-left: auto;">Find Book</button>
+        </div>
+      </div>
+      <button class="fab" id="fab">
+        <span class="material-symbols-outlined">attach_money</span>
+      </button>
+    </section>
+
+    <section id="account">
+      <p style="color: #39B053; font-size: 32px;">Hi, <span id="userNameTV"></span> welcome to <br>Green Books!</p>
+      <p style="color: #39B053; margin-top: 32px;">What would you like us to help you with?</p>
+      <div style="margin-top: 48px;">
+        <button class="accountButton">Schedule</button>
+      </div>
+      <div>
+        <button class="accountButton">Subscription</button>
+      </div>
+      <div>
+        <button class="accountButton">Sign Out</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <nav>
+      <a href="#transactions" class="nav-link" style="font-size: 14px; margin-top: 8px;"><span
+          class="material-symbols-outlined">
+          receipt</span>Transactions</a>
+      <a href="#home" class="nav-link active-link"> <span class="material-symbols-outlined">
+          home</span> Home</a>
+      <a href="#account" class="nav-link"><span style="margin-left: auto; margin-right: auto;"
+          class="material-symbols-outlined">person</span>Account</a>
+
+    </nav>
+  </footer>
+
+  <script>
+    const links = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('main section');
+
+    const listBookModal = document.getElementById("listBookModal")
+
+    const findBookBtn = document.getElementById("findBookBtn")
+    const fab = document.getElementById("fab")
+
+
+    const homeSection = document.getElementById('home');
+    homeSection.classList.add('active');
+
+    links.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        // Remove active styles
+        links.forEach(l => l.classList.remove('active-link'));
+        sections.forEach(s => s.classList.remove('active'));
+
+        // Add active to clicked link
+        link.classList.add('active-link');
+
+        // Show corresponding section
+        const targetId = link.getAttribute('href').substring(1); // removes the #
+        const targetSection = document.getElementById(targetId);
+
+        if (targetId == "transactions") {
+          document.getElementById("mainFrame").style.backgroundColor = "#39B053"
+        } else {
+          document.getElementById("mainFrame").style.backgroundColor = '#fff'
+        }
+        if (targetSection) targetSection.classList.add('active');
+      });
+    });
+
+    fab.onclick = () => {
+      showListBookModal()
+    }
+
+    findBookBtn.onclick = () => {
+      openListedBooks()
+    }
+
+    function openRegisterView() {
+      window.location.replace("registerView.html");
+    }
+
+    function openListedBooks() {
+      window.open("listedBooks.html", '_blank').focus();
+    }
+
+    function showListBookModal() {
+      listBookModal.style.display = 'flex'
+    }
+
+  </script>
+</body>
+
+</html>
