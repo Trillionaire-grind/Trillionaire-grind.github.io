@@ -545,7 +545,7 @@
           Availability<br>(max 4)</p>
         <div>
           <div style="display: flex; align-items: center;">
-            <p style="background-color: #39B053; color: white; padding: 8px;">M</p>
+            <p style="background-color: #39B053; width: 20px; color: white; padding: 8px;margin-top: 2px; margin-bottom: 2px; text-align: center;">M</p>
             <div class="tags">
               <span class="tag">10 AM</span>
               <span class="tag">1 PM</span>
@@ -554,7 +554,7 @@
             </div>
           </div>
           <div style="display: flex; align-items: center;">
-            <p style="background-color: #39B053; color: white; padding: 8px;">T</p>
+            <p style="background-color: #39B053; width: 20px; color: white; padding: 8px;margin-top: 2px; margin-bottom: 2px; text-align: center;">T</p>
             <div class="tags">
               <span class="tag">10 AM</span>
               <span class="tag">1 PM</span>
@@ -563,7 +563,7 @@
             </div>
           </div>
           <div style="display: flex; align-items: center;">
-            <p style="background-color: #39B053; color: white; padding: 8px;">W</p>
+            <p style="background-color: #39B053; width: 20px; color: white; padding: 8px;margin-top: 2px; margin-bottom: 2px; text-align: center;">W</p>
             <div class="tags">
               <span class="tag">10 AM</span>
               <span class="tag">1 PM</span>
@@ -571,8 +571,8 @@
               <span class="tag">6 AM</span>
             </div>
           </div>
-          <div style="display: flex; align-items: center;">
-            <p style="background-color: #39B053; color: white; padding: 8px;">Th</p>
+          <div style="display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
+            <p style="background-color: #39B053; width: 20px; color: white; padding: 8px;margin-top: 2px; margin-bottom: 2px; text-align: center;">Th</p>
             <div class="tags">
               <span class="tag">10 AM</span>
               <span class="tag">1 PM</span>
@@ -580,8 +580,8 @@
               <span class="tag">6 AM</span>
             </div>
           </div>
-          <div style="display: flex; align-items: center;">
-            <p style="background-color: #39B053; color: white; padding: 8px;">F</p>
+          <div style="display: flex; align-items: center; margin-top: 0px; margin-bottom: 0px;">
+            <p style="background-color: #39B053; width: 20px; color: white; padding: 8px;margin-top: 2px; margin-bottom: 2px; text-align: center;">F</p>
             <div class="tags">
               <span class="tag">10 AM</span>
               <span class="tag">1 PM</span>
@@ -593,9 +593,8 @@
         </div>
 
         <div class="modal-buttons">
-          <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
-          <button id="saveFriendBtn" style="background-color: #39B053; color: white;" type="button"
-            onclick="saveFriend()">Sell</button>
+          <button id="cancelListBtn" type="button">Cancel</button>
+          <button id="sellListBtn" style="background-color: #39B053; color: white;" type="button">Sell</button>
         </div>
       </div>
     </div>
@@ -674,6 +673,8 @@
     const findBookBtn = document.getElementById("findBookBtn")
     const fab = document.getElementById("fab")
 
+    const cancelListBtn = document.getElementById("cancelListBtn")
+    const sellListBtn = document.getElementById("sellListBtn")
 
     const homeSection = document.getElementById('home');
     homeSection.classList.add('active');
@@ -704,6 +705,14 @@
 
     fab.onclick = () => {
       showListBookModal()
+    }
+
+    sellListBtn.onclick = () => {
+      listBookModal.style.display = 'none'
+    }
+
+    cancelListBtn.onclick = () => {
+      listBookModal.style.display = 'none'
     }
 
     findBookBtn.onclick = () => {

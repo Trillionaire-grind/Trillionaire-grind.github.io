@@ -285,99 +285,12 @@
         color: #fff;
       }
     </style>
-    <script>
-      function toggleOptionalFields() {
-        const optional = document.getElementById('optionalFields');
-        const btn = document.getElementById('toggleOptionalBtn');
-        if (optional.style.display === 'none' || optional.style.display === '') {
-          optional.style.display = 'block';
-          btn.textContent = 'Hide Optional Fields ▲';
-        } else {
-          optional.style.display = 'none';
-          btn.textContent = 'Show Optional Fields ▼';
-        }
-      }
-
-      function closeAddFriend() {
-        document.getElementById('friendModal').style.display = 'none';
-        //document.getElementById('imagePreview').innerHTML = '';
-        document.getElementById('friendPic').value = ''; // reset file input
-
-        // Reset optional fields hidden & toggle button text
-        const optional = document.getElementById('optionalFields');
-        optional.style.display = 'none';
-        document.getElementById('toggleOptionalBtn').textContent = 'Show Optional Fields ▼';
-
-        // Clear all fields
-        document.getElementById('friendName').value = '';
-        document.getElementById('friendFact').value = '';
-        document.getElementById('friendEmail').value = '';
-        document.getElementById('friendPhone').value = '';
-        document.getElementById('friendGroup').value = '';
-
-
-      }
-    </script>
-
   </head>
 
   <body>
-
     <main>
-      <div class="modal-overlay" id="friendModal">
-        <div class="modal">
-          <h2>Add New Friend</h2>
-
-          <label>Name *</label>
-          <input type="text" id="friendName" required placeholder="e.g., Sarah">
-
-          <label>Fun Fact *</label>
-          <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
-
-          <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields ▼</button>
-
-          <div id="optionalFields">
-            <label>Email (optional)</label>
-            <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
-
-            <label>Phone (optional)</label>
-            <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
-
-            <label>Group (optional)</label>
-            <input type="text" id="friendGroup" placeholder="e.g., Book Club">
-
-            <label>Picture (optional)</label>
-            <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
-                  <div id="imagePreview"></div>-->
-            <input type="file" id="friendPic" capture="environment" accept="image/*">
-          </div>
-
-          <div class="modal-buttons">
-            <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
-            <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
-          </div>
-        </div>
-      </div>
-
-
       <section id="friends" class="active">
-        <header>
-          <h1>Win Friends 👋</h1>
-        </header>
-        <main>
-        
-          <div id="friendList" style="padding-bottom: 24px;">
-
-          </div>
-         
-          </div>
-        </main>
-      </section>
-
-      <section id="crm">
-        <header>
-          <h1>Keep Friends</h1>
-        </header>
+       
       </section>
     </main>
   </body>
