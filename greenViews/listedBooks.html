@@ -369,32 +369,13 @@
     <main>
         <div class="modal-overlay" id="friendModal">
             <div class="modal">
-                <h2>Add New Friend</h2>
+                <h2>Confirm Meeting</h2>
 
                 <label>Name *</label>
                 <input type="text" id="friendName" required placeholder="e.g., Sarah">
 
                 <label>Fun Fact *</label>
                 <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
-
-                <button id="toggleOptionalBtn" type="button" onclick="toggleOptionalFields()">Show Optional Fields
-                    ▼</button>
-
-                <div id="optionalFields">
-                    <label>Email (optional)</label>
-                    <input type="email" id="friendEmail" placeholder="e.g., sarah@example.com">
-
-                    <label>Phone (optional)</label>
-                    <input type="tel" id="friendPhone" placeholder="e.g., 123-456-7890">
-
-                    <label>Group (optional)</label>
-                    <input type="text" id="friendGroup" placeholder="e.g., Book Club">
-
-                    <label>Picture (optional)</label>
-                    <!--<input type="file" id="friendPic" accept="image/*" capture="environment" onchange="previewImage(event)">
-                  <div id="imagePreview"></div>-->
-                    <input type="file" id="friendPic" capture="environment" accept="image/*">
-                </div>
 
                 <div class="modal-buttons">
                     <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
@@ -404,9 +385,9 @@
         </div>
 
 
-        <section id="friends" class="active">
-            <p id="titleTV"> Books For MATH2020 </p>
-            <div id="bookCard">
+        <section id="booksDiv" class="active">
+            <p id="titleTV"> Books For </p>
+            <!--<div id="bookCard">
                 <p
                     style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto;">
                     The Title</p>
@@ -424,10 +405,111 @@
                 <p style="width: 100%; text-align: center; color: white; margin-top: 0px;">Availability</p>
                 <div class="tags">
                     <span class="tag"> M 1 PM</span>
+                    <span class="tag"> M 1 PM</span>
+                    <span class="tag"> T 10 AM</span>
+                    <span class="tag"> M 1 PM</span>
+                    <span class="tag"> T 10 AM</span>
+                    <span class="tag"> M 1 PM</span>
                     <span class="tag"> T 10 AM</span>
                 </div>
-            </div>
+            </div>-->
 
+            
+        </section>
+    </main>
+    <script type="module">
+        // Firebase SDK and login code
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+        import { getAuth,onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyBtOJ476HXPPTqhs7GFhCrRBbBlHO3n5Pk",
+            authDomain: "mvp-greenbooks.firebaseapp.com",
+            projectId: "mvp-greenbooks",
+            storageBucket: "mvp-greenbooks.firebasestorage.app",
+            messagingSenderId: "855438667917",
+            appId: "1:855438667917:web:63646f84aa4fd5c82a72c4",
+            measurementId: "G-WH3NHEGR92"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth(app)
+        const db = getFirestore(app)
+
+        const titleTV = document.getElementById("titleTV")
+        const booksDiv = document.getElementById("booksDiv")
+    
+        async function getBooks() {
+            const params = new URLSearchParams(window.location.search);
+            const schoolId = params.get("id");
+            const courseId = params.get("course")
+            titleTV.innerText = `Books For ${courseId}`
+            try {
+                // 1) Check if the course exists first
+                const courseRef = doc(db, `Schools/${schoolId}/Courses/${courseId}`);
+                const courseSnap = await getDoc(courseRef);
+
+                if (!courseSnap.exists()) {
+                    booksDiv.innerHTML += `
+                    <p style="width: 100%; text-align:center">
+                        Course not added yet...
+                    </p>
+                    `
+                    return [];
+                }
+
+                // 2) Read the books collection
+                const booksCol = collection(courseRef, "books");
+                const booksSnap = await getDocs(booksCol);
+
+                if (booksSnap.empty) {
+                    booksDiv.innerHTML += `
+                    <p style="width: 100%; text-align:center">
+                        No books available yet...
+                    </p>
+                    `
+                    return [];
+                }
+
+                // 3) Convert docs → array of objects
+                const books = booksSnap.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                alert(`books ${books}`)
+                for(var i=0; i< books.length; i++){
+                    addBookDiv(books[i])
+                }
+                return books;
+
+            } catch (err) {
+                console.error("Error fetching books:", err);
+                alert(`Something went wrong while loading books. ${err}`);
+                return [];
+            }
+        }
+        function addTimeTags(){
+
+        }
+
+        function showNoBooks(){
+
+        }
+
+        function addBookDiv(book)
+        {   
+            alert(`book ${book}`)
+            let div  = `
             <div id="bookCard">
                 <p
                     style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto;">
@@ -448,10 +530,25 @@
                     <span class="tag"> M 1 PM</span>
                     <span class="tag"> T 10 AM</span>
                 </div>
-            </div>
-        </section>
-    </main>
+            </div>` 
 
+            
+        }
+
+        onAuthStateChanged(auth, user => {
+        if (user) {
+            getBooks()
+        } else {
+            console.log("No user logged in");
+            // maybe redirect to login
+            openRegisterView()
+        }
+        });
+
+        function openRegisterView() {
+            window.location.replace("registerView.html");
+        }
+    </script>
 </body>
 
 </html>
