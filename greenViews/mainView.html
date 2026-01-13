@@ -1130,7 +1130,8 @@
     onAuthStateChanged(auth, user => {
       if (user) {
         getStudentInfo()
-        getTransactions()
+        //getTransactions()
+        listenToTransactions()
       } else {
         console.log("No user logged in");
         // maybe redirect to login
@@ -1366,7 +1367,7 @@
           snapshot.docChanges().forEach(change => {
             const txId = change.doc.id;
             const data = change.doc.data();
-
+            alert(`the data ${data}`)
             if (change.type === "added") {
               addTransactionDiv({ id: txId, ...data });
             }
