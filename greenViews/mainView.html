@@ -481,6 +481,72 @@
       background-color: #39B053; /* green */
       color: white;
     }
+    .transaction-card {
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .tx-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .book-title {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .tx-id {
+      font-size: 0.75rem;
+      color: #777;
+      margin: 4px 0 8px;
+    }
+
+    .tx-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin: 3px 0;
+    }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      color: white;
+    }
+
+    /* Status colors */
+    .status-listed { background:#39B053; }
+    .status-pending { background:#f0ad4e; }
+    .status-meeting-set { background:#4287f5; }
+    .status-completed { color:#2ecc71; background-color: #eee; }
+    .status-cancelled { color:#c0392b; background-color: #eee; }
+    .status-removed {color: #000; background-color: #eee;}
+
+    .tx-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn.primary { background:black; color:white; }
+    .btn.warning { background:#f0ad4e; color:black; }
+    .btn.danger { background:#c0392b; color:white; }
+    .btn.ghost { background:#eee; }
+
   </style>
   </style>
   <script>
@@ -629,8 +695,11 @@
     </div>
 
 
-    <section id="transactions">
-      <p style="color: white; font-size: 48px; text-align: center;">No transactions yet...</p>
+    <section id="transactions"  style="margin-bottom: 64px;">
+      <div id="transactionsDiv">
+        
+      </div>
+    
     </section>
 
     <section id="home">
@@ -676,7 +745,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-    import { doc, setDoc, collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+    import { doc, setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
@@ -728,10 +797,12 @@
     const addAddBtn = document.getElementById("addAddBtn")
 
     const homeSection = document.getElementById('home');
+    const transactionsDiv = document.getElementById("transactionsDiv")
     homeSection.classList.add('active');
 
     let studentSchool = ""
     let studentSchedule = []
+    let studentTransactions = []
 
 
     links.forEach(link => {
@@ -796,8 +867,6 @@
       getSchedule()
     }
 
-
-
     signOutBtn.onclick = () => {
       signOut(auth).then(() => {
         // Sign-out successful.
@@ -840,7 +909,6 @@
 
       let  studentRef = doc(db, `Students/${studentId}`)
 
-
       const studentSnap = await getDoc(studentRef);
 
       if (!studentSnap.exists()) {
@@ -852,6 +920,32 @@
         studentSchool = data.school
         studentSchedule = data.schedule
         populateData(name, courses)
+      }
+    }
+
+    async function getTransactions()
+    {
+      const studentId = auth.currentUser.uid 
+
+      try{
+        let transactionsRef = collection(db, `Students/${studentId}/transactions`)
+        const transactionsSnap = await getDocs(transactionsRef)
+
+        if(transactionsSnap.empty){
+          noTransactions()
+          return 
+        }
+        const transactions = transactionsSnap.docs.map(doc => ({
+          id: doc.id, 
+          ...doc.data()
+        }))
+        
+        studentTransactions = transactions
+        for(var i=0; i<transactions.length; i++){
+          addTransactionDiv(transactions[i], transactions[i].id)
+        }
+      }catch (err){
+        alert(`error MV-865 ${err}`)
       }
     }
 
@@ -872,7 +966,6 @@
 
     function resetSchedule()
     {
-      alert(`student schedule ${studentSchedule}`)
       if(studentSchedule != null && studentSchedule.length > 0)
       {
         scheduleDiv.innerHTML = ""
@@ -883,25 +976,71 @@
       }
     }
 
+    function addTransactionDiv(transaction){
+      var status = ""
+      if(transaction.status == "listed"){ status = "status-listed"}
+      if(transaction.status == "listing_removed"){status = "status-removed"}
+      if(transaction.status == "pending"){status = "status-pending"}
+      if(transaction.status == "transaction_completed"){status = "status-completed"}
+      if(transaction.status == "transaction_cancelled"){status = "status-cancelled"}
+      let div = `
+        <div class="transaction-card" data-course-id="${transaction.book.course}"  data-seller-id="${transaction.book.sellerId}" data-buyer-id="${transaction.buyerId}"  data-tx-id="${transaction.id}">
+          <div class="tx-header">
+            <h3 class="book-title">${transaction.book.title}</h3>
+            <span class="status-badge ${status}">${transaction.status}</span>
+          </div>
+          <p class="tx-id">ID: a8F9dk22L</p>
+          <div class="tx-row">
+            <span><strong>Seller:</strong>${transaction.book.author}</span>
+            <span><strong>Buyer:</strong> You</span>
+          </div>
+          <div class="tx-row">
+            <span><strong>Meeting:</strong${transaction.meetingTime ?? "-"}</span>
+          </div>
+          <div class="tx-row">
+            ${renderButtons(transaction.status)}
+          </div>
+        </div>
+      `
+      transactionsDiv.innerHTML += div
+    }
+
+    function renderButtons(status) {
+      if (status === "pending") {
+        return `
+          <button class="btn-cancel" style="margin-right:8px;" data-action="cancel">Cancel Transaction</button>
+          <button class="btn-primary" style="background-color: #000; margin-left: 8px" data-action="complete">Complete Transaction</button>
+        `;
+      }
+
+      if (status === "listed") {
+        return `
+          <button class="btn-primary" data-action="remove">
+            Remove Listing
+          </button>
+        `;
+      }
+      return "";
+    }
+
     async function updateSchedule(courses){
       let userId = auth.currentUser.uid 
 
       try {
-          await updateDoc(doc(db, `Students/${userId}`),
-            {
-                courses : courses
-            }
-          );
-            
-          scheduleModal.style.display = 'none'
-          //openMainView()
-          } 
-          catch (error) {
-              console.error("Error adding friend:", error);
-              alert(`error:WF-395 ${error}`)
+        await updateDoc(doc(db, `Students/${userId}`),
+          {
+              courses : courses
           }
+        );
+          
+        scheduleModal.style.display = 'none'
+        //openMainView()
+        } 
+        catch (error) {
+            console.error("Error adding friend:", error);
+            alert(`error:WF-395 ${error}`)
+        }
     }
-
 
     function addCourseDiv(course)
     {
@@ -949,38 +1088,47 @@
     async function uploadBook(){
       //this will add it to the school's market place
       let book = getBookInfo()
+      let transactionId = uuidv4()
+      book.transactionId = transactionId
       try{
         const docRef = await addDoc(collection(db, `Schools/${studentSchool}/Courses/${book.course}/books`), book);
         listBookModal.style.display = 'none'
-        createReceipt()
+        
+        createReceipt(book, docRef.id)
       }
       catch(err){
         alert(`there was an error ${err}`)
       }
     }
 
-    async function createReceipt(book){
+    async function createReceipt(book, bookId){
       //this will add the uploaded book as a transaction to the seller's account
       //gotta remove the book from the list of books for sale too
       let transaction = {
         book : book, 
         buyerId : null, 
         meetingTime : null, 
-        status : "Book Listed"
+        status : "listed",
+        bookId : bookId
       }
 
       try{
-        let recRef = await addDoc(collection(db, `Students/${auth.currentUser.uid}/transactions`), transaction)
+        let recRef = await setDoc(doc(db, `Students/${auth.currentUser.uid}/transactions/${book.transactionId}`), transaction)
       } catch (error){
         alert(`error MV-844 ${error}`)
       }
-
     }
-
+    
+    function uuidv4() {
+      return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+        (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+      );
+    }
 
     onAuthStateChanged(auth, user => {
       if (user) {
         getStudentInfo()
+        getTransactions()
       } else {
         console.log("No user logged in");
         // maybe redirect to login
@@ -996,6 +1144,128 @@
       openListedBooks( studentSchool, courseName)
       }
     });
+
+    document.addEventListener("click", async (e) => {
+      const button = e.target.closest("button[data-action]");
+      if (!button) return;
+
+      const card = button.closest(".transaction-card");
+      if (!card) return;
+
+      const txId = card.dataset.txId;
+      const buyerId = card.dataset.buyerId
+      const sellerId = card.dataset.sellerId
+      const action = button.dataset.action;
+      const courseId = card.dataset.courseId
+
+      switch (action) {
+        case "remove":
+          await updateTransaction(sellerId,txId, "listing_removed");
+
+          //card.remove(); // optimistic UI
+          alert('remove listing')
+          deleteBookByTransactionId(studentSchool, courseId, txId)
+          break;
+
+        case "cancel":
+          await updateTransaction(buyerId, txId, "transaction_cancelled");
+          await updateTransaction(sellerId, txId, "transaction_cancelled");
+          //await updateTransaction(auth.currentUser.uid,txId, "transaction_cancelled");
+          //need to find the sellerId to finish this 
+          //updateStatus(card, "transaction_cancelled");
+          alert('cancel transaction')
+
+          break;
+
+        case "complete":
+          await updateTransaction(buyerId,txId, "transaction_completed");
+          await updateTransaction(sellerId,txId, "transaction_completed");
+
+         // updateStatus(card, "transaction_completed");
+          alert('complete transaction')
+          break;
+      }
+    });
+
+    async function deleteBookByTransactionId(schoolId, courseId, transactionId) {
+      try {
+        const booksRef = collection(
+          db,
+          `Schools/${schoolId}/Courses/${courseId}/books`
+        );
+        const q = query(
+          booksRef,
+          where("transactionId", "==", transactionId)
+        );
+
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          alert("No book found for this transaction.");
+          return;
+        }
+
+        // In case there is more than one (usually should be one)
+        const deletePromises = snap.docs.map(bookDoc =>
+          deleteDoc(bookDoc.ref)
+        );
+
+        await Promise.all(deletePromises);
+
+        alert("Book removed successfully");
+
+      } catch (error) {
+        console.error("Error deleting book:", error);
+        alert("error MV-1220");
+      }
+    }
+
+    async function removeFromListing(schoolId,courseId ,id){
+        try{            
+            await deleteDoc(doc(db, `Schools/${schoolId}/Courses/${courseId}/books`, id));
+            alert(`deleted successfully`)
+        }catch(error){
+            alert(`error LB-639: ${error}`)
+        }
+    }   
+
+
+    async function removeListing(txId) {
+      await updateDoc(
+        doc(db, `Students/${auth.currentUser.uid}/transactions/${txId}`),
+        { status: "listing_removed" }
+      );
+    }
+    async function updateTransaction(userId, transactionId, status) {
+      await updateDoc(
+        doc(db, `Students/${userId}/transactions/${transactionId}`),
+        { status: `${status}` }
+      );
+    }
+    
+
+    async function cancelTransaction(txId) {
+      await updateDoc(
+        doc(db, `Students/${auth.currentUser.uid}/transactions/${txId}`),
+        { status: "transaction_cancelled" }
+      );
+    }
+
+    async function completeTransaction(txId) {
+      await updateDoc(
+        doc(db, `Students/${auth.currentUser.uid}/transactions/${txId}`),
+        {
+          status: "transaction_completed",
+          completedAt: serverTimestamp()
+        }
+      );
+    }
+
+    function updateStatus(card, newStatus) {
+      const badge = card.querySelector(".status-badge");
+      badge.textContent = newStatus;
+      badge.className = `status-badge status-${newStatus}`;
+    }
 
     function openListedBooks(school, course){
       /*const params = new URLSearchParams(window.location.search);
@@ -1028,6 +1298,43 @@
       return results;
     }
 
+    function renderActions(status) {
+      const actions = [];
+
+      if (status === "book_listed") {
+        actions.push(`<button class="btn danger">Remove Listing</button>`);
+      }
+
+      if(status == "meeting_pending"){
+
+      }
+
+      /*if (status === "Pending Meeting" || status === "Meeting Set") {
+        actions.push(`<button class="btn primary">Complete Transaction</button>`);
+        actions.push(`<button class="btn danger">Cancel Transaction</button>`);
+      }
+
+      if (status === "Completed") {
+        actions.push(`<button class="btn ghost">Archive</button>`);
+      }
+
+      if (status === "Cancelled") {
+        actions.push(`<button class="btn ghost">Remove</button>`);
+      }
+
+      if (status === "listing_removed") {
+        actions.push(`<button class="btn danger">cool</button>`);
+      }*/
+
+
+      return actions.join("");
+    }
+
+    function noTransactions(){
+      transactionsDiv.innerHTML = `
+        <p style="width: 100%; text-align: center; color: white"> No Transactions yet... </p>
+      `
+    }
   </script>
 </body>
 

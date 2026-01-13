@@ -328,8 +328,60 @@
             font-size: 0.85rem;
             cursor: pointer;
         }
+
+        .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.6);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        }
+
+        .modal-overlay.hidden {
+        display: none;
+        }
+
+        .modal-card {
+        background: #39B053;
+        color: white;
+        width: 90%;
+        max-width: 360px;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .modal-card h3 {
+        margin-top: 0;
+        }
+
+        .modal-actions {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+        }
+
+        .modal-actions button {
+        padding: 10px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        }
+
+        #modalCancelBtn {
+        background: white;
+        color: black;
+        }
+
+        #modalConfirmBtn {
+        background: black;
+        color: white;
+        }
     </style>
     <script>
+        
         function toggleOptionalFields() {
             const optional = document.getElementById('optionalFields');
             const btn = document.getElementById('toggleOptionalBtn');
@@ -367,54 +419,34 @@
 
 <body>
     <main>
-        <div class="modal-overlay" id="friendModal">
-            <div class="modal">
-                <h2>Confirm Meeting</h2>
+        <div id="confirmModal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3>Confirm meeting with...<span id="sellerTV"></span></h3>
 
-                <label>Name *</label>
-                <input type="text" id="friendName" required placeholder="e.g., Sarah">
+            <p ><strong>Book Title:</strong> <span id="modalBookTitle"></span></p>
+              <div style="display: flex; margin-bottom: 0px; padding-top: 0px;">
+                <p><strong>Author:</strong> <span id="authorTV"></span></p>
+                <p style="margin-left: auto;"><strong>Quality:</strong> <span id="qualityTV"> </span></p>
+            </div>
+            <div style="display: flex; margin-top: 0px;">
+                <p><strong>Price:</strong> <span id="priceTV"></span></p>
+                <p style="margin-left: auto;"><strong>Time:</strong> <span id="modalTime"></span></p>
+            </div>
+            
 
-                <label>Fun Fact *</label>
-                <input type="text" id="friendFact" required placeholder="e.g., Loves skydiving">
-
-                <div class="modal-buttons">
-                    <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
-                    <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
-                </div>
+            <div class="modal-actions">
+            <button id="modalCancelBtn">Cancel</button>
+            <button id="modalConfirmBtn">Confirm</button>
             </div>
         </div>
+        </div>
+       
 
 
         <section id="booksDiv" class="active">
             <p id="titleTV"> Books For </p>
-            <!--<div id="bookCard">
-                <p
-                    style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto;">
-                    The Title</p>
-                <p
-                    style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto; margin-bottom: 0px;">
-                    The Author</p>
-                <div style="display: flex; margin-top: 0px;margin-bottom: 0px;">
-                    <p
-                        style="padding: 8px; background-color: white; color: black; width: 40%; margin-left: auto; margin-right: auto;">
-                        The Quality </p>
-                    <p
-                        style="text-align: center; padding: 8px; background-color: white; color: black; width: 40%; margin-left: auto; margin-right: auto;">
-                        The Price</p>
-                </div>
-                <p style="width: 100%; text-align: center; color: white; margin-top: 0px;">Availability</p>
-                <div class="tags">
-                    <span class="tag"> M 1 PM</span>
-                    <span class="tag"> M 1 PM</span>
-                    <span class="tag"> T 10 AM</span>
-                    <span class="tag"> M 1 PM</span>
-                    <span class="tag"> T 10 AM</span>
-                    <span class="tag"> M 1 PM</span>
-                    <span class="tag"> T 10 AM</span>
-                </div>
-            </div>-->
 
-            
+            <div id="booksListDiv"></div>
         </section>
     </main>
     <script type="module">
@@ -423,7 +455,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
         import { getAuth,onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
@@ -448,6 +480,13 @@
 
         const titleTV = document.getElementById("titleTV")
         const booksDiv = document.getElementById("booksDiv")
+        const booksListDiv = document.getElementById("booksListDiv")
+
+        const confirmModal = document.getElementById("")
+
+        let allBooks = [];              // 🔑 global
+        let selectedBookIndex = null;
+        let selectedTime = null;
     
         async function getBooks() {
             const params = new URLSearchParams(window.location.search);
@@ -486,9 +525,10 @@
                     id: doc.id,
                     ...doc.data()
                 }));
-                alert(`books ${books}`)
+
+                allBooks = books
                 for(var i=0; i< books.length; i++){
-                    addBookDiv(books[i])
+                    addBookDiv(books[i], i)
                 }
                 return books;
 
@@ -498,56 +538,176 @@
                 return [];
             }
         }
-        function addTimeTags(){
-
+        function addTimeTags(timeTags){
+            let parentDiv = `
+            <div>
+                <p style="width: 100%; text-align: center; color: white; margin-top: 0px;">Availability</p>
+                <div class="tags">
+           `
+            let tagsDiv = document.getElementById("tagsDiv")
+            
+            for(var i=0; i < timeTags.length; i++){
+               
+                let tag  = `<span class="tag">${timeTags[i]}</span>`
+                parentDiv  += tag
+            }
+            parentDiv += `
+                </div>
+            </div>
+            `            
+            return parentDiv
         }
 
         function showNoBooks(){
 
         }
 
-        function addBookDiv(book)
-        {   
-            alert(`book ${book}`)
-            let div  = `
-            <div id="bookCard">
-                <p
-                    style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto;">
-                    How To Win Friends and Influence People</p>
-                <p
-                    style="padding: 8px; background-color: white; color: black; width: 90%; margin-left: auto; margin-right: auto; margin-bottom: 0px;">
-                    Dale Carnegie</p>
-                <div style="display: flex; margin-top: 0px;margin-bottom: 0px;">
-                    <p
-                        style="padding: 8px; background-color: white; color: black; width: 40%; margin-left: auto; margin-right: auto;">
-                        Great</p>
-                    <p
-                        style="text-align: center; padding: 8px; background-color: white; color: black; width: 40%; margin-left: auto; margin-right: auto;">
-                        $4 </p>
-                </div>
-                <p style="width: 100%; text-align: center; color: white; margin-top: 0px;">Availability</p>
-                <div class="tags">
-                    <span class="tag"> M 1 PM</span>
-                    <span class="tag"> T 10 AM</span>
-                </div>
-            </div>` 
+        function addBookDiv(book, index) {
+            let div = `
+                <div class="book-card" data-index="${index}" 
+                    style="margin-bottom: 16px; background-color: #39B053; border-radius: 8px; padding-bottom: 8px;">
 
-            
+                <p style="padding: 8px; background-color: white; color: black; width: 90%; margin: 8px auto;">
+                    ${book.title}
+                </p>
+
+                <p style="padding: 8px; background-color: white; color: black; width: 90%; margin: 8px auto;">
+                    ${book.author}
+                </p>
+
+                <div style="display: flex;">
+                    <p style="padding: 8px; background-color: white; color: black; width: 40%; margin: auto;">
+                    ${book.quality}
+                    </p>
+
+                    <p style="padding: 8px; background-color: white; color: black; width: 40%; margin: auto; text-align:center;">
+                    ${book.price}
+                    </p>
+                </div>
+
+                ${addTimeTags(book.timeChips)}
+                </div>
+            `;
+
+            booksListDiv.innerHTML += div;
         }
 
         onAuthStateChanged(auth, user => {
-        if (user) {
-            getBooks()
-        } else {
-            console.log("No user logged in");
-            // maybe redirect to login
-            openRegisterView()
-        }
+            if (user) {
+                getBooks()
+            } else {
+                console.log("No user logged in");
+                // maybe redirect to login
+                openRegisterView()
+            }
         });
+
+        document.addEventListener("click", (e) => {
+            if (!e.target.classList.contains("tag")) return;
+
+            const card = e.target.closest(".book-card");
+            if (!card) return;
+
+            const bookIndex = card.dataset.index;
+            const time = e.target.textContent.trim();
+
+            selectedBookIndex = bookIndex;
+            selectedTime = time;
+
+            openConfirmModal();
+        });
+
 
         function openRegisterView() {
             window.location.replace("registerView.html");
         }
+
+        function openConfirmModal() {
+            const book = allBooks[selectedBookIndex];
+            var author = ""
+            var seller = "" 
+            if(book.author != null) { author = book.author}
+            if(book.sellerName != null) { seller = book.sellerName}
+
+            document.getElementById("modalBookTitle").textContent = book.title;
+            document.getElementById("modalTime").textContent = selectedTime;
+            document.getElementById("authorTV").textContent = author
+            document.getElementById("sellerTV").textContent = seller
+            document.getElementById("qualityTV").textContent = book.quality 
+            document.getElementById("priceTV").textContent = `$${book.price}`
+            document.getElementById("confirmModal").classList.remove("hidden");
+
+           
+        }
+
+        document.getElementById("modalCancelBtn").onclick = () => {
+            closeModal();
+        };
+
+        document.getElementById("modalConfirmBtn").onclick = () => {
+            const params = new URLSearchParams(window.location.search);
+
+            const schoolId = params.get("id");
+            const courseId = params.get("course")
+
+            removeFromListing(schoolId , courseId, allBooks[selectedBookIndex].id)
+            let tempTransaction =  {
+                book : allBooks[selectedBookIndex], 
+                buyerId : `${auth.currentUser.uid}`, 
+                meetingTime : `${document.getElementById("modalTime").textContent}`, 
+                status : `pending`, 
+            }
+            createBuyerTransaction(tempTransaction, allBooks[selectedBookIndex].transactionId )
+            updateTransaction( tempTransaction, allBooks[selectedBookIndex].transactionId)
+            //update the transaction on the seller Side, 
+            //update the transaction on the buyer side. 
+            closeModal()
+        }
+
+        
+
+        async function removeFromListing(schoolId,courseId ,id){
+            try{                
+                await deleteDoc(doc(db, `Schools/${schoolId}/Courses/${courseId}/books`, id));
+                alert(`deleted successfully`)
+            }catch(error){
+                alert(`error LB-639: ${error}`)
+            }
+        }   
+
+        async function createBuyerTransaction(transaction, transactionId)
+        {
+            try{
+                 await setDoc(doc(db,`Students/${auth.currentUser.uid}/transactions/${transactionId}`), transaction);
+            }catch(err){
+                alert(`error is this... ${err}`)
+            }
+        }
+
+
+        async function updateTransaction(transaction, transactionId) {
+            try {
+                await updateDoc(
+                doc(db, `Students/${transaction.book.sellerId}/transactions/${transactionId}`), transaction)
+                alert("transaction update");
+            } catch (err) {
+                alert("Failed to update book");
+                console.error(err);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById("confirmModal").classList.add("hidden");
+            selectedBookIndex = null;
+            selectedTime = null;
+        }
+
+        /*document
+            .querySelector(
+                `.book-card[data-index="${selectedBookIndex}"] .tag`
+            )
+            ?.classList.add("selected");*/
+
     </script>
 </body>
 
