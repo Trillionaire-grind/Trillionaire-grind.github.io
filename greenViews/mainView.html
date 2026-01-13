@@ -745,7 +745,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
     import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-    import { doc, setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+    import { doc, setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
@@ -1002,7 +1002,9 @@
           </div>
         </div>
       `
-      transactionsDiv.innerHTML += div
+      //transactionsDiv.innerHTML += div original worked 
+      transactionsDiv.insertAdjacentHTML("beforeend", div); //new one
+
     }
 
     function renderButtons(status) {
@@ -1335,6 +1337,84 @@
         <p style="width: 100%; text-align: center; color: white"> No Transactions yet... </p>
       `
     }
+
+    let unsubscribeTransactions = null;
+
+    function listenToTransactions() {
+      const studentId = auth.currentUser.uid;
+
+      const transactionsRef = collection(
+        db,
+        `Students/${studentId}/transactions`
+      );
+
+      // Stop old listener if it exists
+      if (unsubscribeTransactions) {
+        unsubscribeTransactions();
+      }
+
+      unsubscribeTransactions = onSnapshot(
+        transactionsRef,
+        (snapshot) => {
+
+          if (snapshot.empty) {
+            transactionsDiv.innerHTML = "";
+            noTransactions();
+            return;
+          }
+
+          snapshot.docChanges().forEach(change => {
+            const txId = change.doc.id;
+            const data = change.doc.data();
+
+            if (change.type === "added") {
+              addTransactionDiv({ id: txId, ...data });
+            }
+
+            if (change.type === "modified") {
+              updateTransactionCard(txId, data);
+            }
+
+            if (change.type === "removed") {
+              removeTransactionCard(txId);
+            }
+          });
+        },
+        (error) => {
+          console.error("Transaction listener error:", error);
+        }
+      );
+    }
+
+    function updateTransactionCard(txId, data) {
+      const card = document.querySelector(
+        `.transaction-card[data-tx-id="${txId}"]`
+      );
+
+      if (!card) return;
+
+      // Update status badge
+      const badge = card.querySelector(".status-badge");
+      badge.textContent = data.status;
+      badge.className = `status-badge status-${data.status}`;
+
+      // Update buttons
+      const buttonRow = card.querySelector(".tx-row");
+      buttonRow.innerHTML = renderButtons(data.status);
+    }
+
+    function removeTransactionCard(txId) {
+      const card = document.querySelector(
+        `.transaction-card[data-tx-id="${txId}"]`
+      );
+
+      if (card) {
+        card.remove();
+      }
+    }
+
+
+
   </script>
 </body>
 
