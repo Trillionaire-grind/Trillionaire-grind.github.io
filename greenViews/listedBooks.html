@@ -435,8 +435,8 @@
             
 
             <div class="modal-actions">
-            <button id="modalCancelBtn">Cancel</button>
-            <button id="modalConfirmBtn">Confirm</button>
+            <button style="margin-right: 8px;" id="modalCancelBtn">Cancel</button>
+            <button style="margin-left: 8px;" style="margin-right: 8px;" id="modalConfirmBtn">Confirm</button>
             </div>
         </div>
         </div>
@@ -455,7 +455,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
         import { getAuth,onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+        import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, updateDoc, onSnapshot} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
         // TODO: Add SDKs for Firebase products that you want to use
         // https://firebase.google.com/docs/web/setup#available-libraries
@@ -487,7 +487,75 @@
         let allBooks = [];              // 🔑 global
         let selectedBookIndex = null;
         let selectedTime = null;
-    
+
+        let studentName = null 
+
+        let unsubscribeBooks = null;
+
+        // First: check if course exists (ONE TIME)
+        function listenForBooks() {
+            const params = new URLSearchParams(window.location.search);
+            const schoolId = params.get("id");
+            const courseId = params.get("course");
+
+            titleTV.innerText = `Books For ${courseId}`;
+
+            const courseRef = doc(db, `Schools/${schoolId}/Courses/${courseId}`);
+
+            // First: check if course exists (ONE TIME)
+            getDoc(courseRef).then(courseSnap => {
+                if (!courseSnap.exists()) {
+                booksDiv.innerHTML = `
+                    <p style="width: 100%; text-align:center">
+                    Course not added yet...
+                    </p>
+                `;
+                return;
+                }
+
+                const booksCol = collection(courseRef, "books");
+
+                // 🔥 REALTIME LISTENER
+                unsubscribeBooks = onSnapshot(
+                booksCol,
+                (snapshot) => {
+                    booksDiv.innerHTML = ""; // clear UI first
+
+                    if (snapshot.empty) {
+                    booksDiv.innerHTML = `
+                        <p style="width: 100%; text-align:center">
+                        No books available yet...
+                        </p>
+                    `;
+                    return;
+                    }
+
+                    const books = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                    }));
+
+                    allBooks = books;
+
+                    /*books.forEach((book, index) => {
+                    addBookDiv(book, index);
+                    });*/ 
+                    books.forEach((book, index) => {
+                    try {
+                        addBookDiv(book, index);
+                    } catch (err) {
+                        alert("addBookDiv crashed for book:");
+                    }
+                    });
+                },
+                (error) => {
+                    console.error("Books listener error:", error);
+                    alert("Something went wrong loading books.");
+                }
+                );
+            });
+        }
+
         async function getBooks() {
             const params = new URLSearchParams(window.location.search);
             const schoolId = params.get("id");
@@ -541,7 +609,7 @@
         function addTimeTags(timeTags){
             let parentDiv = `
             <div>
-                <p style="width: 100%; text-align: center; color: white; margin-top: 0px;">Availability</p>
+                <p style="width: 100%; text-align: center; color: white; margin-top: 16px;">Availability</p>
                 <div class="tags">
            `
             let tagsDiv = document.getElementById("tagsDiv")
@@ -563,24 +631,65 @@
         }
 
         function addBookDiv(book, index) {
+        if (!book) return;
+
+        let div = `
+            <div class="book-card" data-index="${index}"  style="
+            width: 80%;
+            margin: 24px auto;
+            background-color: #39B053;
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            ">
+            <p style="padding:16px;background:#fff;color:#000;width:90%;margin:auto; border-radius: 12px">
+                ${book.title ?? "Untitled Book"}
+            </p>
+
+            <p style="padding:16px;background:#fff;color:#000;width:90%;margin:auto;border-radius: 12px">
+                ${book.author ?? "Unknown Author"}
+            </p>
+
+            <div style="display:flex;">
+                <p style="padding:16px;background:#fff;color:#000;width:40%;margin:auto;border-radius: 12px">
+                ${book.quality ?? "-"}
+                </p>
+
+                <p style="padding:16px;background:#fff;color:#000;width:40%;margin:auto;text-align:center;border-radius: 12px">
+                ${book.price ?? "-"}
+                </p>
+            </div>
+
+            ${addTimeTags(book.timeChips)}
+            </div>
+        `;
+
+        booksDiv.insertAdjacentHTML("beforeend", div);
+        }
+
+
+        /* old one 
+        function addBookDiv(book, index) {
             let div = `
                 <div class="book-card" data-index="${index}" 
-                    style="margin-bottom: 16px; background-color: #39B053; border-radius: 8px; padding-bottom: 8px;">
+                    style="margin-bottom: 16px; background-color: #39B053; border-radius: 8px; padding-bottom: 8px; width:90%; margin-left: auto; margin-right: auto; max-width:600px; padding: 8px;">
 
-                <p style="padding: 8px; background-color: white; color: black; width: 90%; margin: 8px auto;">
+                <p style="padding: 8px; background-color: white; color: black; width: 90%; border-radius: 8px; margin: 8px  auto;">
                     ${book.title}
                 </p>
 
-                <p style="padding: 8px; background-color: white; color: black; width: 90%; margin: 8px auto;">
+                <p style="padding: 8px; background-color: white; color: black; width: 90%; border-radius: 8px; margin: 8px auto;">
                     ${book.author}
                 </p>
 
                 <div style="display: flex;">
-                    <p style="padding: 8px; background-color: white; color: black; width: 40%; margin: auto;">
+                    <p style="padding: 8px; background-color: white; color: black; width: 40%; border-radius: 8px; margin: auto;">
                     ${book.quality}
                     </p>
 
-                    <p style="padding: 8px; background-color: white; color: black; width: 40%; margin: auto; text-align:center;">
+                    <p style="padding: 8px; background-color: white; color: black; width: 40%; border-radius: 8px; margin: auto; text-align:center;">
                     ${book.price}
                     </p>
                 </div>
@@ -590,11 +699,12 @@
             `;
 
             booksListDiv.innerHTML += div;
-        }
+        }*/
 
         onAuthStateChanged(auth, user => {
             if (user) {
-                getBooks()
+                //getBooks()
+                listenForBooks()
             } else {
                 console.log("No user logged in");
                 // maybe redirect to login
@@ -636,8 +746,6 @@
             document.getElementById("qualityTV").textContent = book.quality 
             document.getElementById("priceTV").textContent = `$${book.price}`
             document.getElementById("confirmModal").classList.remove("hidden");
-
-           
         }
 
         document.getElementById("modalCancelBtn").onclick = () => {
@@ -654,14 +762,17 @@
             let tempTransaction =  {
                 book : allBooks[selectedBookIndex], 
                 buyerId : `${auth.currentUser.uid}`, 
+                buyerName : studentName,
                 meetingTime : `${document.getElementById("modalTime").textContent}`, 
                 status : `pending`, 
             }
             createBuyerTransaction(tempTransaction, allBooks[selectedBookIndex].transactionId )
-            updateTransaction( tempTransaction, allBooks[selectedBookIndex].transactionId)
+            //updateTransaction( tempTransaction, allBooks[selectedBookIndex].transactionId)
             //update the transaction on the seller Side, 
             //update the transaction on the buyer side. 
-            closeModal()
+            // closeModal()
+            // alert('meeting confirmed')
+           // window.close();
         }
 
         
@@ -669,7 +780,6 @@
         async function removeFromListing(schoolId,courseId ,id){
             try{                
                 await deleteDoc(doc(db, `Schools/${schoolId}/Courses/${courseId}/books`, id));
-                alert(`deleted successfully`)
             }catch(error){
                 alert(`error LB-639: ${error}`)
             }
@@ -679,6 +789,7 @@
         {
             try{
                  await setDoc(doc(db,`Students/${auth.currentUser.uid}/transactions/${transactionId}`), transaction);
+                 updateTransaction( transaction, allBooks[selectedBookIndex].transactionId)
             }catch(err){
                 alert(`error is this... ${err}`)
             }
@@ -689,7 +800,9 @@
             try {
                 await updateDoc(
                 doc(db, `Students/${transaction.book.sellerId}/transactions/${transactionId}`), transaction)
-                alert("transaction update");
+                closeModal()
+                window.close()
+                alert('meeting confirmed')
             } catch (err) {
                 alert("Failed to update book");
                 console.error(err);
@@ -702,11 +815,35 @@
             selectedTime = null;
         }
 
+
+        window.addEventListener("beforeunload", () => {
+        if (unsubscribeBooks) {
+            unsubscribeBooks();
+        }
+        });
         /*document
             .querySelector(
                 `.book-card[data-index="${selectedBookIndex}"] .tag`
             )
             ?.classList.add("selected");*/
+
+        async function getStudentInfo(){
+            // get the name and get 
+            const studentId = auth.currentUser.uid;
+
+            let  studentRef = doc(db, `Students/${studentId}`)
+
+            const studentSnap = await getDoc(studentRef);
+
+            if (!studentSnap.exists()) {
+                alert("error MV: 790")
+            } else {
+                let data = studentSnap.data()
+                let name = data.name
+                let courses =  data.courses
+                studentName = name
+            }
+        }
 
     </script>
 </body>

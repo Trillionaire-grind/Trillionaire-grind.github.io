@@ -606,7 +606,6 @@
       function getSchedule(){
         const courses = [...scheduleDiv.querySelectorAll(".course-name")]
           .map(el => el.textContent.trim().toUpperCase());
-        alert(`courses  ${courses} `)
         uploadSchedule(courses)
       }
 

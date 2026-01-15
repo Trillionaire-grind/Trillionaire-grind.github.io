@@ -801,6 +801,7 @@
     homeSection.classList.add('active');
 
     let studentSchool = ""
+    let studentName = ""
     let studentSchedule = []
     let studentTransactions = []
 
@@ -918,6 +919,7 @@
         let name = data.name
         let courses =  data.courses
         studentSchool = data.school
+        studentName = name
         studentSchedule = data.schedule
         populateData(name, courses)
       }
@@ -986,16 +988,16 @@
       let div = `
         <div class="transaction-card" data-course-id="${transaction.book.course}"  data-seller-id="${transaction.book.sellerId}" data-buyer-id="${transaction.buyerId}"  data-tx-id="${transaction.id}">
           <div class="tx-header">
-            <h3 class="book-title">${transaction.book.title}</h3>
+            <h3 class="book-title">${transaction.book.title} - ${transaction.book.author}</h3>
             <span class="status-badge ${status}">${transaction.status}</span>
           </div>
-          <p class="tx-id">ID: a8F9dk22L</p>
+          <p class="tx-id">ID: ${transaction.book.transactionId}</p>
           <div class="tx-row">
-            <span><strong>Seller:</strong>${transaction.book.author}</span>
-            <span><strong>Buyer:</strong> You</span>
+            <span><strong>Seller:</strong>${transaction.book.sellerName ?? ""}</span>
+            <span><strong>Buyer:</strong> ${transaction.book.buyerName ?? ""}</span>
           </div>
           <div class="tx-row">
-            <span><strong>Meeting:</strong${transaction.meetingTime ?? "-"}</span>
+            <span><strong>Meeting:</strong> ${transaction.meetingTime}</span>
           </div>
           <div class="tx-row">
             ${renderButtons(transaction.status)}
@@ -1078,6 +1080,7 @@
         title : title, 
         author : author, 
         quality : quality, 
+        sellerName : studentName, 
         timeChips : getAvailabilitySelections(),
         price : price,
         sellerId : auth.currentUser.uid
@@ -1131,7 +1134,9 @@
       if (user) {
         getStudentInfo()
         //getTransactions()
-        listenToTransactions()
+        //listenToTransactions()
+        listenForTransactions()
+
       } else {
         console.log("No user logged in");
         // maybe redirect to login
@@ -1339,9 +1344,8 @@
       `
     }
 
-    let unsubscribeTransactions = null;
 
-    function listenToTransactions() {
+    /*function listenToTransactions() {
       const studentId = auth.currentUser.uid;
 
       const transactionsRef = collection(
@@ -1367,7 +1371,6 @@
           snapshot.docChanges().forEach(change => {
             const txId = change.doc.id;
             const data = change.doc.data();
-            alert(`the data ${data}`)
             if (change.type === "added") {
               addTransactionDiv({ id: txId, ...data });
             }
@@ -1385,6 +1388,62 @@
           console.error("Transaction listener error:", error);
         }
       );
+    }*/
+
+    let unsubscribeTransactions = null;
+
+
+    function listenForTransactions() {
+    
+      const studentRef = doc(db, `Students/${auth.currentUser.uid}`);
+      // First: check if user exists (ONE TIME)
+      getDoc(studentRef).then(transactionsSnap => {
+          if (!transactionsSnap.exists()) {
+            transactionsDiv.innerHTML = `
+              <p style="width: 100%; text-align:center">
+              No transactions yet...
+              </p>
+          `;
+          return;
+          }
+
+          const transactionsCol = collection(studentRef, "transactions");
+
+          // 🔥 REALTIME LISTENER
+          unsubscribeTransactions = onSnapshot(
+          transactionsCol,
+          (snapshot) => {
+            transactionsDiv.innerHTML = ""; // clear UI first
+
+              if (snapshot.empty) {
+                transactionsDiv.innerHTML = `
+                    <p style="width: 100%; text-align:center">
+                    No books available yet...
+                    </p>
+                `;
+                return;
+              }
+
+              studentTransactions = snapshot.docs.map(doc => ({
+              id: doc.id,
+              ...doc.data()
+              }));
+             
+
+              studentTransactions.forEach((transaction, index) => {
+              try {
+                addTransactionDiv(transaction, index);
+              } catch (err) {
+                  alert("addBookDiv crashed for book:");
+              }
+              });
+          },
+          (error) => {
+              console.error("Books listener error:", error);
+              alert("Something went wrong loading books.");
+          }
+          );
+      });
     }
 
     function updateTransactionCard(txId, data) {
