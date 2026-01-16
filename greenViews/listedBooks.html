@@ -410,8 +410,6 @@
             document.getElementById('friendEmail').value = '';
             document.getElementById('friendPhone').value = '';
             document.getElementById('friendGroup').value = '';
-
-
         }
     </script>
 
@@ -420,31 +418,28 @@
 <body>
     <main>
         <div id="confirmModal" class="modal-overlay hidden">
-        <div class="modal-card">
-            <h3>Confirm meeting with...<span id="sellerTV"></span></h3>
+            <div class="modal-card">
+                <h3>Confirm meeting with...<span id="sellerTV"></span></h3>
 
-            <p ><strong>Book Title:</strong> <span id="modalBookTitle"></span></p>
-              <div style="display: flex; margin-bottom: 0px; padding-top: 0px;">
-                <p><strong>Author:</strong> <span id="authorTV"></span></p>
-                <p style="margin-left: auto;"><strong>Quality:</strong> <span id="qualityTV"> </span></p>
-            </div>
-            <div style="display: flex; margin-top: 0px;">
-                <p><strong>Price:</strong> <span id="priceTV"></span></p>
-                <p style="margin-left: auto;"><strong>Time:</strong> <span id="modalTime"></span></p>
-            </div>
-            
-
-            <div class="modal-actions">
-            <button style="margin-right: 8px;" id="modalCancelBtn">Cancel</button>
-            <button style="margin-left: 8px;" style="margin-right: 8px;" id="modalConfirmBtn">Confirm</button>
+                <p ><strong>Book Title:</strong> <span id="modalBookTitle"></span></p>
+                <div style="display: flex; margin-bottom: 0px; padding-top: 0px;">
+                    <p><strong>Author:</strong> <span id="authorTV"></span></p>
+                    <p style="margin-left: auto;"><strong>Quality:</strong> <span id="qualityTV"> </span></p>
+                </div>
+                <div style="display: flex; margin-top: 0px;">
+                    <p><strong>Price:</strong> <span id="priceTV"></span></p>
+                    <p style="margin-left: auto;"><strong>Time:</strong> <span id="modalTime"></span></p>
+                </div>
+                
+                <div class="modal-actions">
+                    <button style="margin-right: 8px;" id="modalCancelBtn">Cancel</button>
+                    <button style="margin-left: 8px;" style="margin-right: 8px;" id="modalConfirmBtn">Confirm</button>
+                </div>
             </div>
         </div>
-        </div>
-       
-
 
         <section id="booksDiv" class="active">
-            <p id="titleTV"> Books For </p>
+            <p id="titleTV" style="display: none;"> Books For </p>
 
             <div id="booksListDiv"></div>
         </section>
@@ -537,20 +532,18 @@
 
                     allBooks = books;
 
-                    /*books.forEach((book, index) => {
-                    addBookDiv(book, index);
-                    });*/ 
+                  
                     books.forEach((book, index) => {
-                    try {
-                        addBookDiv(book, index);
-                    } catch (err) {
-                        alert("addBookDiv crashed for book:");
-                    }
+                        try {
+                            addBookDiv(book, index);
+                        } catch (err) {
+                            alert("error LB-542");
+                        }
                     });
                 },
                 (error) => {
                     console.error("Books listener error:", error);
-                    alert("Something went wrong loading books.");
+                    alert("error LB-548");
                 }
                 );
             });
@@ -602,7 +595,7 @@
 
             } catch (err) {
                 console.error("Error fetching books:", err);
-                alert(`Something went wrong while loading books. ${err}`);
+                alert(`error LB-600`);
                 return [];
             }
         }
@@ -669,38 +662,6 @@
         booksDiv.insertAdjacentHTML("beforeend", div);
         }
 
-
-        /* old one 
-        function addBookDiv(book, index) {
-            let div = `
-                <div class="book-card" data-index="${index}" 
-                    style="margin-bottom: 16px; background-color: #39B053; border-radius: 8px; padding-bottom: 8px; width:90%; margin-left: auto; margin-right: auto; max-width:600px; padding: 8px;">
-
-                <p style="padding: 8px; background-color: white; color: black; width: 90%; border-radius: 8px; margin: 8px  auto;">
-                    ${book.title}
-                </p>
-
-                <p style="padding: 8px; background-color: white; color: black; width: 90%; border-radius: 8px; margin: 8px auto;">
-                    ${book.author}
-                </p>
-
-                <div style="display: flex;">
-                    <p style="padding: 8px; background-color: white; color: black; width: 40%; border-radius: 8px; margin: auto;">
-                    ${book.quality}
-                    </p>
-
-                    <p style="padding: 8px; background-color: white; color: black; width: 40%; border-radius: 8px; margin: auto; text-align:center;">
-                    ${book.price}
-                    </p>
-                </div>
-
-                ${addTimeTags(book.timeChips)}
-                </div>
-            `;
-
-            booksListDiv.innerHTML += div;
-        }*/
-
         onAuthStateChanged(auth, user => {
             if (user) {
                 //getBooks()
@@ -754,7 +715,6 @@
 
         document.getElementById("modalConfirmBtn").onclick = () => {
             const params = new URLSearchParams(window.location.search);
-
             const schoolId = params.get("id");
             const courseId = params.get("course")
 
@@ -767,15 +727,7 @@
                 status : `pending`, 
             }
             createBuyerTransaction(tempTransaction, allBooks[selectedBookIndex].transactionId )
-            //updateTransaction( tempTransaction, allBooks[selectedBookIndex].transactionId)
-            //update the transaction on the seller Side, 
-            //update the transaction on the buyer side. 
-            // closeModal()
-            // alert('meeting confirmed')
-           // window.close();
         }
-
-        
 
         async function removeFromListing(schoolId,courseId ,id){
             try{                
@@ -790,17 +742,16 @@
             try{
                  await setDoc(doc(db,`Students/${auth.currentUser.uid}/transactions/${transactionId}`), transaction);
                  updateTransaction( transaction, allBooks[selectedBookIndex].transactionId)
+                 closeModal()
             }catch(err){
                 alert(`error is this... ${err}`)
             }
         }
 
-
         async function updateTransaction(transaction, transactionId) {
             try {
                 await updateDoc(
                 doc(db, `Students/${transaction.book.sellerId}/transactions/${transactionId}`), transaction)
-                closeModal()
                 window.close()
                 alert('meeting confirmed')
             } catch (err) {
@@ -817,18 +768,12 @@
 
 
         window.addEventListener("beforeunload", () => {
-        if (unsubscribeBooks) {
-            unsubscribeBooks();
-        }
+            if (unsubscribeBooks) {
+                unsubscribeBooks();
+            }
         });
-        /*document
-            .querySelector(
-                `.book-card[data-index="${selectedBookIndex}"] .tag`
-            )
-            ?.classList.add("selected");*/
 
         async function getStudentInfo(){
-            // get the name and get 
             const studentId = auth.currentUser.uid;
 
             let  studentRef = doc(db, `Students/${studentId}`)
@@ -844,6 +789,14 @@
                 studentName = name
             }
         }
+
+        onAuthStateChanged(auth, user => {
+            if (user) {
+                getStudentInfo()
+            } else {
+                openRegisterView()
+            }
+        });
 
     </script>
 </body>

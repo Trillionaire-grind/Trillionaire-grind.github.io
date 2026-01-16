@@ -844,7 +844,6 @@
     }
 
     addAddBtn.onclick = () => {
-      //getSchedule()
       let courseName = addCourseET.value
       addToScheduleDiv(courseName)
       addCourseModal.style.display = 'none'
@@ -882,10 +881,6 @@
       
       listBookModal.style.display = 'none'
     }
-
-    /*findBookBtn.onclick = () => {
-      openListedBooks()
-    }*/
 
     function openRegisterView() {
       window.location.replace("registerView.html");
@@ -994,19 +989,17 @@
           <p class="tx-id">ID: ${transaction.book.transactionId}</p>
           <div class="tx-row">
             <span><strong>Seller:</strong>${transaction.book.sellerName ?? ""}</span>
-            <span><strong>Buyer:</strong> ${transaction.book.buyerName ?? ""}</span>
+            <span><strong>Buyer:</strong> ${transaction.buyerName ?? ""}</span>
           </div>
           <div class="tx-row">
-            <span><strong>Meeting:</strong> ${transaction.meetingTime}</span>
+            <span><strong>Meeting:</strong> ${transaction.meetingTime ?? "-"}</span>
           </div>
           <div class="tx-row">
             ${renderButtons(transaction.status)}
           </div>
         </div>
       `
-      //transactionsDiv.innerHTML += div original worked 
       transactionsDiv.insertAdjacentHTML("beforeend", div); //new one
-
     }
 
     function renderButtons(status) {
@@ -1038,9 +1031,7 @@
         );
           
         scheduleModal.style.display = 'none'
-        //openMainView()
-        } 
-        catch (error) {
+        } catch (error) {
             console.error("Error adding friend:", error);
             alert(`error:WF-395 ${error}`)
         }
@@ -1085,13 +1076,11 @@
         price : price,
         sellerId : auth.currentUser.uid
       }
-
       return book
     }
 
 
     async function uploadBook(){
-      //this will add it to the school's market place
       let book = getBookInfo()
       let transactionId = uuidv4()
       book.transactionId = transactionId
@@ -1107,8 +1096,6 @@
     }
 
     async function createReceipt(book, bookId){
-      //this will add the uploaded book as a transaction to the seller's account
-      //gotta remove the book from the list of books for sale too
       let transaction = {
         book : book, 
         buyerId : null, 
@@ -1133,13 +1120,10 @@
     onAuthStateChanged(auth, user => {
       if (user) {
         getStudentInfo()
-        //getTransactions()
-        //listenToTransactions()
         listenForTransactions()
 
       } else {
         console.log("No user logged in");
-        // maybe redirect to login
         openRegisterView()
       }
     });
@@ -1169,28 +1153,21 @@
       switch (action) {
         case "remove":
           await updateTransaction(sellerId,txId, "listing_removed");
-
-          //card.remove(); // optimistic UI
-          alert('remove listing')
+          alert('listing removed')
           deleteBookByTransactionId(studentSchool, courseId, txId)
           break;
 
         case "cancel":
           await updateTransaction(buyerId, txId, "transaction_cancelled");
           await updateTransaction(sellerId, txId, "transaction_cancelled");
-          //await updateTransaction(auth.currentUser.uid,txId, "transaction_cancelled");
-          //need to find the sellerId to finish this 
-          //updateStatus(card, "transaction_cancelled");
-          alert('cancel transaction')
+          alert('transaction cancelled')
 
           break;
 
         case "complete":
           await updateTransaction(buyerId,txId, "transaction_completed");
           await updateTransaction(sellerId,txId, "transaction_completed");
-
-         // updateStatus(card, "transaction_completed");
-          alert('complete transaction')
+          alert('transaction completed')
           break;
       }
     });
@@ -1276,9 +1253,6 @@
     }
 
     function openListedBooks(school, course){
-      /*const params = new URLSearchParams(window.location.search);
-      const shoolId = params.get("school");
-      const course = params.get("course")*/
       window.open(`listedBooks.html?id=${school}&course=${course}`, '_blank').focus();
     }
 
@@ -1305,90 +1279,12 @@
 
       return results;
     }
-
-    function renderActions(status) {
-      const actions = [];
-
-      if (status === "book_listed") {
-        actions.push(`<button class="btn danger">Remove Listing</button>`);
-      }
-
-      if(status == "meeting_pending"){
-
-      }
-
-      /*if (status === "Pending Meeting" || status === "Meeting Set") {
-        actions.push(`<button class="btn primary">Complete Transaction</button>`);
-        actions.push(`<button class="btn danger">Cancel Transaction</button>`);
-      }
-
-      if (status === "Completed") {
-        actions.push(`<button class="btn ghost">Archive</button>`);
-      }
-
-      if (status === "Cancelled") {
-        actions.push(`<button class="btn ghost">Remove</button>`);
-      }
-
-      if (status === "listing_removed") {
-        actions.push(`<button class="btn danger">cool</button>`);
-      }*/
-
-
-      return actions.join("");
-    }
-
+    
     function noTransactions(){
       transactionsDiv.innerHTML = `
         <p style="width: 100%; text-align: center; color: white"> No Transactions yet... </p>
       `
     }
-
-
-    /*function listenToTransactions() {
-      const studentId = auth.currentUser.uid;
-
-      const transactionsRef = collection(
-        db,
-        `Students/${studentId}/transactions`
-      );
-
-      // Stop old listener if it exists
-      if (unsubscribeTransactions) {
-        unsubscribeTransactions();
-      }
-
-      unsubscribeTransactions = onSnapshot(
-        transactionsRef,
-        (snapshot) => {
-
-          if (snapshot.empty) {
-            transactionsDiv.innerHTML = "";
-            noTransactions();
-            return;
-          }
-
-          snapshot.docChanges().forEach(change => {
-            const txId = change.doc.id;
-            const data = change.doc.data();
-            if (change.type === "added") {
-              addTransactionDiv({ id: txId, ...data });
-            }
-
-            if (change.type === "modified") {
-              updateTransactionCard(txId, data);
-            }
-
-            if (change.type === "removed") {
-              removeTransactionCard(txId);
-            }
-          });
-        },
-        (error) => {
-          console.error("Transaction listener error:", error);
-        }
-      );
-    }*/
 
     let unsubscribeTransactions = null;
 
@@ -1472,9 +1368,6 @@
         card.remove();
       }
     }
-
-
-
   </script>
 </body>
 

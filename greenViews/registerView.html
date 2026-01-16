@@ -513,9 +513,6 @@
 
       function createLogIn()
       {
-        //first gotta check that everything meets minimum requirements, before we register them we check 
-        //to see if there's a school with their email, else give them the ability to request their school
-        //we split by ["@"] if length < 1 return else query against the rest of the 
         if(nameET.value.length < 2){
           alert(`name is too short`)
           return 
@@ -554,7 +551,7 @@
           const school = data.schoolUid 
           registerUser(school)
         }else{
-          alert("shool is not added yet")
+          alert("school is not added yet")
           //here they will be given the option of requesting their school to be added
         }
       }
