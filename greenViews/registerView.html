@@ -393,13 +393,13 @@
         <p id="sectionName" style="width: 100%; margin-left: 5%; margin-bottom: 0px;">Id</p>
         <div id="registerForm">
             <div id="firstSectionDiv" style="display: flex;">
-                <div style="width: 30%; height: 150px; margin: 8px; background-color: #000;">
+                <div style="width: 20%; height: 100px; margin: 8px; background-color: #000;">
 
                 </div>
-                <div style="width: 70%; margin: 8px;">
-                    <input class="inputField" type="text" id="nameET" required placeholder="name..."><br>
-                    <input class="inputField" style="margin-top: 8px; " type="email" id="emailET" required placeholder="email..."><br>
-                    <input class="inputField" style="margin-top: 8px; " type="password" id="passwordET" required placeholder="password..."><br>
+                <div style="width: 76%; margin: 8px;">
+                    <input class="inputField" style="margin-top: 8px; margin-right: 8px;"  type="text" id="nameET" required placeholder="name..."><br>
+                    <input class="inputField" style="margin-top: 8px; margin-right: 8px;" type="email" id="emailET" required placeholder="email..."><br>
+                    <input class="inputField" style="margin-top: 8px;margin-right: 8px; " type="password" id="passwordET" required placeholder="password..."><br>
                     <button id="createLogInBtn">Create Log-In</button>
                 </div>
             </div>
@@ -607,8 +607,6 @@
       }
 
       async function uploadSchedule(courses){
-        //get all the schedule stuff here and the upload the schedule to firebase 
-        //
         const userId = auth.currentUser.uid
         try {
           await updateDoc(doc(db, `Students/${userId}`),
