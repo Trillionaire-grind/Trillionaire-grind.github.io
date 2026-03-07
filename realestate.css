@@ -375,6 +375,24 @@ html, body, * {
     .hero__ampersand-text { font-size: 0.8rem; letter-spacing: 0.35em; }
     .testimonial-slide { padding: 0 2rem; }
     .img-card-grid { flex-direction: column; }
+
+    /* Logo: shrink on mobile so it doesn't cover the hamburger */
+    .s-header__branding .site-title img {
+        max-height: 36px;
+    }
+
+    /* $62M sale: stack vertically on mobile */
+    .featured-sale {
+        flex-direction: column !important;
+        gap: 2rem !important;
+    }
+    .featured-sale > div {
+        flex: unset !important;
+        width: 100% !important;
+    }
+    .featured-sale img {
+        height: 260px !important;
+    }
 }
 
 @media screen and (max-width: 480px) {
