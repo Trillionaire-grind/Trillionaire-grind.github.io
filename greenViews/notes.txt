@@ -1,3 +1,0 @@
- .status-listed { background:#39B053; }
-    .status-pending { background:#f0ad4e; }
-    .status-meeting-set { background:#4287f5; }
