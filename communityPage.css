@@ -1,0 +1,401 @@
+/* ===================================================
+   communityPage.css — Arpin & Giacalone Community Pages
+   =================================================== */
+
+/* ---- Community Hero ---- */
+.community-hero {
+    position: relative;
+    width: 100%;
+    height: 72vh;
+    min-height: 480px;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.community-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.48);
+}
+
+.community-hero__content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+}
+
+.community-hero__label {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.65);
+    margin-bottom: 1rem;
+}
+
+.community-hero__title {
+    font-size: 5rem;
+    font-weight: 200;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: #fff;
+    margin: 0 0 1.2rem;
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.5);
+}
+
+.community-hero__divider {
+    width: 48px;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.6);
+    margin: 0 auto 1.2rem;
+}
+
+.community-hero__subtitle {
+    font-size: 1.15rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+    margin: 0;
+}
+
+/* ---- Community Intro ---- */
+.community-intro {
+    width: 82%;
+    max-width: 1200px;
+    margin: 6rem auto;
+    display: flex;
+    gap: 5rem;
+    align-items: flex-start;
+}
+
+.community-intro__text {
+    flex: 1.6;
+}
+
+.community-intro__eyebrow {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 0.6rem;
+}
+
+.community-intro__heading {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.15;
+    margin-bottom: 1.2rem;
+}
+
+.community-intro__bar {
+    width: 48px;
+    height: 3px;
+    background: #111;
+    margin-bottom: 2rem;
+}
+
+.community-intro__body {
+    font-size: 1.55rem;
+    line-height: 1.85;
+    color: #444;
+    margin-bottom: 1.2rem;
+}
+
+/* Stats column */
+.community-intro__stats {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding-top: 0.5rem;
+}
+
+.community-intro__stat {
+    border-left: 3px solid #111;
+    padding-left: 1.5rem;
+}
+
+.community-intro__stat-value {
+    display: block;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #111;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+}
+
+.community-intro__stat-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #888;
+}
+
+/* ---- Listings Section ---- */
+.community-listings {
+    width: 82%;
+    max-width: 1200px;
+    margin: 0 auto 6rem;
+}
+
+.community-listings__header {
+    margin-bottom: 3rem;
+}
+
+.community-listings__eyebrow {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 0.6rem;
+}
+
+.community-listings__heading {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: #111;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.community-listings__bar {
+    width: 48px;
+    height: 3px;
+    background: #111;
+}
+
+/* Listing cards grid */
+.listings-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3rem 2.5rem;
+}
+
+.listing-card {
+    background: #fff;
+}
+
+.listing-card__image-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 300px;
+}
+
+.listing-card__image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.listing-card:hover .listing-card__image-wrap img {
+    transform: scale(1.06);
+}
+
+.listing-card__status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #111;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 0.3em 0.8em;
+    z-index: 1;
+}
+
+.listing-card__status--pending {
+    background: #888;
+}
+
+.listing-card__hover {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.listing-card:hover .listing-card__hover {
+    opacity: 1;
+}
+
+.listing-card__hover-btn {
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    padding: 0.7em 1.6em;
+    transition: background 0.2s ease;
+}
+
+.listing-card__hover-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.listing-card__info {
+    padding: 1.2rem 0 0;
+}
+
+.listing-card__address {
+    font-size: 1.45rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 0.4rem;
+}
+
+.listing-card__details {
+    font-size: 1.25rem;
+    color: #888;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+}
+
+.listing-card__price {
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+}
+
+/* ---- CTA Section ---- */
+.community-cta {
+    width: 100%;
+    background: #111;
+    padding: 7rem 2rem;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.community-cta__eyebrow {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1rem;
+}
+
+.community-cta__heading {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 1.2rem;
+}
+
+.community-cta__bar {
+    width: 48px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.4);
+    margin: 0 auto 2rem;
+}
+
+.community-cta__body {
+    font-size: 1.55rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 640px;
+    margin: 0 auto 2.5rem;
+}
+
+.community-cta__btn {
+    display: inline-block;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #111;
+    background: #fff;
+    text-decoration: none;
+    padding: 1em 2.5em;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.community-cta__btn:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 900px) {
+    .community-intro {
+        flex-direction: column;
+        gap: 3rem;
+        width: 88%;
+    }
+
+    .community-intro__stats {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        padding-top: 0;
+    }
+
+    .community-intro__stat {
+        flex: 1;
+        min-width: 120px;
+    }
+
+    .community-listings {
+        width: 88%;
+    }
+}
+
+@media (max-width: 768px) {
+    .community-hero__title {
+        font-size: 3rem;
+    }
+
+    .community-hero {
+        background-attachment: scroll;
+    }
+
+    .listings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .community-intro__heading,
+    .community-listings__heading {
+        font-size: 2.2rem;
+    }
+
+    .community-cta__heading {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .community-hero__title {
+        font-size: 2.2rem;
+    }
+
+    .community-intro {
+        width: 92%;
+        margin: 4rem auto;
+    }
+
+    .community-listings {
+        width: 92%;
+    }
+}
