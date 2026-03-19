@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Webcam App</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="glasses.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    </head>
+    <body>
+        <video id="video" autoplay muted></video>
+        
+        <div id="tasks">
+            <div class="task">
+                <div class="circle"></div>
+                <span>Task 1</span>
+            </div>
+            <div class="task">
+                <div class="circle"></div>
+                <span>Task 2</span>
+            </div>
+            <div class="task">
+                <div class="circle"></div>
+                <span>Task 3</span>
+            </div>
+        </div>
+        
+        <div id="comic-text">
+            This is a comic book style text popup!
+        </div>
+        
+        <div id="minimap"></div>
+
+        <div id="compass">
+            <div class="compass-ring">
+                <div class="compass-arrow"></div>
+                <div class="compass-label north">N</div>
+                <div class="compass-label east">E</div>
+                <div class="compass-label south">S</div>
+                <div class="compass-label west">W</div>
+            </div>
+            <div id="compass-distance">--</div>
+        </div>
+
+        <div id="destination-ui">
+            <input id="destination" class="destination-input" type="text" placeholder="Enter destination">
+            <button id="search" class="destination-btn">Go</button>
+            <div id="destination-results" class="destination-results"></div>
+        </div>
+
+        <div id="datetime"></div>
+        
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+        <script src="glasses.js"></script>
+    </body>
+</html>
