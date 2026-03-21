@@ -13,6 +13,7 @@
     </head>
     <body>
         <video id="video" autoplay muted></video>
+        <canvas id="face-canvas"></canvas>
         
         <div id="tasks">
             <div class="task">
@@ -29,9 +30,12 @@
             </div>
         </div>
         
-        <div id="comic-text">
+        <div id="comic-text" class="hidden">
+            <button id="close-text" class="close-btn">×</button>
             This is a comic book style text popup!
         </div>
+        
+        <div id="text-badge">!</div>
         
         <div id="minimap"></div>
 
@@ -53,7 +57,42 @@
         </div>
 
         <div id="datetime"></div>
+
+        <div id="task-tracker">
+            <div class="tracker-header">TASKS</div>
+            <div class="tracker-list">
+                <div class="tracker-task">
+                    <div class="task-time">09:00</div>
+                    <div class="task-info">
+                        <div class="task-name">Morning Briefing</div>
+                        <div class="task-duration">30 min</div>
+                    </div>
+                </div>
+                <div class="tracker-task">
+                    <div class="task-time">11:30</div>
+                    <div class="task-info">
+                        <div class="task-name">Review Code</div>
+                        <div class="task-duration">45 min</div>
+                    </div>
+                </div>
+                <div class="tracker-task">
+                    <div class="task-time">13:00</div>
+                    <div class="task-info">
+                        <div class="task-name">Team Meeting</div>
+                        <div class="task-duration">1 hour</div>
+                    </div>
+                </div>
+                <div class="tracker-task">
+                    <div class="task-time">15:30</div>
+                    <div class="task-info">
+                        <div class="task-name">Deploy Update</div>
+                        <div class="task-duration">20 min</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         
+        <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
         <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
         <script src="glasses.js"></script>
