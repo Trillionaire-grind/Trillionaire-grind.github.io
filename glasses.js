@@ -1,11 +1,76 @@
 document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById('video');
+    const canvas = document.getElementById('face-canvas');
+    const ctx = canvas.getContext('2d');
     const tasks = document.querySelectorAll('.task');
 
-    // Webcam access
+    const setupCanvas = () => {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.style.width = window.innerWidth + 'px';
+        canvas.style.height = window.innerHeight + 'px';
+    };
+
+    const drawFaceBox = (box) => {
+        const x = box.x;
+        const y = box.y;
+        const width = box.width;
+        const height = box.height;
+
+        ctx.strokeStyle = '#ff003c';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(x, y, width, height);
+
+        ctx.fillStyle = '#ff003c';
+        ctx.font = 'bold 18px Anton, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('persoon', x + width / 2, y - 10);
+    };
+
+    const runDetectionLoop = async (detector) => {
+        if (video.readyState !== 4) {
+            requestAnimationFrame(() => runDetectionLoop(detector));
+            return;
+        }
+
+        try {
+            const detections = await detector.detect(video);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (detections.length === 0) {
+                // if none found, keep at least a hint box
+                const w = canvas.width * 0.2;
+                const h = canvas.height * 0.3;
+                drawFaceBox({ x: (canvas.width - w)/2, y: (canvas.height - h)/2, width: w, height: h });
+            } else {
+                detections.forEach(item => drawFaceBox(item.boundingBox));
+            }
+
+        } catch (err) {
+            console.error('Face detection error (FaceDetector):', err);
+        }
+
+        requestAnimationFrame(() => runDetectionLoop(detector));
+    };
+
+    const startFaceDetection = async () => {
+        if (!('FaceDetector' in window)) {
+            console.warn('FaceDetector not available; please use Chrome/Edge or a polyfill. Falling back to static frame.');
+            return;
+        }
+
+        const faceDetector = new FaceDetector({ fastMode: true, maxDetectedFaces: 8 });
+        runDetectionLoop(faceDetector);
+    };
+
     navigator.mediaDevices.getUserMedia({ video: true })
         .then(stream => {
             video.srcObject = stream;
+            video.play();
+            video.addEventListener('loadedmetadata', () => {
+                setupCanvas();
+                startFaceDetection();
+            });
         })
         .catch(err => {
             console.error('Error accessing webcam:', err);
@@ -17,6 +82,33 @@ document.addEventListener('DOMContentLoaded', () => {
             const circle = task.querySelector('.circle');
             circle.classList.toggle('checked');
         });
+    });
+
+    // Task tracker functionality
+    const trackerTasks = document.querySelectorAll('.tracker-task');
+    trackerTasks.forEach(task => {
+        task.addEventListener('click', () => {
+            task.classList.toggle('completed');
+        });
+    });
+
+    // Comic text badge functionality
+    const comicText = document.getElementById('comic-text');
+    const textBadge = document.getElementById('text-badge');
+    const closeBtn = document.getElementById('close-text');
+
+    // Badge click toggles popup visibility and hides badge
+    textBadge.addEventListener('click', (e) => {
+        e.stopPropagation();
+        comicText.classList.remove('hidden');
+        textBadge.style.display = 'none';
+    });
+
+    // Close button hides popup and shows badge
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        comicText.classList.add('hidden');
+        textBadge.style.display = 'flex';
     });
 
     // Date and time update
