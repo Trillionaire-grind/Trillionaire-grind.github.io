@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Face Recognition App</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script defer src="script.js"></script>
+    <style>
+        body { display: flex; flex-direction: column; align-items: center; }
+        canvas { position: absolute; }
+    </style>
+</head>
+<body>
+    <h1>Face Recognition System</h1>
+    <div style="position: relative;">
+        <video id="video" width="720" height="560" autoplay muted></video>
+    </div>
+    <button id="register">Save This Face</button>
+    <div id="status-container" style="margin-top: 20px; font-family: sans-serif;">
+    <strong>Current Recognition:</strong> <span id="person-name">Scanning...</span>
+</div>
+</body>
+</html>
