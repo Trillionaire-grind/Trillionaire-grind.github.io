@@ -1,0 +1,33 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff003c;stop-opacity:0.1" />
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" fill="url(#bg)"/>
+  
+  <!-- Glasses frame -->
+  <circle cx="160" cy="200" r="80" fill="none" stroke="#ff003c" stroke-width="8"/>
+  <circle cx="352" cy="200" r="80" fill="none" stroke="#ff003c" stroke-width="8"/>
+  
+  <!-- Bridge -->
+  <line x1="240" y1="200" x2="272" y2="200" stroke="#ff003c" stroke-width="8"/>
+  
+  <!-- Temples -->
+  <line x1="80" y1="200" x2="120" y2="200" stroke="#ff003c" stroke-width="6"/>
+  <line x1="392" y1="200" x2="432" y2="200" stroke="#ff003c" stroke-width="6"/>
+  
+  <!-- Face outline -->
+  <ellipse cx="256" cy="280" rx="120" ry="100" fill="none" stroke="#f7f7f7" stroke-width="4" opacity="0.3"/>
+  
+  <!-- AR elements -->
+  <rect x="200" y="150" width="40" height="4" fill="#ff003c" opacity="0.8"/>
+  <rect x="272" y="150" width="40" height="4" fill="#ff003c" opacity="0.8"/>
+  
+  <!-- Compass -->
+  <circle cx="256" cy="400" r="30" fill="none" stroke="#ff003c" stroke-width="4"/>
+  <line x1="256" y1="370" x2="256" y2="430" stroke="#ff003c" stroke-width="3"/>
+  <line x1="226" y1="400" x2="286" y2="400" stroke="#ff003c" stroke-width="3"/>
+  <text x="256" y="360" text-anchor="middle" fill="#ff003c" font-family="Arial" font-size="16">N</text>
+</svg>
