@@ -1,8 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Register service worker for PWA
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js')
+            .then(registration => console.log('Service Worker registered'))
+            .catch(error => console.log('Service Worker registration failed'));
+    }
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('face-canvas');
     const ctx = canvas.getContext('2d');
     const tasks = document.querySelectorAll('.task');
+
+    // Face recognition variables
+    let faceMatcher = null;
+    let labeledFaceDescriptors = [];
+    let unknownFaceDetected = false;
+    let lastUnknownDescriptor = null;
 
     const setupCanvas = () => {
         canvas.width = video.videoWidth;
@@ -11,7 +24,44 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.style.height = window.innerHeight + 'px';
     };
 
-    const drawFaceBox = (box) => {
+    // Initialize face recognition
+    async function initFaceRecognition() {
+        console.log("Loading face recognition models...");
+        const MODEL_URL = './models';
+
+        try {
+            await Promise.all([
+                faceapi.nets.tinyFaceDetector.loadFromUri(MODEL_URL),
+                faceapi.nets.faceLandmark68Net.loadFromUri(MODEL_URL),
+                faceapi.nets.faceRecognitionNet.loadFromUri(MODEL_URL),
+                faceapi.nets.ssdMobilenetv1.loadFromUri(MODEL_URL)
+            ]);
+
+            console.log("Face recognition models loaded.");
+            loadFacesFromLocalStorage();
+        } catch (err) {
+            console.error("Face recognition initialization failed:", err);
+        }
+    }
+
+    // Load saved faces from localStorage
+    function loadFacesFromLocalStorage() {
+        const data = localStorage.getItem('face_db');
+        if (!data) return;
+
+        const parsedData = JSON.parse(data);
+        labeledFaceDescriptors = parsedData.map(item => {
+            const descriptors = item.descriptors.map(d => new Float32Array(d));
+            return new faceapi.LabeledFaceDescriptors(item.label, descriptors);
+        });
+
+        if (labeledFaceDescriptors.length > 0) {
+            faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+            console.log(`Restored ${labeledFaceDescriptors.length} faces from memory.`);
+        }
+    }
+
+    const drawFaceBox = (box, label = 'persoon') => {
         const x = box.x;
         const y = box.y;
         const width = box.width;
@@ -24,17 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fillStyle = '#ff003c';
         ctx.font = 'bold 18px Anton, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText('persoon', x + width / 2, y - 10);
+        ctx.fillText(label, x + width / 2, y - 10);
     };
 
-    const runDetectionLoop = async (detector) => {
+    const runDetectionLoop = async () => {
         if (video.readyState !== 4) {
-            requestAnimationFrame(() => runDetectionLoop(detector));
+            requestAnimationFrame(runDetectionLoop);
             return;
         }
 
         try {
-            const detections = await detector.detect(video);
+            // Use face-api for detection and recognition
+            const detections = await faceapi.detectAllFaces(video, new faceapi.TinyFaceDetectorOptions())
+                .withFaceLandmarks()
+                .withFaceDescriptors();
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             if (detections.length === 0) {
@@ -43,24 +97,86 @@ document.addEventListener('DOMContentLoaded', () => {
                 const h = canvas.height * 0.3;
                 drawFaceBox({ x: (canvas.width - w)/2, y: (canvas.height - h)/2, width: w, height: h });
             } else {
-                detections.forEach(item => drawFaceBox(item.boundingBox));
+                detections.forEach(detection => {
+                    const box = detection.detection.box;
+                    let label = 'persoon';
+
+                    if (faceMatcher) {
+                        const result = faceMatcher.findBestMatch(detection.descriptor);
+                        if (result.label !== 'unknown') {
+                            label = result.label;
+                        } else {
+                            // Unknown face detected
+                            if (!unknownFaceDetected) {
+                                unknownFaceDetected = true;
+                                lastUnknownDescriptor = detection.descriptor;
+                                showFaceModal();
+                            }
+                        }
+                    } else {
+                        // No faces saved yet, show modal for first face
+                        if (!unknownFaceDetected) {
+                            unknownFaceDetected = true;
+                            lastUnknownDescriptor = detection.descriptor;
+                            showFaceModal();
+                        }
+                    }
+
+                    drawFaceBox(box, label);
+                });
             }
 
         } catch (err) {
-            console.error('Face detection error (FaceDetector):', err);
+            console.error('Face detection error (face-api):', err);
         }
 
-        requestAnimationFrame(() => runDetectionLoop(detector));
+        requestAnimationFrame(runDetectionLoop);
     };
 
     const startFaceDetection = async () => {
-        if (!('FaceDetector' in window)) {
-            console.warn('FaceDetector not available; please use Chrome/Edge or a polyfill. Falling back to static frame.');
-            return;
-        }
+        await initFaceRecognition();
+        runDetectionLoop();
+    };
 
-        const faceDetector = new FaceDetector({ fastMode: true, maxDetectedFaces: 8 });
-        runDetectionLoop(faceDetector);
+    // Modal functions
+    const showFaceModal = () => {
+        const modal = document.getElementById('face-modal');
+        modal.classList.remove('hidden');
+    };
+
+    const hideFaceModal = () => {
+        const modal = document.getElementById('face-modal');
+        modal.classList.add('hidden');
+        unknownFaceDetected = false;
+        lastUnknownDescriptor = null;
+    };
+
+    const saveFace = () => {
+        const nameInput = document.getElementById('face-name-input');
+        const name = nameInput.value.trim();
+        if (!name || !lastUnknownDescriptor) return;
+
+        // Create labeled descriptor
+        const newDescriptor = new faceapi.LabeledFaceDescriptors(name, [lastUnknownDescriptor]);
+        labeledFaceDescriptors.push(newDescriptor);
+
+        // Save to localStorage
+        const storageData = labeledFaceDescriptors.map(ld => ({
+            label: ld.label,
+            descriptors: ld.descriptors.map(d => Array.from(d))
+        }));
+        localStorage.setItem('face_db', JSON.stringify(storageData));
+
+        // Update matcher
+        faceMatcher = new faceapi.FaceMatcher(labeledFaceDescriptors, 0.6);
+
+        alert(`Successfully saved ${name}!`);
+        nameInput.value = '';
+        hideFaceModal();
+    };
+
+    const skipFace = () => {
+        hideFaceModal();
     };
 
     navigator.mediaDevices.getUserMedia({ video: true })
@@ -283,6 +399,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', (event) => {
         if (!destinationResults.contains(event.target) && event.target !== destinationInput) {
             clearResults();
+        }
+    });
+
+    // Modal event listeners
+    document.querySelector('.close-modal').addEventListener('click', hideFaceModal);
+    document.getElementById('save-face-btn').addEventListener('click', saveFace);
+    document.getElementById('skip-face-btn').addEventListener('click', skipFace);
+
+    // Close modal when clicking outside
+    document.getElementById('face-modal').addEventListener('click', (e) => {
+        if (e.target.id === 'face-modal') {
+            hideFaceModal();
         }
     });
 });
