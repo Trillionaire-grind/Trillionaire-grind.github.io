@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arcadia | Ethereal Shadow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Montserrat:wght@100&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --white: #ffffff;
+            --gold: #c5a059;
+            --black: #050505;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: var(--black);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+            color: var(--white);
+        }
+
+        /* High-End Image Viewer */
+        #gallery-canvas {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+            transition: transform 2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+        }
+
+        /* Soft Gradient Scrim */
+        .scrim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent, rgba(0,0,0,0.8));
+            z-index: 2;
+        }
+
+        /* Refined Title - Less Prominent */
+        .header {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(1.5rem, 4vw, 2.5rem); /* Scaled down significantly */
+            font-weight: 300;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 12px;
+            opacity: 0.6; /* Softer presence */
+            transition: letter-spacing 1.5s ease, opacity 1s ease;
+        }
+
+        /* Bottom Navigation */
+        .nav-container {
+            position: absolute;
+            bottom: 60px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 80px;
+            z-index: 20;
+        }
+
+        button {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 0.6rem;
+            letter-spacing: 4px;
+            cursor: pointer;
+            opacity: 0.4;
+            transition: 0.5s;
+            padding: 10px;
+        }
+
+        button:hover {
+            opacity: 1;
+            color: var(--gold);
+        }
+
+        /* Refresh Effect */
+        .fade-out {
+            opacity: 0 !important;
+            transform: scale(1.03);
+            letter-spacing: 20px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="gallery-canvas"></div>
+    <div class="scrim"></div>
+
+    <div class="header">
+        <h1 id="headline">Arcadia Droptail</h1>
+    </div>
+
+    <nav class="nav-container">
+        <button onclick="handleAction('repeat')">REPEAT</button>
+        <button onclick="handleAction('next')">NEXT</button>
+    </nav>
+
+    <script>
+        const folder = "Arcadia";
+        const baseName = "arcadia_";
+        const ext = ".webp";
+        const totalImages = 10; // Update this to your total number of files
+
+        let lastIndex = -1;
+        const canvas = document.getElementById('gallery-canvas');
+        const title = document.getElementById('headline');
+
+        function handleAction(type) {
+            let nextIndex;
+
+            if (type === 'repeat') {
+                nextIndex = 1;
+            } else {
+                // Logic: Find a random number that IS NOT the current one
+                do {
+                    nextIndex = Math.floor(Math.random() * totalImages) + 1;
+                } while (nextIndex === lastIndex);
+            }
+
+            // Start Cinematic Transition
+            canvas.classList.add('fade-out');
+            title.classList.add('fade-out');
+
+            setTimeout(() => {
+                canvas.style.backgroundImage = `url('${folder}/${baseName}${nextIndex}${ext}')`;
+                lastIndex = nextIndex;
+
+                // End Transition
+                canvas.classList.remove('fade-out');
+                title.classList.remove('fade-out');
+            }, 800);
+        }
+
+        // Initialize first view
+        window.onload = () => handleAction('next');
+    </script>
+</body>
+</html>
