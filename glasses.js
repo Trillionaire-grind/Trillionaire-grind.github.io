@@ -18,11 +18,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let lastUnknownDescriptor = null;
 
     const setupCanvas = () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
         canvas.style.width = window.innerWidth + 'px';
         canvas.style.height = window.innerHeight + 'px';
     };
+
+    // Handle window resize
+    window.addEventListener('resize', setupCanvas);
 
     // Initialize face recognition
     async function initFaceRecognition() {
