@@ -1,4 +1,5 @@
-const CACHE_NAME = 'ar-glasses-v1';
+// Bump cache version so updated assets (e.g. glasses.css) are picked up.
+const CACHE_NAME = 'ar-glasses-v2';
 const urlsToCache = [
   '/',
   '/index.html',
@@ -16,6 +17,18 @@ self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames =>
+      Promise.all(
+        cacheNames.map(name => {
+          if (name !== CACHE_NAME) return caches.delete(name);
+        })
+      )
+    )
   );
 });
 
