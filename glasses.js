@@ -16,19 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let labeledFaceDescriptors = [];
     let unknownFaceDetected = false;
     let lastUnknownDescriptor = null;
-
-    const setupCanvas = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        canvas.style.width = window.innerWidth + 'px';
-        canvas.style.height = window.innerHeight + 'px';
-        // Ensure canvas is transparent
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-    };
+    let faceOverlays = []; // Store overlay elements
 
     // Handle window resize
-    window.addEventListener('resize', setupCanvas);
+    window.addEventListener('resize', () => {
+        // Clear existing overlays on resize
+        faceOverlays.forEach(overlay => overlay.remove());
+        faceOverlays = [];
+    });
 
     // Initialize face recognition
     async function initFaceRecognition() {
@@ -73,14 +68,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const width = box.width;
         const height = box.height;
 
-        ctx.strokeStyle = '#ff003c';
+        ctx.strokeStyle = '#ffffff';
         ctx.lineWidth = 3;
         ctx.strokeRect(x, y, width, height);
 
-        ctx.fillStyle = '#ff003c';
+        ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 18px Anton, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(label, x + width / 2, y - 10);
+    };
+
+    const createFaceOverlay = (box, label) => {
+        const overlay = document.createElement('div');
+        overlay.className = 'face-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.left = box.x + 'px';
+        overlay.style.top = box.y + 'px';
+        overlay.style.width = box.width + 'px';
+        overlay.style.height = box.height + 'px';
+        overlay.style.border = '3px solid #ffffff';
+        overlay.style.borderRadius = '8px';
+        overlay.style.pointerEvents = 'none';
+        overlay.style.zIndex = '10';
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'face-label';
+        labelDiv.textContent = label;
+        labelDiv.style.position = 'absolute';
+        labelDiv.style.top = '-25px';
+        labelDiv.style.left = '50%';
+        labelDiv.style.transform = 'translateX(-50%)';
+        labelDiv.style.color = '#ffffff';
+        labelDiv.style.fontFamily = 'Anton, sans-serif';
+        labelDiv.style.fontSize = '18px';
+        labelDiv.style.fontWeight = 'bold';
+        labelDiv.style.textAlign = 'center';
+        labelDiv.style.textShadow = '0 0 8px rgba(255, 255, 255, 0.8)';
+        labelDiv.style.whiteSpace = 'nowrap';
+
+        overlay.appendChild(labelDiv);
+        document.body.appendChild(overlay);
+        faceOverlays.push(overlay);
     };
 
     const runDetectionLoop = async () => {
@@ -95,14 +123,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 .withFaceLandmarks()
                 .withFaceDescriptors();
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear existing overlays
+            faceOverlays.forEach(overlay => overlay.remove());
+            faceOverlays = [];
 
-            if (detections.length === 0) {
-                // if none found, keep at least a hint box
-                const w = canvas.width * 0.2;
-                const h = canvas.height * 0.3;
-                drawFaceBox({ x: (canvas.width - w)/2, y: (canvas.height - h)/2, width: w, height: h });
-            } else {
+            if (detections.length > 0) {
                 detections.forEach(detection => {
                     const box = detection.detection.box;
                     let label = 'persoon';
@@ -128,7 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
 
-                    drawFaceBox(box, label);
+                    // Create overlay element instead of drawing on canvas
+                    createFaceOverlay(box, label);
                 });
             }
 
@@ -190,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
             video.srcObject = stream;
             video.play();
             video.addEventListener('loadedmetadata', () => {
-                setupCanvas();
                 startFaceDetection();
             });
         })
