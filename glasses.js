@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
         canvas.height = window.innerHeight;
         canvas.style.width = window.innerWidth + 'px';
         canvas.style.height = window.innerHeight + 'px';
+        // Ensure canvas is transparent
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
 
     // Handle window resize
