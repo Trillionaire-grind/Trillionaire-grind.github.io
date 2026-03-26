@@ -9,13 +9,18 @@
     --p5-font-mono: 'Roboto Mono', monospace;
 }
 
+html {
+    background: transparent;
+}
+
 body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     font-family: var(--p5-font-mono);
     color: var(--p5-white);
-    background: radial-gradient(circle at top, rgba(255, 0, 60, 0.22), rgba(0, 0, 0, 1) 65%);
+    /* Make the passthrough/video visible behind the overlays. */
+    background: transparent;
 }
 
 body::before {
@@ -23,8 +28,8 @@ body::before {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: linear-gradient(120deg, rgba(255, 0, 60, 0.16), transparent 40%, rgba(0, 0, 0, 0.55));
-    mix-blend-mode: overlay;
+    /* Disable background tint so the "world" shows through. */
+    background: transparent;
 }
 
 body::after {
@@ -32,7 +37,7 @@ body::after {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08), transparent 65%);
+    background: transparent;
 }
 
 #video {
@@ -43,19 +48,14 @@ body::after {
     height: 100vh;
     object-fit: cover;
     filter: brightness(0.92) contrast(1.1) saturate(1.2);
-    z-index: 1;
-    display: none; /* Completely hide video for see-through AR */
+    /* Put the world behind the UI overlays. */
+    z-index: 0;
+    display: none; /* Keep camera feed hidden; we want glasses passthrough underneath */
+    pointer-events: none;
 }
 
 #face-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw !important;
-    height: 100vh !important;
-    z-index: 2;
-    pointer-events: none; /* Allow interactions with underlying elements */
-    background: transparent !important;
+    display: none; /* Hide canvas completely for AR approach */
 }
 
 #tasks {
@@ -71,6 +71,7 @@ body::after {
     gap: 18px;
     box-shadow: var(--p5-glow);
     backdrop-filter: blur(10px);
+    z-index: 10;
 }
 
 .task {
@@ -343,6 +344,7 @@ body::after {
     overflow: hidden;
     background: rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(6px);
+    z-index: 10;
 }
 
 #compass {
