@@ -10,7 +10,7 @@
 }
 
 html {
-    background: transparent;
+    background: transparent !important;
 }
 
 body {
@@ -20,7 +20,8 @@ body {
     font-family: var(--p5-font-mono);
     color: var(--p5-white);
     /* Make the passthrough/video visible behind the overlays. */
-    background: transparent;
+    background: transparent !important;
+    background-color: transparent !important;
 }
 
 body::before {
@@ -29,7 +30,7 @@ body::before {
     inset: 0;
     pointer-events: none;
     /* Disable background tint so the "world" shows through. */
-    background: transparent;
+    background: transparent !important;
 }
 
 body::after {
@@ -37,7 +38,7 @@ body::after {
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: transparent;
+    background: transparent !important;
 }
 
 #video {
