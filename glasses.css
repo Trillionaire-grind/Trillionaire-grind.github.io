@@ -44,8 +44,7 @@ body::after {
     object-fit: cover;
     filter: brightness(0.92) contrast(1.1) saturate(1.2);
     z-index: 1;
-    opacity: 0; /* Hide video for see-through AR */
-    pointer-events: none; /* Don't interfere with interactions */
+    display: none; /* Completely hide video for see-through AR */
 }
 
 #face-canvas {
