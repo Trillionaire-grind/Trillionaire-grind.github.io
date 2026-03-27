@@ -6,16 +6,42 @@
         <meta name="theme-color" content="#ff003c">
         <meta name="description" content="Face recognition and navigation app for AR glasses">
         <title>AR Glasses App</title>
+        <script>
+            (function () {
+                var t = localStorage.getItem('jakov-theme');
+                document.documentElement.setAttribute('data-theme', (t === 'dark' || t === 'light') ? t : 'light');
+            })();
+        </script>
+        <style>
+            #video { display: none !important; }
+        </style>
+        <script>
+            // Ensure we aren't stuck with an older cached UI when iterating quickly.
+            // Only runs once per reload (guarded by `sw-unreg=1`).
+            (async () => {
+                try {
+                    const url = new URL(window.location.href);
+                    if (url.searchParams.get('sw-unreg') === '1') return;
+                    if (!('serviceWorker' in navigator)) return;
+                    const regs = await navigator.serviceWorker.getRegistrations();
+                    await Promise.all(regs.map(r => r.unregister()));
+                    url.searchParams.set('sw-unreg', '1');
+                    window.location.replace(url.toString());
+                } catch (e) {
+                    // Ignore if service workers aren't available/allowed.
+                }
+            })();
+        </script>
         <link rel="manifest" href="manifest.json">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Anton&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="glasses.css">
+        <link rel="stylesheet" href="glasses.css?v=3">
         <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
         <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
     </head>
     <body>
-        <video id="video" autoplay muted playsinline></video>
+        <video id="video" autoplay muted playsinline style="display:none;"></video>
         <canvas id="face-canvas" style="background: transparent;"></canvas>
         
         <div id="tasks">
@@ -60,6 +86,8 @@
         </div>
 
         <div id="datetime"></div>
+
+        <button type="button" id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="Switch color theme">Dark</button>
 
         <div id="task-tracker">
             <div class="tracker-header">TASKS</div>
