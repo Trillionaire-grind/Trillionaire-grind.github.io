@@ -6,6 +6,30 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.log('Service Worker registration failed'));
     }
 
+    const THEME_KEY = 'jakov-theme';
+    const themeToggle = document.getElementById('theme-toggle');
+    const applyTheme = (mode) => {
+        const next = mode === 'dark' ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', next);
+        try {
+            localStorage.setItem(THEME_KEY, next);
+        } catch (e) { /* ignore */ }
+        if (themeToggle) {
+            themeToggle.textContent = next === 'dark' ? 'Light' : 'Dark';
+            themeToggle.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+            themeToggle.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+        }
+    };
+    if (themeToggle) {
+        const saved = localStorage.getItem(THEME_KEY);
+        if (saved === 'dark' || saved === 'light') applyTheme(saved);
+        else applyTheme('light');
+        themeToggle.addEventListener('click', () => {
+            const cur = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+            applyTheme(cur === 'dark' ? 'light' : 'dark');
+        });
+    }
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('face-canvas');
     const ctx = canvas.getContext('2d');
