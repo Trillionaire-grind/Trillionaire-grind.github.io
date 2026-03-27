@@ -590,3 +590,124 @@ body::after {
 #save-face-btn:hover, #skip-face-btn:hover {
     background: rgba(255, 0, 60, 0.8);
 }
+
+/* Theme toggle (testing): light = transparent scrim; dark = black + gray panels */
+.theme-toggle {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    z-index: 200;
+    padding: 8px 14px;
+    font-family: var(--p5-font-mono);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 999px;
+    border: 2px solid var(--p5-red);
+    background: rgba(0, 0, 0, 0.55);
+    color: var(--p5-white);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--p5-shadow);
+}
+
+.theme-toggle:hover {
+    opacity: 0.92;
+}
+
+html[data-theme="dark"] {
+    --dm-panel: #4a4a4a;
+    --dm-panel-soft: #3d3d3d;
+}
+
+html[data-theme="dark"],
+html[data-theme="dark"] body {
+    background: #000000 !important;
+    background-color: #000000 !important;
+}
+
+html[data-theme="dark"] body::before {
+    background: transparent !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+html[data-theme="dark"] body::after {
+    background: transparent !important;
+}
+
+html[data-theme="dark"] #tasks,
+html[data-theme="dark"] #task-tracker,
+html[data-theme="dark"] #comic-text:not(.hidden),
+html[data-theme="dark"] #text-badge,
+html[data-theme="dark"] #minimap,
+html[data-theme="dark"] .compass-ring,
+html[data-theme="dark"] #compass-distance,
+html[data-theme="dark"] .destination-input,
+html[data-theme="dark"] .destination-btn,
+html[data-theme="dark"] .destination-results,
+html[data-theme="dark"] #datetime,
+html[data-theme="dark"] .theme-toggle,
+html[data-theme="dark"] .modal-content {
+    background: var(--dm-panel) !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] #comic-text.hidden {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+html[data-theme="dark"] #comic-text::before {
+    border-left-color: var(--dm-panel);
+}
+
+html[data-theme="dark"] .tracker-header {
+    border-bottom-color: rgba(255, 255, 255, 0.35);
+    color: var(--p5-white);
+}
+
+html[data-theme="dark"] .tracker-task {
+    border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-theme="dark"] .tracker-task:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .destination-input:focus {
+    background: var(--dm-panel-soft) !important;
+    border-color: rgba(255, 255, 255, 0.65);
+}
+
+html[data-theme="dark"] .destination-btn:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+html[data-theme="dark"] .destination-result:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .compass-arrow {
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.35);
+}
+
+html[data-theme="dark"] .modal {
+    background-color: rgba(0, 0, 0, 0.92);
+}
+
+html[data-theme="dark"] #face-name-input {
+    background: var(--dm-panel-soft);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+html[data-theme="dark"] #save-face-btn:hover,
+html[data-theme="dark"] #skip-face-btn:hover {
+    background: rgba(255, 255, 255, 0.22) !important;
+}
