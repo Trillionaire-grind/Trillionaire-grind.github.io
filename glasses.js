@@ -30,6 +30,54 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    /**
+     * Chrome on some glasses/Android builds reports as "mobile" and does not
+     * apply :hover from a mouse reliably. Mirroring hover styles with a class
+     * driven by pointer/mouse enter+leave fixes that.
+     */
+    /**
+     * Uses pointerover/pointerout (bubbling) so descendants count — needed
+     * for fixed children like #compass-distance and for whole-panel hovers.
+     */
+    function bindPointerHover(el) {
+        if (!el) return;
+        const add = () => { el.classList.add('is-pointer-hover'); };
+        const remove = () => { el.classList.remove('is-pointer-hover'); };
+        const maybeRemove = (e) => {
+            const to = e.relatedTarget;
+            if (to && el.contains(to)) return;
+            remove();
+        };
+        el.addEventListener('pointerover', (e) => {
+            if (el.contains(e.target)) add();
+        });
+        el.addEventListener('pointerout', maybeRemove);
+        el.addEventListener('mouseover', (e) => {
+            if (el.contains(e.target)) add();
+        });
+        el.addEventListener('mouseout', maybeRemove);
+    }
+
+    function initPointerHoverBindings() {
+        const q = (sel) => document.querySelector(sel);
+        bindPointerHover(q('#tasks'));
+        bindPointerHover(q('#task-tracker'));
+        bindPointerHover(q('#comic-text'));
+        bindPointerHover(q('#text-badge'));
+        bindPointerHover(q('#close-text'));
+        bindPointerHover(q('#minimap'));
+        bindPointerHover(q('#compass'));
+        bindPointerHover(q('#destination-ui'));
+        bindPointerHover(q('#datetime'));
+        bindPointerHover(q('#theme-toggle'));
+        bindPointerHover(q('.modal-content'));
+        bindPointerHover(q('#face-name-input'));
+        bindPointerHover(q('#save-face-btn'));
+        bindPointerHover(q('#skip-face-btn'));
+        bindPointerHover(q('.close-modal'));
+    }
+    initPointerHoverBindings();
+
     const video = document.getElementById('video');
     const canvas = document.getElementById('face-canvas');
     const ctx = canvas.getContext('2d');
