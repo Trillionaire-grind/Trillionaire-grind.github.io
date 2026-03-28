@@ -85,6 +85,37 @@ body::after {
     box-shadow: var(--p5-glow);
     backdrop-filter: blur(10px);
     z-index: 10;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Whole bar highlights (CSS :hover + .is-pointer-hover from JS for “mobile” Chrome + mouse) */
+#tasks:hover,
+#tasks.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+#tasks:hover .task,
+#tasks.is-pointer-hover .task {
+    color: var(--ui-hover-fg);
+}
+
+#tasks:hover .circle,
+#tasks.is-pointer-hover .circle {
+    border-color: var(--ui-hover-fg);
+    transform: scale(1.05);
+}
+
+#tasks:hover .circle.checked,
+#tasks.is-pointer-hover .circle.checked {
+    background: var(--ui-hover-fg);
+    border-color: var(--ui-hover-fg);
+}
+
+#tasks:hover .circle.checked::after,
+#tasks.is-pointer-hover .circle.checked::after {
+    color: var(--ui-hover-bg);
 }
 
 .task {
@@ -100,21 +131,7 @@ body::after {
     padding: 6px 12px;
     margin: -6px -12px;
     border-radius: 999px;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.task:hover {
-    background: var(--ui-hover-bg);
-    color: var(--ui-hover-fg);
-}
-
-.task:hover .circle.checked {
-    background: var(--ui-hover-fg);
-    border-color: var(--ui-hover-fg);
-}
-
-.task:hover .circle.checked::after {
-    color: var(--ui-hover-bg);
+    transition: color 0.2s ease;
 }
 
 .circle {
@@ -126,11 +143,6 @@ body::after {
     align-items: center;
     justify-content: center;
     transition: background 0.25s, transform 0.25s, border-color 0.2s;
-}
-
-.task:hover .circle {
-    border-color: var(--ui-hover-fg);
-    transform: scale(1.05);
 }
 
 .circle.checked {
@@ -158,6 +170,55 @@ body::after {
     box-shadow: var(--p5-glow), var(--p5-shadow);
     overflow: hidden;
     z-index: 100;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Whole panel highlights like #tasks (anywhere inside the tracker) */
+#task-tracker:hover,
+#task-tracker.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+#task-tracker:hover .tracker-header,
+#task-tracker.is-pointer-hover .tracker-header {
+    background: transparent;
+    color: var(--ui-hover-fg);
+    border-bottom-color: var(--ui-hover-fg);
+}
+
+#task-tracker:hover .tracker-task,
+#task-tracker.is-pointer-hover .tracker-task {
+    background: transparent;
+    border-bottom-color: rgba(10, 10, 10, 0.12);
+}
+
+#task-tracker:hover .task-time,
+#task-tracker:hover .task-name,
+#task-tracker.is-pointer-hover .task-time,
+#task-tracker.is-pointer-hover .task-name {
+    color: var(--ui-hover-fg);
+}
+
+#task-tracker:hover .task-duration,
+#task-tracker.is-pointer-hover .task-duration {
+    color: rgba(10, 10, 10, 0.55);
+}
+
+#task-tracker:hover .tracker-task.completed .task-name,
+#task-tracker.is-pointer-hover .tracker-task.completed .task-name {
+    color: rgba(10, 10, 10, 0.45);
+}
+
+#task-tracker:hover .tracker-task.completed .task-time,
+#task-tracker.is-pointer-hover .tracker-task.completed .task-time {
+    color: rgba(10, 10, 10, 0.45);
+}
+
+#task-tracker:hover .tracker-task.completed,
+#task-tracker.is-pointer-hover .tracker-task.completed {
+    opacity: 1;
 }
 
 .tracker-header {
@@ -169,13 +230,7 @@ body::after {
     text-transform: uppercase;
     color: var(--p5-red);
     font-weight: 700;
-    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-}
-
-.tracker-header:hover {
-    background: var(--ui-hover-bg);
-    color: var(--ui-hover-fg);
-    border-bottom-color: var(--ui-hover-fg);
+    transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .tracker-list {
@@ -192,28 +247,7 @@ body::after {
     gap: 12px;
     align-items: flex-start;
     cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.tracker-task:hover {
-    background: var(--ui-hover-bg);
-}
-
-.tracker-task:hover .task-time,
-.tracker-task:hover .task-name {
-    color: var(--ui-hover-fg);
-}
-
-.tracker-task:hover .task-duration {
-    color: rgba(10, 10, 10, 0.55);
-}
-
-.tracker-task.completed:hover .task-name {
-    color: rgba(10, 10, 10, 0.45);
-}
-
-.tracker-task.completed:hover .task-time {
-    color: rgba(10, 10, 10, 0.45);
+    transition: border-color 0.2s ease;
 }
 
 .tracker-task:last-child {
@@ -298,18 +332,21 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-#comic-text:not(.hidden):hover {
+#comic-text:not(.hidden):hover,
+#comic-text:not(.hidden).is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
 }
 
-#comic-text:not(.hidden):hover .close-btn {
+#comic-text:not(.hidden):hover .close-btn,
+#comic-text:not(.hidden).is-pointer-hover .close-btn {
     color: var(--ui-hover-fg);
 }
 
-#comic-text:not(.hidden):hover::before {
+#comic-text:not(.hidden):hover::before,
+#comic-text:not(.hidden).is-pointer-hover::before {
     border-left-color: var(--ui-hover-bg);
 }
 
@@ -377,7 +414,8 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-#text-badge:hover {
+#text-badge:hover,
+#text-badge.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
@@ -428,7 +466,8 @@ body::after {
     transition: background 0.2s ease, border-color 0.2s ease;
 }
 
-#minimap:hover {
+#minimap:hover,
+#minimap.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     border-color: var(--ui-hover-fg);
 }
@@ -457,17 +496,21 @@ body::after {
     cursor: default;
 }
 
-.compass-ring:hover {
+/* Whole compass cluster (ring + distance pill) — same idea as #tasks / #task-tracker */
+#compass:hover .compass-ring,
+#compass.is-pointer-hover .compass-ring {
     background: var(--ui-hover-bg) !important;
     border-color: var(--ui-hover-fg);
 }
 
-.compass-ring:hover .compass-label {
+#compass:hover .compass-label,
+#compass.is-pointer-hover .compass-label {
     color: var(--ui-hover-fg);
     text-shadow: none;
 }
 
-.compass-ring:hover .compass-arrow {
+#compass:hover .compass-arrow,
+#compass.is-pointer-hover .compass-arrow {
     background: var(--ui-hover-fg);
     box-shadow: 0 0 12px rgba(10, 10, 10, 0.35);
 }
@@ -505,7 +548,8 @@ body::after {
     cursor: default;
 }
 
-#compass-distance:hover {
+#compass:hover #compass-distance,
+#compass.is-pointer-hover #compass-distance {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
@@ -537,6 +581,31 @@ body::after {
     align-items: stretch;
     width: min(340px, 90vw);
     z-index: 10;
+    padding: 12px;
+    margin: -12px;
+    border-radius: 20px;
+    border: 2px solid transparent;
+    box-sizing: border-box;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#destination-ui:hover,
+#destination-ui.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+#destination-ui:hover .destination-input,
+#destination-ui.is-pointer-hover .destination-input {
+    border-color: var(--ui-hover-fg);
+    background: rgba(10, 10, 10, 0.06);
+    color: var(--ui-hover-fg);
+}
+
+#destination-ui:hover .destination-input::placeholder,
+#destination-ui.is-pointer-hover .destination-input::placeholder {
+    color: rgba(10, 10, 10, 0.45);
 }
 
 .destination-input {
@@ -552,14 +621,12 @@ body::after {
     transition: border 0.2s, background 0.2s, color 0.2s;
 }
 
-.destination-input:hover,
 .destination-input:focus {
     border-color: var(--ui-hover-fg);
     background: var(--ui-hover-bg);
     color: var(--ui-hover-fg);
 }
 
-.destination-input:hover::placeholder,
 .destination-input:focus::placeholder {
     color: rgba(10, 10, 10, 0.45);
 }
@@ -579,8 +646,9 @@ body::after {
     align-self: center;
 }
 
-.destination-btn:hover {
-    background: var(--ui-hover-bg);
+#destination-ui:hover .destination-btn,
+#destination-ui.is-pointer-hover .destination-btn {
+    background: rgba(10, 10, 10, 0.08);
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
     transform: translateY(-1px);
@@ -606,9 +674,20 @@ body::after {
     cursor: pointer;
 }
 
-.destination-result:hover {
-    background: var(--ui-hover-bg);
+#destination-ui:hover .destination-result,
+#destination-ui.is-pointer-hover .destination-result {
     color: var(--ui-hover-fg);
+}
+
+#destination-ui:hover .destination-results,
+#destination-ui.is-pointer-hover .destination-results {
+    background: rgba(10, 10, 10, 0.06);
+    border-color: var(--ui-hover-fg);
+}
+
+#destination-ui:hover .destination-result:hover,
+#destination-ui.is-pointer-hover .destination-result:hover {
+    background: rgba(10, 10, 10, 0.1);
 }
 
 #datetime {
@@ -628,7 +707,8 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-#datetime:hover {
+#datetime:hover,
+#datetime.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
@@ -666,18 +746,22 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.modal-content:hover {
+.modal-content:hover,
+.modal-content.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
 }
 
 .modal-content:hover h2,
-.modal-content:hover p {
+.modal-content:hover p,
+.modal-content.is-pointer-hover h2,
+.modal-content.is-pointer-hover p {
     color: var(--ui-hover-fg);
 }
 
-.modal-content:hover .close-modal {
+.modal-content:hover .close-modal,
+.modal-content.is-pointer-hover .close-modal {
     color: var(--ui-hover-fg);
 }
 
@@ -689,7 +773,8 @@ body::after {
     cursor: pointer;
 }
 
-.close-modal:hover {
+.close-modal:hover,
+.close-modal.is-pointer-hover {
     color: var(--ui-hover-fg);
 }
 
@@ -707,6 +792,7 @@ body::after {
 }
 
 #face-name-input:hover,
+#face-name-input.is-pointer-hover,
 #face-name-input:focus {
     border-color: var(--ui-hover-fg);
     background: var(--ui-hover-bg);
@@ -714,6 +800,7 @@ body::after {
 }
 
 #face-name-input:hover::placeholder,
+#face-name-input.is-pointer-hover::placeholder,
 #face-name-input:focus::placeholder {
     color: rgba(10, 10, 10, 0.45);
 }
@@ -737,7 +824,10 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-#save-face-btn:hover, #skip-face-btn:hover {
+#save-face-btn:hover,
+#save-face-btn.is-pointer-hover,
+#skip-face-btn:hover,
+#skip-face-btn.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
@@ -766,7 +856,8 @@ body::after {
     transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.theme-toggle:hover {
+.theme-toggle:hover,
+.theme-toggle.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg);
     border-color: var(--ui-hover-fg);
@@ -832,108 +923,202 @@ html[data-theme="dark"] .tracker-task {
     border-bottom-color: rgba(255, 255, 255, 0.12);
 }
 
-html[data-theme="dark"] .tracker-header:hover {
+html[data-theme="dark"] #task-tracker:hover,
+html[data-theme="dark"] #task-tracker.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #task-tracker:hover .tracker-header,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .tracker-header {
     color: var(--ui-hover-fg) !important;
     border-bottom-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .tracker-task:hover {
-    background: var(--ui-hover-bg) !important;
+html[data-theme="dark"] #task-tracker:hover .tracker-task,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .tracker-task {
+    border-bottom-color: rgba(10, 10, 10, 0.12) !important;
 }
 
-html[data-theme="dark"] .tracker-task:hover .task-time,
-html[data-theme="dark"] .tracker-task:hover .task-name {
+html[data-theme="dark"] #task-tracker:hover .task-time,
+html[data-theme="dark"] #task-tracker:hover .task-name,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .task-time,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .task-name {
     color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .tracker-task:hover .task-duration {
+html[data-theme="dark"] #task-tracker:hover .task-duration,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .task-duration {
     color: rgba(10, 10, 10, 0.55) !important;
 }
 
-html[data-theme="dark"] .destination-input:hover,
+html[data-theme="dark"] #task-tracker:hover .tracker-task.completed .task-name,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .tracker-task.completed .task-name {
+    color: rgba(10, 10, 10, 0.45) !important;
+}
+
+html[data-theme="dark"] #task-tracker:hover .tracker-task.completed .task-time,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .tracker-task.completed .task-time {
+    color: rgba(10, 10, 10, 0.45) !important;
+}
+
+html[data-theme="dark"] #task-tracker:hover .tracker-task.completed,
+html[data-theme="dark"] #task-tracker.is-pointer-hover .tracker-task.completed {
+    opacity: 1 !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover,
+html[data-theme="dark"] #destination-ui.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover .destination-input,
+html[data-theme="dark"] #destination-ui.is-pointer-hover .destination-input {
+    background: rgba(10, 10, 10, 0.06) !important;
+    color: var(--ui-hover-fg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover .destination-btn,
+html[data-theme="dark"] #destination-ui.is-pointer-hover .destination-btn {
+    background: rgba(10, 10, 10, 0.08) !important;
+    color: var(--ui-hover-fg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover .destination-results,
+html[data-theme="dark"] #destination-ui.is-pointer-hover .destination-results {
+    background: rgba(10, 10, 10, 0.06) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover .destination-result,
+html[data-theme="dark"] #destination-ui.is-pointer-hover .destination-result {
+    color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #destination-ui:hover .destination-result:hover,
+html[data-theme="dark"] #destination-ui.is-pointer-hover .destination-result:hover {
+    background: rgba(10, 10, 10, 0.1) !important;
+}
+
 html[data-theme="dark"] .destination-input:focus {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .destination-btn:hover {
+html[data-theme="dark"] #tasks:hover,
+html[data-theme="dark"] #tasks.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #tasks:hover .task,
+html[data-theme="dark"] #tasks.is-pointer-hover .task {
+    color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #tasks:hover .circle,
+html[data-theme="dark"] #tasks.is-pointer-hover .circle {
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #tasks:hover .circle.checked,
+html[data-theme="dark"] #tasks.is-pointer-hover .circle.checked {
+    background: var(--ui-hover-fg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #tasks:hover .circle.checked::after,
+html[data-theme="dark"] #tasks.is-pointer-hover .circle.checked::after {
+    color: var(--ui-hover-bg) !important;
+}
+
+html[data-theme="dark"] #minimap:hover,
+html[data-theme="dark"] #minimap.is-pointer-hover {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #compass:hover .compass-ring,
+html[data-theme="dark"] #compass.is-pointer-hover .compass-ring {
+    background: var(--ui-hover-bg) !important;
+    border-color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #compass:hover .compass-label,
+html[data-theme="dark"] #compass.is-pointer-hover .compass-label {
+    color: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #compass:hover .compass-arrow,
+html[data-theme="dark"] #compass.is-pointer-hover .compass-arrow {
+    background: var(--ui-hover-fg) !important;
+}
+
+html[data-theme="dark"] #compass:hover #compass-distance,
+html[data-theme="dark"] #compass.is-pointer-hover #compass-distance {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .destination-result:hover {
-    background: var(--ui-hover-bg) !important;
-    color: var(--ui-hover-fg) !important;
-}
-
-html[data-theme="dark"] #tasks .task:hover {
-    background: var(--ui-hover-bg) !important;
-    color: var(--ui-hover-fg) !important;
-}
-
-html[data-theme="dark"] #minimap:hover {
-    background: var(--ui-hover-bg) !important;
-    border-color: var(--ui-hover-fg) !important;
-}
-
-html[data-theme="dark"] .compass-ring:hover {
-    background: var(--ui-hover-bg) !important;
-    border-color: var(--ui-hover-fg) !important;
-}
-
-html[data-theme="dark"] #compass-distance:hover {
+html[data-theme="dark"] #datetime:hover,
+html[data-theme="dark"] #datetime.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] #datetime:hover {
+html[data-theme="dark"] .theme-toggle:hover,
+html[data-theme="dark"] .theme-toggle.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .theme-toggle:hover {
+html[data-theme="dark"] #text-badge:hover,
+html[data-theme="dark"] #text-badge.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] #text-badge:hover {
+html[data-theme="dark"] #comic-text:not(.hidden):hover,
+html[data-theme="dark"] #comic-text:not(.hidden).is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] #comic-text:not(.hidden):hover {
-    background: var(--ui-hover-bg) !important;
-    color: var(--ui-hover-fg) !important;
-    border-color: var(--ui-hover-fg) !important;
-}
-
-html[data-theme="dark"] #comic-text:not(.hidden):hover::before {
+html[data-theme="dark"] #comic-text:not(.hidden):hover::before,
+html[data-theme="dark"] #comic-text:not(.hidden).is-pointer-hover::before {
     border-left-color: var(--ui-hover-bg) !important;
 }
 
-html[data-theme="dark"] .modal-content:hover {
+html[data-theme="dark"] .modal-content:hover,
+html[data-theme="dark"] .modal-content.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
 }
 
 html[data-theme="dark"] .modal-content:hover h2,
-html[data-theme="dark"] .modal-content:hover p {
+html[data-theme="dark"] .modal-content:hover p,
+html[data-theme="dark"] .modal-content.is-pointer-hover h2,
+html[data-theme="dark"] .modal-content.is-pointer-hover p {
     color: var(--ui-hover-fg) !important;
 }
 
-html[data-theme="dark"] .modal-content:hover .close-modal {
+html[data-theme="dark"] .modal-content:hover .close-modal,
+html[data-theme="dark"] .modal-content.is-pointer-hover .close-modal {
     color: var(--ui-hover-fg) !important;
 }
 
 html[data-theme="dark"] #face-name-input:hover,
+html[data-theme="dark"] #face-name-input.is-pointer-hover,
 html[data-theme="dark"] #face-name-input:focus {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
@@ -954,7 +1139,9 @@ html[data-theme="dark"] #face-name-input {
 }
 
 html[data-theme="dark"] #save-face-btn:hover,
-html[data-theme="dark"] #skip-face-btn:hover {
+html[data-theme="dark"] #save-face-btn.is-pointer-hover,
+html[data-theme="dark"] #skip-face-btn:hover,
+html[data-theme="dark"] #skip-face-btn.is-pointer-hover {
     background: var(--ui-hover-bg) !important;
     color: var(--ui-hover-fg) !important;
     border-color: var(--ui-hover-fg) !important;
