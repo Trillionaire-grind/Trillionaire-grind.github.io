@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rolls-Royce Phantom Builder</title>
+  <style>
+    :root {
+      --bg: #0d0f14;
+      --panel: #151926;
+      --panel-2: #1c2232;
+      --text: #f4f6fb;
+      --muted: #a9b3c9;
+      --accent: #d6b36a;
+      --line: #2b3349;
+      --ok: #7fd19d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap {
+      width: min(1180px, 92vw);
+      margin: 0 auto;
+      padding: 24px 0 40px;
+    }
+    .hero {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, #131a2a 0%, #0f1420 100%);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+    }
+    .hero h1 {
+      margin: 0 0 2px;
+      font-size: clamp(1.3rem, 2.4vw, 2rem);
+      font-weight: 700;
+    }
+    .hero p { margin: 0; color: var(--muted); }
+    .price {
+      text-align: right;
+      min-width: 190px;
+    }
+    .price strong {
+      display: block;
+      font-size: 1.65rem;
+      color: var(--accent);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .preview {
+      position: relative;
+      top: 0;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--panel);
+      width: 100%;
+      max-width: 460px;
+      margin-inline: auto;
+      min-width: 0;
+    }
+    @media (min-width: 981px) {
+      .preview {
+        position: sticky;
+        top: 12px;
+      }
+    }
+    /* Single box so image + tint layers share exact width/height (fixes mobile misalignment) */
+    .preview-media {
+      position: relative;
+      width: 100%;
+      height: 430px;
+      overflow: hidden;
+    }
+    .preview-media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      filter: saturate(0.92) contrast(1.04);
+    }
+    .preview-tint {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: transparent;
+      mix-blend-mode: multiply;
+      opacity: 0.58;
+      transition: background-color 0.25s ease, opacity 0.25s ease;
+      /* Fallback: rough body-only area until a true mask is provided */
+      clip-path: polygon(12% 58%, 20% 50%, 35% 47%, 62% 43%, 79% 45%, 89% 54%, 88% 66%, 11% 68%);
+    }
+    .preview-tint.is-masked {
+      clip-path: none;
+      /* True body-only paint region from a white-on-transparent PNG mask */
+      -webkit-mask-image: var(--body-mask-url);
+      -webkit-mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: var(--body-mask-url);
+      mask-size: cover;
+      mask-repeat: no-repeat;
+      mask-position: center;
+    }
+    .preview-wheel,
+    .preview-ornament {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      background: transparent;
+      mix-blend-mode: multiply;
+      transition: background-color 0.25s ease, opacity 0.25s ease;
+    }
+    .preview-wheel {
+      opacity: 0.32;
+      clip-path: ellipse(11% 8% at 27% 68%), ellipse(11% 8% at 72% 68%);
+    }
+    .preview-wheel.is-masked {
+      clip-path: none;
+      -webkit-mask-image: var(--wheel-mask-url);
+      -webkit-mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: var(--wheel-mask-url);
+      mask-size: cover;
+      mask-repeat: no-repeat;
+      mask-position: center;
+    }
+    .preview-ornament {
+      opacity: 0.38;
+      clip-path: ellipse(1.9% 1.8% at 56.4% 56.2%);
+    }
+    .preview-ornament.is-masked {
+      clip-path: none;
+      -webkit-mask-image: var(--ornament-mask-url);
+      -webkit-mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-image: var(--ornament-mask-url);
+      mask-size: cover;
+      mask-repeat: no-repeat;
+      mask-position: center;
+    }
+    .preview-meta {
+      border-top: 1px solid var(--line);
+      padding: 12px 14px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      background: var(--panel);
+    }
+    .steps {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--panel);
+    }
+    .step-tabs {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-bottom: 1px solid var(--line);
+      background: #111827;
+    }
+    .step-tab {
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      padding: 11px 8px;
+      font-size: 0.82rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+    .step-tab.active {
+      color: var(--text);
+      background: #182033;
+      box-shadow: inset 0 -2px 0 var(--accent);
+    }
+    .progress {
+      height: 4px;
+      background: #222c43;
+      position: relative;
+    }
+    .progress > span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 25%;
+      background: linear-gradient(90deg, #b99248, var(--accent));
+      transition: width 0.25s ease;
+    }
+    .step {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      height: 0;
+      overflow: hidden;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .step.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+      height: auto;
+      overflow: visible;
+    }
+    .step:last-child { border-bottom: 0; }
+    .step h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      letter-spacing: 0.02em;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      border: 1px solid #42506e;
+      color: var(--text);
+      background: var(--panel-2);
+      padding: 8px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s ease;
+      user-select: none;
+    }
+    .chip:hover { border-color: var(--accent); }
+    .chip.active {
+      border-color: var(--accent);
+      color: #0f1220;
+      background: var(--accent);
+      font-weight: 600;
+    }
+    .summary {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: var(--panel);
+    }
+    .summary h3 { margin: 0 0 8px; font-size: 1rem; }
+    .summary ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 0.95rem;
+      display: grid;
+      gap: 6px;
+    }
+    .summary li strong { color: var(--text); }
+    .cta {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+    }
+    .btn {
+      border: 1px solid var(--accent);
+      background: var(--accent);
+      color: #151515;
+      font-weight: 700;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+    }
+    .btn.alt {
+      background: transparent;
+      color: var(--accent);
+    }
+    .toast {
+      margin-top: 10px;
+      color: var(--ok);
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+    .step-controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .step-note {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 10px;
+    }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .wrap {
+        width: 100%;
+        max-width: 100%;
+        padding: 16px 12px 28px;
+      }
+      .hero {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: left;
+      }
+      .price {
+        text-align: left;
+        min-width: 0;
+      }
+      .step-tabs {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        grid-template-columns: unset;
+      }
+      .step-tab {
+        flex: 0 0 auto;
+        min-height: 44px;
+        padding: 12px 14px;
+        font-size: 0.75rem;
+        white-space: nowrap;
+      }
+      .chip {
+        min-height: 44px;
+        padding: 10px 14px;
+      }
+      .btn {
+        min-height: 44px;
+        padding: 12px 14px;
+      }
+      .preview-media {
+        height: auto;
+        aspect-ratio: 16 / 10;
+        max-height: min(70vh, 440px);
+        min-height: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Rolls-Royce Phantom Builder</h1>
+        <p>Configure your Phantom and see instant pricing updates.</p>
+      </div>
+      <div class="price">
+        <span>Current Price</span>
+        <strong id="price">$460,000</strong>
+      </div>
+    </section>
+
+    <main class="grid">
+      <section class="preview">
+        <div class="preview-media">
+          <img id="carImage" src="https://www.topgear.com/sites/default/files/cars-car/image/2017/10/_jl58227.jpg" alt="Rolls-Royce Phantom preview">
+          <div class="preview-tint" id="carTint"></div>
+          <div class="preview-wheel" id="wheelTint"></div>
+          <div class="preview-ornament" id="ornamentTint"></div>
+        </div>
+        <div class="preview-meta" id="previewMeta">Exterior: Black Diamond · Wheels: 22" Aero · Interior: Black</div>
+      </section>
+
+      <section>
+        <div class="steps">
+          <div class="step-tabs" id="stepTabs"></div>
+          <div class="progress"><span id="progressBar"></span></div>
+          <div class="step active" data-step="0">
+            <h3>Exterior Color</h3>
+            <div class="chips" data-group="exterior"></div>
+          </div>
+          <div class="step" data-step="1">
+            <h3>Wheel Design</h3>
+            <div class="chips" data-group="wheels"></div>
+          </div>
+          <div class="step" data-step="2">
+            <h3>Interior Theme</h3>
+            <div class="chips" data-group="interior"></div>
+          </div>
+          <div class="step" data-step="3">
+            <h3>Spirit of Ecstasy</h3>
+            <div class="chips" data-group="spirit"></div>
+          </div>
+          <div class="step" data-step="4">
+            <h3>Packages</h3>
+            <div class="chips" data-group="packages"></div>
+            <p class="step-note">Tip: Package options can be combined.</p>
+          </div>
+          <div class="step-controls">
+            <button class="btn alt" id="prevStep">Back</button>
+            <button class="btn" id="nextStep">Next</button>
+          </div>
+        </div>
+
+        <div class="summary">
+          <h3>Build Summary</h3>
+          <ul id="summaryList"></ul>
+          <div class="cta">
+            <button class="btn" id="requestQuote">Request Quote</button>
+            <button class="btn alt" id="resetBuild">Reset</button>
+          </div>
+          <div class="toast" id="toast"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const BASE_PRICE = 460000;
+    const BASE_CAR_IMAGE = "https://www.topgear.com/sites/default/files/cars-car/image/2017/10/_jl58227.jpg";
+    /*
+      For true body-only paint changes, add a mask file in your project:
+      - white = car body panels to color
+      - transparent = wheels, windows, lights, background
+      Example path below (create this file): assets/phantom-body-mask.png
+    */
+    const BODY_MASK_URL = "assets/phantom-body-mask.png";
+    const WHEEL_MASK_URL = "assets/phantom-wheel-mask.png";
+    const ORNAMENT_MASK_URL = "assets/phantom-ornament-mask.png";
+
+    const config = {
+      exterior: [
+        { label: "Black Diamond", price: 0, tint: "#22252e", tintOpacity: 0.68 },
+        { label: "Arctic White", price: 6500, tint: "#e8edf7", tintOpacity: 0.84 },
+        { label: "Midnight Sapphire", price: 8500, tint: "#0c2f55", tintOpacity: 0.7 },
+        { label: "Bespoke Emerald", price: 12000, tint: "#0c3d2f", tintOpacity: 0.7 }
+      ],
+      wheels: [
+        { label: '21" Classic Silver', price: 0, tint: "#a8b4c8", tintOpacity: 0.26 },
+        { label: '22" Aero Dark', price: 3500, tint: "#2a3038", tintOpacity: 0.4 },
+        { label: '22" Polished Chrome', price: 6200, tint: "#cdd5e4", tintOpacity: 0.24 }
+      ],
+      interior: [
+        { label: "Black", price: 0 },
+        { label: "Tan Cashmere", price: 4800 },
+        { label: "Navy + Ivory", price: 7600 }
+      ],
+      spirit: [
+        { label: "Classic Silver", price: 0, tint: "#b8c2d4", tintOpacity: 0.22 },
+        { label: "Black Badge", price: 3200, tint: "#1a1d24", tintOpacity: 0.45 },
+        { label: "Rose Gold", price: 5400, tint: "#a06b52", tintOpacity: 0.38 }
+      ],
+      packages: [
+        { label: "Rear Theatre", price: 8900, multi: true },
+        { label: "Starlight Headliner", price: 13200, multi: true },
+        { label: "Executive Seating", price: 15400, multi: true }
+      ]
+    };
+
+    const state = {
+      exterior: config.exterior[0],
+      wheels: config.wheels[1],
+      interior: config.interior[0],
+      spirit: config.spirit[0],
+      packages: [],
+      currentStep: 0
+    };
+    const stepDefs = [
+      { key: "exterior", label: "Exterior" },
+      { key: "wheels", label: "Wheels" },
+      { key: "interior", label: "Interior" },
+      { key: "spirit", label: "Spirit" },
+      { key: "packages", label: "Packages" }
+    ];
+
+    const priceEl = document.getElementById("price");
+    const carImageEl = document.getElementById("carImage");
+    const carTintEl = document.getElementById("carTint");
+    const wheelTintEl = document.getElementById("wheelTint");
+    const ornamentTintEl = document.getElementById("ornamentTint");
+    const previewMetaEl = document.getElementById("previewMeta");
+    const summaryListEl = document.getElementById("summaryList");
+    const toastEl = document.getElementById("toast");
+    const stepTabsEl = document.getElementById("stepTabs");
+    const progressBarEl = document.getElementById("progressBar");
+    const stepEls = Array.from(document.querySelectorAll(".step[data-step]"));
+
+    function formatCurrency(v) {
+      return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(v);
+    }
+
+    function totalPrice() {
+      const pkgTotal = state.packages.reduce((sum, p) => sum + p.price, 0);
+      return BASE_PRICE + state.exterior.price + state.wheels.price + state.interior.price + state.spirit.price + pkgTotal;
+    }
+
+    /** Overlay darkness only (base JPG unchanged). Values are clamped to 1. */
+    function overlayOpacity(v, fallback) {
+      const raw = Math.min(1, Math.max(0, v ?? fallback));
+      return String(raw);
+    }
+
+    function updateUI() {
+      priceEl.textContent = formatCurrency(totalPrice());
+      carImageEl.src = BASE_CAR_IMAGE;
+      carTintEl.style.backgroundColor = state.exterior.tint || "transparent";
+      carTintEl.style.opacity = overlayOpacity(state.exterior.tintOpacity, 0.58);
+      wheelTintEl.style.backgroundColor = state.wheels.tint || "transparent";
+      wheelTintEl.style.opacity = overlayOpacity(state.wheels.tintOpacity, 0.32);
+      ornamentTintEl.style.backgroundColor = state.spirit.tint || "transparent";
+      ornamentTintEl.style.opacity = overlayOpacity(state.spirit.tintOpacity, 0.35);
+      previewMetaEl.textContent =
+        `Exterior: ${state.exterior.label} · Wheels: ${state.wheels.label} · Spirit: ${state.spirit.label} · Interior: ${state.interior.label}`;
+
+      const packagesText = state.packages.length
+        ? state.packages.map((p) => `${p.label} (${formatCurrency(p.price)})`).join(", ")
+        : "None";
+
+      summaryListEl.innerHTML = `
+        <li><strong>Model:</strong> Rolls-Royce Phantom</li>
+        <li><strong>Exterior:</strong> ${state.exterior.label} (${formatCurrency(state.exterior.price)})</li>
+        <li><strong>Wheels:</strong> ${state.wheels.label} (${formatCurrency(state.wheels.price)})</li>
+        <li><strong>Interior:</strong> ${state.interior.label} (${formatCurrency(state.interior.price)})</li>
+        <li><strong>Spirit:</strong> ${state.spirit.label} (${formatCurrency(state.spirit.price)})</li>
+        <li><strong>Packages:</strong> ${packagesText}</li>
+      `;
+      updateStepUI();
+    }
+
+    function enableMaskIfAvailable(maskUrl, element, cssVarName, className) {
+      const testImage = new Image();
+      testImage.onload = () => {
+        element.classList.add(className);
+        element.style.setProperty(cssVarName, `url("${maskUrl}")`);
+      };
+      testImage.onerror = () => {
+        element.classList.remove(className);
+      };
+      testImage.src = maskUrl;
+    }
+
+    function renderTabs() {
+      stepTabsEl.innerHTML = "";
+      stepDefs.forEach((step, index) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "step-tab";
+        btn.textContent = `${index + 1}. ${step.label}`;
+        if (index === state.currentStep) btn.classList.add("active");
+        btn.addEventListener("click", () => {
+          state.currentStep = index;
+          updateStepUI();
+        });
+        stepTabsEl.appendChild(btn);
+      });
+    }
+
+    function updateStepUI() {
+      stepEls.forEach((el, i) => {
+        el.classList.toggle("active", i === state.currentStep);
+      });
+      const tabs = stepTabsEl.querySelectorAll(".step-tab");
+      tabs.forEach((tab, i) => tab.classList.toggle("active", i === state.currentStep));
+      progressBarEl.style.width = `${((state.currentStep + 1) / stepDefs.length) * 100}%`;
+      document.getElementById("prevStep").disabled = state.currentStep === 0;
+      document.getElementById("nextStep").textContent = state.currentStep === stepDefs.length - 1 ? "Finish" : "Next";
+    }
+
+    function renderGroup(groupName, options) {
+      const holder = document.querySelector(`[data-group="${groupName}"]`);
+      holder.innerHTML = "";
+
+      options.forEach((option) => {
+        const chip = document.createElement("button");
+        chip.type = "button";
+        chip.className = "chip";
+        chip.textContent = option.price > 0 ? `${option.label} (+${formatCurrency(option.price)})` : option.label;
+
+        const isActive = groupName === "packages"
+          ? state.packages.some((p) => p.label === option.label)
+          : state[groupName].label === option.label;
+
+        if (isActive) chip.classList.add("active");
+
+        chip.addEventListener("click", () => {
+          if (groupName === "packages") {
+            const exists = state.packages.find((p) => p.label === option.label);
+            if (exists) {
+              state.packages = state.packages.filter((p) => p.label !== option.label);
+            } else {
+              state.packages.push(option);
+            }
+          } else {
+            state[groupName] = option;
+          }
+          renderAll();
+        });
+
+        holder.appendChild(chip);
+      });
+    }
+
+    function renderAll() {
+      renderTabs();
+      renderGroup("exterior", config.exterior);
+      renderGroup("wheels", config.wheels);
+      renderGroup("interior", config.interior);
+      renderGroup("spirit", config.spirit);
+      renderGroup("packages", config.packages);
+      updateUI();
+    }
+
+    document.getElementById("prevStep").addEventListener("click", () => {
+      state.currentStep = Math.max(0, state.currentStep - 1);
+      updateStepUI();
+    });
+    document.getElementById("nextStep").addEventListener("click", () => {
+      if (state.currentStep < stepDefs.length - 1) {
+        state.currentStep += 1;
+        updateStepUI();
+      } else {
+        toastEl.textContent = "Configuration complete. Review and request quote.";
+      }
+    });
+
+    document.getElementById("resetBuild").addEventListener("click", () => {
+      state.exterior = config.exterior[0];
+      state.wheels = config.wheels[1];
+      state.interior = config.interior[0];
+      state.spirit = config.spirit[0];
+      state.packages = [];
+      state.currentStep = 0;
+      toastEl.textContent = "Build reset.";
+      renderAll();
+    });
+
+    document.getElementById("requestQuote").addEventListener("click", () => {
+      const selected = {
+        model: "Rolls-Royce Phantom",
+        exterior: state.exterior.label,
+        wheels: state.wheels.label,
+        interior: state.interior.label,
+        spirit: state.spirit.label,
+        packages: state.packages.map((p) => p.label),
+        totalPrice: totalPrice()
+      };
+      localStorage.setItem("phantomBuild", JSON.stringify(selected));
+      toastEl.textContent = "Build saved to browser storage as phantomBuild.";
+    });
+
+    enableMaskIfAvailable(BODY_MASK_URL, carTintEl, "--body-mask-url", "is-masked");
+    enableMaskIfAvailable(WHEEL_MASK_URL, wheelTintEl, "--wheel-mask-url", "is-masked");
+    enableMaskIfAvailable(ORNAMENT_MASK_URL, ornamentTintEl, "--ornament-mask-url", "is-masked");
+    renderAll();
+  </script>
+</body>
+</html>
