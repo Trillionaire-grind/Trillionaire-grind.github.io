@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <title data-i18n="home.title">Akèy — Liv Lakay</title>
+        <link rel="stylesheet" href="assets/styles.css">
+    </head>
+    <body class="liv-body">
+        <div class="liv-page">
+            <h2 class="liv-section-label" data-i18n="home.pinned" id="pinnedHeading" hidden>Liv mwen (sou akèy)</h2>
+            <p class="liv-home-pinned-hint" id="pinnedHint" hidden data-i18n="home.pinnedHint"></p>
+            <div class="liv-book-grid" id="pinnedDiv" hidden></div>
+
+            <h2 class="liv-section-label" data-i18n="home.myBooks">Liv mwen</h2>
+            <div class="liv-book-grid" id="cardsDiv"></div>
+            <p id="homeEmptyBooks" class="liv-library-empty" hidden data-i18n="home.noBooks"></p>
+        </div>
+
+        <div id="homeRemoveModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="homeRemoveModalTitle">
+            <div class="liv-modal-inner liv-modal-inner--wide">
+                <button type="button" class="liv-modal-close" id="homeRemoveModalClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="homeRemoveModalTitle" class="liv-section-label" style="margin-top: 0;" data-i18n="home.removeModalTitle">Retire liv la?</h2>
+                <p id="homeRemoveModalText" class="liv-search-hint" style="margin-bottom: 16px;"></p>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
+                    <button type="button" class="liv-btn-secondary" id="homeRemoveModalCancel" data-i18n="home.removeCancel">Anile</button>
+                    <button type="button" class="liv-btn-primary" id="homeRemoveModalYes" data-i18n="home.removeYes">Wi, retire l</button>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { initLivI18n, applyLivI18n, t } from "./scripts/livI18n.js";
+        import { getPinnedBookIds, removePinnedBook } from "./scripts/livPins.js";
+        import { removeUserBookFromFirestore } from "./scripts/livUserBooks.js";
+
+        initLivI18n();
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        getAnalytics(app);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const pinnedHeading = document.getElementById("pinnedHeading");
+        const pinnedHint = document.getElementById("pinnedHint");
+        const pinnedDiv = document.getElementById("pinnedDiv");
+        const cardsDiv = document.getElementById("cardsDiv");
+        const homeEmptyBooks = document.getElementById("homeEmptyBooks");
+        const homeRemoveModal = document.getElementById("homeRemoveModal");
+        const homeRemoveModalText = document.getElementById("homeRemoveModalText");
+        let pendingRemoveBookId = null;
+
+        function closeRemoveBookModal() {
+            pendingRemoveBookId = null;
+            homeRemoveModal.classList.remove("is-open");
+        }
+
+        function openRemoveBookModal(bookId, bookTitle) {
+            pendingRemoveBookId = bookId;
+            const safeTitle = String(bookTitle || bookId || "").trim() || bookId;
+            homeRemoveModalText.textContent = t("home.removeConfirm").replace("{title}", safeTitle);
+            applyLivI18n(homeRemoveModal);
+            homeRemoveModal.classList.add("is-open");
+        }
+
+        document.getElementById("homeRemoveModalClose").addEventListener("click", closeRemoveBookModal);
+        document.getElementById("homeRemoveModalCancel").addEventListener("click", closeRemoveBookModal);
+        homeRemoveModal.addEventListener("click", function (e) {
+            if (e.target === homeRemoveModal) closeRemoveBookModal();
+        });
+        document.getElementById("homeRemoveModalYes").addEventListener("click", async function () {
+            const id = pendingRemoveBookId;
+            const u = auth.currentUser;
+            closeRemoveBookModal();
+            if (!id || !u) return;
+            try {
+                await removeUserBookFromFirestore(db, u.uid, id);
+                await loadBooks(u);
+            } catch (err) {
+                console.error(err);
+            }
+        });
+
+        function createBookCard(title, author, img, id, bookIndex, listKind, opts) {
+            opts = opts || {};
+            const lazy = bookIndex >= 3 ? ' loading="lazy"' : "";
+            const priority = bookIndex < 2 ? ' fetchpriority="high"' : "";
+
+            const inner = document.createElement("div");
+            inner.className =
+                listKind === "pinned"
+                    ? "liv-book-card liv-book-card--pinned-home"
+                    : "liv-book-card";
+            inner.innerHTML = `
+                <div class="liv-book-card-cover">
+                    <img src="${img}" alt="" decoding="async"${lazy}${priority}>
+                </div>
+                <div class="liv-book-meta">
+                    <p class="liv-book-title">${title}</p>
+                    <p class="liv-book-author">${author}</p>
+                </div>`;
+
+            if (listKind === "pinned") {
+                inner.addEventListener("click", function () {
+                    removePinnedBook(id);
+                    loadBooks(auth.currentUser);
+                });
+            } else if (listKind === "main" && opts.showRemove) {
+                let lpTimer;
+                let lpFired = false;
+                inner.addEventListener("pointerdown", function (e) {
+                    if (e.pointerType === "mouse" && e.button !== 0) return;
+                    lpFired = false;
+                    clearTimeout(lpTimer);
+                    lpTimer = setTimeout(function () {
+                        lpFired = true;
+                        openRemoveBookModal(id, title);
+                    }, 500);
+                });
+                ["pointerup", "pointerleave", "pointercancel"].forEach(function (evName) {
+                    inner.addEventListener(evName, function () {
+                        clearTimeout(lpTimer);
+                    });
+                });
+                inner.addEventListener("click", function (e) {
+                    if (lpFired) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        lpFired = false;
+                        return;
+                    }
+                    openIndividualBook(id);
+                });
+            } else {
+                inner.addEventListener("click", function () {
+                    openIndividualBook(id);
+                });
+            }
+
+            if (listKind === "main") {
+                const wrap = document.createElement("div");
+                wrap.className = "speechCard";
+                wrap.dataset.speechId = id;
+                wrap.appendChild(inner);
+                return wrap;
+            }
+            return inner;
+        }
+
+        function openIndividualBook(bookId) {
+            const url = `./individualBookView.html?id=${bookId}`;
+            window.open(url, "_blank").focus();
+        }
+
+        function scheduleAppend(container, nodes, index) {
+            if (index >= nodes.length) return;
+            container.appendChild(nodes[index]);
+            requestAnimationFrame(function () {
+                scheduleAppend(container, nodes, index + 1);
+            });
+        }
+
+        async function loadBooks(user) {
+            const querySnapshot = await getDocs(collection(db, "books"));
+            const byId = new Map(querySnapshot.docs.map((d) => [d.id, d]));
+            let allowedIds = [];
+            let hasBookFilter = false;
+            if (user && user.uid) {
+                const userSnap = await getDoc(doc(db, "users", user.uid));
+                if (userSnap.exists()) {
+                    const raw = userSnap.data().books;
+                    if (Array.isArray(raw)) {
+                        allowedIds = raw;
+                        hasBookFilter = true;
+                    }
+                }
+            }
+            const allowedSet = new Set(allowedIds);
+            const pinnedIds = getPinnedBookIds();
+            const pinnedDocs = pinnedIds
+                .map((pid) => byId.get(pid))
+                .filter((d) => d && (!hasBookFilter || allowedSet.has(d.id)));
+            const rest = querySnapshot.docs.filter(
+                (d) => pinnedIds.indexOf(d.id) < 0 && (!hasBookFilter || allowedSet.has(d.id))
+            );
+
+            pinnedDiv.innerHTML = "";
+            cardsDiv.innerHTML = "";
+
+            if (pinnedDocs.length > 0) {
+                pinnedHeading.hidden = false;
+                pinnedHint.hidden = false;
+                pinnedDiv.hidden = false;
+                applyLivI18n(pinnedHint);
+                const pinnedNodes = pinnedDocs.map((docSnap, i) => {
+                    const d = docSnap.data();
+                    return createBookCard(d.bookTitle, d.bookAuthor, d.bookImg, docSnap.id, i, "pinned");
+                });
+                scheduleAppend(pinnedDiv, pinnedNodes, 0);
+            } else {
+                pinnedHeading.hidden = true;
+                pinnedHint.hidden = true;
+                pinnedDiv.hidden = true;
+            }
+
+            const mainNodes = rest.map((docSnap, i) => {
+                const d = docSnap.data();
+                return createBookCard(d.bookTitle, d.bookAuthor, d.bookImg, docSnap.id, i, "main", {
+                    showRemove: !!(user && hasBookFilter),
+                });
+            });
+            scheduleAppend(cardsDiv, mainNodes, 0);
+
+            const showEmpty = hasBookFilter && pinnedDocs.length === 0 && rest.length === 0;
+            homeEmptyBooks.hidden = !showEmpty;
+            if (showEmpty) applyLivI18n(homeEmptyBooks);
+        }
+
+        onAuthStateChanged(auth, function (user) {
+            loadBooks(user);
+        });
+
+        window.addEventListener("storage", function (e) {
+            if (e.key === "livPinnedBooks") loadBooks(auth.currentUser || null);
+        });
+    </script>
+</html>

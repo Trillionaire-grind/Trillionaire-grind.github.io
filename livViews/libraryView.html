@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <title data-i18n="library.title">Bibliyotèk — Liv Lakay</title>
+        <link rel="stylesheet" href="assets/styles.css">
+    </head>
+    <body class="liv-body">
+        <div class="liv-page">
+            <h1 class="liv-library-hero" data-i18n="library.hero">Bibliyotèk</h1>
+
+            <div class="liv-toolbar">
+                <h2 class="liv-section-label" data-i18n="meta.year">Ane</h2>
+                <button type="button" class="liv-search-btn" id="livOpenSearchBtn" data-i18n="library.search">Rechèch</button>
+            </div>
+
+            <p id="livLibraryEmpty" class="liv-library-empty" hidden data-i18n="search.noResults"></p>
+            <div id="yearSections"></div>
+        </div>
+
+        <button type="button" id="livLibraryFab" class="liv-fab" hidden aria-label="Ajoute yon liv">+</button>
+
+        <div id="livSearchModal" class="liv-modal liv-search-modal" role="dialog" aria-modal="true" aria-labelledby="livSearchTitle">
+            <div class="liv-modal-inner liv-modal-inner--wide">
+                <button type="button" class="liv-modal-close" id="livSearchClose" data-i18n-aria="search.close">&times;</button>
+                <h2 id="livSearchTitle" data-i18n="search.title">Rechèch liv</h2>
+                <p class="liv-search-hint" data-i18n="search.hint"></p>
+
+                <fieldset class="liv-search-fieldset">
+                    <legend data-i18n="search.byCode">Pa ISBN oswa ID</legend>
+                    <div class="liv-admin-field">
+                        <label for="livSearchIsbn" data-i18n="search.isbn">ISBN</label>
+                        <input type="text" id="livSearchIsbn" maxlength="32" inputmode="numeric" autocomplete="off">
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livSearchDocId" data-i18n="search.docId">ID liv</label>
+                        <input type="text" id="livSearchDocId" maxlength="120" autocomplete="off">
+                    </div>
+                </fieldset>
+
+                <p class="liv-search-or" data-i18n="search.orFilters"></p>
+
+                <fieldset class="liv-search-fieldset">
+                    <legend data-i18n="search.byFilters">Ane, sijè, otè, tèks</legend>
+                    <div class="liv-admin-field">
+                        <label for="livSearchYear" data-i18n="meta.year">Ane</label>
+                        <select id="livSearchYear">
+                            <option value="" data-i18n="search.yearAll">Tout ane yo</option>
+                            <option>1e</option>
+                            <option>2èm</option>
+                            <option>3èm</option>
+                            <option>4èm</option>
+                            <option>5èm</option>
+                            <option>6èm</option>
+                            <option>7èm</option>
+                            <option>8èm</option>
+                            <option>9èm</option>
+                        </select>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livSearchSubject" data-i18n="meta.subject">Sijè</label>
+                        <select id="livSearchSubject">
+                            <option value="" data-i18n="search.subjectAll">Tout sijè yo</option>
+                            <option value="Ayiti">Ayiti</option>
+                            <option value="Sante">Sante</option>
+                            <option value="Syans">Syans</option>
+                            <option value="Lang">Lang</option>
+                            <option value="Relijyon">Relijyon</option>
+                            <option value="Kapitalis">Kapitalis</option>
+                        </select>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livSearchAuthor" data-i18n="meta.author">Ote</label>
+                        <input type="text" id="livSearchAuthor" maxlength="200" autocomplete="off">
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livSearchText" data-i18n="search.textQuery">Tèks</label>
+                        <input type="text" id="livSearchText" maxlength="200" autocomplete="off">
+                    </div>
+                </fieldset>
+
+                <div class="liv-search-actions">
+                    <button type="button" class="liv-btn-primary" id="livSearchRunBtn" data-i18n="search.run">Chèche</button>
+                    <button type="button" class="liv-btn-secondary" id="livSearchResetBtn" data-i18n="search.reset">Montre tout</button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { collection, getDocs, getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { initLivI18n, t, applyLivI18n } from "./scripts/livI18n.js";
+        import { isBookPinned, togglePinnedBook } from "./scripts/livPins.js";
+        import { loadUserBookIds, toggleUserBookInFirestore } from "./scripts/livUserBooks.js";
+
+        initLivI18n();
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let cachedBookDocs = [];
+        let myBookIds = new Set();
+
+        async function refreshMyBooksFromServer() {
+            if (!auth.currentUser) {
+                myBookIds = new Set();
+                return;
+            }
+            myBookIds = await loadUserBookIds(db, auth.currentUser.uid);
+        }
+
+        function isBookOnHomeList(id) {
+            if (auth.currentUser) return myBookIds.has(id);
+            return isBookPinned(id);
+        }
+
+        function normalizeIsbn(s) {
+            return String(s).replace(/[\s-]/g, "").toUpperCase();
+        }
+
+        function filterBookDocs(docs, crit) {
+            const docId = crit.docId && crit.docId.trim();
+            if (docId) {
+                return docs.filter((d) => d.id === docId);
+            }
+            const isbn = crit.isbn && crit.isbn.trim();
+            if (isbn) {
+                const want = normalizeIsbn(isbn);
+                if (!want) return [];
+                return docs.filter((d) => {
+                    const raw = d.data().bookIsbn;
+                    if (raw == null || String(raw).trim() === "") return false;
+                    return normalizeIsbn(String(raw)) === want;
+                });
+            }
+            return docs.filter((d) => {
+                const data = d.data();
+                if (crit.year && (data.bookYear || "") !== crit.year) return false;
+                if (crit.subject && (data.bookSubject || "") !== crit.subject) return false;
+                if (crit.author && crit.author.trim()) {
+                    const au = (data.bookAuthor || "").toLowerCase();
+                    if (!au.includes(crit.author.trim().toLowerCase())) return false;
+                }
+                if (crit.text && crit.text.trim()) {
+                    const q = crit.text.trim().toLowerCase();
+                    const title = (data.bookTitle || "").toLowerCase();
+                    const auth = (data.bookAuthor || "").toLowerCase();
+                    if (!title.includes(q) && !auth.includes(q)) return false;
+                }
+                return true;
+            });
+        }
+
+        function updatePinButton(btn, id) {
+            const on = isBookOnHomeList(id);
+            btn.setAttribute("aria-pressed", on ? "true" : "false");
+            btn.textContent = on ? "★" : "☆";
+            btn.setAttribute("aria-label", on ? t("library.pinRemove") : t("library.pinAdd"));
+        }
+
+        function createBookDiv(title, author, img, id, bookIndex) {
+            const lazy = bookIndex >= 3 ? ' loading="lazy"' : "";
+            const priority = bookIndex < 2 ? ' fetchpriority="high"' : "";
+            const div = document.createElement("div");
+            div.className = "speechCard";
+            div.dataset.speechId = id;
+            div.innerHTML = `
+                <div class="liv-book-card">
+                    <div class="liv-book-card-cover">
+                        <button type="button" class="liv-pin-btn">☆</button>
+                        <img src="${img}" alt="" decoding="async"${lazy}${priority}>
+                    </div>
+                    <div class="liv-book-meta">
+                        <p class="liv-book-title">${title}</p>
+                        <p class="liv-book-author">${author}</p>
+                    </div>
+                </div>`;
+            const pinBtn = div.querySelector(".liv-pin-btn");
+            updatePinButton(pinBtn, id);
+            pinBtn.addEventListener("click", async function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                const u = auth.currentUser;
+                if (u) {
+                    try {
+                        const nowOn = await toggleUserBookInFirestore(db, u.uid, id);
+                        if (nowOn) myBookIds.add(id);
+                        else myBookIds.delete(id);
+                    } catch (err) {
+                        console.error(err);
+                        await refreshMyBooksFromServer();
+                    }
+                } else {
+                    togglePinnedBook(id);
+                }
+                updatePinButton(pinBtn, id);
+            });
+            div.addEventListener("click", function (e) {
+                if (e.target.closest(".liv-pin-btn")) return;
+                openIndividualBook(id);
+            });
+            return div;
+        }
+
+        const YEAR_ORDER = ["1e", "2èm", "3èm", "4èm", "5èm", "6èm", "7èm", "8èm", "9èm"];
+
+        function yearSortValue(y) {
+            const idx = YEAR_ORDER.indexOf(y);
+            return idx >= 0 ? idx : 999;
+        }
+
+        function renderBookGrid(docs) {
+            const yearSections = document.getElementById("yearSections");
+            const emptyEl = document.getElementById("livLibraryEmpty");
+            yearSections.innerHTML = "";
+            if (docs.length === 0) {
+                emptyEl.hidden = false;
+                applyLivI18n(emptyEl);
+                return;
+            }
+            emptyEl.hidden = true;
+
+            const grouped = new Map();
+            docs.forEach(function (docSnap) {
+                const y = String((docSnap.data().bookYear || "")).trim();
+                const key = y || "—";
+                if (!grouped.has(key)) grouped.set(key, []);
+                grouped.get(key).push(docSnap);
+            });
+
+            const allYears = YEAR_ORDER.slice();
+            grouped.forEach(function (_v, y) {
+                if (allYears.indexOf(y) < 0) allYears.push(y);
+            });
+            allYears.sort(function (a, b) {
+                const sa = yearSortValue(a);
+                const sb = yearSortValue(b);
+                if (sa !== sb) return sa - sb;
+                return a.localeCompare(b);
+            });
+
+            allYears.forEach(function (year) {
+                const section = document.createElement("section");
+                section.className = "liv-year-section";
+
+                const h = document.createElement("h2");
+                h.className = "liv-section-label";
+                h.style.marginTop = "14px";
+                h.textContent = year;
+                section.appendChild(h);
+
+                const yearDocs = grouped.get(year) || [];
+                if (yearDocs.length === 0) {
+                    const p = document.createElement("p");
+                    p.className = "liv-library-empty";
+                    p.textContent = t("search.noResults");
+                    section.appendChild(p);
+                } else {
+                    const grid = document.createElement("div");
+                    grid.className = "liv-book-grid";
+                    yearDocs.forEach(function (docSnap, i) {
+                        const d = docSnap.data();
+                        grid.appendChild(
+                            createBookDiv(d.bookTitle, d.bookAuthor, d.bookImg, docSnap.id, i)
+                        );
+                    });
+                    section.appendChild(grid);
+                }
+
+                yearSections.appendChild(section);
+            });
+        }
+
+        function openIndividualBook(id) {
+            const url = `./individualBookView.html?id=${id}`;
+            window.open(url, "_blank").focus();
+        }
+
+        async function getBooks() {
+            const querySnapshot = await getDocs(collection(db, "books"));
+            cachedBookDocs = querySnapshot.docs;
+            await refreshMyBooksFromServer();
+            renderBookGrid(cachedBookDocs);
+        }
+
+        getBooks();
+
+        onAuthStateChanged(auth, async function () {
+            await refreshMyBooksFromServer();
+            if (cachedBookDocs.length) renderBookGrid(cachedBookDocs);
+        });
+
+        const searchModal = document.getElementById("livSearchModal");
+
+        function openSearchModal() {
+            applyLivI18n(searchModal);
+            searchModal.classList.add("is-open");
+        }
+
+        function closeSearchModal() {
+            searchModal.classList.remove("is-open");
+        }
+
+        function readSearchCriteria() {
+            return {
+                docId: document.getElementById("livSearchDocId").value,
+                isbn: document.getElementById("livSearchIsbn").value,
+                year: document.getElementById("livSearchYear").value,
+                subject: document.getElementById("livSearchSubject").value,
+                author: document.getElementById("livSearchAuthor").value,
+                text: document.getElementById("livSearchText").value
+            };
+        }
+
+        function clearSearchForm() {
+            document.getElementById("livSearchIsbn").value = "";
+            document.getElementById("livSearchDocId").value = "";
+            document.getElementById("livSearchYear").value = "";
+            document.getElementById("livSearchSubject").value = "";
+            document.getElementById("livSearchAuthor").value = "";
+            document.getElementById("livSearchText").value = "";
+        }
+
+        document.getElementById("livOpenSearchBtn").addEventListener("click", openSearchModal);
+        document.getElementById("livSearchClose").addEventListener("click", closeSearchModal);
+        searchModal.addEventListener("click", function (e) {
+            if (e.target === searchModal) closeSearchModal();
+        });
+
+        document.getElementById("livSearchRunBtn").addEventListener("click", function () {
+            if (cachedBookDocs.length === 0) return;
+            const crit = readSearchCriteria();
+            const filtered = filterBookDocs(cachedBookDocs, crit);
+            renderBookGrid(filtered);
+            closeSearchModal();
+        });
+
+        document.getElementById("livSearchResetBtn").addEventListener("click", function () {
+            clearSearchForm();
+            renderBookGrid(cachedBookDocs);
+            closeSearchModal();
+        });
+
+        window.addEventListener("storage", function (e) {
+            if (e.key === "livLang") {
+                document.querySelectorAll(".liv-pin-btn").forEach(function (btn) {
+                    const card = btn.closest(".speechCard");
+                    if (card && card.dataset.speechId) {
+                        updatePinButton(btn, card.dataset.speechId);
+                    }
+                });
+            }
+            if (e.key === "livPinnedBooks" && !auth.currentUser) {
+                if (cachedBookDocs.length) renderBookGrid(cachedBookDocs);
+            }
+        });
+    </script>
+    <script>
+        var LIV_ADMIN_KEY = "livAdminMode";
+
+        function syncLibraryFab() {
+            var fab = document.getElementById("livLibraryFab");
+            if (!fab) return;
+            var on =
+                localStorage.getItem(LIV_ADMIN_KEY) === "true" ||
+                window.location.search.indexOf("debugFab=1") !== -1;
+            fab.hidden = !on;
+        }
+
+        document.getElementById("livLibraryFab").addEventListener("click", function () {
+            window.location.href = "adminAddBook.html";
+        });
+
+        syncLibraryFab();
+        window.addEventListener("focus", syncLibraryFab);
+        window.addEventListener("storage", function (ev) {
+            if (ev.key === LIV_ADMIN_KEY || ev.key === null) syncLibraryFab();
+        });
+        window.addEventListener("message", function (e) {
+            if (e.data && e.data.type === "liv-sync-fab") syncLibraryFab();
+        });
+        document.addEventListener("visibilitychange", function () {
+            if (!document.hidden) syncLibraryFab();
+        });
+    </script>
+</html>

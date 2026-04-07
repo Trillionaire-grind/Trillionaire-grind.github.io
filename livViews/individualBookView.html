@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="stylesheet" href="assets/styles.css">
+        <title data-i18n="book.detailTitle">Liv — Detay liv</title>
+    </head>
+    <body class="liv-body">
+        <div class="liv-page">
+            <a class="liv-admin-back" href="primaryView.html?tab=1" data-i18n="book.backLibrary">← Rete nan bibliyotèk</a>
+
+            <div class="liv-book-cover-wrap">
+                <img id="bookIV" src="" alt="">
+            </div>
+
+            <h1 class="liv-book-detail-title" id="bookTitleTV"></h1>
+
+            <div class="liv-pin-row">
+                <button type="button" id="livPinHomeBtn" class="liv-btn-pill" aria-pressed="false"></button>
+            </div>
+
+            <div class="liv-meta-grid" aria-label="Detay liv">
+                <div class="liv-meta-cell">
+                    <p class="liv-meta-label" data-i18n="meta.author">Ote</p>
+                    <p class="liv-meta-value" id="authorTV"></p>
+                </div>
+                <div class="liv-meta-cell">
+                    <p class="liv-meta-label" data-i18n="meta.subject">Sije</p>
+                    <p class="liv-meta-value" id="subjectTV"></p>
+                </div>
+                <div class="liv-meta-cell">
+                    <p class="liv-meta-label" data-i18n="meta.year">Ane</p>
+                    <p class="liv-meta-value" id="yearTV"></p>
+                </div>
+            </div>
+
+            <h2 class="liv-section-heading" data-i18n="book.content">Kontni</h2>
+            <p class="liv-chapter-hint" data-i18n="book.chapterHint">Touche yon chapit pou li. Peze long pou modifye.</p>
+            <div id="chaptersDiv"></div>
+        </div>
+
+        <div id="myModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="chapterModalTitle">
+            <div class="liv-modal-inner">
+                <button type="button" class="liv-modal-close" onclick="closeDialog()" aria-label="Fèmen">&times;</button>
+                <h2 id="chapterModalTitle">Ajoute yon chapit</h2>
+                <div>
+                    <label for="chapterTV">Tit chapit la</label>
+                    <input type="text" id="chapterTV" name="title" placeholder="Mete tit chapit la">
+
+                    <label for="pageTV">Konben paj</label>
+                    <input type="number" id="pageTV" name="description" min="1" max="15" placeholder="Kantite paj">
+                    <p style="font-size: 0.85rem; color: var(--liv-muted); margin-top: 6px;">Maksimòm 15 paj.</p>
+
+                    <button type="button" id="submitBtn">Voye</button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+        import { getFirestore, query, orderBy, collection, doc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { initLivI18n, t } from "./scripts/livI18n.js";
+        import { isBookPinned, togglePinnedBook } from "./scripts/livPins.js";
+        import { loadUserBookIds, toggleUserBookInFirestore } from "./scripts/livUserBooks.js";
+
+        initLivI18n();
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        getAnalytics(app);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        let myBookIds = new Set();
+
+        const bookTitleTV = document.getElementById("bookTitleTV");
+        const authorTV = document.getElementById("authorTV");
+        const bookIV = document.getElementById("bookIV");
+        const subjectTV = document.getElementById("subjectTV");
+        const yearTV = document.getElementById("yearTV");
+
+        let book = "";
+
+        const livPinHomeBtn = document.getElementById("livPinHomeBtn");
+
+        async function refreshMyBooksForCurrentBook() {
+            if (!auth.currentUser || !book) {
+                myBookIds = new Set();
+            } else {
+                myBookIds = await loadUserBookIds(db, auth.currentUser.uid);
+            }
+            syncPinButton();
+        }
+
+        onAuthStateChanged(auth, function () {
+            refreshMyBooksForCurrentBook();
+        });
+
+        function syncPinButton() {
+            if (!livPinHomeBtn || !book) return;
+            const on = auth.currentUser ? myBookIds.has(book) : isBookPinned(book);
+            livPinHomeBtn.setAttribute("aria-pressed", on ? "true" : "false");
+            livPinHomeBtn.textContent = on ? t("book.pinRemove") : t("book.pinAdd");
+        }
+
+        if (livPinHomeBtn) {
+            livPinHomeBtn.addEventListener("click", async function () {
+                if (!book) return;
+                if (auth.currentUser) {
+                    try {
+                        const nowOn = await toggleUserBookInFirestore(db, auth.currentUser.uid, book);
+                        if (nowOn) myBookIds.add(book);
+                        else myBookIds.delete(book);
+                    } catch (e) {
+                        console.error(e);
+                        await refreshMyBooksForCurrentBook();
+                    }
+                } else {
+                    togglePinnedBook(book);
+                }
+                syncPinButton();
+            });
+        }
+
+        window.addEventListener("storage", function (e) {
+            if (e.key === "livPinnedBooks" || e.key === "livLang") syncPinButton();
+        });
+
+        async function getBook(id) {
+            const chaptersDiv = document.getElementById("chaptersDiv");
+            chaptersDiv.innerHTML = "";
+
+            let bookSnapshot = await getDoc(doc(db, "books", id));
+            let coll = "books";
+            if (!bookSnapshot.exists()) {
+                bookSnapshot = await getDoc(doc(db, "Books", id));
+                coll = "Books";
+            }
+
+            const chaptersRef = collection(db, coll, id, "chapters");
+            const q = query(chaptersRef, orderBy("chapter_number", "asc"));
+            const chaptersSnapshot = await getDocs(q);
+
+            if (bookSnapshot.exists()) {
+                const d = bookSnapshot.data();
+                bookTitleTV.textContent = d.bookTitle || "";
+                authorTV.textContent = d.bookAuthor || "—";
+                if (d.bookImg) bookIV.src = d.bookImg;
+                yearTV.textContent = d.bookYear || "—";
+                subjectTV.textContent = d.bookSubject || "—";
+
+                chaptersSnapshot.forEach((docSnap) => {
+                    const cd = docSnap.data();
+                    const label =
+                        cd.chapter_name && String(cd.chapter_name).trim()
+                            ? String(cd.chapter_name).trim()
+                            : docSnap.id;
+                    chaptersDiv.appendChild(
+                        createChapterDiv(bookSnapshot.id, docSnap.id, label)
+                    );
+                });
+                refreshMyBooksForCurrentBook();
+            } else {
+                bookTitleTV.textContent = t("search.noResults");
+                authorTV.textContent = "—";
+                yearTV.textContent = "—";
+                subjectTV.textContent = "—";
+                bookIV.removeAttribute("src");
+                refreshMyBooksForCurrentBook();
+            }
+        }
+
+        function addChapter(bookId, chapterName) {
+            const pageTV = document.getElementById("pageTV");
+            const pages = parseInt(pageTV.value, 10);
+            if (!chapterName || !chapterName.trim()) {
+                alert("Antre tit chapit la.");
+                return;
+            }
+            if (!pages || pages < 1 || pages > 15) {
+                alert("Antre ant 1 ak 15 paj.");
+                return;
+            }
+
+            const chapterRef = doc(db, "books", `${bookId}`, "chapters", `${chapterName}`);
+            setDoc(chapterRef, {
+                chapter_name: `${chapterName}`,
+                chapter_pages: `${pageTV.value}`
+            });
+            createPages(bookId, chapterName, pages);
+            closeDialog();
+        }
+
+        document.getElementById("submitBtn").onclick = () => {
+            const chapter = document.getElementById("chapterTV").value;
+            addChapter(book, chapter);
+        };
+
+        function extractParamsFromUrl(url) {
+            let id;
+            try {
+                const u = new URL(url, window.location.href);
+                id = u.searchParams.get("id");
+            } catch (e) {
+                /* fallback */
+            }
+            if (!id) {
+                const qs = url.split("?")[1];
+                if (!qs) return;
+                const m = qs.match(/(?:^|&)id=([^&]*)/);
+                id = m ? decodeURIComponent(m[1].replace(/\+/g, " ")) : "";
+            }
+            if (!id) return;
+            book = id;
+            syncPinButton();
+            getBook(id);
+        }
+
+        extractParamsFromUrl(window.location.href);
+
+        function createChapterDiv(bookId, chapterDocId, displayTitle) {
+            const label =
+                displayTitle != null && String(displayTitle).trim() !== ""
+                    ? String(displayTitle).trim()
+                    : chapterDocId;
+            const div = document.createElement("div");
+            div.className = "liv-chapter-item chapterDiv";
+            div.dataset.speechId = bookId;
+            const p = document.createElement("p");
+            p.textContent = label;
+            div.appendChild(p);
+
+            let pressTimer;
+            let longPressed = false;
+
+            const startPress = (event) => {
+                event.preventDefault();
+                longPressed = false;
+                pressTimer = setTimeout(() => {
+                    longPressed = true;
+                    openEdit(bookId, chapterDocId);
+                }, 500);
+            };
+
+            const endPress = () => {
+                clearTimeout(pressTimer);
+                if (!longPressed) {
+                    openPage(bookId, chapterDocId);
+                }
+            };
+
+            div.addEventListener("mousedown", startPress);
+            div.addEventListener("mouseup", endPress);
+            div.addEventListener("mouseleave", endPress);
+            div.addEventListener("touchstart", startPress, { passive: false });
+            div.addEventListener("touchend", endPress);
+            div.addEventListener("touchcancel", endPress);
+            div.addEventListener("contextmenu", (e) => e.preventDefault());
+
+            return div;
+        }
+
+        function openPage(bookId, chapterName) {
+            const url = "./pagesView.html?id=" + encodeURIComponent(bookId) + "&chapter=" + encodeURIComponent(chapterName);
+            window.open(url, "_blank").focus();
+        }
+
+        function createPages(bookId, chapterName, pages) {
+            for (let i = 1; i <= pages; i++) {
+                const pagesRef = doc(db, "books", `${bookId}`, "chapters", `${chapterName}`, "pages", `page${i}`);
+                setDoc(pagesRef, {
+                    text: "no text transcribed"
+                });
+            }
+            const chaptersDiv = document.getElementById("chaptersDiv");
+            chaptersDiv.appendChild(createChapterDiv(bookId, chapterName, chapterName));
+        }
+    </script>
+
+    <script>
+        function openDialog() {
+            document.getElementById("myModal").classList.add("is-open");
+        }
+
+        function closeDialog() {
+            document.getElementById("myModal").classList.remove("is-open");
+        }
+
+        document.getElementById("myModal").addEventListener("click", function (e) {
+            if (e.target === this) closeDialog();
+        });
+
+        function openEdit(bookId, chapterName) {
+            const url = "./editView.html?id=" + encodeURIComponent(bookId) + "?chapter=" + encodeURIComponent(chapterName);
+            const newWindow = window.open(url, "_blank");
+            if (newWindow) newWindow.focus();
+        }
+    </script>
+</html>

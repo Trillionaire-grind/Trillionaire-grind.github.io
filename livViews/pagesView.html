@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-full">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="stylesheet" href="assets/styles.css">
+        <title>Liv — Li paj</title>
+    </head>
+    <body class="liv-body liv-page-reader">
+        <div class="liv-page liv-page-reader-inner">
+            <header class="liv-reader-header">
+                <h1 id="chapterTV" class="liv-reader-chapter-title"></h1>
+            </header>
+
+            <div class="liv-reader-stage">
+                <button type="button" id="leftBtn" class="liv-reader-arrow liv-reader-arrow-left" aria-label="Paj anvan">&#9664;</button>
+                <article class="liv-book-surface">
+                    <p id="contentTV" class="liv-reader-text"></p>
+                </article>
+                <button type="button" id="rightBtn" class="liv-reader-arrow liv-reader-arrow-right" aria-label="Pwochen paj">&#9654;</button>
+            </div>
+
+            <footer class="liv-reader-footer">
+                <p id="pageCounter" class="liv-page-counter"></p>
+            </footer>
+        </div>
+    </body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+        let pagePosition = 0;
+        const chapterTV = document.getElementById("chapterTV");
+        const pageCounter = document.getElementById("pageCounter");
+
+        let pagesContent = [];
+        let pageNames = [];
+        let bookId = "";
+        let chapterOrder = [];
+        let currentChapterIndex = -1;
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+          authDomain: "liv-lakay.firebaseapp.com",
+          projectId: "liv-lakay",
+          storageBucket: "liv-lakay.appspot.com",
+          messagingSenderId: "896987078937",
+          appId: "1:896987078937:web:acc868befefa57564fa588",
+          measurementId: "G-YP58T0S16P"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        getAnalytics(app);
+        const db = getFirestore(app);
+
+        async function getBookCollectionName(bookDocId) {
+            const inBooks = await getDoc(doc(db, "books", bookDocId));
+            if (inBooks.exists()) return "books";
+            const inLegacy = await getDoc(doc(db, "Books", bookDocId));
+            if (inLegacy.exists()) return "Books";
+            return "books";
+        }
+
+        function extractNumber(pageString) {
+            return parseInt(pageString.replace(/page\s*/i, "").trim(), 10) || 0;
+        }
+
+        function hasPrevChapter() {
+            return currentChapterIndex > 0;
+        }
+
+        function hasNextChapter() {
+            return currentChapterIndex >= 0 && currentChapterIndex < chapterOrder.length - 1;
+        }
+
+        async function navigateToChapter(chapterName, startPage) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("id", bookId);
+            url.searchParams.set("chapter", chapterName);
+            history.replaceState(null, "", url.pathname + url.search + url.hash);
+            await getPages(bookId, chapterName, startPage);
+        }
+
+        async function getPages(id, chapterName, startPage = "first") {
+            bookId = id;
+            const coll = await getBookCollectionName(id);
+
+            const pageReference = collection(db, coll, id, "chapters", chapterName, "pages");
+            const chaptersRef = collection(db, coll, id, "chapters");
+            let chaptersSnap;
+            try {
+                const qCh = query(chaptersRef, orderBy("chapter_number", "asc"));
+                chaptersSnap = await getDocs(qCh);
+            } catch {
+                chaptersSnap = await getDocs(chaptersRef);
+            }
+
+            chapterOrder = chaptersSnap.docs.map((d) => d.id);
+            currentChapterIndex = chapterOrder.indexOf(chapterName);
+
+            const chMetaSnap = await getDoc(doc(db, coll, id, "chapters", chapterName));
+            const chapterTitle =
+                chMetaSnap.exists() && chMetaSnap.data().chapter_name
+                    ? String(chMetaSnap.data().chapter_name).trim()
+                    : chapterName;
+
+            const pageCollectionSnap = await getDocs(pageReference);
+
+            chapterTV.textContent =
+                currentChapterIndex >= 0
+                    ? currentChapterIndex + 1 + ". " + chapterTitle
+                    : chapterTitle;
+
+            const pairs = [];
+            pageCollectionSnap.forEach((docSnap) => {
+                pairs.push({ id: docSnap.id, text: docSnap.data().text });
+            });
+
+            pairs.sort((a, b) => extractNumber(a.id) - extractNumber(b.id));
+            pageNames = pairs.map((p) => p.id);
+            pagesContent = pairs.map((p) => p.text);
+
+            pagePosition = 0;
+            if (pageNames.length === 0) {
+                document.getElementById("contentTV").textContent = "Pa gen paj nan chapit sa a.";
+                pageCounter.textContent = "";
+                leftBtn.innerHTML = "&#9664;";
+                rightBtn.innerHTML = "&#9654;";
+                setArrowVisible(leftBtn, false);
+                setArrowVisible(rightBtn, false);
+                return;
+            }
+
+            const start =
+                startPage === "last" ? Math.max(0, pageNames.length - 1) : 0;
+            showPage(start);
+        }
+
+        function updateArrowContents(position, n) {
+            const first = position === 0;
+            const last = position === n - 1;
+
+            if (first && hasPrevChapter()) {
+                leftBtn.innerHTML =
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">◀</span><span class="liv-arrow-chapter-words">Chapit anvan</span></span>';
+            } else if (position > 0) {
+                leftBtn.innerHTML =
+                    '<span class="liv-arrow-chev" aria-hidden="true">◀</span>';
+            } else {
+                leftBtn.innerHTML = "&#9664;";
+            }
+
+            if (last && hasNextChapter()) {
+                rightBtn.innerHTML =
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">▶</span><span class="liv-arrow-chapter-words">Chapit swivan</span></span>';
+            } else if (position < n - 1) {
+                rightBtn.innerHTML =
+                    '<span class="liv-arrow-chev" aria-hidden="true">▶</span>';
+            } else {
+                rightBtn.innerHTML = "&#9654;";
+            }
+        }
+
+        function setArrowVisible(btn, visible) {
+            btn.classList.toggle("liv-reader-arrow--off", !visible);
+            btn.disabled = !visible;
+            btn.setAttribute("aria-disabled", visible ? "false" : "true");
+        }
+
+        function showPage(position) {
+            const contentTV = document.getElementById("contentTV");
+            const n = pagesContent.length;
+            if (n === 0) return;
+
+            pageCounter.textContent = "Paj " + (position + 1) + " / " + n;
+
+            const first = position === 0;
+            const last = position === n - 1;
+
+            const canLeft = !first || (first && hasPrevChapter());
+            const canRight = !last || (last && hasNextChapter());
+
+            setArrowVisible(leftBtn, canLeft);
+            setArrowVisible(rightBtn, canRight);
+
+            if (first && hasPrevChapter()) {
+                leftBtn.setAttribute("aria-label", "Chapit anvan");
+            } else {
+                leftBtn.setAttribute("aria-label", "Paj anvan");
+            }
+            if (last && hasNextChapter()) {
+                rightBtn.setAttribute("aria-label", "Chapit swivan");
+            } else {
+                rightBtn.setAttribute("aria-label", "Pwochen paj");
+            }
+
+            updateArrowContents(position, n);
+
+            contentTV.textContent = pagesContent[position] ?? "";
+            pagePosition = position;
+        }
+
+        leftBtn.addEventListener("click", async () => {
+            if (pagePosition > 0) {
+                showPage(pagePosition - 1);
+                return;
+            }
+            if (pagePosition === 0 && hasPrevChapter()) {
+                const prevName = chapterOrder[currentChapterIndex - 1];
+                await navigateToChapter(prevName, "last");
+            }
+        });
+
+        rightBtn.addEventListener("click", async () => {
+            const n = pagesContent.length;
+            if (pagePosition < n - 1) {
+                showPage(pagePosition + 1);
+                return;
+            }
+            if (pagePosition === n - 1 && hasNextChapter()) {
+                const nextName = chapterOrder[currentChapterIndex + 1];
+                await navigateToChapter(nextName, "first");
+            }
+        });
+
+        function normalizeSearch(search) {
+            let s = search || "";
+            if (s.includes("?chapter=") && !s.includes("&chapter=")) {
+                s = s.replace("?chapter=", "&chapter=");
+            }
+            return s;
+        }
+
+        function extractParamsFromUrl(href) {
+            let search = "";
+            try {
+                const u = new URL(href, window.location.href);
+                search = u.search;
+            } catch {
+                const m = href.match(/\?([^#]+)/);
+                search = m ? "?" + m[1] : "";
+            }
+            search = normalizeSearch(search);
+            const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+            let id = params.get("id");
+            let chapter = params.get("chapter");
+
+            if (chapter == null && id != null && id.includes("?")) {
+                const parts = id.split("?");
+                id = parts[0];
+                const rest = parts.slice(1).join("?");
+                const cm = rest.match(/^chapter=(.+)$/);
+                if (cm) chapter = decodeURIComponent(cm[1]);
+            }
+
+            if (id) id = decodeURIComponent(id);
+            if (chapter) chapter = decodeURIComponent(chapter);
+
+            if (id && chapter) {
+                getPages(id, chapter, "first");
+            } else {
+                document.getElementById("contentTV").textContent =
+                    "Lyen an pa konplè (id oswa chapit manke).";
+            }
+        }
+
+        extractParamsFromUrl(window.location.href);
+    </script>
+</html>

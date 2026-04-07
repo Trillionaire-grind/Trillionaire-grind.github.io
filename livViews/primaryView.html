@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-shell-html">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <title>Liv Lakay</title>
+        <style>
+            .liv-shell-html,
+            .liv-shell-html body {
+                margin: 0;
+                height: 100%;
+                overflow: hidden;
+                overscroll-behavior: none;
+            }
+
+            .liv-shell {
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+                min-height: 100dvh;
+                max-height: 100vh;
+                max-height: 100dvh;
+                background-color: #f0f1f3;
+            }
+
+            .liv-shell-main {
+                flex: 1 1 0;
+                min-height: 0;
+                position: relative;
+                width: 100%;
+                max-width: 1400px;
+                margin: 0 auto;
+            }
+
+            /* Stack tabs with opacity instead of display:none so iframe layers stay
+               composited — avoids a full repaint of heavy home/library on each switch. */
+            .liv-shell-view {
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            .liv-shell-view.is-active {
+                z-index: 1;
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .liv-shell-view iframe {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                display: block;
+                vertical-align: top;
+            }
+
+            .liv-shell-footer {
+                flex-shrink: 0;
+                width: 100%;
+                max-width: 1400px;
+                margin: 0 auto;
+                background-color: #fff;
+                border-top: 1px solid #e8eaed;
+                padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+                box-sizing: border-box;
+            }
+
+            .liv-shell-footer nav {
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+            }
+
+            .liv-shell-footer nav a {
+                text-decoration: none;
+                color: #333;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 44px;
+                min-height: 44px;
+            }
+
+            .liv-shell-footer nav a:hover {
+                color: #007bff;
+            }
+        </style>
+    </head>
+    <body class="liv-shell">
+        <div class="liv-shell-main">
+            <div class="liv-shell-view is-active" id="homeView">
+                <iframe src="homeView.html" title="Akèy"></iframe>
+            </div>
+            <div class="liv-shell-view" id="libraryView">
+                <iframe id="libraryIframe" src="libraryView.html" title="Bibliyotèk"></iframe>
+            </div>
+            <div class="liv-shell-view" id="profileView">
+                <iframe src="profileView.html" title="Profil"></iframe>
+            </div>
+        </div>
+        <footer class="liv-shell-footer">
+            <nav>
+                <a href="#" aria-label="Akèy"><img id="homeBtn" src="assets/house_g.svg" alt="" width="24" height="24" onclick="changeTo(0); return false;"></a>
+                <a href="#" aria-label="Bibliyotèk"><img id="libraryBtn" src="assets/books.svg" alt="" width="24" height="24" onclick="changeTo(1); return false;"></a>
+                <a href="#" aria-label="Profil"><img id="profileBtn" src="assets/person.svg" alt="" width="24" height="24" onclick="changeTo(2); return false;"></a>
+            </nav>
+        </footer>
+    </body>
+    <script>
+        var homeView = document.getElementById("homeView");
+        var libraryView = document.getElementById("libraryView");
+        var profileView = document.getElementById("profileView");
+
+        var views = [homeView, libraryView, profileView];
+
+        function notifyLibraryFabSync() {
+            var lib = document.getElementById("libraryIframe");
+            if (lib && lib.contentWindow) {
+                try {
+                    lib.contentWindow.postMessage({ type: "liv-sync-fab" }, "*");
+                } catch (e) {}
+            }
+        }
+
+        function changeTo(destination) {
+            views.forEach(function (view, index) {
+                if (index === destination) {
+                    view.classList.add("is-active");
+                    view.setAttribute("aria-hidden", "false");
+                } else {
+                    view.classList.remove("is-active");
+                    view.setAttribute("aria-hidden", "true");
+                }
+            });
+            selectedBtn(destination);
+            if (destination === 1) {
+                requestAnimationFrame(function () {
+                    notifyLibraryFabSync();
+                });
+            }
+        }
+
+        window.addEventListener("message", function (e) {
+            if (e.data && e.data.type === "liv-admin-changed") {
+                notifyLibraryFabSync();
+            }
+            if (e.data && e.data.type === "liv-tab" && typeof e.data.tab === "number") {
+                changeTo(e.data.tab);
+            }
+        });
+
+        function selectedBtn(destination) {
+            var homeBtn = document.getElementById("homeBtn");
+            var libraryBtn = document.getElementById("libraryBtn");
+            var profileBtn = document.getElementById("profileBtn");
+
+            homeBtn.src = "assets/house.svg";
+            libraryBtn.src = "assets/books.svg";
+            profileBtn.src = "assets/person.svg";
+
+            switch (destination) {
+                case 0:
+                    homeBtn.src = "assets/house_g.svg";
+                    break;
+                case 1:
+                    libraryBtn.src = "assets/books_g.svg";
+                    break;
+                case 2:
+                    profileBtn.src = "assets/person_g.svg";
+                    break;
+            }
+        }
+
+        (function initTabFromUrl() {
+            var q = new URLSearchParams(window.location.search);
+            var t = q.get("tab");
+            if (t === "1" || t === "library") {
+                changeTo(1);
+            } else if (t === "2" || t === "profile") {
+                changeTo(2);
+            } else {
+                changeTo(0);
+            }
+        })();
+    </script>
+</html>

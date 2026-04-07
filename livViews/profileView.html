@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="stylesheet" href="assets/styles.css">
+        <title data-i18n="profile.title">Profil — Liv Lakay</title>
+        <style>
+            .profile-heading {
+                font-size: 1.35rem;
+                font-weight: 700;
+                margin: 8px 0 20px;
+                color: var(--liv-text);
+            }
+
+            .profile-identity {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 12px;
+                background: #fff;
+                border-radius: 12px;
+                padding: 16px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            }
+
+            .avatar {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                background: linear-gradient(145deg, var(--liv-green), var(--liv-green-dark));
+                color: #fff;
+                font-size: 1.5rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+
+            .identity-text {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .identity-text .name {
+                font-size: 1.05rem;
+                font-weight: 700;
+                margin: 0 0 4px;
+            }
+
+            .identity-text .email {
+                font-size: 0.8rem;
+                font-weight: 400;
+                color: var(--liv-muted);
+                margin: 0;
+                word-break: break-word;
+            }
+
+            .link-edit {
+                border: none;
+                background: none;
+                color: var(--liv-green);
+                font-size: 0.95rem;
+                font-weight: 600;
+                cursor: pointer;
+                padding: 8px 4px;
+                margin-left: auto;
+            }
+
+            .link-edit:active {
+                opacity: 0.8;
+            }
+
+            .profile-menu {
+                margin-top: 28px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .menu-row {
+                display: flex;
+                align-items: center;
+                min-height: 52px;
+                padding: 0 16px;
+                background-color: var(--liv-green);
+                color: #fff;
+                border: none;
+                border-radius: 14px;
+                font-size: 1rem;
+                font-family: inherit;
+                cursor: pointer;
+                text-align: left;
+                text-decoration: none;
+                box-shadow: 0 2px 6px rgba(42, 191, 91, 0.35);
+            }
+
+            .menu-row:hover {
+                filter: brightness(1.05);
+            }
+
+            .menu-row:active {
+                filter: brightness(0.95);
+            }
+
+            .menu-row span.chev {
+                margin-left: auto;
+                opacity: 0.9;
+            }
+
+            a.menu-row {
+                color: #fff;
+            }
+        </style>
+    </head>
+    <body class="liv-body">
+        <div class="profile-page">
+            <h1 class="profile-heading" data-i18n="profile.heading">Profil mwen</h1>
+
+            <section class="profile-identity" aria-label="Itilizatè">
+                <div class="avatar" id="profileAvatarInitial" aria-hidden="true">J</div>
+                <div class="identity-text">
+                    <p class="name" id="profileDisplayName">Jean-Phillipe</p>
+                    <p class="email" id="profileEmail">jeanphillipe@gmail.com</p>
+                </div>
+                <button type="button" class="link-edit" id="profileSignOutBtn" hidden data-i18n="auth.signOut">Dekonekte</button>
+            </section>
+            <div class="profile-auth-row">
+                <a class="liv-admin-back" id="livGoLoginLink" href="../liv.html" target="_top" hidden data-i18n="auth.goLogin">Konekte</a>
+            </div>
+
+            <section class="liv-settings-card" aria-labelledby="adminSettingsLabel">
+                <div>
+                    <p id="adminSettingsLabel" class="liv-settings-label" data-i18n="profile.adminMode">Mode administratè</p>
+                    <p class="liv-settings-hint" data-i18n="profile.adminHint">Lè li aktive, w ap wè yon bouton + nan bibliyotèk pou ajoute liv.</p>
+                </div>
+                <label class="liv-switch">
+                    <input type="checkbox" id="livAdminToggle" role="switch" aria-labelledby="adminSettingsLabel">
+                    <span class="liv-slider"></span>
+                </label>
+            </section>
+
+            <nav class="profile-menu" aria-label="Paramèt">
+                <button type="button" class="menu-row" id="profileMenuBooks" data-action="books">
+                    <span data-i18n="profile.menuBooks">Chwazi liv ou yo</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </button>
+                <button type="button" class="menu-row" id="profileMenuLanguage" data-action="language">
+                    <span data-i18n="profile.menuLanguage">Lang</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </button>
+                <button type="button" class="menu-row" data-action="about">
+                    <span data-i18n="profile.menuAbout">Sou aplikasyon an</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </button>
+                <a class="menu-row" href="https://buy.stripe.com/bIYaFB5m9cD2asw4gh" target="_blank" rel="noopener noreferrer">
+                    <span data-i18n="profile.menuSupport">Bay sipò</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </a>
+            </nav>
+        </div>
+
+        <div id="livLangModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livLangModalTitle">
+            <div class="liv-modal-inner">
+                <button type="button" class="liv-modal-close" id="livLangModalClose" aria-label="Fèmen">&times;</button>
+                <h2 id="livLangModalTitle" data-i18n="profile.langTitle">Chwazi lang</h2>
+                <div class="liv-lang-list">
+                    <button type="button" class="liv-lang-option" data-lang="ht" data-i18n="profile.lang.ht"></button>
+                    <button type="button" class="liv-lang-option" data-lang="fr" data-i18n="profile.lang.fr"></button>
+                    <button type="button" class="liv-lang-option" data-lang="es" data-i18n="profile.lang.es"></button>
+                    <button type="button" class="liv-lang-option" data-lang="en" data-i18n="profile.lang.en"></button>
+                </div>
+            </div>
+        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            import { livFirebaseConfig } from "./scripts/livFirebaseConfig.js";
+            import { initLivI18n, setLivLang, getLivLang, applyLivI18n, t } from "./scripts/livI18n.js";
+
+            initLivI18n();
+
+            const fbApp = initializeApp(livFirebaseConfig);
+            getAnalytics(fbApp);
+            const auth = getAuth(fbApp);
+
+            const profileDisplayName = document.getElementById("profileDisplayName");
+            const profileEmail = document.getElementById("profileEmail");
+            const profileAvatarInitial = document.getElementById("profileAvatarInitial");
+            const profileSignOutBtn = document.getElementById("profileSignOutBtn");
+            const livGoLoginLink = document.getElementById("livGoLoginLink");
+
+            onAuthStateChanged(auth, function (user) {
+                if (user) {
+                    const disp = user.displayName || (user.email ? user.email.split("@")[0] : "");
+                    profileDisplayName.textContent = disp || "—";
+                    profileEmail.textContent = user.email || "—";
+                    const initial = (disp || user.email || "?").trim().charAt(0) || "?";
+                    profileAvatarInitial.textContent = initial.toUpperCase();
+                    profileSignOutBtn.hidden = false;
+                    livGoLoginLink.hidden = true;
+                } else {
+                    profileDisplayName.textContent = t("auth.guestName");
+                    profileEmail.textContent = t("auth.guestHint");
+                    profileAvatarInitial.textContent = "?";
+                    profileSignOutBtn.hidden = true;
+                    livGoLoginLink.hidden = false;
+                }
+            });
+
+            profileSignOutBtn.addEventListener("click", function () {
+                signOut(auth)
+                    .catch(function () {})
+                    .finally(function () {
+                        window.top.location.replace("../liv.html");
+                    });
+            });
+
+            window.addEventListener("storage", function (e) {
+                if (e.key === "livLang" && !auth.currentUser) {
+                    profileDisplayName.textContent = t("auth.guestName");
+                    profileEmail.textContent = t("auth.guestHint");
+                }
+            });
+
+            const KEY = "livAdminMode";
+            const toggle = document.getElementById("livAdminToggle");
+            toggle.checked = localStorage.getItem(KEY) === "true";
+            toggle.addEventListener("change", function () {
+                localStorage.setItem(KEY, toggle.checked ? "true" : "false");
+                try {
+                    window.parent.postMessage({ type: "liv-admin-changed" }, "*");
+                } catch (e) {}
+            });
+
+            function openLangModal() {
+                const m = document.getElementById("livLangModal");
+                m.hidden = false;
+                m.classList.add("is-open");
+                const cur = getLivLang();
+                m.querySelectorAll(".liv-lang-option").forEach(function (btn) {
+                    btn.classList.toggle("is-active", btn.getAttribute("data-lang") === cur);
+                });
+            }
+
+            function closeLangModal() {
+                const m = document.getElementById("livLangModal");
+                m.hidden = true;
+                m.classList.remove("is-open");
+            }
+
+            document.getElementById("livLangModalClose").addEventListener("click", closeLangModal);
+            document.getElementById("livLangModal").addEventListener("click", function (e) {
+                if (e.target === this) closeLangModal();
+            });
+
+            document.querySelectorAll(".liv-lang-option").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const lang = btn.getAttribute("data-lang");
+                    if (!lang) return;
+                    setLivLang(lang);
+                    applyLivI18n();
+                    closeLangModal();
+                });
+            });
+
+            document.getElementById("profileMenuBooks").addEventListener("click", function () {
+                try {
+                    window.parent.postMessage({ type: "liv-tab", tab: 1 }, "*");
+                } catch (e) {}
+            });
+
+            document.getElementById("profileMenuLanguage").addEventListener("click", openLangModal);
+
+            document.querySelector('.menu-row[data-action="about"]').addEventListener("click", function () {
+                alert("Liv Lakay — pwal disponib byento.");
+            });
+        </script>
+    </body>
+</html>

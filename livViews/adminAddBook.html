@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <title>Ajoute yon liv — Liv (admin)</title>
+        <link rel="stylesheet" href="assets/styles.css">
+    </head>
+    <body class="liv-body">
+        <div class="liv-page liv-admin-page">
+            <a class="liv-admin-back" href="primaryView.html?tab=1">← Rete nan bibliyotèk</a>
+
+            <div id="adminGate" class="liv-admin-banner" hidden>
+                Mode administratè pa aktive. Ale nan <strong>Profil</strong> epi aktive switch la.
+            </div>
+
+            <h1 class="liv-page-title" style="margin-top: 0;">Ajoute yon liv</h1>
+
+            <form id="adminBookForm">
+                <section class="liv-admin-section">
+                    <h2>Enfòmasyon sou liv la</h2>
+                    <div class="liv-admin-field">
+                        <label for="bookDocId">ID liv la (inik, san espas — pou baz done a)</label>
+                        <input type="text" id="bookDocId" name="bookDocId" required pattern="[a-zA-Z0-9_-]+" maxlength="120" placeholder="egzanp: matenatik_5e" autocomplete="off">
+                        <p class="hint">Let, nimewo, tire (-) ak soulign (_) sèlman.</p>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="bookTitle">Tit</label>
+                        <input type="text" id="bookTitle" name="bookTitle" required maxlength="200" placeholder="Tit liv la">
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="authorTV">Otè</label>
+                        <input type="text" id="authorTV" name="author" required maxlength="200" placeholder="Non otè a">
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="bookIsbn">ISBN (opsyonèl)</label>
+                        <input type="text" id="bookIsbn" name="bookIsbn" maxlength="32" placeholder="egzanp: 9781234567890" inputmode="numeric" autocomplete="off">
+                        <p class="hint">ISBN-10 oswa ISBN-13, si liv la genyen. Kòd lokal oswa lòt nimewo — mete yo nan rechèch kòm &quot;ID liv&quot; si w sere yo nan tit/ID.</p>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="subjectDD">Sijè</label>
+                        <select id="subjectDD" name="subject">
+                            <option value="Ayiti">Ayiti</option>
+                            <option value="Sante">Sante</option>
+                            <option value="Syans">Syans</option>
+                            <option value="Lang">Lang</option>
+                            <option value="Relijyon">Relijyon</option>
+                            <option value="Kapitalis">Kapitalis</option>
+                        </select>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="yearDD">Ane</label>
+                        <select id="yearDD" name="year">
+                            <option>1e</option>
+                            <option>2èm</option>
+                            <option>3èm</option>
+                            <option>4èm</option>
+                            <option>5èm</option>
+                            <option>6èm</option>
+                            <option>7èm</option>
+                            <option>8èm</option>
+                            <option>9èm</option>
+                        </select>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="coverFile">Kouvèti (imaj)</label>
+                        <input type="file" id="coverFile" name="cover" accept="image/*" required>
+                    </div>
+                </section>
+
+                <section class="liv-admin-section">
+                    <h2>Chapit ak paj</h2>
+                    <p class="hint" style="margin: 0 0 12px;">Pou chak chapit: mete <strong>tit chapit la</strong>, konben paj, epi klike <strong>Prepare paj yo</strong> pou ekri tèks chak paj. Nimewo chapit yo mete otomatikman (1, 2, 3…).</p>
+                    <div id="chaptersContainer"></div>
+                    <div class="liv-btn-row">
+                        <button type="button" class="liv-btn-secondary" id="addChapterBlockBtn">+ Ajoute yon chapit</button>
+                    </div>
+                </section>
+
+                <button type="submit" class="liv-btn-primary" id="submitBookBtn">Anrejistre liv la</button>
+            </form>
+        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+            import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+
+            const ADMIN_KEY = "livAdminMode";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
+                authDomain: "liv-lakay.firebaseapp.com",
+                projectId: "liv-lakay",
+                storageBucket: "liv-lakay.appspot.com",
+                messagingSenderId: "896987078937",
+                appId: "1:896987078937:web:acc868befefa57564fa588",
+                measurementId: "G-YP58T0S16P"
+            };
+
+            const app = initializeApp(firebaseConfig);
+            getAnalytics(app);
+            const db = getFirestore(app);
+
+            const gate = document.getElementById("adminGate");
+            const form = document.getElementById("adminBookForm");
+            const chaptersContainer = document.getElementById("chaptersContainer");
+
+            if (localStorage.getItem(ADMIN_KEY) !== "true") {
+                gate.hidden = false;
+                form.querySelectorAll("input, select, button, textarea").forEach((el) => {
+                    if (el.type !== "hidden") el.disabled = true;
+                });
+            }
+
+            function slugFromTitle(title) {
+                return title
+                    .trim()
+                    .toLowerCase()
+                    .replace(/\s+/g, "_")
+                    .replace(/[^a-z0-9_-]/g, "")
+                    .slice(0, 80);
+            }
+
+            document.getElementById("bookTitle").addEventListener("blur", function () {
+                const idEl = document.getElementById("bookDocId");
+                if (!idEl.value.trim()) {
+                    const s = slugFromTitle(this.value);
+                    if (s) idEl.value = s;
+                }
+            });
+
+            let chapterBlockIndex = 0;
+
+            function uniqueChapterDocId(base, used) {
+                let id = base || "chapit";
+                let n = 0;
+                let candidate = id;
+                while (used.has(candidate)) {
+                    n += 1;
+                    candidate = id + "_" + n;
+                }
+                return candidate;
+            }
+
+            function chapterDocIdFromTitle(title, orderIndex, used) {
+                let base = slugFromTitle(title);
+                if (!base) base = "chapit_" + (orderIndex + 1);
+                return uniqueChapterDocId(base, used);
+            }
+
+            function buildChapterBlock() {
+                const idx = chapterBlockIndex++;
+                const wrap = document.createElement("div");
+                wrap.className = "liv-admin-chapter";
+                wrap.dataset.chapterIndex = String(idx);
+                wrap.innerHTML = `
+                    <h3>Chapit <span class="ch-num-label">${idx + 1}</span></h3>
+                    <div class="liv-admin-field">
+                        <label>Tit chapit la</label>
+                        <input type="text" class="ch-title" required maxlength="200" placeholder="egzanp: Antroduksyon">
+                    </div>
+                    <div class="liv-admin-row">
+                        <div class="liv-admin-field">
+                            <label>Nimewo chapit</label>
+                            <input type="number" class="ch-num" min="1" max="999" value="${idx + 1}" required readonly aria-readonly="true" title="Nimewo a otomatik">
+                        </div>
+                        <div class="liv-admin-field">
+                            <label>Konben paj</label>
+                            <input type="number" class="ch-page-count" min="1" max="50" value="1" required>
+                        </div>
+                    </div>
+                    <div class="liv-btn-row">
+                        <button type="button" class="liv-btn-secondary ch-prep-pages">Prepare paj yo</button>
+                        <button type="button" class="liv-btn-secondary liv-btn-danger ch-remove">Retire chapit</button>
+                    </div>
+                    <div class="liv-page-fields"></div>
+                `;
+
+                wrap.querySelector(".ch-prep-pages").addEventListener("click", function () {
+                    const count = parseInt(wrap.querySelector(".ch-page-count").value, 10);
+                    const fields = wrap.querySelector(".liv-page-fields");
+                    fields.innerHTML = "";
+                    if (!count || count < 1 || count > 50) {
+                        alert("Antre ant 1 ak 50 paj.");
+                        return;
+                    }
+                    for (let p = 1; p <= count; p++) {
+                        const div = document.createElement("div");
+                        div.className = "liv-admin-field";
+                        div.innerHTML = `
+                            <label>Tèks — paj ${p}</label>
+                            <textarea class="ch-page-text" rows="4" placeholder="Tèks paj ${p}"></textarea>`;
+                        fields.appendChild(div);
+                    }
+                });
+
+                wrap.querySelector(".ch-remove").addEventListener("click", function () {
+                    wrap.remove();
+                    renumberChapters();
+                });
+
+                return wrap;
+            }
+
+            function renumberChapters() {
+                const blocks = chaptersContainer.querySelectorAll(".liv-admin-chapter");
+                blocks.forEach((b, i) => {
+                    const lab = b.querySelector(".ch-num-label");
+                    if (lab) lab.textContent = String(i + 1);
+                    const numIn = b.querySelector(".ch-num");
+                    if (numIn) numIn.value = String(i + 1);
+                });
+            }
+
+            document.getElementById("addChapterBlockBtn").addEventListener("click", function () {
+                chaptersContainer.appendChild(buildChapterBlock());
+            });
+
+            chaptersContainer.appendChild(buildChapterBlock());
+
+            async function uploadCover(file, bookId) {
+                const storage = getStorage();
+                const path = `books/${bookId}/${Date.now()}_${file.name.replace(/[^a-z0-9._-]/gi, "_")}`;
+                const storageRef = ref(storage, path);
+                await uploadBytes(storageRef, file);
+                return getDownloadURL(storageRef);
+            }
+
+            form.addEventListener("submit", async function (e) {
+                e.preventDefault();
+                if (localStorage.getItem(ADMIN_KEY) !== "true") {
+                    alert("Mode administratè pa aktive.");
+                    return;
+                }
+
+                const bookDocId = document.getElementById("bookDocId").value.trim();
+                const title = document.getElementById("bookTitle").value.trim();
+                const author = document.getElementById("authorTV").value.trim();
+                const isbnRaw = document.getElementById("bookIsbn").value.trim();
+                const subject = document.getElementById("subjectDD");
+                const year = document.getElementById("yearDD");
+
+                const coverFile = document.getElementById("coverFile").files[0];
+                if (!coverFile) {
+                    alert("Chwazi yon imaj kouvèti.");
+                    return;
+                }
+
+                const blocks = chaptersContainer.querySelectorAll(".liv-admin-chapter");
+                if (blocks.length === 0) {
+                    alert("Ajoute omwen yon chapit.");
+                    return;
+                }
+
+                const submitBtn = document.getElementById("submitBookBtn");
+                submitBtn.disabled = true;
+
+                try {
+                    const existing = await getDoc(doc(db, "books", bookDocId));
+                    if (existing.exists()) {
+                        alert("ID liv sa a deja itilize. Chwazi yon lòt ID.");
+                        submitBtn.disabled = false;
+                        return;
+                    }
+
+                    const coverUrl = await uploadCover(coverFile, bookDocId);
+
+                    const bookPayload = {
+                        bookTitle: title,
+                        bookAuthor: author,
+                        bookImg: coverUrl,
+                        bookYear: year.options[year.selectedIndex].text,
+                        bookSubject: subject.options[subject.selectedIndex].text
+                    };
+                    if (isbnRaw) bookPayload.bookIsbn = isbnRaw;
+                    await setDoc(doc(db, "books", bookDocId), bookPayload);
+
+                    const usedChapterIds = new Set();
+
+                    for (let bi = 0; bi < blocks.length; bi++) {
+                        const block = blocks[bi];
+                        const chTitle = block.querySelector(".ch-title").value.trim();
+                        if (!chTitle) {
+                            throw new Error("Chak chapit bezwen yon tit.");
+                        }
+                        const chId = chapterDocIdFromTitle(chTitle, bi, usedChapterIds);
+                        usedChapterIds.add(chId);
+                        const chNum = bi + 1;
+                        const pageTexts = block.querySelectorAll(".ch-page-text");
+                        if (pageTexts.length === 0) {
+                            throw new Error("Prepare paj yo pou chapit: " + chTitle);
+                        }
+
+                        await setDoc(doc(db, "books", bookDocId, "chapters", chId), {
+                            chapter_name: chTitle,
+                            chapter_pages: String(pageTexts.length),
+                            chapter_number: chNum
+                        });
+
+                        let p = 1;
+                        for (const ta of pageTexts) {
+                            await setDoc(
+                                doc(db, "books", bookDocId, "chapters", chId, "pages", "page" + p),
+                                { text: ta.value || "" }
+                            );
+                            p++;
+                        }
+                    }
+
+                    alert("Liv la anrejistre!");
+                    window.location.href = "primaryView.html?tab=1";
+                } catch (err) {
+                    console.error(err);
+                    alert("Erè: " + (err.message || err));
+                } finally {
+                    submitBtn.disabled = false;
+                }
+            });
+        </script>
+    </body>
+</html>

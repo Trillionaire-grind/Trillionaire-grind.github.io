@@ -1,0 +1,78 @@
+Liv Lakay — accessCodes (single-use pass codes)
+================================================
+
+Data model (collection: accessCodes)
+-----------------------------------
+Document ID: the normalized code (A–Z and 0–9 only, no spaces). The app strips
+spaces/dashes from user input and uppercases before lookup.
+
+Fields used by liv.html:
+  consumed   (bool)   required — false until registration completes
+  active     (bool)   optional — omit or true = valid; false blocks signup
+  consumedAt (timestamp) set by client on redeem
+  redeemedByUid (string)
+  redeemedByEmail (string)
+
+Optional fields for your checkout / admin tooling:
+  orderId, passSku, purchaserEmail, createdAt, etc.
+
+Issuing a code when someone buys a pass
+----------------------------------------
+Do NOT create codes from the public web app (anyone could call it). Use one of:
+
+  • Firebase Admin SDK in a trusted environment (Cloud Function, server, or
+    secure script with a service account) after payment succeeds, e.g.:
+
+    admin.firestore().collection('accessCodes').doc(normalizedCode).set({
+      consumed: false,
+      active: true,
+      orderId: 'stripe_...',
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+
+  • Stripe (or other) webhook → Cloud Function → setDoc as above.
+
+Generate `normalizedCode` as a long random string (e.g. 12–16 chars from
+A–Z0–9). The document ID must match exactly what normalizeAccessCode() would
+produce on the user-facing string.
+
+Example security rules (merge into your firestore.rules)
+--------------------------------------------------------
+Adjust to match the rest of your project. This pattern allows:
+  • Unauthenticated GET only for unused, active codes (so users can validate
+    before creating an account).
+  • Authenticated UPDATE only to flip consumed to true, with redeemedByUid
+    matching the signed-in user.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /accessCodes/{codeId} {
+      allow get: if resource.data.consumed == false
+                 && resource.data.active != false;
+
+      allow update: if request.auth != null
+        && request.auth.uid != null
+        && resource.data.consumed == false
+        && resource.data.active != false
+        && request.resource.data.consumed == true
+        && request.resource.data.redeemedByUid == request.auth.uid;
+
+      allow create, delete: if false;
+    }
+
+    // Written only by Cloud Functions (Stripe webhook). No client access.
+    match /stripeCheckoutSessions/{sessionId} {
+      allow read, write: if false;
+    }
+
+    // ... your users/{uid}, books, etc.
+  }
+}
+
+Notes
+-----
+• Create accessCodes documents only via Admin SDK or trusted backend.
+• If you need stricter security (hide whether a code exists), replace the
+  unauthenticated get with a Cloud Callable that validates the code server-side.
