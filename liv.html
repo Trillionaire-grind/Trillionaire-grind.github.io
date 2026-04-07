@@ -1,157 +1,860 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht" class="liv-html-doc">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
+        <link rel="stylesheet" href="livViews/assets/styles.css">
         <link rel="shortcut icon" type="image/x-icon" href="livViews/assets/coats.svg.png"/>
 
-
-        <title>Liv App V 0.0.0.5</title>
+        <title data-i18n="landing.browserTitle">Liv Lakay</title>
         <style>
-            /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
-                background-color: #F9FAFC;
+                background-color: #f0f1f3;
             }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
+            .liv-landing-hero {
                 text-align: center;
-                padding: 10px 0;
+                margin-top: 16px;
             }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
+            .liv-landing-quote {
+                margin-left: 5%;
+                margin-right: 5%;
+                line-height: 1.45;
+            }
+            .liv-landing-card {
+                width: 80%;
+                margin: 20px 10%;
+                background-color: #e7f9ed;
+                border-radius: 12px;
                 text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
+                padding: 4px 0 20px;
+                box-sizing: border-box;
             }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
+            .liv-landing-card h2 {
+                font-size: 1.5rem;
+                padding-top: 16px;
+                font-weight: bold;
+                margin: 8px 12px;
+                color: #1a1a1a;
             }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
+            .liv-landing-card p {
+                margin: 8px 12px;
                 color: #333;
             }
-            footer nav a:hover {
-                color: #007bff;
+            .liv-landing-btn {
+                margin-top: 12px;
+                width: 80%;
+                max-width: 320px;
+                font-size: 16px;
+                padding: 10px 16px;
+                cursor: pointer;
+                border-radius: 10px;
+                font-family: inherit;
             }
-
-            .card-container {
+            .liv-landing-btn--primary {
+                background-color: #2abf5b;
+                color: white;
+                border: 2px solid #239a4b;
+            }
+            .liv-landing-btn--secondary {
+                background-color: #e7f9ed;
+                color: #239a4b;
+                border: 2px solid #2abf5b;
+            }
+            .liv-error-modal {
+                position: fixed;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.45);
+                z-index: 3000;
+                padding: 18px;
+                box-sizing: border-box;
+            }
+            .liv-error-modal.is-open {
                 display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
             }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            .liv-error-modal-card {
+                width: min(92vw, 420px);
+                background: #fff;
+                border-radius: 14px;
+                box-shadow: 0 14px 34px rgba(0, 0, 0, 0.22);
+                border: 1px solid #e8eaed;
+                padding: 16px 16px 14px;
+                position: relative;
             }
-            .card img {
+            .liv-error-modal-title {
+                margin: 0 0 8px;
+                color: #9a1c1c;
+                font-size: 1.1rem;
+            }
+            .liv-error-modal-text {
+                margin: 0 0 14px;
+                color: #222;
+                line-height: 1.45;
+                white-space: pre-wrap;
+            }
+            .liv-error-modal-btn {
                 width: 100%;
-                height: auto;
+                border-radius: 10px;
+                border: 0;
+                background: #2abf5b;
+                color: #fff;
+                font-size: 0.95rem;
+                font-weight: 600;
+                padding: 10px 12px;
+                cursor: pointer;
             }
-            .card-content {
-                padding: 10px;
+            .liv-landing-lang-wrap {
+                position: fixed;
+                top: 12px;
+                right: 12px;
+                z-index: 1200;
+                width: 106px;
             }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
+            .liv-landing-lang-btn {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                border: 1px solid #d8dee4;
+                background: #fff;
+                color: #1e293b;
+                border-radius: 999px;
+                padding: 6px 10px;
+                font-size: 12px;
+                text-align: center;
+                white-space: nowrap;
+                cursor: pointer;
+            }
+            .liv-landing-lang-btn:active {
+                transform: none;
+            }
+            .liv-landing-lang-menu {
+                display: none;
+                position: absolute;
+                right: 0;
+                margin-top: 6px;
+                background: #fff;
+                border: 1px solid #e5e7eb;
+                border-radius: 10px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+                padding: 4px;
+                min-width: 120px;
+            }
+            .liv-landing-lang-menu.is-open {
+                display: block;
+            }
+            .liv-landing-lang-option {
+                width: 100%;
+                text-align: left;
+                border: 0;
+                background: transparent;
+                border-radius: 8px;
+                padding: 8px 10px;
+                font-size: 13px;
+                cursor: pointer;
+            }
+            .liv-landing-lang-option:hover {
+                background: #f1f5f9;
+            }
+            .liv-loading-modal {
+                position: fixed;
+                inset: 0;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.35);
+                z-index: 3100;
+                padding: 16px;
+                box-sizing: border-box;
+            }
+            .liv-loading-modal.is-open {
+                display: flex;
+            }
+            .liv-loading-card {
+                width: min(88vw, 320px);
+                background: #fff;
+                border-radius: 14px;
+                border: 1px solid #e8eaed;
+                box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+                padding: 16px;
+                text-align: center;
+            }
+            .liv-loading-spinner {
+                width: 30px;
+                height: 30px;
+                margin: 0 auto 10px;
+                border-radius: 50%;
+                border: 3px solid #d1fae5;
+                border-top-color: #16a34a;
+                animation: liv-spin 0.8s linear infinite;
+            }
+            .liv-loading-text {
+                margin: 0;
+                color: #1f2937;
+                font-size: 0.95rem;
+            }
+            @keyframes liv-spin {
+                to {
+                    transform: rotate(360deg);
                 }
             }
         </style>
     </head>
-    <body>
-        <div style="text-align: center; margin-top: 16px;">
-            <img src="livViews/assets/coats.svg.png" height="200px" width="300px">
+    <body class="liv-body">
+        <div class="liv-landing-lang-wrap" id="livLandingLangWrap">
+            <button type="button" class="liv-landing-lang-btn" id="livLandingLangBtn">Kr/en/es/fr</button>
+            <div class="liv-landing-lang-menu" id="livLandingLangMenu">
+                <button type="button" class="liv-landing-lang-option" data-lang="ht" data-i18n="profile.lang.ht"></button>
+                <button type="button" class="liv-landing-lang-option" data-lang="fr" data-i18n="profile.lang.fr"></button>
+                <button type="button" class="liv-landing-lang-option" data-lang="es" data-i18n="profile.lang.es"></button>
+                <button type="button" class="liv-landing-lang-option" data-lang="en" data-i18n="profile.lang.en"></button>
+            </div>
         </div>
-        <p style="margin-left: 5%; margin-right: 5%;">
-            "Premye responsabiltie leta se travay pou 
-            tout moun ale lekol. Se sèl sa ki kapab
-            pèmèt peyi a devlope. Leta dwe ankouraje 
-            epi bay gwoup prive ki antreprann travay sa 
-            a tout kout men y’ap beswen”
-            <br>         
-            -Atik 32-2
-        <p>
-  
-        <p style="margin-left: 5%; margin-right: 5%;">
-            “ansèyman primè obligatwa pou tout mon. 
-            Lalwa sa fikse sanksyon pou sa. Leta va bay
-            elèv primè founninti klasik ak lòt materyèl 
-            y’ap bezwen gratis.” 
-            <br>
-            -Atik 32-3
-        <p>
-        <div style="width: 80%; margin-right: 10%; margin-left: 10%; background-color: #E7F9ED; border-radius: 10px; text-align: center;">
-            <p style="font-size: 32px; padding-top:16px; font-weight: bold;">
-               Liv Lekol Pou<br>
-                Avni Ayiti 
-            </p>
-            <p>
-                Jwen aksè a edikasyon
-            </p>
-            <button onclick="alert('only log in works for now')" style="margin-top: 16px; width: 80%; background-color: #2ABF5B; color: white; border-color: #2ABF5B; font-size: 16px; 
-            padding-top: 8px; padding-bottom: 8px; cursor: pointer; border-radius: 8px;">
-                Kreye Yon Kont
-            </button>
-            <br>
-            <button onclick="replaceTab()" style="margin-top: 16px; width: 80%; background-color: #E7F9ED; color: #2ABF5B; border-color: #2ABF5B; font-size: 16px; 
-            padding-top: 8px; padding-bottom: 8px; cursor: pointer; margin-bottom: 16px; border-radius: 8px;">
-                Konekte
-            </button>
+        <div class="liv-landing-hero">
+            <img src="livViews/assets/coats.svg.png" height="200" width="300" alt="">
         </div>
-    </body>
-    <script>
+        <p class="liv-landing-quote">
+            <span data-i18n="landing.quote1">Premye responsabiltie leta se travay pou tout moun ale lekol. Se sèl sa ki kapab pèmèt peyi a devlope. Leta dwe ankouraje epi bay gwoup prive ki antreprann travay sa a tout kout men y'ap beswen</span>
+            <br>
+            <span data-i18n="landing.quote1Source">-Atik 32-2</span>
+        </p>
 
-        
-        function versionAlert(){
-            alert(`version .4 being tested`)
-        }
-        function newTab() {
-            window.open("primaryView.html");
-        }
+        <p class="liv-landing-quote">
+            <span data-i18n="landing.quote2">ansèyman primè obligatwa pou tout mon. Lalwa sa fikse sanksyon pou sa. Leta va bay elèv primè founninti klasik ak lòt materyèl y'ap bezwen gratis.</span>
+            <br>
+            <span data-i18n="landing.quote2Source">-Atik 32-3</span>
+        </p>
 
-        function replaceTab()
-        {
-            window.location.replace(
-                "livViews/primaryView.html");
-        }
+        <div class="liv-landing-card">
+            <h2 class="liv-landing-title" data-i18n="landing.taglineTitle">Liv Lekol Pou Avni Ayiti</h2>
+            <p data-i18n="landing.taglineSub">Jwen aksè a edikasyon</p>
+            <button type="button" class="liv-landing-btn liv-landing-btn--secondary" id="livBuyPass" hidden data-i18n="landing.buyPass">Achte yon pè aksè</button>
+            <br>
+            <button type="button" class="liv-landing-btn liv-landing-btn--primary" id="livOpenSignup" data-i18n="auth.signupTitle">Kreye yon kont</button>
+            <br>
+            <button type="button" class="liv-landing-btn liv-landing-btn--secondary" id="livOpenLogin" data-i18n="auth.loginTitle">Konekte</button>
+        </div>
 
-        let cards = document.getElementsByClassName("card")
+        <div id="livSignupModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livSignupTitle">
+            <div class="liv-modal-inner liv-modal-inner--wide">
+                <button type="button" class="liv-modal-close" id="livSignupClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="livSignupTitle" data-i18n="auth.signupTitle">Kreye yon kont</h2>
+                <div id="livSignupError" class="liv-auth-error" hidden></div>
 
-        for(let i = 0; i < cards.length; i++) {
-            cards[i].onclick = function () {
-                newTab()
+                <div class="liv-admin-field">
+                    <label for="livSignupFullName" data-i18n="auth.fullName">Non konplè</label>
+                    <input type="text" id="livSignupFullName" autocomplete="name" maxlength="120" required>
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupEmail" data-i18n="auth.email">Imèl</label>
+                    <input type="email" id="livSignupEmail" autocomplete="email" required>
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupGrade" data-i18n="auth.grade">Klas</label>
+                    <select id="livSignupGrade" required>
+                        <option value="" data-i18n="auth.gradePlaceholder">—</option>
+                        <option>1e</option>
+                        <option>2èm</option>
+                        <option>3èm</option>
+                        <option>4èm</option>
+                        <option>5èm</option>
+                        <option>6èm</option>
+                        <option>7èm</option>
+                        <option>8èm</option>
+                        <option>9èm</option>
+                    </select>
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupAccess" data-i18n="auth.accessCode">Kòd aksè</label>
+                    <input type="text" id="livSignupAccess" autocomplete="off" maxlength="64" required data-i18n-placeholder="auth.accessCodeHint">
+                    <p class="hint" data-i18n="auth.accessCodeHint"></p>
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupPhoto" data-i18n="auth.profilePhoto">Foto pwofil</label>
+                    <input type="file" id="livSignupPhoto" accept="image/jpeg,image/png,image/webp,image/gif" required>
+                    <p class="hint" data-i18n="auth.profilePhotoHint"></p>
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupPassword" data-i18n="auth.password">Modpas</label>
+                    <input type="password" id="livSignupPassword" autocomplete="new-password" required minlength="6">
+                </div>
+                <div class="liv-admin-field">
+                    <label for="livSignupConfirm" data-i18n="auth.confirmPassword">Konfime modpas</label>
+                    <input type="password" id="livSignupConfirm" autocomplete="new-password" required minlength="6">
+                </div>
+                <button type="button" class="liv-btn-primary" style="width: 100%; margin-top: 12px;" id="livSignupSubmit" data-i18n="auth.createAccount">Kreye kont</button>
+            </div>
+        </div>
+
+        <div id="livLoginModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livLoginTitle">
+            <div class="liv-modal-inner liv-modal-inner--wide">
+                <button type="button" class="liv-modal-close" id="livLoginClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="livLoginTitle" data-i18n="auth.loginTitle">Konekte</h2>
+                <p class="liv-auth-login-sub" data-i18n="auth.loginSubtitle"></p>
+
+                <div id="livLoginFormBlock">
+                    <div id="livLoginError" class="liv-auth-error" hidden></div>
+                    <div class="liv-admin-field">
+                        <label for="livLoginEmail" data-i18n="auth.email">Imèl</label>
+                        <input type="email" id="livLoginEmail" autocomplete="email" required>
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livLoginPassword" data-i18n="auth.password">Modpas</label>
+                        <input type="password" id="livLoginPassword" autocomplete="current-password" required>
+                    </div>
+                    <button type="button" class="liv-btn-primary" style="width: 100%; margin-top: 4px;" id="livLoginSubmit" data-i18n="auth.signIn">Konekte</button>
+                    <div class="liv-auth-forgot-bar">
+                        <button type="button" class="liv-btn-forgot" id="livForgotShow" data-i18n="auth.forgotPassword">Bliye modpas?</button>
+                    </div>
+                </div>
+
+                <div id="livResetFormBlock" hidden>
+                    <div id="livResetError" class="liv-auth-error" hidden></div>
+                    <p class="liv-search-hint" data-i18n="auth.resetExplain"></p>
+                    <div class="liv-admin-field">
+                        <label for="livResetEmail" data-i18n="auth.email">Imèl</label>
+                        <input type="email" id="livResetEmail" autocomplete="email" required>
+                    </div>
+                    <button type="button" class="liv-btn-primary" style="width: 100%; margin-top: 8px;" id="livResetSubmit" data-i18n="auth.sendReset">Voye lyen reset</button>
+                    <button type="button" class="liv-auth-link-btn" id="livResetBack" data-i18n="auth.backToLogin">Retounen nan koneksyon</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="livErrorModal" class="liv-error-modal" role="dialog" aria-modal="true" aria-labelledby="livErrorModalTitle">
+            <div class="liv-error-modal-card">
+                <button type="button" class="liv-modal-close" id="livErrorModalClose" data-i18n-aria="auth.close">&times;</button>
+                <h3 id="livErrorModalTitle" class="liv-error-modal-title" data-i18n="auth.errorTitle">Error</h3>
+                <p id="livErrorModalText" class="liv-error-modal-text"></p>
+                <button type="button" id="livErrorModalOk" class="liv-error-modal-btn" data-i18n="auth.close">Close</button>
+            </div>
+        </div>
+        <div id="livLoadingModal" class="liv-loading-modal" role="status" aria-live="polite" aria-busy="true">
+            <div class="liv-loading-card">
+                <div class="liv-loading-spinner" aria-hidden="true"></div>
+                <p class="liv-loading-text" data-i18n="auth.creatingAccount">Creating your account...</p>
+            </div>
+        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+            import {
+                getAuth,
+                createUserWithEmailAndPassword,
+                signInWithEmailAndPassword,
+                sendPasswordResetEmail,
+                onAuthStateChanged,
+                updateProfile,
+                deleteUser,
+                signOut,
+            } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            import {
+                getFirestore,
+                collection,
+                doc,
+                getDoc,
+                getDocs,
+                setDoc,
+                deleteDoc,
+                query,
+                runTransaction,
+                serverTimestamp,
+                where,
+            } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+            import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+            import { livFirebaseConfig } from "./livViews/scripts/livFirebaseConfig.js";
+            import {
+                LIV_CREATE_CHECKOUT_SESSION_URL,
+                LIV_REVEAL_ACCESS_CODE_URL,
+            } from "./livViews/scripts/livCheckoutConfig.js";
+            import {
+                LIV_ALLOW_BYPASS_TEST_CODE,
+                LIV_BYPASS_TEST_CODE_ID,
+            } from "./livViews/scripts/livAccessTestConfig.js";
+            import { initLivI18n, t, applyLivI18n, setLivLang } from "./livViews/scripts/livI18n.js?v=20260333";
+
+            const APP_PATH = "livViews/primaryView.html";
+            const MAX_PROFILE_BYTES = 5 * 1024 * 1024;
+            /** One document per pass: id = normalized code (A–Z0–9). Issued when a user buys a pass; consumed once at signup. */
+            const ACCESS_CODES_COLL = "accessCodes";
+
+            initLivI18n();
+            applyLivI18n(document);
+            window.addEventListener("load", function () {
+                applyLivI18n(document);
+            });
+
+            const app = initializeApp(livFirebaseConfig);
+            getAnalytics(app);
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+
+            function mapAuthError(code) {
+                const table = {
+                    "auth/operation-not-allowed": "auth.error.operationNotAllowed",
+                    "auth/email-already-in-use": "auth.error.emailInUse",
+                    "auth/invalid-email": "auth.error.invalidEmail",
+                    "auth/weak-password": "auth.error.weakPassword",
+                    "auth/user-not-found": "auth.error.userNotFound",
+                    "auth/wrong-password": "auth.error.wrongPassword",
+                    "auth/invalid-credential": "auth.error.invalidCredential",
+                    "auth/too-many-requests": "auth.error.tooManyRequests",
+                    "auth/network-request-failed": "auth.error.network",
+                };
+                const key = table[code];
+                return key ? t(key) : t("auth.error.generic");
             }
-        }
 
-        versionAlert()
-    </script>
-    
+            function showErr(el, codeOrMsg) {
+                let msg = codeOrMsg;
+                if (typeof codeOrMsg === "string" && codeOrMsg.indexOf("auth/") === 0) {
+                    msg = mapAuthError(codeOrMsg);
+                }
+                el.textContent = msg;
+                el.hidden = false;
+                openErrorModal(msg);
+            }
+
+            function hideErr(el) {
+                el.hidden = true;
+                el.textContent = "";
+            }
+
+            function normalizeAccessCode(raw) {
+                const s = String(raw || "").replace(/[^A-Za-z0-9]/g, "");
+                return s.toUpperCase().slice(0, 64);
+            }
+
+            function isBypassTestAccessCode(codeId) {
+                return (
+                    LIV_ALLOW_BYPASS_TEST_CODE === true &&
+                    codeId === LIV_BYPASS_TEST_CODE_ID
+                );
+            }
+
+            async function validateAccessCodeBeforeSignup(codeId) {
+                if (!codeId) return { ok: false, reason: "invalid" };
+                if (isBypassTestAccessCode(codeId)) {
+                    return { ok: true };
+                }
+                try {
+                    const snap = await getDoc(doc(db, ACCESS_CODES_COLL, codeId));
+                    if (!snap.exists()) return { ok: false, reason: "invalid" };
+                    const d = snap.data();
+                    if (d.consumed === true) return { ok: false, reason: "used" };
+                    if (d.active === false) return { ok: false, reason: "inactive" };
+                    return { ok: true };
+                } catch (e) {
+                    if (e.code === "permission-denied") return { ok: false, reason: "permission" };
+                    throw e;
+                }
+            }
+
+            function mapAccessCodeGateReason(reason) {
+                if (reason === "permission") return t("auth.error.firestorePermission");
+                if (reason === "used") return t("auth.error.accessCodeAlreadyUsed");
+                if (reason === "inactive") return t("auth.error.accessCodeInactive");
+                return t("auth.error.accessCodeInvalid");
+            }
+
+            async function redeemAccessCodeTx(codeId, uid, email) {
+                if (isBypassTestAccessCode(codeId)) {
+                    return;
+                }
+                await runTransaction(db, async (txn) => {
+                    const ref = doc(db, ACCESS_CODES_COLL, codeId);
+                    const snap = await txn.get(ref);
+                    if (!snap.exists()) throw Object.assign(new Error("invalid"), { redeem: "invalid" });
+                    const d = snap.data();
+                    if (d.consumed === true) throw Object.assign(new Error("used"), { redeem: "used" });
+                    if (d.active === false) throw Object.assign(new Error("inactive"), { redeem: "inactive" });
+                    txn.update(ref, {
+                        consumed: true,
+                        consumedAt: serverTimestamp(),
+                        redeemedByUid: uid,
+                        redeemedByEmail: email,
+                    });
+                });
+            }
+
+            async function loadBooksForGrade(grade) {
+                const q = query(collection(db, "books"), where("bookYear", "==", grade));
+                const snap = await getDocs(q);
+                const ids = [];
+                snap.forEach(function (d) {
+                    ids.push(d.id);
+                });
+                return ids;
+            }
+
+            async function rollbackPartialSignup(user, storageRef) {
+                try {
+                    await deleteDoc(doc(db, "users", user.uid));
+                } catch (e) {
+                    console.warn(e);
+                }
+                if (storageRef) {
+                    try {
+                        await deleteObject(storageRef);
+                    } catch (e) {
+                        console.warn(e);
+                    }
+                }
+                try {
+                    await deleteUser(user);
+                } catch (e) {
+                    console.warn(e);
+                    try {
+                        await signOut(auth);
+                    } catch (e2) {
+                        console.warn(e2);
+                    }
+                }
+            }
+
+            /** While signup runs after createUser, block redirect so profile upload + code redeem can finish. */
+            let livAuthRedirectHold = false;
+
+            onAuthStateChanged(auth, function (user) {
+                if (user && !livAuthRedirectHold) {
+                    window.location.replace(APP_PATH);
+                }
+            });
+
+            const signupModal = document.getElementById("livSignupModal");
+            const loginModal = document.getElementById("livLoginModal");
+            const loginFormBlock = document.getElementById("livLoginFormBlock");
+            const resetFormBlock = document.getElementById("livResetFormBlock");
+            const errorModal = document.getElementById("livErrorModal");
+            const errorModalText = document.getElementById("livErrorModalText");
+            const loadingModal = document.getElementById("livLoadingModal");
+            const landingLangWrap = document.getElementById("livLandingLangWrap");
+            const landingLangBtn = document.getElementById("livLandingLangBtn");
+            const landingLangMenu = document.getElementById("livLandingLangMenu");
+
+            function openLoadingModal() {
+                applyLivI18n(loadingModal);
+                loadingModal.classList.add("is-open");
+            }
+
+            function closeLoadingModal() {
+                loadingModal.classList.remove("is-open");
+            }
+
+            function closeErrorModal() {
+                errorModal.classList.remove("is-open");
+            }
+
+            function openErrorModal(message) {
+                errorModalText.textContent = message;
+                applyLivI18n(errorModal);
+                errorModal.classList.add("is-open");
+            }
+
+            function openSignup() {
+                hideErr(document.getElementById("livSignupError"));
+                applyLivI18n(signupModal);
+                signupModal.classList.add("is-open");
+            }
+
+            function closeSignup() {
+                signupModal.classList.remove("is-open");
+            }
+
+            function openLogin() {
+                hideErr(document.getElementById("livLoginError"));
+                hideErr(document.getElementById("livResetError"));
+                loginFormBlock.hidden = false;
+                resetFormBlock.hidden = true;
+                applyLivI18n(loginModal);
+                loginModal.classList.add("is-open");
+            }
+
+            function closeLogin() {
+                loginModal.classList.remove("is-open");
+                loginFormBlock.hidden = false;
+                resetFormBlock.hidden = true;
+            }
+
+            function showResetForm() {
+                hideErr(document.getElementById("livLoginError"));
+                hideErr(document.getElementById("livResetError"));
+                const le = document.getElementById("livLoginEmail").value.trim();
+                document.getElementById("livResetEmail").value = le;
+                loginFormBlock.hidden = true;
+                resetFormBlock.hidden = false;
+            }
+
+            function showLoginForm() {
+                hideErr(document.getElementById("livResetError"));
+                loginFormBlock.hidden = false;
+                resetFormBlock.hidden = true;
+            }
+
+            document.getElementById("livOpenSignup").addEventListener("click", openSignup);
+            document.getElementById("livOpenLogin").addEventListener("click", openLogin);
+            document.getElementById("livSignupClose").addEventListener("click", closeSignup);
+            document.getElementById("livLoginClose").addEventListener("click", closeLogin);
+            document.getElementById("livErrorModalClose").addEventListener("click", closeErrorModal);
+            document.getElementById("livErrorModalOk").addEventListener("click", closeErrorModal);
+            landingLangBtn.addEventListener("click", function () {
+                landingLangMenu.classList.toggle("is-open");
+            });
+            landingLangMenu.querySelectorAll("[data-lang]").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const lang = btn.getAttribute("data-lang");
+                    setLivLang(lang);
+                    applyLivI18n(document);
+                    landingLangMenu.classList.remove("is-open");
+                });
+            });
+            signupModal.addEventListener("click", function (e) {
+                if (e.target === signupModal) closeSignup();
+            });
+            loginModal.addEventListener("click", function (e) {
+                if (e.target === loginModal) closeLogin();
+            });
+            errorModal.addEventListener("click", function (e) {
+                if (e.target === errorModal) closeErrorModal();
+            });
+            document.addEventListener("click", function (e) {
+                if (!landingLangWrap.contains(e.target)) {
+                    landingLangMenu.classList.remove("is-open");
+                }
+            });
+
+            document.getElementById("livForgotShow").addEventListener("click", showResetForm);
+            document.getElementById("livResetBack").addEventListener("click", showLoginForm);
+
+            document.getElementById("livSignupGrade").options[0].value = "";
+
+            document.getElementById("livSignupSubmit").addEventListener("click", async function () {
+                const errEl = document.getElementById("livSignupError");
+                hideErr(errEl);
+                const fullName = document.getElementById("livSignupFullName").value.trim();
+                const email = document.getElementById("livSignupEmail").value.trim();
+                const grade = document.getElementById("livSignupGrade").value;
+                const access = document.getElementById("livSignupAccess").value;
+                const photoInput = document.getElementById("livSignupPhoto");
+                const pass = document.getElementById("livSignupPassword").value;
+                const confirm = document.getElementById("livSignupConfirm").value;
+
+                if (!fullName) {
+                    showErr(errEl, t("auth.error.fullNameRequired"));
+                    return;
+                }
+                if (!email) {
+                    showErr(errEl, t("auth.error.invalidEmail"));
+                    return;
+                }
+                if (!grade) {
+                    showErr(errEl, t("auth.error.gradeRequired"));
+                    return;
+                }
+                if (!access || !access.trim()) {
+                    showErr(errEl, t("auth.error.accessCodeRequired"));
+                    return;
+                }
+                const file = photoInput.files && photoInput.files[0];
+                if (!file) {
+                    showErr(errEl, t("auth.error.profilePhotoRequired"));
+                    return;
+                }
+                if (file.size > MAX_PROFILE_BYTES) {
+                    showErr(errEl, t("auth.error.imageTooBig"));
+                    return;
+                }
+                if (pass !== confirm) {
+                    showErr(errEl, t("auth.passwordMismatch"));
+                    return;
+                }
+                if (pass.length < 6) {
+                    showErr(errEl, t("auth.error.weakPassword"));
+                    return;
+                }
+
+                const codeId = normalizeAccessCode(access);
+                let pre;
+                try {
+                    pre = await validateAccessCodeBeforeSignup(codeId);
+                } catch (e) {
+                    console.error(e);
+                    showErr(errEl, t("auth.error.generic"));
+                    return;
+                }
+                if (!pre.ok) {
+                    showErr(errEl, mapAccessCodeGateReason(pre.reason));
+                    return;
+                }
+
+                const submitBtn = document.getElementById("livSignupSubmit");
+                submitBtn.disabled = true;
+                livAuthRedirectHold = true;
+                openLoadingModal();
+                let storageRef = null;
+                try {
+                    const gradeBooks = await loadBooksForGrade(grade);
+                    const cred = await createUserWithEmailAndPassword(auth, email, pass);
+                    const user = cred.user;
+
+                    await updateProfile(user, { displayName: fullName });
+
+                    const ext = (file.name.split(".").pop() || "jpg").replace(/[^a-z0-9]/gi, "").slice(0, 8) || "jpg";
+                    const storage = getStorage(app);
+                    storageRef = ref(storage, "users/" + user.uid + "/profile." + ext);
+                    await uploadBytes(storageRef, file);
+                    const photoURL = await getDownloadURL(storageRef);
+                    await updateProfile(user, { photoURL: photoURL });
+
+                    await setDoc(doc(db, "users", user.uid), {
+                        email: email,
+                        fullName: fullName,
+                        grade: grade,
+                        photoURL: photoURL,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp(),
+                        accessCodeId: codeId,
+                        books: gradeBooks,
+                    });
+
+                    await redeemAccessCodeTx(codeId, user.uid, email);
+                    window.location.replace(APP_PATH);
+                } catch (e) {
+                    console.error(e);
+                    const authUser = auth.currentUser;
+                    if (authUser && storageRef) {
+                        await rollbackPartialSignup(authUser, storageRef);
+                    } else if (authUser) {
+                        await rollbackPartialSignup(authUser, null);
+                    }
+                    if (e.redeem === "used" || e.redeem === "invalid" || e.redeem === "inactive") {
+                        showErr(errEl, mapAccessCodeGateReason(e.redeem === "invalid" ? "invalid" : e.redeem));
+                    } else if (e.code === "failed-precondition" || e.message && e.message.indexOf("transaction") !== -1) {
+                        showErr(errEl, t("auth.error.accessCodeRedeemFailed"));
+                    } else if (e.code && e.code.indexOf("auth/") === 0) {
+                        showErr(errEl, e.code);
+                    } else if (e.code === "storage/unauthorized") {
+                        showErr(errEl, t("auth.error.generic"));
+                    } else {
+                        showErr(errEl, t("auth.error.generic"));
+                    }
+                } finally {
+                    livAuthRedirectHold = false;
+                    submitBtn.disabled = false;
+                    closeLoadingModal();
+                }
+            });
+
+            document.getElementById("livLoginSubmit").addEventListener("click", async function () {
+                const errEl = document.getElementById("livLoginError");
+                hideErr(errEl);
+                const email = document.getElementById("livLoginEmail").value.trim();
+                const pass = document.getElementById("livLoginPassword").value;
+                if (!email || !pass) {
+                    showErr(errEl, t("auth.error.generic"));
+                    return;
+                }
+                try {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                    window.location.replace(APP_PATH);
+                } catch (e) {
+                    showErr(errEl, e.code || e.message);
+                }
+            });
+
+            (function wireStripeLanding() {
+                const buyBtn = document.getElementById("livBuyPass");
+                if (buyBtn && LIV_CREATE_CHECKOUT_SESSION_URL) {
+                    buyBtn.hidden = false;
+                    buyBtn.addEventListener("click", async function () {
+                        buyBtn.disabled = true;
+                        try {
+                            const r = await fetch(LIV_CREATE_CHECKOUT_SESSION_URL, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: "{}",
+                            });
+                            const data = await r.json();
+                            if (data.url) {
+                                window.location.href = data.url;
+                                return;
+                            }
+                        } catch (e) {
+                            console.error(e);
+                        }
+                        buyBtn.disabled = false;
+                        alert(t("auth.error.generic"));
+                    });
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const passState = params.get("pass");
+                const checkoutSessionId = params.get("session_id");
+
+                if (passState === "cancelled") {
+                    alert(t("landing.passCancelled"));
+                    history.replaceState({}, "", window.location.pathname + window.location.hash);
+                }
+
+                if (passState === "paid" && checkoutSessionId && LIV_REVEAL_ACCESS_CODE_URL) {
+                    (async function () {
+                        let revealed = false;
+                        for (let i = 0; i < 10; i++) {
+                            try {
+                                const r = await fetch(LIV_REVEAL_ACCESS_CODE_URL, {
+                                    method: "POST",
+                                    headers: { "Content-Type": "application/json" },
+                                    body: JSON.stringify({ sessionId: checkoutSessionId }),
+                                });
+                                const data = await r.json();
+                                if (data.accessCodeId) {
+                                    const input = document.getElementById("livSignupAccess");
+                                    if (input) input.value = data.accessCodeId;
+                                    openSignup();
+                                    revealed = true;
+                                    break;
+                                }
+                                if (!data.pending) {
+                                    break;
+                                }
+                            } catch (e) {
+                                console.error(e);
+                                break;
+                            }
+                            await new Promise(function (resolve) {
+                                setTimeout(resolve, 1200);
+                            });
+                        }
+                        if (!revealed) {
+                            alert(t("landing.passRevealFail"));
+                        }
+                        history.replaceState({}, "", window.location.pathname + window.location.hash);
+                    })();
+                }
+            })();
+
+            document.getElementById("livResetSubmit").addEventListener("click", async function () {
+                const errEl = document.getElementById("livResetError");
+                hideErr(errEl);
+                const email = document.getElementById("livResetEmail").value.trim();
+                if (!email) {
+                    showErr(errEl, t("auth.error.invalidEmail"));
+                    return;
+                }
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    alert(t("auth.resetSent"));
+                    showLoginForm();
+                } catch (e) {
+                    showErr(errEl, e.code || e.message);
+                }
+            });
+        </script>
+    </body>
 </html>
