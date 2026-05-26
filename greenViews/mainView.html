@@ -156,15 +156,31 @@
       </button>
     </section>
 
-    <section id="account">
-      <p style="color: #39B053; font-size: 32px;">Hi, <span id="studentNameTV"></span> welcome to <br>Green Books!</p>
-      <p style="color: #39B053; margin-top: 32px;">What would you like us to help you with?</p>
-      <div style="margin-top: 48px;">
-        <button id="scheduleBtn" class="accountButton">Schedule</button>
-      </div>
-      
-      <div>
-        <button id="signOutBtn" class="accountButton">Sign Out</button>
+    <section id="account" aria-label="Profile">
+      <div class="profile-page">
+        <header class="profile-header">
+          <div class="profile-avatar" aria-hidden="true">
+            <span class="profile-avatar-initial" id="profileAvatarInitial">?</span>
+          </div>
+          <h1 class="profile-title">Your profile</h1>
+          <p class="profile-name" id="studentNameTV">—</p>
+          <p class="profile-meta">
+            <span class="material-symbols-outlined profile-meta-icon">mail</span>
+            <span id="profileEmailTV">—</span>
+          </p>
+          <p class="profile-meta">
+            <span class="material-symbols-outlined profile-meta-icon">school</span>
+            <span id="profileSchoolTV">—</span>
+          </p>
+        </header>
+
+        <div class="profile-actions">
+          <button type="button" id="scheduleBtn" class="accountButton profile-action-primary">
+            <span class="material-symbols-outlined" style="vertical-align: middle; margin-right: 8px;">calendar_month</span>
+            Schedule
+          </button>
+          <button type="button" id="signOutBtn" class="accountButton profile-action-signout">Sign out</button>
+        </div>
       </div>
     </section>
   </main>
@@ -176,8 +192,8 @@
           receipt</span>Transactions</a>
       <a href="#home" class="nav-link active-link"> <span class="material-symbols-outlined">
           home</span> Home</a>
-      <a href="#account" class="nav-link"><span style="margin-left: auto; margin-right: auto;"
-          class="material-symbols-outlined">person</span>Account</a>
+      <a href="#account" class="nav-link" aria-label="Profile"><span style="margin-left: auto; margin-right: auto;"
+          class="material-symbols-outlined">person</span>Profile</a>
 
     </nav>
   </footer>

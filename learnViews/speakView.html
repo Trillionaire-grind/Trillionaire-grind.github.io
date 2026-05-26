@@ -1,93 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Speak</title>
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talk to me</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #D31034;
+      --blue: #0020A0;
+      --green: #005315;
+      --cta: #FF0C36;
+      --gold: #DAA123;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --max: 1080px;
+    }
 
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
+    * { box-sizing: border-box; }
 
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <header>
-            <p style="font-size: 26px; padding-left: 5%;">Talk To Me!</p>
-        </header>
-        <div class="calendly-inline-widget" data-url="https://calendly.com/buildingwithkepler" style="min-width:320px;height:700px;"></div>
-        <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-           
-    </body>
+    body {
+      margin: 0;
+      padding: 0 0 48px;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
+
+    .speak-page {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+      padding: 20px 0 40px;
+      max-width: 100%;
+    }
+
+    .speak-intro {
+      margin: 0 0 18px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .speak-hero {
+      display: flex;
+      align-items: stretch;
+      gap: 28px;
+      margin-bottom: 16px;
+    }
+
+    .speak-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .speak-copy h2 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0 0 16px;
+      letter-spacing: -0.01em;
+    }
+
+    .speak-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .speak-list li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .speak-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cta);
+    }
+
+    .speak-topics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 0 0 16px;
+    }
+
+    .speak-topic {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .speak-topic--apps { color: var(--red); border-color: rgba(211, 16, 52, 0.2); }
+    .speak-topic--business { color: var(--blue); border-color: rgba(0, 32, 160, 0.2); }
+    .speak-topic--city { color: var(--green); border-color: rgba(0, 83, 21, 0.2); }
+    .speak-topic--kotfe { color: var(--text); }
+
+    .speak-photo {
+      width: min(240px, 28%);
+      flex-shrink: 0;
+      align-self: stretch;
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .speak-photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+      display: block;
+    }
+
+    .speak-calendly-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      min-height: 680px;
+      position: relative;
+    }
+
+    .speak-calendly-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 14px;
+      background: var(--surface);
+      z-index: 1;
+      transition: opacity 0.2s;
+    }
+
+    .speak-calendly-loading.is-hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .speak-calendly-spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid rgba(0, 0, 0, 0.08);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: speak-spin 0.8s linear infinite;
+    }
+
+    @keyframes speak-spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .calendly-inline-widget {
+      min-width: 320px;
+      max-width: 100%;
+      height: 700px;
+    }
+
+    .speak-fallback {
+      text-align: center;
+      padding: 20px 16px 28px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .speak-fallback p {
+      margin: 0 0 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .speak-fallback a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      background: var(--cta);
+      transition: background 0.15s;
+    }
+
+    .speak-fallback a:hover { background: #000; }
+
+    .speak-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .speak-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .speak-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding-bottom: 32px;
+      }
+
+      .speak-page {
+        width: 100%;
+        padding: 12px 16px 28px;
+      }
+
+      .speak-hero {
+        flex-direction: column;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .speak-intro {
+        font-size: 16px;
+        line-height: 1.75;
+        margin-bottom: 20px;
+      }
+
+      .speak-copy h2 {
+        font-size: 1.125rem;
+        margin-bottom: 14px;
+      }
+
+      .speak-list {
+        gap: 10px;
+      }
+
+      .speak-list li {
+        font-size: 16px;
+        line-height: 1.7;
+        padding: 14px 14px 14px 32px;
+        background: var(--surface);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        border-radius: 12px;
+        text-wrap: pretty;
+      }
+
+      .speak-list li::before {
+        left: 14px;
+        top: 1.35em;
+      }
+
+      .speak-photo {
+        order: -1;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+        max-height: 200px;
+      }
+
+      .speak-photo img {
+        position: relative;
+        inset: auto;
+        height: 100%;
+      }
+
+      .speak-topics {
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .speak-topic {
+        font-size: 13px;
+        padding: 7px 12px;
+      }
+
+      .speak-calendly-card {
+        min-height: 0;
+        border-radius: 12px;
+      }
+
+      .calendly-inline-widget {
+        min-width: 0;
+        width: 100%;
+        height: 640px;
+      }
+
+      .speak-fallback {
+        padding: 16px;
+      }
+
+      .speak-fallback p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .speak-links {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        margin-top: 20px;
+        padding-top: 16px;
+      }
+
+      .speak-links a {
+        font-size: 15px;
+        line-height: 1.4;
+      }
+    }
+
+    @media (max-width: 380px) {
+      .speak-page {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .speak-list li {
+        padding: 12px 12px 12px 28px;
+        font-size: 15px;
+      }
+
+      .speak-list li::before {
+        left: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="speak-page">
+    <div class="speak-hero">
+      <div class="speak-copy">
+        <p class="speak-intro">
+          Pick a time that works for you. We can talk apps, business, cities, or the Mangé Lakay project — whatever you're working on or curious about.
+        </p>
+        <h2>What to expect</h2>
+        <ul class="speak-list">
+          <li>A focused <strong>15–30 minute</strong> conversation — no pitch deck required.</li>
+          <li>Bring a question, idea, or project. I'll share what I know from building in public.</li>
+          <li>Times are shown in <strong>your local timezone</strong>. You'll get a confirmation email from Calendly.</li>
+        </ul>
+      </div>
+      <div class="speak-photo">
+        <img src="assets/sitting.png" alt="Siguineau, Képler">
+      </div>
+    </div>
+
+    <div class="speak-topics" aria-label="Topics we can discuss">
+      <span class="speak-topic speak-topic--apps">Apps</span>
+      <span class="speak-topic speak-topic--business">Business</span>
+      <span class="speak-topic speak-topic--city">Cities</span>
+      <span class="speak-topic speak-topic--kotfe">Mangé Lakay</span>
+    </div>
+
+    <div class="speak-calendly-card">
+      <div id="calendlyLoading" class="speak-calendly-loading" aria-live="polite">
+        <div class="speak-calendly-spinner" aria-hidden="true"></div>
+        <span>Loading calendar…</span>
+      </div>
+      <div
+        class="calendly-inline-widget"
+        data-url="https://calendly.com/buildingwithkepler"
+        data-resize="true">
+      </div>
+      <div class="speak-fallback">
+        <p>Calendar not loading?</p>
+        <a href="https://calendly.com/buildingwithkepler" target="_blank" rel="noopener noreferrer">Open Calendly in a new tab</a>
+      </div>
+    </div>
+
+    <nav class="speak-links" aria-label="Related pages">
+      <a href="learn.html#notes" data-speak-nav="notes">Read my notes first</a>
+      <a href="learn.html#kotfe" data-speak-nav="kotfe">Mangé Lakay project</a>
+      <a href="mailto:kepler@keplersiguineau.com">Email instead</a>
+    </nav>
+  </div>
+
+  <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script type="module">
+    import { initLearnNav, goToPage } from "./scripts/learnNav.js";
+    initLearnNav("speak");
+
+    document.querySelectorAll("[data-speak-nav]").forEach((el) => {
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        goToPage(el.dataset.speakNav);
+      });
+    });
+  </script>
+  <script>
+    (function () {
+      const loading = document.getElementById("calendlyLoading");
+      if (!loading) return;
+
+      function hideLoading() {
+        loading.classList.add("is-hidden");
+        setTimeout(() => { loading.hidden = true; }, 220);
+      }
+
+      window.addEventListener("load", () => {
+        setTimeout(hideLoading, 1200);
+      });
+
+      setTimeout(hideLoading, 8000);
+    })();
+  </script>
+</body>
 </html>

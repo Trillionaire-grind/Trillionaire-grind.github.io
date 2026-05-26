@@ -1,0 +1,36 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /accessCodes/{codeId} {
+      allow get: if resource.data.consumed == false &&
+        resource.data.active != false;
+
+      allow update: if request.auth != null &&
+        request.auth.uid != null &&
+        resource.data.consumed == false &&
+        resource.data.active != false &&
+        request.resource.data.consumed == true &&
+        request.resource.data.redeemedByUid == request.auth.uid;
+
+      allow create, delete: if false;
+    }
+
+    match /stripeCheckoutSessions/{sessionId} {
+      allow read, write: if false;
+    }
+
+    match /learnNotes/{noteId} {
+      allow read: if true;
+      allow create, update, delete: if request.auth != null &&
+        request.auth.token.email == "buildingwithkepler@gmail.com";
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null &&
+        request.auth.uid == userId &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin']);
+    }
+  }
+}

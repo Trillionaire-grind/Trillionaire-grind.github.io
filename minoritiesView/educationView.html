@@ -5,94 +5,87 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>The Minorities</title>
         <style>
-            /* General reset and basic styles */
+            :root {
+                --bg: #f5f5f7;
+                --surface: #ffffff;
+                --text: #1c1b1f;
+                --muted: #666;
+                --primary: #af2d0b;
+                --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+                --radius: 16px;
+            }
+
             body {
                 margin: 0;
-                padding: 0;
                 font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
+                background-color: var(--bg);
+                color: var(--text);
             }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
+
+            .screen {
+                min-height: 100dvh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                box-sizing: border-box;
             }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
+
+            .class-card {
+                width: min(520px, 100%);
+                background: var(--surface);
+                border-radius: var(--radius);
+                box-shadow: var(--shadow);
+                padding: 24px;
                 text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .eyebrow {
+                color: var(--muted);
+                margin: 0 0 8px;
+                letter-spacing: 0.02em;
+            }
+
+            .headline {
+                font-size: 32px;
+                line-height: 1.2;
+                margin: 0 0 24px;
+            }
+
+            .primary-btn {
+                border: none;
+                border-radius: 999px;
+                padding: 12px 20px;
+                font-size: 15px;
+                font-weight: 700;
+                color: #fff;
+                background: var(--primary);
                 cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
+                min-height: 48px;
             }
 
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
+            .primary-btn:hover {
+                filter: brightness(0.95);
             }
 
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
+            #currentClassDiv {
+                display: none;
+                height: 100dvh;
+                width: 100vw;
             }
         </style>
     </head>
     <body>
-        <div id="nextClassDiv">
-            <p style="margin-top: 40%; font-weight: bold; font-size: 36px; text-align: center;">Next Class On<br>
-                Tuesday at 4:00 PM EST</p>
-              <div onclick="showClass()" id="showBtn" style=" margin-left: auto; margin-right: auto; width: 30%; background-color: #000; border-radius: 10px; cursor: pointer;">
-                    <p style="color: white; padding: 8px; text-align: center;">Show Mock Class</p>
-              </div>
+        <div id="nextClassDiv" class="screen">
+            <section class="class-card">
+                <p class="eyebrow">Upcoming Live Session</p>
+                <h1 class="headline">Tuesday at 4:00 PM EST</h1>
+                <button id="showBtn" class="primary-btn" type="button" onclick="showClass()">Join Mock Class</button>
+            </section>
         </div>
-        
-        <div id="currentClassDiv" style="display: none; height: 100vh; width: 100vh">
-         </div>
+
+        <div id="currentClassDiv">
+        </div>
 
     </body>
 
@@ -111,7 +104,7 @@
 
         function createDiv()
         {
-            document.getElementById("currentClassDiv").innerHTML = `<iframe style="height: 100vh; width: 100%" src="https://us04web.zoom.us/j/79142289381?pwd=BkYjnBJfEcwjxA9lLjjf9kafc4Wmlv.1" allow="camera; microphone; display-capture"></iframe>       
+            document.getElementById("currentClassDiv").innerHTML = `<iframe title="Live class stream" style="height: 100dvh; width: 100%; border: none;" src="https://us04web.zoom.us/j/79142289381?pwd=BkYjnBJfEcwjxA9lLjjf9kafc4Wmlv.1" allow="camera; microphone; display-capture"></iframe>       
 `
         }
     </script>

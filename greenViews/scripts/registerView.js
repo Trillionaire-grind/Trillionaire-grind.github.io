@@ -1,7 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getAuth, connectAuthEmulator, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+import { doc, setDoc, connectFirestoreEmulator, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getFunctions, connectFunctionsEmulator } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-functions.js";
+
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,20 +11,30 @@ import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBtOJ476HXPPTqhs7GFhCrRBbBlHO3n5Pk",
-    authDomain: "mvp-greenbooks.firebaseapp.com",
-    projectId: "mvp-greenbooks",
-    storageBucket: "mvp-greenbooks.firebasestorage.app",
-    messagingSenderId: "855438667917",
-    appId: "1:855438667917:web:63646f84aa4fd5c82a72c4",
-    measurementId: "G-WH3NHEGR92"
+    apiKey: "AIzaSyC9cxAdUPzgjbqvcJ5gMWpB1trMci4WIm8",
+    authDomain: "green-books-app.firebaseapp.com",
+    projectId: "green-books-app",
+    storageBucket: "green-books-app.firebasestorage.app",
+    messagingSenderId: "153412264348",
+    appId: "1:153412264348:web:c4cb56c38cbcad59a16859",
+    measurementId: "G-B0XMGHPWYW"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app)
 const db = getFirestore(app)
+const functions = getFunctions(app);
+
+
+if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
+    connectAuthEmulator(auth, "http://localhost:9099");
+    connectFunctionsEmulator(functions, "localhost", 5001);
+    // If you use Firestore, connect that too!
+    connectFirestoreEmulator(db, 'localhost', 8080);
+    console.log("Connected to Auth and Functions Emulators");
+}
+
 
 const firstSectionDiv = document.getElementById("firstSectionDiv")
 const nameET = document.getElementById("nameET")
@@ -105,7 +117,7 @@ function createLogIn()
 
 async function checkSchoolByEmail(email){
     const q = query(
-        collection(db, "Schools"), 
+        collection(db, "schools"), 
         where("email", "==", `${email}`)
     )
 
@@ -132,13 +144,16 @@ function registerUser(school){
             const user = userCredential.user;
             //now gotta open the app with the UID
             addUserToDatabase(user.uid, name, school)
+            //testServerRoot()
+            //testHelloRoute()
         })
         .catch((error) => {
             console.error("Error creating user:", error);
     });
 }
 
-async function addUserToDatabase(userId, name, school){
+//changed to back end stuff 
+/*async function addUserToDatabase(userId, name, school){
     try {
         await setDoc(doc(db, `Students/${userId}`),
             {
@@ -153,6 +168,88 @@ async function addUserToDatabase(userId, name, school){
     catch (error) {
         console.error("Error adding friend:", error);
         alert(`error:WF-395 ${error}`)
+    }
+}*/
+
+async function addUserToDatabase(userId, name, school){
+    try {
+        const token = await auth.currentUser.getIdToken(true);
+        const response = await fetch('/api/addUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // This is usually how 'requireAuth' expects the token
+                'Authorization': `Bearer ${token}` 
+            },
+            body: JSON.stringify({
+                uid: userId,
+                schoolId: school,
+                courses: [],
+                name : name
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Server responded with ${response.status}`);
+            alert(`${response.status}`)
+        }
+
+        console.log("Student successfully added to Firestore!");
+        openSecondView()
+
+    } catch (error) {
+        console.error("Failed to add student:", error);
+    }
+}
+
+
+async function testHelloRoute() {
+    try {
+        // You can still send the token if your route requires auth
+        const token = await auth.currentUser.getIdToken(true);
+        
+        const response = await fetch('/api/', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+
+        if (!response.ok) {
+            alert(`Error: ${response.status}`);
+            return;
+        }
+
+        const message = await response.text();
+        console.log("Success:", message);
+        alert("Server says: " + message);
+
+    } catch (error) {
+        console.error("Fetch failed:", error);
+    }
+}
+
+async function testServerRoot() {
+    try {
+        const token = await auth.currentUser.getIdToken(true);
+        const response = await fetch('/api', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+
+        if (!response.ok) {
+            alert(`Error: ${response.status}`);
+            throw new Error(`Server responded with ${response.status}`);
+        }
+
+        const text = await response.text();
+        console.log("Server response:", text);
+        alert("Success! Server said: " + text);
+
+    } catch (error) {
+        console.error("Failed to reach server:", error);
     }
 }
 

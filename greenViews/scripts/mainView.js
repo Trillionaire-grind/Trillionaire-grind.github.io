@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
-import { doc, setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { getAuth,connectAuthEmulator ,signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
+import { doc, connectFirestoreEmulator,setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -9,22 +9,19 @@ import { doc, setDoc, serverTimestamp,collection, addDoc, updateDoc , getFiresto
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBtOJ476HXPPTqhs7GFhCrRBbBlHO3n5Pk",
-    authDomain: "mvp-greenbooks.firebaseapp.com",
-    projectId: "mvp-greenbooks",
-    storageBucket: "mvp-greenbooks.firebasestorage.app",
-    messagingSenderId: "855438667917",
-    appId: "1:855438667917:web:63646f84aa4fd5c82a72c4",
-    measurementId: "G-WH3NHEGR92"
+    apiKey: "AIzaSyC9cxAdUPzgjbqvcJ5gMWpB1trMci4WIm8",
+    authDomain: "green-books-app.firebaseapp.com",
+    projectId: "green-books-app",
+    storageBucket: "green-books-app.firebasestorage.app",
+    messagingSenderId: "153412264348",
+    appId: "1:153412264348:web:c4cb56c38cbcad59a16859",
+    measurementId: "G-B0XMGHPWYW"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth(app)
 const db = getFirestore(app)
-
-const studentNameTV = document.getElementById("studentNameTV")
 
 const links = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('main section');
@@ -63,6 +60,10 @@ let studentName = ""
 let studentSchedule = []
 let studentTransactions = []
 
+//connectAuthEmulator(auth, "http://127.0.0.1:9099");
+//connectFirestoreEmulator(db, "127.0.0.1", 8080);
+
+
 
 links.forEach(link => {
     link.addEventListener('click', (e) => {
@@ -93,7 +94,9 @@ fab.onclick = () => {
 }
 
 sellListBtn.onclick = () => {
-    uploadBook()     
+    //uploadBook()     
+    //createProduct()
+    testFunction()
 }
 
 
@@ -257,11 +260,28 @@ async function getTransactions()
 }
 
 function populateData(name, courses){
-    let studentNameTV = document.getElementById("studentNameTV")
-    studentNameTV.innerHTML = name
-    for(let i=0; i<courses.length; i++){
-    addCourseDiv(courses[i])
-    addToScheduleDiv(courses[i])
+    const nameEl = document.getElementById("studentNameTV")
+    if (nameEl) nameEl.textContent = name || "—"
+
+    const initialEl = document.getElementById("profileAvatarInitial")
+    if (initialEl) {
+        const letter = (name && name.trim()) ? name.trim().charAt(0).toUpperCase() : "?"
+        initialEl.textContent = letter
+    }
+
+    const emailEl = document.getElementById("profileEmailTV")
+    if (emailEl) {
+        emailEl.textContent = auth.currentUser?.email || "—"
+    }
+
+    const schoolEl = document.getElementById("profileSchoolTV")
+    if (schoolEl) {
+        schoolEl.textContent = studentSchool || "—"
+    }
+
+    for (let i = 0; i < courses.length; i++) {
+        addCourseDiv(courses[i])
+        addToScheduleDiv(courses[i])
     }
 }
 
@@ -377,14 +397,14 @@ function getBookInfo()
     const quality = document.getElementById("qualityET").value
     const price = Number(document.getElementById("priceET").value)
     let book = {
-    course : course, 
-    title : title, 
-    author : author, 
-    quality : quality, 
-    sellerName : studentName, 
-    timeChips : getAvailabilitySelections(),
-    price : price,
-    sellerId : auth.currentUser.uid
+        course : course, 
+        title : title, 
+        author : author, 
+        quality : quality, 
+        sellerName : studentName, 
+        timeChips : getAvailabilitySelections(),
+        price : price,
+        sellerId : auth.currentUser.uid
     }
     return book
 }
@@ -677,3 +697,55 @@ function removeTransactionCard(txId) {
     card.remove();
     }
 }
+
+
+async function testFunction() {
+    const token = await auth.currentUser.getIdToken()
+    alert(`token ${token}`)
+    console.log(`token ${token}`)
+    let book = getBookInfo()
+    const res = await fetch(
+        "http://127.0.0.1:5001/green-books-app/us-central1/app/api/ListBook",
+        {
+        method: "POST",
+        headers: {
+            "Authorization" : "Bearer "+token,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            author: book.author,
+            course: book.course,
+            price: book.price,
+            quality: book.quality,
+            sellerId: book.sellerId,
+            sellerName: book.sellerName,
+            timeChips: book.timeChips,
+            title:book.title,
+            transactionId : `okay`,
+            schoolId : `0aaaa`
+        }),
+        }
+    );
+
+    if (!res.ok) {
+        const text = await res.text();
+        console.error("Error:", text);
+        return;
+    }
+
+    alert("Product created!");
+}
+  
+  
+  async function listBookClient() {
+    const user = auth.currentUser;
+    if (!user) {
+      alert("You must be signed in");
+      return;
+    }
+  
+    const token = await user.getIdToken();
+    
+  }
+  
+  

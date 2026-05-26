@@ -1,115 +1,576 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht" class="liv-html-doc">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
-
-        <title>Profile</title>
+        <title data-i18n="profile.title">Profil — Liv Lakay</title>
         <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
+            .profile-heading {
+                font-size: 1.35rem;
+                font-weight: 700;
+                margin: 8px 0 20px;
+                color: var(--liv-text);
             }
 
-            .card-container {
+            .profile-identity {
                 display: flex;
-                width: 90%;
-                margin: 0 auto;
                 flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
+                align-items: center;
+                gap: 12px;
+                background: #fff;
+                border-radius: 12px;
+                padding: 16px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
             }
 
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
+            .avatar {
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                background: linear-gradient(145deg, var(--liv-green), var(--liv-green-dark));
+                color: #fff;
+                font-size: 1.5rem;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .avatar img {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: none;
+            }
+
+            .avatar.has-photo {
+                color: transparent;
+            }
+
+            .avatar.has-photo img {
+                display: block;
+            }
+
+            .identity-text {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .identity-text .name {
+                font-size: 1.05rem;
+                font-weight: 700;
+                margin: 0 0 4px;
+            }
+
+            .identity-text .email {
+                font-size: 0.8rem;
+                font-weight: 400;
+                color: var(--liv-muted);
+                margin: 0;
+                word-break: break-word;
+            }
+
+            .link-edit {
+                border: none;
+                background: none;
+                color: var(--liv-green);
+                font-size: 0.95rem;
+                font-weight: 600;
+                cursor: pointer;
+                padding: 8px 4px;
+                margin-left: auto;
+            }
+
+            .link-edit:active {
+                opacity: 0.8;
+            }
+
+            .profile-menu {
+                margin-top: 28px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .menu-row {
+                display: flex;
+                align-items: center;
+                min-height: 52px;
+                padding: 0 16px;
+                background-color: var(--liv-green);
+                color: #fff;
+                border: none;
+                border-radius: 14px;
+                font-size: 1rem;
+                font-family: inherit;
+                cursor: pointer;
+                text-align: left;
+                text-decoration: none;
+                box-shadow: 0 2px 6px rgba(42, 191, 91, 0.35);
+            }
+
+            .menu-row:hover {
+                filter: brightness(1.05);
+            }
+
+            .menu-row:active {
+                filter: brightness(0.95);
+            }
+
+            .menu-row span.chev {
+                margin-left: auto;
+                opacity: 0.9;
+            }
+
+            a.menu-row {
+                color: #fff;
+            }
+
+            .liv-about-body {
+                margin: 12px 0 0;
+                line-height: 1.5;
+                color: var(--liv-text);
+                font-size: 0.98rem;
+            }
+
+            .profile-edit-fields {
+                display: grid;
+                gap: 10px;
+            }
+
+            .profile-edit-actions {
+                margin-top: 12px;
+                display: flex;
+                justify-content: flex-end;
+                gap: 8px;
+                flex-wrap: nowrap;
+                align-items: center;
+            }
+
+            .profile-edit-actions .liv-btn-secondary {
+                margin-right: auto;
+            }
+
+            .profile-edit-actions .liv-btn-primary[disabled],
+            .profile-edit-actions .liv-btn-secondary[disabled] {
+                opacity: 0.7;
+                cursor: not-allowed;
             }
         </style>
     </head>
-    <body>
-        <p style="font-size: 16px; padding-left: 5%; font-weight: bold;">Profil Mwen</p>
-        <div style="width: 90%; height: 10vh; background-color: #fff; border-radius: 10px; margin-right: auto; margin-left: auto; display: flex;">
-            <img src="assets/person.svg" height="30px" width="30px" style="border-radius: 50%; margin-top: auto; margin-bottom: auto; margin-left: 8px;">
-            <p style="font-size: 16px; font-weight: bold; margin-left: 32px; margin-top: auto; margin-bottom: auto;">Jean-Phillipe <br> <span style="font-size: 12px; font-weight: normal;">Jeanphillipe@gmail.com</span></p>
-            <p style="cursor: pointer; color: #2ABF5B; margin-top: auto; margin-bottom: auto; margin-left: auto; margin-right: 16px;">Modifye</p>
+    <body class="liv-body">
+        <div class="profile-page">
+            <h1 class="profile-heading" data-i18n="profile.heading">Profil mwen</h1>
+
+            <section class="profile-identity" aria-label="Itilizatè">
+                <div class="avatar" id="profileAvatarInitial" aria-hidden="true">
+                    J
+                    <img id="profileAvatarPhoto" alt="">
+                </div>
+                <div class="identity-text">
+                    <p class="name" id="profileDisplayName">Jean-Phillipe</p>
+                    <p class="email" id="profileEmail">jeanphillipe@gmail.com</p>
+                </div>
+                <button type="button" class="link-edit" id="profileEditBtn" data-i18n="profile.edit">Modifye</button>
+                <button type="button" class="link-edit" id="profileSignOutBtn" hidden data-i18n="auth.signOut">Dekonekte</button>
+            </section>
+            <div class="profile-auth-row">
+                <a class="liv-admin-back" id="livGoLoginLink" href="../liv.html" target="_top" hidden data-i18n="auth.goLogin">Konekte</a>
+            </div>
+
+            <section class="liv-settings-card" id="livAdminSettingsSection" aria-labelledby="adminSettingsLabel" hidden>
+                <div>
+                    <p id="adminSettingsLabel" class="liv-settings-label" data-i18n="profile.adminMode">Mode administratè</p>
+                    <p class="liv-settings-hint" data-i18n="profile.adminHint">Lè li aktive, w ap wè yon bouton + nan bibliyotèk pou ajoute liv.</p>
+                </div>
+                <label class="liv-switch">
+                    <input type="checkbox" id="livAdminToggle" role="switch" aria-labelledby="adminSettingsLabel">
+                    <span class="liv-slider"></span>
+                </label>
+            </section>
+
+            <nav class="profile-menu" aria-label="Paramèt">
+                <button type="button" class="menu-row" id="profileMenuLanguage" data-action="language">
+                    <span data-i18n="profile.menuLanguage">Lang</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </button>
+                <button type="button" class="menu-row" data-action="about">
+                    <span data-i18n="profile.menuAbout">Sou aplikasyon an</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </button>
+                <a class="menu-row" href="https://buy.stripe.com/bIYaFB5m9cD2asw4gh" target="_blank" rel="noopener noreferrer">
+                    <span data-i18n="profile.menuSupport">Bay sipò</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </a>
+            </nav>
         </div>
-        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 64px; display: flex; cursor: pointer;">
-            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Chwazi Liv Ou Yo</p>
-            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
+
+        <div id="livLangModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livLangModalTitle">
+            <div class="liv-modal-inner">
+                <button type="button" class="liv-modal-close" id="livLangModalClose" aria-label="Fèmen">&times;</button>
+                <h2 id="livLangModalTitle" data-i18n="profile.langTitle">Chwazi lang</h2>
+                <div class="liv-lang-list">
+                    <button type="button" class="liv-lang-option" data-lang="ht" lang="ht">Kreyòl (HT)</button>
+                    <button type="button" class="liv-lang-option" data-lang="fr" lang="fr">Français (FR)</button>
+                    <button type="button" class="liv-lang-option" data-lang="es" lang="es">Español (ES)</button>
+                    <button type="button" class="liv-lang-option" data-lang="en" lang="en">English (EN)</button>
+                </div>
+            </div>
         </div>
-        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
-            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">HT/FR/ES/EN</p>
-            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
+
+        <div id="livAboutModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livAboutModalTitle">
+            <div class="liv-modal-inner">
+                <button type="button" class="liv-modal-close" id="livAboutModalClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="livAboutModalTitle" data-i18n="profile.menuAbout">Sou aplikasyon an</h2>
+                <p class="liv-about-body" data-i18n="profile.aboutMission"></p>
+            </div>
         </div>
-        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
-            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Rezilta Devwa Ou Yo</p>
-            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
+
+        <div id="livProfileEditModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livProfileEditTitle">
+            <div class="liv-modal-inner liv-modal-inner--wide">
+                <button type="button" class="liv-modal-close" id="livProfileEditClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="livProfileEditTitle" data-i18n="profile.editTitle">Modifye pwofil</h2>
+                <div class="profile-edit-fields">
+                    <div class="liv-admin-field">
+                        <label for="livProfileEditName" data-i18n="auth.fullName">Non konplè</label>
+                        <input type="text" id="livProfileEditName" maxlength="120" autocomplete="name">
+                    </div>
+                    <div class="liv-admin-field">
+                        <label for="livProfileEditPhoto" data-i18n="auth.profilePhoto">Foto pwofil</label>
+                        <input type="file" id="livProfileEditPhoto" accept="image/jpeg,image/png,image/webp,image/gif">
+                        <p class="hint" data-i18n="auth.profilePhotoHint"></p>
+                    </div>
+                </div>
+                <div class="profile-edit-actions">
+                    <button type="button" class="liv-btn-secondary" id="livProfileEditCancel" data-i18n="home.removeCancel">Anile</button>
+                    <button type="button" class="liv-btn-primary" id="livProfileEditSave" data-i18n="profile.save">Sove</button>
+                </div>
+            </div>
         </div>
-        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer;">
-            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Sou Aplikasyon An</p>
-            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
+
+        <div id="livProfileStatusModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livProfileStatusTitle">
+            <div class="liv-modal-inner">
+                <button type="button" class="liv-modal-close" id="livProfileStatusClose" data-i18n-aria="auth.close">&times;</button>
+                <h2 id="livProfileStatusTitle" data-i18n="profile.statusTitle">Mizajou pwofil</h2>
+                <p id="livProfileStatusText" class="liv-search-hint" style="margin-bottom: 16px;"></p>
+                <div style="display:flex; justify-content:flex-end;">
+                    <button type="button" class="liv-btn-primary" id="livProfileStatusOk" data-i18n="auth.ok">OK</button>
+                </div>
+            </div>
         </div>
-        <div style="width: 80%; height: 8vh; background-color: #2ABF5B; border-radius: 20px; border:2px #2ABF5B ; margin-right: auto; margin-left: auto; display: flex; margin-top: 16px; display: flex; cursor: pointer; " onclick="location.href='https://buy.stripe.com/bIYaFB5m9cD2asw4gh';">
-            <p style="color: white; margin-left: 8px; margin-top: auto; margin-bottom: auto;">Bay Sipò</p>
-            <p style="color: white; margin-left: auto; margin-right: 8px; margin-top: auto; margin-bottom: auto;"> ></p>
-        </div>
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+            import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
+            import { livFirebaseConfig } from "./scripts/livFirebaseConfig.js";
+            import { initLivI18n, setLivLang, getLivLang, applyLivI18n, t } from "./scripts/livI18n.js";
+
+            initLivI18n();
+
+            const fbApp = initializeApp(livFirebaseConfig);
+            getAnalytics(fbApp);
+            const auth = getAuth(fbApp);
+            const db = getFirestore(fbApp);
+
+            const profileDisplayName = document.getElementById("profileDisplayName");
+            const profileEmail = document.getElementById("profileEmail");
+            const profileAvatarInitial = document.getElementById("profileAvatarInitial");
+            const profileAvatarPhoto = document.getElementById("profileAvatarPhoto");
+            const profileEditBtn = document.getElementById("profileEditBtn");
+            const profileSignOutBtn = document.getElementById("profileSignOutBtn");
+            const livGoLoginLink = document.getElementById("livGoLoginLink");
+            const adminSettingsSection = document.getElementById("livAdminSettingsSection");
+            const MAX_PROFILE_BYTES = 5 * 1024 * 1024;
+            const profileEditSaveBtn = document.getElementById("livProfileEditSave");
+            const profileEditCancelBtn = document.getElementById("livProfileEditCancel");
+            let profileUserDocUnsub = null;
+            let avatarBlobUrl = "";
+            let avatarLoadToken = 0;
+
+            function openStatusModal(message) {
+                const modal = document.getElementById("livProfileStatusModal");
+                const text = document.getElementById("livProfileStatusText");
+                text.textContent = message;
+                applyLivI18n(modal);
+                modal.classList.add("is-open");
+            }
+
+            function withDebugCode(baseMessage, err) {
+                const code = err && err.code ? String(err.code) : "";
+                if (!code) return baseMessage;
+                return baseMessage + " (" + code + ")";
+            }
+
+            function closeStatusModal() {
+                document.getElementById("livProfileStatusModal").classList.remove("is-open");
+            }
+
+            function clearProfileUserListener() {
+                if (profileUserDocUnsub) {
+                    profileUserDocUnsub();
+                    profileUserDocUnsub = null;
+                }
+            }
+
+            async function updateAvatar(disp, email, photoURL) {
+                const initial = (disp || email || "?").trim().charAt(0) || "?";
+                profileAvatarInitial.textContent = initial.toUpperCase();
+                if (photoURL) {
+                    const myToken = ++avatarLoadToken;
+                    if (avatarBlobUrl) {
+                        URL.revokeObjectURL(avatarBlobUrl);
+                        avatarBlobUrl = "";
+                    }
+                    try {
+                        const r = await fetch(photoURL, { cache: "no-store" });
+                        if (!r.ok) throw new Error("avatar_fetch_failed");
+                        const blob = await r.blob();
+                        if (myToken !== avatarLoadToken) return;
+                        avatarBlobUrl = URL.createObjectURL(blob);
+                        profileAvatarPhoto.src = avatarBlobUrl;
+                    } catch (_e) {
+                        if (myToken !== avatarLoadToken) return;
+                        profileAvatarPhoto.src = photoURL;
+                    }
+                    profileAvatarInitial.classList.add("has-photo");
+                } else {
+                    avatarLoadToken++;
+                    if (avatarBlobUrl) {
+                        URL.revokeObjectURL(avatarBlobUrl);
+                        avatarBlobUrl = "";
+                    }
+                    profileAvatarPhoto.removeAttribute("src");
+                    profileAvatarInitial.classList.remove("has-photo");
+                }
+            }
+
+            onAuthStateChanged(auth, function (user) {
+                clearProfileUserListener();
+                adminSettingsSection.hidden = true;
+                if (user) {
+                    const baseDisp = user.displayName || (user.email ? user.email.split("@")[0] : "");
+                    profileDisplayName.textContent = baseDisp || "—";
+                    profileEmail.textContent = user.email || "—";
+                    updateAvatar(baseDisp, user.email, user.photoURL || "");
+                    profileSignOutBtn.hidden = false;
+                    profileEditBtn.hidden = false;
+                    livGoLoginLink.hidden = true;
+
+                    profileUserDocUnsub = onSnapshot(
+                        doc(db, "users", user.uid),
+                        function (snap) {
+                            const data = snap.exists() ? snap.data() : {};
+                            const fromDocName = String(data.fullName || "").trim();
+                            const fromDocPhoto = String(data.photoURL || "").trim();
+                            const resolvedName = fromDocName || user.displayName || (user.email ? user.email.split("@")[0] : "") || "—";
+                            const resolvedPhoto = fromDocPhoto || user.photoURL || "";
+                            profileDisplayName.textContent = resolvedName;
+                            profileEmail.textContent = user.email || "—";
+                            updateAvatar(resolvedName, user.email, resolvedPhoto);
+
+                            const isAdmin =
+                                snap.exists() && snap.data().admin === true;
+                            adminSettingsSection.hidden = !isAdmin;
+                            if (isAdmin) {
+                                const KEY = "livAdminMode";
+                                document.getElementById("livAdminToggle").checked =
+                                    localStorage.getItem(KEY) === "true";
+                            } else if (localStorage.getItem("livAdminMode") === "true") {
+                                localStorage.setItem("livAdminMode", "false");
+                                try {
+                                    window.parent.postMessage({ type: "liv-admin-changed" }, "*");
+                                } catch (e) {}
+                            }
+                        },
+                        function () {
+                            adminSettingsSection.hidden = true;
+                        }
+                    );
+                } else {
+                    profileDisplayName.textContent = t("auth.guestName");
+                    profileEmail.textContent = t("auth.guestHint");
+                    updateAvatar("?", "", "");
+                    profileSignOutBtn.hidden = true;
+                    profileEditBtn.hidden = true;
+                    livGoLoginLink.hidden = false;
+                }
+            });
+
+            profileSignOutBtn.addEventListener("click", function () {
+                signOut(auth)
+                    .catch(function () {})
+                    .finally(function () {
+                        window.top.location.replace("../liv.html");
+                    });
+            });
+
+            window.addEventListener("storage", function (e) {
+                if (e.key === "livLang" && !auth.currentUser) {
+                    profileDisplayName.textContent = t("auth.guestName");
+                    profileEmail.textContent = t("auth.guestHint");
+                }
+            });
+
+            const KEY = "livAdminMode";
+            const toggle = document.getElementById("livAdminToggle");
+            toggle.checked = localStorage.getItem(KEY) === "true";
+            toggle.addEventListener("change", function () {
+                localStorage.setItem(KEY, toggle.checked ? "true" : "false");
+                try {
+                    window.parent.postMessage({ type: "liv-admin-changed" }, "*");
+                } catch (e) {}
+            });
+
+            function openLangModal() {
+                const m = document.getElementById("livLangModal");
+                m.hidden = false;
+                m.classList.add("is-open");
+                const cur = getLivLang();
+                m.querySelectorAll(".liv-lang-option").forEach(function (btn) {
+                    btn.classList.toggle("is-active", btn.getAttribute("data-lang") === cur);
+                });
+            }
+
+            function closeLangModal() {
+                const m = document.getElementById("livLangModal");
+                m.hidden = true;
+                m.classList.remove("is-open");
+            }
+
+            document.getElementById("livLangModalClose").addEventListener("click", closeLangModal);
+            document.getElementById("livLangModal").addEventListener("click", function (e) {
+                if (e.target === this) closeLangModal();
+            });
+
+            document.querySelectorAll(".liv-lang-option").forEach(function (btn) {
+                btn.addEventListener("click", function () {
+                    const lang = btn.getAttribute("data-lang");
+                    if (!lang) return;
+                    setLivLang(lang);
+                    applyLivI18n();
+                    closeLangModal();
+                });
+            });
+
+            document.getElementById("profileMenuLanguage").addEventListener("click", openLangModal);
+
+            function openAboutModal() {
+                const m = document.getElementById("livAboutModal");
+                applyLivI18n(m);
+                m.classList.add("is-open");
+            }
+
+            function closeAboutModal() {
+                document.getElementById("livAboutModal").classList.remove("is-open");
+            }
+
+            document.getElementById("livAboutModalClose").addEventListener("click", closeAboutModal);
+            document.getElementById("livAboutModal").addEventListener("click", function (e) {
+                if (e.target === this) closeAboutModal();
+            });
+
+            document.querySelector('.menu-row[data-action="about"]').addEventListener("click", openAboutModal);
+            document.getElementById("livProfileStatusClose").addEventListener("click", closeStatusModal);
+            document.getElementById("livProfileStatusOk").addEventListener("click", closeStatusModal);
+            document.getElementById("livProfileStatusModal").addEventListener("click", function (e) {
+                if (e.target === this) closeStatusModal();
+            });
+            window.addEventListener("beforeunload", function () {
+                if (avatarBlobUrl) {
+                    URL.revokeObjectURL(avatarBlobUrl);
+                    avatarBlobUrl = "";
+                }
+            });
+
+            function openProfileEditModal() {
+                const u = auth.currentUser;
+                if (!u) return;
+                document.getElementById("livProfileEditName").value = u.displayName || "";
+                document.getElementById("livProfileEditPhoto").value = "";
+                const m = document.getElementById("livProfileEditModal");
+                applyLivI18n(m);
+                m.classList.add("is-open");
+            }
+
+            function closeProfileEditModal() {
+                document.getElementById("livProfileEditModal").classList.remove("is-open");
+            }
+
+            function setProfileEditSaving(isSaving) {
+                profileEditSaveBtn.disabled = isSaving;
+                profileEditCancelBtn.disabled = isSaving;
+                profileEditSaveBtn.textContent = isSaving ? t("profile.saving") : t("profile.save");
+            }
+
+            profileEditBtn.addEventListener("click", openProfileEditModal);
+            document.getElementById("livProfileEditClose").addEventListener("click", closeProfileEditModal);
+            document.getElementById("livProfileEditCancel").addEventListener("click", closeProfileEditModal);
+            document.getElementById("livProfileEditModal").addEventListener("click", function (e) {
+                if (e.target === this) closeProfileEditModal();
+            });
+
+            document.getElementById("livProfileEditSave").addEventListener("click", async function () {
+                const u = auth.currentUser;
+                if (!u) return;
+                const nameInput = document.getElementById("livProfileEditName");
+                const photoInput = document.getElementById("livProfileEditPhoto");
+                const fullName = String(nameInput.value || "").trim();
+                if (!fullName) {
+                    openStatusModal(t("auth.error.fullNameRequired"));
+                    return;
+                }
+                const file = photoInput.files && photoInput.files[0];
+                if (file && file.size > MAX_PROFILE_BYTES) {
+                    openStatusModal(t("auth.error.imageTooBig"));
+                    return;
+                }
+                let photoURL = u.photoURL || "";
+                try {
+                    setProfileEditSaving(true);
+                    await updateProfile(u, { displayName: fullName });
+                    if (file) {
+                        const ext =
+                            (file.name.split(".").pop() || "jpg")
+                                .replace(/[^a-z0-9]/gi, "")
+                                .slice(0, 8) || "jpg";
+                        const storage = getStorage(fbApp);
+                        const storageRef = ref(
+                            storage,
+                            "users/" + u.uid + "/profile-" + Date.now() + "." + ext
+                        );
+                        await uploadBytes(storageRef, file);
+                        photoURL = await getDownloadURL(storageRef);
+                        await updateProfile(u, { photoURL: photoURL });
+                    }
+                    await setDoc(
+                        doc(db, "users", u.uid),
+                        {
+                            fullName: fullName,
+                            photoURL: photoURL,
+                            updatedAt: serverTimestamp(),
+                        },
+                        { merge: true }
+                    );
+                    profileDisplayName.textContent = fullName;
+                    updateAvatar(fullName, u.email || "", photoURL);
+                    closeProfileEditModal();
+                    openStatusModal(t("profile.saved"));
+                } catch (e) {
+                    console.error(e);
+                    openStatusModal(withDebugCode(t("profile.saveFailed"), e));
+                } finally {
+                    setProfileEditSaving(false);
+                }
+            });
+        </script>
     </body>
 </html>

@@ -4,497 +4,807 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Notes</title>
+        <link rel="alternate" type="application/rss+xml" title="Képler Siguineau Notes" href="notes-feed.xml">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>
-            /* General reset and basic styles */
+            :root {
+                --red: #D31034;
+                --blue: #0020A0;
+                --green: #005315;
+                --cta: #FF0C36;
+                --gold: #DAA123;
+                --bg: #F0F1F3;
+                --surface: #ffffff;
+                --text: #1a1a1a;
+                --muted: #5c6370;
+                --radius: 16px;
+                --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+                --max: 1080px;
+            }
+
+            * { box-sizing: border-box; }
+
             body {
                 margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
+                padding: 0 0 48px;
+                font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+                background-color: var(--bg);
+                color: var(--text);
+                line-height: 1.5;
             }
 
-            .card-container {
-                display: flex;
-                width: 90%;
+            .notes-page {
+                width: min(var(--max), 92%);
                 margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
+                padding-top: 24px;
             }
 
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-
-            .tabs {
+            .notes-top {
                 display: flex;
-                background-color: #ffffff;
-                border-bottom: 1px solid #ddd;
+                align-items: flex-start;
+                justify-content: space-between;
+                gap: 16px;
+                margin-bottom: 20px;
             }
 
-            .tab {
-                flex: 1;
-                text-align: center;
-                padding: 16px;
+            .notes-intro {
+                margin: 0;
+                font-size: 15px;
+                color: var(--muted);
+                max-width: 36rem;
+                line-height: 1.6;
+            }
+
+            .notes-auth-link {
+                flex-shrink: 0;
+                font-size: 13px;
+                color: var(--muted);
+                background: none;
+                border: none;
                 cursor: pointer;
-                display:flex;
-                transition: background-color 0.3s, color 0.3s;
+                padding: 4px 0;
+                text-decoration: underline;
+                text-underline-offset: 3px;
             }
 
-            .tab i {
-                font-size: 24px;
-                display: block;
-                margin-bottom: 4px;
-            }
+            .notes-auth-link:hover { color: var(--text); }
 
-            .tab span {
-                font-size: 14px;
-            }
+            body.notes-admin .notes-auth-link { color: var(--green); }
 
-            .tab.active {
-                color: black; /* Primary color */
-            }
-            /*.tab:hover {
-                //removed due to bug...fix later?
-                color: #DAA123; /* Primary color 
-            }*/
-
-            .tab.active {
-                border-bottom: 2px solid red; /* Active indicator */
-            }
-
-            /* Optional: You can add a slight shadow to the tab bar for a raised effect */
-            .tabs {
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            .notes-admin-hint {
+                font-size: 12px;
+                color: var(--muted);
+                text-align: center;
+                margin: 0 0 16px;
+                padding: 10px 14px;
+                background: var(--surface);
+                border-radius: 10px;
+                border: 1px solid rgba(0, 0, 0, 0.05);
             }
 
             .search-container {
-                display: flex;
-                align-items: center;
-                width: 90%;
-                margin: 50px auto;
-                padding: 0 10px;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                background-color: #EDEDED;
-                
+                position: relative;
+                margin-bottom: 20px;
             }
 
-            /* Search input */
+            .search-container::before {
+                content: "";
+                position: absolute;
+                left: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 16px;
+                height: 16px;
+                opacity: 0.45;
+                background: currentColor;
+                mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z'/%3E%3C/svg%3E") center / contain no-repeat;
+                -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='black'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-4.35-4.35M11 18a7 7 0 100-14 7 7 0 000 14z'/%3E%3C/svg%3E") center / contain no-repeat;
+                pointer-events: none;
+            }
+
             #search-input {
-                border: none;
-                padding: 10px 20px;
-                border-radius: 25px;
                 width: 100%;
-                font-size: 16px;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                padding: 12px 16px 12px 42px;
+                border-radius: 12px;
+                font-size: 15px;
                 outline: none;
-                background-color: #EDEDED;
-
+                background: var(--surface);
+                font-family: inherit;
+                transition: border-color 0.15s, box-shadow 0.15s;
             }
 
-            /* Search button */
-            #search-button {
+            #search-input:focus {
+                border-color: rgba(0, 32, 160, 0.35);
+                box-shadow: 0 0 0 3px rgba(0, 32, 160, 0.08);
+            }
+
+            .notes-loading {
+                text-align: center;
+                color: var(--muted);
+                font-size: 14px;
+                margin: 8px 0 20px;
+            }
+
+            .tabs {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 28px;
                 background: none;
                 border: none;
-                padding: 10px;
-                border-radius: 25px;
+                box-shadow: none;
+            }
+
+            .tab {
+                flex: 0 0 auto;
+                text-align: center;
+                padding: 8px 18px;
                 cursor: pointer;
-                transition: background-color 0.3s;
+                border-radius: 999px;
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--muted);
+                background: var(--surface);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                transition: color 0.15s, background 0.15s, border-color 0.15s;
             }
 
-            /* Search button icon */
-            #search-button i {
-                font-size: 24px;
-                color: #888;
+            .tab img { display: none; }
+
+            .tab.active {
+                color: var(--text);
+                font-weight: 600;
+                background: var(--surface);
             }
 
-            /* Button hover effect */
-            #search-button:hover {
-                background-color: #f0f0f0;
+            .tabs[data-active-genre="apps"] .tab.active {
+                color: var(--red);
+                border-color: rgba(211, 16, 52, 0.25);
+                background: rgba(211, 16, 52, 0.06);
             }
 
-            .noteCard{
-                background-color: #fff;
-                flex: 1;  /* each card grows equally instead of fixed 45% */
+            .tabs[data-active-genre="business"] .tab.active {
+                color: var(--blue);
+                border-color: rgba(0, 32, 160, 0.25);
+                background: rgba(0, 32, 160, 0.06);
+            }
+
+            .tabs[data-active-genre="city"] .tab.active {
+                color: var(--green);
+                border-color: rgba(0, 83, 21, 0.25);
+                background: rgba(0, 83, 21, 0.06);
+            }
+
+            .notes-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+
+            @media (max-width: 720px) {
+                .notes-grid { grid-template-columns: 1fr; }
+            }
+
+            .noteCard {
+                position: relative;
                 display: flex;
                 flex-direction: column;
-            }
-            .noteCard:hover{
-                background-color: #DAA123;
-            }
-
-            .noteCard h1{
-                font-size: 1.2rem;
-                word-wrap: break-word;   /* ensures long words wrap */
-                overflow-wrap: break-word;
-                hyphens: auto;    
+                background: var(--surface);
+                border-radius: var(--radius);
+                padding: 18px;
+                cursor: pointer;
+                border: 1px solid rgba(0, 0, 0, 0.05);
+                border-left: 4px solid var(--note-accent, var(--red));
+                box-shadow: var(--shadow);
+                transition: transform 0.18s ease, box-shadow 0.18s ease;
             }
 
-            .noteLogo {
+            .noteCard--apps { --note-accent: var(--red); }
+            .noteCard--business { --note-accent: var(--blue); }
+            .noteCard--city { --note-accent: var(--green); }
+
+            .noteCard:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+            }
+
+            .noteCard[data-deletable="1"] { touch-action: manipulation; }
+
+            .noteCard--featured {
+                grid-column: 1 / -1;
+                flex-direction: row;
+                gap: 24px;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            .noteCard--featured .note-card-body {
+                padding: 24px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+            }
+
+            .noteCard--featured .note-card-thumb {
+                width: min(42%, 360px);
+                min-height: 200px;
+                margin: 0;
+                border-radius: 0;
+                flex-shrink: 0;
+            }
+
+            .noteCard--featured .note-card-thumb img {
+                height: 100%;
+                min-height: 200px;
+            }
+
+            @media (max-width: 720px) {
+                .noteCard--featured {
+                    flex-direction: column;
+                }
+                .noteCard--featured .note-card-thumb {
+                    width: 100%;
+                    aspect-ratio: 16 / 9;
+                    min-height: 0;
+                }
+            }
+
+            .note-card-thumb {
+                width: 100%;
+                aspect-ratio: 16 / 9;
+                border-radius: 10px;
+                overflow: hidden;
+                margin-bottom: 14px;
+                background: #e8eaed;
+            }
+
+            .noteCard--featured .note-card-thumb { margin-bottom: 0; }
+
+            .note-card-thumb img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            .note-card-thumb--placeholder {
+                background: linear-gradient(135deg, rgba(211, 16, 52, 0.07), rgba(0, 32, 160, 0.07));
+            }
+
+            .note-card-body {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-width: 0;
+            }
+
+            .note-card-label {
+                font-size: 11px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                color: var(--note-accent, var(--red));
+                margin: 0 0 8px;
+            }
+
+            .noteCard h2 {
+                font-size: 1.125rem;
+                font-weight: 600;
+                margin: 0 0 8px;
+                line-height: 1.35;
+                letter-spacing: -0.01em;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .noteCard--featured h2 {
+                font-size: clamp(1.25rem, 3vw, 1.5rem);
+                -webkit-line-clamp: 3;
+            }
+
+            .note-summary {
+                margin: 0 0 14px;
+                flex: 1;
+                font-size: 14px;
+                color: var(--muted);
+                line-height: 1.55;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .noteCard--featured .note-summary {
+                -webkit-line-clamp: 4;
+                font-size: 15px;
+            }
+
+            .note-card-meta {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 6px 10px;
+                font-size: 12px;
+                color: var(--muted);
+                margin-top: auto;
+            }
+
+            .note-card-meta-dot {
+                opacity: 0.45;
+            }
+
+            .note-card-meta-genre {
+                font-weight: 600;
+                color: var(--note-accent, var(--red));
+            }
+
+            .note-author {
+                font-weight: 500;
+                color: var(--text);
+            }
+
+            .note-author--collab {
+                color: var(--muted);
+            }
+
+            .note-ai-badge {
+                font-size: 10px;
+                font-weight: 600;
+                padding: 2px 7px;
+                border-radius: 999px;
+                background: rgba(0, 0, 0, 0.06);
+                color: var(--muted);
+            }
+
+            .note-card-actions {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                z-index: 2;
+                opacity: 0;
+                transition: opacity 0.15s;
+            }
+
+            .noteCard:hover .note-card-actions,
+            .noteCard:focus-within .note-card-actions {
+                opacity: 1;
+            }
+
+            @media (hover: none) {
+                .noteCard .note-card-actions { opacity: 1; }
+            }
+
+            .note-card-edit {
+                border: none;
+                background: var(--surface);
+                color: var(--muted);
+                width: 30px;
+                height: 30px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-size: 14px;
+                line-height: 1;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+            }
+
+            .note-card-edit:hover {
+                background: var(--blue);
+                color: #fff;
+            }
+
+            .notes-empty {
+                text-align: center;
+                color: var(--muted);
+                padding: 48px 24px;
+                background: var(--surface);
+                border-radius: var(--radius);
+                border: 1px dashed rgba(0, 0, 0, 0.1);
+            }
+
+            .notes-empty strong {
+                display: block;
+                color: var(--text);
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+
+            .undo-toast {
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #222;
+                color: #fff;
+                padding: 10px 16px;
+                border-radius: 10px;
+                display: none;
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                z-index: 90;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            }
+
+            .undo-toast.is-visible { display: flex; }
+
+            .undo-toast button {
+                border: none;
+                background: var(--cta);
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 600;
+            }
+
+            .add-note-btn {
+                position: fixed;
+                bottom: 24px;
+                right: 20px;
+                z-index: 50;
+                border: none;
+                background: var(--cta);
+                color: #fff;
+                font-size: 26px;
+                width: 52px;
+                height: 52px;
+                border-radius: 50%;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(255, 12, 54, 0.35);
+                line-height: 1;
+            }
+
+            .add-note-btn[hidden] { display: none !important; }
+
+            .add-note-btn:hover { background: #000; }
+
+            .add-note-draft-hint {
+                font-size: 12px;
+                color: var(--muted);
+                margin: -8px 0 12px;
+            }
+
+            .notes-login-modal,
+            .add-note-modal {
+                display: none;
+                position: fixed;
+                inset: 0;
+                z-index: 100;
+                background: rgba(0, 0, 0, 0.4);
+                align-items: center;
+                justify-content: center;
+                padding: 16px;
+            }
+
+            .notes-login-modal.is-open,
+            .add-note-modal.is-open { display: flex; }
+
+            .notes-login-panel,
+            .add-note-panel {
+                background: var(--surface);
+                border-radius: var(--radius);
+                width: 100%;
+                max-width: 360px;
+                padding: 20px;
                 position: relative;
-                top: 1px;
-                float: right;
-                width: 40px;   /* adjust size as needed */
-                height: auto;
-            }
-            
-            .contentRow{
-                width: 90%;
-                margin: auto; 
-                display: flex; 
-                gap: 20px; 
-                margin-top: 16px; 
-                margin-bottom: 16px;
+                box-shadow: var(--shadow);
+                font-family: inherit;
             }
 
-            /*span:hover{
-                color: #DAA123;
-                //removed due to bug...fix later?
-            }*/
+            .add-note-panel { max-width: 480px; max-height: 90vh; overflow-y: auto; }
+
+            .notes-login-close {
+                position: absolute;
+                top: 8px;
+                right: 12px;
+                border: none;
+                background: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: var(--muted);
+            }
+
+            .notes-login-panel h2,
+            .add-note-panel h2 {
+                margin: 0 0 16px;
+                font-size: 18px;
+            }
+
+            .notes-login-panel label,
+            .add-note-panel label {
+                display: block;
+                font-size: 13px;
+                margin-bottom: 4px;
+                color: var(--muted);
+            }
+
+            .notes-login-panel input,
+            .add-note-panel input,
+            .add-note-panel select,
+            .add-note-panel textarea {
+                width: 100%;
+                box-sizing: border-box;
+                padding: 10px;
+                margin-bottom: 12px;
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                border-radius: 10px;
+                font-size: 14px;
+                font-family: inherit;
+            }
+
+            .add-note-panel textarea {
+                min-height: 160px;
+                resize: vertical;
+            }
+
+            .notes-login-submit,
+            .notes-login-google,
+            .add-note-submit {
+                width: 100%;
+                padding: 12px;
+                border: none;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                font-family: inherit;
+            }
+
+            .notes-login-submit,
+            .add-note-submit {
+                background: var(--cta);
+                color: #fff;
+                margin-top: 4px;
+            }
+
+            .notes-login-submit:hover,
+            .add-note-submit:hover { background: #000; }
+
+            .notes-login-google {
+                background: var(--surface);
+                color: var(--text);
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                margin-bottom: 12px;
+            }
+
+            .notes-login-error,
+            .add-note-error {
+                color: var(--red);
+                font-size: 13px;
+                margin: 0 0 12px;
+            }
+
+            .notes-login-setup {
+                font-size: 13px;
+                color: var(--muted);
+                line-height: 1.5;
+                margin: 0;
+            }
+
+            .add-note-check {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-bottom: 16px;
+                font-size: 14px;
+            }
+
+            .add-note-check input { width: auto; margin: 0; }
+
+            .note-format-toolbar {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                margin-bottom: 8px;
+            }
+
+            .note-format-toolbar button {
+                padding: 6px 10px;
+                border: 1px solid rgba(0, 0, 0, 0.08);
+                border-radius: 8px;
+                background: var(--bg);
+                font-size: 12px;
+                cursor: pointer;
+                font-family: inherit;
+            }
+
+            .note-format-toolbar button:hover { background: rgba(0, 32, 160, 0.08); }
+
+            .note-format-help {
+                font-size: 12px;
+                color: var(--muted);
+                margin: 8px 0 12px;
+            }
+
+            .note-format-help pre {
+                background: var(--bg);
+                padding: 10px;
+                border-radius: 8px;
+                overflow-x: auto;
+                font-size: 11px;
+                margin: 8px 0 0;
+            }
+
+            .add-note-preview-label {
+                display: block;
+                font-size: 13px;
+                color: var(--muted);
+                margin-bottom: 6px;
+            }
+
+            .add-note-preview {
+                background: var(--bg);
+                border: 1px solid rgba(0, 0, 0, 0.06);
+                border-radius: 10px;
+                padding: 12px;
+                max-height: 200px;
+                overflow-y: auto;
+                font-size: 14px;
+            }
+
+            .add-note-preview h2,
+            .add-note-preview h3 { color: var(--blue); }
+
+            .add-note-preview pre {
+                background: rgba(0, 32, 160, 0.06);
+                padding: 10px;
+                border-radius: 6px;
+                overflow-x: auto;
+                font-family: monospace;
+                font-size: 12px;
+            }
+
+            .add-note-preview code {
+                background: rgba(0, 32, 160, 0.08);
+                padding: 2px 4px;
+                border-radius: 4px;
+                font-family: monospace;
+            }
+
+            .add-note-preview blockquote {
+                border-left: 4px solid var(--gold);
+                padding-left: 12px;
+                margin: 12px 0;
+                font-style: italic;
+            }
+
+            .add-note-preview a {
+                color: var(--blue);
+                text-decoration: underline;
+            }
+
+            .add-note-preview .note-video {
+                position: relative;
+                width: 100%;
+                padding-bottom: 56.25%;
+                margin: 12px 0;
+                background: #0d1b2a;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .add-note-preview .note-video iframe {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+                border: 0;
+            }
         </style>
     </head>
-    <body style="background-color: #F7F7F7;">
-        <p style="text-align: left; background-color: white; margin: 0px; padding-left: 8px; padding-top: 32px; font-size: 32px;">Notes</p>
-        <div class="tabs" style="margin-bottom: 32px;">
-            <div class="tab active" data-icon-default="assets/app.svg" data-icon-active="assets/app_r.svg">
-                <img src="assets/app_r.svg" height="20px" width="20px">
-                <span id="appSpan" style="padding-left: 8px; color: red;">Apps</span>
+    <body>
+        <div class="notes-page">
+            <div class="notes-top">
+                <p class="notes-intro">Apps, business &amp; cities — things I'm learning, building, and writing down.</p>
+                <button type="button" id="notesAuthBtn" class="notes-auth-link" aria-pressed="false">Log in</button>
             </div>
-            <div class="tab"  data-icon-default="assets/banknote.svg" data-icon-active="assets/banknote_b.svg">
-                <img src="assets/banknote.svg" height="20px" width="40px">
-                <span id="bizSpan" style="padding-left: 8px;">Businesses</span>
+            <p id="notesAdminHint" class="notes-admin-hint" hidden>Long-press a note to hide or delete. Hover a card and tap ✎ to edit.</p>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search notes…" autocomplete="off">
             </div>
-            <div class="tab" data-icon-default="assets/building.svg" data-icon-active="assets/building_g.svg">
-                <img src="assets/building.svg" height="20px" width="20px">
-                <span id="citySpan" style="padding-left: 8px;">Cities</span>
+            <p id="notesLoading" class="notes-loading">Loading notes…</p>
+            <div class="tabs" id="notesTabs" data-active-genre="apps">
+                <div class="tab active"><span>Apps</span></div>
+                <div class="tab"><span>Business</span></div>
+                <div class="tab"><span>Cities</span></div>
             </div>
+            <div id="appDiv"></div>
+            <div id="businessDiv" style="display: none;"></div>
+            <div id="cityDiv" style="display: none;"></div>
         </div>
-        <!--<div class="search-container">
-            <input type="text" id="search-input" placeholder="Search...">
-            <button id="search-button">
-                <i class="material-icons">search</i>
-            </button>
-        </div>-->
-        <div id="appDiv" style="gap: 40px; ">
-            <div class="contentRow" >
-                <div onclick="openIndividualNote('apps',false,'fannyApp')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <h1>How To Build An App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-                <div onclick="openIndividualNote('apps',true,'calendarApp')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Calendar App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('apps',true,'coffeeApp')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Coffee App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-                <div onclick="openIndividualNote('apps',true,'datingApp')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Dating App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('apps',true,'fishApp')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Fish App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-                <div onclick="openIndividualNote('apps',true,'geographyApp')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Geography App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('apps',true,'notesApp')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Notes App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
-                <div onclick="openIndividualNote('apps',true,'workoutApp')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A Workout App</h1>
-                    <p>In this thing we are talkig about how to build an app...</p>
-                </div>
+
+        <button type="button" id="addNoteBtn" class="add-note-btn" hidden title="Add note" aria-label="Add note">+</button>
+
+        <div id="addNoteModal" class="add-note-modal" role="dialog" aria-modal="true" aria-labelledby="addNoteTitle">
+            <div class="add-note-panel">
+                <button type="button" id="addNoteClose" class="notes-login-close" aria-label="Close">&times;</button>
+                <h2 id="addNoteTitle">Add a note</h2>
+                <p class="add-note-draft-hint">Drafts save automatically while you write.</p>
+                <p id="addNoteError" class="add-note-error" hidden></p>
+                <form id="addNoteForm">
+                    <label for="addNoteTitleInput">Title</label>
+                    <input type="text" id="addNoteTitleInput" required maxlength="200">
+                    <label for="addNoteSummary">Summary</label>
+                    <input type="text" id="addNoteSummary" required maxlength="300">
+                    <label for="addNoteThumbnail">Thumbnail URL (optional — auto from YouTube if empty)</label>
+                    <input type="url" id="addNoteThumbnail" placeholder="https://… or leave blank">
+                    <label for="addNoteGenre">Genre</label>
+                    <select id="addNoteGenre" required>
+                        <option value="apps">App</option>
+                        <option value="business">Business</option>
+                        <option value="city">City</option>
+                    </select>
+                    <label for="addNoteBody">Content</label>
+                    <div class="note-format-toolbar">
+                        <button type="button" data-insert="## Section title&#10;">H2</button>
+                        <button type="button" data-insert="### Subsection&#10;">H3</button>
+                        <button type="button" data-insert="&gt; Quote line&#10;&gt; Another line&#10;&#10;">Quote</button>
+                        <button type="button" data-insert="```&#10;your code here&#10;```&#10;&#10;">Code</button>
+                        <button type="button" data-insert="- List item&#10;- Another item&#10;&#10;">List</button>
+                        <button type="button" data-insert="[Link text](https://example.com)&#10;&#10;">Link</button>
+                        <button type="button" data-insert="@youtube https://www.youtube.com/watch?v=VIDEO_ID&#10;&#10;">YouTube</button>
+                    </div>
+                    <textarea id="addNoteBody" required rows="10" placeholder="Use ## headings, @youtube video URLs, ``` code blocks, and - lists."></textarea>
+                    <details class="note-format-help">
+                        <summary>Formatting guide</summary>
+                        <pre>## Section (h2)
+### Subsection (h3)
+> Quote block
+```
+code block
+```
+- Bullet list
+`inline code` and **bold**
+[Link](https://example.com)
+@youtube https://www.youtube.com/watch?v=VIDEO_ID
+[youtube](https://youtu.be/VIDEO_ID)</pre>
+                    </details>
+                    <label class="add-note-preview-label">Preview</label>
+                    <div id="addNotePreview" class="add-note-preview note-article-body"></div>
+                    <label for="addNoteAuthorType">Author</label>
+                    <select id="addNoteAuthorType" required>
+                        <option value="kepler">Képler Siguineau</option>
+                        <option value="ai">AI</option>
+                        <option value="ai-human">AI + human</option>
+                        <option value="team">The team</option>
+                    </select>
+                    <button type="submit" class="add-note-submit" id="addNoteSubmitBtn">Publish note</button>
+                </form>
             </div>
         </div>
 
-        <div id="businessDiv" style="gap: 40px; display: none;">
-            <div class="contentRow" >
-                <div onclick="openIndividualNote('business',false,'howSell')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <h1>How To Sell Anything</h1>
-                    <p>Selling is an important skillset</p>
-                </div>
-                <div onclick="openIndividualNote('business',true,'beDoHave')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>Be. Do. Have.</h1>
-                    <p>learn the secret those 3 words contain</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('business',true,'berkInvest')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>Why You Should Invest in Berkshire Hathaway</h1>
-                    <p>Berkshire Hathaway isn’t a typical company—it’s a collection of businesses hand-picked by Warren Buffett and his team over decades.</p>
-                   
-                </div>
-                <div onclick="openIndividualNote('business',true,'coldCall')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Cold Call</h1>
-                    <p>Cold calling is one of the fastest ways to create pipeline</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('business',true,'needMoney')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>Do You Need Money To Start A Business?</h1>
-                    <p>Short answer: <strong>not always</strong>...</p>
-                </div>
-                <div onclick="openIndividualNote('business',true,'profitExplained')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Earn A Profit</h1>
-                    <p>Making a profit is the goal of any business or investment...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('business',true,'salesMindset')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How to Have a Winning Mindset in Sales</h1>
-                    <p>Sales success doesn’t start with scripts or products—it starts in your mind...</p>
-                </div>
-                <div onclick="openIndividualNote('business',true,'salesTips')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>The Biggest Sales Secrets</h1>
-                    <p>Sales is not about pushing a product—it’s about solving problems, building trust, and creating long-term relationships...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('business',true,'startBusiness')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Start A Business</h1>
-                    <p>Starting a business is more than just a great idea...</p>
-                </div>
-                <div onclick="openIndividualNote('business',true,'warrenMethod')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Invest Like Warren Buffett</h1>
-                    <p>Warren Buffett is one of the most successful investors in history...</p>
-                </div>
-            </div>
+        <div id="undoToast" class="undo-toast" hidden>
+            <span>Note removed.</span>
+            <button type="button" id="undoToastBtn">Undo</button>
         </div>
 
-        <div id="cityDiv" style="gap: 40px; display: none;">
-            <div class="contentRow" >
-                <div onclick="openIndividualNote('city',false,'capitalismSlavery')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <h1>Is Capitalism Pro-Slavery?</h1>
-                    <p>"wage labor you are renting yourself.
-                    which is not very different from being a slave..."</p>
-                </div>
-                <div onclick="openIndividualNote('city',true,'profitSeacoast')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Profit From Your Seacoast</h1>
-                    <p>Your coastline is more than just a scenic boundary—it’s an economic engine...</p>
-                </div>
+        <div id="notesLoginModal" class="notes-login-modal" role="dialog" aria-modal="true" aria-labelledby="notesLoginTitle">
+            <div class="notes-login-panel">
+                <button type="button" id="notesLoginClose" class="notes-login-close" aria-label="Close">&times;</button>
+                <h2 id="notesLoginTitle">Admin log in</h2>
+                <p id="notesLoginSetup" class="notes-login-setup"></p>
+                <p id="notesLoginError" class="notes-login-error" hidden></p>
+                <button type="button" id="notesDemoLoginBtn" class="notes-login-submit" onclick="window.startDemoAdmin()">Try admin UI (demo)</button>
+                <button type="button" id="notesGoogleBtn" class="notes-login-google" hidden>Continue with Google</button>
+                <form id="notesLoginForm" hidden>
+                    <label for="notesLoginEmail">Email</label>
+                    <input type="email" id="notesLoginEmail" autocomplete="username" required>
+                    <label for="notesLoginPassword">Password</label>
+                    <input type="password" id="notesLoginPassword" autocomplete="current-password" required>
+                    <button type="submit" class="notes-login-submit">Log in</button>
+                </form>
             </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('city',true,'cityBuilding')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A City</h1>
-                    <p>Building a city is one of humanity’s most ambitious undertakings...</p>
-                </div>
-                <div onclick="openIndividualNote('city',true,'cityDiversity')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>The Pros and Cons Of Diversity In A City</h1>
-                    <p>Diversity—across culture, language, age, income, and ability—shapes how a city feels, grows, and solves problems...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('city',true,'cityZoning')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Zone A City</h1>
-                    <p>Zoning is the backbone of effective city planning...</p>
-                </div>
-                <div onclick="openIndividualNote('city',true,'citySchool')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build A School</h1>
-                    <p>Schools are the foundation of every community...</p>
-                </div>
-            </div>
-            <div class="contentRow">
-                <div onclick="openIndividualNote('city',true,'mountainRoads')" class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>How To Build Roads In A Mountainous Zone</h1>
-                    <p>Mountain roads unlock remote communities, tourism, emergency access, and trade—but they’re among the most complex pieces of infrastructure to design and build...</p>
-                </div>
-                <div onclick="openIndividualNote('city',true,'richestCities')"  class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);">
-                    <img src="assets/ai_logo.webp" alt="logo" class="noteLogo" />
-                    <h1>The 5 Wealthiest Cities In The World</h1>
-                    <p>When it comes to global wealth, some cities stand far above the rest...</p>
-                </div>
-            </div>
-           
         </div>
     </body>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            const appSpan = document.getElementById("appSpan")
-            const bizSpan = document.getElementById("bizSpan")
-            const citySpan = document.getElementById("citySpan")
-
-            const tabs = document.querySelectorAll('.tab');
-
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => {
-                    // Remove 'active' class from all tabs and revert icons
-                    tabs.forEach(t => {
-                        t.classList.remove('active');
-                        const icon = t.querySelector('img');
-                        if (icon) {
-                            icon.src = t.getAttribute('data-icon-default');
-                        }
-                        t.style.borderBottomColor = '#000';
-                      
-                         // Default color
-                        if(index == 0){
-                            t.style.borderBottomColor = 'red'
-                        }
-                        if(index == 1){
-                            t.style.borderBottomColor = 'blue'
-                        }
-                        else if(index == 2){
-                            t.style.borderBottomColor = 'green'
-                        }
-
-                    });
-
-                    // Add 'active' class to the clicked tab and change icon
-                    tab.classList.add('active');
-                    const icon = tab.querySelector('img');
-                    if (icon) {
-                        icon.src = tab.getAttribute('data-icon-active');
-                    }
-
-                   
-                    //border-bottom: 2px solid #DAA123;
-                    appSpan.style.color = 'black' 
-                    bizSpan.style.color = 'black'
-                    citySpan.style.color = 'black'
-                    if(index == 0){
-                       // tab.style.color = 'red'
-                        appSpan.style.color = 'red'
-                    } else if(index == 1)
-                    {
-                        tab.style.color = 'blue'
-                        bizSpan.style.color = 'blue'
-                    } else if(index == 2)
-                    {
-                        tab.style.color = 'green'
-                        citySpan.style.color = 'green'
-                    }
-                    
-
-                    showContent(index);
-
-                });
-            });
-        });
-
-        function openIndividualNote(contentType, isAi, url)
-        {
-           
-            let finalUrl = ``
-            if(isAi){
-                finalUrl = `./content/${contentType}/ai/${url}.html`
-            }else{
-                finalUrl = `./content/${contentType}/${url}.html`
-            }
-            //let e*/
-            window.open(finalUrl, '_blank').focus();
-        }
-
-        function showContent(type)
-        {
-            //type 0 == apps
-            //type 1 == business
-            //type 2 == cities
-            let appDiv = document.getElementById("appDiv")
-            let businessDiv = document.getElementById("businessDiv")
-            let cityDiv = document.getElementById("cityDiv")
-
-            appDiv.style.display = 'none'
-            businessDiv.style.display = 'none'
-            cityDiv.style.display = 'none'
-
-            if(type == 0){
-                appDiv.style.display = 'block'
-            }else if(type == 1){
-                businessDiv.style.display = 'block'
-            }else if(type == 2){
-                cityDiv.style.display = 'block'
-            }
-        }
-        
+    <script type="module" src="./scripts/learnNotesAuth.js"></script>
+    <script type="module" src="./scripts/learnNotesPage.js"></script>
+    <script type="module">
+        import { initLearnNav } from "./scripts/learnNav.js";
+        initLearnNav("notes");
     </script>
 </html>

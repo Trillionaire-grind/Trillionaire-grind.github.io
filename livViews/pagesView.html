@@ -1,131 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ht" class="liv-html-full">
     <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Page</title>
-    <style>
-        /*body {
-            font-family: 'Georgia', serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: block;
-            justify-content: center;
-            height: 100vh;
-            flex-direction: column;
-        }*/
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%; /* Ensure full viewport height */
-            overflow: hidden; /* Prevent scrolling on the whole page */
-            font-family: 'Georgia', serif;
-            background-color: #f5f5f5;
-        }
-
-        .book-container {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            margin-right: auto;
-            height: 80%;
-            margin-top: 16px;
-        }
-
-        .book-page {
-            width: 100%;
-            background-color: #fff;
-            padding: 2rem;
-            height: 90%;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            line-height: 1.6;
-            z-index: 1;
-        }
-
-        .book-page h1,  .book-page h3 {
-            margin-top: 0;
-            color: #333;
-        }
-
-        .book-page h2{
-            position: fixed;
-            bottom: 16px;
-            left: 24%;
-        }
-        .book-page p {
-            text-align: justify;
-            height: 80%;
-            overflow-y: auto;    /* enables vertical scroll */
-            overflow-x: hidden; 
-        }
-
-        .arrow {
-            position: absolute;
-            top: 50%;
-            font-size: 2rem;
-            color: #333;
-            cursor: pointer;
-            user-select: none;
-            z-index: 2;
-        }
-
-        .arrow-left {
-            left: -40px;
-        }
-
-        .arrow-right {
-            right: -40px;
-        }
-
-        .arrow:hover {
-            color: #555;
-        }
-
-        #pageTV{
-            margin-top: 20px; /* Add some space between the book container and the page number */
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #333;
-            text-align: center; 
-        }
-    </style>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="stylesheet" href="assets/styles.css">
+        <title>Liv — Li paj</title>
     </head>
-    <body>
-        <div class="book-container">
-            <div id="leftBtn" class="arrow arrow-left">&#9664;</div>
-            <div class="book-page">
-                <h1 id="chapterTV" ></h1>
-                <p id="contentTV"></p>
+    <body class="liv-body liv-page-reader">
+        <div class="liv-page liv-page-reader-inner">
+            <header class="liv-reader-header">
+                <h1 id="chapterTV" class="liv-reader-chapter-title"></h1>
+            </header>
+
+            <div class="liv-reader-stage">
+                <button type="button" id="leftBtn" class="liv-reader-arrow liv-reader-arrow-left" aria-label="Paj anvan">&#9664;</button>
+                <article class="liv-book-surface">
+                    <img id="pageImage" class="liv-reader-image" alt="" hidden>
+                    <p id="contentTV" class="liv-reader-text"></p>
+                    <p id="imageCaptionTV" class="liv-reader-image-caption" hidden></p>
+                </article>
+                <button type="button" id="rightBtn" class="liv-reader-arrow liv-reader-arrow-right" aria-label="Pwochen paj">&#9654;</button>
             </div>
-            <div id="rightBtn" class="arrow arrow-right">&#9654;</div>
+
+            <footer class="liv-reader-footer">
+                <p id="pageCounter" class="liv-page-counter"></p>
+            </footer>
         </div>
-        <h2 id="pageTV"></h2>
     </body>
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-        import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-        import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js"; 
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js"; 
+        import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
 
+        const leftBtn = document.getElementById("leftBtn");
+        const rightBtn = document.getElementById("rightBtn");
+        let pagePosition = 0;
+        const chapterTV = document.getElementById("chapterTV");
+        const pageCounter = document.getElementById("pageCounter");
 
-        let leftBtn = document.getElementById("leftBtn")
-        let rightBtn = document.getElementById("rightBtn")
-
-        let pageDiv = document.getElementById("pageDiv")
-
-        let pagePosition = 0
-        let chapterTV = document.getElementById("chapterTV")
-        let pageTV = document.getElementById("pageTV")
-
-        let pagesContent = []
-        let pageNames = []
+        let pagesContent = [];
+        let pageNames = [];
+        let bookId = "";
+        let chapterOrder = [];
+        let currentChapterIndex = -1;
 
         const firebaseConfig = {
           apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
@@ -136,130 +53,256 @@
           appId: "1:896987078937:web:acc868befefa57564fa588",
           measurementId: "G-YP58T0S16P"
         };
-      
-        // Initialize Firebase
+
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+        getAnalytics(app);
         const db = getFirestore(app);
 
-        async function getPages(id, chapterName)
-        {
-            const pageReference = collection(db, `Books/${id}/chapters/${chapterName}/pages`)
-
-            const pageCollectionSnap = await getDocs(pageReference)
-
-            chapterTV.innerText = chapterName
-            pageCollectionSnap.forEach((doc) => {
-                    console.log(`page name ${doc.id}`)
-                    pageNames.push(doc.id)
-                    //chaptersDiv.appendChild(createChapterDiv(bookSnapshot.id, doc.id))
-                    pagesContent.push(doc.data().text)
-                })
-
-            pageNames.sort((a, b) => {
-                const numA = extractNumber(a);
-                const numB = extractNumber(b);
-                return numA - numB;
-            });    
-            
-            showPage(0)
-
+        async function getBookCollectionName(bookDocId) {
+            const inBooks = await getDoc(doc(db, "books", bookDocId));
+            if (inBooks.exists()) return "books";
+            const inLegacy = await getDoc(doc(db, "Books", bookDocId));
+            if (inLegacy.exists()) return "Books";
+            return "books";
         }
 
         function extractNumber(pageString) {
-            return parseInt(pageString.replace('page ', ''), 10);
+            return parseInt(pageString.replace(/page\s*/i, "").trim(), 10) || 0;
         }
 
-        // Sorting function
-       
-        function showPage(position)
-        {
-            let contentTV = document.getElementById("contentTV")
-            let pageTV = document.getElementById("pageTV")
+        function hasPrevChapter() {
+            return currentChapterIndex > 0;
+        }
 
-            pageTV.innerText = pageNames[position]
-            
-            if(position == 0 && pagesContent.length == 1){
-                leftBtn.style.display = "none"
-                rightBtn.style.display = "none"
+        function hasNextChapter() {
+            return currentChapterIndex >= 0 && currentChapterIndex < chapterOrder.length - 1;
+        }
+
+        async function navigateToChapter(chapterName, startPage) {
+            const url = new URL(window.location.href);
+            url.searchParams.set("id", bookId);
+            url.searchParams.set("chapter", chapterName);
+            history.replaceState(null, "", url.pathname + url.search + url.hash);
+            await getPages(bookId, chapterName, startPage);
+        }
+
+        async function getPages(id, chapterName, startPage = "first") {
+            bookId = id;
+            const coll = await getBookCollectionName(id);
+
+            const pageReference = collection(db, coll, id, "chapters", chapterName, "pages");
+            const chaptersRef = collection(db, coll, id, "chapters");
+            let chaptersSnap;
+            try {
+                const qCh = query(chaptersRef, orderBy("chapter_number", "asc"));
+                chaptersSnap = await getDocs(qCh);
+            } catch {
+                chaptersSnap = await getDocs(chaptersRef);
             }
-            else if(position == 0){
-                leftBtn.style.display = "none"
-                rightBtn.style.display = "block"
+
+            chapterOrder = chaptersSnap.docs.map((d) => d.id);
+            currentChapterIndex = chapterOrder.indexOf(chapterName);
+
+            const chMetaSnap = await getDoc(doc(db, coll, id, "chapters", chapterName));
+            const chapterTitle =
+                chMetaSnap.exists() && chMetaSnap.data().chapter_name
+                    ? String(chMetaSnap.data().chapter_name).trim()
+                    : chapterName;
+
+            const pageCollectionSnap = await getDocs(pageReference);
+
+            chapterTV.textContent =
+                currentChapterIndex >= 0
+                    ? currentChapterIndex + 1 + ". " + chapterTitle
+                    : chapterTitle;
+
+            const pairs = [];
+            pageCollectionSnap.forEach((docSnap) => {
+                const data = docSnap.data() || {};
+                pairs.push({
+                    id: docSnap.id,
+                    text: data.text || "",
+                    imageUrl: data.imageUrl || "",
+                    pageType: data.pageType || "text",
+                });
+            });
+
+            pairs.sort((a, b) => extractNumber(a.id) - extractNumber(b.id));
+            pageNames = pairs.map((p) => p.id);
+            pagesContent = pairs;
+
+            pagePosition = 0;
+            if (pageNames.length === 0) {
+                const contentTV = document.getElementById("contentTV");
+                const pageImage = document.getElementById("pageImage");
+                const imageCaptionTV = document.getElementById("imageCaptionTV");
+                contentTV.hidden = false;
+                contentTV.textContent = "Pa gen paj nan chapit sa a.";
+                pageImage.hidden = true;
+                pageImage.removeAttribute("src");
+                imageCaptionTV.hidden = true;
+                imageCaptionTV.textContent = "";
+                pageCounter.textContent = "";
+                leftBtn.innerHTML = "&#9664;";
+                rightBtn.innerHTML = "&#9654;";
+                setArrowVisible(leftBtn, false);
+                setArrowVisible(rightBtn, false);
+                return;
             }
-            else if(position == pagesContent.length-1)
-            {
-                leftBtn.style.display = "block"
-                rightBtn.style.display = "none"
+
+            const start =
+                startPage === "last" ? Math.max(0, pageNames.length - 1) : 0;
+            showPage(start);
+        }
+
+        function updateArrowContents(position, n) {
+            const first = position === 0;
+            const last = position === n - 1;
+
+            if (first && hasPrevChapter()) {
+                leftBtn.innerHTML =
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">◀</span><span class="liv-arrow-chapter-words">Chapit anvan</span></span>';
+            } else if (position > 0) {
+                leftBtn.innerHTML =
+                    '<span class="liv-arrow-chev" aria-hidden="true">◀</span>';
+            } else {
+                leftBtn.innerHTML = "&#9664;";
             }
-            else{
-                leftBtn.style.display = "block"
-                rightBtn.style.display = "block"
-            }
 
-            contentTV.innerText = pagesContent[position]
-        }
-
-        leftBtn.onclick = () => {
-            showPage(pagePosition-1)
-            pagePosition--;
-        }
-
-        rightBtn.onclick = () => {
-            showPage(pagePosition+1)
-            pagePosition++;
-        }
-        
-        function getParameter(sParam)
-        {
-            var sPageURL = window.location.search.substring(1);
-            var sURLVariables = sPageURL.split('&');
-            for (var i = 0; i < sURLVariables.length; i++) 
-            {
-                var sParameterName = sURLVariables[i].split('=');
-                console.log(`the value of parameter ${sParameterName}`)
-                if (sParameterName[0] == sParam) 
-                {
-                    return sParameterName[1];
-                }
+            if (last && hasNextChapter()) {
+                rightBtn.innerHTML =
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">▶</span><span class="liv-arrow-chapter-words">Chapit swivan</span></span>';
+            } else if (position < n - 1) {
+                rightBtn.innerHTML =
+                    '<span class="liv-arrow-chev" aria-hidden="true">▶</span>';
+            } else {
+                rightBtn.innerHTML = "&#9654;";
             }
         }
 
-        function extractParamsFromUrl(url) {
-            // Extract the query string part from the URL
-            const bookId = url.split('?')[1];
-            const chapterId = url.split('?')[2];
-            
-            // Split the query string into individual key-value pairs
-            const bookParams = bookId.split('&');
-            const chapterParams = chapterId.split('&');
-
-            // Initialize an object to store the extracted parameters
-            const extractedParams = {};
-            
-            // Loop through each key-value pair and extract the values
-            /*params.forEach(param => {
-                const [key, value] = param.split('=');
-                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '));
-            });*/
-            
-            bookParams.forEach(param => {
-                const [key, value] = param.split('=');
-                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
-            })
-            chapterParams.forEach(param => {
-                const [key, value] = param.split('=');
-                extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
-            })
-
-            
-            //(`the values are ${extractedParams['speech']} and ${extractedParams['user']}`)
-            // Return an array with values of 'speech' and 'user'
-            //return [extractedParams['speech'], extractedParams['user']];
-            getPages(extractedParams['id'], extractedParams['chapter'])
+        function setArrowVisible(btn, visible) {
+            btn.classList.toggle("liv-reader-arrow--off", !visible);
+            btn.disabled = !visible;
+            btn.setAttribute("aria-disabled", visible ? "false" : "true");
         }
+
+        function showPage(position) {
+            const contentTV = document.getElementById("contentTV");
+            const n = pagesContent.length;
+            if (n === 0) return;
+
+            pageCounter.textContent = "Paj " + (position + 1) + " / " + n;
+
+            const first = position === 0;
+            const last = position === n - 1;
+
+            const canLeft = !first || (first && hasPrevChapter());
+            const canRight = !last || (last && hasNextChapter());
+
+            setArrowVisible(leftBtn, canLeft);
+            setArrowVisible(rightBtn, canRight);
+
+            if (first && hasPrevChapter()) {
+                leftBtn.setAttribute("aria-label", "Chapit anvan");
+            } else {
+                leftBtn.setAttribute("aria-label", "Paj anvan");
+            }
+            if (last && hasNextChapter()) {
+                rightBtn.setAttribute("aria-label", "Chapit swivan");
+            } else {
+                rightBtn.setAttribute("aria-label", "Pwochen paj");
+            }
+
+            updateArrowContents(position, n);
+
+            const page = pagesContent[position] || {};
+            const textValue = typeof page.text === "string" ? page.text : "";
+            const imageUrl = typeof page.imageUrl === "string" ? page.imageUrl : "";
+            const pageType = page.pageType === "image" ? "image" : "text";
+            const pageImage = document.getElementById("pageImage");
+            const imageCaptionTV = document.getElementById("imageCaptionTV");
+
+            if (pageType === "image" && imageUrl) {
+                pageImage.src = imageUrl;
+                pageImage.hidden = false;
+                contentTV.hidden = true;
+                imageCaptionTV.hidden = textValue.trim().length === 0;
+                imageCaptionTV.textContent = textValue;
+            } else {
+                pageImage.hidden = true;
+                pageImage.removeAttribute("src");
+                contentTV.hidden = false;
+                imageCaptionTV.hidden = true;
+                imageCaptionTV.textContent = "";
+                contentTV.textContent = textValue;
+            }
+            pagePosition = position;
+        }
+
+        leftBtn.addEventListener("click", async () => {
+            if (pagePosition > 0) {
+                showPage(pagePosition - 1);
+                return;
+            }
+            if (pagePosition === 0 && hasPrevChapter()) {
+                const prevName = chapterOrder[currentChapterIndex - 1];
+                await navigateToChapter(prevName, "last");
+            }
+        });
+
+        rightBtn.addEventListener("click", async () => {
+            const n = pagesContent.length;
+            if (pagePosition < n - 1) {
+                showPage(pagePosition + 1);
+                return;
+            }
+            if (pagePosition === n - 1 && hasNextChapter()) {
+                const nextName = chapterOrder[currentChapterIndex + 1];
+                await navigateToChapter(nextName, "first");
+            }
+        });
+
+        function normalizeSearch(search) {
+            let s = search || "";
+            if (s.includes("?chapter=") && !s.includes("&chapter=")) {
+                s = s.replace("?chapter=", "&chapter=");
+            }
+            return s;
+        }
+
+        function extractParamsFromUrl(href) {
+            let search = "";
+            try {
+                const u = new URL(href, window.location.href);
+                search = u.search;
+            } catch {
+                const m = href.match(/\?([^#]+)/);
+                search = m ? "?" + m[1] : "";
+            }
+            search = normalizeSearch(search);
+            const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+            let id = params.get("id");
+            let chapter = params.get("chapter");
+
+            if (chapter == null && id != null && id.includes("?")) {
+                const parts = id.split("?");
+                id = parts[0];
+                const rest = parts.slice(1).join("?");
+                const cm = rest.match(/^chapter=(.+)$/);
+                if (cm) chapter = decodeURIComponent(cm[1]);
+            }
+
+            if (id) id = decodeURIComponent(id);
+            if (chapter) chapter = decodeURIComponent(chapter);
+
+            if (id && chapter) {
+                getPages(id, chapter, "first");
+            } else {
+                document.getElementById("contentTV").textContent =
+                    "Lyen an pa konplè (id oswa chapit manke).";
+            }
+        }
+
         extractParamsFromUrl(window.location.href);
-
-        //getPages("book1", "chapter1")
     </script>
 </html>

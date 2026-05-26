@@ -1,0 +1,19 @@
+{
+  "name": "liv-lakay-functions",
+  "description": "Stripe Checkout + webhook to issue single-use Liv Lakay accessCodes",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions",
+    "lint": "eslint . || true"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.0",
+    "stripe": "^17.7.0"
+  }
+}

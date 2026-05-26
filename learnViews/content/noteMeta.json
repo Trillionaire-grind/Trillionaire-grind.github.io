@@ -1,0 +1,236 @@
+[
+  {
+    "id": "static-apps-fannyApp",
+    "slug": "fannyApp",
+    "genre": "apps",
+    "title": "How To Build An App",
+    "isAi": false,
+    "createdAt": 1695427200000,
+    "wordCount": 8902
+  },
+  {
+    "id": "static-apps-calendarApp",
+    "slug": "calendarApp",
+    "genre": "apps",
+    "title": "How To Build A Calendar App",
+    "isAi": true,
+    "createdAt": 1695513600000,
+    "wordCount": 37
+  },
+  {
+    "id": "static-apps-coffeeApp",
+    "slug": "coffeeApp",
+    "genre": "apps",
+    "title": "How To Build A Coffee App",
+    "isAi": true,
+    "createdAt": 1695600000000,
+    "wordCount": 502
+  },
+  {
+    "id": "static-apps-datingApp",
+    "slug": "datingApp",
+    "genre": "apps",
+    "title": "How To Build A Dating App",
+    "isAi": true,
+    "createdAt": 1695686400000,
+    "wordCount": 582
+  },
+  {
+    "id": "static-apps-fishApp",
+    "slug": "fishApp",
+    "genre": "apps",
+    "title": "How To Build A Fish App",
+    "isAi": true,
+    "createdAt": 1695772800000,
+    "wordCount": 537
+  },
+  {
+    "id": "static-apps-geographyApp",
+    "slug": "geographyApp",
+    "genre": "apps",
+    "title": "How To Build A Geography App",
+    "isAi": true,
+    "createdAt": 1695859200000,
+    "wordCount": 352
+  },
+  {
+    "id": "static-apps-notesApp",
+    "slug": "notesApp",
+    "genre": "apps",
+    "title": "How To Build A Notes App",
+    "isAi": true,
+    "createdAt": 1695945600000,
+    "wordCount": 507
+  },
+  {
+    "id": "static-apps-workoutApp",
+    "slug": "workoutApp",
+    "genre": "apps",
+    "title": "How To Build A Workout App",
+    "isAi": true,
+    "createdAt": 1696032000000,
+    "wordCount": 266
+  },
+  {
+    "id": "static-business-howSell",
+    "slug": "howSell",
+    "genre": "business",
+    "title": "How To Sell Anything",
+    "isAi": false,
+    "createdAt": 1695427200000,
+    "wordCount": 1232
+  },
+  {
+    "id": "static-business-beDoHave",
+    "slug": "beDoHave",
+    "genre": "business",
+    "title": "Be. Do. Have.",
+    "isAi": true,
+    "createdAt": 1695513600000,
+    "wordCount": 675
+  },
+  {
+    "id": "static-business-berkInvest",
+    "slug": "berkInvest",
+    "genre": "business",
+    "title": "Why You Should Invest in Berkshire Hathaway",
+    "isAi": true,
+    "createdAt": 1695600000000,
+    "wordCount": 580
+  },
+  {
+    "id": "static-business-coldCall",
+    "slug": "coldCall",
+    "genre": "business",
+    "title": "How To Cold Call",
+    "isAi": true,
+    "createdAt": 1695686400000,
+    "wordCount": 754
+  },
+  {
+    "id": "static-business-needMoney",
+    "slug": "needMoney",
+    "genre": "business",
+    "title": "Do You Need Money To Start A Business?",
+    "isAi": true,
+    "createdAt": 1695772800000,
+    "wordCount": 582
+  },
+  {
+    "id": "static-business-profitExplained",
+    "slug": "profitExplained",
+    "genre": "business",
+    "title": "How To Earn A Profit",
+    "isAi": true,
+    "createdAt": 1695859200000,
+    "wordCount": 258
+  },
+  {
+    "id": "static-business-salesMindset",
+    "slug": "salesMindset",
+    "genre": "business",
+    "title": "How to Have a Winning Mindset in Sales",
+    "isAi": true,
+    "createdAt": 1695945600000,
+    "wordCount": 401
+  },
+  {
+    "id": "static-business-salesTips",
+    "slug": "salesTips",
+    "genre": "business",
+    "title": "The Biggest Sales Secrets",
+    "isAi": true,
+    "createdAt": 1696032000000,
+    "wordCount": 339
+  },
+  {
+    "id": "static-business-startBusiness",
+    "slug": "startBusiness",
+    "genre": "business",
+    "title": "How To Start A Business",
+    "isAi": true,
+    "createdAt": 1696118400000,
+    "wordCount": 516
+  },
+  {
+    "id": "static-business-warrenMethod",
+    "slug": "warrenMethod",
+    "genre": "business",
+    "title": "How To Invest Like Warren Buffett",
+    "isAi": true,
+    "createdAt": 1696204800000,
+    "wordCount": 357
+  },
+  {
+    "id": "static-city-capitalismSlavery",
+    "slug": "capitalismSlavery",
+    "genre": "city",
+    "title": "Is Capitalism Pro-Slavery?",
+    "isAi": false,
+    "createdAt": 1695427200000,
+    "wordCount": 1333
+  },
+  {
+    "id": "static-city-profitSeacoast",
+    "slug": "profitSeacoast",
+    "genre": "city",
+    "title": "How To Profit From Your Seacoast",
+    "isAi": true,
+    "createdAt": 1695513600000,
+    "wordCount": 494
+  },
+  {
+    "id": "static-city-cityBuilding",
+    "slug": "cityBuilding",
+    "genre": "city",
+    "title": "How To Build A City",
+    "isAi": true,
+    "createdAt": 1695600000000,
+    "wordCount": 398
+  },
+  {
+    "id": "static-city-cityDiversity",
+    "slug": "cityDiversity",
+    "genre": "city",
+    "title": "The Pros and Cons Of Diversity In A City",
+    "isAi": true,
+    "createdAt": 1695686400000,
+    "wordCount": 707
+  },
+  {
+    "id": "static-city-cityZoning",
+    "slug": "cityZoning",
+    "genre": "city",
+    "title": "How To Zone A City",
+    "isAi": true,
+    "createdAt": 1695772800000,
+    "wordCount": 464
+  },
+  {
+    "id": "static-city-citySchool",
+    "slug": "citySchool",
+    "genre": "city",
+    "title": "How To Build A School",
+    "isAi": true,
+    "createdAt": 1695859200000,
+    "wordCount": 411
+  },
+  {
+    "id": "static-city-mountainRoads",
+    "slug": "mountainRoads",
+    "genre": "city",
+    "title": "How To Build Roads In A Mountainous Zone",
+    "isAi": true,
+    "createdAt": 1695945600000,
+    "wordCount": 848
+  },
+  {
+    "id": "static-city-richestCities",
+    "slug": "richestCities",
+    "genre": "city",
+    "title": "The 5 Wealthiest Cities In The World",
+    "isAi": true,
+    "createdAt": 1696032000000,
+    "wordCount": 345
+  }
+]

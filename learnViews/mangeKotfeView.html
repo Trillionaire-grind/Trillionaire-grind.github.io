@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mangé Lakay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #D31034;
+      --blue: #0020A0;
+      --green: #005315;
+      --cta: #FF0C36;
+      --gold: #DAA123;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --max: 720px;
+      --max-wide: 860px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 0 0 100px;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .kotfe-page {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+      padding: 12px 0 40px;
+    }
+
+    .kotfe-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--green);
+      margin: 0 0 12px;
+    }
+
+    .kotfe-hero {
+      text-align: center;
+      max-width: var(--max-wide);
+      margin: 0 auto 12px;
+      padding: 0;
+    }
+
+    .kotfe-hero-copy {
+      max-width: 54rem;
+      margin: 0 auto;
+    }
+
+    .kotfe-hero-eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .kotfe-hero-title {
+      font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+      font-weight: 700;
+      margin: 0;
+      letter-spacing: -0.03em;
+      line-height: 1.12;
+      color: var(--text);
+    }
+
+    .btn-donate--hero {
+      margin-top: 20px;
+      padding: 16px 28px;
+      font-size: 16px;
+      min-width: min(100%, 280px);
+    }
+
+    .btn-donate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      background: var(--cta);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 16px rgba(255, 12, 54, 0.28);
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .btn-donate:hover {
+      background: #000;
+      transform: translateY(-1px);
+    }
+
+    .btn-donate--tier {
+      width: 100%;
+      margin-top: 12px;
+      font-size: 14px;
+      padding: 12px 16px;
+    }
+
+    .kotfe-quote {
+      border-left: 4px solid var(--gold);
+      padding: 14px 18px;
+      margin: 0 0 28px;
+      font-style: italic;
+      background: var(--surface);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      font-size: 15px;
+      color: #333;
+      box-shadow: var(--shadow);
+    }
+
+    .kotfe-quote cite {
+      display: block;
+      margin-top: 10px;
+      font-style: normal;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .kotfe-section {
+      margin-bottom: 36px;
+    }
+
+    .kotfe-section h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+      color: var(--red);
+    }
+
+    .kotfe-section h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 20px 0 8px;
+      color: var(--text);
+    }
+
+    .kotfe-section p {
+      margin: 0 0 12px;
+      font-size: 15px;
+    }
+
+    .kotfe-lead {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .kotfe-stat {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-left: 4px solid var(--green);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+    }
+
+    .kotfe-stat strong { color: var(--blue); }
+
+    .kotfe-callout {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      font-weight: 600;
+      font-size: 15px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .kotfe-callout--green {
+      border-left: 4px solid var(--green);
+    }
+
+    .kotfe-callout--gold {
+      border-left: 4px solid var(--gold);
+    }
+
+    .kotfe-question {
+      font-size: 1.15rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--red);
+      margin: 20px 0 12px;
+    }
+
+    .kotfe-list {
+      margin: 0 0 14px;
+      padding-left: 1.2em;
+      font-size: 15px;
+    }
+
+    .kotfe-list li {
+      margin-bottom: 8px;
+    }
+
+    .kotfe-list li::marker {
+      color: var(--green);
+    }
+
+    .kotfe-reports-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-left: 4px solid var(--blue);
+      padding: 24px;
+    }
+
+    .kotfe-reports-panel h2 {
+      color: var(--text);
+    }
+
+    .kotfe-reports-panel > p {
+      margin: 0 0 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .kotfe-report-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .kotfe-report-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      background: var(--bg);
+      border-radius: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      text-decoration: none;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .kotfe-report-link:hover {
+      border-color: rgba(0, 32, 160, 0.25);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .kotfe-report-link strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .kotfe-report-link span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .kotfe-report-link svg {
+      flex-shrink: 0;
+      color: var(--blue);
+    }
+
+    .kotfe-reports-empty {
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .kotfe-video-wrap {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .kotfe-video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #111;
+    }
+
+    .kotfe-video-frame iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .kotfe-video-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px;
+      text-align: center;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.55)),
+        url("assets/beach.png") center / cover no-repeat;
+      color: #fff;
+    }
+
+    .kotfe-video-play {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .kotfe-video-play svg {
+      width: 22px;
+      height: 22px;
+      margin-left: 4px;
+      fill: var(--cta);
+    }
+
+    .kotfe-video-placeholder p {
+      margin: 0;
+      font-size: 14px;
+      max-width: 28rem;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .kotfe-video-placeholder strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+
+    .kotfe-video-caption {
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .kotfe-donate-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-left: 4px solid var(--cta);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .kotfe-donate-panel h2 {
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .kotfe-donate-panel > p {
+      margin: 0 0 18px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .kotfe-tiers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .kotfe-tier {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .kotfe-tier--major {
+      border-color: rgba(0, 83, 21, 0.2);
+      background: rgba(0, 83, 21, 0.04);
+    }
+
+    .kotfe-tier-amount {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--green);
+      margin: 0 0 6px;
+    }
+
+    .kotfe-tier--major .kotfe-tier-amount {
+      color: var(--blue);
+    }
+
+    .kotfe-tier-desc {
+      margin: 0 0 auto;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    .kotfe-donate-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 12px 0 0;
+    }
+
+    .kotfe-cta-block {
+      text-align: center;
+      padding: 28px 20px;
+      margin: 32px 0 0;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .kotfe-cta-block p {
+      margin: 0 0 16px;
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .kotfe-roadmap {
+      display: grid;
+      gap: 12px;
+    }
+
+    .kotfe-roadmap-item {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .kotfe-roadmap-item strong {
+      display: block;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .kotfe-roadmap-item p {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .kotfe-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .kotfe-proof-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .kotfe-proof-card strong {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .kotfe-proof-card span {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    .kotfe-vsl-block {
+      max-width: var(--max-wide);
+      margin: 0 auto 40px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid rgba(255, 12, 54, 0.12);
+    }
+
+    .kotfe-vsl-block .kotfe-video-wrap {
+      margin-bottom: 16px;
+    }
+
+    .kotfe-ask-block {
+      margin-top: 40px;
+      padding-top: 8px;
+      border-top: 2px solid rgba(255, 12, 54, 0.15);
+    }
+
+    .kotfe-ask-block > p.kotfe-lead {
+      font-size: 1.1rem;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .kotfe-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .kotfe-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .kotfe-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .kotfe-sticky {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      z-index: 30;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+
+    .kotfe-sticky.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .kotfe-sticky .btn-donate {
+      display: block;
+      width: min(480px, 88%);
+      margin: 0 auto;
+      pointer-events: none;
+    }
+
+    .kotfe-sticky.is-visible .btn-donate {
+      pointer-events: auto;
+    }
+
+    @media (min-width: 900px) {
+      .kotfe-hero-title {
+        font-size: 2.05rem;
+        max-width: 50rem;
+        margin-left: auto;
+        margin-right: auto;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .kotfe-tiers {
+        grid-template-columns: 1fr;
+      }
+
+      .kotfe-proof-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="kotfe-page">
+    <header class="kotfe-hero">
+      <div class="kotfe-hero-copy">
+        <p class="kotfe-hero-eyebrow">From boiled eggs today to 40 years of wealth in Kotfè</p>
+        <h1 class="kotfe-hero-title">Discover How a City of 50,000 Runs Out of Eggs — and the Plan to Build Lasting Wealth</h1>
+      </div>
+    </header>
+
+    <div class="kotfe-vsl-block" id="donate">
+      <div class="kotfe-video-wrap">
+        <div class="kotfe-video-frame" id="kotfeVideo"></div>
+        <p class="kotfe-video-caption" id="kotfeVideoCaption">Full project video publishing soon. When your VSL is ready, it replaces this placeholder.</p>
+      </div>
+
+      <p style="text-align: center; margin: 0 0 20px;">
+        <button type="button" class="btn-donate btn-donate--hero" data-donate>Support Mangé Lakay</button>
+      </p>
+
+      <aside class="kotfe-donate-panel">
+        <h2>Support Mangé Lakay</h2>
+        <p>100% of donations fund operations on the ground — feed, stock, labor, and land. Pick a tier (or enter any amount on Stripe):</p>
+        <div class="kotfe-tiers">
+          <div class="kotfe-tier">
+            <p class="kotfe-tier-amount">$25</p>
+            <p class="kotfe-tier-desc">About a week of chicken feed for our current flock — keeps daily egg sales running.</p>
+            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $25</button>
+          </div>
+          <div class="kotfe-tier">
+            <p class="kotfe-tier-amount">$100</p>
+            <p class="kotfe-tier-desc">Roughly 8 laying hens — ~500 days of eggs per bird after maturity.</p>
+            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $100</button>
+          </div>
+          <div class="kotfe-tier kotfe-tier--major">
+            <p class="kotfe-tier-amount">$1,000</p>
+            <p class="kotfe-tier-desc">A real scale step — housing, stock, and labor toward our next flock expansion.</p>
+            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $1,000</button>
+          </div>
+          <div class="kotfe-tier kotfe-tier--major">
+            <p class="kotfe-tier-amount">$10,000+</p>
+            <p class="kotfe-tier-desc">Major push toward the first $100K deployment — land, buildings, and thousands of birds.</p>
+            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $10,000+</button>
+          </div>
+        </div>
+        <p class="kotfe-donate-note">Not a registered charity — a direct contribution to Mangé Lakay. You receive updates, not shares. Secure checkout via Stripe.</p>
+      </aside>
+
+      <div class="kotfe-cta-block">
+        <p>If you're ready now, any amount helps.</p>
+        <button type="button" class="btn-donate" data-donate>Donate any amount</button>
+      </div>
+    </div>
+
+    <p class="kotfe-eyebrow" style="margin-bottom: 20px;">The full pitch</p>
+
+    <blockquote class="kotfe-quote">
+      "...if Haiti could be kept free from revolutions, she might easily become, in proportion to her territory and population, the richest country in the world..."
+      <cite>— Frederick Douglass, First American Minister to Haiti</cite>
+    </blockquote>
+
+    <section class="kotfe-section">
+      <p class="kotfe-lead">What do Singapore, China, South Korea, and Botswana have in common?</p>
+      <p>They all went through a major transformation — starting extremely poor and becoming wealthy nations.</p>
+      <p>China is the clearest example. Adam Smith described 18th-century China like this:</p>
+    </section>
+
+    <blockquote class="kotfe-quote">
+      "The poverty of the lower ranks of people in China far surpasses that of the most beggarly nations in Europe…"
+    </blockquote>
+
+    <section class="kotfe-section">
+      <h2>That was China then. This is China now.</h2>
+      <p>Today China is the second wealthiest nation in the world. Here is what changed for some nations that pulled ahead:</p>
+      <div class="kotfe-stat"><strong>China:</strong> $76 GDP per capita (1961) → $12,597 (2023)</div>
+      <div class="kotfe-stat"><strong>Singapore:</strong> $425 (1961) → $84,734+ (2023)</div>
+      <div class="kotfe-stat"><strong>South Korea:</strong> $158 (1961) → $35,563+ (2023)</div>
+      <div class="kotfe-stat"><strong>Botswana:</strong> $63 (1961) → $7,249+ (2023)</div>
+      <p class="kotfe-question">How did they do it?</p>
+      <p><strong>They adopted capitalism and allocated capital properly.</strong> Mangé Lakay applies that same discipline — starting with food, reinvesting profits, and building over a 40-year horizon.</p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>Why Mangé Lakay — and why now</h2>
+      <p>With <strong>Mangé Lakay</strong> ("home food"), we are building local food supply and long-term value for the people of Kotfè — my hometown.</p>
+      <p>Right now Kotfè's economy is in dire condition. It has regressed since the 1970s.</p>
+      <div class="kotfe-stat"><strong>Haiti:</strong> $68 GDP per capita (1961) → $1,693 (2023)</div>
+      <ul class="kotfe-list">
+        <li><strong>Botswana</strong> started $5 poorer than Haiti — now ~4× richer.</li>
+        <li><strong>Singapore</strong> was ~6× richer than Haiti in 1961 — now ~50× richer.</li>
+      </ul>
+      <p>The canal my grandfather helped build in the 1950s is still the only water system for farmers — and it is poorly maintained. Our city is moving backward. Donations help us move forward.</p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>Why Kotfè?</h2>
+      <ul class="kotfe-list">
+        <li>Most citizens spend <strong>90% of income on food</strong></li>
+        <li>Many eat only <strong>4 days per week</strong> on average</li>
+        <li>Many walk miles daily to fetch water</li>
+        <li>Lower security risk than the capital</li>
+        <li>It is my hometown — my full family lineage is here</li>
+        <li>Haiti is a free-market nation with enormous untapped opportunity</li>
+      </ul>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>What we are building toward</h2>
+      <p>This is a <strong>40-year vision</strong>, not an overnight fix. Donations fund the steps along the way.</p>
+      <ul class="kotfe-list">
+        <li><strong>Local food security</strong> for Kotfè's 50,000+ residents</li>
+        <li><strong>150,000 eggs per day</strong> at full scale — affordable protein for the region</li>
+        <li><strong>Reinvested agriculture</strong> → development → transportation → infrastructure</li>
+        <li><strong>Quarterly reports</strong> so supporters see exactly where money went</li>
+      </ul>
+      <p class="kotfe-callout kotfe-callout--green">Our model: start with profitable agriculture, amass capital from operations and donations, and allocate into capital-intensive industries over time.</p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>40-year roadmap</h2>
+      <div class="kotfe-roadmap">
+        <div class="kotfe-roadmap-item">
+          <strong>Decade 1 — Food</strong>
+          <p>150,000 eggs/day · corn surplus · vetiver for biofuel and erosion control · scale toward 200,000 people fed daily.</p>
+        </div>
+        <div class="kotfe-roadmap-item">
+          <strong>Decade 2 — Development</strong>
+          <p>Buildings, schools, churches, canals, farming consulting, and value-added food products.</p>
+        </div>
+        <div class="kotfe-roadmap-item">
+          <strong>Decade 3 — Transportation</strong>
+          <p>Taxis, tap-taps, buses, tourist transport, and distribution networks.</p>
+        </div>
+        <div class="kotfe-roadmap-item">
+          <strong>Decade 4 — Infrastructure</strong>
+          <p>Roads, airports, ports, canals, water systems, and energy.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>What we have done — and why we exist</h2>
+      <p>We started selling boiled eggs — a popular breakfast in Haiti. With egg cost and labor, we earned a <strong>30% profit margin</strong>.</p>
+      <p>Then we hit a wall: <strong>we ran out of eggs to buy.</strong></p>
+      <p class="kotfe-callout kotfe-callout--gold">At Walmart I can buy 40+ cartons of 60 eggs in one day. In Kotfè (50,000+ people), the market could not supply more than <strong>100 eggs</strong>.</p>
+      <p>That scarcity is why Mangé Lakay exists: <strong>we must supply the market ourselves.</strong></p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>What we have today</h2>
+      <div class="kotfe-proof-grid">
+        <div class="kotfe-proof-card">
+          <strong>45</strong>
+          <span>laying hens producing daily</span>
+        </div>
+        <div class="kotfe-proof-card">
+          <strong>5</strong>
+          <span>centièmes of land under management</span>
+        </div>
+        <div class="kotfe-proof-card">
+          <strong>30%</strong>
+          <span>margin on boiled-egg sales</span>
+        </div>
+      </div>
+      <h3>Land</h3>
+      <ul class="kotfe-list">
+        <li><strong>5 centièmes</strong> under management (rented through October 2033)</li>
+        <li><strong>~10 centièmes</strong> expected via inheritance (not yet in the fund)</li>
+      </ul>
+      <p>At <strong>2 m² per chicken</strong>, each centième supports ~<strong>64 chickens</strong>.</p>
+      <h3>Livestock (focus through 2034)</h3>
+      <ul class="kotfe-list">
+        <li><strong>45 hens</strong> — daily egg production, meat after ~2 years</li>
+        <li><strong>5 roosters</strong> — breeding stock</li>
+      </ul>
+      <h3>Other operating assets</h3>
+      <ul class="kotfe-list">
+        <li><strong>Charge-your-electronics</strong> — covers chicken feed costs</li>
+        <li><strong>Mobile top-up</strong> — side business funding operations</li>
+      </ul>
+    </section>
+
+    <section class="kotfe-section" id="reports">
+      <div class="kotfe-reports-panel">
+        <h2>Quarterly reports</h2>
+        <p>Every quarter we publish where money went — flock count, spend, milestones, and what's next. Click a report to read it.</p>
+        <ul class="kotfe-report-list" id="kotfeReportList"></ul>
+      </div>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>Why Kotfè still wins</h2>
+      <ul class="kotfe-list">
+        <li><strong>Underserved market</strong> — room to profit where supply is scarce</li>
+        <li><strong>Growth runway</strong> — ~7% GDP growth in developing nations vs ~2.5% in the US</li>
+        <li><strong>Competitive labor</strong> — ~$0.80/hour average</li>
+        <li><strong>US trade advantages</strong> — HOPE/HELP duty-free agricultural exports</li>
+      </ul>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>What donations help us buy</h2>
+      <p><em>Figures in USD — subject to change.</em></p>
+      <ul class="kotfe-list">
+        <li>1 chicken — <strong>$12 USD</strong></li>
+        <li>1 centième of land — <strong>$300 USD</strong></li>
+        <li>1 labourer/day — <strong>$6 USD</strong></li>
+        <li>Building per chicken — <strong>$5.57–$10.14 USD</strong></li>
+      </ul>
+      <div class="kotfe-stat"><strong>Hen (2-year lifetime):</strong> ~$71–$91 total cost · ~$120 lifetime revenue from eggs + meat</div>
+      <p>Blended profit per bird: <strong>~$16–$23</strong> — reinvested into scaling the flock, not paid out as dividends.</p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>Next scale: first $100K</h2>
+      <ul class="kotfe-list">
+        <li><strong>$2,900</strong> — yearly operating costs</li>
+        <li><strong>$97,000</strong> — fixed costs (land, housing, stock)</li>
+      </ul>
+      <p>That gets us from <strong>~50 birds today</strong> to <strong>~1,000 birds</strong>, scaling toward <strong>~2,625</strong> in year one.</p>
+      <p>Long-term target: <strong>150,000 laying hens</strong> (~300,000 total birds) — enough to feed Kotfè's residents <strong>3 eggs per day</strong> at full scale.</p>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>What's next — corn</h2>
+      <ul class="kotfe-list">
+        <li>Corn is a staple across Haiti</li>
+        <li>Storable for years — buffer against drought and disease</li>
+        <li>Research report <strong>2028</strong>; production <strong>2029</strong></li>
+      </ul>
+    </section>
+
+    <section class="kotfe-section">
+      <h2>Honest limits</h2>
+      <p>Working in Haiti carries real risk — political instability, infrastructure gaps, and no guarantee of outcomes.</p>
+      <p class="kotfe-callout kotfe-callout--gold">This is <strong>not</strong> an investment offering. Donations do not buy equity or promised returns. You are supporting a project you believe in, and we report back honestly — see <a href="#reports" style="color: var(--blue);">quarterly reports</a> above.</p>
+      <p>We cannot guarantee results — only transparent accounting of what your money made possible.</p>
+    </section>
+
+    <div class="kotfe-ask-block">
+      <div class="kotfe-cta-block">
+        <p>Ready to support Mangé Lakay?</p>
+        <a class="btn-donate" href="#donate" style="text-decoration: none;">Back to video &amp; donate</a>
+      </div>
+    </div>
+
+    <nav class="kotfe-links" aria-label="Related pages">
+      <a href="#donate">Video &amp; donate</a>
+      <a href="#reports">Quarterly reports</a>
+      <a href="learn.html#speak" data-kotfe-nav="speak">Talk to me about the project</a>
+      <a href="learn.html#notes" data-kotfe-nav="notes">Read city &amp; business notes</a>
+      <a href="learn.html#home" data-kotfe-nav="home">Back to home</a>
+    </nav>
+  </div>
+
+  <div class="kotfe-sticky">
+    <button type="button" class="btn-donate" data-donate>Donate to Mangé Lakay</button>
+  </div>
+
+  <script type="module">
+    import { initLearnNav, goToPage } from "./scripts/learnNav.js";
+    import { KOTFE_REPORTS } from "./scripts/kotfeReportsCatalog.js";
+
+    initLearnNav("kotfe");
+
+    document.querySelectorAll("[data-kotfe-nav]").forEach((el) => {
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        goToPage(el.dataset.kotfeNav);
+      });
+    });
+
+    const reportList = document.getElementById("kotfeReportList");
+
+    if (KOTFE_REPORTS.length === 0) {
+      reportList.innerHTML = `
+        <li class="kotfe-reports-empty">
+          First quarterly report publishing soon. When it's ready, it will show up here as a clickable link.
+        </li>`;
+    } else {
+      reportList.innerHTML = KOTFE_REPORTS.map((report) => `
+        <li>
+          <a class="kotfe-report-link" href="${report.href}" target="_blank" rel="noopener noreferrer">
+            <div>
+              <strong>${report.title}</strong>
+              <span>${report.date}</span>
+            </div>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M7 17L17 7M17 7H7M17 7V17"/>
+            </svg>
+          </a>
+        </li>
+      `).join("");
+    }
+
+    // Paste your YouTube video ID here when ready (e.g. "dQw4w9WgXcQ")
+    const KOTFE_YOUTUBE_ID = "";
+
+    const videoEl = document.getElementById("kotfeVideo");
+    const videoCaption = document.getElementById("kotfeVideoCaption");
+
+    if (KOTFE_YOUTUBE_ID) {
+      videoEl.innerHTML = `
+        <iframe
+          src="https://www.youtube.com/embed/${KOTFE_YOUTUBE_ID}?rel=0"
+          title="Mangé Lakay project video"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>`;
+      videoCaption.textContent = "Watch the full VSL, then pick a donation tier below.";
+    } else {
+      videoEl.innerHTML = `
+        <div class="kotfe-video-placeholder" aria-hidden="true">
+          <div class="kotfe-video-play">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <p><strong>Project video coming soon</strong>
+          Your VSL goes here — Kotfè, the farm, and the 40-year plan.</p>
+        </div>`;
+    }
+  </script>
+  <script>
+    const STRIPE_DONATE_URL = "https://buy.stripe.com/eVaaFBaGtfPe7gk8wA";
+
+    function openDonate() {
+      window.open(STRIPE_DONATE_URL, "_blank", "noopener,noreferrer")?.focus();
+    }
+
+    document.querySelectorAll("[data-donate]").forEach((el) => {
+      el.addEventListener("click", openDonate);
+    });
+
+    const stickyCta = document.querySelector(".kotfe-sticky");
+    const STICKY_SCROLL_THRESHOLD = 80;
+
+    function updateStickyCta() {
+      if (!stickyCta) return;
+      stickyCta.classList.toggle("is-visible", window.scrollY > STICKY_SCROLL_THRESHOLD);
+    }
+
+    window.addEventListener("scroll", updateStickyCta, { passive: true });
+    updateStickyCta();
+  </script>
+</body>
+</html>

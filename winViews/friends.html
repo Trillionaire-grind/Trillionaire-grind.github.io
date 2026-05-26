@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Friends List</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+        .friend-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .friend-card {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 8px;
+            padding: 0.75rem;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .friend-card:hover {
+            background: #f0f8ff;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .friend-info h2 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .friend-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            text-decoration: none;
+            color: #00ACEE;
+        }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="homeView.html" class="back-button">← Back</a>
+    <h1>Your Friends</h1>
+  </header>
+
+  <main>
+    <section class="friend-list">
+
+      <div class="friend-card" onclick="window.location.href='profile.html'">
+        <img src="avatar1.jpg" alt="Mark Johnson" class="avatar" />
+        <div class="friend-info">
+          <h2>Mark Johnson</h2>
+          <p>📅 2 weeks ago</p>
+          <p>📍 Coffee Shop</p>
+        </div>
+      </div>
+
+      <div class="friend-card" onclick="window.location.href='profile.html'">
+        <img src="avatar2.jpg" alt="Priya Shah" class="avatar" />
+        <div class="friend-info">
+          <h2>Priya Shah</h2>
+          <p>📅 5 days ago</p>
+          <p>📍 Bookstore Meetup</p>
+        </div>
+      </div>
+
+      <div class="friend-card" onclick="window.location.href='profile.html'">
+        <img src="avatar3.jpg" alt="Leo Park" class="avatar" />
+        <div class="friend-info">
+          <h2>Leo Park</h2>
+          <p>📅 10 days ago</p>
+          <p>📍 Co-working Space</p>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+</body>
+</html>

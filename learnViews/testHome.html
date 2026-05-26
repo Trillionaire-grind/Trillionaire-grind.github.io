@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Siguineau, Képler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #D31034;
+      --blue: #0020A0;
+      --green: #005315;
+      --cta: #FF0C36;
+      --gold: #DAA123;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --max: 1080px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+
+    .page { min-height: 100vh; }
+
+    .container {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+    }
+
+    /* —— Intro (Ali-style landing) —— */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+      padding: 48px 0 64px;
+    }
+
+    .eyebrow {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0 0 12px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.12;
+      margin: 0 0 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-lead {
+      font-size: 1.125rem;
+      color: var(--muted);
+      margin: 0 0 20px;
+      max-width: 34rem;
+    }
+
+    .pronounce {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+
+    .pronounce button {
+      border: none;
+      background: var(--surface);
+      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: grid;
+      place-items: center;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--cta);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255, 12, 54, 0.28);
+    }
+
+    .btn-primary:hover { background: #000; }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+
+    .btn-ghost:hover { background: #f5f5f5; }
+
+    .hero-photo {
+      position: relative;
+    }
+
+    .hero-photo img {
+      width: 100%;
+      max-height: 520px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-photo::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 40%;
+      border-radius: 0 0 var(--radius) var(--radius);
+      background: linear-gradient(transparent, rgba(0,0,0,0.04));
+      pointer-events: none;
+    }
+
+    .section {
+      padding: 56px 0;
+    }
+
+    .section-white {
+      background: var(--surface);
+    }
+
+    .section-title {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      text-align: center;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      margin: 0 auto 40px;
+      max-width: 32rem;
+    }
+
+    .help-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .help-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .help-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+    }
+
+    .help-card img {
+      height: 32px;
+      width: auto;
+      max-width: 44px;
+      margin-bottom: 16px;
+      object-fit: contain;
+    }
+
+    .help-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.15rem;
+    }
+
+    .help-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .help-card--apps { border-top: 4px solid var(--red); }
+    .help-card--apps h3 { color: var(--red); }
+    .help-card--business { border-top: 4px solid var(--blue); }
+    .help-card--business h3 { color: var(--blue); }
+    .help-card--city { border-top: 4px solid var(--green); }
+    .help-card--city h3 { color: var(--green); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .about-photo {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .about-photo img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+    }
+
+    .about-grid h2 {
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      margin: 0 0 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .about-grid > div:last-child {
+      text-align: left;
+    }
+
+    .about-grid p {
+      color: var(--muted);
+      margin: 0 0 14px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--bg);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .pill-link {
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.15s, border-color 0.15s;
+    }
+
+    .pill-link:hover {
+      background: var(--surface);
+      transform: translateY(-1px);
+    }
+
+    .pill--red { color: var(--red); border-color: rgba(211, 16, 52, 0.2); }
+    .pill--blue { color: var(--blue); border-color: rgba(0, 32, 160, 0.2); }
+    .pill--green { color: var(--green); border-color: rgba(0, 83, 21, 0.2); }
+
+    .featured {
+      background: linear-gradient(135deg, #fff 0%, #f8f9fb 100%);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      box-shadow: var(--shadow);
+      text-align: center;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .featured h2 {
+      color: var(--red);
+      margin: 0 0 12px;
+      font-size: 1.75rem;
+    }
+
+    .featured p {
+      color: var(--muted);
+      max-width: 36rem;
+      margin: 0 auto 24px;
+    }
+
+    .site-footer {
+      text-align: center;
+      padding: 32px 0 48px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* —— Pitch (from homeView) —— */
+    #pitchPage {
+      display: none;
+      min-height: 100vh;
+      overflow-y: auto;
+      padding-bottom: 88px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .pitch-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 4%;
+      background: var(--surface);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .pitch-back {
+      border: none;
+      background: none;
+      font-size: 14px;
+      color: var(--blue);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .pitch-title {
+      text-align: center;
+      font-size: clamp(1.5rem, 4vw, 1.75rem);
+      font-weight: 700;
+      margin: 24px 16px 8px;
+    }
+
+    .salesCopy {
+      width: min(720px, 92%);
+      margin: 0 auto 32px;
+      line-height: 1.65;
+    }
+
+    .sales-section { margin-bottom: 28px; }
+    .sales-section h2 {
+      font-size: 1.35rem;
+      color: var(--red);
+      margin: 28px 0 12px;
+    }
+    .sales-section h3 {
+      font-size: 1.05rem;
+      color: var(--blue);
+      margin: 18px 0 8px;
+    }
+    .sales-lead { font-size: 1.05rem; font-weight: 600; }
+    .sales-list { padding-left: 1.25em; }
+    .sales-list li { margin-bottom: 8px; }
+
+    .highlighted-quote {
+      border-left: 4px solid var(--gold);
+      padding: 12px 16px;
+      margin: 16px 0;
+      font-style: italic;
+      background: var(--surface);
+      border-radius: 0 8px 8px 0;
+      color: #333;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin: 10px 0;
+      border-left: 4px solid var(--green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .stat-card strong { color: var(--blue); }
+
+    .sales-callout {
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 16px 0;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .sales-question {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--red);
+      margin: 24px 0 12px;
+    }
+
+    .sticky-cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      z-index: 30;
+      display: none;
+      pointer-events: none;
+    }
+
+    .sticky-cta.visible { display: block; }
+
+    .sticky-cta .btn-primary {
+      width: min(480px, 88%);
+      margin: 0 auto;
+      pointer-events: auto;
+    }
+
+    @media (max-width: 860px) {
+      .hero,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-photo { order: -1; }
+      .hero-photo img { max-height: 360px; }
+
+      .help-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="introPage" class="page">
+    <section class="container hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Hey Friends 👋</p>
+        <h1>I'm Siguineau, Képler.<br>Apps, business &amp; cities.</h1>
+        <p class="hero-lead">
+          I document what I'm building — from software and sales to city-scale projects starting in my hometown, Kotfè, Haiti.
+        </p>
+        <div class="pronounce">
+          <span>(cape-lair see-gee-no)</span>
+          <button type="button" onclick="playAudio()" aria-label="Hear name pronunciation">
+            <img src="assets/ear.svg" alt="" width="18" height="18">
+          </button>
+        </div>
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" onclick="goToPage('kotfe')">Explore Mangé Lakay</button>
+          <a class="btn btn-ghost" href="learn.html#notes" data-learn-nav="notes">Read my notes</a>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <img src="assets/sitting.png" alt="Siguineau, Képler">
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container">
+        <h2 class="section-title">How can I help you?</h2>
+        <p class="section-sub">Pick a lane — each one is a different way I think about building wealth and impact.</p>
+        <div class="help-grid">
+          <a class="help-card help-card--apps" href="learn.html#notes" data-learn-nav="notes">
+            <img src="assets/app_r.svg" alt="">
+            <h3>Apps</h3>
+            <p>Learn how to build software — tutorials, ideas, and projects you can ship yourself.</p>
+          </a>
+          <a class="help-card help-card--business" href="learn.html#notes" data-learn-nav="notes">
+            <img src="assets/banknote_b.svg" alt="">
+            <h3>Businesses</h3>
+            <p>Sales, investing, and entrepreneurship — practical notes from the field.</p>
+          </a>
+          <a class="help-card help-card--city" href="learn.html#notes" data-learn-nav="notes">
+            <img src="assets/building_g.svg" alt="">
+            <h3>Cities</h3>
+            <p>How cities grow, zone, and create prosperity — and what that means for Haiti.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container about-grid">
+        <div class="about-photo">
+          <img src="assets/beach.png" alt="Siguineau, Képler at the beach">
+        </div>
+        <div>
+          <h2>Hey, I'm Siguineau, Képler</h2>
+          <p>
+            I grew up in Kotfè and spent years in the U.S. learning business, software, and how capital actually moves. Now I'm applying those lessons back home — starting with food, land, and the Mangé Lakay project.
+          </p>
+          <p>
+            This site is where I share notes on apps, business, and city-building — and where you can follow the Mangé Lakay journey from eggs on the ground to a 40-year vision for Kotfè.
+          </p>
+          <div class="pill-row">
+            <button type="button" class="pill pill-link pill--red" data-notes-genre="apps">Apps</button>
+            <button type="button" class="pill pill-link pill--blue" data-notes-genre="business">Business</button>
+            <button type="button" class="pill pill-link pill--green" data-notes-genre="city">Cities</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-white">
+      <div class="container">
+        <div class="featured">
+          <h2>Mangé Lakay Project</h2>
+          <p>
+            A long-horizon plan to build value in Kotfè through agriculture, capital allocation, and infrastructure — starting with eggs today and scaling over decades.
+          </p>
+          <button type="button" class="btn btn-primary" onclick="goToPage('kotfe')">Read the full pitch</button>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer container">
+      Version 0.2.9.3 · <a href="homeView.html" style="color: var(--blue);">Classic home</a>
+    </footer>
+  </div>
+
+  <audio id="audio" src="assets/name.mp3"></audio>
+
+  <script type="module">
+    import { initLearnNav, goToPage, goToNotesGenre } from "./scripts/learnNav.js";
+
+    initLearnNav("home");
+    window.goToPage = goToPage;
+
+    document.querySelectorAll("[data-learn-nav]").forEach((el) => {
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        goToPage(el.dataset.learnNav);
+      });
+    });
+
+    document.querySelectorAll("[data-notes-genre]").forEach((el) => {
+      el.addEventListener("click", () => goToNotesGenre(el.dataset.notesGenre));
+    });
+  </script>
+  <script>
+    function playAudio() {
+      document.getElementById("audio").play();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ht">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title data-i18n="pass.pageTitle">Liv Lakay Access Pass</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f0fdf4;
+        color: #0f172a;
+      }
+      .wrap {
+        max-width: 860px;
+        margin: 0 auto;
+        padding: 24px 16px 52px;
+      }
+      /* Same language switcher as liv.html landing */
+      .liv-landing-lang-wrap {
+        position: fixed;
+        top: 12px;
+        right: 12px;
+        z-index: 1200;
+        width: 106px;
+      }
+      .liv-landing-lang-btn {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        border: 1px solid #d8dee4;
+        background: #fff;
+        color: #1e293b;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 12px;
+        text-align: center;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .liv-landing-lang-btn:active {
+        transform: none;
+      }
+      .liv-landing-lang-menu {
+        display: none;
+        position: absolute;
+        right: 0;
+        margin-top: 6px;
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        padding: 4px;
+        min-width: 120px;
+      }
+      .liv-landing-lang-menu.is-open {
+        display: block;
+      }
+      .liv-landing-lang-option {
+        width: 100%;
+        text-align: left;
+        border: 0;
+        background: transparent;
+        border-radius: 8px;
+        padding: 8px 10px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      .liv-landing-lang-option:hover {
+        background: #f1f5f9;
+      }
+      .card {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        padding: 18px;
+      }
+      .hero {
+        text-align: center;
+        margin-bottom: 18px;
+      }
+      .eyebrow {
+        display: inline-block;
+        background: #dcfce7;
+        color: #166534;
+        border: 1px solid #86efac;
+        border-radius: 999px;
+        padding: 4px 10px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+      h1 {
+        margin: 10px 0 8px;
+        font-size: 1.9rem;
+        line-height: 1.2;
+      }
+      p {
+        line-height: 1.45;
+      }
+      .sub {
+        max-width: 680px;
+        margin: 0 auto;
+        color: #374151;
+        font-size: 1.02rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 14px;
+      }
+      @media (max-width: 780px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      .video-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        border: 1px solid #d1d5db;
+      }
+      .video-wrap iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+      .price {
+        font-size: 1.35rem;
+        font-weight: 700;
+        color: #166534;
+        margin-top: 8px;
+      }
+      .btn {
+        width: 100%;
+        margin-top: 12px;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .btn-primary {
+        background: #2abf5b;
+        color: #fff;
+      }
+      .btn-primary:hover {
+        background: #249f4c;
+      }
+      .btn-secondary {
+        background: #fff;
+        color: #166534;
+        border: 2px solid #2abf5b;
+      }
+      .benefits {
+        margin: 10px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .benefits li {
+        margin: 8px 0;
+        color: #374151;
+      }
+      .status {
+        margin-top: 14px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 0.94rem;
+        line-height: 1.4;
+      }
+      .status.info { background: #eff6ff; color: #1e40af; }
+      .status.success { background: #ecfdf3; color: #065f46; }
+      .status.error { background: #fef2f2; color: #991b1b; }
+      .code-box {
+        margin-top: 14px;
+        border: 1px dashed #2abf5b;
+        border-radius: 12px;
+        padding: 12px;
+        background: #f0fdf4;
+      }
+      .code {
+        font-size: 1.25rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        word-break: break-all;
+      }
+      .hint {
+        margin-top: 10px;
+        font-size: 0.88rem;
+        color: #4b5563;
+      }
+      .top-link {
+        display: inline-block;
+        margin: 0 0 14px;
+        color: #166534;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .small {
+        font-size: 0.85rem;
+        color: #6b7280;
+        margin-top: 10px;
+      }
+      .liv-pass-dev-card {
+        margin-top: 16px;
+        max-width: 860px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px dashed #94a3b8;
+        background: #f8fafc;
+        font-size: 0.9rem;
+        line-height: 1.45;
+      }
+      .liv-pass-dev-card h3 {
+        margin: 0 0 8px;
+        font-size: 1rem;
+        color: #0f172a;
+      }
+      .liv-pass-dev-card code {
+        font-size: 0.82rem;
+        word-break: break-all;
+      }
+      .liv-pass-dev-label {
+        display: block;
+        margin: 12px 0 4px;
+        font-weight: 600;
+        font-size: 0.88rem;
+      }
+      .liv-pass-dev-input {
+        width: 100%;
+        max-width: 420px;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        font-size: 0.95rem;
+      }
+      .liv-pass-dev-card .btn {
+        margin-top: 12px;
+        max-width: 420px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="liv-landing-lang-wrap" id="livPassLangWrap">
+      <button type="button" class="liv-landing-lang-btn" id="livPassLangBtn" aria-haspopup="true" aria-expanded="false" aria-controls="livPassLangMenu">KR/EN/ES/FR</button>
+      <div class="liv-landing-lang-menu" id="livPassLangMenu" role="menu" aria-label="Language">
+        <button type="button" class="liv-landing-lang-option" data-lang="ht" role="menuitem" lang="ht">Kreyòl (HT)</button>
+        <button type="button" class="liv-landing-lang-option" data-lang="fr" role="menuitem" lang="fr">Français (FR)</button>
+        <button type="button" class="liv-landing-lang-option" data-lang="es" role="menuitem" lang="es">Español (ES)</button>
+        <button type="button" class="liv-landing-lang-option" data-lang="en" role="menuitem" lang="en">English (EN)</button>
+      </div>
+    </div>
+    <div class="wrap">
+      <a class="top-link" href="liv.html" data-i18n="pass.backLink">← Back to Liv Lakay</a>
+      <section class="hero">
+        <span class="eyebrow" data-i18n="pass.eyebrow">Liv Lakay Access Pass</span>
+        <h1 data-i18n="pass.headline">Open the door to quality school books in Kreyol</h1>
+        <p class="sub" data-i18n="pass.sub">One secure payment gives you a one-time access code for account signup. After signup, you can read the Liv Lakay library from your phone or computer.</p>
+      </section>
+
+      <div class="grid">
+        <div class="card">
+          <div class="video-wrap">
+            <iframe
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+              data-i18n-title="pass.videoIframeTitle"
+              title="Liv Lakay introduction video"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <p class="small" data-i18n="pass.videoHint">Replace this video URL with your real sales/intro video.</p>
+        </div>
+
+        <div class="card">
+          <h2 style="margin:0;" data-i18n="pass.ctaTitle">Get your access code now</h2>
+          <p class="price" data-i18n="pass.price">$10.00 USD</p>
+          <ul class="benefits">
+            <li data-i18n="pass.benefit1">✅ One-time code generation after payment</li>
+            <li data-i18n="pass.benefit2">✅ Code is consumed at signup for security</li>
+            <li data-i18n="pass.benefit3">✅ Supports your education mission</li>
+          </ul>
+          <button id="buyBtn" type="button" class="btn btn-primary" data-i18n="pass.buyBtn">Buy access code</button>
+          <button id="copyBtn" type="button" class="btn btn-secondary" hidden data-i18n="pass.copyBtn">Copy code</button>
+
+          <div id="status" class="status info" hidden></div>
+          <div id="codeWrap" class="code-box" hidden>
+            <div data-i18n="pass.yourCodeLabel">Your access code:</div>
+            <div id="code" class="code"></div>
+            <div class="hint" data-i18n="pass.codeHint">Keep this code safe. It is consumed when used for signup.</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="livPassDevPanel" class="liv-pass-dev-card" hidden>
+        <h3>Local test (dev only)</h3>
+        <p>
+          Deploy <code>mintLivDevAccessCode</code>, set the Firebase function parameter
+          <code>LIV_DEV_MINT_KEY</code> (dev/staging project only), paste the HTTPS URL into
+          <code>livViews/scripts/livCheckoutConfig.js</code> as <code>LIV_DEV_MINT_URL</code>, then use the same key below.
+        </p>
+        <label class="liv-pass-dev-label" for="livPassDevKey">Dev mint key</label>
+        <input
+          type="password"
+          id="livPassDevKey"
+          class="liv-pass-dev-input"
+          autocomplete="off"
+          placeholder="Matches LIV_DEV_MINT_KEY on the function"
+        >
+        <button type="button" id="livPassDevMintBtn" class="btn btn-secondary">Generate test code &amp; open signup</button>
+      </div>
+    </div>
+
+    <script type="module">
+      import {
+        LIV_CREATE_CHECKOUT_SESSION_URL,
+        LIV_REVEAL_ACCESS_CODE_URL,
+        LIV_DEV_MINT_URL,
+      } from "./livViews/scripts/livCheckoutConfig.js";
+      import { initLivI18n, applyLivI18n, setLivLang, t } from "./livViews/scripts/livI18n.js?v=20260423b";
+
+      initLivI18n();
+      applyLivI18n(document);
+
+      const buyBtn = document.getElementById("buyBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const statusEl = document.getElementById("status");
+      const codeWrap = document.getElementById("codeWrap");
+      const codeEl = document.getElementById("code");
+      const langWrap = document.getElementById("livPassLangWrap");
+      const langBtn = document.getElementById("livPassLangBtn");
+      const langMenu = document.getElementById("livPassLangMenu");
+
+      const LIV_DEV_MINT_STORAGE = "livDevMintKey";
+
+      function isDevMintUiEnabled() {
+        try {
+          if (new URLSearchParams(window.location.search).get("devMint") === "1") {
+            return true;
+          }
+          const h = window.location.hostname;
+          return h === "localhost" || h === "127.0.0.1";
+        } catch {
+          return false;
+        }
+      }
+
+      function showDevPanelIfLocal() {
+        const panel = document.getElementById("livPassDevPanel");
+        if (!panel || !isDevMintUiEnabled()) return;
+        panel.hidden = false;
+        const input = document.getElementById("livPassDevKey");
+        const saved = sessionStorage.getItem(LIV_DEV_MINT_STORAGE);
+        if (input && saved) input.value = saved;
+      }
+
+      function showStatus(msg, kind) {
+        statusEl.hidden = false;
+        statusEl.className = `status ${kind}`;
+        statusEl.textContent = msg;
+      }
+
+      function showCode(code) {
+        codeEl.textContent = code;
+        codeWrap.hidden = false;
+        copyBtn.hidden = false;
+      }
+
+      async function startCheckout() {
+        if (!LIV_CREATE_CHECKOUT_SESSION_URL) {
+          showStatus(t("pass.statusCheckoutMissing"), "error");
+          return;
+        }
+        buyBtn.disabled = true;
+        showStatus(t("pass.statusRedirecting"), "info");
+        try {
+          const r = await fetch(LIV_CREATE_CHECKOUT_SESSION_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              successPath: "/livPass.html",
+              cancelPath: "/livPass.html",
+            }),
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok || !data.url) throw new Error(data.error || "checkout_failed");
+          window.location.href = data.url;
+        } catch (err) {
+          showStatus(t("pass.statusCheckoutFail"), "error");
+          buyBtn.disabled = false;
+        }
+      }
+
+      async function revealFromSessionId(sessionId) {
+        if (!LIV_REVEAL_ACCESS_CODE_URL) {
+          showStatus(t("pass.statusRevealMissing"), "error");
+          return;
+        }
+        showStatus(t("pass.statusRevealStart"), "info");
+        for (let i = 0; i < 8; i++) {
+          const r = await fetch(LIV_REVEAL_ACCESS_CODE_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ sessionId }),
+          });
+          const data = await r.json().catch(() => ({}));
+          if (r.ok && data.accessCodeId) {
+            showCode(data.accessCodeId);
+            showStatus(t("pass.statusRevealOk"), "success");
+            return;
+          }
+          if (!data.pending) break;
+          await new Promise((resolve) => setTimeout(resolve, 1500));
+        }
+        showStatus(t("pass.statusRevealPending"), "info");
+      }
+
+      buyBtn.addEventListener("click", startCheckout);
+      copyBtn.addEventListener("click", async function () {
+        const v = codeEl.textContent.trim();
+        if (!v) return;
+        try {
+          await navigator.clipboard.writeText(v);
+          showStatus(t("pass.statusCopied"), "success");
+        } catch {
+          showStatus(t("pass.statusCopyFail"), "error");
+        }
+      });
+
+      if (langBtn && langMenu && langWrap) {
+        langBtn.addEventListener("click", function () {
+          const open = !langMenu.classList.contains("is-open");
+          langMenu.classList.toggle("is-open", open);
+          langBtn.setAttribute("aria-expanded", open ? "true" : "false");
+        });
+
+        langMenu.querySelectorAll("[data-lang]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const next = btn.getAttribute("data-lang");
+            if (!next) return;
+            setLivLang(next);
+            applyLivI18n(document);
+            langMenu.classList.remove("is-open");
+            langBtn.setAttribute("aria-expanded", "false");
+          });
+        });
+
+        document.addEventListener("click", function (e) {
+          if (!langWrap.contains(e.target)) {
+            langMenu.classList.remove("is-open");
+            langBtn.setAttribute("aria-expanded", "false");
+          }
+        });
+      }
+
+      document.getElementById("livPassDevMintBtn")?.addEventListener("click", async function () {
+        const url = String(LIV_DEV_MINT_URL || "").trim();
+        if (!url) {
+          window.alert(
+            "Set LIV_DEV_MINT_URL in livViews/scripts/livCheckoutConfig.js to your deployed mintLivDevAccessCode URL."
+          );
+          return;
+        }
+        const keyInput = document.getElementById("livPassDevKey");
+        let key = (keyInput && keyInput.value.trim()) || sessionStorage.getItem(LIV_DEV_MINT_STORAGE) || "";
+        if (!key) {
+          key = String(
+            window.prompt(
+              "Enter dev mint key (must match Firebase param LIV_DEV_MINT_KEY on mintLivDevAccessCode):"
+            ) || ""
+          ).trim();
+          if (!key) return;
+        }
+        sessionStorage.setItem(LIV_DEV_MINT_STORAGE, key);
+        if (keyInput) keyInput.value = key;
+        try {
+          const r = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Liv-Dev-Mint": key,
+            },
+            body: "{}",
+          });
+          const data = await r.json().catch(() => ({}));
+          if (!r.ok || !data.accessCodeId) {
+            console.error(data);
+            window.alert("Mint failed: " + (data.error || "HTTP " + r.status));
+            return;
+          }
+          window.location.href =
+            "liv.html?openSignup=1&code=" + encodeURIComponent(data.accessCodeId);
+        } catch (e) {
+          console.error(e);
+          window.alert(
+            "Mint request failed. Check the function URL, CORS, and that LIV_DEV_MINT_KEY is set on the function."
+          );
+        }
+      });
+
+      (function initFromUrl() {
+        applyLivI18n(document);
+        showDevPanelIfLocal();
+        const params = new URLSearchParams(window.location.search);
+        const state = params.get("pass");
+        const sessionId = params.get("session_id");
+        if (state === "paid" && sessionId) {
+          buyBtn.hidden = true;
+          revealFromSessionId(sessionId);
+          return;
+        }
+        if (state === "cancelled") {
+          showStatus(t("pass.statusCancelled"), "info");
+        }
+      })();
+    </script>
+  </body>
+</html>

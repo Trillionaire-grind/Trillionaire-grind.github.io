@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Note — Siguineau, Képler</title>
+  <meta id="metaDescription" name="description" content="Notes by Siguineau, Képler">
+  <meta id="ogTitle" property="og:title" content="Siguineau, Képler">
+  <meta id="ogDescription" property="og:description" content="">
+  <meta property="og:type" content="article">
+  <meta id="ogImage" property="og:image" content="">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/noteArticle.css">
+</head>
+<body>
+  <div class="blogContainer">
+    <p id="noteStatus" class="note-loading">Loading…</p>
+    <article id="noteContent" class="note-article-shell" hidden>
+      <div class="note-article-toolbar">
+        <a id="backToNotes" class="note-back-link" href="learn.html#notes">← Back to notes</a>
+        <button type="button" id="copyNoteLinkBtn" class="note-copy-link">Copy link</button>
+      </div>
+      <header class="note-article-header">
+        <p id="noteGenre" class="note-genre"></p>
+        <h1 id="noteTitle" class="note-article-title"></h1>
+        <div id="noteMeta" class="note-meta"></div>
+      </header>
+      <div id="noteBody" class="note-article-body"></div>
+    </article>
+  </div>
+  <script type="module">
+    import { fetchLearnNote, formatNoteDate, noteCreatedMs, formatNoteBody } from "./scripts/learnNotesService.js";
+    import { noteThumbnailUrl } from "./scripts/learnNoteThumbnails.js";
+    import { copyNoteLink } from "./scripts/learnNoteUrls.js";
+    import { trackLearnEvent } from "./scripts/learnAnalytics.js";
+    import { initLearnNav } from "./scripts/learnNav.js";
+    import {
+      buildNoteMetaHtml,
+      estimateReadMinutes,
+      normalizeAuthorType,
+      noteAuthorLabel,
+    } from "./scripts/learnNoteReadTime.js";
+
+    initLearnNav("notes");
+
+    const params = new URLSearchParams(window.location.search);
+    const noteId = params.get("id");
+    const statusEl = document.getElementById("noteStatus");
+    const contentEl = document.getElementById("noteContent");
+    const genreEl = document.getElementById("noteGenre");
+    const titleEl = document.getElementById("noteTitle");
+    const metaEl = document.getElementById("noteMeta");
+    const bodyEl = document.getElementById("noteBody");
+    const copyBtn = document.getElementById("copyNoteLinkBtn");
+
+    const genreLabels = { apps: "Apps", business: "Business", city: "Cities" };
+
+    function setMeta(name, content) {
+      const el = document.getElementById(name);
+      if (el) el.setAttribute("content", content);
+    }
+
+    function renderMeta(note) {
+      const dateLabel = formatNoteDate(noteCreatedMs(note));
+      const readMin = estimateReadMinutes(note);
+      const authorType = normalizeAuthorType(note);
+      metaEl.innerHTML = buildNoteMetaHtml({
+        dateLabel,
+        readMin,
+        author: noteAuthorLabel(note),
+        authorType,
+      });
+    }
+
+    async function loadNote() {
+      if (!noteId) {
+        statusEl.textContent = "Note not found.";
+        statusEl.className = "note-error";
+        return;
+      }
+
+      try {
+        const note = await fetchLearnNote(noteId);
+        if (!note) {
+          statusEl.textContent = "Note not found.";
+          statusEl.className = "note-error";
+          return;
+        }
+
+        contentEl.classList.add(`note-article-shell--${note.genre}`);
+        genreEl.textContent = genreLabels[note.genre] || note.genre;
+        titleEl.textContent = note.title;
+        renderMeta(note);
+        bodyEl.innerHTML = formatNoteBody(note.body || "");
+        statusEl.hidden = true;
+        contentEl.hidden = false;
+        document.title = `${note.title} — Siguineau, Képler`;
+
+        const desc = note.summary || note.title;
+        const thumb = noteThumbnailUrl(note);
+        setMeta("metaDescription", desc);
+        setMeta("ogTitle", `${note.title} — Siguineau, Képler`);
+        setMeta("ogDescription", desc);
+        if (thumb) setMeta("ogImage", thumb);
+
+        copyBtn?.addEventListener("click", async () => {
+          const ok = await copyNoteLink(note);
+          copyBtn.textContent = ok ? "Copied!" : "Copy link";
+          trackLearnEvent("share_note", { note_id: note.id });
+          if (ok) setTimeout(() => { copyBtn.textContent = "Copy link"; }, 2000);
+        });
+
+        trackLearnEvent("view_note", { note_id: note.id, note_title: note.title });
+      } catch (error) {
+        statusEl.textContent = "Could not load this note.";
+        statusEl.className = "note-error";
+      }
+    }
+
+    loadNote();
+  </script>
+</body>
+</html>

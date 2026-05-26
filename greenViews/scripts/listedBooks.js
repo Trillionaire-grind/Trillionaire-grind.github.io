@@ -9,15 +9,14 @@ import { doc, setDoc, collection, addDoc , getFirestore,getDoc, getDocs, query, 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyBtOJ476HXPPTqhs7GFhCrRBbBlHO3n5Pk",
-    authDomain: "mvp-greenbooks.firebaseapp.com",
-    projectId: "mvp-greenbooks",
-    storageBucket: "mvp-greenbooks.firebasestorage.app",
-    messagingSenderId: "855438667917",
-    appId: "1:855438667917:web:63646f84aa4fd5c82a72c4",
-    measurementId: "G-WH3NHEGR92"
+    apiKey: "AIzaSyC9cxAdUPzgjbqvcJ5gMWpB1trMci4WIm8",
+    authDomain: "green-books-app.firebaseapp.com",
+    projectId: "green-books-app",
+    storageBucket: "green-books-app.firebasestorage.app",
+    messagingSenderId: "153412264348",
+    appId: "1:153412264348:web:c4cb56c38cbcad59a16859",
+    measurementId: "G-B0XMGHPWYW"
 };
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);

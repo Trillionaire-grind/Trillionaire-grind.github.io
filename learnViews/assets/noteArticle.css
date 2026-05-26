@@ -1,0 +1,334 @@
+:root {
+  --red: #D31034;
+  --blue: #0020A0;
+  --green: #005315;
+  --cta: #FF0C36;
+  --gold: #DAA123;
+  --bg: #F0F1F3;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --muted: #5c6370;
+  --radius: 16px;
+  --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+  --max: 720px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.65;
+  margin: 0;
+  padding: 0 0 48px;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.blogContainer {
+  width: min(var(--max), 92%);
+  margin: 32px auto 48px;
+}
+
+.note-article-shell {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-left: 4px solid var(--note-accent, var(--red));
+  overflow: hidden;
+}
+
+.note-article-shell--apps { --note-accent: var(--red); }
+.note-article-shell--business { --note-accent: var(--blue); }
+.note-article-shell--city { --note-accent: var(--green); }
+
+.note-article-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px 0;
+}
+
+.note-back-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.note-back-link:hover { color: var(--blue); }
+
+.note-copy-link {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: var(--surface);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  cursor: pointer;
+  font-weight: 600;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s;
+}
+
+.note-copy-link:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
+.note-article-header {
+  padding: 16px 24px 28px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.note-genre {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 12px;
+  color: var(--note-accent, var(--red));
+}
+
+.note-article-title {
+  color: var(--text);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 12px;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.note-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.note-meta-dot { opacity: 0.45; }
+
+.note-author {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.note-author--collab {
+  color: var(--muted);
+}
+
+.note-ai-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+  color: var(--muted);
+}
+
+.note-article-body {
+  padding: 28px 24px 32px;
+  font-size: 16px;
+}
+
+.note-article-body h2,
+.note-article-body h3 {
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+.note-article-body h2 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin: 32px 0 12px;
+  color: var(--blue);
+}
+
+.note-article-body h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 24px 0 10px;
+}
+
+.note-article-body p {
+  margin: 0 0 16px;
+  color: var(--text);
+}
+
+.note-article-body pre {
+  background: var(--bg);
+  padding: 14px;
+  border-radius: 10px;
+  overflow-x: auto;
+  font-family: ui-monospace, monospace;
+  font-size: 14px;
+  margin: 20px 0;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.note-article-body code {
+  background: rgba(0, 32, 160, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+.note-article-body pre code {
+  background: none;
+  padding: 0;
+}
+
+.note-article-body a {
+  color: var(--blue);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.note-article-body a:hover {
+  color: var(--text);
+}
+
+.note-article-body ul,
+.note-article-body ol {
+  padding-left: 1.25em;
+  margin: 0 0 16px;
+}
+
+.note-article-body li {
+  margin-bottom: 8px;
+}
+
+.note-article-body .note-video {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin: 24px 0;
+  background: #0d1b2a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.note-article-body .note-video iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.note-article-body .note-video-error {
+  color: var(--red);
+  font-size: 14px;
+  margin: 16px 0;
+}
+
+.note-article-body blockquote {
+  border-left: 4px solid var(--gold);
+  padding: 12px 16px;
+  color: var(--text);
+  margin: 24px 0;
+  font-style: italic;
+  background: var(--bg);
+  border-radius: 0 10px 10px 0;
+}
+
+.note-loading,
+.note-error {
+  text-align: center;
+  padding: 64px 16px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.note-error { color: var(--red); }
+
+/* Static HTML notes (via noteBranding.js) */
+body.static-note-reader {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}
+
+.blogContainer.note-article-shell {
+  width: min(var(--max), 92%) !important;
+  max-width: none !important;
+  margin: 32px auto 48px !important;
+  padding: 0 !important;
+  background: var(--surface) !important;
+  box-shadow: var(--shadow) !important;
+  border-radius: var(--radius) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-left: 4px solid var(--note-accent, var(--red)) !important;
+  overflow: hidden;
+}
+
+.blogContainer.note-article-shell h1 {
+  color: var(--text) !important;
+  font-size: clamp(1.5rem, 4vw, 2rem) !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.02em !important;
+  margin: 0 0 12px !important;
+}
+
+.blogContainer.note-article-shell h2 {
+  color: var(--blue) !important;
+  font-size: 1.35rem !important;
+  font-weight: 600 !important;
+}
+
+.blogContainer.note-article-shell h3 {
+  color: var(--text) !important;
+}
+
+.blogContainer.note-article-shell blockquote {
+  border-left: 4px solid var(--gold) !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  border-radius: 0 10px 10px 0 !important;
+}
+
+.blogContainer.note-article-shell pre {
+  background: var(--bg) !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  border-radius: 10px !important;
+}
+
+.blogContainer.note-article-shell code {
+  background: rgba(0, 32, 160, 0.08) !important;
+}
+
+.blogContainer.note-article-shell a {
+  color: var(--blue) !important;
+  text-decoration: underline !important;
+}
+
+.blogContainer .note-static-body > *:first-child {
+  margin-top: 0;
+}
+
+.note-video-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  margin: 24px 0;
+  background: #0d1b2a;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.note-video-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}

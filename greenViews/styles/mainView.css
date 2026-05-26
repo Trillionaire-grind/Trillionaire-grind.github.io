@@ -578,5 +578,101 @@
     font-size: 16px;
     padding: 8px; 
   }
+
+  /* Profile (Account) tab */
+  #account.active {
+    padding-bottom: 5rem;
+  }
+
+  .profile-page {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+
+  .profile-header {
+    text-align: center;
+    padding: 0.5rem 0 1.25rem;
+  }
+
+  .profile-avatar {
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 1rem;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #39B053, #2d8f42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(57, 176, 83, 0.35);
+  }
+
+  .profile-avatar-initial {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .profile-title {
+    margin: 0 0 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #666;
+  }
+
+  .profile-name {
+    margin: 0 0 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  .profile-meta {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.35rem;
+    margin: 0.35rem 0 0;
+    font-size: 0.95rem;
+    color: #444;
+    text-align: left;
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .profile-meta-icon {
+    font-size: 1.15rem !important;
+    color: #39B053;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .profile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .profile-action-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .profile-action-signout {
+    background-color: #fff !important;
+    color: #c0392b !important;
+    border: 2px solid #e8e8e8;
+  }
+
+  .profile-action-signout:hover {
+    background-color: #fff5f5 !important;
+    border-color: #c0392b;
+  }
+
   
   

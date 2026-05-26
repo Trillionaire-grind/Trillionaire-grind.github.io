@@ -5,127 +5,160 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Individual Chat</title>
         <style>
-            /* styles.css */
-            /* styles.css */
-            /* styles.css */
-            /* styles.css */
+            :root {
+                --bg: #f5f5f7;
+                --surface: #ffffff;
+                --surface-variant: #f1f1f3;
+                --text: #1c1b1f;
+                --primary: #af2d0b;
+                --outline: #e5e5ea;
+            }
+
             body {
                 font-family: Arial, sans-serif;
-                background-color: #F3F3F3;
+                background-color: var(--bg);
                 margin: 0;
                 padding: 0;
+                min-height: 100dvh;
+            }
+
+            .top-bar {
+                display: flex;
+                align-items: center;
+                min-height: 64px;
+                padding: 0 12px;
+                border-bottom: 1px solid var(--outline);
+                background-color: var(--surface);
+            }
+
+            .back-btn {
+                border: none;
+                background: transparent;
+                color: var(--primary);
+                font-size: 28px;
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            .back-btn:hover {
+                background: #fff1ee;
+            }
+
+            .title {
+                font-weight: 700;
+                font-size: 20px;
+                margin: 0;
             }
 
             .chat-container {
                 width: 100%;
-                height: 90%;
-                border: 1px solid #ccc;
-                background-color: #fff;
+                height: calc(100dvh - 64px);
+                background-color: var(--surface);
                 display: flex;
                 flex-direction: column;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                margin-top: 0px;
             }
 
             .messages {
                 flex: 1;
-                padding: 10px;
+                padding: 12px;
                 overflow-y: auto;
-                background-color: #999;
+                background-color: var(--surface-variant);
             }
 
             .message {
                 margin: 10px 0;
-                padding: 10px;
-                border-radius: 10px;
+                padding: 10px 12px;
+                border-radius: 16px;
                 max-width: 80%;
+                line-height: 1.35;
             }
 
             .receiver {
-                background-color: black;
+                background-color: #1f1f1f;
                 color: white;
                 align-self: flex-end;
-                border:1px solid white;
+                border: 1px solid #1f1f1f;
                 margin-left: auto;
                 margin-right: 8px;
             }
 
             .sender {
                 background-color: #fff;
-                color: black;
+                color: var(--text);
                 align-self: flex-start;
-                border:1px solid black;
-
+                border: 1px solid var(--outline);
             }
 
             .input-container {
-                height: 6%;
                 display: flex;
                 padding: 10px;
-                background-color: #f1f1f1;
+                background-color: var(--surface);
+                border-top: 1px solid var(--outline);
+                gap: 8px;
             }
 
             #chatInput {
                 flex: 1;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
+                padding: 0 12px;
+                border: 1px solid var(--outline);
+                border-radius: 999px;
+                min-height: 44px;
             }
 
             #sendButton {
-                padding: 10px 15px;
+                padding: 0 18px;
                 border: none;
-                border-radius: 5px;
-                background-color: #AF2D0B;
+                border-radius: 999px;
+                background-color: var(--primary);
                 color: white;
                 cursor: pointer;
-                margin-left: 10px;
+                min-height: 44px;
+                font-weight: 700;
             }
 
             #sendButton:hover {
-                background-color: #000;
+                filter: brightness(0.95);
             }
         </style>
     </head>
-    <body style="height: 100vh">
-        <div style="display: flex; height:10%;">
-            <img src="assets/person.svg" height="30px" width="30px" style="margin-left:8px; margin-top: auto;margin-bottom: auto;">
-            <p style="font-weight: bold; font-size: 40px; margin-top:16px; margin-left: auto; margin-right: auto; margin-bottom: 0px;">V.I.P. Group Chat</p>
-        </div> 
-
+    <body>
+        <header class="top-bar">
+            <button class="back-btn" type="button" aria-label="Go back" onclick="window.history.back()">‹</button>
+            <img src="assets/person.svg" height="30" width="30" alt="Chat avatar" style="margin-right: 8px;">
+            <p class="title">V.I.P. Group Chat</p>
+        </header>
         <div class="chat-container">
             <div class="messages" id="messages">
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
                     <div class="message sender">Hello, how are you?</div>
                 </div>
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
                     <div class="message receiver">I'm good, thanks! How about you?</div>
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
                 </div>
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
                     <div class="message sender">Just working on a project.</div>
                 </div>
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
                     <div class="message receiver">What is it about?</div>
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
                 </div>
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
-                    <div class="message sender">We are helping content creators to add value to their audience and earn money from their audience. The chatrooom that we 
-                        are using right now, is one of the feature of this app. This will help create a community for the audience. 
-                    </div>
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
+                    <div class="message sender">We are helping content creators to add value to their audience and earn money from their audience. The chatroom we are using right now is one of the core features.</div>
                 </div>
-                <div style="display: flex; margin-top: 0px; margin-bottom: 0px;">
+                <div style="display: flex; margin-top: 0; margin-bottom: 0;">
                     <div class="message receiver">Sounds interesting!</div>
-                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px; cursor: pointer;" height="30px" width="30px">
+                    <img src="assets/person.svg" style="margin-top: auto; margin-bottom: auto; margin-right: 8px;" height="30" width="30" alt="Participant avatar">
                 </div>
-            
             </div>
             <div class="input-container">
-                <input type="text" placeholder="Type a message..." id="chatInput">
-                <button id="sendButton">Send</button>
+                <input type="text" placeholder="Type a message..." id="chatInput" aria-label="Message input">
+                <button id="sendButton" type="button">Send</button>
             </div>
         </div>
     </body>

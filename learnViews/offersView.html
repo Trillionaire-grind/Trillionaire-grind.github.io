@@ -1,247 +1,552 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Offers</title>
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 45%;
-                margin: 10px;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-
-            .tabs {
-                display: flex;
-                background-color: #ffffff;
-                border-bottom: 1px solid #ddd;
-            }
-
-            .tab {
-                flex: 1;
-                text-align: center;
-                padding: 16px;
-                cursor: pointer;
-                display:flex;
-                transition: background-color 0.3s, color 0.3s;
-            }
-
-            .tab i {
-                font-size: 24px;
-                display: block;
-                margin-bottom: 4px;
-            }
-
-            .tab span {
-                font-size: 14px;
-            }
-
-            .tab.active, .tab:hover {
-                color: #DAA123; /* Primary color */
-            }
-
-            .tab.active {
-                border-bottom: 2px solid #DAA123; /* Active indicator */
-            }
-
-            /* Optional: You can add a slight shadow to the tab bar for a raised effect */
-            .tabs {
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            .search-container {
-                display: flex;
-                align-items: center;
-                width: 90%;
-                margin: 50px auto;
-                padding: 0 10px;
-                border: 1px solid #ddd;
-                border-radius: 10px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                background-color: #EDEDED;
-                
-            }
-
-            /* Search input */
-            #search-input {
-                border: none;
-                padding: 10px 20px;
-                border-radius: 25px;
-                width: 100%;
-                font-size: 16px;
-                outline: none;
-                background-color: #EDEDED;
-
-            }
-
-            /* Search button */
-            #search-button {
-                background: none;
-                border: none;
-                padding: 10px;
-                border-radius: 25px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-            }
-
-            /* Search button icon */
-            #search-button i {
-                font-size: 24px;
-                color: #888;
-            }
-
-            /* Button hover effect */
-            #search-button:hover {
-                background-color: #f0f0f0;
-            }
-
-            .noteCard{
-                background-color: #fff;
-                width: 90%;  
-                margin-left: auto;
-                margin-right: auto;
-                padding: 8px;
-                border-radius: 10px; cursor: pointer;  
-                box-shadow: 0 5px 10px rgba(154,160,185,.05),
-                0 15px 40px rgba(166,173,201,.2);
-            }
-            .noteCard:hover{
-                background-color: #DAA123;
-            }
-        </style>
-    </head>
-    <body style="background-color: #F7F7F7;">
-        <p style="text-align: left; background-color: white; margin: 0px; 
-        padding-left: 8px; padding-top: 32px; font-size: 32px; padding-bottom: 16px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">Offers</p>
-        <!--<div class="tabs" >
-            <div class="tab active" class="tab active" data-icon-default="assets/books.svg" data-icon-active="assets/books_y.svg">
-                <img src="assets/books_y.svg" height="20px" width="20px">
-                <span style="padding-left: 8px;">Education</span>
-            </div>
-            <div class="tab" class="tab" data-icon-default="assets/app.svg" data-icon-active="assets/app_r.svg">
-                <img src="assets/app.svg" height="20px" width="20px">
-                <span style="padding-left: 8px;">Apps</span>
-            </div>
-            <div class="tab" class="tab" data-icon-default="assets/bag.svg" data-icon-active="assets/bag_y.svg">
-                <img src="assets/bag.svg" height="20px" width="20px">
-                <span style="padding-left: 8px;">Services</span>
-            </div>
-        </div>-->
-  
-        <!--<div style="width: 90%; margin: auto; display: flex; margin-top: 32px;">
-            <div class="noteCard" style="width: 45%; padding: 8px; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);" onclick="openIndividualOffer()">
-                <h1>How To Build An App</h1>
-                <p>In this thing we are talkig about how to build an app...</p>
-            </div>
-            <div style="width: 45%; margin-left: 10%; padding: 8px; background-color: white; border-radius: 10px; cursor: pointer;  box-shadow: 0 5px 10px rgba(154,160,185,.05), 0 15px 40px rgba(166,173,201,.2);" onclick="openIndividualOffer()">
-                <h1>How To Build An App</h1>
-                <p>In this thing we are talkig about how to build an app...</p>
-            </div>
-        </div>-->
-        <!--<div id="educationDiv">
-            <div class="noteCard" onclick="openIndividualOffer()">
-                <p style="font-size: 24px; margin-left: 8px;">How To Sell...</p>
-            </div>
-        </div>
-        <div id="appDiv" style="display: none;">
-            <div class="noteCard" onclick="openIndividualOffer()">
-                <p style="font-size: 24px; margin-left: 8px;">How To Never Forget A Name</p>
-            </div>
-        </div>
-        <div id="serviceDiv" style="display: none;">
-            <div class="noteCard" onclick="openIndividualOffer()">
-                <p style="font-size: 24px; margin-left: 8px;">Build Your Billion Dollar Idea</p>
-            </div>
-        </div>-->
-        <div class="noteCard" style="margin-top: 24px;" onclick="openBookListing()">
-            <p style="font-size: 24px; margin-left: 8px;">A Secret Attraction</p>
-        </div>
-    </body>
-    <script>
-   
-   function openIndividualOffer()
-    {
-        let url = `./individualOfferView.html`
-        //let e
-        window.open(url, '_blank').focus();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #D31034;
+      --blue: #0020A0;
+      --green: #005315;
+      --cta: #FF0C36;
+      --gold: #DAA123;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --max: 1080px;
     }
 
-    function openBookListing()
-    {
-        let url = "https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H"
+    * { box-sizing: border-box; }
 
-        window.open(url, '_blank').focus()
+    body {
+      margin: 0;
+      padding: 0 0 48px;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
     }
-    </script>
+
+    .offers-page {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+      padding: 20px 0 40px;
+    }
+
+    .offers-intro {
+      margin: 0 0 28px;
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 42rem;
+      line-height: 1.65;
+    }
+
+    .offers-lanes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .offers-lane-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: var(--surface);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .offers-lane-pill:hover {
+      border-color: rgba(0, 0, 0, 0.12);
+    }
+
+    .offers-lane-pill.is-active {
+      box-shadow: var(--shadow);
+    }
+
+    .offers-lane-pill--all.is-active {
+      color: var(--text);
+      border-color: rgba(0, 0, 0, 0.12);
+      background: var(--surface);
+    }
+
+    .offers-lane-pill--earn.is-active {
+      color: var(--green);
+      border-color: rgba(0, 83, 21, 0.25);
+      background: rgba(0, 83, 21, 0.08);
+    }
+
+    .offers-lane-pill--fun.is-active {
+      color: var(--gold);
+      border-color: rgba(218, 161, 35, 0.35);
+      background: rgba(218, 161, 35, 0.1);
+    }
+
+    .offers-page[data-filter="earn"] .offers-section--fun,
+    .offers-page[data-filter="fun"] .offers-section--earn {
+      display: none;
+    }
+
+    .offers-lane-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .offers-lane-dot--earn { background: var(--green); }
+    .offers-lane-dot--fun { background: var(--gold); }
+
+    .offers-lane-pill--earn { color: var(--green); }
+    .offers-lane-pill--fun { color: var(--gold); }
+    .offers-lane-pill--all { color: var(--muted); }
+
+    .offers-section {
+      margin-bottom: 40px;
+    }
+
+    .offers-section-head {
+      margin-bottom: 16px;
+    }
+
+    .offers-section-head h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .offers-section-head p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 36rem;
+    }
+
+    .offer-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-left: 4px solid var(--offer-accent, var(--gold));
+      overflow: hidden;
+    }
+
+    .offer-card--earn { --offer-accent: var(--green); }
+    .offer-card--fun { --offer-accent: var(--gold); }
+
+    .offer-hero {
+      display: flex;
+      align-items: stretch;
+      gap: 32px;
+      padding: 28px;
+    }
+
+    .offer-copy {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .offer-type {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--offer-accent);
+      margin: 0 0 10px;
+    }
+
+    .offer-copy h3 {
+      font-size: clamp(1.25rem, 3vw, 1.6rem);
+      font-weight: 700;
+      margin: 0 0 8px;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+    }
+
+    .offer-subtitle {
+      margin: 0 0 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .offer-lead {
+      margin: 0 0 14px;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .offer-split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .offer-split-box {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .offer-split-box h4 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--offer-accent);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .offer-split-box p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+
+    .offer-list {
+      margin: 0 0 20px;
+      padding-left: 1.15em;
+      font-size: 14px;
+    }
+
+    .offer-list li {
+      margin-bottom: 8px;
+    }
+
+    .offer-list li::marker {
+      color: var(--offer-accent);
+    }
+
+    .offer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 16px;
+    }
+
+    .btn-primary-offer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 22px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      color: #fff;
+      background: var(--cta);
+      box-shadow: 0 4px 16px rgba(255, 12, 54, 0.28);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .btn-primary-offer:hover {
+      background: #000;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary-offer {
+      display: inline-flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--surface);
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: background 0.15s;
+    }
+
+    .btn-secondary-offer:hover {
+      background: var(--bg);
+    }
+
+    .offer-note {
+      font-size: 12px;
+      color: var(--muted);
+      width: 100%;
+    }
+
+    .offer-visual {
+      width: min(220px, 32%);
+      flex-shrink: 0;
+      align-self: stretch;
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .offer-visual--cover {
+      background: #e8eaed;
+    }
+
+    .offer-visual--cover img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .offer-visual--funnel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 24px 16px;
+      background: linear-gradient(160deg, rgba(0, 83, 21, 0.08), rgba(0, 32, 160, 0.08));
+      border: 1px solid rgba(0, 83, 21, 0.12);
+    }
+
+    .offer-visual--funnel img {
+      width: 48px;
+      height: auto;
+    }
+
+    .offer-visual--funnel span {
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--green);
+      line-height: 1.4;
+    }
+
+    .offers-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      margin-top: 8px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .offers-links a {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--blue);
+      text-decoration: none;
+    }
+
+    .offers-links a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .offer-hero {
+        flex-direction: column;
+        padding: 20px;
+      }
+
+      .offer-split {
+        grid-template-columns: 1fr;
+      }
+
+      .offer-visual {
+        order: -1;
+        width: min(200px, 72%);
+        margin: 0 auto;
+        min-height: 160px;
+        align-self: auto;
+      }
+
+      .offer-visual--cover {
+        aspect-ratio: 2 / 3;
+      }
+
+      .offer-visual--cover img {
+        position: relative;
+        inset: auto;
+        height: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="offers-page" data-filter="all">
+    <p class="offers-intro">
+      This site is mostly about <strong>education</strong> — notes on apps, business, and cities. Offers are different:
+      some help you <strong>earn</strong>, others are purely for <strong>enjoyment</strong>. Use the tabs below to focus on one lane.
+    </p>
+
+    <div class="offers-lanes" role="tablist" aria-label="Offer types">
+      <button type="button" class="offers-lane-pill offers-lane-pill--all is-active" role="tab" aria-selected="true" data-lane="all">
+        All offers
+      </button>
+      <button type="button" class="offers-lane-pill offers-lane-pill--earn" role="tab" aria-selected="false" data-lane="earn">
+        <span class="offers-lane-dot offers-lane-dot--earn" aria-hidden="true"></span>
+        Build &amp; earn — productive
+      </button>
+      <button type="button" class="offers-lane-pill offers-lane-pill--fun" role="tab" aria-selected="false" data-lane="fun">
+        <span class="offers-lane-dot offers-lane-dot--fun" aria-hidden="true"></span>
+        Entertainment — off the clock
+      </button>
+    </div>
+
+    <section class="offers-section offers-section--earn" aria-labelledby="earn-heading">
+      <div class="offers-section-head">
+        <h2 id="earn-heading">Build &amp; earn</h2>
+        <p>Practical offers tied to making money — learn the strategy, then hire us to implement if you want the shortcut.</p>
+      </div>
+
+      <article class="offer-card offer-card--earn">
+        <div class="offer-hero">
+          <div class="offer-copy">
+            <p class="offer-type">Productive · Service</p>
+            <h3>How To Build Your Own Online Marketing Funnel</h3>
+            <p class="offer-subtitle">We teach you what to do — and we can build it for you.</p>
+
+            <p class="offer-lead">
+              A funnel is not one page or one ad. It's the full path: stranger → lead → trust → purchase.
+              Most people jump straight to traffic and wonder why nothing converts.
+            </p>
+
+            <div class="offer-split">
+              <div class="offer-split-box">
+                <h4>Learn the how</h4>
+                <p>
+                  We walk you through what a real funnel needs — offer, landing page, capture, follow-up,
+                  checkout — and how the pieces connect before you spend on ads.
+                </p>
+              </div>
+              <div class="offer-split-box">
+                <h4>We build it</h4>
+                <p>
+                  Don't want to wire it yourself? We implement the funnel for you — pages, flow, and handoff —
+                  so you can focus on your product and sales.
+                </p>
+              </div>
+            </div>
+
+            <ul class="offer-list">
+              <li>For founders, creators, and sellers who need leads that actually convert</li>
+              <li>Education first — implementation optional</li>
+              <li>Aligned with the business notes on this site, applied to your offer</li>
+            </ul>
+
+            <div class="offer-actions">
+              <a class="btn-primary-offer" href="learn.html#speak" data-offers-nav="speak">Book a funnel build call</a>
+              <a class="btn-secondary-offer" href="learn.html#notes" data-offers-nav="notes">Read business notes</a>
+              <span class="offer-note">On the call we'll scope your offer and quote a build if you want done-for-you.</span>
+            </div>
+          </div>
+
+          <div class="offer-visual offer-visual--funnel" aria-hidden="true">
+            <img src="assets/banknote_b.svg" alt="">
+            <span>Traffic → Capture → Nurture → Convert</span>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="offers-section offers-section--fun" aria-labelledby="fun-heading">
+      <div class="offers-section-head">
+        <h2 id="fun-heading">Entertainment</h2>
+        <p>Not everything here is a lesson. This is fiction — read it because you want to, not because it will teach you SQL.</p>
+      </div>
+
+      <article class="offer-card offer-card--fun">
+        <div class="offer-hero">
+          <div class="offer-copy">
+            <p class="offer-type">Entertainment · Fiction</p>
+            <h3>A Secret Attraction Between Mentor and Mentee</h3>
+            <p class="offer-subtitle">On mentorship, ambition, and the tension between guidance and desire.</p>
+
+            <p class="offer-lead">
+              What happens when the person shaping your future becomes the person you can't stop thinking about?
+              This book explores the emotional complexity of mentorship — respect, rivalry, attraction, and the
+              choices that define who you become.
+            </p>
+            <p class="offer-lead">
+              It's written for anyone who has ever had a mentor (or been one) and felt the line between
+              admiration and something deeper.
+            </p>
+
+            <ul class="offer-list">
+              <li>For readers who like character-driven stories with real stakes</li>
+              <li>If you've ever learned more from a person than from a textbook</li>
+              <li>If you're building a life and asking who you're becoming along the way</li>
+            </ul>
+
+            <div class="offer-actions">
+              <a
+                class="btn-primary-offer"
+                href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H"
+                target="_blank"
+                rel="noopener noreferrer">
+                Buy on Amazon
+              </a>
+              <span class="offer-note">Opens Amazon in a new tab</span>
+            </div>
+          </div>
+
+          <div class="offer-visual offer-visual--cover">
+            <img
+              src="../secretAttractionViews/assets/book_cover.jpg"
+              alt="Cover of A Secret Attraction Between Mentor and Mentee">
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <nav class="offers-links" aria-label="Related pages">
+      <a href="learn.html#notes" data-offers-nav="notes">Free education — notes</a>
+      <a href="learn.html#speak" data-offers-nav="speak">Talk to me</a>
+      <a href="learn.html#kotfe" data-offers-nav="kotfe">Mangé Lakay project</a>
+    </nav>
+  </div>
+
+  <script type="module">
+    import { initLearnNav, goToPage } from "./scripts/learnNav.js";
+    initLearnNav("offers");
+
+    document.querySelectorAll("[data-offers-nav]").forEach((el) => {
+      el.addEventListener("click", (event) => {
+        event.preventDefault();
+        goToPage(el.dataset.offersNav);
+      });
+    });
+
+    const offersPage = document.querySelector(".offers-page");
+    const laneTabs = document.querySelectorAll("[data-lane]");
+
+    laneTabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        const lane = tab.dataset.lane;
+        offersPage.dataset.filter = lane;
+
+        laneTabs.forEach((t) => {
+          const active = t === tab;
+          t.classList.toggle("is-active", active);
+          t.setAttribute("aria-selected", active ? "true" : "false");
+        });
+      });
+    });
+  </script>
+</body>
 </html>

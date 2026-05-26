@@ -1,0 +1,267 @@
+:root {
+  --learn-nav-height: 56px;
+  --learn-nav-mobile-breakpoint: 768px;
+}
+
+.learn-app-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: rgba(240, 241, 243, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.learn-app-nav__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 clamp(16px, 4vw, 48px) 0 4px;
+  min-height: var(--learn-nav-height);
+  box-sizing: border-box;
+}
+
+.learn-app-nav__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-right: auto;
+  text-decoration: none;
+  color: #1a1a1a;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  transition: color 0.15s;
+  min-width: 0;
+}
+
+.learn-app-nav__logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex-shrink: 0;
+  display: block;
+  align-self: center;
+}
+
+.learn-app-nav__brand-text {
+  min-width: 0;
+  line-height: 32px;
+  display: block;
+}
+
+.learn-app-nav__brand:hover {
+  color: #0020A0;
+}
+
+.learn-app-nav__toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #1a1a1a;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.learn-app-nav__toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.learn-app-nav__toggle-bars,
+.learn-app-nav__toggle-bars::before,
+.learn-app-nav__toggle-bars::after {
+  display: block;
+  width: 18px;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+}
+
+.learn-app-nav__toggle-bars {
+  position: relative;
+}
+
+.learn-app-nav__toggle-bars::before,
+.learn-app-nav__toggle-bars::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.learn-app-nav__toggle-bars::before {
+  top: -6px;
+}
+
+.learn-app-nav__toggle-bars::after {
+  top: 6px;
+}
+
+.learn-app-nav--open .learn-app-nav__toggle-bars {
+  background: transparent;
+}
+
+.learn-app-nav--open .learn-app-nav__toggle-bars::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.learn-app-nav--open .learn-app-nav__toggle-bars::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+.learn-app-nav__links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.learn-app-nav__links a {
+  text-decoration: none;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 4px 0;
+  white-space: nowrap;
+  transition: color 0.15s;
+}
+
+.learn-app-nav__links a:hover {
+  color: #1a1a1a;
+}
+
+.learn-app-nav__links a.is-active {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.learn-app-nav__backdrop {
+  display: none;
+}
+
+body.learn-nav-active {
+  padding-top: var(--learn-nav-height);
+}
+
+@media (max-width: 768px) {
+  .learn-app-nav__inner {
+    padding: 0 12px 0 4px;
+    gap: 8px;
+  }
+
+  .learn-app-nav__brand {
+    font-size: 14px;
+    margin-right: 0;
+  }
+
+  .learn-app-nav__logo {
+    width: 28px;
+    height: 28px;
+  }
+
+  .learn-app-nav__brand-text {
+    line-height: 28px;
+  }
+
+  .learn-app-nav__toggle {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .learn-app-nav__backdrop {
+    display: block;
+    position: fixed;
+    inset: var(--learn-nav-height) 0 0 0;
+    background: rgba(0, 0, 0, 0.25);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+  }
+
+  .learn-app-nav--open .learn-app-nav__backdrop {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .learn-app-nav__links {
+    position: fixed;
+    top: var(--learn-nav-height);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 8px 12px 16px;
+    background: rgba(248, 249, 250, 0.98);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+  }
+
+  .learn-app-nav--open .learn-app-nav__links {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .learn-app-nav__links a {
+    font-size: 15px;
+    padding: 12px 8px;
+    border-radius: 8px;
+    white-space: normal;
+  }
+
+  .learn-app-nav__links a:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }
+
+  .learn-app-nav__links a.is-active {
+    background: rgba(0, 32, 160, 0.06);
+    color: #0020A0;
+  }
+}
+
+@media (max-width: 420px) {
+  .learn-app-nav__brand {
+    max-width: calc(100% - 48px);
+  }
+
+  .learn-app-nav__brand-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}

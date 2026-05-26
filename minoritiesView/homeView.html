@@ -7,12 +7,47 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>The Minorities</title>
         <style>
+            :root {
+                --bg: #f5f5f7;
+                --surface: #ffffff;
+                --text: #1c1b1f;
+                --muted: #67656f;
+                --primary: #af2d0b;
+                --outline: #e6e1e5;
+            }
+
             /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
                 font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
+                background-color: var(--bg);
+                color: var(--text);
+            }
+            button {
+                font-family: inherit;
+            }
+            .icon-button {
+                border: none;
+                background: transparent;
+                border-radius: 50%;
+                width: 48px;
+                height: 48px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .segment-btn {
+                border: none;
+                background: transparent;
+                cursor: pointer;
+                font-size: 16px;
+                color: var(--muted);
+            }
+            .segment-btn.active {
+                color: var(--text);
+                font-weight: 700;
             }
 
             footer {
@@ -132,8 +167,102 @@
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
                 cursor: pointer;
             }
+            .contentCard > img {
+                display: block;
+                width: 100%;
+                max-height: 320px;
+                object-fit: cover;
+            }
             .contentCard:hover{
                 box-shadow: 0 4px 8px #AF2D0B, 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+            .postCard {
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 10px;
+                margin-top: 16px;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+            .postCard > img {
+                display: block;
+                width: 90%;
+                margin-left: auto;
+                margin-right: auto;
+                max-height: 320px;
+                object-fit: cover;
+            }
+            .shopPromoCard {
+                background-color: white;
+                width: 90%;
+                margin-top: 24px;
+                margin-left: auto;
+                margin-right: auto;
+                border-radius: 10px;
+            }
+            .shopPromoCardWrap {
+                display: flex;
+                height: 100%;
+            }
+            .shopPromoText {
+                width: 50%;
+                background-color: #fff;
+                border-radius: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+            .shopPromoImg {
+                width: 50%;
+                background-color: transparent;
+                max-height: 260px;
+                object-fit: contain;
+            }
+            @media (min-width: 1024px) {
+                .contentCard {
+                    max-width: 760px;
+                }
+                #homeDiv > div,
+                #homeDiv .contentCard {
+                    width: min(760px, 90%);
+                }
+                #postsDiv .postCard {
+                    width: min(760px, 90%);
+                }
+                .shopPromoCard {
+                    width: min(760px, 90%);
+                }
+                .postCard > img {
+                    max-height: 280px;
+                }
+                .shopPromoImg {
+                    max-height: 220px;
+                }
+            }
+            @media (min-width: 1440px) {
+                .contentCard > img {
+                    max-height: 260px;
+                }
+                #homeDiv > div,
+                #homeDiv .contentCard {
+                    width: min(680px, 82%);
+                }
+                #postsDiv .postCard {
+                    width: min(680px, 82%);
+                }
+                .shopPromoCard {
+                    width: min(680px, 82%);
+                }
+                .postCard > img {
+                    max-height: 220px;
+                }
+                .shopPromoImg {
+                    max-height: 180px;
+                }
+                #homeDiv {
+                    padding-bottom: 16px;
+                }
             }
 
             /*bottom sheet*/
@@ -174,23 +303,25 @@
     </head>
 
     <body style="height: 100vh;">
-        <div style="display: flex;">
+        <div style="display: flex; align-items: center;">
             <img src="assets/logo_site.png" height="60px" width="60px" style="padding: 8px;">
             <p style="padding-left: 16px; font-size: 24px;">the minorities</p>
-            <img id="profileBtn" src="assets/person.svg" height="50px" width="50px" style="margin-left:auto; padding: 8px; cursor: pointer;">
+            <button id="profileBtn" class="icon-button" type="button" style="margin-left:auto; margin-right: 8px;" aria-label="Open profile">
+                <img src="assets/person.svg" height="32" width="32" alt="Profile">
+            </button>
         </div>
         <div style="display: flex; ">
             <div style="margin-left: auto;">
-                <p style="cursor: pointer;" id="homeBtn">Home</p>
+                <button class="segment-btn active" type="button" id="homeBtn">Home</button>
                 <hr id="homeHr">
             </div>
             <div style="padding-left: 8px; margin-right: auto;">
-                <p style="cursor: pointer;" id="postsBtn">Posts</p>
+                <button class="segment-btn" type="button" id="postsBtn">Posts</button>
                 <hr style="display: none;" id="postsHr">
             </div>
         </div>
         <hr>
-        <div id="homeDiv" style="display: inline; background-color: red;">
+        <div id="homeDiv" style="display: inline;">
             <div
                 style="background-color: #fff; width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px;cursor: pointer;" onclick="openSubscriptionView()">
                 <div style="display: flex;">
@@ -200,7 +331,7 @@
                             style="font-weight: normal;">support the vision</span></p>
                     <p
                         style="margin-top: auto; margin-bottom: auto; font-size: 32px; font-weight: bold; margin-left: auto; margin-right: 16px;">
-                        ></p>
+                        ›</p>
                 </div>
             </div>
             <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Content</p>
@@ -208,7 +339,7 @@
                 <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;" onclick="openIndividualPost()">
                 <p style="font-weight: bold; padding-left: 8px;">First to Pick-Up at HOOTERS WINS!</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
-                    <p style="margin-top: 0px;margin-bottom: 8px;">Thu 12, 2024 - 44</p><img src="assets/message_r.svg"
+                    <p style="margin-top: 0px;margin-bottom: 8px;">Dec 12, 2024 - 44</p><img src="assets/message_r.svg"
                         width="15px" height="12px" style=" margin-bottom: auto;">
                 </div>
             </div>
@@ -218,15 +349,15 @@
                 </p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
                     <p style="margin-top: 0px;margin-bottom: 8px;">
-                        Thu 12, 2024 - 44
+                        Dec 12, 2024 - 44
                     </p>
                     <img src="assets/message_r.svg" width="15px" height="12px" style=" margin-bottom: auto;">
                 </div>
             </div>
            
-            <div style="background-color: white; width: 90%; margin-top: 24px; margin-left: auto; margin-right: auto; border-radius: 10px;">
-                <div style="display: flex; height: 100%;">
-                    <div style="width: 50%; background-color: #fff; border-radius: 10px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div class="shopPromoCard">
+                <div class="shopPromoCardWrap">
+                    <div class="shopPromoText">
                         <div>
                             <p style="color: #FF0C11; font-weight: bold; font-size: 32px; text-align: center; margin-top: 2px; margin-bottom: 0;">Sale</p>
                             <p style="color: #FF0C11; text-align: center; margin-top: 4px;">Get your new "University" Hoodie</p>
@@ -235,15 +366,20 @@
                             <p style="color: #fff;">Yes, I want to get my hoodie for 10% off by December 12th</p>
                         </div>
                     </div>
-                    <img src="assets/basket.svg" style="width: 50%; background-color: transparent;">
+                    <img src="assets/basket.svg" class="shopPromoImg">
                 </div>
             </div>
             
-            <div class="contentCard" style="padding-bottom: 16px; background-color: white; width: 90%; margin-top: 24px; margin-left: auto; margin-right: auto; border-radius: 10px;">
-                <img src="assets/girls.png" style="width: 100%;border-bottom: solid black;   filter: blur(8px);" onclick="openIndividualPost()">
+            <div class="contentCard" style="padding-bottom: 16px; background-color: white; width: 90%; margin-top: 24px; margin-left: auto; margin-right: auto; border-radius: 10px;" onclick="openSubscriptionView()">
+                <div style="position: relative; overflow: hidden;">
+                    <img src="assets/girls.png" style="width: 100%; border-bottom: solid black; filter: blur(8px); display: block;">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(0,0,0,0.7); border-radius: 8px; padding: 8px 16px; pointer-events: none;">
+                        <p style="color: white; margin: 0; font-size: 14px; white-space: nowrap;">🔒 Upgrade to unlock</p>
+                    </div>
+                </div>
                 <p style="font-weight: bold; padding-left: 8px;">First to Pick-Up at HOOTERS WINS!</p>
                 <div style="display: flex; padding-left: 8px; margin-top: 0px;margin-bottom: 0px;">
-                    <p style="margin-top: 0px;margin-bottom: 8px;">Thu 12, 2024 - 44</p><img src="assets/message_r.svg"
+                    <p style="margin-top: 0px;margin-bottom: 8px;">Dec 12, 2024 - 44</p><img src="assets/message_r.svg"
                         width="15px" height="12px" style=" margin-bottom: auto;">
                 </div>
             </div>
@@ -254,9 +390,11 @@
                 <img style="margin-top: 8px;" src="assets/filter.svg" width="40px" height="40px">
                 <p style="margin-left: 16px; color: #808080;">Filter</p>
             </div>-->
-            <img id="filterBtn" style="margin-top: 8px; margin-left: 5%; cursor: pointer;" src="assets/filter.svg" width="40px" height="40px">
+            <button id="filterBtn" class="icon-button" type="button" style="margin-top: 8px; margin-left: 5%; border-radius: 12px;" aria-label="Filter posts">
+                <img src="assets/filter.svg" width="28" height="28" alt="Filter">
+            </button>
            <!--Regular post (just text)-->  
-            <div style="width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);">
+            <div class="postCard">
                 <div style="display: flex; align-items: center; padding: 8px;">
                     <img src="assets/person.svg" height="50px" width="50px" style="margin-right: 8px; cursor: pointer;">
                     <div style="flex-grow: 1;">
@@ -279,7 +417,7 @@
             </div>
        
             <!--Regular post (text & image)-->
-            <div style="width: 90%; margin-left: auto; margin-right: auto; border-radius: 10px; margin-top: 16px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);">
+            <div class="postCard">
                 <div style="display: flex; align-items: center; padding: 8px;">
                     <img src="assets/person.svg" height="50px" width="50px" style="margin-right: 8px; cursor: pointer;">
                     <div style="flex-grow: 1;">
@@ -293,7 +431,7 @@
                     Nothing here will be like home which will contain con-
                     tent and sales for the company.
                 </p>
-                <img src="assets/girls.png" style="width: 90%; margin-left: auto; margin-right: auto;">
+                <img src="assets/girls.png">
                 <div style="display: flex; align-items: center; padding: 8px;">
                     <img src="assets/heart.fill.svg" width="16px" height="12px">
                     <p style="margin: 0; margin-left: 4px;">12</p>
@@ -370,7 +508,7 @@
             </div>
         </div>
         <div id="profileBottomSheet" class="bottom-sheet" style="text-align: center;">
-            <p style="text-align: right; cursor: pointer; margin-right: 16px;" id="profileCloseBtn">close</p>
+            <button style="text-align: right; cursor: pointer; margin-right: 16px; margin-top: 8px; border: none; background: transparent;" id="profileCloseBtn" type="button">Close</button>
             <div class="bottom-sheet-content">
                 <img src="assets/person.svg" style="margin-top: 0px;" height="70px" width="70px" >
                 <p style="font-size: 32px; font-weight: bold; margin-bottom: 0px; padding-bottom: 0px;">Képler Siguineau</p>
@@ -378,21 +516,21 @@
                 <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 32px;">
                     <img src="assets/dollar.svg" height="40px" width="40px" >
                     <p style="margin-left: 24px; font-size: 16px; ">Subscriptions</p>
-                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                    <p style="margin-left: auto; font-size: 20px; color: #999;">›</p>
                 </div>
                 <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
                     <img src="assets/signature.svg" height="40px" width="40px" >
                     <p style="margin-left: 24px; font-size: 16px; ">Personal Info</p>
-                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                    <p style="margin-left: auto; font-size: 20px; color: #999;">›</p>
                 </div>
                 <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
                     <img src="assets/stack.svg" height="40px" width="40px" >
                     <p style="margin-left: 24px; font-size: 16px; ">Social Media</p>
-                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                    <p style="margin-left: auto; font-size: 20px; color: #999;">›</p>
                 </div> <div style="width: 80%; margin-left: auto; margin-right: auto; cursor: pointer;  display: flex; margin-top: 16px;">
                     <img src="assets/profile.svg" height="40px" width="40px" >
                     <p style="margin-left: 24px; font-size: 16px; ">Log Out</p>
-                    <p style="margin-left: auto;  font-size: 16px;">></p>
+                    <p style="margin-left: auto; font-size: 20px; color: #999;">›</p>
                 </div>
             </div>
         </div>
@@ -411,6 +549,8 @@
         homeBtn.onclick = () => {
             homeHr.style.display = 'block'
             postsHr.style.display = 'none'
+            homeBtn.classList.add('active')
+            postsBtn.classList.remove('active')
 
             homeDiv.style.display = 'inline'
             postsDiv.style.display = 'none'
@@ -419,6 +559,8 @@
         postsBtn.onclick = () => {
             homeHr.style.display = 'none'
             postsHr.style.display = 'block'
+            homeBtn.classList.remove('active')
+            postsBtn.classList.add('active')
 
             homeDiv.style.display = 'none'
             postsDiv.style.display = 'inline'
@@ -480,16 +622,12 @@
 
         function openIndividualPost()
         {
-            let url = `./individualPost.html`
-            //let e
-            window.open(url, '_blank').focus();
+            window.location.href = './individualPost.html';
         }
 
         function openSubscriptionView()
         {
-            let url = `./subscriptionView.html`
-            //let e
-            window.open(url, '_blank').focus();
+            window.location.href = './subscriptionView.html';
         }
     </script>
 </html>

@@ -3,249 +3,589 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>How To Build A Calendar App</title>
+  <title>Green Focus Calendar</title>
   <style>
+    :root {
+      --green-900: #1f6f36;
+      --green-700: #2e8d46;
+      --green-500: #39b053;
+      --green-100: #e8f7ec;
+      --card: #ffffff;
+      --text: #1b2a1f;
+      --muted: #5a6e60;
+      --border: #cfead7;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      line-height: 1.6;
       margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #f5fcf7 0%, #ecf8f0 100%);
+    }
+
+    .app {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 1rem;
+    }
+
+    .hero {
+      background: var(--green-700);
+      color: #fff;
+      border-radius: 16px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      box-shadow: 0 8px 20px rgba(29, 94, 48, 0.2);
+    }
+
+    .hero h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.35rem;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 1rem;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem;
+      box-shadow: 0 4px 12px rgba(40, 92, 58, 0.08);
+    }
+
+    .calendar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .month-label {
+      font-weight: 700;
+      color: var(--green-900);
+    }
+
+    .btn {
+      background: var(--green-500);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.45rem 0.7rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn:hover {
+      background: var(--green-700);
+    }
+
+    .weekdays,
+    .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.4rem;
+    }
+
+    .weekday {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 700;
+      padding-bottom: 0.2rem;
+    }
+
+    .day {
+      min-height: 66px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+      padding: 0.3rem;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .day:hover {
+      border-color: var(--green-500);
+      background: #f8fef9;
+    }
+
+    .day.empty {
+      background: #f7fbf8;
+      cursor: default;
+      border-style: dashed;
+    }
+
+    .day.selected {
+      background: var(--green-100);
+      border-color: var(--green-700);
+    }
+
+    .day-num {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--green-900);
+    }
+
+    .task-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 99px;
+      background: var(--green-500);
+      display: inline-block;
+      margin-right: 3px;
+      margin-top: 6px;
+    }
+
+    .task-head h2 {
+      margin: 0;
+      color: var(--green-900);
+      font-size: 1.05rem;
+    }
+
+    .task-head p {
+      margin: 0.35rem 0 0.75rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .task-add {
+      display: flex;
+      gap: 0.45rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .task-add input {
+      flex: 1;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.55rem;
+      font-size: 0.92rem;
+    }
+
+    .task-list {
+      list-style: none;
       padding: 0;
-      background-color: #eef4f9;
-      color: #333;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
     }
-    .blogContainer {
-      width: 80%;
-      max-width: 700px;
-      margin: 56px auto;
-      padding: 20px;
-      background: #ffffff;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.45rem 0.5rem;
+      background: #fff;
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .check {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--green-500);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      color: #fff;
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 700;
+    }
+
+    .check.done {
+      background: var(--green-500);
+    }
+
+    .task-text {
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .task-text.done {
+      text-decoration: line-through;
+      color: #6f7e74;
+    }
+
+    .delete {
+      border: none;
+      background: #f3f7f4;
+      color: #335540;
       border-radius: 8px;
+      padding: 0.35rem 0.5rem;
+      cursor: pointer;
+      font-size: 0.75rem;
     }
-    h1, h2, h3 {
-      color: #2c3e50;
+
+    .delete:hover {
+      background: #ddeee2;
     }
-    pre {
-      background-color: #f4f8fc;
-      padding: 12px;
-      border-radius: 4px;
-      overflow-x: auto;
-      font-family: monospace;
+
+    .focus-plan {
+      margin-top: 1rem;
     }
-    code {
-      background-color: #e2edf7;
-      padding: 2px 4px;
-      border-radius: 4px;
-      font-family: monospace;
+
+    .focus-plan h3 {
+      margin: 0 0 0.5rem;
+      color: var(--green-900);
+      font-size: 1rem;
     }
-    a {
-      color: #0077b6;
-      text-decoration: none;
+
+    .phase-list {
+      display: grid;
+      gap: 0.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     }
-    a:hover {
-      text-decoration: underline;
+
+    .phase {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.5rem;
+      background: #fff;
     }
-    ul {
-      padding-left: 20px;
+
+    .phase strong {
+      display: block;
+      color: var(--green-900);
+      font-size: 0.85rem;
     }
-    blockquote {
-      border-left: 4px solid #0077b6;
-      padding-left: 12px;
-      color: #444;
-      margin: 20px 0;
-      font-style: italic;
-      background-color: #f0f9ff;
-      border-radius: 4px;
+
+    .badge {
+      display: inline-block;
+      margin-top: 0.25rem;
+      padding: 0.2rem 0.4rem;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #e8f7ec;
+      color: #276d3f;
+    }
+
+    @media (max-width: 820px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="blogContainer">
-    <h1>📅 How To Build A Calendar App</h1>
+  <div class="app">
+    <section class="hero">
+      <h1>Green Focus Calendar</h1>
+      <p>4 months work-focused, then 2 months family-focused. Daily targets: 16h work and 5h family.</p>
+    </section>
 
-    <p>Want to organize your life better? Let’s build a simple calendar app that lets you create events, view them by date, and keep track of your schedule. This is a beginner-friendly project that combines frontend and backend development.</p>
+    <div class="layout">
+      <section class="panel">
+        <div class="calendar-head">
+          <button class="btn" id="prevBtn" type="button">Prev</button>
+          <div class="month-label" id="monthLabel">Month Year</div>
+          <button class="btn" id="nextBtn" type="button">Next</button>
+        </div>
+        <div class="weekdays" id="weekdays"></div>
+        <div class="days" id="days"></div>
+      </section>
 
-    <h2>🎯 What Are We Building?</h2>
-    <p>A simple web app where users can:</p>
-    <ul>
-      <li>View a monthly calendar</li>
-      <li>Add events with title and description</li>
-      <li>Click a date to see all events for that day</li>
-    </ul>
+      <section class="panel">
+        <div class="task-head">
+          <h2 id="taskDateTitle">Tasks</h2>
+          <p id="phaseInfo">Focus phase and hour targets will show here.</p>
+        </div>
+        <div class="task-add">
+          <input id="taskInput" type="text" placeholder="Add task for selected date" />
+          <button class="btn" id="addTaskBtn" type="button">Add</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
 
-    <h2>🧰 Tools You’ll Need</h2>
-    <ul>
-      <li><strong>Node.js</strong> and <strong>Express.js</strong> for backend</li>
-      <li><strong>HTML, CSS, JavaScript</strong> for frontend</li>
-      <li>A text editor like <a href="https://code.visualstudio.com/" target="_blank">VS Code</a></li>
-    </ul>
-
-    <h2>📁 Step 1: Setup Your Project</h2>
-    <pre><code>mkdir calendar-app
-cd calendar-app
-npm init -y
-npm install express</code></pre>
-
-    <h2>🔧 Step 2: Backend with Express</h2>
-    <p>Create <code>server.js</code>:</p>
-    <pre><code>// server.js
-const express = require('express');
-const app = express();
-const PORT = 3000;
-
-let events = [];
-
-app.use(express.static('public'));
-app.use(express.json());
-
-app.get('/api/events', (req, res) =&gt; {
-  res.json(events);
-});
-
-app.post('/api/events', (req, res) =&gt; {
-  const { date, title, description } = req.body;
-  if (date &amp;&amp; title) {
-    events.push({ date, title, description });
-    res.status(201).json({ message: 'Event added!' });
-  } else {
-    res.status(400).json({ error: 'Date and title are required.' });
-  }
-});
-
-app.listen(PORT, () =&gt; {
-  console.log(`Calendar app running at http://localhost:${PORT}`);
-});</code></pre>
-
-    <h2>🎨 Step 3: Frontend</h2>
-    <p>Create a <code>public</code> folder and add these files:</p>
-
-    <h3>1. <code>index.html</code></h3>
-    <pre><code>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-  &lt;meta charset="UTF-8"&gt;
-  &lt;title&gt;Calendar App&lt;/title&gt;
-  &lt;link rel="stylesheet" href="style.css"&gt;
-&lt;/head&gt;
-&lt;body&gt;
-  &lt;h1&gt;📅 My Calendar&lt;/h1&gt;
-
-  &lt;div id="calendar"&gt;&lt;/div&gt;
-
-  &lt;form id="event-form"&gt;
-    &lt;input type="date" id="date" required /&gt;&lt;br&gt;
-    &lt;input type="text" id="title" placeholder="Event Title" required /&gt;&lt;br&gt;
-    &lt;textarea id="description" placeholder="Event Description"&gt;&lt;/textarea&gt;&lt;br&gt;
-    &lt;button type="submit"&gt;Add Event&lt;/button&gt;
-  &lt;/form&gt;
-
-  &lt;div id="event-list"&gt;&lt;/div&gt;
-
-  &lt;script src="app.js"&gt;&lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;</code></pre>
-
-    <h3>2. <code>style.css</code></h3>
-    <pre><code>body {
-  font-family: Arial, sans-serif;
-  background: #eef4f9;
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 0 20px;
-  color: #333;
-}
-
-#calendar {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin: 20px 0;
-}
-
-.day {
-  background: #fff;
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.day:hover {
-  background: #e6f2ff;
-}
-
-.event {
-  background: #cce5ff;
-  margin: 5px 0;
-  padding: 5px;
-  border-radius: 4px;
-}</code></pre>
-
-    <h3>3. <code>app.js</code></h3>
-    <pre><code>async function loadEvents() {
-  const res = await fetch('/api/events');
-  const data = await res.json();
-  const container = document.getElementById('event-list');
-  container.innerHTML = '';
-
-  data.forEach(event =&gt; {
-    const div = document.createElement('div');
-    div.className = 'event';
-    div.innerHTML = `
-      &lt;strong&gt;${event.title}&lt;/strong&gt; (${event.date})&lt;br&gt;
-      ${event.description || ''}
-    `;
-    container.appendChild(div);
-  });
-}
-
-document.getElementById('event-form').addEventListener('submit', async (e) =&gt; {
-  e.preventDefault();
-  const date = document.getElementById('date').value;
-  const title = document.getElementById('title').value;
-  const description = document.getElementById('description').value;
-
-  await fetch('/api/events', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ date, title, description }),
-  });
-
-  e.target.reset();
-  loadEvents();
-});
-
-// Basic calendar (30 days demo)
-function renderCalendar() {
-  const calendar = document.getElementById('calendar');
-  calendar.innerHTML = '';
-  for (let i = 1; i &lt;= 30; i++) {
-    const div = document.createElement('div');
-    div.className = 'day';
-    div.textContent = i;
-    calendar.appendChild(div);
-  }
-}
-
-renderCalendar();
-loadEvents();</code></pre>
-
-    <h2>🚀 Step 4: Run Your App</h2>
-    <pre><code>node server.js</code></pre>
-    <p>Then open <a href="http://localhost:3000" target="_blank">http://localhost:3000</a> and start planning your schedule!</p>
-
-    <h2>✨ Bonus Ideas</h2>
-    <ul>
-      <li>Add month navigation (previous/next months)</li>
-      <li>Highlight days with events</li>
-      <li>Allow recurring events</li>
-      <li>Integrate reminders or notifications</li>
-    </ul>
-
-    <h2>💬 Final Thoughts</h2>
-    <blockquote>
-      A calendar app helps keep life organized. Start small with just dates and events, then expand into reminders, notifications, and even integrations with Google Calendar!
-    </blockquote>
+        <div class="focus-plan">
+          <h3>6-Month Focus Cycle</h3>
+          <div class="phase-list" id="phaseList"></div>
+        </div>
+      </section>
+    </div>
   </div>
+
+  <script>
+    const monthLabel = document.getElementById("monthLabel");
+    const weekdays = document.getElementById("weekdays");
+    const days = document.getElementById("days");
+    const taskDateTitle = document.getElementById("taskDateTitle");
+    const phaseInfo = document.getElementById("phaseInfo");
+    const taskList = document.getElementById("taskList");
+    const taskInput = document.getElementById("taskInput");
+    const addTaskBtn = document.getElementById("addTaskBtn");
+    const phaseList = document.getElementById("phaseList");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+
+    const weekdayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const cycleMonths = 6;
+    const tasksByDate = JSON.parse(localStorage.getItem("greenFocusTasks") || "{}");
+
+    const today = new Date();
+    let currentMonthDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    let selectedDate = formatDate(today);
+
+    function formatDate(dateObj) {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      return year + "-" + month + "-" + day;
+    }
+
+    function parseDate(dateString) {
+      const [year, month, day] = dateString.split("-").map(Number);
+      return new Date(year, month - 1, day);
+    }
+
+    function phaseForDate(dateString) {
+      const date = parseDate(dateString);
+      const base = new Date(today.getFullYear(), today.getMonth(), 1);
+      const monthDiff = (date.getFullYear() - base.getFullYear()) * 12 + (date.getMonth() - base.getMonth());
+      const position = ((monthDiff % cycleMonths) + cycleMonths) % cycleMonths;
+      const isWorkPhase = position < 4;
+      return {
+        label: isWorkPhase ? "Work Focus" : "Family Focus",
+        workHours: 16,
+        familyHours: 5
+      };
+    }
+
+    function seedDefaultTasks(dateKey) {
+      if (tasksByDate[dateKey]) {
+        return;
+      }
+      const phase = phaseForDate(dateKey);
+      if (phase.label === "Work Focus") {
+        tasksByDate[dateKey] = [
+          { text: "Deep work block (4h)", done: false },
+          { text: "Project execution sprint", done: false },
+          { text: "Family quality time (5h target)", done: false }
+        ];
+      } else {
+        tasksByDate[dateKey] = [
+          { text: "Family first time block", done: false },
+          { text: "Plan shared activity", done: false },
+          { text: "Essential work priorities only", done: false }
+        ];
+      }
+      saveTasks();
+    }
+
+    function saveTasks() {
+      localStorage.setItem("greenFocusTasks", JSON.stringify(tasksByDate));
+    }
+
+    function renderWeekdays() {
+      weekdays.innerHTML = "";
+      weekdayLabels.forEach((label) => {
+        const cell = document.createElement("div");
+        cell.className = "weekday";
+        cell.textContent = label;
+        weekdays.appendChild(cell);
+      });
+    }
+
+    function renderCalendar() {
+      const year = currentMonthDate.getFullYear();
+      const month = currentMonthDate.getMonth();
+      monthLabel.textContent = currentMonthDate.toLocaleString("en-US", { month: "long", year: "numeric" });
+      days.innerHTML = "";
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i += 1) {
+        const emptyCell = document.createElement("div");
+        emptyCell.className = "day empty";
+        days.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= totalDays; day += 1) {
+        const cell = document.createElement("div");
+        const dateKey = formatDate(new Date(year, month, day));
+        cell.className = "day";
+        if (dateKey === selectedDate) {
+          cell.classList.add("selected");
+        }
+
+        const dayNum = document.createElement("div");
+        dayNum.className = "day-num";
+        dayNum.textContent = String(day);
+        cell.appendChild(dayNum);
+
+        const dateTasks = tasksByDate[dateKey] || [];
+        const pendingDots = Math.min(dateTasks.filter((task) => !task.done).length, 4);
+        for (let i = 0; i < pendingDots; i += 1) {
+          const dot = document.createElement("span");
+          dot.className = "task-dot";
+          cell.appendChild(dot);
+        }
+
+        cell.addEventListener("click", () => {
+          selectedDate = dateKey;
+          seedDefaultTasks(selectedDate);
+          renderCalendar();
+          renderTasks();
+        });
+
+        days.appendChild(cell);
+      }
+    }
+
+    function renderTasks() {
+      seedDefaultTasks(selectedDate);
+      const phase = phaseForDate(selectedDate);
+      taskDateTitle.textContent = "Tasks for " + selectedDate;
+      phaseInfo.textContent = phase.label + " | Work: " + phase.workHours + "h | Family: " + phase.familyHours + "h";
+      taskList.innerHTML = "";
+
+      const tasks = tasksByDate[selectedDate] || [];
+      if (tasks.length === 0) {
+        const empty = document.createElement("li");
+        empty.className = "task-item";
+        empty.textContent = "No tasks yet. Add one.";
+        taskList.appendChild(empty);
+        return;
+      }
+
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+        li.className = "task-item";
+
+        const left = document.createElement("div");
+        left.className = "task-left";
+
+        const check = document.createElement("button");
+        check.type = "button";
+        check.className = "check" + (task.done ? " done" : "");
+        check.textContent = task.done ? "✓" : "";
+        check.addEventListener("click", () => {
+          tasksByDate[selectedDate][index].done = !tasksByDate[selectedDate][index].done;
+          saveTasks();
+          renderCalendar();
+          renderTasks();
+        });
+
+        const text = document.createElement("span");
+        text.className = "task-text" + (task.done ? " done" : "");
+        text.textContent = task.text;
+
+        left.appendChild(check);
+        left.appendChild(text);
+
+        const del = document.createElement("button");
+        del.type = "button";
+        del.className = "delete";
+        del.textContent = "Delete";
+        del.addEventListener("click", () => {
+          tasksByDate[selectedDate].splice(index, 1);
+          saveTasks();
+          renderCalendar();
+          renderTasks();
+        });
+
+        li.appendChild(left);
+        li.appendChild(del);
+        taskList.appendChild(li);
+      });
+    }
+
+    function renderCycleCards() {
+      phaseList.innerHTML = "";
+      const start = new Date(today.getFullYear(), today.getMonth(), 1);
+      for (let i = 0; i < 6; i += 1) {
+        const monthDate = new Date(start.getFullYear(), start.getMonth() + i, 1);
+        const dateKey = formatDate(monthDate);
+        const phase = phaseForDate(dateKey);
+
+        const card = document.createElement("div");
+        card.className = "phase";
+
+        const title = document.createElement("strong");
+        title.textContent = monthDate.toLocaleString("en-US", { month: "short", year: "numeric" });
+        card.appendChild(title);
+
+        const badge = document.createElement("span");
+        badge.className = "badge";
+        badge.textContent = phase.label;
+        card.appendChild(badge);
+
+        const hours = document.createElement("p");
+        hours.style.margin = "0.45rem 0 0";
+        hours.style.fontSize = "0.78rem";
+        hours.style.color = "#486151";
+        hours.textContent = "Work " + phase.workHours + "h | Family " + phase.familyHours + "h";
+        card.appendChild(hours);
+
+        phaseList.appendChild(card);
+      }
+    }
+
+    addTaskBtn.addEventListener("click", () => {
+      const taskText = taskInput.value.trim();
+      if (!taskText) {
+        return;
+      }
+      seedDefaultTasks(selectedDate);
+      tasksByDate[selectedDate].push({ text: taskText, done: false });
+      taskInput.value = "";
+      saveTasks();
+      renderCalendar();
+      renderTasks();
+    });
+
+    taskInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        addTaskBtn.click();
+      }
+    });
+
+    prevBtn.addEventListener("click", () => {
+      currentMonthDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth() - 1, 1);
+      renderCalendar();
+    });
+
+    nextBtn.addEventListener("click", () => {
+      currentMonthDate = new Date(currentMonthDate.getFullYear(), currentMonthDate.getMonth() + 1, 1);
+      renderCalendar();
+    });
+
+    renderWeekdays();
+    renderCycleCards();
+    seedDefaultTasks(selectedDate);
+    renderCalendar();
+    renderTasks();
+  </script>
+<script src="../../noteBranding.js" defer></script>
 </body>
 </html>
