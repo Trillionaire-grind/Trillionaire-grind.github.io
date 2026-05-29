@@ -60,9 +60,24 @@ export function collectFeedbackEntries(snapshot) {
   return entries;
 }
 
-export function getLegacyFeedbackSpeechIds(speechId) {
+/**
+ * Firestore paths to read feedback from for a speech (document id = meeting date).
+ * Legacy: feedback was sometimes saved under today's date instead of the meeting date —
+ * only merge that for the current agenda meeting, not every past speech.
+ */
+export function getFeedbackSpeechIds(speechId, agendaMeetingDate = "") {
   const ids = [speechId];
   const today = new Date().toISOString().slice(0, 10);
-  if (today && today !== speechId) ids.push(today);
-  return ids;
+  const meetingDate = String(agendaMeetingDate || "").trim();
+
+  if (today && today !== speechId && meetingDate && speechId === meetingDate) {
+    ids.push(today);
+  }
+
+  return [...new Set(ids)];
+}
+
+/** @deprecated Use getFeedbackSpeechIds */
+export function getLegacyFeedbackSpeechIds(speechId) {
+  return getFeedbackSpeechIds(speechId);
 }

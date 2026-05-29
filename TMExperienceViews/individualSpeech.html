@@ -56,13 +56,13 @@
     <script type="module">
         import { collection, doc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getTmDb } from "./scripts/tmFirebase.js";
-        import { formatMeetingDate, loadAndMigrateAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
+        import { formatMeetingDate, getAgendaMeta, loadAndMigrateAgendaDoc, normalizeAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
         import { loadAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=3";
         import {
             collectFeedbackEntries,
-            getLegacyFeedbackSpeechIds,
+            getFeedbackSpeechIds,
             resolveSpeechDisplay,
-        } from "./scripts/tmSpeechRecords.js";
+        } from "./scripts/tmSpeechRecords.js?v=2";
 
         const db = getTmDb();
 
@@ -181,10 +181,10 @@
             }
         }
 
-        function startFeedbackListener(userId, speechId) {
+        function startFeedbackListener(userId, speechId, agendaMeetingDate = "") {
             stopFeedbackListener();
 
-            const speechIds = getLegacyFeedbackSpeechIds(speechId);
+            const speechIds = getFeedbackSpeechIds(speechId, agendaMeetingDate);
             const mergedEntries = new Map();
 
             function publishFeedback() {
@@ -239,6 +239,11 @@
                 }
 
                 const speechData = speechSnapshot.data();
+                const agendaMeetingDate = String(
+                    agendaLoaded?.data?.meetingDate
+                    || getAgendaMeta(normalizeAgendaDoc(agendaLoaded?.data || {}).data).date
+                    || ""
+                ).trim();
                 const display = resolveSpeechDisplay(
                     speechId,
                     userId,
@@ -248,7 +253,7 @@
                 const formattedDate = formatMeetingDate(speechId);
                 renderSpeechMeta({ ...display, date: formattedDate });
 
-                startFeedbackListener(userId, speechId);
+                startFeedbackListener(userId, speechId, agendaMeetingDate);
                 setViewState("content");
             } catch (error) {
                 console.error("Failed to load speech:", error);
