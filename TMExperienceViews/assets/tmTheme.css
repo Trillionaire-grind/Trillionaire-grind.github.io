@@ -1537,6 +1537,18 @@ html:has(.tm-tool-sheet-body) {
   margin-bottom: 14px;
 }
 
+.tm-admin-toolbar__left {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
+}
+
+.tm-admin-toolbar__left[hidden] {
+  display: none !important;
+}
+
 .tm-admin-toolbar__edit-tools {
   display: flex;
   flex-wrap: wrap;

@@ -18,16 +18,16 @@
                     <iframe src="TMExperienceViews/calendarView.html?v=6" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=11" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=13" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
                     <iframe src="TMExperienceViews/toolsView.html?v=7" title="Tools"></iframe>
                 </div>
                 <div id="adminView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/adminView.html?v=5" title="Admin"></iframe>
+                    <iframe src="TMExperienceViews/adminView.html?v=8" title="Admin"></iframe>
                 </div>
                 <div id="profileView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/profileView.html?v=6" title="Profile"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html?v=10" title="Profile"></iframe>
                 </div>
             </div>
             <nav class="tm-tabbar" id="navBar" aria-label="Main">
@@ -203,6 +203,8 @@
             let verifiedClub = null
             let pendingWelcomeVariant = null
             let authUiReady = false
+            let isSigningOut = false
+            let isSigningIn = false
 
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
@@ -330,12 +332,37 @@
                 });
             }
 
+            function removeAdminTab() {
+                document.getElementById("adminTabBtn")?.remove();
+            }
+
+            function resetFramePanels() {
+                document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                    iframe.contentWindow?.postMessage({ type: "tm-sign-out" }, "*");
+                    iframe.contentWindow?.postMessage({
+                        type: "tm-auth-state",
+                        signedIn: false,
+                    }, "*");
+                });
+            }
+
+            function clearSignedInShellState() {
+                removeAdminTab();
+                closeWelcomeModal();
+                pendingWelcomeVariant = null;
+                document.getElementById("logInPassword").value = "";
+            }
+
             function broadcastAuthToFrames(user) {
                 document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
                     iframe.contentWindow?.postMessage({
                         type: "tm-auth-state",
                         signedIn: Boolean(user),
+                        uid: user?.uid || null,
                     }, "*");
+                    if (!user) {
+                        iframe.contentWindow?.postMessage({ type: "tm-sign-out" }, "*");
+                    }
                 });
             }
 
@@ -351,6 +378,24 @@
                     const speechesFrame = feedbackView?.querySelector("iframe");
                     speechesFrame?.contentWindow?.postMessage({ type: "tm-reload-speakers" }, "*");
                 }
+
+                if (destination === 3 || destination === 4) {
+                    const panel = destination === 3 ? adminView : profileView;
+                    const frame = panel?.querySelector("iframe");
+                    frame?.contentWindow?.postMessage({
+                        type: "tm-auth-state",
+                        signedIn: Boolean(auth.currentUser),
+                        uid: auth.currentUser?.uid || null,
+                    }, "*");
+                }
+            }
+
+            function postAuthToAdminFrame(userId) {
+                adminView?.querySelector("iframe")?.contentWindow?.postMessage({
+                    type: "tm-auth-state",
+                    signedIn: true,
+                    uid: userId,
+                }, "*");
             }
 
             function blurAuthInputs() {
@@ -368,12 +413,15 @@
 
             function showAuthScreen()
             {
+                clearSignedInShellState();
                 welcomeView.hidden = false;
                 mainViewDiv.hidden = true;
                 registerView.hidden = true;
                 setAuthShellMode(true);
                 showRegister(false);
                 changeTo(0);
+                resetFramePanels();
+                resetMobileViewport();
             }
 
             function showMainView()
@@ -524,9 +572,12 @@
 
             async function checkRole(userId)
             {
+                removeAdminTab();
                 const userRef = doc(db, "users", userId)
 
                 const docSnap = await getDoc(userRef);
+                showMainView();
+
                 if (!docSnap.exists()) {
                     return;
                 }
@@ -544,20 +595,29 @@
                         adminTab.addEventListener('click', () => changeTo(3));
                         const profileTab = document.querySelector('.tm-tab[data-dest="4"]');
                         navBar.insertBefore(adminTab, profileTab);
+                        postAuthToAdminFrame(userId);
                     }
                 }
-                showMainView();
             }
 
             async function signIn(email, password) {
                 logInBtn.disabled = true;
+                isSigningIn = true;
                 try {
                     pendingWelcomeVariant = "returning";
+                    await auth.authStateReady();
+                    if (auth.currentUser) {
+                        resetFramePanels();
+                        await signOut(auth);
+                        await auth.authStateReady();
+                    }
                     await signInWithEmailAndPassword(auth, email, password);
+                    await auth.authStateReady();
                 } catch (error) {
                     pendingWelcomeVariant = null;
                     alert(`Log in failed: ${error.message}`);
                 } finally {
+                    isSigningIn = false;
                     logInBtn.disabled = false;
                     blurAuthInputs();
                 }
@@ -593,6 +653,16 @@
             window.showRegister = showRegister;
 
             onAuthStateChanged(auth, async (user) => {
+                if (isSigningOut) {
+                    if (user) return;
+                    broadcastAuthToFrames(null);
+                    return;
+                }
+
+                if (isSigningIn && !user) {
+                    return;
+                }
+
                 broadcastAuthToFrames(user);
 
                 if (user) {
@@ -608,15 +678,23 @@
                 authUiReady = true;
             });
 
-            window.addEventListener("message", (event) => {
+            window.addEventListener("message", async (event) => {
                 if (event.data?.type !== "tm-sign-out") return;
+                if (isSigningOut) return;
 
-                signOut(auth)
-                    .then(() => showAuthScreen())
-                    .catch((error) => {
-                        console.error("Sign out failed:", error);
-                        alert("Could not sign out. Please try again.");
+                isSigningOut = true;
+                try {
+                    await signOut(auth);
+                    showAuthScreen();
+                } catch (error) {
+                    console.error("Sign out failed:", error);
+                    alert("Could not sign out. Please try again.");
+                    document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                        iframe.contentWindow?.postMessage({ type: "tm-sign-out-failed" }, "*");
                     });
+                } finally {
+                    isSigningOut = false;
+                }
             });
 
             window.onload = function() {

@@ -37,21 +37,48 @@
         const auth = await getTmAuth();
         const db = getTmDb();
         const signOutBtn = document.getElementById("signOutBtn");
+        let activeUserId = null;
+        let profileSession = 0;
+        /** Uid from parent shell — authoritative during sign-in/out and account switches. */
+        let shellUid = null;
+        /** null = iframe not yet synced with parent; false = signed out; true = signed in. */
+        let shellSignedIn = null;
 
-        function getUser() {
-            onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    fetchUserInfo(user.uid);
-                    fetchSpeeches(user.uid);
-                    signOutBtn.disabled = false;
-                } else {
-                    document.getElementById("nameTV").innerText = "Member";
-                    document.getElementById("bioTV").innerText = "Sign in to view your profile.";
-                    document.getElementById("profileImage").src = "assets/alex.jpeg";
-                    document.getElementById("speechesDiv").innerHTML = "";
-                    signOutBtn.disabled = true;
-                }
-            });
+        function resetProfileView() {
+            profileSession += 1;
+            activeUserId = null;
+            document.getElementById("nameTV").innerText = "Member";
+            document.getElementById("bioTV").innerText = "Sign in to view your profile.";
+            document.getElementById("profileImage").src = "assets/alex.jpeg";
+            document.getElementById("speechesDiv").innerHTML = "";
+            signOutBtn.disabled = true;
+        }
+
+        function showMissingProfile(user) {
+            document.getElementById("nameTV").innerText = user.displayName || user.email || "Member";
+            document.getElementById("bioTV").innerText = "Profile not found. Contact your club admin to finish setup.";
+            document.getElementById("profileImage").src = "assets/alex.jpeg";
+            document.getElementById("speechesDiv").innerHTML = "";
+        }
+
+        async function syncProfileForUid(userId) {
+            const session = profileSession;
+            if (!userId) {
+                resetProfileView();
+                return;
+            }
+
+            if (activeUserId !== userId) {
+                document.getElementById("nameTV").innerText = "Member";
+                document.getElementById("bioTV").innerText = "";
+                document.getElementById("profileImage").src = "assets/alex.jpeg";
+                document.getElementById("speechesDiv").innerHTML = "";
+            }
+
+            activeUserId = userId;
+            signOutBtn.disabled = false;
+            await fetchUserInfo(userId, null, session);
+            await fetchSpeeches(userId, session);
         }
 
         function openIndividualSpeech(speechId, uid) {
@@ -59,11 +86,16 @@
             window.open(url, "_blank")?.focus();
         }
 
-        async function fetchUserInfo(userId) {
+        async function fetchUserInfo(userId, authUser = null, session = profileSession) {
             const docSnap = await getDoc(doc(db, "users", userId));
+            if (session !== profileSession || activeUserId !== userId) return;
+
             if (docSnap.exists()) {
                 setData(docSnap.data());
+                return;
             }
+
+            showMissingProfile(authUser || auth.currentUser || { displayName: "", email: "" });
         }
 
         function setData(data) {
@@ -72,15 +104,17 @@
             document.getElementById("profileImage").src = data.imageUrl;
         }
 
-        async function fetchSpeeches(userId) {
+        async function fetchSpeeches(userId, session = profileSession) {
             const speechesDiv = document.getElementById("speechesDiv");
             speechesDiv.innerHTML = "";
             try {
                 const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
+                if (session !== profileSession || activeUserId !== userId) return;
                 querySnapshot.forEach((speechDoc) => {
                     speechesDiv.appendChild(createSpeechDiv(speechDoc.id, speechDoc.data(), userId));
                 });
             } catch (error) {
+                if (session !== profileSession || activeUserId !== userId) return;
                 speechesDiv.innerHTML = '<p class="tm-bio-card__bio">Failed to fetch speeches. Please try again later.</p>';
             }
         }
@@ -114,7 +148,46 @@
             window.parent.postMessage({ type: "tm-sign-out" }, "*");
         });
 
-        getUser();
+        window.addEventListener("message", (event) => {
+            if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                shellSignedIn = false;
+                shellUid = null;
+                resetProfileView();
+                return;
+            }
+
+            if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                shellSignedIn = true;
+                shellUid = event.data.uid || null;
+                syncProfileForUid(shellUid).catch((error) => {
+                    console.error("Failed to sync profile after sign in:", error);
+                });
+                return;
+            }
+
+            if (event.data?.type === "tm-sign-out-failed" && shellSignedIn) {
+                signOutBtn.disabled = false;
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                if (shellSignedIn !== true) resetProfileView();
+                return;
+            }
+
+            if (shellSignedIn === false) return;
+
+            if (shellSignedIn === true) {
+                if (shellUid && user.uid !== shellUid) return;
+            } else {
+                shellUid = user.uid;
+            }
+
+            syncProfileForUid(user.uid).catch((error) => {
+                console.error("Failed to sync profile:", error);
+            });
+        });
     </script>
 </body>
 </html>

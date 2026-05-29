@@ -156,7 +156,7 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb, waitForTmUser } from "./scripts/tmFirebase.js";
+            import { getTmAuth, getTmDb, waitForAuthUid } from "./scripts/tmFirebase.js";
             import {
                 findRoleAssignment,
                 formatMeetingDate,
@@ -591,16 +591,21 @@
             });
 
             async function handleParentAuthMessage(event) {
-                if (event.data?.type === "tm-auth-state") {
-                    if (!event.data.signedIn) {
-                        stopAgendaListener();
-                        speakers = [];
-                        showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
-                        return;
-                    }
+                if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                    stopAgendaListener();
+                    speakers = [];
+                    index = 0;
+                    meetingIsLive = false;
+                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    return;
+                }
 
+                if (event.data?.type === "tm-auth-state") {
                     await auth.authStateReady();
-                    const user = auth.currentUser || await waitForTmUser(auth);
+                    const expectedUid = event.data.uid || null;
+                    const user = expectedUid
+                        ? await waitForAuthUid(auth, expectedUid)
+                        : auth.currentUser;
                     if (!user) return;
 
                     refreshSpeakers().catch((error) => {

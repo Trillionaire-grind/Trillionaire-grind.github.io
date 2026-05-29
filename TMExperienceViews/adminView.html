@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/tmTheme.css?v=13">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=17">
         <style>
             .tm-agenda-table-wrap--source { display: none; }
         </style>
@@ -36,6 +36,9 @@
             </div>
 
             <div class="tm-admin-toolbar">
+                <div id="adminRevealTools" class="tm-admin-toolbar__left">
+                    <button type="button" id="revealVotesBtn" class="tm-btn tm-btn--secondary">Reveal votes</button>
+                </div>
                 <div id="adminEditTools" class="tm-admin-toolbar__edit-tools" hidden>
                     <label class="tm-admin-import">
                         <span class="tm-btn tm-btn--secondary">Import PDF</span>
@@ -44,7 +47,6 @@
                     <button type="button" id="previewBtn" class="tm-btn tm-btn--secondary">Preview</button>
                 </div>
                 <div class="tm-admin-toolbar__right">
-                    <button type="button" id="revealVotesBtn" class="tm-btn tm-btn--secondary">Reveal votes</button>
                     <button type="button" id="editAgendaBtn" class="tm-btn tm-btn--primary">Edit agenda</button>
                 </div>
             </div>
@@ -356,12 +358,9 @@
     </body>
   
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { collection, doc, setDoc, getDoc, getDocs, updateDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { importAgendaPdf, renderImportSummary } from "./scripts/tmAgendaPdfImport.js";
         import {
             AGENDA_ROLE_COUNT,
@@ -386,21 +385,33 @@
             renderVoteResultsHtml,
         } from "./scripts/tmVoteTally.js";
         import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
+        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-            authDomain: "naples-sunrise-bay.firebaseapp.com",
-            projectId: "naples-sunrise-bay",
-            storageBucket: "naples-sunrise-bay.appspot.com",
-            messagingSenderId: "39028676552",
-            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-            measurementId: "G-L0QCNW7C6W"
-        };
-        const app = initializeApp(firebaseConfig);
+        const app = getTmApp();
         const analytics = getAnalytics(app);
-        const auth = getAuth(app)
-        const db = getFirestore(app);
+        const auth = await getTmAuth();
+        const db = getTmDb();
 
+        let shellUid = null;
+        let shellSignedIn = null;
+
+        async function requireAuthUser() {
+            const user = await requireTmAuthUser(auth, { shellUid });
+            if (!user) throw new Error("Sign in to continue.");
+            return user;
+        }
+
+        window.addEventListener("message", (event) => {
+            if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                shellSignedIn = false;
+                shellUid = null;
+                return;
+            }
+            if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                shellSignedIn = true;
+                shellUid = event.data.uid || null;
+            }
+        });
 
         let members = []
         let agendaExists = false
@@ -409,6 +420,7 @@
 
         const editAgendaBtn = document.getElementById("editAgendaBtn")
         const adminEditTools = document.getElementById("adminEditTools")
+        const adminRevealTools = document.getElementById("adminRevealTools")
         const publishBtn = document.getElementById("publishBtn")
         const cancelBtn = document.getElementById("cancelBtn")
         const previewBtn = document.getElementById("previewBtn")
@@ -504,6 +516,7 @@
         function enterEditMode() {
             isEditing = true
             document.body.classList.add("is-editing")
+            adminRevealTools.hidden = true
             adminEditTools.hidden = false
             setToolbarEditAction(true)
             adminStickyBar.classList.add("is-visible")
@@ -517,6 +530,7 @@
         function exitEditMode() {
             isEditing = false
             document.body.classList.remove("is-editing")
+            adminRevealTools.hidden = false
             adminEditTools.hidden = true
             importSummary.hidden = true
             setToolbarEditAction(false)
@@ -818,8 +832,7 @@
 
         async function uploadToServer(data)
         {
-            const user = auth.currentUser
-            if (!user) throw new Error("Sign in to publish the agenda.")
+            const user = await requireAuthUser()
 
             const enriched = await enrichSpeakerAssignments(data)
             const meta = getAgendaMeta(enriched)
@@ -835,8 +848,7 @@
         }
 
         async function setMeetingLive(isLive) {
-            const user = auth.currentUser
-            if (!user) throw new Error("Sign in to update live status.")
+            const user = await requireAuthUser()
 
             const loaded = await loadAgendaDoc(db, {
                 getDocFn: getDoc,

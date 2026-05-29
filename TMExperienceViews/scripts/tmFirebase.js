@@ -36,9 +36,15 @@ export async function getTmAuth() {
   return auth;
 }
 
-export function waitForTmUser(auth, { timeoutMs = 3000 } = {}) {
+export function waitForTmUser(auth, { timeoutMs = 3000, uid = null } = {}) {
   return new Promise((resolve) => {
-    if (auth.currentUser) {
+    const matches = (user) => {
+      if (!user) return false;
+      if (!uid) return true;
+      return user.uid === uid;
+    };
+
+    if (matches(auth.currentUser)) {
       resolve(auth.currentUser);
       return;
     }
@@ -48,15 +54,30 @@ export function waitForTmUser(auth, { timeoutMs = 3000 } = {}) {
       if (settled) return;
       settled = true;
       unsubscribe();
-      resolve(auth.currentUser);
+      resolve(matches(auth.currentUser) ? auth.currentUser : null);
     }, timeoutMs);
 
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (settled || !user) return;
+      if (settled || !matches(user)) return;
       settled = true;
       clearTimeout(timeout);
       unsubscribe();
       resolve(user);
     });
   });
+}
+
+/** Wait until auth.currentUser matches a specific uid (for account switches). */
+export function waitForAuthUid(auth, uid, options = {}) {
+  return waitForTmUser(auth, { ...options, uid });
+}
+
+/** Resolve signed-in user for iframe views; optional shellUid from parent postMessage. */
+export async function requireTmAuthUser(auth, { shellUid = null, timeoutMs = 8000 } = {}) {
+  await auth.authStateReady();
+  if (shellUid) {
+    const matched = await waitForTmUser(auth, { uid: shellUid, timeoutMs });
+    if (matched) return matched;
+  }
+  return auth.currentUser || null;
 }
