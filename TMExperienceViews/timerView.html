@@ -1,350 +1,141 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Naples Sunrise Bay</title>
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                /*background-color: #F0F1F3;*/
-                background-color: #DEE2E1;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #024165;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 40%;
-                /*margin: 10;*/
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-            table {
-                width: 50%;
-                border-collapse: collapse;
-                margin: 20px auto;
-            }
-           
-            th, td {
-                padding: 10px;
-                text-align: start;
-            }
-            table td:nth-child(2) {
-                background-color: #DEE2E1; /* Replace with your desired color */
-            }
-            table td:nth-child(4) {
-                background-color: #DEE2E1; /* Replace with your desired color */
-            }
-            table, th, td {
-                border: 1px solid #024165;
-            }
-            table td {
-                border: 2px solid #024165; /* Ensure the header cells have borders */
-            }
-            table th {
-                border: 2px solid #024165; /* Ensure the header cells have borders */
-            }
-            .stepper {
-                display: flex;
-                align-items: center;
-            }
-            .stepper button {
-                padding: 2px;
-                margin: 1px;
-                cursor: pointer;
-            }
-            .stepper input {
-                width: 30px;
-                text-align: center;
-                margin: 0 2px;
-            }
-            table th, table td {
-                border-bottom: 2px solid #024165  !important; /* Ensures the bottom border is visible */
-            }
-        </style>
+        <title>Timer — TM Experience</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=9">
     </head>
-    <body>
-        <header>
-            <p style="font-size: 8vh; font-weight: bold;  color: #024165; margin-top: 8px; margin-bottom: 0px; text-align: center;">Timer's Timing Sheet</p>
-        </header>
-        <div style="padding: 8px; padding-top: 0px; margin-top: 0px;" >
-            <table class="mdc-data-table__table" aria-label="Dessert calories">
-                <thead>
-                    <tr class="mdc-data-table__header-row">
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Speech Type</th>
-                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Green</th>
-                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Yellow</th>
-                        <th class="mdc-data-table__header-cell mdc-data-table__header-cell--numeric" role="columnheader" scope="col">Red</th>
-                    </tr>
-                </thead>
-                <tbody class="mdc-data-table__content">
-                    <tr class="mdc-data-table__row">
-                        <th class="mdc-data-table__cell" scope="row">
-                            <p>Prepared</p>
-                        </th>
-                        <td >
-                            5:00
-                        </td>
-                        <td >
-                           6:00
-                        </td>
-                        <td >
-                            7:00
-                         </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <th class="mdc-data-table__cell" scope="row">
-                            <p>Table Topics</p>
-                        </th>
-                        <td >
-                            1:00
-                        </td>
-                        <td >
-                           1:30
-                        </td>
-                        <td >
-                            2:00
-                         </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <th class="mdc-data-table__cell" scope="row">
-                            <p>Evaluation</p>
-                        </th>
-                        <td >
-                            2:00
-                        </td>
-                        <td >
-                           2:30
-                        </td>
-                        <td >
-                            3:00
-                         </td>
-                    </tr>
-                </tbody>
-            </table>
-            <p>*Disqualified if 30 seconds under green or 30 seconds over red</p>
-
-            <table class="mdc-data-table__table" aria-label="Dessert calories">
-                <thead>
-                    <tr class="mdc-data-table__header-row">
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Sequence</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Name</th>
-                        <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Time Used</th>
-                    </tr>
-                </thead>
-                <tbody class="mdc-data-table__content">
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Prepared Speaker #1
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Prepared Speaker #2
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Prepared Speaker #3
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Prepared Speaker #4
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Table Topic #1
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Table Topic #2
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Table Topic #3
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Table Topic #4
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Evaluator #1
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Evaluator #2
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Evaluator #3
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                    <tr class="mdc-data-table__row">
-                        <td>
-                            Evaluator #4
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                        <td >
-                            <input class="mdc-text-field__input" style="background-color: white; font-size: 12px;" type="text" aria-labelledby="my-label-id">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    <body class="tm-body tm-tool-sheet-body">
+        <div class="tm-tool-sheet__bar">
+            <h1>Speech Timer</h1>
+            <div class="tm-tool-sheet__middle">
+                <span id="toolSavedHint" class="tm-tool-saving-hint" hidden>Saving</span>
+            </div>
+            <button type="button" id="clearDataBtn" class="tm-tool-clear-btn" aria-label="Reset sheet">
+                <svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                Reset
+            </button>
         </div>
-    </body>
-    <script>
-        function increment(button) {
-            const input = button.previousElementSibling;
-            input.value = parseInt(input.value) + 1;
-        }
+        <div class="tm-tool-sheet-content">
+            <p class="tm-tool-section-title">Timing guide</p>
+            <div class="tm-tool-table-scroll">
+            <table class="tm-tool-table tm-tool-table--reference tm-tool-table--timer-guide" aria-label="Speech timing guide">
+                <thead>
+                    <tr>
+                        <th scope="col">Speech type</th>
+                        <th scope="col">Green</th>
+                        <th scope="col">Yellow</th>
+                        <th scope="col">Red</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row"><p class="tm-tool-row-label">Prepared</p></th>
+                        <td>5:00</td>
+                        <td>6:00</td>
+                        <td>7:00</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><p class="tm-tool-row-label">Table Topics</p></th>
+                        <td>1:00</td>
+                        <td>1:30</td>
+                        <td>2:00</td>
+                    </tr>
+                    <tr>
+                        <th scope="row"><p class="tm-tool-row-label">Evaluation</p></th>
+                        <td>2:00</td>
+                        <td>2:30</td>
+                        <td>3:00</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="tm-tool-table-note">Disqualified if 30 seconds under green or 30 seconds over red.</p>
 
-        function decrement(button) {
-            const input = button.nextElementSibling;
-            let value = parseInt(input.value);
-            if (value > 0) {
-                input.value = value - 1;
-            }
-        }
-    </script>
+            <p class="tm-tool-section-title">Tonight's times</p>
+            <div class="tm-tool-table-scroll">
+            <table class="tm-tool-table tm-tool-table--entries" aria-label="Speech timer entries">
+                <thead>
+                    <tr>
+                        <th scope="col">Sequence</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Time used</th>
+                    </tr>
+                </thead>
+                <tbody id="timerEntriesBody">
+                    <tr>
+                        <td><p class="tm-tool-row-label">Prepared Speaker #1</p></td>
+                        <td>
+                            <input class="tm-tool-name-input" type="text" aria-label="Speaker name">
+                        </td>
+                        <td>
+                            <input class="tm-tool-time-input" type="text" aria-label="Time used">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Prepared Speaker #2</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Prepared Speaker #3</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Prepared Speaker #4</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Table Topic #1</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Table Topic #2</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Table Topic #3</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Table Topic #4</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Evaluator #1</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Evaluator #2</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Evaluator #3</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                    <tr>
+                        <td><p class="tm-tool-row-label">Evaluator #4</p></td>
+                        <td><input class="tm-tool-name-input" type="text" aria-label="Speaker name"></td>
+                        <td><input class="tm-tool-time-input" type="text" aria-label="Time used"></td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <script src="scripts/tmToolsStorage.js?v=5"></script>
+        <script>TmToolsStorage.initTimer();</script>
+    </body>
 </html>

@@ -1,0 +1,23 @@
+TM Experience — Firestore rules
+=================================
+
+TESTING (current firestore.rules)
+---------------------------------
+TM collections are open (read/write: if true) for development:
+  test, clubs, users, votes, feedback
+
+PRODUCTION (restore later)
+--------------------------
+Re-apply admin/member restrictions before launch.
+
+Deploy:
+  firebase deploy --only firestore:rules
+
+Single club
+-----------
+All agendas use club id: naples-sunrise-bay
+Path: clubs/naples-sunrise-bay/agendas/current
+
+Agenda document shape
+---------------------
+  meetingDate, isLive, publishedAt, publishedBy, version, data[]

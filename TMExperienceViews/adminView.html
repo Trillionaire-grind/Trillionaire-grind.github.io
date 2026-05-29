@@ -4,184 +4,57 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Liv Lakay</title>
+        <title>Admin — TM Experience</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=13">
         <style>
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #DEE2E1;
-                width: 100%;
-                overflow-x: hidden;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; 
-                right: 50%;
-                background-color: #024165;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 40%;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-
-            /*table {
-                width: 100%;
-                border-collapse: collapse;
-                overflow-x: auto;
-            } old one*/
-
-            table {
-                width: 100%;
-                overflow-x: hidden;
-
-            }
-            th, td {
-                padding: 8px;
-                text-align: left;
-                border: 1px solid #ddd;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-            tr:nth-child(even) {
-            background-color: #f9f9f9; 
-            }
-            tr:nth-child(odd) {
-                background-color: #ffffff;
-            }
-            dialog {
-                padding: 20px;
-                border: none;
-                border-radius: 5px;
-                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-                font-family: Arial, sans-serif;
-            }
-            .dialog-buttons {
-                margin-top: 20px;
-                text-align: right;
-            }
-            button {
-                margin-left: 10px;
-                padding: 6px 12px;
-                font-size: 14px;
-            }
-            input{
-                width: 100%;
-            }
-            #updateBtn{
-                width: 60px;
-                padding: 8px; 
-                text-align: center; 
-                margin-left: 8px;
-                background-color: #024165; 
-                color: white; 
-                border-radius: 10px; 
-                cursor: pointer;
-            }
-            #roleBar{
-                display: flex; 
-                width: 100%; 
-                display: none; 
-            }
-            #agenda{
-                margin-bottom: 48px; 
-                pointer-events: none;
-                width: 100%;
-                padding: 2px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            #clearBtn{
-                cursor: pointer; 
-                margin-left: auto; 
-                margin-right: 8px; 
-                margin-top: auto;
-                margin-bottom: auto;
-                background-color: #024165; 
-                color: white; 
-                border: none; 
-                height: 32px;
-                border-radius: 10px; 
-            }
+            .tm-agenda-table-wrap--source { display: none; }
         </style>
     </head>
-    <body>
-        <p id="updateBtn" >Update</p>
-        <div style="clear: both;"></div>
-      
-        <div id="roleBar">
-            <div style="margin-left: 8px;">
-                <p style="font-weight: bold; padding-top: auto; padding-bottom: auto; font-size: 24px;">Set Roles</p>
+    <body class="tm-body tm-admin-body">
+        <header class="tm-meeting-hero">
+            <div class="tm-meeting-hero__inner">
+                <p class="tm-meeting-hero__eyebrow">Admin</p>
+                <h1 class="tm-meeting-hero__date">Set meeting agenda</h1>
+                <p class="tm-meeting-hero__meta">7:30 AM – 8:39 AM</p>
             </div>
-        
-            <div style="display: flex; align-items: center; margin-left: auto; margin-right: auto;">
-                <label for="meetingDate" style="margin: 0; font-weight: 500;">Date:</label>
-                <input 
-                    type="date" id="meetingDate" name="meetingDate" style="padding: 6px 8px; border: 1px solid #ccc; border-radius: 6px;">
+        </header>
+
+        <div class="tm-page tm-admin-page">
+            <input type="hidden" id="meetingDate" name="meetingDate">
+            <div class="tm-admin-status">
+                <div class="tm-admin-status__row">
+                    <span id="adminStatusBadge" class="tm-admin-status__badge tm-admin-status__badge--draft">Draft</span>
+                    <button type="button" id="meetingLiveToggle" class="tm-live-toggle" aria-pressed="false" disabled>
+                        <span class="tm-live-toggle__track" aria-hidden="true"><span class="tm-live-toggle__thumb"></span></span>
+                        <span class="tm-live-toggle__label">Meeting live</span>
+                    </button>
+                </div>
+                <p id="adminStatusCopy" class="tm-admin-status__copy">Edit roles, publish the agenda, then go live for feedback and voting.</p>
             </div>
-        
-            <button id="clearBtn">
-                Clear
-            </button>
-        </div> 
-        <table id="agenda" >
+
+            <div class="tm-admin-toolbar">
+                <div id="adminEditTools" class="tm-admin-toolbar__edit-tools" hidden>
+                    <label class="tm-admin-import">
+                        <span class="tm-btn tm-btn--secondary">Import PDF</span>
+                        <input type="file" id="agendaPdfInput" accept="application/pdf,.pdf">
+                    </label>
+                    <button type="button" id="previewBtn" class="tm-btn tm-btn--secondary">Preview</button>
+                </div>
+                <div class="tm-admin-toolbar__right">
+                    <button type="button" id="revealVotesBtn" class="tm-btn tm-btn--secondary">Reveal votes</button>
+                    <button type="button" id="editAgendaBtn" class="tm-btn tm-btn--primary">Edit agenda</button>
+                </div>
+            </div>
+
+            <div id="adminMessage" class="tm-admin-message" hidden></div>
+            <div id="importSummary" class="tm-import-summary" hidden></div>
+            <div id="tmAdminCards" class="tm-agenda-list" aria-label="Agenda role editor"></div>
+
+            <div class="tm-agenda-table-wrap tm-agenda-table-wrap--source" aria-hidden="true">
+        <table id="agenda">
             <thead>
                 <tr>
                     <th>Time</th>
@@ -312,6 +185,20 @@
                 <tr>
                     <td>8:02AM</td>
                     <td>
+                        <strong>Speaker #4</strong><br>
+                        The Toastmaster will introduce the speaker, a short introduction, and the speech title.  After the speech, the Toastmaster will ask the Timer for one minute of slience for notes written to the speakers.<br>
+                        <strong>Path / Project / Time:</strong> <input type="text" id="fourthSpeakerPath"><br>
+                        <strong>Project Title:</strong> <input type="text" id="fourthSpeakerTitle" ><br>
+                    </td>
+                     <td >
+                        <select id="fourthSpeaker">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:10AM</td>
+                    <td>
                         <strong>Table Topics Master</strong><br>
                         The Table Topics Masters calls upon members without other duties on the agenda to deliver 1-2 minute impromptu talks on a topic announced right before the member is chosen.  The role is introduced by the Toastmaster and control is returned to the Toastmaster after TT.
                     </td>
@@ -322,7 +209,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:10AM</td>
+                    <td>8:18AM</td>
                     <td>
                         <strong>General Evaluator</strong><br>
                         General evaluator introduces each evaluator to do their evaluation.  At the end of the evaluations, the GE calls for reports of helpers and provides meeting, evaluator, and leader evaluations.  This role is introduced by the Toastmaster.
@@ -334,7 +221,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:11AM</td>
+                    <td>8:19AM</td>
                     <td>
                         <strong>Evaluator #1</strong><br>
                         Evaluates speaker #1 and is introduced by the General Evaluator
@@ -346,7 +233,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:14AM</td>
+                    <td>8:22AM</td>
                     <td>
                         <strong>Evaluator #2</strong><br>
                         Evaluates speaker #2 and is introduced by the General Evaluator
@@ -358,7 +245,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:17AM</td>
+                    <td>8:25AM</td>
                     <td>
                         <strong>Evaluator #3</strong><br>
                         Evaluates speaker #3 and is introduced by the General Evaluator
@@ -370,7 +257,19 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:24AM</td>
+                    <td>8:28AM</td>
+                    <td>
+                        <strong>Evaluator #4</strong><br>
+                        Evaluates speaker #4 and is introduced by the General Evaluator
+                    </td>
+                    <td >
+                        <select id="fourthEvaluator">
+                            <option value="">-- Select Name --</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>8:32AM</td>
                     <td>
                         <strong>General Evaluator Meeting Evaluation</strong><br>
                     </td>
@@ -379,7 +278,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:28AM</td>
+                    <td>8:36AM</td>
                     <td>
                         <strong>Toastmaster Presents Awards</strong><br>
                         Toastmaster receives final votes from the vote counter and presents awards.  Toastmaster returns control of the meeting to the Presiding Officer.
@@ -389,7 +288,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:29AM</td>
+                    <td>8:37AM</td>
                     <td>
                         <strong>Moments of Truth - Education Tips</strong><br>
                         Tips to help build on the success of our club.
@@ -401,7 +300,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>8:31AM<br>8:34AM(end)</td>
+                    <td>8:39AM (end)</td>
                     <td>
                         <strong>Presiding Officer Makes Closing Remarks / Adjourns Meeting
                         </strong><br>
@@ -410,25 +309,50 @@
                 </tr>
             </tbody>
         </table>
-
-        <dialog id="clearDialog">
-            <form method="dialog">
-              <h3>Are you sure you want to clear the table?</h3>
-              <div class="dialog-buttons">
-                <button id="clearDialogCancelBtn" value="cancel">Cancel</button>
-                <button id="clearDialogYesBtn" value="yes">Yes</button>
-              </div>
-            </form>
-          </dialog>
-          
-        <div id="editBar" style="display: none; float: right; margin-right: 8px; margin-bottom: 48px; margin-top: 8px;">
-            <div id="cancelBtn" style="margin-right: 8px; cursor: pointer;">
-                <p>Cancel</p>
-            </div>
-            <div id="setBtn" style="background-color: #024165; color: white; padding-left: 8px; padding-right: 8px; border-radius: 10px; cursor: pointer;">
-                <p>Set Calendar</p>
             </div>
         </div>
+
+        <div id="adminStickyBar" class="tm-admin-sticky">
+            <p id="adminStickyCopy" class="tm-admin-sticky__copy">Fill every role before publishing.</p>
+            <div class="tm-admin-sticky__actions">
+                <button type="button" id="cancelBtn" class="tm-btn tm-btn--secondary">Cancel</button>
+                <button type="button" id="publishBtn" class="tm-btn tm-btn--primary" disabled>Publish agenda</button>
+            </div>
+        </div>
+
+        <dialog id="previewDialog" class="tm-admin-dialog">
+            <div class="tm-admin-dialog__panel">
+                <h3>Meeting preview</h3>
+                <p>This is how the published agenda will read on the Meeting tab.</p>
+                <div id="previewAgendaList"></div>
+                <div class="tm-admin-dialog__actions" style="margin-top:16px;">
+                    <button type="button" id="previewCloseBtn" class="tm-btn tm-btn--primary">Close</button>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="clearDialog" class="tm-admin-dialog">
+            <form method="dialog" class="tm-admin-dialog__panel">
+                <h3>Clear all role assignments?</h3>
+                <p>This removes every selected member and speaker project field.</p>
+                <div class="tm-admin-dialog__actions">
+                    <button type="button" id="clearDialogCancelBtn" class="tm-btn tm-btn--secondary">Cancel</button>
+                    <button type="button" id="clearDialogYesBtn" class="tm-btn tm-btn--primary">Clear agenda</button>
+                </div>
+            </form>
+        </dialog>
+
+        <dialog id="voteResultsDialog" class="tm-admin-dialog">
+            <div class="tm-admin-dialog__panel tm-vote-results">
+                <h3>Vote results</h3>
+                <div id="voteResultsBody" class="tm-vote-results__body">
+                    <p class="tm-vote-results__loading">Loading votes…</p>
+                </div>
+                <div class="tm-admin-dialog__actions" style="margin-top:16px;">
+                    <button type="button" id="voteResultsCloseBtn" class="tm-btn tm-btn--primary">Close</button>
+                </div>
+            </div>
+        </dialog>
     </body>
   
     <script type="module">
@@ -436,8 +360,32 @@
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { collection, doc, setDoc, getDoc, getDocs} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+        import { collection, doc, setDoc, getDoc, getDocs, updateDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+        import { importAgendaPdf, renderImportSummary } from "./scripts/tmAgendaPdfImport.js";
+        import {
+            AGENDA_ROLE_COUNT,
+            AGENDA_ROLE_IDS,
+            getAgendaMeta,
+            loadAndMigrateAgendaDoc,
+            normalizeAgendaDoc,
+        } from "./scripts/tmAgendaData.js?v=3";
+        import {
+            loadAgendaDoc,
+            saveAgendaDoc,
+        } from "./scripts/tmAgendaFirestore.js?v=3";
+        import {
+            buildAdminAgendaCards,
+            buildAdminPreviewHtml,
+            countIncompleteAdminRoles,
+            highlightIncompleteAdminRoles,
+            setAdminCardsEditable,
+        } from "./scripts/tmAdminAgendaInit.js";
+        import {
+            buildVoteResultsSummary,
+            renderVoteResultsHtml,
+        } from "./scripts/tmVoteTally.js";
+        import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
@@ -454,82 +402,244 @@
         const db = getFirestore(app);
 
 
-        let updateBtn = document.getElementById("updateBtn")
-        let clearBtn = document.getElementById('clearBtn')
+        let members = []
+        let agendaExists = false
+        let isEditing = false
+        let meetingIsLive = false
 
-        let roleBar = document.getElementById("roleBar")
+        const editAgendaBtn = document.getElementById("editAgendaBtn")
+        const adminEditTools = document.getElementById("adminEditTools")
+        const publishBtn = document.getElementById("publishBtn")
+        const cancelBtn = document.getElementById("cancelBtn")
+        const previewBtn = document.getElementById("previewBtn")
+        const previewDialog = document.getElementById("previewDialog")
+        const previewCloseBtn = document.getElementById("previewCloseBtn")
+        const adminStickyBar = document.getElementById("adminStickyBar")
+        const adminStickyCopy = document.getElementById("adminStickyCopy")
+        const adminMessage = document.getElementById("adminMessage")
+        const adminStatusBadge = document.getElementById("adminStatusBadge")
+        const adminStatusCopy = document.getElementById("adminStatusCopy")
+        const meetingDateInput = document.getElementById("meetingDate")
+        const meetingLiveToggle = document.getElementById("meetingLiveToggle")
 
-        let editBar = document.getElementById("editBar")
-        let cancelBtn = document.getElementById("cancelBtn")
-        let setBtn = document.getElementById("setBtn")
-
-        let clearDialogCancelBtn = document.getElementById("clearDialogCancelBtn")
-        let clearDialogYesBtn = document.getElementById("clearDialogYesBtn")
-
-        updateBtn.onclick = () => {
-            updateBtn.style.display = "none"
-            editBar.style.display = "flex"
-            roleBar.style.display = "flex"
-            document.getElementById("agenda").style.pointerEvents = "all"
+        function isMeetingLiveOn() {
+            return meetingLiveToggle.getAttribute("aria-pressed") === "true"
         }
 
-        cancelBtn.onclick = () => {
-            fetchAgenda()
-            updateBtn.style.display = "flex"
-            editBar.style.display = "none"
-            roleBar.style.display = "none"
-            document.getElementById("agenda").style.pointerEvents = "none"
-        }   
+        function setMeetingLiveToggle(isLive) {
+            meetingLiveToggle.setAttribute("aria-pressed", isLive ? "true" : "false")
+            meetingLiveToggle.classList.toggle("is-on", isLive)
+        }
+        const clearDialogCancelBtn = document.getElementById("clearDialogCancelBtn")
+        const clearDialogYesBtn = document.getElementById("clearDialogYesBtn")
+        const revealVotesBtn = document.getElementById("revealVotesBtn")
+        const voteResultsDialog = document.getElementById("voteResultsDialog")
+        const voteResultsBody = document.getElementById("voteResultsBody")
+        const voteResultsCloseBtn = document.getElementById("voteResultsCloseBtn")
+        const agendaPdfInput = document.getElementById("agendaPdfInput")
+        const importSummary = document.getElementById("importSummary")
 
-        setBtn.onclick = () => {
-            
-            let result = isFilledOut()
-            if(result){
-                updateBtn.style.display = "flex"
-                editBar.style.display = "none"
-                roleBar.style.display = "none"
-                document.getElementById("agenda").style.pointerEvents = "none"
-                uploadToServer(getTableValues())
+        function showAdminMessage(text, type = "info") {
+            adminMessage.textContent = text
+            adminMessage.className = `tm-admin-message tm-admin-message--${type}`
+            adminMessage.hidden = false
+        }
 
-            }else{
-                alert('make sure to fill out the entire agenda')
+        function hideAdminMessage() {
+            adminMessage.hidden = true
+            adminMessage.textContent = ""
+        }
+
+        function getAgendaDateValue() {
+            if (meetingDateInput.value) return meetingDateInput.value;
+            return new Date().toISOString().slice(0, 10);
+        }
+
+        function updateStatusUI() {
+            adminStatusBadge.className = "tm-admin-status__badge"
+            if (isEditing) {
+                adminStatusBadge.classList.add("tm-admin-status__badge--draft")
+                adminStatusBadge.textContent = "Editing"
+                adminStatusCopy.textContent = "Update roles, then publish when every assignment is filled."
+                return
+            }
+            if (meetingIsLive) {
+                adminStatusBadge.classList.add("tm-admin-status__badge--live")
+                adminStatusBadge.textContent = "Live"
+                adminStatusCopy.textContent = "Members can give feedback and cast votes in the Speeches tab."
+                return
+            }
+            if (agendaExists) {
+                adminStatusBadge.classList.add("tm-admin-status__badge--published")
+                adminStatusBadge.textContent = "Published"
+                adminStatusCopy.textContent = "Agenda is saved. Turn on Meeting live when the session starts."
+                return
+            }
+            adminStatusBadge.classList.add("tm-admin-status__badge--draft")
+            adminStatusBadge.textContent = "Draft"
+            adminStatusCopy.textContent = "Edit roles, publish the agenda, then go live for feedback and voting."
+        }
+
+        function isFilledOut() {
+            return AGENDA_ROLE_IDS.every((id) => document.getElementById(id)?.value.trim())
+        }
+
+        function updatePublishState() {
+            highlightIncompleteAdminRoles()
+            const incomplete = countIncompleteAdminRoles()
+            publishBtn.disabled = !isEditing || !isFilledOut()
+            if (incomplete > 0) {
+                adminStickyCopy.textContent = `${incomplete} role${incomplete === 1 ? "" : "s"} still need a member.`
+            } else {
+                adminStickyCopy.textContent = "Ready to publish."
             }
         }
 
-        function openVerifyDialog()
-        {
-            document.getElementById('clearDialog').showModal();
+        function setToolbarEditAction(isClear) {
+            editAgendaBtn.textContent = isClear ? "Clear" : "Edit agenda"
+            editAgendaBtn.classList.toggle("tm-btn--primary", !isClear)
+            editAgendaBtn.classList.toggle("tm-btn--secondary", isClear)
         }
 
-        function isFilledOut(){
-            let filled = true; 
-            const table = document.getElementById("agenda");
-            if (!table) {
-                alert(`Table not found with selector: ${tableSelector}`);
+        function enterEditMode() {
+            isEditing = true
+            document.body.classList.add("is-editing")
+            adminEditTools.hidden = false
+            setToolbarEditAction(true)
+            adminStickyBar.classList.add("is-visible")
+            setAdminCardsEditable(true)
+            meetingLiveToggle.disabled = true
+            updateStatusUI()
+            updatePublishState()
+            hideAdminMessage()
+        }
+
+        function exitEditMode() {
+            isEditing = false
+            document.body.classList.remove("is-editing")
+            adminEditTools.hidden = true
+            importSummary.hidden = true
+            setToolbarEditAction(false)
+            adminStickyBar.classList.remove("is-visible")
+            setAdminCardsEditable(false)
+            meetingLiveToggle.disabled = !agendaExists
+            updateStatusUI()
+        }
+
+        editAgendaBtn.onclick = () => {
+            if (isEditing) {
+                document.getElementById("clearDialog").showModal()
+                return
+            }
+            enterEditMode()
+        }
+
+        cancelBtn.onclick = async () => {
+            await fetchAgenda()
+            exitEditMode()
+            hideAdminMessage()
+        }
+
+        publishBtn.onclick = async () => {
+            if (!isFilledOut()) {
+                updatePublishState()
+                showAdminMessage("Fill out every role before publishing.", "error")
+                return
             }
 
-            const selects = table.querySelectorAll("select");
-            selects.forEach(select => {
-                const id = select.id;
-                const member = select.value.trim();
-                if(member == "" || null)
-                {
-                    filled =  false;
+            try {
+                await uploadToServer(getTableValues(false))
+                agendaExists = true
+                exitEditMode()
+                updateStatusUI()
+                showAdminMessage("Agenda published and saved to Firestore. Turn on Meeting live when you're ready for feedback and voting.", "success")
+            } catch (error) {
+                console.error("Publish failed:", error)
+                showAdminMessage(error?.message || "Could not publish the agenda. Try again.", "error")
+            }
+        }
+
+        previewBtn.onclick = () => {
+            document.getElementById("previewAgendaList").innerHTML = buildAdminPreviewHtml()
+            previewDialog.showModal()
+        }
+
+        previewCloseBtn.onclick = () => previewDialog.close()
+
+        async function revealVotes() {
+            voteResultsBody.innerHTML = `<p class="tm-vote-results__loading">Loading votes…</p>`;
+            voteResultsDialog.showModal();
+
+            try {
+                const snapshot = await getDocs(collection(db, "votes"));
+                const voteDocs = [];
+                snapshot.forEach((voteDoc) => {
+                    voteDocs.push({ id: voteDoc.id, data: voteDoc.data() });
+                });
+
+                if (!voteDocs.length) {
+                    voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">No votes have been cast yet.</p>`;
+                    return;
                 }
-            })
 
-            return filled
+                const summary = buildVoteResultsSummary(voteDocs);
+                voteResultsBody.innerHTML = renderVoteResultsHtml(summary);
+            } catch (error) {
+                console.error("Failed to load votes:", error);
+                voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">Could not load votes. Try again in a moment.</p>`;
+            }
         }
 
-        clearBtn.onclick = () => {
-            openVerifyDialog()
+        revealVotesBtn.onclick = () => {
+            revealVotes();
+        };
+
+        voteResultsCloseBtn.onclick = () => voteResultsDialog.close();
+
+        clearDialogCancelBtn.onclick = () => {
+            document.getElementById("clearDialog").close()
         }
 
         clearDialogYesBtn.onclick = () => {
             resetSelects()
+            enterEditMode()
+            updatePublishState()
+            document.getElementById("clearDialog").close()
+            showAdminMessage("Agenda cleared. Assign roles, then publish.", "info")
         }
 
-        let members = []
+        meetingLiveToggle.addEventListener("click", async () => {
+            if (meetingLiveToggle.disabled) return
+
+            if (!agendaExists) {
+                setMeetingLiveToggle(false)
+                showAdminMessage("Publish an agenda before going live.", "error")
+                return
+            }
+
+            const nextLive = !isMeetingLiveOn()
+            setMeetingLiveToggle(nextLive)
+
+            try {
+                await setMeetingLive(nextLive)
+                meetingIsLive = nextLive
+                updateStatusUI()
+                showAdminMessage(
+                    meetingIsLive
+                        ? "Meeting is live. Feedback and voting are enabled."
+                        : "Meeting is no longer live. Feedback and voting are paused.",
+                    "success"
+                )
+            } catch (error) {
+                setMeetingLiveToggle(!nextLive)
+                console.error("setMeetingLive failed:", error)
+                showAdminMessage("Could not update live status. Check that you're signed in as an admin.", "error")
+            }
+        })
+
+        document.getElementById("tmAdminCards")?.addEventListener("change", (event) => {
+            if (event.target.matches("select, input")) updatePublishState()
+        })
         async function getMembers()
         {
             const usersRef = collection(db, "users");
@@ -544,12 +654,14 @@
             let firstSpeaker = document.getElementById("firstSpeaker")
             let secondSpeaker = document.getElementById("secondSpeaker")
             let thirdSpeaker = document.getElementById("thirdSpeaker")
+            let fourthSpeaker = document.getElementById("fourthSpeaker")
             let tableRole = document.getElementById("tableRole")
             let generalRole = document.getElementById("generalRole")
             let generalRoleCopy = document.getElementById("generalRoleCopy")
             let firstEvaluator = document.getElementById("firstEvaluator")
             let secondEvaluator = document.getElementById("secondEvaluator")
             let thirdEvaluator = document.getElementById("thirdEvaluator")
+            let fourthEvaluator = document.getElementById("fourthEvaluator")
             let educationRole = document.getElementById("educationRole")
 
             querySnapshot.forEach((doc) => {
@@ -571,183 +683,258 @@
                 firstSpeaker.appendChild(createOption(name));
                 secondSpeaker.appendChild(createOption(name));
                 thirdSpeaker.appendChild(createOption(name));
+                fourthSpeaker.appendChild(createOption(name));
                 tableRole.appendChild(createOption(name));
                 generalRole.appendChild(createOption(name));
                 firstEvaluator.appendChild(createOption(name));
                 secondEvaluator.appendChild(createOption(name));
                 thirdEvaluator.appendChild(createOption(name));
+                fourthEvaluator.appendChild(createOption(name));
                 educationRole.appendChild(createOption(name));
             });
         }
 
-        getMembers()
+        getMembers().then(() => {
+            buildAdminAgendaCards()
+            setAdminCardsEditable(false)
+            fetchAgenda()
+        })
+
+        agendaPdfInput.addEventListener("change", async (event) => {
+            const file = event.target.files?.[0];
+            event.target.value = "";
+            if (!file) return;
+
+            importSummary.hidden = true;
+            importSummary.classList.remove("is-error");
+            importSummary.textContent = "Reading agenda PDF…";
+            importSummary.hidden = false;
+
+            try {
+                const { parsed, summary } = await importAgendaPdf(file);
+                enterEditMode();
+                highlightIncompleteAdminRoles();
+                updatePublishState();
+                renderImportSummary(importSummary, summary, parsed.meetingDate);
+                showAdminMessage("PDF imported. Review highlighted roles, then publish.", "info");
+            } catch (error) {
+                importSummary.classList.add("is-error");
+                importSummary.innerHTML = `<p><strong>Could not import PDF.</strong> ${error.message || error}</p><p>Use a Toastmasters printed agenda PDF from your club site.</p>`;
+            }
+        });
 
         document.getElementById("tmRole").addEventListener("change", function  () {
             const value = this.value 
             document.getElementById("tmRoleCopy").textContent = value
+            document.getElementById("tmRoleCopyDisplay").textContent = value || "Unassigned"
         })
 
         document.getElementById("generalRole").addEventListener("change", function  () {
             const value = this.value 
             document.getElementById("generalRoleCopy").textContent = value
+            document.getElementById("generalRoleCopyDisplay").textContent = value || "Unassigned"
         })
 
-        function getTableValues() {
-            const table = document.getElementById("agenda");
-            if (!table) {
-                alert(`Table not found with selector: ${tableSelector}`);
-                return [];
-            }
-
-            const selects = table.querySelectorAll("select");
+        function getTableValues(publishLive = isMeetingLiveOn()) {
             const assignments = [];
+            const dateValue = getAgendaDateValue();
 
-            let meetingDate = document.getElementById("meetingDate")
-            let dateValue = meetingDate.value
+            AGENDA_ROLE_IDS.forEach((id) => {
+                const select = document.getElementById(id);
+                if (!select) return;
 
-            selects.forEach(select => {
-                const id = select.id;
                 const member = select.value.trim();
                 const assignment = { id, member };
-                
-                if (id === "firstSpeaker") {
-                    const pathInput = document.getElementById("firstSpeakerPath");
-                    const titleInput = document.getElementById("firstSpeakerTitle");
 
-                    var speakerIndex= document.getElementById("firstSpeaker").selectedIndex
-                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
-                    let titleValue = titleInput ? titleInput.value.trim() : "";
+                if (id.endsWith("Speaker")) {
+                    const pathInput = document.getElementById(`${id}Path`);
+                    const titleInput = document.getElementById(`${id}Title`);
+                    const pathValue = pathInput ? pathInput.value.trim() : "";
+                    const titleValue = titleInput ? titleInput.value.trim() : "";
+                    const memberEntry = members.find((entry) => entry.name === member);
+                    const speakerId = memberEntry?.id;
 
-                    let speakerId = members[speakerIndex-1].id
-
-                    assignment.path = pathValue
-                    assignment.title = titleValue
-                    assignment.userId = speakerId
-                    
-                    addSpeech(speakerId, pathValue, titleValue, dateValue);
+                    assignment.path = pathValue;
+                    assignment.title = titleValue;
+                    if (speakerId) assignment.userId = speakerId;
                 }
 
-                if (id === "secondSpeaker") {
-                    const pathInput = document.getElementById("secondSpeakerPath");
-                    const titleInput = document.getElementById("secondSpeakerTitle");
-
-                    var speakerIndex= document.getElementById("secondSpeaker").selectedIndex
-                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
-                    let titleValue = titleInput ? titleInput.value.trim() : "";
-
-                    let speakerId = members[speakerIndex-1].id
-
-                    assignment.path = pathValue
-                    assignment.title = titleValue
-                    assignment.userId = speakerId
-
-                    addSpeech(speakerId, pathValue, titleValue, dateValue);
-                }
-
-                if (id === "thirdSpeaker") {
-                    const pathInput = document.getElementById("thirdSpeakerPath");
-                    const titleInput = document.getElementById("thirdSpeakerTitle");
-
-                    var speakerIndex= document.getElementById("thirdSpeaker").selectedIndex
-                    let pathValue = pathInput ? pathInput.value.trim() : ""; 
-                    let titleValue = titleInput ? titleInput.value.trim() : "";
-
-                    let speakerId = members[speakerIndex-1].id
-
-                    assignment.path = pathValue
-                    assignment.title = titleValue
-                    assignment.userId = speakerId
-
-                    addSpeech(speakerId, pathValue, titleValue, dateValue);
-                }
-                
                 assignments.push(assignment);
             });
-            const value = meetingDate.value
-            assignments.push({"date": value})
-            assignments.push({"editable": true})
+
+            assignments.push({ date: dateValue });
+            assignments.push({ editable: publishLive });
             return assignments;
+        }
+
+        async function enrichSpeakerAssignments(assignments) {
+            for (const assignment of assignments) {
+                if (!assignment?.id?.endsWith("Speaker")) continue;
+
+                const memberEntry = members.find((entry) => entry.name === assignment.member);
+                if (memberEntry?.id && !assignment.userId) {
+                    assignment.userId = memberEntry.id;
+                }
+
+                if (!assignment.userId) continue;
+
+                try {
+                    const userSnap = await getDoc(doc(db, "users", assignment.userId));
+                    if (!userSnap.exists()) continue;
+                    const profile = userSnap.data();
+                    assignment.imageUrl = profile.imageUrl || "";
+                    assignment.bio = profile.bio || "";
+                } catch (error) {
+                    console.warn("Could not attach speaker profile:", assignment.userId, error);
+                }
+            }
+
+            return assignments;
+        }
+
+        async function syncPublishedSpeakerRecords(assignments, meetingDate) {
+            if (!meetingDate) return;
+
+            const tasks = [];
+            assignments.forEach((assignment) => {
+                if (!assignment?.id?.endsWith("Speaker")) return;
+
+                const userId = assignment.userId;
+                if (!userId) return;
+
+                const payload = buildSpeechDocPayload({
+                    path: assignment.path,
+                    title: assignment.title,
+                });
+                if (!Object.keys(payload).length) return;
+
+                tasks.push(
+                    setDoc(doc(db, "users", userId, "speeches", meetingDate), payload, { merge: true })
+                );
+            });
+
+            await Promise.all(tasks);
         }
 
         async function uploadToServer(data)
         {
-            await setDoc(doc(db, "test", "date"), {
-                data
-            });
+            const user = auth.currentUser
+            if (!user) throw new Error("Sign in to publish the agenda.")
+
+            const enriched = await enrichSpeakerAssignments(data)
+            const meta = getAgendaMeta(enriched)
+
+            await syncPublishedSpeakerRecords(enriched, meta.date)
+
+            await saveAgendaDoc(db, enriched, {
+                uid: user.uid,
+                isLive: meta.editable,
+            })
+
+            agendaExists = true
+        }
+
+        async function setMeetingLive(isLive) {
+            const user = auth.currentUser
+            if (!user) throw new Error("Sign in to update live status.")
+
+            const loaded = await loadAgendaDoc(db, {
+                getDocFn: getDoc,
+                setDocFn: setDoc,
+                loadAndMigrateAgendaDoc,
+            })
+            if (!loaded?.data?.data) throw new Error("missing agenda")
+
+            const normalized = normalizeAgendaDoc(loaded.data)
+            const data = normalized.data
+
+            if (data.length <= AGENDA_ROLE_COUNT) {
+                data[AGENDA_ROLE_COUNT] = { date: getAgendaDateValue() }
+            }
+            data[AGENDA_ROLE_COUNT + 1] = { editable: isLive }
+
+            await saveAgendaDoc(db, data, {
+                uid: user.uid,
+                isLive,
+            })
+
+            meetingIsLive = isLive
         }
 
         async function fetchAgenda()
         {
-            const docRef = doc(db, "test", "date")
-            const docSnap = await getDoc(docRef)
+            try {
+                const loaded = await loadAgendaDoc(db, {
+                    getDocFn: getDoc,
+                    setDocFn: setDoc,
+                    loadAndMigrateAgendaDoc,
+                })
 
-            if(docSnap.exists()){
+                if (!loaded) {
+                    agendaExists = false
+                    meetingIsLive = false
+                    setMeetingLiveToggle(false)
+                    meetingLiveToggle.disabled = true
+                    updateStatusUI()
+                    return;
+                }
 
-                let data = docSnap.data()
-                
-                for(var i=0; i<14; i++){
-                    let element = document.getElementById(data.data[i].id);
-                    element.value = data.data[i].member
-                    if(data.data[i].id == "tmRole"){
-                        document.getElementById("tmRoleCopy").innerText = data.data[i].member
+                const docData = loaded.data
+                agendaExists = true
+
+                for (let i = 0; i < AGENDA_ROLE_COUNT; i++) {
+                    const assignment = docData.data[i];
+                    if (!assignment?.id) continue;
+
+                    const element = document.getElementById(assignment.id);
+                    if (element) element.value = assignment.member || "";
+
+                    if (assignment.id === "tmRole") {
+                        document.getElementById("tmRoleCopy").innerText = assignment.member || "";
+                        document.getElementById("tmRoleCopyDisplay").textContent = assignment.member || "Unassigned";
                     }
 
-                    if(data.data[i].id == "generalRole"){
-                        document.getElementById("generalRoleCopy").innerText = data.data[i].member
+                    if (assignment.id === "generalRole") {
+                        document.getElementById("generalRoleCopy").innerText = assignment.member || "";
+                        document.getElementById("generalRoleCopyDisplay").textContent = assignment.member || "Unassigned";
                     }
 
-                    if(data.data[i].id == "firstSpeaker")
-                    {
-                        document.getElementById("firstSpeakerPath").value = data.data[i].path
-                        document.getElementById("firstSpeakerTitle").value = data.data[i].title
+                    if (assignment.id.endsWith("Speaker")) {
+                        const pathEl = document.getElementById(`${assignment.id}Path`);
+                        const titleEl = document.getElementById(`${assignment.id}Title`);
+                        if (pathEl) pathEl.value = assignment.path || "";
+                        if (titleEl) titleEl.value = assignment.title || "";
                     }
-                    if(data.data[i].id == "secondSpeaker")
-                    {
-                        document.getElementById("secondSpeakerPath").value = data.data[i].path 
-                        document.getElementById("secondSpeakerTitle").value = data.data[i].title 
-                    }
-                    if(data.data[i].id == "thirdSpeaker")
-                    {
-                        document.getElementById("thirdSpeakerPath").value = data.data[i].path 
-                        document.getElementById("thirdSpeakerTitle").value = data.data[i].title 
-                    }
-                }    
-                
-            }else{
-                alert(`error CV-500`)
+                }
+
+                const meta = getAgendaMeta(docData.data);
+                if (meta.date) meetingDateInput.value = meta.date
+                meetingIsLive = meta.editable
+                setMeetingLiveToggle(meta.editable)
+                meetingLiveToggle.disabled = isEditing
+                highlightIncompleteAdminRoles()
+                updatePublishState()
+                updateStatusUI()
+            } catch (error) {
+                showAdminMessage("Could not load the saved agenda.", "error")
             }
         }
 
-        fetchAgenda()
-
         function resetSelects() {
-            const table = document.getElementById("agenda");
-            const selects = table.querySelectorAll("select");
-
-            selects.forEach(select => {
-                select.value = ""; 
+            AGENDA_ROLE_IDS.forEach((id) => {
+                const select = document.getElementById(id);
+                if (select) select.value = "";
             });
 
             document.getElementById("tmRoleCopy").textContent = ""
             document.getElementById("generalRoleCopy").textContent = ""
-            document.getElementById("meetingDate").innerText = ""
+            document.getElementById("tmRoleCopyDisplay").textContent = "Unassigned"
+            document.getElementById("generalRoleCopyDisplay").textContent = "Unassigned"
+            meetingDateInput.value = ""
 
-            document.getElementById("firstSpeakerPath").value = ""
-            document.getElementById("firstSpeakerTitle").value = ""
-
-            document.getElementById("secondSpeakerPath").value = ""
-            document.getElementById("secondSpeakerTitle").value = ""
-
-            document.getElementById("thirdSpeakerPath").value = ""
-            document.getElementById("thirdSpeakerTitle").value = ""
-
-        }
-
-        async function addSpeech(id, path, title, date)
-        {
-            let result = await setDoc(doc(db, "users", id, "speeches" , `${date}`), {
-                path: `${path}`, 
-                title: `${title}`, 
+            ["firstSpeaker", "secondSpeaker", "thirdSpeaker", "fourthSpeaker"].forEach((id) => {
+                document.getElementById(`${id}Path`).value = ""
+                document.getElementById(`${id}Title`).value = ""
             })
         }
     </script>

@@ -1,0 +1,29 @@
+TM Experience — Firestore clubs collection
+==========================================
+
+Add to your Firebase project (naples-sunrise-bay) firestore.rules:
+
+  match /clubs/{clubId} {
+    // Allow registration lookup by club document ID (no list/search).
+    allow get: if resource.data.active != false;
+    allow list, create, update, delete: if false;
+  }
+
+  match /users/{userId} {
+    allow read: if request.auth != null && request.auth.uid == userId;
+    allow create: if request.auth != null
+      && request.auth.uid == userId
+      && request.resource.data.clubId is string
+      && request.resource.data.clubId.size() >= 3;
+    ...
+  }
+
+Club document example (clubs/naples-sunrise-bay):
+
+  {
+    "name": "Naples Sunrise Bay Toastmasters",
+    "active": true
+  }
+
+The club ID the user enters must match the document ID exactly
+(e.g. naples-sunrise-bay or your Toastmasters club number as the doc id).

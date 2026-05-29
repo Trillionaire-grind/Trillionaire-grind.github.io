@@ -1,215 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Naples Sunrise Bay</title>
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                /*background-color: #F0F1F3;*/
-                background-color: #DEE2E1;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #024165;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — TM Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=6">
+</head>
+<body class="tm-body">
+    <div class="tm-page">
+        <p class="tm-profile-greeting">Hello<br><span id="nameTV">Member</span></p>
 
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 40%;
-                /*margin: 10;*/
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
+        <div class="tm-profile-bio-header">
+            <p class="tm-section-title">Your bio</p>
+            <button type="button" id="signOutBtn" class="tm-btn tm-btn--secondary tm-profile-sign-out" disabled>Sign out</button>
+        </div>
+        <div class="tm-card tm-bio-card">
+            <img src="assets/alex.jpeg" id="profileImage" alt="Profile photo">
+            <div class="tm-bio-card__text">
+                <p class="tm-bio-card__label">About you</p>
+                <p class="tm-bio-card__bio" id="bioTV"></p>
+            </div>
+        </div>
 
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
+        <p class="tm-section-title">Your speeches</p>
+        <div id="speechesDiv" class="tm-speech-grid"></div>
+    </div>
+
+    <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getTmAuth, getTmDb } from "./scripts/tmFirebase.js";
+
+        const auth = await getTmAuth();
+        const db = getTmDb();
+        const signOutBtn = document.getElementById("signOutBtn");
+
+        function getUser() {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    fetchUserInfo(user.uid);
+                    fetchSpeeches(user.uid);
+                    signOutBtn.disabled = false;
+                } else {
+                    document.getElementById("nameTV").innerText = "Member";
+                    document.getElementById("bioTV").innerText = "Sign in to view your profile.";
+                    document.getElementById("profileImage").src = "assets/alex.jpeg";
+                    document.getElementById("speechesDiv").innerHTML = "";
+                    signOutBtn.disabled = true;
                 }
+            });
+        }
+
+        function openIndividualSpeech(speechId, uid) {
+            const url = `./individualSpeech.html?v=7&speech=${encodeURIComponent(speechId)}&user=${encodeURIComponent(uid)}`;
+            window.open(url, "_blank")?.focus();
+        }
+
+        async function fetchUserInfo(userId) {
+            const docSnap = await getDoc(doc(db, "users", userId));
+            if (docSnap.exists()) {
+                setData(docSnap.data());
             }
-        </style>
-        
-    </head>
-    <body>
-        <header>
-            <p style="font-size: 26px; padding-left: 5%;">Hello <br><span id="nameTV" style="font-size: 32px; font-weight: bold;  color: #024165;">Michael</span></p>
-        </header>
+        }
 
-        <p style="margin-left: 5%; font-weight: bold;">Your Bio</p>
-        <div style="width: 90; background-color: white; margin-left: 5%; margin-right: 5%;  border-radius: 6px; display: flex;">
-            <img src="assets/alex.jpeg" id="profileImage" height="60px" width="50px" style="margin-top: auto; margin-bottom: auto; margin-left: 10px;">
-            <div style="margin: auto; margin-bottom: auto; margin-left: 4%;">
-                <p style="font-size: 16px; font-weight: bold;">I am...<br>
-                    <p id="bioTV"> </p>
-            </div>
-        </div>
-        <p style="font-weight: bold; margin-left: 5%;">Your Speeches</p>
-      
-        <div style="margin-bottom: 20vh;">
-        
-            <div id="speechesDiv" style="display: flex; flex-wrap: wrap; justify-content: left;  overflow-y: scroll; width: 90%; margin-left: auto; margin-right: auto;">
+        function setData(data) {
+            document.getElementById("nameTV").innerText = data.name;
+            document.getElementById("bioTV").innerText = data.bio;
+            document.getElementById("profileImage").src = data.imageUrl;
+        }
 
-            </div>
-        </div>
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
-            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-            import { getStorage, ref} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
-
-
-            const firebaseConfig = {
-            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-            authDomain: "naples-sunrise-bay.firebaseapp.com",
-            projectId: "naples-sunrise-bay",
-            storageBucket: "naples-sunrise-bay.appspot.com",
-            messagingSenderId: "39028676552",
-            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-            measurementId: "G-L0QCNW7C6W"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const auth = getAuth(app)
-            const db = getFirestore(app);
-
-            function getUser() {
-            const auth = getAuth();
-            var uid = 0;
-
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        uid = user.uid;
-                        fetchUserInfo(uid)
-                        fetchSpeeches(uid)
-                    } else {
-                       //alert('No user signed in PV-143');
-                    }
+        async function fetchSpeeches(userId) {
+            const speechesDiv = document.getElementById("speechesDiv");
+            speechesDiv.innerHTML = "";
+            try {
+                const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
+                querySnapshot.forEach((speechDoc) => {
+                    speechesDiv.appendChild(createSpeechDiv(speechDoc.id, speechDoc.data(), userId));
                 });
+            } catch (error) {
+                speechesDiv.innerHTML = '<p class="tm-bio-card__bio">Failed to fetch speeches. Please try again later.</p>';
             }
-            
-            function openIndividualSpeech(speechId, uid)
-            {
-                let url = `./individualSpeech.html?speech=${speechId}?user=${uid}`
-                window.open(url, '_blank').focus();
-            }
+        }
 
-            async function fetchUserInfo(userId)
-            {
-                const docRef = doc(db, "users", userId)
-                const docSnap = await getDoc(docRef)
+        function formatSpeechCardDate(dateValue) {
+            const raw = String(dateValue || "").trim();
+            if (!raw) return "Date TBD";
 
-                if(docSnap.exists()){
-                    setData(docSnap.data())
-                }else{
-                    alert(`PV:162 there was an error ${userId}`)
-                }
-            }
+            const parsed = new Date(`${raw}T12:00:00`);
+            if (Number.isNaN(parsed.getTime())) return raw;
 
-            function setData(data)
-            {
-                let nameTV = document.getElementById("nameTV")
-                let bioTV = document.getElementById("bioTV")
-                let profileImage = document.getElementById("profileImage")
+            return parsed.toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+            });
+        }
 
-                nameTV.innerText = data.name
-                bioTV.innerText = data.bio
-                profileImage.src = data.imageUrl
-            }
+        function createSpeechDiv(id, data, userId) {
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "tm-card tm-speech-card";
+            const safeTitle = String(data?.title || data?.speechTitle || "Untitled speech").trim() || "Untitled speech";
+            card.innerHTML = `<p class="tm-speech-card__date">${formatSpeechCardDate(id)}</p><p class="tm-speech-card__title">${safeTitle}</p>`;
+            card.addEventListener("click", () => openIndividualSpeech(id, userId));
+            return card;
+        }
 
-            async function fetchSpeeches(userId) {
-                let speechesDiv = document.getElementById("speechesDiv");
-                speechesDiv.innerHTML = ''; 
-                try {
-                    const querySnapshot = await getDocs(collection(db, `users/${userId}/speeches`));
+        signOutBtn.addEventListener("click", () => {
+            signOutBtn.disabled = true;
+            window.parent.postMessage({ type: "tm-sign-out" }, "*");
+        });
 
-                    querySnapshot.forEach((doc) => {
-                        
-                        speechesDiv.appendChild(createSpeechDiv(doc.id, doc.data().title, userId));
-                    });
-                } catch (error) {
-                    speechesDiv.innerText = "Failed to fetch speeches. Please try again later.";
-                }
-            }
-
-            function createSpeechDiv(id, title, userId) {
-                let div = document.createElement('div');
-                div.className = 'speechCard';
-                div.dataset.speechId = id;
-                div.innerHTML = `
-                    <div style="width: 150px; display: inline-block; height: 160px; cursor: pointer;
-                                background-color: #fff; margin: 10px; border-radius: 10%;"
-                        onmouseover="this.style.background='#7D2128';" 
-                        onmouseout="this.style.background='#fff';"
-                        id="speechCard";
-                    >
-                        <p style="text-align: center; font-weight: bold;">${id}</p>
-                        <p style="text-align: center; font-size: 16px;">${title}</p>
-                    </div>`;
-                    div.addEventListener('click', () => {
-                        openIndividualSpeech(id, userId);
-                    });
-
-                return div;
-            }
-            getUser()
-        </script>
-    </body>
+        getUser();
+    </script>
+</body>
 </html>

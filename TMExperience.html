@@ -2,455 +2,182 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
-        <title>Your TM Experience</title>
-        <style>        
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #DEE2E1;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-                box-sizing: border-box;
-            }
-            
-            footer{
-                background-color: white;
-                margin: 0;
-                width: 100%;
-                padding: 10px 0;
-                max-width: 100vw;
-                overflow-x: hidden;
-
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 40%;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-
-            .form-group {
-                margin-bottom: 15px;
-            }
-            .form-group label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-            .form-group input[type="text"],
-            .form-group input[type="email"],
-            .form-group input[type="password"],
-            .form-group textarea {
-                width: calc(100% - 12px);
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 14px;
-            }
-            .form-group textarea {
-                resize: vertical;
-            }
-            .form-group .file-input {
-                display: block;
-                margin-top: 10px;
-            }
-            .form-group .file-input input[type="file"] {
-                display: none;
-            }
-            .form-group .file-input label {
-                display: inline-block;
-                background-color: #007bff;
-                color: #fff;
-                padding: 8px 12px;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 14px;
-            }
-            .form-group .file-name {
-                margin-top: 5px;
-                font-size: 12px;
-            }
-            .form-group .social-input {
-                display: flex;
-                align-items: center;
-            }
-            .form-group .social-input label {
-                margin-right: 10px;
-            }
-            .form-group .social-input input[type="text"] {
-                flex: 1;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 14px;
-            }
-            .form-group .social-input span {
-                font-size: 12px;
-                color: #666;
-            }
-            .form-group .submit-btn {
-                text-align: center;
-            }
-            .form-group .submit-btn input[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 16px;
-            }
-
-            .button {
-                display: inline-block;
-            
-                font-size: 24px;
-                font-weight: bold;
-                text-align: center;
-                background-color: #024165;
-                color: white;
-                border: none;
-                border-radius: 10px;
-                cursor: pointer;
-                width: 100%;
-                text-decoration: none;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                transition: background-color 0.3s ease;
-            }
-            
-            .button:hover {
-                background-color: #fff;
-                color: #024165;
-            }
-
-            .form-container {
-                max-width: 600px;
-                margin: 0 auto;
-                background-color: #fff;
-                border-radius: 8px;
-            
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            }
-
-            .form-container label {
-                display: block;
-                text-align: left;
-                margin-bottom: 5px;
-                margin-left: 8px;
-            }
-
-            .form-container input[type="text"],
-            .form-container input[type="email"],
-            .form-container input[type="password"],
-            .form-container textarea,
-            .form-container input[type="tel"],
-            .form-container input[type="file"] {
-                width: calc(100% - 20px);
-                padding: 10px;
-                margin-bottom: 15px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-sizing: border-box;
-                margin-left: 8px;
-                
-            }
-
-            .form-container button {
-                padding: 12px 20px;
-                background-color: #024165;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                margin-left: 8px;
-            }
-
-            .form-container button.secondary {
-                background-color: #008CBA;
-            }
-
-            .form-container button.danger {
-                background-color: #f44336;
-            }
-
-
-            @media (max-width: 600px) {
-                .form-container input[type="text"],
-                .form-container input[type="email"],
-                .form-container input[type="password"],
-                .form-container textarea,
-                .form-container input[type="tel"],
-                .form-container input[type="file"] {
-                    width: 100%;
-                }
-            }
-
-            .modal {
-                display: none; 
-                position: fixed; 
-                z-index: 1; 
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%; 
-                overflow: auto; 
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.4); 
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: 15% auto; 
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%;
-            }
-
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-                background-color: #024165;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .upgrade-container {
-                margin: 8px;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                font-family: Arial, sans-serif;
-            }
-
-            .checkbox-label {
-                display: flex;
-                align-items: center;
-                font-size: 1.1em;
-            }
-
-            .checkbox-label input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                margin-right: 10px;
-                accent-color: #024165; 
-                cursor: pointer;
-                transform: scale(1.5); 
-            }
-
-            .custom-form-container {
-                margin-left: 5%;
-                margin-right: 5%;
-                text-align: center;
-                max-width: 400px;
-                margin: auto;
-            }
-
-            .custom-form-group {
-                display: flex;
-                flex-direction: column;
-                align-items: flex-start;
-                margin-bottom: 1rem;
-            }
-
-            .custom-form-label {
-                margin-bottom: 0.4rem;
-                font-weight: bold;
-                margin-left: 5%;
-            }
-
-            .custom-form-input {
-                width: 90%;
-                padding: 0.5rem;
-                box-sizing: border-box;
-                border-radius: 5px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .custom-reset-link {
-                cursor: pointer;
-                color: #024165;
-                margin-top: -8px;
-                margin-bottom: 10px;
-                text-align: center;
-                width: 100%;
-            }
-
-            .custom-login-button {
-                background-color: #024165;
-                border: none;
-                color: white;
-                height: 6vh;
-                width: 100%;
-                max-width: 150px;
-                cursor: pointer;
-                margin-top: 10px;
-                border-radius: 5px;
-            }
-
-            .custom-button-wrapper {
-                display: flex;
-                justify-content: center;
-            }
-
-        </style>
+        <title>TM Experience</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="TMExperienceViews/assets/tmTheme.css">
+        <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=5">
     </head>
-    <body>
-        <div id="mainViewDiv" style="display: none;">
-            <div>
-                <div style="display: inline;" id="calendarView" style="height: 100vh; width: 100%; ">
-                    <iframe src="TMExperienceViews/calendarView.html" style="height: 100vh; width: 100%;"   ></iframe>
+    <body class="tm-shell-body">
+        <div id="mainViewDiv" class="tm-app-shell" hidden>
+            <div class="tm-frame-stack">
+                <div id="calendarView" class="tm-frame-panel is-active">
+                    <iframe src="TMExperienceViews/calendarView.html?v=6" title="Upcoming meeting"></iframe>
                 </div>
-                <div  style="display: none;"  id="feedbackView" style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/feedbackView.html" style="height: 100vh; width: 100%;"></iframe>
+                <div id="feedbackView" class="tm-frame-panel">
+                    <iframe src="TMExperienceViews/feedbackView.html?v=10" title="Speeches"></iframe>
                 </div>
-                <div style="display: none;"  id="toolsView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/toolsView.html" style="height: 100vh; width: 100%;" ></iframe>
+                <div id="toolsView" class="tm-frame-panel">
+                    <iframe src="TMExperienceViews/toolsView.html?v=7" title="Tools"></iframe>
                 </div>
-                <div style="display: none;"  id="adminView"  style="height: 100vh;  width: 100%;">
-                    <iframe src="TMExperienceViews/adminView.html" style="height: 100vh; width: 100%;" ></iframe>
+                <div id="adminView" class="tm-frame-panel">
+                    <iframe src="TMExperienceViews/adminView.html?v=5" title="Admin"></iframe>
                 </div>
-                <div style="display: none;"  id="profileView"  style="height: 100vh; width: 100%;">
-                    <iframe src="TMExperienceViews/profileView.html" style="height: 100vh; width: 100%;"></iframe>
+                <div id="profileView" class="tm-frame-panel">
+                    <iframe src="TMExperienceViews/profileView.html?v=6" title="Profile"></iframe>
                 </div>
             </div>
-            <footer>
-                <nav id="navBar">
-                    <a href="#"><img id="calendarBtn" onclick="changeTo(0)" src="assets/calendar.svg"  height="24px" width="24px"></a> 
-                    <a href="#"><img id="feedbackBtn" onclick="changeTo(1)" src="assets/list.clipboard.fill.svg" height="24px" width="16px"></a> 
-                    <a href="#"><img id="toolsBtn" onclick="changeTo(2)"  src="assets/tools.svg" height="24px" width="24px"></a> 
-                    <a href="#"><img id="profileBtn" onclick="changeTo(4)"  src="assets/person.svg"  height="24px" width="24px"></a>  
-                    
-                </nav>
-            </footer>
+            <nav class="tm-tabbar" id="navBar" aria-label="Main">
+                <button type="button" class="tm-tab is-active" data-dest="0" onclick="changeTo(0)">
+                    <img id="calendarBtn" src="TMExperienceViews/assets/calendar_fill.svg" alt="">
+                    <span>Meeting</span>
+                </button>
+                <button type="button" class="tm-tab" data-dest="1" onclick="changeTo(1)">
+                    <img id="feedbackBtn" src="TMExperienceViews/assets/list.clipboard.svg?v=6" alt="">
+                    <span>Speeches</span>
+                </button>
+                <button type="button" class="tm-tab" data-dest="2" onclick="changeTo(2)">
+                    <img id="toolsBtn" src="TMExperienceViews/assets/tools.svg" alt="">
+                    <span>Tools</span>
+                </button>
+                <button type="button" class="tm-tab" data-dest="4" onclick="changeTo(4)">
+                    <img id="profileBtn" src="TMExperienceViews/assets/person_muted.svg?v=6" alt="">
+                    <span>Profile</span>
+                </button>
+            </nav>
         </div>
-        <div class="form-container" id="registerView" style="display: none; background-color: red;">
-            <div>
-                <h1 style="text-align: center;">Your <span style=" color: #024165;">TM</span> Experience</h1>
-                <h2 style="text-align: center;">Create your account below or <span id=''  style="color: #7D2128; cursor: pointer; "onclick="showModal()"><u id='signInDialogBtn' >sign-in</u></span></h2>
-               
-                
-                <label for="registerName">Name</label>
-                <input type="text" id="registerName" placeholder="Enter your name"><br>
-        
-                <label for="registerEmail">Email</label>
-                <input type="email" id="registerEmail" placeholder="Enter your email"><br>
-        
-                <label for="registerPassword">Password</label>
-                <input type="password" id="registerPassword" placeholder="Enter your password"><br>
-        
-                <label for="registerBio">Bio</label>
-                <textarea id="registerBio" placeholder="Tell us about yourself"></textarea><br>
-        
-                <label for="image">Select image:</label>
-                <input type="file" id="image" name="img" accept="image/*"><br>
 
-                <div class="upgrade-container">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="upgradeCheckbox">
-                        Yes, I want to upgrade to the TMExperience Pro, to record my speeches and to improve my speeches even better.
-                    </label>
-                </div>
-                <button id="registerBtn"  style="align-self: center; background-color: #024165;">Register</button>
-            </div>
-        </div>
-        <div id="welcomeView" style="text-align: center;">
-            <p style="text-align: left; margin-left: 5%;">Discover...
-                <span style="display: block; text-align:center ; font-weight: bold; font-size: 32px;">
-                    "How To Master<br>Public Speaking"
-                </span>
-                <span style="display: block;text-align: center; ">
-                    <mark>With the TM Experience App</mark>
-                </span>
-            </p>
-            <p style="width: 90%; margin-left: 5%; margin-right: 5%; text-align: start;">
-                Do you want to be a better speaker?<br>
-                Do you want to be able to express yourself?<br>
-                Do you want to be able to help others?<br>
-                <br>
-                Do you like receiving feedback on your speeches?<br>
-                Do you like preparing throughly before a speech?<br>
-                Do you like improving your speeches?<br>
-                <br>
-                Do you want the #1 app to master public speaking?<br><br>
-                Then...Log In!
-            </p>
-            <div id="resetModal" class="modal">
-                <div class="modal-content" style="padding-bottom: 64px;">
-                    <h2 style="text-align: center;">Reset Your Password</h2>
-                    <p style="text-align: start; margin-bottom: 0px;">Enter Your Email </p><br>
-                    <input type="email" id="resetEmailET" style="width: 100%; height: 40px; margin-left: auto; margin-right: auto; margin-top: 0px;" placeholder="Enter your email"><br>
-                    <div style="float: right; margin-top: 12px;">
-                        <button id="resetCancelBtn" style="background-color: #fff; color: #000; border: none; margin-left: auto; padding: 8px; cursor: pointer;">Cancel</button>
-                        <button id="resetSendBtn" style="float: right; background-color: #024165; color: white; padding: 8px; cursor: pointer; border-radius: 10px; border: none;">Reset Password</button>
+        <div id="registerView" class="tm-auth-screen tm-register-page" hidden>
+            <header class="tm-register-top">
+                <button type="button" class="tm-auth-back" id="backToWelcomeBtn">← Back to sign in</button>
+            </header>
+
+            <div class="tm-register-content">
+                <div class="tm-auth-pitch">
+                    <p class="tm-auth-pitch__eyebrow">Discover…</p>
+                    <p class="tm-auth-pitch__headline">"How To Master<br>Public Speaking"</p>
+                    <p class="tm-auth-pitch__mark"><mark>With the TM Experience App</mark></p>
+                    <div class="tm-auth-video" data-tm-welcome-video aria-label="TM Experience intro video"></div>
+                    <div class="tm-auth-pitch__body">
+                        <p>Do you want to be a better speaker?<br>
+                        Do you want to be able to express yourself?<br>
+                        Do you want to be able to help others?</p>
+                        <p>Do you like receiving feedback on your speeches?<br>
+                        Do you like preparing throughly before a speech?<br>
+                        Do you like improving your speeches?</p>
+                        <p>Do you want the #1 app to master public speaking?<br><br>
+                        Then… create your account!</p>
                     </div>
                 </div>
+
+                <section class="tm-register-form">
+                    <h2 class="tm-register-form__title">Create account</h2>
+                    <p id="registerError" class="tm-auth-error" hidden></p>
+                <div class="tm-field">
+                    <label for="registerClubId">Club ID</label>
+                    <input type="text" id="registerClubId" placeholder="e.g. naples-sunrise-bay" autocomplete="off" inputmode="text">
+                    <p class="tm-field-hint">Your VP Education or club admin can give you this ID.</p>
+                </div>
+                <div class="tm-field">
+                    <label for="registerName">Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your name">
+                </div>
+                <div class="tm-field">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email">
+                </div>
+                <div class="tm-field">
+                    <label for="registerPassword">Password</label>
+                    <input type="password" id="registerPassword" placeholder="Enter your password">
+                </div>
+                <div class="tm-field">
+                    <label for="registerBio">Bio</label>
+                    <textarea id="registerBio" placeholder="Tell us about yourself"></textarea>
+                </div>
+                <div class="tm-field">
+                    <label for="image">Profile photo</label>
+                    <input type="file" id="image" name="img" accept="image/*">
+                </div>
+                <div class="tm-upgrade-box">
+                    <p class="tm-upgrade-box__badge">TM Experience Pro</p>
+                    <h3 class="tm-upgrade-box__title">Level up your speaking journey</h3>
+                    <p class="tm-upgrade-box__intro">
+                        Add Pro to get your speeches recorded and a personal speaker reel page you can share with club members, mentors, and anyone who wants to see your best work.
+                    </p>
+                    <ul class="tm-upgrade-box__list">
+                        <li>
+                            Up to 2 speeches a month recorded for 12 months
+                            <span class="tm-upgrade-box__value">($2,328 value)</span>
+                        </li>
+                        <li>
+                            A personal speaker reel webpage showcasing your best speeches
+                            <span class="tm-upgrade-box__value">($4,000 value)</span>
+                        </li>
+                    </ul>
+                    <p class="tm-upgrade-box__price">
+                        Over <strong>$6,328</strong> value for only <strong>$97</strong>/year
+                    </p>
+                    <label class="tm-upgrade-box__check">
+                        <input type="checkbox" id="upgradeCheckbox">
+                        <span>Yes, add TM Experience Pro to my account</span>
+                    </label>
+                </div>
+                <div class="tm-auth-actions">
+                    <button type="button" id="registerBtn" class="tm-btn tm-btn--primary">Register</button>
+                </div>
+                </section>
             </div>
-            <div class="custom-form-container">
-                <div class="custom-form-group">
-                  <label for="customEmail" class="custom-form-label">Email</label>
-                  <input type="email" id="logInEmail" class="custom-form-input" placeholder="Enter your email">
+        </div>
+
+        <div id="welcomeView" class="tm-auth-screen">
+            <div class="tm-auth-hero">
+                <h1 class="tm-auth-hero__brand">Your <em>TM</em> Experience</h1>
+                <p class="tm-auth-hero__club">At Naples Sunrise Bay</p>
+            </div>
+
+            <div class="tm-auth-card">
+                <h2>Sign in</h2>
+                <div class="tm-field">
+                    <label for="logInEmail">Email</label>
+                    <input type="email" id="logInEmail" placeholder="Enter your email">
                 </div>
-              
-                <div class="custom-form-group">
-                  <label for="customPassword" class="custom-form-label">Password</label>
-                  <input type="password" id="logInPassword" class="custom-form-input" placeholder="Enter your password">
+                <div class="tm-field">
+                    <label for="logInPassword">Password</label>
+                    <input type="password" id="logInPassword" placeholder="Enter your password">
                 </div>
-              
-                <p id="resetEmailBtn" class="custom-reset-link">Reset your password?</p>
-              
-                <div class="custom-button-wrapper">
-                  <button id="logInBtn" class="custom-login-button">Log In</button>
+                <button type="button" id="resetEmailBtn" class="tm-link-btn">Reset your password?</button>
+                <div class="tm-auth-actions tm-auth-actions--stack">
+                    <button type="button" id="logInBtn" class="tm-btn tm-btn--primary">Log in</button>
+                    <button type="button" id="goToRegisterBtn" class="tm-btn tm-btn--secondary">Create account</button>
                 </div>
-                <p style="text-align: center;">version 1.0.1.5</p>
+                <p class="tm-version">version 1.0.1.5</p>
+            </div>
+        </div>
+
+        <div id="resetModal" class="tm-modal-shell" aria-hidden="true">
+            <div class="tm-modal-shell__panel">
+                <h2>Reset your password</h2>
+                <div class="tm-field">
+                    <label for="resetEmailET">Email</label>
+                    <input type="email" id="resetEmailET" placeholder="Enter your email">
+                </div>
+                <div class="tm-modal-shell__actions">
+                    <button type="button" id="resetCancelBtn" class="tm-btn tm-btn--secondary">Cancel</button>
+                    <button type="button" id="resetSendBtn" class="tm-btn tm-btn--primary">Send reset link</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="welcomeModal" class="tm-modal-shell" aria-hidden="true">
+            <div class="tm-modal-shell__panel">
+                <h2 id="welcomeModalTitle">Welcome to TM Experience</h2>
+                <p id="welcomeModalBody" class="tm-modal-shell__copy">Your account is ready. Explore the meeting agenda, give speaker feedback, and use club tools from the tabs below.</p>
+                <div class="tm-auth-actions tm-modal-shell__footer">
+                    <button type="button" id="welcomeModalCloseBtn" class="tm-btn tm-btn--primary">Get started</button>
+                </div>
             </div>
         </div>
         <script type="module">
@@ -460,6 +187,7 @@
             import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+            import { validateClubId } from "./TMExperienceViews/scripts/tmClubService.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
@@ -476,6 +204,13 @@
             const db = getFirestore(app);
 
             let mainViewDiv = document.getElementById("mainViewDiv")
+            const registerView = document.getElementById("registerView")
+            const welcomeView = document.getElementById("welcomeView")
+            const navBar = document.getElementById("navBar")
+            const registerBtn = document.getElementById("registerBtn")
+            const goToRegisterBtn = document.getElementById("goToRegisterBtn")
+            const registerError = document.getElementById("registerError")
+            let verifiedClub = null
 
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
@@ -499,7 +234,8 @@
 
 
             resetEmailBtn.onclick = () => {
-                resetModal.style.display = 'inline'
+                resetModal.classList.add('is-open');
+                resetModal.setAttribute('aria-hidden', 'false');
             }
 
             resetSendBtn.onclick = () => {
@@ -508,83 +244,219 @@
             }
 
             resetCancelBtn.onclick = () => {
-                resetModal.style.display = 'none'
+                resetModal.classList.remove('is-open');
+                resetModal.setAttribute('aria-hidden', 'true');
+            }
+
+            document.getElementById('backToWelcomeBtn')?.addEventListener('click', () => showRegister(false));
+            goToRegisterBtn?.addEventListener('click', () => {
+                showRegister(true);
+                mountWelcomeVideos(TM_WELCOME_YOUTUBE_ID);
+            });
+            document.getElementById('welcomeModalCloseBtn')?.addEventListener('click', closeWelcomeModal);
+
+            const WELCOME_MODAL_COPY = {
+                newAccount: {
+                    title: 'Welcome to TM Experience',
+                    body: 'Your account is ready. Explore the meeting agenda, give speaker feedback, and use club tools from the tabs below.',
+                    buttonLabel: 'Get started',
+                },
+                returning: {
+                    title: 'Welcome back',
+                    body: 'Good to see you again. Your meeting agenda, feedback tools, and profile are ready below.',
+                    buttonLabel: 'Continue',
+                },
+            };
+
+            function openWelcomeModal(variant = 'newAccount') {
+                const copy = WELCOME_MODAL_COPY[variant] || WELCOME_MODAL_COPY.newAccount;
+                const welcomeModal = document.getElementById('welcomeModal');
+                const titleEl = document.getElementById('welcomeModalTitle');
+                const bodyEl = document.getElementById('welcomeModalBody');
+                const closeBtn = document.getElementById('welcomeModalCloseBtn');
+
+                if (titleEl) titleEl.textContent = copy.title;
+                if (bodyEl) bodyEl.textContent = copy.body;
+                if (closeBtn) closeBtn.textContent = copy.buttonLabel;
+
+                welcomeModal.classList.add('is-open');
+                welcomeModal.setAttribute('aria-hidden', 'false');
+            }
+
+            function closeWelcomeModal() {
+                const welcomeModal = document.getElementById('welcomeModal');
+                welcomeModal.classList.remove('is-open');
+                welcomeModal.setAttribute('aria-hidden', 'true');
+            }
+
+            const TM_WELCOME_YOUTUBE_ID = "";
+
+            function mountWelcomeVideos(youtubeId) {
+                document.querySelectorAll("[data-tm-welcome-video]").forEach((wrap) => {
+                    if (youtubeId) {
+                        wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${youtubeId}" title="TM Experience intro" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
+                    } else {
+                        wrap.innerHTML = `<div class="tm-auth-video__placeholder">Welcome video coming soon</div>`;
+                    }
+                });
+            }
+
+            function setAuthShellMode(isAuth) {
+                document.body.classList.toggle("tm-shell-body--auth", isAuth);
+            }
+
+            const TAB_ICON_VERSION = "6";
+
+            const TAB_ICONS = {
+                0: ["calendar_fill.svg", "calendar.circle.svg"],
+                1: ["list.clipboard.fill.svg", "list.clipboard.svg"],
+                2: ["tools_b.svg", "tools.svg"],
+                3: ["admin_b.svg", "admin.svg"],
+                4: ["person_b.svg", "person_muted.svg"],
+            };
+
+            function tabIconUrl(filename) {
+                return `TMExperienceViews/assets/${filename}?v=${TAB_ICON_VERSION}`;
+            }
+
+            function selectedBtn(destination) {
+                const destNum = Number(destination);
+                document.querySelectorAll(".tm-tab").forEach((tab) => {
+                    const dest = Number(tab.dataset.dest);
+                    const active = dest === destNum;
+                    tab.classList.toggle("is-active", active);
+                    const img = tab.querySelector("img");
+                    if (!img) return;
+
+                    const icons = TAB_ICONS[dest];
+                    const activeIcon = tab.dataset.iconActive || icons?.[0];
+                    const inactiveIcon = tab.dataset.iconInactive || icons?.[1];
+                    const file = active ? activeIcon : inactiveIcon;
+                    if (!file) return;
+
+                    img.src = tabIconUrl(file);
+                });
+            }
+
+            function broadcastAuthToFrames(user) {
+                document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                    iframe.contentWindow?.postMessage({
+                        type: "tm-auth-state",
+                        signedIn: Boolean(user),
+                    }, "*");
+                });
             }
 
             function changeTo(destination)
             {
                 let views = [calendarView, feedbackView, toolsView, adminView, profileView]
-                for(var i=0; i<views.length; i++)
-                {
-                    views[i].style.display = "none"
-                }
-                views[destination].style.display = "inline"
+                views.forEach((view, index) => {
+                    view.classList.toggle('is-active', index === destination);
+                });
                 selectedBtn(destination)
+
+                if (destination === 1) {
+                    const speechesFrame = feedbackView?.querySelector("iframe");
+                    speechesFrame?.contentWindow?.postMessage({ type: "tm-reload-speakers" }, "*");
+                }
+            }
+
+            function showAuthScreen()
+            {
+                welcomeView.hidden = false;
+                mainViewDiv.hidden = true;
+                registerView.hidden = true;
+                setAuthShellMode(true);
+                showRegister(false);
+                changeTo(0);
             }
 
             function showMainView()
             {
-                let mainView = document.getElementById("mainViewDiv")
-                let registerView = document.getElementById("registerView")
-                let formContainer = document.getElementById("form-container")
-                let welcomeView = document.getElementById("welcomeView")
+                mainViewDiv.hidden = false;
+                registerView.hidden = true;
+                welcomeView.hidden = true;
+                setAuthShellMode(false);
+            }
 
-                mainView.style.display = 'inline'
-                registerView.style.display = 'none'
-                welcomeView.style.display = 'none'
-                
+            function showRegister(bool)
+            {
+                registerView.hidden = !bool;
+                welcomeView.hidden = bool;
+                setAuthShellMode(true);
+                if (registerError) {
+                    registerError.hidden = true;
+                    registerError.textContent = "";
+                }
+                if (bool) {
+                    window.scrollTo(0, 0);
+                }
+            }
+
+            function showRegisterError(message) {
+                if (!registerError) {
+                    alert(message);
+                    return;
+                }
+                registerError.textContent = message;
+                registerError.hidden = !message;
             }
 
             function filledOut()
             {
-                let name = document.getElementById("registerName").value
-                let email = document.getElementById("registerEmail").value
+                let name = document.getElementById("registerName").value.trim()
+                let email = document.getElementById("registerEmail").value.trim()
                 let password = document.getElementById("registerPassword").value
-                let bio = document.getElementById("registerBio").value
+                let bio = document.getElementById("registerBio").value.trim()
+                let clubId = document.getElementById("registerClubId").value.trim()
                 let image = document.getElementById("image")
 
-                if(name.length < 1)
-                {
-                    return false;
-                }
-                if(email.length < 1)
-                {
-                    return false;
-                }
-                if(password.length < 1)
-                {
-                    return false;
-                }
-                if(bio.length < 1)
-                {
-                    return false;
-                }
-                if(image.files < 1)
-                {
-                    return false;
-                }
+                if(clubId.length < 1) return false;
+                if(name.length < 1) return false;
+                if(email.length < 1) return false;
+                if(password.length < 1) return false;
+                if(bio.length < 1) return false;
+                if(!image.files || image.files.length < 1) return false;
                 return true
             }
 
-            function createAccount()
+            async function createAccount()
             {
-                let emailValue = document.getElementById('registerEmail').value
-                let passwordValue = document.getElementById('registerPassword').value
+                showRegisterError("");
+                if (!filledOut()) {
+                    showRegisterError("Please fill out every field, including club ID and profile photo.");
+                    return;
+                }
 
+                registerBtn.disabled = true;
+                registerBtn.textContent = "Verifying club…";
+
+                const clubCheck = await validateClubId(db, document.getElementById("registerClubId").value);
+                if (!clubCheck.ok) {
+                    showRegisterError(clubCheck.message);
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = "Register";
+                    return;
+                }
+
+                verifiedClub = clubCheck;
+                registerBtn.textContent = "Creating account…";
+
+                let emailValue = document.getElementById('registerEmail').value.trim()
+                let passwordValue = document.getElementById('registerPassword').value
                 let file = document.getElementById("image").files[0]
+
                 createUserWithEmailAndPassword(auth, emailValue, passwordValue)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    let id = user.uid;
-                    if(id != null)
-                    {
-                        uploadImage(file, id)
+                    if(user.uid != null) {
+                        uploadImage(file, user.uid)
                     }
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(`MV-215: there was an error ${errorMessage} with code ${errorCode}`)
+                    showRegisterError(error.message || "Could not create account.");
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = "Register";
                 });
             }
 
@@ -596,8 +468,14 @@
                         getDownloadURL(moutainsRef).then((downloadURL) => {
                             createUser(userId, downloadURL)
                         }).catch((error) => {
-                            alert('Error getting download URL');
+                            showRegisterError('Error uploading profile photo.');
+                            registerBtn.disabled = false;
+                            registerBtn.textContent = "Register";
                         });
+                    }).catch(() => {
+                        showRegisterError('Error uploading profile photo.');
+                        registerBtn.disabled = false;
+                        registerBtn.textContent = "Register";
                     });
             }
 
@@ -605,26 +483,36 @@
             {
                 const usersRef = collection(db, "users");
 
-                let name = document.getElementById("registerName").value
-                let email = document.getElementById("registerEmail").value
-                let password = document.getElementById("registerPassword").value
-
-                let bio = document.getElementById("registerBio").value
+                let name = document.getElementById("registerName").value.trim()
+                let email = document.getElementById("registerEmail").value.trim()
+                let bio = document.getElementById("registerBio").value.trim()
+                const clubId = verifiedClub?.clubId || document.getElementById("registerClubId").value.trim()
+                const clubName = verifiedClub?.clubName || clubId
                 
                 setDoc(doc(usersRef, userId), {
-                    name: `${name}`,email: `${email}`, bio:`${bio}`, 
-                    imageUrl: `${imageUrl}`,speeches: [] }
-                ).then(()=>{
-                    alert("created account successfully")
-                    let myModal = document.getElementById('myModal');
-                   
+                    name,
+                    email,
+                    bio,
+                    imageUrl,
+                    speeches: [],
+                    clubId,
+                    clubName,
+                }).then(()=>{
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = "Register";
+                    showMainView();
+                    checkRole(userId);
                     const checkbox = document.getElementById('upgradeCheckbox');
                     if(checkbox.checked){
                         //go to the website stripe. 
                     }else{
-                        localStorage.removeItem('showModal'); 
-                        myModal.style.display = 'inline'; 
+                        localStorage.removeItem('showModal');
+                        openWelcomeModal('newAccount');
                     }
+                }).catch(() => {
+                    showRegisterError("Account created but profile could not be saved. Contact your club admin.");
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = "Register";
                 });
             }
 
@@ -635,20 +523,19 @@
                 const docSnap = await getDoc(userRef);
                 if (docSnap.exists()) {
                     if(docSnap.data().role == 'admin'){
-                        alert(`admin user`)
-                        const adminLink = document.createElement('a');
-                        adminLink.href = '#';
-
-                        const adminImg = document.createElement('img');
-                        adminImg.id = 'adminBtn';
-                        adminImg.src = 'TMExperienceViews/assets/admin.svg';
-                        adminImg.height = 24;
-                        adminImg.width = 24;
-                        adminImg.setAttribute('onclick', 'changeTo(3)');
-
-                        adminLink.appendChild(adminImg);
-
-                        document.getElementById('navBar').appendChild(adminLink);
+                        if (!document.getElementById('adminTabBtn')) {
+                            const adminTab = document.createElement('button');
+                            adminTab.type = 'button';
+                            adminTab.className = 'tm-tab';
+                            adminTab.id = 'adminTabBtn';
+                            adminTab.dataset.dest = '3';
+                            adminTab.dataset.iconActive = 'admin_b.svg';
+                            adminTab.dataset.iconInactive = 'admin.svg';
+                            adminTab.innerHTML = `<img id="adminBtn" src="${tabIconUrl('admin.svg')}" alt=""><span>Admin</span>`;
+                            adminTab.addEventListener('click', () => changeTo(3));
+                            const profileTab = document.querySelector('.tm-tab[data-dest="4"]');
+                            navBar.insertBefore(adminTab, profileTab);
+                        }
                     }
                     showMainView()
                 } else {
@@ -659,10 +546,10 @@
             function signIn(email, password) {
                 signOut(auth).then(() => {
                     signInWithEmailAndPassword(auth, email, password)
-                    .then((userCredential) => {
+                    .then(async (userCredential) => {
                         const user = userCredential.user;
-                        alert("Welcome back!")
-                        checkRole(user.uid)
+                        await checkRole(user.uid);
+                        openWelcomeModal('returning');
                     })
                     .catch((error) => {
                         const errorCode = error.code;
@@ -679,7 +566,8 @@
                 sendPasswordResetEmail(auth, email)
                 .then(() => {
                     alert('check your email to reset your password!')
-                    resetModal.style.display = 'none'
+                    resetModal.classList.remove('is-open');
+                    resetModal.setAttribute('aria-hidden', 'true');
                 })
                 .catch((error) => {
                     const errorCode = error.code;
@@ -688,29 +576,8 @@
                 })
             }
 
-            function showRegister(bool)
-            {
-                let registerView = document.getElementById("registerView")
-                let welcomeView = document.getElementById("welcomeView")
-                if(bool)
-                {
-                    registerView.style.display = "inline"
-                    welcomeView.style.display = "none"
-                }
-                else{
-                    registerView.style.display = "none"
-                    welcomeView.style.display = "inline"
-                }
-            }
-
-
             registerBtn.onclick = () => {
-                if(filledOut()){
-                    createAccount()
-                }
-                else{
-                    alert("not filled out")
-                }
+                createAccount()
             }
 
             logInBtn.onclick = () => {
@@ -719,147 +586,36 @@
                 signIn(email, password)
             } 
 
-            showRegister(false)
+            showRegister(false);
+            window.changeTo = changeTo;
+            window.showRegister = showRegister;
+
+            onAuthStateChanged(auth, (user) => {
+                broadcastAuthToFrames(user);
+                if (user) {
+                    checkRole(user.uid);
+                } else {
+                    showAuthScreen();
+                }
+            });
+
+            window.addEventListener("message", (event) => {
+                if (event.data?.type !== "tm-sign-out") return;
+
+                signOut(auth)
+                    .then(() => showAuthScreen())
+                    .catch((error) => {
+                        console.error("Sign out failed:", error);
+                        alert("Could not sign out. Please try again.");
+                    });
+            });
+
             window.onload = function() {
                 if (localStorage.getItem('showModal') === 'true') {
-                    let myModal = document.getElementById('myModal');
-                    localStorage.removeItem('showModal'); 
-                    myModal.style.display = 'inline';
+                    localStorage.removeItem('showModal');
+                    openWelcomeModal('newAccount');
                 }
             };
-        </script>
-    
-        <script>
-            var calendarView = document.getElementById('calendarView');
-            var feedbackView = document.getElementById('feedbackView')
-            var toolsView = document.getElementById('toolsView')
-            var adminView = document.getElementById('adminView')
-            var profileView = document.getElementById('profileView')
-
-            let views = [calendarView, feedbackView, toolsView, adminView, profileView]
-            
-            function changeTo(destination)
-            {
-                views.forEach((view, index) => {
-                    if (index === destination) {
-                        view.style.display = 'inline';
-                    } else {
-                        view.style.display = 'none';
-                    }
-                });
-                selectedBtn(destination)
-            }
-
-            function selectedBtn(destination)
-            {
-                let calendarBtn = document.getElementById("calendarBtn")
-                let feedbackBtn = document.getElementById("feedbackBtn")
-                let toolsBtn = document.getElementById("toolsBtn")
-                let adminView = document.getElementById("adminView")
-                let profileBtn = document.getElementById("profileBtn")
-
-
-                let adminBtn = document.getElementById("adminBtn")
-                calendarBtn.src = "TMExperienceViews/assets/calendar.circle.svg"
-                feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.svg"
-                toolsBtn.src = "TMExperienceViews/assets/tools.svg"
-                profileBtn.src = "TMExperienceViews/assets/person.svg"
-                if(adminBtn){
-                    adminBtn.src = "TMExperienceViews/assets/admin.svg"
-                    switch (destination){
-                        case 0:
-                            calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
-                            break
-                        case 1:
-                            feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
-                            break
-                        case 2:
-                            toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
-                            break
-                        case 3:
-                            adminBtn.src = "TMExperienceViews/assets/admin_b.png"
-                            break
-                        case 4:
-                            profileBtn.src = "TMExperienceViews/assets/person_b.svg"
-                            break
-                    }
-                }
-                else{
-                    switch (destination){
-                        case 0:
-                            calendarBtn.src = "TMExperienceViews/assets/calendar_fill.svg"
-                            break
-                        case 1:
-                            feedbackBtn.src = "TMExperienceViews/assets/list.clipboard.fill.svg"
-                            break
-                        case 2:
-                            toolsBtn.src = "TMExperienceViews/assets/tools_b.svg"
-                            break
-                        case 4:
-                            profileBtn.src = "TMExperienceViews/assets/person_b.svg"
-                            break
-                    }
-                }               
-            }
-            changeTo(0)
-        </script>
-        <script>
-            let startX;
-                let currentX;
-                const threshold = 50;
-            
-                let voteDiv = document.getElementById("voteDiv")
-                let speakerDiv = document.getElementById("speakerDiv")
-                let voteBtn = document.getElementById("voteBtn")
-                let speakerBtn = document.getElementById("speakerBtn")
-            
-                document.addEventListener('touchstart', handleTouchStart, false);
-                document.addEventListener('touchmove', handleTouchMove, false);
-
-                var modal = document.getElementById("myModal");
-                var modalId = document.getElementById("modalId")
-
-                var btn = document.getElementById("signInDialogBtn");
-
-                btn.onclick = function() {
-                    modal.style.display = "block";
-                }
-
-                function closeModal()
-                {
-                    modal.style.display = "none"
-                }
-
-                window.onclick = function(event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-
-                function showModal(name, id){
-                    modal.style.display = "block"                  
-                }
-            
-                function handleTouchStart(event) {
-                    startX = event.touches[0].pageX;
-                }
-
-                function handleTouchMove(event) {
-                    if (!startX) return;
-            
-                    currentX = event.touches[0].pageX;
-            
-                    let deltaX = currentX - startX;
-            
-                    if (Math.abs(deltaX) > threshold) {
-                        if (deltaX > 0) {
-                            showView('view2');
-                        } else {
-                            showView('view1');
-                        }
-                        startX = null;
-                    }
-                }
         </script>
     </body>
 </html>

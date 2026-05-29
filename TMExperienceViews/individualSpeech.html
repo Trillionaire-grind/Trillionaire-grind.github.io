@@ -1,205 +1,275 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Your Speech</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                margin: 0;
-                padding: 0;
-            }
-            .content {
-                padding: 20px;
-            }
-            .bottom-nav {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background-color: #fff;
-                display: flex;
-                justify-content: space-around;
-                align-items: center;
-                padding: 10px 0;
-                border-top: 1px solid #ccc;
-            }
-            .bottom-nav a {
-                color: #333; 
-                text-decoration: none;
-                padding: 10px;
-                border-right: 1px solid #ccc;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                width: 25%;
-                box-sizing: border-box;
-            }
-            .bottom-nav a:last-child {
-                border-right: none; 
-            }
-            .bottom-nav img {
-                width: 24px;
-                height: 24px;
-                margin-bottom: 5px; 
-            }
-            .titleBar{
-                background: #FEFEFE;
-                height: 25px;
-                width: 100%;
-            }
-            .button{
-                border:solid 1px;
-                width: 25px;
-                height: 23px;
-                float:right;
-                cursor:pointer;
-            }
-            .evaluationText{
-                min-height: 250px;
-                background: #DFDFDF;
-                padding: 8px;
-            }
-        </style>
-    </head>
-    <body style="margin-bottom: 30vh;">
-        <h1 id="titleTV" style="text-align: center; padding-left: 8px; font-size: 36px; margin-bottom: 0px;"></h1>
-        <div style="display: flex; justify-content: flex-end; margin-right: 5%;  margin-top: 2px; margin-right: 5%;">
-            <p id="pathTV" style="margin-right: 16px;"></p>
-            <p id="dateTV"></p>
-        </div>
-      
-        <p id="pathTV" style="text-align: center;"></p>
-        
-        <div class="feedbackView" style="margin-top: 32px; width: 90%; margin-right: auto; margin-left: auto;;">
-            <div style="display: flex; border:1px solid black;  border-radius: 10px 10px 0px 0px">
-                <p style="display: inline; padding-top: 0px; padding-left: 8px;">feedback</p>
-                <button style="display: inline;margin-left: auto; margin-top: 8px; margin-right: 8px; " id="feedbackBtn" class="button" onclick="minimizeFeedback()">-</button>
-            </div>
-            <div class="window">
-                <div style="visibility: visible; border-radius: 0px 0px 10px 10px;" class="evaluationText" id="feedbackTV"  >  
-                
-                </div>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your speech — TM Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=16">
+</head>
+<body class="tm-body tm-speech-detail-body">
+    <div class="tm-page tm-speech-detail-page">
+        <button type="button" id="backBtn" class="tm-speech-detail-back">← Back to profile</button>
+
+        <div id="speechLoading" class="tm-speech-detail-loading">
+            <div class="tm-speeches-skeleton tm-speeches-skeleton--line"></div>
+            <div class="tm-speeches-skeleton tm-speeches-skeleton--line short"></div>
+            <div class="tm-speech-detail-feedback-skeleton"></div>
+            <div class="tm-speech-detail-feedback-skeleton"></div>
         </div>
 
-        <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-            import { getStorage, ref} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+        <div id="speechError" class="tm-speech-detail-empty" hidden>
+            <p id="speechErrorTitle" class="tm-speech-detail-empty__title">Could not load speech</p>
+            <p id="speechErrorCopy" class="tm-speech-detail-empty__copy">Check the link and try again.</p>
+        </div>
 
+        <section id="speechContent" hidden>
+            <div class="tm-speech-detail-feedback-header">
+                <h2 class="tm-section-title">Speech info</h2>
+            </div>
 
-            const firebaseConfig = {
-              apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-              authDomain: "naples-sunrise-bay.firebaseapp.com",
-              projectId: "naples-sunrise-bay",
-              storageBucket: "naples-sunrise-bay.appspot.com",
-              messagingSenderId: "39028676552",
-              appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-              measurementId: "G-L0QCNW7C6W"
+            <article id="speechMetaCard" class="tm-card tm-speech-detail-meta">
+                <p class="tm-speech-detail-meta__label">Date</p>
+                <p id="speechDate" class="tm-speech-detail-meta__value"></p>
+                <p class="tm-speech-detail-meta__label">Project title</p>
+                <p id="speechProjectTitle" class="tm-speech-detail-meta__value"></p>
+                <p class="tm-speech-detail-meta__label">Path</p>
+                <p id="speechPath" class="tm-speech-detail-meta__value"></p>
+            </article>
+
+            <div class="tm-speech-detail-feedback-header">
+                <h2 class="tm-section-title">Feedback</h2>
+                <span id="feedbackCount" class="tm-speech-detail-feedback-count">0</span>
+            </div>
+
+            <div id="feedbackList" class="tm-speech-detail-feedback-list"></div>
+
+            <div id="feedbackEmpty" class="tm-speech-detail-empty" hidden>
+                <p class="tm-speech-detail-empty__title">No feedback yet</p>
+                <p class="tm-speech-detail-empty__copy">Feedback from club members will appear here after your speech.</p>
+            </div>
+        </section>
+    </div>
+
+    <script type="module">
+        import { collection, doc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getTmDb } from "./scripts/tmFirebase.js";
+        import { formatMeetingDate, loadAndMigrateAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
+        import { loadAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=3";
+        import {
+            collectFeedbackEntries,
+            getLegacyFeedbackSpeechIds,
+            resolveSpeechDisplay,
+        } from "./scripts/tmSpeechRecords.js";
+
+        const db = getTmDb();
+
+        const speechDate = document.getElementById("speechDate");
+        const speechProjectTitle = document.getElementById("speechProjectTitle");
+        const speechPath = document.getElementById("speechPath");
+        const speechLoading = document.getElementById("speechLoading");
+        const speechError = document.getElementById("speechError");
+        const speechErrorTitle = document.getElementById("speechErrorTitle");
+        const speechErrorCopy = document.getElementById("speechErrorCopy");
+        const speechContent = document.getElementById("speechContent");
+        const feedbackList = document.getElementById("feedbackList");
+        const feedbackEmpty = document.getElementById("feedbackEmpty");
+        const feedbackCount = document.getElementById("feedbackCount");
+        const backBtn = document.getElementById("backBtn");
+
+        let unsubFeedback = null;
+        let activeSpeechId = "";
+        let activeUserId = "";
+
+        function getSpeechParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                speechId: params.get("speech"),
+                userId: params.get("user"),
             };
+        }
 
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const auth = getAuth(app)
-            const db = getFirestore(app);
+        function setViewState(state) {
+            speechLoading.hidden = state !== "loading";
+            speechError.hidden = state !== "error";
+            speechContent.hidden = state !== "content";
+        }
 
-            function getParameter(sParam)
-            {
-                var sPageURL = window.location.search.substring(1);
-                var sURLVariables = sPageURL.split('&');
-                for (var i = 0; i < sURLVariables.length; i++) 
-                {
-                    var sParameterName = sURLVariables[i].split('=');
-                    if (sParameterName[0] == sParam) 
-                    {
-                        return sParameterName[1];
+        function showError(title, copy) {
+            speechErrorTitle.textContent = title;
+            speechErrorCopy.textContent = copy;
+            updateDocumentTitle("Speech unavailable");
+            setViewState("error");
+        }
+
+        function splitSentences(text) {
+            const matches = text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g);
+            if (!matches) return [text];
+            return matches.map((part) => part.trim()).filter(Boolean);
+        }
+
+        function createFeedbackCard(text) {
+            const card = document.createElement("article");
+            card.className = "tm-card tm-speech-detail-feedback-card";
+
+            const sentences = splitSentences(text);
+            const needsTruncation = sentences.length > 2;
+            const textEl = document.createElement("p");
+            textEl.className = "tm-speech-detail-feedback-card__text";
+
+            if (needsTruncation) {
+                const preview = sentences.slice(0, 2).join(" ");
+                textEl.textContent = preview;
+
+                const readMoreBtn = document.createElement("button");
+                readMoreBtn.type = "button";
+                readMoreBtn.className = "tm-speech-detail-feedback-card__read-more";
+                readMoreBtn.textContent = "Read more";
+                readMoreBtn.setAttribute("aria-expanded", "false");
+
+                readMoreBtn.addEventListener("click", () => {
+                    const expanded = readMoreBtn.getAttribute("aria-expanded") === "true";
+                    if (expanded) {
+                        textEl.textContent = preview;
+                        readMoreBtn.textContent = "Read more";
+                        readMoreBtn.setAttribute("aria-expanded", "false");
+                    } else {
+                        textEl.textContent = text;
+                        readMoreBtn.textContent = "Read less";
+                        readMoreBtn.setAttribute("aria-expanded", "true");
                     }
-                }
+                });
+
+                card.appendChild(textEl);
+                card.appendChild(readMoreBtn);
+            } else {
+                textEl.textContent = text;
+                card.appendChild(textEl);
             }
 
-            function extractParamsFromUrl(url) {
-                const speechId = url.split('?')[1];
-                const userId = url.split('?')[2];
-                
-                const speechParams = speechId.split('&');
-                const userParams = userId.split('&');
-                
-                const extractedParams = {};
+            return card;
+        }
 
-                speechParams.forEach(param => {
-                    const [key, value] = param.split('=');
-                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
-                })
-                userParams.forEach(param => {
-                    const [key, value] = param.split('=');
-                    extractedParams[key] = decodeURIComponent(value.replace(/\+/g, ' '))
-                })
+        function renderFeedbackEntries(entries) {
+            feedbackList.innerHTML = "";
+            feedbackCount.textContent = String(entries.length);
+            feedbackEmpty.hidden = entries.length > 0;
 
-                getSpeech(extractedParams['speech'], extractedParams['user'])
+            entries.forEach(({ text }) => {
+                feedbackList.appendChild(createFeedbackCard(text));
+            });
+        }
+
+        function updateDocumentTitle(title) {
+            const safeTitle = String(title || "Your speech").trim() || "Your speech";
+            document.title = `${safeTitle} — TM Experience`;
+        }
+
+        function renderSpeechMeta({ title, path, date }) {
+            updateDocumentTitle(title);
+            speechDate.textContent = date || "Date TBD";
+            speechProjectTitle.textContent = title;
+            speechPath.textContent = path || "—";
+        }
+
+        function stopFeedbackListener() {
+            if (unsubFeedback) {
+                unsubFeedback();
+                unsubFeedback = null;
+            }
+        }
+
+        function startFeedbackListener(userId, speechId) {
+            stopFeedbackListener();
+
+            const speechIds = getLegacyFeedbackSpeechIds(speechId);
+            const mergedEntries = new Map();
+
+            function publishFeedback() {
+                renderFeedbackEntries([...mergedEntries.values()]);
             }
 
-            async function getSpeech(speechId,  userId)
-            {
-                let titleTV = document.getElementById("titleTV")
-                let pathTV = document.getElementById("pathTV")
-                let dateTV = document.getElementById("dateTV")
-                let feedbackTV = document.getElementById("feedbackTV")
+            const unsubscribers = speechIds.map((id) =>
+                onSnapshot(
+                    collection(db, "users", userId, "speeches", id, "feedback"),
+                    (snapshot) => {
+                        [...mergedEntries.keys()]
+                            .filter((key) => key.startsWith(`${id}:`))
+                            .forEach((key) => mergedEntries.delete(key));
 
-                const feedbackRef = collection(db, `users/${userId}/speeches/${speechId}/feedback`)
-                const speechSnapshot = await getDoc(doc(db, `users/${userId}/speeches/${speechId}`))
-                const feedbackSnapshot = await getDocs(feedbackRef)
+                        collectFeedbackEntries(snapshot).forEach((entry) => {
+                            mergedEntries.set(`${id}:${entry.id}`, entry);
+                        });
 
-                if (speechSnapshot.exists()) {
+                        publishFeedback();
+                    },
+                    (error) => {
+                        console.error("Feedback listener failed:", error);
+                    }
+                )
+            );
 
-                    titleTV.textContent = `"${speechSnapshot.data().title}"`
-                    dateTV.textContent = ` ${speechSnapshot.id}` 
+            unsubFeedback = () => {
+                unsubscribers.forEach((unsub) => unsub());
+            };
+        }
 
-                    pathTV.textContent = `${speechSnapshot.data().path}`
+        async function loadSpeech(speechId, userId) {
+            setViewState("loading");
+            activeSpeechId = speechId;
+            activeUserId = userId;
+            stopFeedbackListener();
 
-                    feedbackSnapshot.forEach((doc) => {
-                        name += doc.data().feedback + '\n\n'
-                    })
-                    feedbackTV.innerText = name
+            try {
+                const speechRef = doc(db, "users", userId, "speeches", speechId);
+                const [speechSnapshot, agendaLoaded] = await Promise.all([
+                    getDoc(speechRef),
+                    loadAgendaDoc(db, {
+                        getDocFn: getDoc,
+                        setDocFn: setDoc,
+                        loadAndMigrateAgendaDoc,
+                    }).catch(() => null),
+                ]);
 
-                } else {
-                    alert("Error IV:177 - No such document!");
+                if (!speechSnapshot.exists()) {
+                    showError("Speech not found", "This speech may have been removed or the link is incorrect.");
+                    return;
                 }
+
+                const speechData = speechSnapshot.data();
+                const display = resolveSpeechDisplay(
+                    speechId,
+                    userId,
+                    speechData,
+                    agendaLoaded?.data || null
+                );
+                const formattedDate = formatMeetingDate(speechId);
+                renderSpeechMeta({ ...display, date: formattedDate });
+
+                startFeedbackListener(userId, speechId);
+                setViewState("content");
+            } catch (error) {
+                console.error("Failed to load speech:", error);
+                showError("Could not load speech", "Check your connection and try again.");
             }
-            extractParamsFromUrl(window.location.href);
-        </script>
-     
-        <script>
-            function minimizeEvaluator(){
-                var evaluationBtn = document.getElementById("evaluationBtn")
-                var evaluationText = document.getElementById("evaluationText")
-                if(evaluationBtn.innerHTML == "-")
-                {
-                    evaluationBtn.innerHTML = "+"
-                }
-                else{
-                    evaluationBtn.innerHTML = "-"
-                    evaluationText.style.display = "inline"
-                }
-               
-            }
-            function minimizeFeedback(){
-                var feedbackBtn = document.getElementById("feedbackBtn")
-                var feedbackText = document.getElementById("feedbackTV")
+        }
 
-                if (feedbackBtn.innerHTML == "-") {
-                    feedbackBtn.innerHTML = "+";
-                    feedbackText.style.visibility = 'hidden'; 
-                } else {
-                    feedbackBtn.innerHTML = "-";
-                    feedbackText.style.visibility = 'visible'; 
-                }
+        backBtn.addEventListener("click", () => {
+            if (window.opener && !window.opener.closed) {
+                window.close();
+                return;
             }
-        </script>
-    </body>
+            window.location.href = "./profileView.html";
+        });
+
+        const { speechId, userId } = getSpeechParams();
+        if (!speechId || !userId) {
+            showError("Invalid link", "This speech link is missing the speech or user id.");
+        } else {
+            loadSpeech(speechId, userId);
+        }
+    </script>
+</body>
 </html>

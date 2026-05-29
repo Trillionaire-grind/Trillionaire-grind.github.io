@@ -1,0 +1,169 @@
+export const AGENDA_ROLE_COUNT = 16;
+
+export const SPEAKER_ROLE_IDS = [
+  "firstSpeaker",
+  "secondSpeaker",
+  "thirdSpeaker",
+  "fourthSpeaker",
+];
+
+export const EVALUATOR_ROLE_IDS = [
+  "firstEvaluator",
+  "secondEvaluator",
+  "thirdEvaluator",
+  "fourthEvaluator",
+];
+
+export const AGENDA_ROLE_INDEX = {
+  tmRole: 0,
+  grammarianRole: 1,
+  ahRole: 2,
+  timerRole: 3,
+  voteRole: 4,
+  firstSpeaker: 5,
+  secondSpeaker: 6,
+  thirdSpeaker: 7,
+  fourthSpeaker: 8,
+  tableRole: 9,
+  generalRole: 10,
+  firstEvaluator: 11,
+  secondEvaluator: 12,
+  thirdEvaluator: 13,
+  fourthEvaluator: 14,
+  educationRole: 15,
+};
+
+export const AGENDA_ROLE_IDS = Object.entries(AGENDA_ROLE_INDEX)
+  .sort((left, right) => left[1] - right[1])
+  .map(([roleId]) => roleId);
+
+const LEGACY_ROLE_COUNT = 14;
+
+export function isLegacyAgendaData(dataArray) {
+  if (!Array.isArray(dataArray)) return false;
+  if (dataArray[AGENDA_ROLE_COUNT]?.date !== undefined) return false;
+  if (dataArray[8]?.id === "fourthSpeaker") return false;
+  if (dataArray[8]?.id === "tableRole") return true;
+  return dataArray[LEGACY_ROLE_COUNT]?.date !== undefined;
+}
+
+function emptySpeakerRole(id) {
+  return { id, member: "", path: "", title: "", userId: "" };
+}
+
+function emptyMemberRole(id) {
+  return { id, member: "" };
+}
+
+export function migrateAgendaData(dataArray) {
+  if (!Array.isArray(dataArray) || !isLegacyAgendaData(dataArray)) {
+    return Array.isArray(dataArray) ? [...dataArray] : [];
+  }
+
+  const legacyRoles = dataArray.slice(0, LEGACY_ROLE_COUNT);
+  const dateEntry = dataArray[LEGACY_ROLE_COUNT] || { date: "" };
+  const editableEntry = dataArray[LEGACY_ROLE_COUNT + 1] || { editable: false };
+
+  return [
+    ...legacyRoles.slice(0, 8),
+    emptySpeakerRole("fourthSpeaker"),
+    legacyRoles[8],
+    legacyRoles[9],
+    legacyRoles[10],
+    legacyRoles[11],
+    legacyRoles[12],
+    emptyMemberRole("fourthEvaluator"),
+    legacyRoles[13],
+    dateEntry,
+    editableEntry,
+  ];
+}
+
+export function normalizeAgendaDoc(docData) {
+  if (!docData?.data) return { data: [] };
+  return { data: migrateAgendaData(docData.data) };
+}
+
+export function getAgendaMeta(dataArray) {
+  return {
+    date: dataArray[AGENDA_ROLE_COUNT]?.date || "",
+    editable: Boolean(dataArray[AGENDA_ROLE_COUNT + 1]?.editable),
+  };
+}
+
+export function formatMeetingDate(dateValue) {
+  const raw = String(dateValue || "").trim();
+  if (!raw) return "Date TBD";
+
+  const parsed = new Date(`${raw}T12:00:00`);
+  if (Number.isNaN(parsed.getTime())) return raw;
+
+  return parsed.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+}
+
+export function findRoleAssignment(dataArray, roleId) {
+  if (!Array.isArray(dataArray) || !roleId) return null;
+
+  const byId = dataArray.find((entry) => entry?.id === roleId);
+  if (byId) return byId;
+
+  const index = AGENDA_ROLE_INDEX[roleId];
+  if (index === undefined) return null;
+
+  const entry = dataArray[index];
+  if (!entry || entry.date !== undefined || entry.editable !== undefined) return null;
+  if (!entry.member && !entry.userId && !entry.path && !entry.title) return null;
+
+  return { ...entry, id: roleId };
+}
+
+export function buildRolesMap(assignments) {
+  const roles = {};
+
+  assignments.forEach((entry) => {
+    if (!entry?.id || entry.date !== undefined || entry.editable !== undefined) return;
+
+    roles[entry.id] = {
+      member: entry.member || "",
+    };
+
+    if (entry.path) roles[entry.id].path = entry.path;
+    if (entry.title) {
+      roles[entry.id].title = entry.title;
+      roles[entry.id].speechTitle = entry.title;
+    }
+    if (entry.userId) roles[entry.id].userId = entry.userId;
+    if (entry.imageUrl) roles[entry.id].imageUrl = entry.imageUrl;
+    if (entry.bio) roles[entry.id].bio = entry.bio;
+  });
+
+  return roles;
+}
+
+export function getSpeakerAssignments(dataArray) {
+  if (!Array.isArray(dataArray)) return [];
+
+  return SPEAKER_ROLE_IDS.map((roleId) => findRoleAssignment(dataArray, roleId)).filter((assignment) => {
+    const member = String(assignment?.member || "").trim();
+    return Boolean(member || assignment?.userId);
+  });
+}
+
+export async function loadAndMigrateAgendaDoc(getDoc, setDoc, docRef) {
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) return null;
+
+  const raw = docSnap.data();
+  if (!isLegacyAgendaData(raw.data)) {
+    return raw;
+  }
+
+  const migrated = { data: migrateAgendaData(raw.data) };
+  await setDoc(docRef, migrated);
+  return migrated;
+}

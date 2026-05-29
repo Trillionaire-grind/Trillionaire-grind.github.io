@@ -1,6 +1,9 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    // TESTING MODE — open access for TM Experience development.
+    // Tighten these before production (see TMExperienceViews/firestore.tm.rules.txt).
+
     match /accessCodes/{codeId} {
       allow get: if resource.data.consumed == false &&
         resource.data.active != false;
@@ -25,12 +28,36 @@ service cloud.firestore {
         request.auth.token.email == "buildingwithkepler@gmail.com";
     }
 
+    match /clubs/{clubId} {
+      allow read, write: if true;
+
+      match /agendas/{agendaId} {
+        allow read, write: if true;
+      }
+    }
+
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    match /votes/{voteId} {
+      allow read, write: if true;
+    }
+
+    match /feedback/{docId} {
+      allow read, write: if true;
+    }
+
     match /users/{userId} {
-      allow read: if request.auth != null && request.auth.uid == userId;
-      allow create: if request.auth != null && request.auth.uid == userId;
-      allow update: if request.auth != null &&
-        request.auth.uid == userId &&
-        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['admin']);
+      allow read, write: if true;
+
+      match /speeches/{speechId} {
+        allow read, write: if true;
+
+        match /feedback/{feedbackId} {
+          allow read, write: if true;
+        }
+      }
     }
   }
 }

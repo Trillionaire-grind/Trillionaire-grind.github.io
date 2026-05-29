@@ -3,680 +3,676 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Our Speakers</title>
-        <style>
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #DEE2E1;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px;  
-                right: 50%;
-                background-color: #024165;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
+        <title>Speeches — TM Experience</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=10">
 
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .card-container {
-                display: flex;
-                width: 90%;
-                margin: 0 auto;
-                flex-wrap: wrap;
-            }
-            .card {
-                width: 40%;
-                background-color: white;
-                border-radius: 6px;
-                overflow: hidden;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-            .card-content {
-                padding: 10px;
-            }
-
-            @media (max-width: 768px) {
-                .card {
-                    width: 100%;
-                }
-            }
-
-            #feedbackDialog{
-                display: none; 
-                position: fixed;
-                z-index: 1; 
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%; 
-                overflow: auto; 
-                background-color: rgba(0,0,0,0.4); 
-
-            }
-
-            .popup {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.6);
-            }
-
-            .popup-content {
-            background-color: #fff;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            position: relative;
-            }
-
-            .close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-            color: #333;
-            }
-
-            h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #024165;
-            }
-
-            .form-group {
-            margin-bottom: 20px;
-            }
-
-            label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            }
-
-            select, input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            }
-
-            .reveal-btn {
-            text-align: center;
-            color: #024165;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 15px;
-            }
-
-            .btn-container {
-            text-align: right;
-            margin-top: 20px;
-            }
-
-            .vote-btn {
-            background-color: #024165;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            }
-
-            .vote-btn:hover {
-            background-color: #033c5a;
-            }
-
-            .imageContainer:hover .middle {
-                    opacity: 1;
-            }
-
-            .middle {
-                transition: .5s ease;
-                opacity: 0;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                -ms-transform: translate(-50%, -50%);
-                text-align: center;
-            }
-
-            .modal {
-                display: none; 
-                position: fixed; 
-                z-index: 1; 
-                left: 0;
-                top: 0;
-                width: 100%; 
-                height: 100%;
-                overflow: auto; 
-                background-color: rgb(0,0,0);
-                background-color: rgba(0,0,0,0.4); 
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: 15% auto; 
-                padding: 20px;
-                border: 1px solid #888;
-                width: 80%; 
-            }
-
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
-
-            .selectorBtn{
-                background-color: #024165;
-            }
-
-            .selectorBtn:hover{
-                background-color: #7D2128;
-            }
-
-        </style>
-        
         <script>
-            function closePopup() {
-                document.getElementById('popup').style.display = 'none';
+            function closeVoteModal() {
+                document.getElementById("voteModal").classList.remove("is-open");
             }
 
-            function closeFeebackDialog()
-            {
-                document.getElementById('feedbackDialog').style.display = 'none'
-            } 
-        
+            function closeFeebackDialog() {
+                document.getElementById("feedbackDialog").classList.remove("is-open");
+            }
         </script>
     </head>
-    <body>
-        <div>
-            <button id="voteBtn" style="float: right; margin-right:5%;margin-top: 16px; border: none; border-radius: 40%; text-decoration: none;
-            padding: 10px; cursor: pointer; box-shadow: 1px 3px 4px 1px #024165;">Vote</button><br>
+    <body class="tm-body tm-speeches-body">
+        <header class="tm-speeches-hero">
+            <div class="tm-speeches-hero__inner">
+                <div class="tm-speeches-hero__top">
+                    <div>
+                        <p class="tm-speeches-hero__eyebrow">Speeches</p>
+                        <p id="speechesHeroMeta" class="tm-speeches-hero__meta">Tonight's speakers</p>
+                    </div>
+                    <span id="meetingLivePill" class="tm-live-pill is-not-live">
+                        <span class="tm-live-pill__dot" aria-hidden="true"></span>
+                        <span id="meetingLivePillText" class="tm-live-pill__text">Not live</span>
+                    </span>
+                </div>
+            </div>
+        </header>
 
-            <div id="myModal"  class="modal">
-                <div class="modal-content" style="width: 80%; height: 30vh;">
-                    <button class="close" onclick="closeModal()">&times;</button>
-                    <p id="modalName">Provide your feedback for </p>
-                    <p id="modalId" style="visibility: hidden;"></p>
-                    <textarea id="feedbackText" style="width: 100%; height: 10vh;"></textarea>
-                    <div style="display: flex; float: right; ">
-                        <button onclick="closeModal()" style="background: none;" >Cancel</button>
-                        <button id="feedbackBtn" onclick="addFeedback()"style="background: black; border-color: #fff; color: white; height: 30px; width: 60px;">Send</button>
+        <div class="tm-page tm-speeches-page">
+            <div id="speechesLoading" class="tm-speeches-loading" hidden>
+                <div class="tm-speeches-skeleton tm-speeches-skeleton--photo"></div>
+                <div class="tm-speeches-skeleton tm-speeches-skeleton--line"></div>
+                <div class="tm-speeches-skeleton tm-speeches-skeleton--line short"></div>
+            </div>
+
+            <div id="speechesEmpty" class="tm-speeches-empty" hidden>
+                <p id="speechesEmptyTitle" class="tm-speeches-empty__title">No speakers assigned</p>
+                <p id="speechesEmptyCopy" class="tm-speeches-empty__copy">Publish an agenda with speakers in Admin.</p>
+            </div>
+
+            <article id="speechesContent" class="tm-speeches-card" hidden>
+                <div class="tm-speeches-card__toolbar">
+                    <button type="button" id="openFeedbackBtn" class="tm-btn tm-btn--secondary tm-speeches-feedback-btn" disabled>Give feedback</button>
+                </div>
+
+                <div class="tm-speaker-carousel">
+                    <button type="button" class="tm-carousel-btn" id="leftBtn" aria-label="Previous speaker">&#8249;</button>
+                    <div class="tm-speaker-photo" id="speakerPhotoWrap">
+                        <img id="currentSpeakerImg" src="assets/person_b.svg" alt="Current speaker">
+                    </div>
+                    <button type="button" class="tm-carousel-btn" id="rightBtn" aria-label="Next speaker">&#8250;</button>
+                </div>
+
+                <p id="speakerCounter" class="tm-speaker-counter">Speaker 1 of 4</p>
+
+                <div class="tm-dot-row">
+                    <button type="button" id="firstSpeakerSelector" aria-label="Speaker 1"></button>
+                    <button type="button" id="secondSpeakerSelector" aria-label="Speaker 2"></button>
+                    <button type="button" id="thirdSpeakerSelector" aria-label="Speaker 3"></button>
+                    <button type="button" id="fourthSpeakerSelector" aria-label="Speaker 4"></button>
+                </div>
+
+                <div class="tm-speeches-card__body">
+                    <h2 id="currentSpeakerName" class="tm-speaker-name">Speaker</h2>
+                    <p id="currentSpeakerTitle" class="tm-speaker-speech-title"></p>
+                    <p id="currentSpeakerPath" class="tm-speaker-speech-path"></p>
+                    <div id="currentSpeakerAboutWrap" class="tm-speaker-about">
+                        <p class="tm-speaker-about__label">About</p>
+                        <div class="tm-speaker-about__scroll">
+                            <p id="currentSpeakerBio" class="tm-speaker-bio"></p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        
-            <p style="font-weight: bold; margin-left: 5%; margin-top: 32px;">Our Speakers</p>
-        
-            <div>
-                <div style="display: flex; align-items: center;">
-                    <button class="selectorBtn" id="leftBtn" style="margin-left: 5%; margin-right: 16px; border: none; height: 40px; width: 40px; color: white; border-radius: 50%; cursor: pointer;">&larr;</button>
-                    
-                    <div style="background-color: white; border-radius: 5%; margin: 0 auto; padding: 10px; width: 300px; height: 300px; overflow: hidden;">
-                        <img id="currentSpeakerImg" src="assets/khan.jpeg" style="width: 100%; height: 100%; object-fit: cover;">
+            </article>
+
+            <button id="voteBtn" type="button" class="tm-btn tm-btn--primary tm-speeches-vote-btn" hidden disabled>Vote</button>
+        </div>
+
+        <div id="voteModal" class="tm-modal" role="dialog" aria-modal="true" aria-labelledby="voteModalTitle">
+            <div class="tm-modal__panel tm-vote-modal">
+                <div class="tm-vote-modal__header">
+                    <div>
+                        <h2 id="voteModalTitle" class="tm-vote-modal__title">Cast your vote</h2>
+                        <p class="tm-vote-modal__copy">Pick tonight's best speaker, evaluator, and table topics participant.</p>
                     </div>
-                    
-                    <button class="selectorBtn" id="rightBtn" style="margin-right: 5%; border: none; height: 40px; width: 40px; color: white; border-radius: 50%; cursor: pointer; margin-left: 16px;">&rarr;</button>
+                    <button type="button" class="tm-vote-modal__close" onclick="closeVoteModal()" aria-label="Close">&times;</button>
                 </div>
-                
-                <div style="display: flex; margin-left: auto; margin-right: auto; width: 12vh; background-color: #fff; border-radius: 5%; margin-top: 16px; padding: 10px; border-radius: 5%;">
-                    <button id="firstSpeakerSelector" style="border: none; border-radius: 50%; background-color: #7D2128; height: 16px; width: 16px;"></button>
-                    <button id="secondSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto; "></button>
-                    <button id="thirdSpeakerSelector" style="border: none; border-radius: 50%; background-color: #024165; height: 16px; width: 16px; margin-left: auto;"></button>
+
+                <div class="tm-vote-modal__field">
+                    <label for="bestSpeaker">Best speaker</label>
+                    <select id="bestSpeaker">
+                        <option value="" disabled selected>Select a speaker</option>
+                        <option id="firstSpeakerOption"></option>
+                        <option id="secondSpeakerOption"></option>
+                        <option id="thirdSpeakerOption"></option>
+                        <option id="fourthSpeakerOption"></option>
+                    </select>
                 </div>
-            </div>
-            
-            <div style="width:90%; display: flex;  margin-left: 5%; margin-right: 5%;">
-                <p id="currentSpeakerName" style="font-weight: bold; margin-top: 64px;">Genghis Khan</p>
-                <button id="openFeedbackBtn"  style="margin-left: auto; border: none; background: none; color: #024165; margin-top: 48px; font-weight: bold; cursor: pointer;">Give feedback</button>
-            </div>
-            <div class="" style="display: flex; width: 90%; margin-right: auto;  margin-left: auto;  margin-bottom: 64px; overflow-y: auto;">
-                    <p id="currentSpeakerBio" style="margin: 0;" >Genghis Khan, also known as Chinggis Khan, was the founder and 
-                        first khan of the Mongol Empire, which he ruled from 1206 
-                        until his death in 1227; it later became the largest contiguous empire in history.
-                    On my death bed I had the larggest empire. 800 years later, I still hold the title. I AM
-                the GREATEST</p>
+
+                <div class="tm-vote-modal__field">
+                    <label for="bestEvaluator">Best evaluator</label>
+                    <select id="bestEvaluator">
+                        <option value="" disabled selected>Select an evaluator</option>
+                        <option id="firstEval"></option>
+                        <option id="secondEval"></option>
+                        <option id="thirdEval"></option>
+                        <option id="fourthEval"></option>
+                    </select>
+                </div>
+
+                <div class="tm-vote-modal__field">
+                    <label for="bestTable">Best table topics speaker</label>
+                    <input type="text" id="bestTable" name="bestTable" placeholder="Enter name">
+                </div>
+
+                <div class="tm-vote-modal__actions">
+                    <button type="button" class="tm-btn tm-btn--secondary" onclick="closeVoteModal()">Cancel</button>
+                    <button type="button" id="castVoteBtn" class="tm-btn tm-btn--primary">Submit vote</button>
                 </div>
             </div>
         </div>
 
-        <div id="popup" class="popup">
-            <div class="popup-content">
-                <span class="close" onclick="closePopup()">&times;</span>
-            
-                <h2>Cast Your Vote</h2>
-            
-                <div class="form-group">
-                <label for="bestSpeaker">Best Speaker:</label>
-                <select id="bestSpeaker">
-                    <option id="firstSpeakerOption"></option>
-                    <option id="secondSpeakerOption"></option>
-                    <option id="thirdSpeakerOption"></option>
-                </select>
+        <div id="feedbackDialog" class="tm-modal" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle">
+            <div class="tm-modal__panel tm-vote-modal">
+                <div class="tm-vote-modal__header">
+                    <div>
+                        <h2 id="feedbackTitle" class="tm-vote-modal__title">Give feedback</h2>
+                        <p id="feedbackModalCopy" class="tm-vote-modal__copy">Share constructive feedback for tonight's speaker.</p>
+                    </div>
+                    <button type="button" class="tm-vote-modal__close" onclick="closeFeebackDialog()" aria-label="Close">&times;</button>
                 </div>
-            
-                <div class="form-group">
-                <label for="bestEvaluator">Best Evaluator:</label>
-                <select id="bestEvaluator">
-                    <option id="firstEval">Alex</option>
-                    <option id="secondEval">Khan</option>
-                    <option id="thirdEval">Napoleon</option>
-                </select>
+
+                <p id="feedbackId" hidden></p>
+
+                <div class="tm-vote-modal__field">
+                    <label for="feedbackTV">Your feedback</label>
+                    <textarea id="feedbackTV" name="feedback" rows="5" placeholder="What went well? What could improve?"></textarea>
                 </div>
-            
-                <div class="form-group">
-                <label for="bestTable">Best Table Topics Speaker:</label>
-                <input type="text" id="bestTable" style="margin-left: auto; margin-right: auto; width: 95%;" name="fname" placeholder="Enter name">
+
+                <div class="tm-vote-modal__actions">
+                    <button type="button" class="tm-btn tm-btn--secondary" onclick="closeFeebackDialog()">Cancel</button>
+                    <button type="button" id="leaveFeedbackBtn" class="tm-btn tm-btn--primary">Submit feedback</button>
                 </div>
-            
-                <p id="revealBtn" class="reveal-btn">Reveal Votes</p>
-            
-                <div class="btn-container">
-                <button id="castVoteBtn" class="vote-btn">Cast Votes</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="feedbackDialog" role="dialog" aria-modal="true" aria-labelledby="feedbackTitle" 
-        style="width: 60%; height: auto; background-color: #fff; border-radius: 8px; 
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: fixed; z-index: 1000;
-        top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 24px;">    
-            
-            <button class="close" onclick="closeFeebackDialog()" aria-label="Close feedback dialog"
-                style="position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 24px; cursor: pointer;">
-                &times;
-            </button>
-
-            <p id="feedbackId" style="display: none;"></p>
-
-            <h2 id="feedbackTitle" style="margin-top: 0;">Leave Feedback</h2>
-
-            <div style="margin: 16px 0;">
-                <label for="feedbackTV" style="display: block; margin-bottom: 8px;">Your feedback:</label>
-                <textarea id="feedbackTV" name="feedback" rows="4"
-                    style="width: 90%; margin-left:auto; margin-right: auto; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical;"></textarea>
-            </div>
-
-            <div style="text-align: right;">
-                <button id="leaveFeedbackBtn"
-                    style="background-color: #024165; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
-                    Submit
-                </button>
             </div>
         </div>
 
         <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-            import { getAuth,  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { getFirestore, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { collection, doc, addDoc, setDoc, getDocs, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
+            import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { getTmAuth, getTmDb } from "./scripts/tmFirebase.js";
+            import {
+                findRoleAssignment,
+                formatMeetingDate,
+                getAgendaMeta,
+                getSpeakerAssignments,
+                normalizeAgendaDoc,
+                EVALUATOR_ROLE_IDS,
+            } from "./scripts/tmAgendaData.js?v=3";
+            import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
+            import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc } from "./scripts/tmAgendaFirestore.js?v=5";
 
+            const auth = await getTmAuth();
+            const db = getTmDb();
 
-            let feedbackBtn = document.getElementById("feedbackBtn")
-            let voteBtn = document.getElementById("voteBtn")
-            let castVoteBtn = document.getElementById("castVoteBtn")
-            let bestSpeaker = document.getElementById("bestSpeaker")
-            let bestEvaluator = document.getElementById("bestEvaluator")
-            let bestTable = document.getElementById("bestTable")
+            const voteBtn = document.getElementById("voteBtn");
+            const castVoteBtn = document.getElementById("castVoteBtn");
+            const bestSpeaker = document.getElementById("bestSpeaker");
+            const bestEvaluator = document.getElementById("bestEvaluator");
+            const bestTable = document.getElementById("bestTable");
+            const openFeedbackBtn = document.getElementById("openFeedbackBtn");
+            const leaveFeedbackBtn = document.getElementById("leaveFeedbackBtn");
+            const feedbackTV = document.getElementById("feedbackTV");
+            const feedbackDialog = document.getElementById("feedbackDialog");
+            const rightBtn = document.getElementById("rightBtn");
+            const leftBtn = document.getElementById("leftBtn");
+            const speakerPhotoWrap = document.getElementById("speakerPhotoWrap");
+            const speechesLoading = document.getElementById("speechesLoading");
+            const speechesEmpty = document.getElementById("speechesEmpty");
+            const speechesContent = document.getElementById("speechesContent");
+            const meetingLivePill = document.getElementById("meetingLivePill");
+            const meetingLivePillText = document.getElementById("meetingLivePillText");
+            const speechesHeroMeta = document.getElementById("speechesHeroMeta");
 
-            let firstSpeakerFeedbackBtn = document.getElementById("firstSpeakerFeedbackBtn")
-            let secondSpeakerFeedbackBtn = document.getElementById("secondSpeakerFeedbackBtn")
-            let thirdSpeakerFeedbackBtn = document.getElementById("thirdSpeakerFeedbackBtn")
+            const dotButtons = [
+                document.getElementById("firstSpeakerSelector"),
+                document.getElementById("secondSpeakerSelector"),
+                document.getElementById("thirdSpeakerSelector"),
+                document.getElementById("fourthSpeakerSelector"),
+            ];
 
-            let firstSpeakerImg = document.getElementById('firstSpeakerImg')
-            let secondSpeakerImg = document.getElementById('secondSpeakerImg')
-            let thirdSpeakerImg = document.getElementById('thirdSpeakerImg')
-
-            let idHolder = [];
-            let nameHolder = [];
-            let speakerHolder = [];
-            let evaluatorHolder = [];
-
-            let agendaEditable = false 
-
-            let revealBtn = document.getElementById('revealBtn')
+            let meetingIsLive = false;
+            let currentMeetingDate = "";
+            const BYPASS_LIVE_CHECK_FOR_UI_TEST = false;
 
             let index = 0;
             let speakers = [];
-          
-            const firebaseConfig = {
-            apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-            authDomain: "naples-sunrise-bay.firebaseapp.com",
-            projectId: "naples-sunrise-bay",
-            storageBucket: "naples-sunrise-bay.appspot.com",
-            messagingSenderId: "39028676552",
-            appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-            measurementId: "G-L0QCNW7C6W"
-            };
-        
-            const app = initializeApp(firebaseConfig);
-            const analytics = getAnalytics(app);
-            const db = getFirestore(app);
-            const auth = getAuth(app)
+            let unsubAgenda = null;
 
+            const voteRef = collection(db, "votes");
+            const DEFAULT_SPEAKER_IMAGE = "assets/person_b.svg";
 
-            const feedbackRef = collection(db, "feedback");
-            const voteRef = collection(db, "votes")
-            const usersRef = collection(db, "users")
-
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-            ];
-
-
-            revealBtn.onclick = () => {
-                let answer = prompt("Enter Passcode: ")
-                if(answer == "test"){
-                    getVotes()
-                }else{
-                    alert("you entered the wrong passcode...")
-                }
+            function resolveSpeakerImage(url) {
+                const raw = String(url || "").trim();
+                return raw || DEFAULT_SPEAKER_IMAGE;
             }
+
+            function isPlaceholderSpeakerImage(url) {
+                const resolved = resolveSpeakerImage(url);
+                return resolved === DEFAULT_SPEAKER_IMAGE || resolved.endsWith("/person_b.svg");
+            }
+
+            function setViewState(state) {
+                speechesLoading.hidden = state !== "loading";
+                speechesEmpty.hidden = state !== "empty";
+                speechesContent.hidden = state !== "content";
+                voteBtn.hidden = state !== "content";
+            }
+
+            function showEmptyState(title, copy) {
+                document.getElementById("speechesEmptyTitle").textContent = title;
+                document.getElementById("speechesEmptyCopy").textContent = copy;
+                setViewState("empty");
+                updateLivePill(false);
+                voteBtn.disabled = true;
+                openFeedbackBtn.disabled = true;
+            }
+
+            function updateMeetingMeta(dateValue) {
+                const formatted = formatMeetingDate(dateValue);
+                speechesHeroMeta.textContent = formatted === "Date TBD"
+                    ? "Tonight's speakers"
+                    : formatted;
+            }
+
+            function updateLivePill(isLive) {
+                meetingLivePillText.textContent = isLive ? "Live" : "Not live";
+                meetingLivePill.classList.toggle("is-live", isLive);
+                meetingLivePill.classList.toggle("is-not-live", !isLive);
+            }
+
+            function applyMeetingLiveState(loaded) {
+                meetingIsLive = loaded?.isLive ?? readMeetingLiveFromDoc(loaded?.data);
+                updateActionButtons();
+            }
+
+            function isMeetingLiveForActions() {
+                return meetingIsLive || BYPASS_LIVE_CHECK_FOR_UI_TEST;
+            }
+
+            function updateActionButtons() {
+                const live = isMeetingLiveForActions();
+                const canInteract = live && speakers.length > 0;
+                voteBtn.disabled = !canInteract;
+                openFeedbackBtn.disabled = !canInteract;
+                updateLivePill(live);
+            }
+
+            function updateCarouselButtons() {
+                const disabled = speakers.length <= 1;
+                leftBtn.disabled = disabled;
+                rightBtn.disabled = disabled;
+            }
+
+            function updateSpeakerCounter() {
+                const counter = document.getElementById("speakerCounter");
+                if (!counter) return;
+                counter.textContent = speakers.length
+                    ? `Speaker ${index + 1} of ${speakers.length}`
+                    : "";
+            }
+
             function openPopup() {
-                document.getElementById('popup').style.display = 'block';
+                document.getElementById("voteModal").classList.add("is-open");
             }
 
             function openFeedbackDialog() {
-                document.getElementById('feedbackDialog').style.display = 'block'
+                const copyEl = document.getElementById("feedbackModalCopy");
+                if (copyEl && speakers[index]) {
+                    copyEl.textContent = `Share constructive feedback for ${speakers[index].name}.`;
+                }
+                document.getElementById("feedbackDialog").classList.add("is-open");
             }
 
-            function addFeedback()
-            {
-                let feedbackTV = document.getElementById("feedbackTV")
-                let id = document.getElementById("modalId").textContent
-
-                let feedbackValue = feedbackTV.value
-
-                id = speakers[index].id
-
-                const date = new Date();
-
-                let day = ''
-                let month = ''
-                if(date.getDate() < 10){
-                    day = `0${date.getDate()}`
+            async function addFeedback() {
+                const feedbackValue = feedbackTV.value.trim();
+                const speaker = speakers[index];
+                const id = speaker?.id;
+                if (!feedbackValue) {
+                    alert("Enter feedback before submitting.");
+                    return;
                 }
-                else{
-                    day = `${date.getDate()}`
+                if (!id) {
+                    alert("Speaker profile is missing. Republish the agenda from Admin.");
+                    return;
+                }
+                if (!currentMeetingDate) {
+                    alert("Meeting date is missing. Republish the agenda from Admin.");
+                    return;
                 }
 
-                if(date.getMonth() < 10){
-                    month = `0${date.getMonth()+1}`
-                }else{
-                    month = `${date.getMonth()+1}`
-                }
+                try {
+                    await setDoc(
+                        doc(db, "users", id, "speeches", currentMeetingDate),
+                        buildSpeechDocPayload({
+                            path: speaker.path,
+                            title: speaker.title,
+                        }),
+                        { merge: true }
+                    );
 
-                let displayedDate = `${date.getFullYear()}-${month}-${day}`
-
-                const docRef =  addDoc(collection(db, "users",`${id}`,"speeches",`${displayedDate}`,"feedback"), {
-                    feedback: `${feedbackValue}`
-                    }).then(() => {
-                        alert('feedback given successfully')
-                        feedbackTV.value = ""
-                        closeFeebackDialog()
+                    await addDoc(collection(db, "users", id, "speeches", currentMeetingDate, "feedback"), {
+                        feedback: feedbackValue,
                     });
-            }
 
-            async function getVotes()
-            {
-                const querySnapshot = await getDocs(collection(db, "votes"))
-
-                let speakerMap = new Map()
-                let evaluatorMap = new Map()
-                let tableValues = []
-                querySnapshot.forEach((doc) => {
-                    let data = doc.data() 
-                    let speaker = data.bestSpeaker 
-                    let evaluator = data.bestEvaluator 
-                    let table = data.bestTable
-
-                    if(speakerMap.has(speaker)){
-                        let value = speakerMap.get(speaker)
-                        speakerMap.set(speaker, (value+1))
-                    }else{
-                        speakerMap.set(speaker, 1)
-                    }
-
-                    if(evaluatorMap.has(evaluator)){
-                        let value = evaluatorMap.get(evaluator)
-                        evaluatorMap.set(evaluator, (value+1))
-                    }else{
-                        evaluatorMap.set(evaluator, 1)
-                    }
-
-                    tableValues.push(table)
-                })
-
-                const speakerObj = Object.fromEntries(speakerMap);
-                const speakerStr = JSON.stringify(speakerObj); 
-                
-                const evaluatorObj = Object.fromEntries(evaluatorMap);
-                const evaluatorStr = JSON.stringify(evaluatorObj);
-
-                const tableStr = JSON.stringify(tableValues);
-
-                alert(`speaker choices ${speakerStr}, evaluator choices ${evaluatorStr} and ${tableStr} `)
-            }
-
-            async function theSpeakers(){
-                const docSnap = await getDoc(doc(db, `test/date`))
-
-                let openFeedbackBtn = document.getElementById("openFeedbackBtn")
-
-                let firstEval = document.getElementById("firstEval")
-                let secondEval = document.getElementById("secondEval")
-                let thirdEval = document.getElementById("thirdEval")
-
-                let firstSpeakerOption = document.getElementById("firstSpeakerOption")
-                let secondSpeakerOption = document.getElementById("secondSpeakerOption")
-                let thirdSpeakerOption = document.getElementById("thirdSpeakerOption")
-
-                if(docSnap.exists()){
-                    let data = docSnap.data()
-                    getSpeaker(firstSpeakerOption, data.data[5].userId)
-                    getSpeaker(secondSpeakerOption,data.data[6].userId)
-                    getSpeaker(thirdSpeakerOption, data.data[7].userId)
-
-                    agendaEditable = data.data[15].editable 
-
-                    firstEval.value = data.data[10].member
-                    firstEval.innerText = data.data[10].member
-                    
-                    secondEval.value = data.data[11].member
-                    secondEval.innerText = data.data[11].member
-                 
-                    thirdEval.value = data.data[12].member
-                    thirdEval.innerText = data.data[12].member 
-
-                }else{
-                    alert(`docSnap does not exist`)
+                    alert("Feedback given successfully");
+                    feedbackTV.value = "";
+                    closeFeebackDialog();
+                } catch (error) {
+                    console.error("Failed to save feedback:", error);
+                    alert("Could not save feedback. Try again.");
                 }
             }
 
-            async function getSpeaker(speakerOption, id)
-            {
-                const docSnap = await getDoc(doc(db, `users/${id}`))
+            async function loadSpeakerProfile(assignment) {
+                const speaker = {
+                    id: assignment.userId || "",
+                    name: String(assignment.member || "").trim() || "Speaker",
+                    bio: "",
+                    imageUrl: resolveSpeakerImage(assignment.imageUrl),
+                    path: assignment.path || "",
+                    title: assignment.title || "",
+                };
 
-                if(docSnap.exists())
-                {
-                    let speaker = {};
-                    speaker.name = docSnap.data().name
-                    speaker.imageUrl = docSnap.data().imageUrl
-                    speaker.bio = docSnap.data().bio
-                    speaker.id = id
-                    speakers.push(speaker)
-                    speakerOption.innerText = docSnap.data().name
-                
-                    setSpeaker(0)
-                }else{
-                    alert(`there was an issue in FBV-595`)
+                if (!assignment.userId) return speaker;
+
+                try {
+                    const docSnap = await getDoc(doc(db, "users", assignment.userId));
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        speaker.name = data.name || speaker.name;
+                        speaker.bio = data.bio || speaker.bio;
+                        speaker.imageUrl = resolveSpeakerImage(data.imageUrl || assignment.imageUrl);
+                        speaker.id = assignment.userId;
+                    }
+                } catch (error) {
+                    console.warn("Could not load speaker profile:", assignment.userId, error);
+                }
+
+                return speaker;
+            }
+
+            function setSpeakerOption(option, speaker) {
+                if (!option || !speaker?.name) return;
+                option.value = speaker.name;
+                option.textContent = speaker.name;
+            }
+
+            function updateSpeakerDots() {
+                dotButtons.forEach((dot, dotIndex) => {
+                    if (!dot) return;
+                    dot.hidden = dotIndex >= speakers.length;
+                });
+            }
+
+            async function renderSpeakersFromAgenda(loaded) {
+                const firstEval = document.getElementById("firstEval");
+                const secondEval = document.getElementById("secondEval");
+                const thirdEval = document.getElementById("thirdEval");
+                const fourthEval = document.getElementById("fourthEval");
+
+                const speakerOptions = [
+                    document.getElementById("firstSpeakerOption"),
+                    document.getElementById("secondSpeakerOption"),
+                    document.getElementById("thirdSpeakerOption"),
+                    document.getElementById("fourthSpeakerOption"),
+                ];
+                const evaluatorOptions = [firstEval, secondEval, thirdEval, fourthEval];
+
+                speakerOptions.forEach((option) => {
+                    if (!option) return;
+                    option.value = "";
+                    option.textContent = "";
+                });
+
+                if (!loaded?.data) {
+                    speakers = [];
+                    meetingIsLive = false;
+                    showEmptyState("No speakers assigned", "Publish an agenda with speakers in Admin.");
+                    return;
+                }
+
+                meetingIsLive = loaded.isLive ?? readMeetingLiveFromDoc(loaded.data);
+
+                const normalized = normalizeAgendaDoc(loaded.data);
+                const data = normalized.data;
+                const meta = getAgendaMeta(data);
+                currentMeetingDate = String(loaded.data.meetingDate || meta.date || "").trim();
+                updateMeetingMeta(currentMeetingDate);
+
+                const assignments = getSpeakerAssignments(data);
+                speakers = await Promise.all(assignments.map((assignment) => loadSpeakerProfile(assignment)));
+
+                speakers.forEach((speaker, speakerIndex) => {
+                    setSpeakerOption(speakerOptions[speakerIndex], speaker);
+                });
+
+                EVALUATOR_ROLE_IDS.forEach((roleId, evaluatorIndex) => {
+                    const assignment = findRoleAssignment(data, roleId);
+                    const option = evaluatorOptions[evaluatorIndex];
+                    if (!assignment?.member || !option) return;
+                    option.value = assignment.member;
+                    option.textContent = assignment.member;
+                });
+
+                updateSpeakerDots();
+                updateCarouselButtons();
+
+                if (speakers.length > 0) {
+                    index = Math.min(index, speakers.length - 1);
+                    setViewState("content");
+                    showSelectedSpeaker(index);
+                } else {
+                    showEmptyState("No speakers assigned", "Publish an agenda with speakers in Admin.");
+                }
+
+                updateActionButtons();
+            }
+
+            function onAgendaSnapshot(loaded) {
+                if (!loaded?.data) {
+                    if (speakers.length === 0) {
+                        renderSpeakersFromAgenda(loaded).catch(handleAgendaRenderError);
+                    } else {
+                        applyMeetingLiveState(loaded);
+                    }
+                    return;
+                }
+
+                renderSpeakersFromAgenda(loaded).catch(handleAgendaRenderError);
+            }
+
+            function handleAgendaRenderError(error) {
+                console.error("Failed to render speakers:", error);
+                showEmptyState("Could not load speakers", "Check your connection and try again.");
+            }
+
+            function setSpeaker(speakerIndex) {
+                const speaker = speakers[speakerIndex];
+                if (!speaker) return;
+
+                document.getElementById("currentSpeakerName").textContent = speaker.name;
+                document.getElementById("currentSpeakerTitle").textContent = speaker.title || "";
+                document.getElementById("currentSpeakerPath").textContent = speaker.path || "";
+                document.getElementById("currentSpeakerBio").textContent = speaker.bio || "";
+
+                const imgEl = document.getElementById("currentSpeakerImg");
+                const photoWrap = document.getElementById("speakerPhotoWrap");
+                const imageUrl = resolveSpeakerImage(speaker.imageUrl);
+
+                imgEl.onerror = () => {
+                    imgEl.onerror = null;
+                    imgEl.src = DEFAULT_SPEAKER_IMAGE;
+                    photoWrap.classList.add("is-placeholder");
+                };
+                imgEl.src = imageUrl;
+                imgEl.alt = speaker.name;
+                photoWrap.classList.toggle("is-placeholder", isPlaceholderSpeakerImage(imageUrl));
+            }
+
+            function stopAgendaListener() {
+                if (unsubAgenda) {
+                    unsubAgenda();
+                    unsubAgenda = null;
                 }
             }
 
-            function setSpeaker(index){
+            function startAgendaListener() {
+                stopAgendaListener();
+                setViewState("loading");
 
-                let speaker = speakers[index]
-                                
-                let currentSpeakerName = document.getElementById("currentSpeakerName")
-                let currentSpeakerBio = document.getElementById("currentSpeakerBio")
-                let currentSpeakerImg = document.getElementById("currentSpeakerImg")
-
-                currentSpeakerName.innerText = speaker.name
-                currentSpeakerBio.innerText = speaker.bio 
-                currentSpeakerImg.src = speaker.imageUrl
-            }
-            
-            function castVote()
-            {
-                let user = auth.currentUser
-                let userId = user.uid
-
-                let bestSpeakerValue = bestSpeaker.options[bestSpeaker.selectedIndex].text
-                let bestEvaluatorValue = bestEvaluator.options[bestEvaluator.selectedIndex].text
-                let bestTableValue = bestTable.value
-
-                
-                setDoc(doc(voteRef, userId), {
-                    bestSpeaker : `${bestSpeakerValue}`,
-                    bestEvaluator : `${bestEvaluatorValue}`,
-                    bestTable : `${bestTableValue}`
-                })
-                alert("your vote has been casted")
-                closePopup()
+                unsubAgenda = subscribeAgendaDoc(db, {
+                    onData: onAgendaSnapshot,
+                    onError: (error) => {
+                        console.error("Speeches agenda listener failed:", error);
+                        showEmptyState("Could not load speakers", "Check your connection and try again.");
+                    },
+                });
             }
 
-            feedbackBtn.onclick = () => {
-                addFeedback()
-            } 
+            async function refreshSpeakers() {
+                await auth.authStateReady();
+                if (!auth.currentUser) {
+                    stopAgendaListener();
+                    speakers = [];
+                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    return;
+                }
+                startAgendaListener();
+            }
+
+            function castVote() {
+                const user = auth.currentUser;
+                if (!user) {
+                    alert("Sign in to cast a vote.");
+                    return;
+                }
+
+                const bestSpeakerValue = bestSpeaker.options[bestSpeaker.selectedIndex].text;
+                const bestEvaluatorValue = bestEvaluator.options[bestEvaluator.selectedIndex].text;
+                const bestTableValue = bestTable.value.trim();
+
+                if (!bestSpeakerValue || bestSpeakerValue === "Select a speaker") {
+                    alert("Choose a best speaker.");
+                    return;
+                }
+                if (!bestEvaluatorValue || bestEvaluatorValue === "Select an evaluator") {
+                    alert("Choose a best evaluator.");
+                    return;
+                }
+                if (!bestTableValue) {
+                    alert("Enter a table topics speaker name.");
+                    return;
+                }
+
+                setDoc(doc(voteRef, user.uid), {
+                    bestSpeaker: `${bestSpeakerValue}`,
+                    bestEvaluator: `${bestEvaluatorValue}`,
+                    bestTable: `${bestTableValue}`,
+                });
+                alert("your vote has been casted");
+                closeVoteModal();
+            }
 
             castVoteBtn.onclick = () => {
-                castVote()
-            }
-            
-            let rightBtn = document.getElementById("rightBtn")
-            let leftBtn = document.getElementById("leftBtn")
+                castVote();
+            };
 
             rightBtn.onclick = () => {
-                updateSpeaker(1)
-            }
+                updateSpeaker(1);
+            };
 
             leftBtn.onclick = () => {
-                updateSpeaker(-1)
-            }
+                updateSpeaker(-1);
+            };
 
-            function updateSpeaker(positionChange)
-            {
-                if(index == 0 && positionChange == -1){
-                    index = 2;
-                }else if(index == 2 && positionChange == 1){
+            function updateSpeaker(positionChange) {
+                const lastIndex = speakers.length - 1;
+                if (lastIndex < 0) return;
+
+                if (index === 0 && positionChange === -1) {
+                    index = lastIndex;
+                } else if (index === lastIndex && positionChange === 1) {
                     index = 0;
-                }else{
-                    index = (index + positionChange)
+                } else {
+                    index = index + positionChange;
                 }
 
-                showSelectedSpeaker(index)
+                showSelectedSpeaker(index);
             }
 
-            function showSelectedSpeaker(index)
-            {
-                let firstSpeakerSelector = document.getElementById("firstSpeakerSelector")
-                let secondSpeakerSelector = document.getElementById("secondSpeakerSelector")
-                let thirdSpeakerSelector = document.getElementById("thirdSpeakerSelector")
-
-                let views = [firstSpeakerSelector, secondSpeakerSelector, thirdSpeakerSelector]
-
-                firstSpeakerSelector.style.backgroundColor = '#024165'
-                secondSpeakerSelector.style.backgroundColor = '#024165'
-                thirdSpeakerSelector.style.backgroundColor = '#024165'
-
-                views[index].style.backgroundColor = '#7D2128'
-                setSpeaker(index);
+            function showSelectedSpeaker(selectedIndex) {
+                dotButtons.forEach((dot, dotIndex) => {
+                    if (!dot || dotIndex >= speakers.length) return;
+                    dot.classList.toggle("is-active", dotIndex === selectedIndex);
+                });
+                setSpeaker(selectedIndex);
+                updateSpeakerCounter();
             }
 
-            theSpeakers()
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
+                    stopAgendaListener();
+                    speakers = [];
+                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    return;
+                }
 
-            let leaveFeedbackBtn = document.getElementById("leaveFeedbackBtn")
-            let feedbackTV = document.getElementById("feedbackTV")
-            let feedbackDialog = document.getElementById("feedbackDialog")
+                refreshSpeakers().catch((error) => {
+                    console.error("Failed to load speakers:", error);
+                    showEmptyState("Could not load speakers", "Check your connection and try again.");
+                });
+            });
+
+            async function handleParentAuthMessage(event) {
+                if (event.data?.type === "tm-auth-state") {
+                    if (!event.data.signedIn) {
+                        stopAgendaListener();
+                        speakers = [];
+                        showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                        return;
+                    }
+
+                    await auth.authStateReady();
+                    if (!auth.currentUser) {
+                        location.reload();
+                        return;
+                    }
+
+                    refreshSpeakers().catch((error) => {
+                        console.error("Failed to load speakers:", error);
+                    });
+                    return;
+                }
+
+                if (event.data?.type === "tm-reload-speakers") {
+                    refreshSpeakers().catch((error) => {
+                        console.error("Failed to reload speakers:", error);
+                    });
+                }
+            }
+
+            window.addEventListener("message", (event) => {
+                handleParentAuthMessage(event);
+            });
+
+            dotButtons.forEach((dot, dotIndex) => {
+                if (!dot) return;
+                dot.addEventListener("click", () => {
+                    if (dotIndex >= speakers.length) return;
+                    index = dotIndex;
+                    showSelectedSpeaker(index);
+                });
+            });
 
             leaveFeedbackBtn.onclick = () => {
-                feedbackDialog.style.display = 'none'
-                addFeedback()
-            }
-
-            openFeedbackBtn.onclick = () =>{
-                if(agendaEditable){
-                    openFeedbackDialog()
-                }else{
-                    alert(`Meeting is not live`)
+                if (!feedbackTV.value.trim()) {
+                    alert("Enter your feedback before submitting.");
+                    return;
                 }
-            }
+                addFeedback();
+            };
+
+            openFeedbackBtn.onclick = () => {
+                if (isMeetingLiveForActions()) {
+                    openFeedbackDialog();
+                } else {
+                    alert("Meeting is not live");
+                }
+            };
 
             voteBtn.onclick = () => {
-                if(agendaEditable){
-                    openPopup()
-                }else {
-                    alert('meeting is not live')
+                if (isMeetingLiveForActions()) {
+                    openPopup();
+                } else {
+                    alert("Meeting is not live");
                 }
-            }
+            };
+
+            document.getElementById("voteModal").addEventListener("click", (event) => {
+                if (event.target.id === "voteModal") closeVoteModal();
+            });
+
+            feedbackDialog.addEventListener("click", (event) => {
+                if (event.target.id === "feedbackDialog") closeFeebackDialog();
+            });
+
+            let touchStartX = 0;
+            speakerPhotoWrap.addEventListener("touchstart", (event) => {
+                touchStartX = event.changedTouches[0].screenX;
+            }, { passive: true });
+
+            speakerPhotoWrap.addEventListener("touchend", (event) => {
+                const delta = event.changedTouches[0].screenX - touchStartX;
+                if (Math.abs(delta) < 40 || speakers.length <= 1) return;
+                updateSpeaker(delta < 0 ? 1 : -1);
+            }, { passive: true });
         </script>
     </body>
 </html>
