@@ -2,14 +2,14 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
         <title>TM Experience</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="TMExperienceViews/assets/tmTheme.css">
-        <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=5">
+        <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=6">
     </head>
     <body class="tm-shell-body">
         <div id="mainViewDiv" class="tm-app-shell" hidden>
@@ -18,7 +18,7 @@
                     <iframe src="TMExperienceViews/calendarView.html?v=6" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=10" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=11" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
                     <iframe src="TMExperienceViews/toolsView.html?v=7" title="Tools"></iframe>
@@ -181,27 +181,17 @@
             </div>
         </div>
         <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-            import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { collection, doc, setDoc, getDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; 
-            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js"; 
+            import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+            import { collection, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
             import { validateClubId } from "./TMExperienceViews/scripts/tmClubService.js";
+            import { getTmApp, getTmAuth, getTmDb } from "./TMExperienceViews/scripts/tmFirebase.js";
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
-                authDomain: "naples-sunrise-bay.firebaseapp.com",
-                projectId: "naples-sunrise-bay",
-                storageBucket: "naples-sunrise-bay.appspot.com",
-                messagingSenderId: "39028676552",
-                appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
-                measurementId: "G-L0QCNW7C6W"
-            };
-            const app = initializeApp(firebaseConfig);
+            const app = getTmApp();
             const analytics = getAnalytics(app);
-            const auth = getAuth(app)
-            const db = getFirestore(app);
+            const auth = await getTmAuth();
+            const db = getTmDb();
 
             let mainViewDiv = document.getElementById("mainViewDiv")
             const registerView = document.getElementById("registerView")
@@ -211,6 +201,8 @@
             const goToRegisterBtn = document.getElementById("goToRegisterBtn")
             const registerError = document.getElementById("registerError")
             let verifiedClub = null
+            let pendingWelcomeVariant = null
+            let authUiReady = false
 
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
@@ -361,6 +353,19 @@
                 }
             }
 
+            function blurAuthInputs() {
+                document.querySelectorAll("#welcomeView input, #registerView input, #registerView textarea").forEach((input) => {
+                    input.blur();
+                });
+            }
+
+            function resetMobileViewport() {
+                blurAuthInputs();
+                window.scrollTo(0, 0);
+                document.documentElement.scrollTop = 0;
+                document.body.scrollTop = 0;
+            }
+
             function showAuthScreen()
             {
                 welcomeView.hidden = false;
@@ -377,6 +382,7 @@
                 registerView.hidden = true;
                 welcomeView.hidden = true;
                 setAuthShellMode(false);
+                resetMobileViewport();
             }
 
             function showRegister(bool)
@@ -521,44 +527,40 @@
                 const userRef = doc(db, "users", userId)
 
                 const docSnap = await getDoc(userRef);
-                if (docSnap.exists()) {
-                    if(docSnap.data().role == 'admin'){
-                        if (!document.getElementById('adminTabBtn')) {
-                            const adminTab = document.createElement('button');
-                            adminTab.type = 'button';
-                            adminTab.className = 'tm-tab';
-                            adminTab.id = 'adminTabBtn';
-                            adminTab.dataset.dest = '3';
-                            adminTab.dataset.iconActive = 'admin_b.svg';
-                            adminTab.dataset.iconInactive = 'admin.svg';
-                            adminTab.innerHTML = `<img id="adminBtn" src="${tabIconUrl('admin.svg')}" alt=""><span>Admin</span>`;
-                            adminTab.addEventListener('click', () => changeTo(3));
-                            const profileTab = document.querySelector('.tm-tab[data-dest="4"]');
-                            navBar.insertBefore(adminTab, profileTab);
-                        }
-                    }
-                    showMainView()
-                } else {
-                    alert("No such document!");
+                if (!docSnap.exists()) {
+                    return;
                 }
+
+                if(docSnap.data().role == 'admin'){
+                    if (!document.getElementById('adminTabBtn')) {
+                        const adminTab = document.createElement('button');
+                        adminTab.type = 'button';
+                        adminTab.className = 'tm-tab';
+                        adminTab.id = 'adminTabBtn';
+                        adminTab.dataset.dest = '3';
+                        adminTab.dataset.iconActive = 'admin_b.svg';
+                        adminTab.dataset.iconInactive = 'admin.svg';
+                        adminTab.innerHTML = `<img id="adminBtn" src="${tabIconUrl('admin.svg')}" alt=""><span>Admin</span>`;
+                        adminTab.addEventListener('click', () => changeTo(3));
+                        const profileTab = document.querySelector('.tm-tab[data-dest="4"]');
+                        navBar.insertBefore(adminTab, profileTab);
+                    }
+                }
+                showMainView();
             }
 
-            function signIn(email, password) {
-                signOut(auth).then(() => {
-                    signInWithEmailAndPassword(auth, email, password)
-                    .then(async (userCredential) => {
-                        const user = userCredential.user;
-                        await checkRole(user.uid);
-                        openWelcomeModal('returning');
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        alert(`Logged in failed ${errorMessage}`)
-                    });
-                        }).catch((error) => {
-                        alert(`TME-690: ${error}`)
-                });
+            async function signIn(email, password) {
+                logInBtn.disabled = true;
+                try {
+                    pendingWelcomeVariant = "returning";
+                    await signInWithEmailAndPassword(auth, email, password);
+                } catch (error) {
+                    pendingWelcomeVariant = null;
+                    alert(`Log in failed: ${error.message}`);
+                } finally {
+                    logInBtn.disabled = false;
+                    blurAuthInputs();
+                }
             }
 
             function requestEmail(email)
@@ -590,13 +592,20 @@
             window.changeTo = changeTo;
             window.showRegister = showRegister;
 
-            onAuthStateChanged(auth, (user) => {
+            onAuthStateChanged(auth, async (user) => {
                 broadcastAuthToFrames(user);
+
                 if (user) {
-                    checkRole(user.uid);
-                } else {
+                    await checkRole(user.uid);
+                    if (pendingWelcomeVariant) {
+                        openWelcomeModal(pendingWelcomeVariant);
+                        pendingWelcomeVariant = null;
+                    }
+                } else if (authUiReady) {
                     showAuthScreen();
                 }
+
+                authUiReady = true;
             });
 
             window.addEventListener("message", (event) => {

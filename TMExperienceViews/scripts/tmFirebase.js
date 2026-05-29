@@ -36,9 +36,25 @@ export async function getTmAuth() {
   return auth;
 }
 
-export function waitForTmUser(auth) {
+export function waitForTmUser(auth, { timeoutMs = 3000 } = {}) {
   return new Promise((resolve) => {
+    if (auth.currentUser) {
+      resolve(auth.currentUser);
+      return;
+    }
+
+    let settled = false;
+    const timeout = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      unsubscribe();
+      resolve(auth.currentUser);
+    }, timeoutMs);
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (settled || !user) return;
+      settled = true;
+      clearTimeout(timeout);
       unsubscribe();
       resolve(user);
     });

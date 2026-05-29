@@ -156,7 +156,7 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb } from "./scripts/tmFirebase.js";
+            import { getTmAuth, getTmDb, waitForTmUser } from "./scripts/tmFirebase.js";
             import {
                 findRoleAssignment,
                 formatMeetingDate,
@@ -600,10 +600,8 @@
                     }
 
                     await auth.authStateReady();
-                    if (!auth.currentUser) {
-                        location.reload();
-                        return;
-                    }
+                    const user = auth.currentUser || await waitForTmUser(auth);
+                    if (!user) return;
 
                     refreshSpeakers().catch((error) => {
                         console.error("Failed to load speakers:", error);
