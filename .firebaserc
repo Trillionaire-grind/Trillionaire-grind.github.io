@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "liv-lakay"
+    "default": "naples-sunrise-bay",
+    "liv-lakay": "liv-lakay",
+    "tm": "naples-sunrise-bay"
   }
 }

@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/tmTheme.css?v=10">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=30">
 
         <script>
             function closeVoteModal() {
@@ -52,24 +52,27 @@
                     <button type="button" id="openFeedbackBtn" class="tm-btn tm-btn--secondary tm-speeches-feedback-btn" disabled>Give feedback</button>
                 </div>
 
-                <div class="tm-speaker-carousel">
-                    <button type="button" class="tm-carousel-btn" id="leftBtn" aria-label="Previous speaker">&#8249;</button>
-                    <div class="tm-speaker-photo" id="speakerPhotoWrap">
-                        <img id="currentSpeakerImg" src="assets/person_b.svg" alt="Current speaker">
+                <div class="tm-speeches-card__main">
+                    <div class="tm-speeches-card__media">
+                        <div class="tm-speaker-carousel">
+                            <button type="button" class="tm-carousel-btn" id="leftBtn" aria-label="Previous speaker">&#8249;</button>
+                            <div class="tm-speaker-photo" id="speakerPhotoWrap">
+                                <img id="currentSpeakerImg" src="assets/person_b.svg" alt="Current speaker">
+                            </div>
+                            <button type="button" class="tm-carousel-btn" id="rightBtn" aria-label="Next speaker">&#8250;</button>
+                        </div>
+
+                        <p id="speakerCounter" class="tm-speaker-counter">Speaker 1 of 4</p>
+
+                        <div class="tm-dot-row">
+                            <button type="button" id="firstSpeakerSelector" aria-label="Speaker 1"></button>
+                            <button type="button" id="secondSpeakerSelector" aria-label="Speaker 2"></button>
+                            <button type="button" id="thirdSpeakerSelector" aria-label="Speaker 3"></button>
+                            <button type="button" id="fourthSpeakerSelector" aria-label="Speaker 4"></button>
+                        </div>
                     </div>
-                    <button type="button" class="tm-carousel-btn" id="rightBtn" aria-label="Next speaker">&#8250;</button>
-                </div>
 
-                <p id="speakerCounter" class="tm-speaker-counter">Speaker 1 of 4</p>
-
-                <div class="tm-dot-row">
-                    <button type="button" id="firstSpeakerSelector" aria-label="Speaker 1"></button>
-                    <button type="button" id="secondSpeakerSelector" aria-label="Speaker 2"></button>
-                    <button type="button" id="thirdSpeakerSelector" aria-label="Speaker 3"></button>
-                    <button type="button" id="fourthSpeakerSelector" aria-label="Speaker 4"></button>
-                </div>
-
-                <div class="tm-speeches-card__body">
+                    <div class="tm-speeches-card__body">
                     <h2 id="currentSpeakerName" class="tm-speaker-name">Speaker</h2>
                     <p id="currentSpeakerTitle" class="tm-speaker-speech-title"></p>
                     <p id="currentSpeakerPath" class="tm-speaker-speech-path"></p>
@@ -79,11 +82,27 @@
                             <p id="currentSpeakerBio" class="tm-speaker-bio"></p>
                         </div>
                     </div>
+                    </div>
                 </div>
             </article>
 
-            <button id="voteBtn" type="button" class="tm-btn tm-btn--primary tm-speeches-vote-btn" hidden disabled>Vote</button>
+            <div id="speechesVoteActions" class="tm-speeches-vote-actions" hidden>
+                <button id="voteBtn" type="button" class="tm-btn tm-btn--primary tm-speeches-vote-btn" disabled>Vote</button>
+                <button type="button" id="revealVotesBtn" class="tm-speeches-reveal-link" hidden>Reveal votes</button>
+            </div>
         </div>
+
+        <dialog id="voteResultsDialog" class="tm-admin-dialog">
+            <div class="tm-admin-dialog__panel tm-vote-results">
+                <h3>Vote results</h3>
+                <div id="voteResultsBody" class="tm-vote-results__body">
+                    <p class="tm-vote-results__loading">Loading votes…</p>
+                </div>
+                <div class="tm-admin-dialog__actions" style="margin-top:16px;">
+                    <button type="button" id="voteResultsCloseBtn" class="tm-btn tm-btn--primary">Close</button>
+                </div>
+            </div>
+        </dialog>
 
         <div id="voteModal" class="tm-modal" role="dialog" aria-modal="true" aria-labelledby="voteModalTitle">
             <div class="tm-modal__panel tm-vote-modal">
@@ -156,22 +175,30 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb, waitForAuthUid } from "./scripts/tmFirebase.js";
+            import { getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
+            import { showTmToast } from "./scripts/tmToast.js";
             import {
                 findRoleAssignment,
                 formatMeetingDate,
                 getAgendaMeta,
                 getSpeakerAssignments,
                 normalizeAgendaDoc,
+                isUserVoteCounterForAgenda,
                 EVALUATOR_ROLE_IDS,
-            } from "./scripts/tmAgendaData.js?v=3";
+            } from "./scripts/tmAgendaData.js?v=4";
             import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
-            import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc } from "./scripts/tmAgendaFirestore.js?v=5";
+            import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc } from "./scripts/tmAgendaFirestore.js?v=6";
+            import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
 
             const auth = await getTmAuth();
             const db = getTmDb();
 
             const voteBtn = document.getElementById("voteBtn");
+            const speechesVoteActions = document.getElementById("speechesVoteActions");
+            const revealVotesBtn = document.getElementById("revealVotesBtn");
+            const voteResultsDialog = document.getElementById("voteResultsDialog");
+            const voteResultsBody = document.getElementById("voteResultsBody");
+            const voteResultsCloseBtn = document.getElementById("voteResultsCloseBtn");
             const castVoteBtn = document.getElementById("castVoteBtn");
             const bestSpeaker = document.getElementById("bestSpeaker");
             const bestEvaluator = document.getElementById("bestEvaluator");
@@ -204,6 +231,13 @@
             let index = 0;
             let speakers = [];
             let unsubAgenda = null;
+            let shellUid = null;
+            let shellSignedIn = null;
+            let publishedAgendaDoc = null;
+
+            function isSignedInForSpeeches() {
+                return shellSignedIn === true || Boolean(auth.currentUser);
+            }
 
             const voteRef = collection(db, "votes");
             const DEFAULT_SPEAKER_IMAGE = "assets/person_b.svg";
@@ -222,7 +256,9 @@
                 speechesLoading.hidden = state !== "loading";
                 speechesEmpty.hidden = state !== "empty";
                 speechesContent.hidden = state !== "content";
-                voteBtn.hidden = state !== "content";
+                speechesVoteActions.hidden = state !== "content";
+                voteBtn.hidden = false;
+                voteBtn.disabled = state !== "content";
             }
 
             function showEmptyState(title, copy) {
@@ -247,9 +283,99 @@
                 meetingLivePill.classList.toggle("is-not-live", !isLive);
             }
 
+            function readLiveFromPayload(loaded) {
+                return loaded?.isLive ?? readMeetingLiveFromDoc(loaded?.data);
+            }
+
             function applyMeetingLiveState(loaded) {
-                meetingIsLive = loaded?.isLive ?? readMeetingLiveFromDoc(loaded?.data);
+                meetingIsLive = readLiveFromPayload(loaded);
+                if (loaded?.data) {
+                    publishedAgendaDoc = loaded.data;
+                    if (typeof publishedAgendaDoc.isLive !== "boolean") {
+                        publishedAgendaDoc.isLive = meetingIsLive;
+                    }
+                }
                 updateActionButtons();
+                updateRevealVotesAccess().catch(() => {});
+            }
+
+            function applyMeetingLiveInstant(isLive) {
+                meetingIsLive = Boolean(isLive);
+                if (publishedAgendaDoc) {
+                    publishedAgendaDoc.isLive = meetingIsLive;
+                }
+                updateLivePill(meetingIsLive);
+                updateActionButtons();
+                updateRevealVotesAccess().catch(() => {});
+            }
+
+            async function updateRevealVotesAccess() {
+                if (!meetingIsLive || !publishedAgendaDoc || speakers.length === 0) {
+                    revealVotesBtn.hidden = true;
+                    return;
+                }
+
+                const user = await requireTmAuthUser(auth, { shellUid });
+                if (!user) {
+                    revealVotesBtn.hidden = true;
+                    return;
+                }
+
+                let userName = "";
+                try {
+                    const profileSnap = await getDoc(doc(db, "users", user.uid));
+                    if (profileSnap.exists()) {
+                        userName = profileSnap.data().name || "";
+                    }
+                } catch (error) {
+                    console.warn("Could not load profile for vote counter check:", error);
+                }
+
+                revealVotesBtn.hidden = !isUserVoteCounterForAgenda(
+                    publishedAgendaDoc,
+                    user.uid,
+                    userName
+                );
+            }
+
+            async function revealVotes() {
+                if (!meetingIsLive) {
+                    showTmToast("Votes can be revealed while the meeting is live.", { type: "info" });
+                    return;
+                }
+
+                const user = await requireTmAuthUser(auth, { shellUid });
+                if (!user) {
+                    showTmToast("Sign in to reveal votes.", { type: "error" });
+                    return;
+                }
+
+                let userName = "";
+                const profileSnap = await getDoc(doc(db, "users", user.uid));
+                if (profileSnap.exists()) {
+                    userName = profileSnap.data().name || "";
+                }
+
+                if (!isUserVoteCounterForAgenda(publishedAgendaDoc, user.uid, userName)) {
+                    showTmToast(
+                        "Only tonight's Vote Counter can reveal votes while the meeting is live.",
+                        { type: "error" }
+                    );
+                    return;
+                }
+
+                voteResultsDialog.showModal();
+
+                try {
+                    await loadVoteResultsInto(voteResultsBody, db);
+                } catch (error) {
+                    console.error("Failed to load votes:", error);
+                    voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">Could not load votes. Try again in a moment.</p>`;
+                }
+            }
+
+            function closeVoteResultsDialog() {
+                voteResultsDialog.close();
             }
 
             function isMeetingLiveForActions() {
@@ -295,15 +421,15 @@
                 const speaker = speakers[index];
                 const id = speaker?.id;
                 if (!feedbackValue) {
-                    alert("Enter feedback before submitting.");
+                    showTmToast("Enter feedback before submitting.", { type: "error" });
                     return;
                 }
                 if (!id) {
-                    alert("Speaker profile is missing. Republish the agenda from Admin.");
+                    showTmToast("Speaker profile is missing. Republish the agenda from Admin.", { type: "error" });
                     return;
                 }
                 if (!currentMeetingDate) {
-                    alert("Meeting date is missing. Republish the agenda from Admin.");
+                    showTmToast("Meeting date is missing. Republish the agenda from Admin.", { type: "error" });
                     return;
                 }
 
@@ -321,12 +447,12 @@
                         feedback: feedbackValue,
                     });
 
-                    alert("Feedback given successfully");
+                    showTmToast("Feedback submitted. Thank you!", { type: "success" });
                     feedbackTV.value = "";
                     closeFeebackDialog();
                 } catch (error) {
                     console.error("Failed to save feedback:", error);
-                    alert("Could not save feedback. Try again.");
+                    showTmToast("Could not save feedback. Try again.", { type: "error" });
                 }
             }
 
@@ -399,6 +525,7 @@
                 }
 
                 meetingIsLive = loaded.isLive ?? readMeetingLiveFromDoc(loaded.data);
+                publishedAgendaDoc = loaded.data;
 
                 const normalized = normalizeAgendaDoc(loaded.data);
                 const data = normalized.data;
@@ -433,6 +560,7 @@
                 }
 
                 updateActionButtons();
+                updateRevealVotesAccess().catch(() => {});
             }
 
             function onAgendaSnapshot(loaded) {
@@ -442,6 +570,14 @@
                     } else {
                         applyMeetingLiveState(loaded);
                     }
+                    return;
+                }
+
+                const nextLive = readLiveFromPayload(loaded);
+                const liveOnlyUpdate = speakers.length > 0 && meetingIsLive !== nextLive;
+
+                if (liveOnlyUpdate) {
+                    applyMeetingLiveState(loaded);
                     return;
                 }
 
@@ -498,19 +634,42 @@
 
             async function refreshSpeakers() {
                 await auth.authStateReady();
-                if (!auth.currentUser) {
+
+                if (shellSignedIn === false) {
                     stopAgendaListener();
                     speakers = [];
-                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    showEmptyState(
+                        "Sign in to view speakers",
+                        "Sign in from the welcome screen to see tonight's speakers."
+                    );
                     return;
                 }
+
+                if (!isSignedInForSpeeches()) {
+                    stopAgendaListener();
+                    speakers = [];
+                    showEmptyState(
+                        "Sign in to view speakers",
+                        "Sign in from the welcome screen to see tonight's speakers."
+                    );
+                    return;
+                }
+
                 startAgendaListener();
             }
 
-            function castVote() {
-                const user = auth.currentUser;
-                if (!user) {
-                    alert("Sign in to cast a vote.");
+            async function requireAuthUser() {
+                const user = await requireTmAuthUser(auth, { shellUid });
+                if (!user) throw new Error("not_signed_in");
+                return user;
+            }
+
+            async function castVote() {
+                let user;
+                try {
+                    user = await requireAuthUser();
+                } catch {
+                    showTmToast("Sign in to cast a vote.", { type: "error" });
                     return;
                 }
 
@@ -519,26 +678,42 @@
                 const bestTableValue = bestTable.value.trim();
 
                 if (!bestSpeakerValue || bestSpeakerValue === "Select a speaker") {
-                    alert("Choose a best speaker.");
+                    showTmToast("Choose a best speaker.", { type: "error" });
                     return;
                 }
                 if (!bestEvaluatorValue || bestEvaluatorValue === "Select an evaluator") {
-                    alert("Choose a best evaluator.");
+                    showTmToast("Choose a best evaluator.", { type: "error" });
                     return;
                 }
                 if (!bestTableValue) {
-                    alert("Enter a table topics speaker name.");
+                    showTmToast("Enter a table topics speaker name.", { type: "error" });
                     return;
                 }
 
-                setDoc(doc(voteRef, user.uid), {
-                    bestSpeaker: `${bestSpeakerValue}`,
-                    bestEvaluator: `${bestEvaluatorValue}`,
-                    bestTable: `${bestTableValue}`,
-                });
-                alert("your vote has been casted");
-                closeVoteModal();
+                try {
+                    await setDoc(doc(voteRef, user.uid), {
+                        bestSpeaker: `${bestSpeakerValue}`,
+                        bestEvaluator: `${bestEvaluatorValue}`,
+                        bestTable: `${bestTableValue}`,
+                    });
+                    showTmToast("Your vote has been recorded.", { type: "success" });
+                    closeVoteModal();
+                } catch (error) {
+                    console.error("Failed to save vote:", error);
+                    showTmToast("Could not save your vote. Try again.", { type: "error" });
+                }
             }
+
+            voteResultsCloseBtn.addEventListener("click", closeVoteResultsDialog);
+
+            voteResultsDialog.addEventListener("cancel", (event) => {
+                event.preventDefault();
+                closeVoteResultsDialog();
+            });
+
+            revealVotesBtn.addEventListener("click", () => {
+                revealVotes().catch((error) => console.error("Reveal votes failed:", error));
+            });
 
             castVoteBtn.onclick = () => {
                 castVote();
@@ -578,10 +753,23 @@
 
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
-                    stopAgendaListener();
-                    speakers = [];
-                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    if (shellSignedIn !== true) {
+                        stopAgendaListener();
+                        speakers = [];
+                        showEmptyState(
+                            "Sign in to view speakers",
+                            "Sign in from the welcome screen to see tonight's speakers."
+                        );
+                    }
                     return;
+                }
+
+                if (shellSignedIn === false) return;
+
+                if (shellSignedIn === true) {
+                    if (shellUid && user.uid !== shellUid) return;
+                } else {
+                    shellUid = user.uid;
                 }
 
                 refreshSpeakers().catch((error) => {
@@ -591,25 +779,31 @@
             });
 
             async function handleParentAuthMessage(event) {
+                if (event.data?.type === "tm-meeting-live") {
+                    applyMeetingLiveInstant(event.data.isLive);
+                    return;
+                }
+
                 if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                    shellSignedIn = false;
+                    shellUid = null;
                     stopAgendaListener();
                     speakers = [];
                     index = 0;
                     meetingIsLive = false;
-                    showEmptyState("Sign in to view speakers", "Sign in from the welcome screen to see tonight's speakers.");
+                    showEmptyState(
+                        "Sign in to view speakers",
+                        "Sign in from the welcome screen to see tonight's speakers."
+                    );
                     return;
                 }
 
-                if (event.data?.type === "tm-auth-state") {
-                    await auth.authStateReady();
-                    const expectedUid = event.data.uid || null;
-                    const user = expectedUid
-                        ? await waitForAuthUid(auth, expectedUid)
-                        : auth.currentUser;
-                    if (!user) return;
-
+                if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                    shellSignedIn = true;
+                    shellUid = event.data.uid || null;
                     refreshSpeakers().catch((error) => {
                         console.error("Failed to load speakers:", error);
+                        showEmptyState("Could not load speakers", "Check your connection and try again.");
                     });
                     return;
                 }
@@ -636,7 +830,7 @@
 
             leaveFeedbackBtn.onclick = () => {
                 if (!feedbackTV.value.trim()) {
-                    alert("Enter your feedback before submitting.");
+                    showTmToast("Enter your feedback before submitting.", { type: "error" });
                     return;
                 }
                 addFeedback();
@@ -646,7 +840,7 @@
                 if (isMeetingLiveForActions()) {
                     openFeedbackDialog();
                 } else {
-                    alert("Meeting is not live");
+                    showTmToast("Meeting is not live yet.", { type: "info" });
                 }
             };
 
@@ -654,7 +848,7 @@
                 if (isMeetingLiveForActions()) {
                     openPopup();
                 } else {
-                    alert("Meeting is not live");
+                    showTmToast("Meeting is not live yet.", { type: "info" });
                 }
             };
 

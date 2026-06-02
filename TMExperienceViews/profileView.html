@@ -7,23 +7,72 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=6">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=24">
 </head>
-<body class="tm-body">
-    <div class="tm-page">
+<body class="tm-body tm-profile-body">
+    <div class="tm-page tm-profile-page">
         <p class="tm-profile-greeting">Hello<br><span id="nameTV">Member</span></p>
 
         <div class="tm-profile-bio-header">
             <p class="tm-section-title">Your bio</p>
-            <button type="button" id="signOutBtn" class="tm-btn tm-btn--secondary tm-profile-sign-out" disabled>Sign out</button>
+            <div class="tm-profile-header-actions">
+                <button type="button" id="editProfileBtn" class="tm-btn tm-btn--secondary tm-profile-edit-btn" disabled>Edit</button>
+                <button type="button" id="signOutBtn" class="tm-btn tm-btn--secondary tm-profile-sign-out" disabled>Sign out</button>
+            </div>
         </div>
-        <div class="tm-card tm-bio-card">
-            <img src="assets/alex.jpeg" id="profileImage" alt="Profile photo">
+        <div id="profileViewCard" class="tm-card tm-bio-card">
+            <img src="assets/person_b.svg" id="profileImage" alt="Profile photo">
             <div class="tm-bio-card__text">
                 <p class="tm-bio-card__label">About you</p>
                 <p class="tm-bio-card__bio" id="bioTV"></p>
             </div>
         </div>
+
+        <div id="profileEditCard" class="tm-card tm-profile-edit" hidden>
+            <div class="tm-profile-edit__photo">
+                <img src="assets/person_b.svg" id="editProfileImagePreview" alt="Profile photo preview">
+                <label class="tm-btn tm-btn--secondary tm-profile-edit__photo-btn">
+                    Change photo
+                    <input type="file" id="editProfilePhoto" accept="image/*" hidden>
+                </label>
+            </div>
+            <div class="tm-profile-edit__field">
+                <label for="editProfileBio">Bio</label>
+                <textarea id="editProfileBio" rows="4" placeholder="Tell members about yourself"></textarea>
+            </div>
+            <div class="tm-profile-edit__actions">
+                <button type="button" id="cancelEditProfileBtn" class="tm-btn tm-btn--secondary">Cancel</button>
+                <button type="button" id="saveEditProfileBtn" class="tm-btn tm-btn--primary">Save</button>
+            </div>
+        </div>
+
+        <section id="tmProCard" class="tm-card tm-pro-card" hidden>
+            <div class="tm-pro-card__header">
+                <div class="tm-pro-card__header-main">
+                    <p id="tmProBadge" class="tm-pro-card__badge">Optional upgrade</p>
+                    <p id="tmProHeaderSummary" class="tm-pro-card__header-summary">TM Experience Pro · $13.99/mo</p>
+                </div>
+                <button
+                    type="button"
+                    id="tmProCollapseBtn"
+                    class="tm-pro-card__collapse-btn"
+                    aria-expanded="true"
+                    aria-controls="tmProCardBody"
+                    aria-label="Minimize Pro details"
+                >−</button>
+            </div>
+            <div id="tmProCardBody" class="tm-pro-card__body">
+                <p id="tmProPrice" class="tm-pro-card__price"><strong>$13.99</strong> / month</p>
+                <p class="tm-pro-card__copy">The club app is free. Pro adds recordings and a shareable speaker reel when you are ready.</p>
+                <ul id="tmProBenefits" class="tm-pro-card__list"></ul>
+                <p id="tmProStatus" class="tm-pro-card__status" hidden></p>
+                <div class="tm-pro-card__actions">
+                    <button type="button" id="tmProPrimaryBtn" class="tm-btn tm-btn--primary">Subscribe</button>
+                    <button type="button" id="tmProSecondaryBtn" class="tm-btn tm-btn--secondary" hidden>Manage billing</button>
+                </div>
+                <p id="tmProFootnote" class="tm-pro-card__footnote">Subscriptions open soon. Meeting tools stay free for all members.</p>
+            </div>
+        </section>
 
         <p class="tm-section-title">Your speeches</p>
         <div id="speechesDiv" class="tm-speech-grid"></div>
@@ -31,34 +80,219 @@
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { collection, doc, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getTmAuth, getTmDb } from "./scripts/tmFirebase.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { collection, doc, getDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
+        import { showTmToast } from "./scripts/tmToast.js";
+        import {
+            TM_PRO_BENEFITS,
+            TM_PRO_CHECKOUT_ENABLED,
+            TM_PRO_PRICE_LABEL,
+        } from "./scripts/tmProConfig.js";
 
         const auth = await getTmAuth();
         const db = getTmDb();
+        const DEFAULT_PROFILE_IMAGE = "assets/person_b.svg";
         const signOutBtn = document.getElementById("signOutBtn");
+        const editProfileBtn = document.getElementById("editProfileBtn");
+        const profileViewCard = document.getElementById("profileViewCard");
+        const profileEditCard = document.getElementById("profileEditCard");
+        const profileImage = document.getElementById("profileImage");
+        const bioTV = document.getElementById("bioTV");
+        const editProfileImagePreview = document.getElementById("editProfileImagePreview");
+        const editProfilePhoto = document.getElementById("editProfilePhoto");
+        const editProfileBio = document.getElementById("editProfileBio");
+        const saveEditProfileBtn = document.getElementById("saveEditProfileBtn");
+        const cancelEditProfileBtn = document.getElementById("cancelEditProfileBtn");
+        const tmProCard = document.getElementById("tmProCard");
+        const tmProBadge = document.getElementById("tmProBadge");
+        const tmProPrice = document.getElementById("tmProPrice");
+        const tmProBenefits = document.getElementById("tmProBenefits");
+        const tmProStatus = document.getElementById("tmProStatus");
+        const tmProPrimaryBtn = document.getElementById("tmProPrimaryBtn");
+        const tmProSecondaryBtn = document.getElementById("tmProSecondaryBtn");
+        const tmProFootnote = document.getElementById("tmProFootnote");
+        const tmProCollapseBtn = document.getElementById("tmProCollapseBtn");
+        const tmProCardBody = document.getElementById("tmProCardBody");
+        const tmProHeaderSummary = document.getElementById("tmProHeaderSummary");
+
+        const TM_PRO_COLLAPSED_KEY = "tm-pro-card-collapsed";
+
+        function escapeHtml(text) {
+            return String(text || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;");
+        }
+
+        function readProCollapsedPreference() {
+            try {
+                return localStorage.getItem(TM_PRO_COLLAPSED_KEY) === "1";
+            } catch {
+                return false;
+            }
+        }
+
+        function writeProCollapsedPreference(collapsed) {
+            try {
+                localStorage.setItem(TM_PRO_COLLAPSED_KEY, collapsed ? "1" : "0");
+            } catch {
+                /* ignore */
+            }
+        }
+
+        function setProCardCollapsed(collapsed) {
+            tmProCard.classList.toggle("is-collapsed", collapsed);
+            tmProCollapseBtn.textContent = collapsed ? "+" : "−";
+            tmProCollapseBtn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+            tmProCollapseBtn.setAttribute(
+                "aria-label",
+                collapsed ? "Show Pro details" : "Minimize Pro details"
+            );
+            writeProCollapsedPreference(collapsed);
+        }
+
+        function initProCollapse() {
+            setProCardCollapsed(readProCollapsedPreference());
+            tmProCollapseBtn.addEventListener("click", () => {
+                setProCardCollapsed(!tmProCard.classList.contains("is-collapsed"));
+            });
+        }
+
+        initProCollapse();
+
+        TM_PRO_BENEFITS.forEach((line) => {
+            const li = document.createElement("li");
+            li.textContent = line;
+            tmProBenefits.appendChild(li);
+        });
+
+        const priceParts = TM_PRO_PRICE_LABEL.match(/^\$([^/]+)(\/.*)$/);
+        if (priceParts) {
+            tmProPrice.innerHTML = `<strong>$${priceParts[1]}</strong>${priceParts[2]}`;
+        } else {
+            tmProPrice.innerHTML = `<strong>${TM_PRO_PRICE_LABEL}</strong>`;
+        }
         let activeUserId = null;
         let profileSession = 0;
         /** Uid from parent shell — authoritative during sign-in/out and account switches. */
         let shellUid = null;
         /** null = iframe not yet synced with parent; false = signed out; true = signed in. */
         let shellSignedIn = null;
+        let cachedProfileData = null;
+        let pendingPhotoFile = null;
+        let editPhotoPreviewUrl = null;
+
+        function resolveProfileImage(url) {
+            const raw = String(url || "").trim();
+            return raw || DEFAULT_PROFILE_IMAGE;
+        }
+
+        function setProfileActionButtonsEnabled(enabled) {
+            signOutBtn.disabled = !enabled;
+            editProfileBtn.disabled = !enabled;
+        }
+
+        function exitEditMode({ restoreView = true } = {}) {
+            profileEditCard.hidden = true;
+            profileViewCard.hidden = false;
+            editProfileBtn.hidden = false;
+            pendingPhotoFile = null;
+            editProfilePhoto.value = "";
+            if (editPhotoPreviewUrl) {
+                URL.revokeObjectURL(editPhotoPreviewUrl);
+                editPhotoPreviewUrl = null;
+            }
+            if (restoreView && cachedProfileData) {
+                setData(cachedProfileData);
+            }
+        }
+
+        function enterEditMode() {
+            if (!cachedProfileData || !activeUserId) return;
+            profileViewCard.hidden = true;
+            profileEditCard.hidden = false;
+            editProfileBtn.hidden = true;
+            editProfileBio.value = cachedProfileData.bio || "";
+            editProfileImagePreview.src = resolveProfileImage(cachedProfileData.imageUrl);
+            pendingPhotoFile = null;
+            editProfilePhoto.value = "";
+        }
+
+        async function uploadProfilePhoto(userId, file) {
+            const storage = getStorage(getTmApp());
+            const photoRef = ref(storage, `users/${userId}/profile.jpg`);
+            await uploadBytes(photoRef, file);
+            return getDownloadURL(photoRef);
+        }
+
+        async function saveProfile() {
+            if (!activeUserId || !cachedProfileData) return;
+
+            const user = await requireTmAuthUser(auth, { shellUid });
+            if (!user) {
+                showTmToast("Sign in to update your profile.", { type: "error" });
+                return;
+            }
+
+            const session = profileSession;
+            const userId = activeUserId;
+            saveEditProfileBtn.disabled = true;
+            cancelEditProfileBtn.disabled = true;
+
+            try {
+                let imageUrl = resolveProfileImage(cachedProfileData.imageUrl);
+                if (pendingPhotoFile) {
+                    imageUrl = await uploadProfilePhoto(userId, pendingPhotoFile);
+                }
+
+                const bio = editProfileBio.value.trim();
+                await setDoc(
+                    doc(db, "users", userId),
+                    { bio, imageUrl },
+                    { merge: true }
+                );
+
+                if (session !== profileSession || activeUserId !== userId) return;
+
+                cachedProfileData = { ...cachedProfileData, bio, imageUrl };
+                setData(cachedProfileData);
+                exitEditMode({ restoreView: false });
+                showTmToast("Profile updated.", { type: "success" });
+            } catch (error) {
+                console.error("Failed to save profile:", error);
+                showTmToast("Could not save profile. Try again.", { type: "error" });
+            } finally {
+                if (session === profileSession) {
+                    saveEditProfileBtn.disabled = false;
+                    cancelEditProfileBtn.disabled = false;
+                }
+            }
+        }
 
         function resetProfileView() {
+            exitEditMode({ restoreView: false });
             profileSession += 1;
             activeUserId = null;
+            cachedProfileData = null;
             document.getElementById("nameTV").innerText = "Member";
-            document.getElementById("bioTV").innerText = "Sign in to view your profile.";
-            document.getElementById("profileImage").src = "assets/alex.jpeg";
+            bioTV.innerText = "Sign in to view your profile.";
+            bioTV.classList.remove("is-empty");
+            profileImage.src = DEFAULT_PROFILE_IMAGE;
             document.getElementById("speechesDiv").innerHTML = "";
-            signOutBtn.disabled = true;
+            setProfileActionButtonsEnabled(false);
+            tmProCard.hidden = true;
         }
 
         function showMissingProfile(user) {
+            exitEditMode({ restoreView: false });
             document.getElementById("nameTV").innerText = user.displayName || user.email || "Member";
-            document.getElementById("bioTV").innerText = "Profile not found. Contact your club admin to finish setup.";
-            document.getElementById("profileImage").src = "assets/alex.jpeg";
+            bioTV.innerText = "Profile not found. Contact your club admin to finish setup.";
+            profileImage.src = DEFAULT_PROFILE_IMAGE;
             document.getElementById("speechesDiv").innerHTML = "";
+            setProfileActionButtonsEnabled(false);
+            tmProCard.hidden = true;
         }
 
         async function syncProfileForUid(userId) {
@@ -69,14 +303,15 @@
             }
 
             if (activeUserId !== userId) {
+                exitEditMode({ restoreView: false });
                 document.getElementById("nameTV").innerText = "Member";
-                document.getElementById("bioTV").innerText = "";
-                document.getElementById("profileImage").src = "assets/alex.jpeg";
+                bioTV.innerText = "";
+                profileImage.src = DEFAULT_PROFILE_IMAGE;
                 document.getElementById("speechesDiv").innerHTML = "";
             }
 
             activeUserId = userId;
-            signOutBtn.disabled = false;
+            setProfileActionButtonsEnabled(true);
             await fetchUserInfo(userId, null, session);
             await fetchSpeeches(userId, session);
         }
@@ -98,11 +333,86 @@
             showMissingProfile(authUser || auth.currentUser || { displayName: "", email: "" });
         }
 
-        function setData(data) {
-            document.getElementById("nameTV").innerText = data.name;
-            document.getElementById("bioTV").innerText = data.bio;
-            document.getElementById("profileImage").src = data.imageUrl;
+        function isProMember(data) {
+            const plan = String(data?.plan || "").toLowerCase();
+            const status = String(data?.subscriptionStatus || "").toLowerCase();
+            return plan === "pro" && (status === "active" || status === "trialing");
         }
+
+        function renderProCard(data) {
+            const pro = isProMember(data);
+            tmProCard.hidden = false;
+            tmProBadge.textContent = pro ? "Pro member" : "Optional upgrade";
+            tmProBadge.classList.toggle("tm-pro-card__badge--active", pro);
+            tmProHeaderSummary.textContent = pro
+                ? "TM Experience Pro · Active"
+                : "TM Experience Pro · $13.99/mo";
+
+            if (pro) {
+                tmProStatus.hidden = false;
+                tmProStatus.textContent = "Your Pro subscription is active.";
+                tmProPrimaryBtn.hidden = true;
+                tmProSecondaryBtn.hidden = false;
+                tmProSecondaryBtn.textContent = TM_PRO_CHECKOUT_ENABLED ? "Manage billing" : "Manage billing (soon)";
+                tmProFootnote.textContent = TM_PRO_CHECKOUT_ENABLED
+                    ? "Update payment method or cancel anytime in the billing portal."
+                    : "Billing portal opens when subscriptions launch.";
+            } else {
+                tmProStatus.hidden = true;
+                tmProPrimaryBtn.hidden = false;
+                tmProPrimaryBtn.textContent = TM_PRO_CHECKOUT_ENABLED ? "Subscribe" : "Subscribe (coming soon)";
+                tmProSecondaryBtn.hidden = true;
+                tmProFootnote.textContent = TM_PRO_CHECKOUT_ENABLED
+                    ? "Cancel anytime. Club meeting tools stay free."
+                    : "Subscriptions open soon. Meeting tools stay free for all members.";
+            }
+        }
+
+        function handleProPrimaryAction() {
+            if (TM_PRO_CHECKOUT_ENABLED) {
+                showTmToast("Opening checkout…", { type: "info" });
+                return;
+            }
+            showTmToast("Pro is optional. Subscriptions open soon — your club app is free to use.", { type: "info" });
+        }
+
+        function handleProSecondaryAction() {
+            if (TM_PRO_CHECKOUT_ENABLED) {
+                showTmToast("Opening billing portal…", { type: "info" });
+                return;
+            }
+            showTmToast("Billing portal opens when subscriptions launch.", { type: "info" });
+        }
+
+        tmProPrimaryBtn.addEventListener("click", handleProPrimaryAction);
+        tmProSecondaryBtn.addEventListener("click", handleProSecondaryAction);
+
+        function setData(data) {
+            cachedProfileData = { ...data };
+            document.getElementById("nameTV").innerText = data.name;
+            const hasBio = Boolean(String(data.bio || "").trim());
+            bioTV.innerText = hasBio ? data.bio : "No bio yet. Tap Edit to add one.";
+            bioTV.classList.toggle("is-empty", !hasBio);
+            profileImage.src = resolveProfileImage(data.imageUrl);
+            renderProCard(data);
+        }
+
+        editProfileBtn.addEventListener("click", enterEditMode);
+        cancelEditProfileBtn.addEventListener("click", () => exitEditMode({ restoreView: true }));
+        saveEditProfileBtn.addEventListener("click", () => {
+            saveProfile().catch((error) => console.error("Save profile failed:", error));
+        });
+
+        editProfilePhoto.addEventListener("change", () => {
+            const file = editProfilePhoto.files?.[0];
+            if (!file) return;
+            pendingPhotoFile = file;
+            if (editPhotoPreviewUrl) {
+                URL.revokeObjectURL(editPhotoPreviewUrl);
+            }
+            editPhotoPreviewUrl = URL.createObjectURL(file);
+            editProfileImagePreview.src = editPhotoPreviewUrl;
+        });
 
         async function fetchSpeeches(userId, session = profileSession) {
             const speechesDiv = document.getElementById("speechesDiv");
@@ -113,6 +423,10 @@
                 querySnapshot.forEach((speechDoc) => {
                     speechesDiv.appendChild(createSpeechDiv(speechDoc.id, speechDoc.data(), userId));
                 });
+                if (!querySnapshot.size) {
+                    speechesDiv.innerHTML =
+                        '<p class="tm-profile-speeches-empty">No speeches on your record yet. They appear here after you speak at a meeting.</p>';
+                }
             } catch (error) {
                 if (session !== profileSession || activeUserId !== userId) return;
                 speechesDiv.innerHTML = '<p class="tm-bio-card__bio">Failed to fetch speeches. Please try again later.</p>';
@@ -137,7 +451,9 @@
             const card = document.createElement("button");
             card.type = "button";
             card.className = "tm-card tm-speech-card";
-            const safeTitle = String(data?.title || data?.speechTitle || "Untitled speech").trim() || "Untitled speech";
+            const safeTitle = escapeHtml(
+                String(data?.title || data?.speechTitle || "Untitled speech").trim() || "Untitled speech"
+            );
             card.innerHTML = `<p class="tm-speech-card__date">${formatSpeechCardDate(id)}</p><p class="tm-speech-card__title">${safeTitle}</p>`;
             card.addEventListener("click", () => openIndividualSpeech(id, userId));
             return card;

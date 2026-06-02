@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="TMExperienceViews/assets/tmTheme.css">
+        <link rel="stylesheet" href="TMExperienceViews/assets/tmTheme.css?v=23">
         <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=6">
     </head>
     <body class="tm-shell-body">
@@ -18,16 +18,16 @@
                     <iframe src="TMExperienceViews/calendarView.html?v=6" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=13" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=25" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/toolsView.html?v=7" title="Tools"></iframe>
+                    <iframe src="TMExperienceViews/toolsView.html?v=8" title="Tools"></iframe>
                 </div>
                 <div id="adminView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/adminView.html?v=8" title="Admin"></iframe>
+                    <iframe src="TMExperienceViews/adminView.html?v=11" title="Admin"></iframe>
                 </div>
                 <div id="profileView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/profileView.html?v=10" title="Profile"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html?v=14" title="Profile"></iframe>
                 </div>
             </div>
             <nav class="tm-tabbar" id="navBar" aria-label="Main">
@@ -60,7 +60,6 @@
                     <p class="tm-auth-pitch__eyebrow">Discover…</p>
                     <p class="tm-auth-pitch__headline">"How To Master<br>Public Speaking"</p>
                     <p class="tm-auth-pitch__mark"><mark>With the TM Experience App</mark></p>
-                    <div class="tm-auth-video" data-tm-welcome-video aria-label="TM Experience intro video"></div>
                     <div class="tm-auth-pitch__body">
                         <p>Do you want to be a better speaker?<br>
                         Do you want to be able to express yourself?<br>
@@ -94,37 +93,16 @@
                     <input type="password" id="registerPassword" placeholder="Enter your password">
                 </div>
                 <div class="tm-field">
-                    <label for="registerBio">Bio</label>
+                    <label for="registerBio">Bio <span class="tm-field-optional">(optional)</span></label>
                     <textarea id="registerBio" placeholder="Tell us about yourself"></textarea>
                 </div>
                 <div class="tm-field">
-                    <label for="image">Profile photo</label>
+                    <label for="image">Profile photo <span class="tm-field-optional">(optional)</span></label>
                     <input type="file" id="image" name="img" accept="image/*">
                 </div>
-                <div class="tm-upgrade-box">
-                    <p class="tm-upgrade-box__badge">TM Experience Pro</p>
-                    <h3 class="tm-upgrade-box__title">Level up your speaking journey</h3>
-                    <p class="tm-upgrade-box__intro">
-                        Add Pro to get your speeches recorded and a personal speaker reel page you can share with club members, mentors, and anyone who wants to see your best work.
-                    </p>
-                    <ul class="tm-upgrade-box__list">
-                        <li>
-                            Up to 2 speeches a month recorded for 12 months
-                            <span class="tm-upgrade-box__value">($2,328 value)</span>
-                        </li>
-                        <li>
-                            A personal speaker reel webpage showcasing your best speeches
-                            <span class="tm-upgrade-box__value">($4,000 value)</span>
-                        </li>
-                    </ul>
-                    <p class="tm-upgrade-box__price">
-                        Over <strong>$6,328</strong> value for only <strong>$97</strong>/year
-                    </p>
-                    <label class="tm-upgrade-box__check">
-                        <input type="checkbox" id="upgradeCheckbox">
-                        <span>Yes, add TM Experience Pro to my account</span>
-                    </label>
-                </div>
+                <p class="tm-register-pro-note">
+                    Your club account is <strong>free</strong>. TM Experience Pro (<strong>$13.99/month</strong>) is optional — add it anytime from <strong>Profile</strong> after you sign in.
+                </p>
                 <div class="tm-auth-actions">
                     <button type="button" id="registerBtn" class="tm-btn tm-btn--primary">Register</button>
                 </div>
@@ -180,6 +158,7 @@
                 </div>
             </div>
         </div>
+        <div id="tmToastStack" class="tm-toast-stack" aria-live="polite"></div>
         <script type="module">
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
             import { getAuth, signOut, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -187,7 +166,11 @@
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
             import { validateClubId } from "./TMExperienceViews/scripts/tmClubService.js";
             import { getTmApp, getTmAuth, getTmDb } from "./TMExperienceViews/scripts/tmFirebase.js";
+            import { showTmToast, initTmToastRelay } from "./TMExperienceViews/scripts/tmToast.js";
 
+            initTmToastRelay();
+
+            const DEFAULT_PROFILE_IMAGE = "assets/person_b.svg";
             const app = getTmApp();
             const analytics = getAnalytics(app);
             const auth = await getTmAuth();
@@ -243,10 +226,7 @@
             }
 
             document.getElementById('backToWelcomeBtn')?.addEventListener('click', () => showRegister(false));
-            goToRegisterBtn?.addEventListener('click', () => {
-                showRegister(true);
-                mountWelcomeVideos(TM_WELCOME_YOUTUBE_ID);
-            });
+            goToRegisterBtn?.addEventListener('click', () => showRegister(true));
             document.getElementById('welcomeModalCloseBtn')?.addEventListener('click', closeWelcomeModal);
 
             const WELCOME_MODAL_COPY = {
@@ -281,18 +261,6 @@
                 const welcomeModal = document.getElementById('welcomeModal');
                 welcomeModal.classList.remove('is-open');
                 welcomeModal.setAttribute('aria-hidden', 'true');
-            }
-
-            const TM_WELCOME_YOUTUBE_ID = "";
-
-            function mountWelcomeVideos(youtubeId) {
-                document.querySelectorAll("[data-tm-welcome-video]").forEach((wrap) => {
-                    if (youtubeId) {
-                        wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${youtubeId}" title="TM Experience intro" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>`;
-                    } else {
-                        wrap.innerHTML = `<div class="tm-auth-video__placeholder">Welcome video coming soon</div>`;
-                    }
-                });
             }
 
             function setAuthShellMode(isAuth) {
@@ -374,19 +342,25 @@
                 });
                 selectedBtn(destination)
 
-                if (destination === 1) {
-                    const speechesFrame = feedbackView?.querySelector("iframe");
-                    speechesFrame?.contentWindow?.postMessage({ type: "tm-reload-speakers" }, "*");
-                }
-
-                if (destination === 3 || destination === 4) {
-                    const panel = destination === 3 ? adminView : profileView;
+                if (destination === 1 || destination === 3 || destination === 4) {
+                    const panel = destination === 1
+                        ? feedbackView
+                        : destination === 3
+                          ? adminView
+                          : profileView;
                     const frame = panel?.querySelector("iframe");
                     frame?.contentWindow?.postMessage({
                         type: "tm-auth-state",
                         signedIn: Boolean(auth.currentUser),
                         uid: auth.currentUser?.uid || null,
                     }, "*");
+                }
+
+                if (destination === 1) {
+                    feedbackView?.querySelector("iframe")?.contentWindow?.postMessage(
+                        { type: "tm-reload-speakers" },
+                        "*"
+                    );
                 }
             }
 
@@ -448,12 +422,19 @@
             }
 
             function showRegisterError(message) {
-                if (!registerError) {
-                    alert(message);
+                if (!message) {
+                    if (registerError) {
+                        registerError.hidden = true;
+                        registerError.textContent = "";
+                    }
                     return;
                 }
-                registerError.textContent = message;
-                registerError.hidden = !message;
+                if (registerError) {
+                    registerError.textContent = message;
+                    registerError.hidden = false;
+                } else {
+                    showTmToast(message, { type: "error" });
+                }
             }
 
             function filledOut()
@@ -461,16 +442,12 @@
                 let name = document.getElementById("registerName").value.trim()
                 let email = document.getElementById("registerEmail").value.trim()
                 let password = document.getElementById("registerPassword").value
-                let bio = document.getElementById("registerBio").value.trim()
                 let clubId = document.getElementById("registerClubId").value.trim()
-                let image = document.getElementById("image")
 
                 if(clubId.length < 1) return false;
                 if(name.length < 1) return false;
                 if(email.length < 1) return false;
                 if(password.length < 1) return false;
-                if(bio.length < 1) return false;
-                if(!image.files || image.files.length < 1) return false;
                 return true
             }
 
@@ -478,7 +455,7 @@
             {
                 showRegisterError("");
                 if (!filledOut()) {
-                    showRegisterError("Please fill out every field, including club ID and profile photo.");
+                    showRegisterError("Please fill out club ID, name, email, and password.");
                     return;
                 }
 
@@ -498,13 +475,17 @@
 
                 let emailValue = document.getElementById('registerEmail').value.trim()
                 let passwordValue = document.getElementById('registerPassword').value
-                let file = document.getElementById("image").files[0]
+                const file = document.getElementById("image").files[0]
 
                 createUserWithEmailAndPassword(auth, emailValue, passwordValue)
                 .then((userCredential) => {
                     const user = userCredential.user;
                     if(user.uid != null) {
-                        uploadImage(file, user.uid)
+                        if (file) {
+                            uploadImage(file, user.uid)
+                        } else {
+                            createUser(user.uid, DEFAULT_PROFILE_IMAGE)
+                        }
                     }
                 })
                 .catch((error) => {
@@ -517,9 +498,9 @@
             function uploadImage(file, userId)
             {
                     const storage = getStorage();
-                    const moutainsRef = ref(storage, `${userId}.jpg`)
-                    uploadBytes(moutainsRef, file).then((snapshot) => {
-                        getDownloadURL(moutainsRef).then((downloadURL) => {
+                    const photoRef = ref(storage, `users/${userId}/profile.jpg`)
+                    uploadBytes(photoRef, file).then((snapshot) => {
+                        getDownloadURL(photoRef).then((downloadURL) => {
                             createUser(userId, downloadURL)
                         }).catch((error) => {
                             showRegisterError('Error uploading profile photo.');
@@ -556,13 +537,8 @@
                     registerBtn.textContent = "Register";
                     showMainView();
                     checkRole(userId);
-                    const checkbox = document.getElementById('upgradeCheckbox');
-                    if(checkbox.checked){
-                        //go to the website stripe. 
-                    }else{
-                        localStorage.removeItem('showModal');
-                        openWelcomeModal('newAccount');
-                    }
+                    localStorage.removeItem('showModal');
+                    openWelcomeModal('newAccount');
                 }).catch(() => {
                     showRegisterError("Account created but profile could not be saved. Contact your club admin.");
                     registerBtn.disabled = false;
@@ -615,7 +591,7 @@
                     await auth.authStateReady();
                 } catch (error) {
                     pendingWelcomeVariant = null;
-                    alert(`Log in failed: ${error.message}`);
+                    showTmToast(`Log in failed: ${error.message}`, { type: "error" });
                 } finally {
                     isSigningIn = false;
                     logInBtn.disabled = false;
@@ -627,14 +603,12 @@
             {
                 sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    alert('check your email to reset your password!')
+                    showTmToast("Check your email to reset your password.", { type: "success" });
                     resetModal.classList.remove('is-open');
                     resetModal.setAttribute('aria-hidden', 'true');
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(`there was an error ${error}`)
+                    showTmToast(error.message || "Could not send reset email.", { type: "error" });
                 })
             }
 
@@ -678,7 +652,21 @@
                 authUiReady = true;
             });
 
+            function broadcastMeetingLiveToFrames(isLive) {
+                document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                    iframe.contentWindow?.postMessage({
+                        type: "tm-meeting-live",
+                        isLive: Boolean(isLive),
+                    }, "*");
+                });
+            }
+
             window.addEventListener("message", async (event) => {
+                if (event.data?.type === "tm-meeting-live") {
+                    broadcastMeetingLiveToFrames(event.data.isLive);
+                    return;
+                }
+
                 if (event.data?.type !== "tm-sign-out") return;
                 if (isSigningOut) return;
 
@@ -688,7 +676,7 @@
                     showAuthScreen();
                 } catch (error) {
                     console.error("Sign out failed:", error);
-                    alert("Could not sign out. Please try again.");
+                    showTmToast("Could not sign out. Please try again.", { type: "error" });
                     document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
                         iframe.contentWindow?.postMessage({ type: "tm-sign-out-failed" }, "*");
                     });

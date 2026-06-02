@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { doc, getDoc, setDoc, updateDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAgendaMeta, buildRolesMap } from "./tmAgendaData.js?v=3";
 
 /** Single-club app: all agendas live under this club id. */
@@ -81,17 +81,38 @@ export async function loadAgendaDoc(db, { getDocFn, setDocFn, loadAndMigrateAgen
 export async function saveAgendaDoc(db, assignments, { uid, isLive, clubId = TM_CLUB_ID }) {
   const payload = packAgendaDocument(assignments, { uid, isLive });
 
-  await setDoc(getClubAgendaRef(db, clubId, CURRENT_AGENDA_ID), payload);
+  const clubCurrentRef = getClubAgendaRef(db, clubId, CURRENT_AGENDA_ID);
+  const writes = [setDoc(clubCurrentRef, payload)];
 
   if (payload.meetingDate) {
-    await setDoc(getClubAgendaRef(db, clubId, payload.meetingDate), payload);
+    writes.push(setDoc(getClubAgendaRef(db, clubId, payload.meetingDate), payload));
   }
 
-  await setDoc(getLegacyAgendaRef(db), {
-    meetingDate: payload.meetingDate,
-    isLive: payload.isLive,
-    data: assignments,
-  });
+  writes.push(
+    setDoc(getLegacyAgendaRef(db), {
+      meetingDate: payload.meetingDate,
+      isLive: payload.isLive,
+      data: assignments,
+    })
+  );
+
+  await Promise.all(writes);
+}
+
+/** Fast live toggle — updates isLive only (avoids rewriting full agenda). */
+export async function patchAgendaLiveStatus(db, isLive, { clubId = TM_CLUB_ID, meetingDate = null } = {}) {
+  const live = Boolean(isLive);
+  const patch = { isLive: live };
+
+  const writes = [updateDoc(getClubAgendaRef(db, clubId, CURRENT_AGENDA_ID), patch)];
+
+  if (meetingDate) {
+    writes.push(updateDoc(getClubAgendaRef(db, clubId, meetingDate), patch));
+  }
+
+  writes.push(updateDoc(getLegacyAgendaRef(db), patch));
+
+  await Promise.all(writes);
 }
 
 /**
@@ -129,7 +150,9 @@ export function subscribeAgendaDoc(db, { onData, onError, clubId = TM_CLUB_ID })
     legacyRef,
     (snap) => {
       legacyPayload = readSnap(snap, "legacy");
-      notify();
+      if (!clubPayload) {
+        notify();
+      }
     },
     onError
   );

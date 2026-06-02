@@ -1,9 +1,64 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // TESTING MODE — open access for TM Experience development.
-    // Tighten these before production (see TMExperienceViews/firestore.tm.rules.txt).
 
+    // --- TM Experience helpers (club: naples-sunrise-bay) ---
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    function userExists() {
+      return signedIn() && exists(userPath());
+    }
+
+    function userData() {
+      return userPath().data;
+    }
+
+    function userClubId() {
+      return userExists() ? userData().clubId : '';
+    }
+
+    function isTmAdmin() {
+      return userExists() && userData().role == 'admin';
+    }
+
+    function sameClubAsUser(userId) {
+      return userExists()
+        && exists(/databases/$(database)/documents/users/$(userId))
+        && get(/databases/$(database)/documents/users/$(userId)).data.clubId == userClubId();
+    }
+
+    function clubAgendaPath(clubId) {
+      return /databases/$(database)/documents/clubs/$(clubId)/agendas/current;
+    }
+
+    function meetingIsLive(clubId) {
+      return exists(clubAgendaPath(clubId))
+        && clubAgendaPath(clubId).data.isLive == true;
+    }
+
+    function isVoteCounter(clubId) {
+      return userExists()
+        && exists(clubAgendaPath(clubId))
+        && (
+          clubAgendaPath(clubId).data.roles.voteRole.userId == request.auth.uid
+          || (
+            clubAgendaPath(clubId).data.roles.voteRole.member == userData().name
+            && userData().name.size() > 0
+          )
+        );
+    }
+
+    function canReadClub(clubId) {
+      return userExists() && userClubId() == clubId;
+    }
+
+    // --- Liv Lakay (unchanged) ---
     match /accessCodes/{codeId} {
       allow get: if resource.data.consumed == false &&
         resource.data.active != false;
@@ -28,34 +83,78 @@ service cloud.firestore {
         request.auth.token.email == "buildingwithkepler@gmail.com";
     }
 
+    // --- TM Experience: club registry (registration lookup) ---
     match /clubs/{clubId} {
-      allow read, write: if true;
+      allow get: if resource.data.active != false;
+      allow list, create, update, delete: if false;
 
       match /agendas/{agendaId} {
-        allow read, write: if true;
+        allow read: if canReadClub(clubId);
+        allow create, update: if canReadClub(clubId) && isTmAdmin();
+        allow delete: if false;
       }
     }
 
+    // Legacy agenda mirror (app still writes here on publish)
     match /test/{docId} {
-      allow read, write: if true;
+      allow read: if userExists();
+      allow create, update: if isTmAdmin();
+      allow delete: if false;
     }
 
     match /votes/{voteId} {
-      allow read, write: if true;
+      allow read: if signedIn() && (
+        request.auth.uid == voteId
+        || isTmAdmin()
+        || (isVoteCounter('naples-sunrise-bay') && meetingIsLive('naples-sunrise-bay'))
+      );
+      allow create, update: if signedIn()
+        && request.auth.uid == voteId
+        && meetingIsLive('naples-sunrise-bay')
+        && request.resource.data.keys().hasOnly(['bestSpeaker', 'bestEvaluator', 'bestTable']);
+      allow delete: if false;
     }
 
+    // Unused by TM Experience client; lock down legacy top-level collection
     match /feedback/{docId} {
-      allow read, write: if true;
+      allow read, write: if false;
     }
 
     match /users/{userId} {
-      allow read, write: if true;
+      allow read: if signedIn() && (
+        request.auth.uid == userId
+        || (userExists() && resource.data.clubId == userClubId())
+      );
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.clubId is string
+        && request.resource.data.clubId.size() >= 3
+        && request.resource.data.clubId.size() <= 64
+        && request.resource.data.name is string
+        && request.resource.data.email is string
+        && !('role' in request.resource.data);
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'clubId']);
+      allow delete: if false;
 
       match /speeches/{speechId} {
-        allow read, write: if true;
+        allow read: if signedIn() && sameClubAsUser(userId);
+        allow create, update: if signedIn() && sameClubAsUser(userId) && (
+          isTmAdmin()
+          || request.resource.data.keys().hasOnly(['path', 'title', 'speechTitle'])
+        );
+        allow delete: if isTmAdmin();
 
         match /feedback/{feedbackId} {
-          allow read, write: if true;
+          allow read: if signedIn() && sameClubAsUser(userId);
+          allow create: if signedIn()
+            && sameClubAsUser(userId)
+            && request.auth.uid != userId
+            && request.resource.data.feedback is string
+            && request.resource.data.feedback.size() > 0
+            && request.resource.data.feedback.size() <= 8000;
+          allow update, delete: if false;
         }
       }
     }

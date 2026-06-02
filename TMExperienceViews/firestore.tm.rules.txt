@@ -1,17 +1,14 @@
 TM Experience — Firestore rules
 =================================
 
-TESTING (current firestore.rules)
----------------------------------
-TM collections are open (read/write: if true) for development:
-  test, clubs, users, votes, feedback
-
-PRODUCTION (restore later)
---------------------------
-Re-apply admin/member restrictions before launch.
+PRODUCTION rules live in repo root: firestore.rules
 
 Deploy:
-  firebase deploy --only firestore:rules
+  firebase use naples-sunrise-bay
+  firebase deploy --only firestore:rules,storage
+
+Launch reset (delete test users + agendas):
+  See TMExperienceViews/LAUNCH.md and scripts/tm-launch-reset.mjs
 
 Single club
 -----------

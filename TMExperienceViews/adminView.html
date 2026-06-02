@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/tmTheme.css?v=17">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=23">
         <style>
             .tm-agenda-table-wrap--source { display: none; }
         </style>
@@ -368,11 +368,15 @@
             getAgendaMeta,
             loadAndMigrateAgendaDoc,
             normalizeAgendaDoc,
-        } from "./scripts/tmAgendaData.js?v=3";
+            attachMemberUserIds,
+            isUserVoteCounterForAgenda,
+        } from "./scripts/tmAgendaData.js?v=4";
         import {
             loadAgendaDoc,
             saveAgendaDoc,
-        } from "./scripts/tmAgendaFirestore.js?v=3";
+            patchAgendaLiveStatus,
+            isMeetingLive,
+        } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
             buildAdminAgendaCards,
             buildAdminPreviewHtml,
@@ -380,10 +384,7 @@
             highlightIncompleteAdminRoles,
             setAdminCardsEditable,
         } from "./scripts/tmAdminAgendaInit.js";
-        import {
-            buildVoteResultsSummary,
-            renderVoteResultsHtml,
-        } from "./scripts/tmVoteTally.js";
+        import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
         import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
         import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
 
@@ -417,6 +418,7 @@
         let agendaExists = false
         let isEditing = false
         let meetingIsLive = false
+        let publishedAgendaDoc = null
 
         const editAgendaBtn = document.getElementById("editAgendaBtn")
         const adminEditTools = document.getElementById("adminEditTools")
@@ -538,6 +540,7 @@
             setAdminCardsEditable(false)
             meetingLiveToggle.disabled = !agendaExists
             updateStatusUI()
+            updateRevealVotesAccess().catch(() => {});
         }
 
         editAgendaBtn.onclick = () => {
@@ -562,11 +565,24 @@
             }
 
             try {
-                await uploadToServer(getTableValues(false))
+                const preserveLive = meetingIsLive
+                await uploadToServer(getTableValues(preserveLive))
                 agendaExists = true
+                meetingIsLive = preserveLive
+                setMeetingLiveToggle(preserveLive)
+                if (publishedAgendaDoc) {
+                    publishedAgendaDoc.isLive = preserveLive
+                }
+                window.parent.postMessage({ type: "tm-meeting-live", isLive: preserveLive }, "*")
                 exitEditMode()
                 updateStatusUI()
-                showAdminMessage("Agenda published and saved to Firestore. Turn on Meeting live when you're ready for feedback and voting.", "success")
+                updateRevealVotesAccess().catch(() => {})
+                showAdminMessage(
+                    preserveLive
+                        ? "Agenda updated. Meeting is still live — feedback and voting continue."
+                        : "Agenda published and saved to Firestore. Turn on Meeting live when you're ready for feedback and voting.",
+                    "success"
+                )
             } catch (error) {
                 console.error("Publish failed:", error)
                 showAdminMessage(error?.message || "Could not publish the agenda. Try again.", "error")
@@ -580,24 +596,54 @@
 
         previewCloseBtn.onclick = () => previewDialog.close()
 
+        async function updateRevealVotesAccess() {
+            if (isEditing || !agendaExists || !meetingIsLive) {
+                revealVotesBtn.hidden = true;
+                return;
+            }
+
+            try {
+                const user = await requireAuthUser();
+                const profileSnap = await getDoc(doc(db, "users", user.uid));
+                const userName = profileSnap.exists() ? profileSnap.data().name : "";
+                const canReveal = isUserVoteCounterForAgenda(
+                    publishedAgendaDoc,
+                    user.uid,
+                    userName
+                );
+                revealVotesBtn.hidden = !canReveal;
+            } catch {
+                revealVotesBtn.hidden = true;
+            }
+        }
+
         async function revealVotes() {
+            if (!meetingIsLive) {
+                showAdminMessage("Turn on Meeting live to reveal votes.", "error");
+                return;
+            }
+
+            try {
+                const user = await requireAuthUser();
+                const profileSnap = await getDoc(doc(db, "users", user.uid));
+                const userName = profileSnap.exists() ? profileSnap.data().name : "";
+                if (!isUserVoteCounterForAgenda(publishedAgendaDoc, user.uid, userName)) {
+                    showAdminMessage(
+                        "Only tonight's Vote Counter can reveal votes while the meeting is live.",
+                        "error"
+                    );
+                    return;
+                }
+            } catch {
+                showAdminMessage("Sign in to reveal votes.", "error");
+                return;
+            }
+
             voteResultsBody.innerHTML = `<p class="tm-vote-results__loading">Loading votes…</p>`;
             voteResultsDialog.showModal();
 
             try {
-                const snapshot = await getDocs(collection(db, "votes"));
-                const voteDocs = [];
-                snapshot.forEach((voteDoc) => {
-                    voteDocs.push({ id: voteDoc.id, data: voteDoc.data() });
-                });
-
-                if (!voteDocs.length) {
-                    voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">No votes have been cast yet.</p>`;
-                    return;
-                }
-
-                const summary = buildVoteResultsSummary(voteDocs);
-                voteResultsBody.innerHTML = renderVoteResultsHtml(summary);
+                await loadVoteResultsInto(voteResultsBody, db);
             } catch (error) {
                 console.error("Failed to load votes:", error);
                 voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">Could not load votes. Try again in a moment.</p>`;
@@ -633,11 +679,19 @@
 
             const nextLive = !isMeetingLiveOn()
             setMeetingLiveToggle(nextLive)
+            meetingIsLive = nextLive
+            updateStatusUI()
+            updateRevealVotesAccess().catch(() => {});
+            window.parent.postMessage({ type: "tm-meeting-live", isLive: nextLive }, "*");
 
             try {
-                await setMeetingLive(nextLive)
-                meetingIsLive = nextLive
-                updateStatusUI()
+                const meta = publishedAgendaDoc
+                    ? getAgendaMeta(normalizeAgendaDoc(publishedAgendaDoc).data)
+                    : { date: getAgendaDateValue() };
+                await patchAgendaLiveStatus(db, nextLive, { meetingDate: meta.date || null });
+                if (publishedAgendaDoc) {
+                    publishedAgendaDoc.isLive = nextLive;
+                }
                 showAdminMessage(
                     meetingIsLive
                         ? "Meeting is live. Feedback and voting are enabled."
@@ -645,7 +699,12 @@
                     "success"
                 )
             } catch (error) {
-                setMeetingLiveToggle(!nextLive)
+                const revertLive = !nextLive
+                setMeetingLiveToggle(revertLive)
+                meetingIsLive = revertLive
+                updateStatusUI()
+                updateRevealVotesAccess().catch(() => {});
+                window.parent.postMessage({ type: "tm-meeting-live", isLive: revertLive }, "*");
                 console.error("setMeetingLive failed:", error)
                 showAdminMessage("Could not update live status. Check that you're signed in as an admin.", "error")
             }
@@ -782,13 +841,10 @@
         }
 
         async function enrichSpeakerAssignments(assignments) {
-            for (const assignment of assignments) {
-                if (!assignment?.id?.endsWith("Speaker")) continue;
+            const withIds = attachMemberUserIds(assignments, members);
 
-                const memberEntry = members.find((entry) => entry.name === assignment.member);
-                if (memberEntry?.id && !assignment.userId) {
-                    assignment.userId = memberEntry.id;
-                }
+            for (const assignment of withIds) {
+                if (!assignment?.id?.endsWith("Speaker")) continue;
 
                 if (!assignment.userId) continue;
 
@@ -803,7 +859,7 @@
                 }
             }
 
-            return assignments;
+            return withIds;
         }
 
         async function syncPublishedSpeakerRecords(assignments, meetingDate) {
@@ -839,12 +895,17 @@
 
             await syncPublishedSpeakerRecords(enriched, meta.date)
 
+            const live = meta.editable
             await saveAgendaDoc(db, enriched, {
                 uid: user.uid,
-                isLive: meta.editable,
+                isLive: live,
             })
 
             agendaExists = true
+            if (publishedAgendaDoc) {
+                publishedAgendaDoc.isLive = live
+                publishedAgendaDoc.data = enriched
+            }
         }
 
         async function setMeetingLive(isLive) {
@@ -884,6 +945,7 @@
 
                 if (!loaded) {
                     agendaExists = false
+                    publishedAgendaDoc = null
                     meetingIsLive = false
                     setMeetingLiveToggle(false)
                     meetingLiveToggle.disabled = true
@@ -892,6 +954,7 @@
                 }
 
                 const docData = loaded.data
+                publishedAgendaDoc = docData
                 agendaExists = true
 
                 for (let i = 0; i < AGENDA_ROLE_COUNT; i++) {
@@ -921,12 +984,13 @@
 
                 const meta = getAgendaMeta(docData.data);
                 if (meta.date) meetingDateInput.value = meta.date
-                meetingIsLive = meta.editable
-                setMeetingLiveToggle(meta.editable)
+                meetingIsLive = isMeetingLive(docData)
+                setMeetingLiveToggle(meetingIsLive)
                 meetingLiveToggle.disabled = isEditing
                 highlightIncompleteAdminRoles()
                 updatePublishState()
                 updateStatusUI()
+                updateRevealVotesAccess().catch(() => {});
             } catch (error) {
                 showAdminMessage("Could not load the saved agenda.", "error")
             }

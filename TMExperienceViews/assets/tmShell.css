@@ -304,6 +304,21 @@ body.tm-shell-body--auth {
   margin: 16px 0;
 }
 
+.tm-register-pro-note {
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(2, 65, 101, 0.12);
+  background: rgba(2, 65, 101, 0.04);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--tm-muted);
+}
+
+.tm-register-pro-note strong {
+  color: var(--tm-navy);
+}
+
 .tm-register-form .tm-auth-actions {
   margin-top: 8px;
 }
@@ -587,6 +602,11 @@ body.tm-shell-body--auth {
   font-size: 12px;
   color: var(--tm-muted);
   line-height: 1.45;
+}
+
+.tm-field-optional {
+  font-weight: 400;
+  color: var(--tm-muted);
 }
 
 .tm-modal-shell__actions {

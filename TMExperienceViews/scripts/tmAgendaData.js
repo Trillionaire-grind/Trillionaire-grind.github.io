@@ -154,6 +154,37 @@ export function getSpeakerAssignments(dataArray) {
   });
 }
 
+/** True when the signed-in user is assigned Vote Counter on the published agenda. */
+export function isUserVoteCounterForAgenda(agendaDoc, userId, userName = "") {
+  if (!userId || !agendaDoc) return false;
+
+  const vote = findRoleAssignment(normalizeAgendaDoc(agendaDoc).data, "voteRole");
+  if (!vote) return false;
+
+  const assignedUid = String(vote.userId || "").trim();
+  if (assignedUid && assignedUid === userId) return true;
+
+  const assignedName = String(vote.member || "").trim();
+  const name = String(userName || "").trim();
+  return Boolean(assignedName && name && assignedName === name);
+}
+
+export function attachMemberUserIds(assignments, members = []) {
+  if (!Array.isArray(assignments)) return assignments;
+
+  return assignments.map((assignment) => {
+    if (!assignment?.member || assignment.date !== undefined || assignment.editable !== undefined) {
+      return assignment;
+    }
+
+    const memberName = String(assignment.member || "").trim();
+    const entry = members.find((m) => String(m?.name || "").trim() === memberName);
+    if (!entry?.id || assignment.userId) return assignment;
+
+    return { ...assignment, userId: entry.id };
+  });
+}
+
 export async function loadAndMigrateAgendaDoc(getDoc, setDoc, docRef) {
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) return null;
