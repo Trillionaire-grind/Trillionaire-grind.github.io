@@ -73,11 +73,23 @@ export function waitForAuthUid(auth, uid, options = {}) {
 }
 
 /** Resolve signed-in user for iframe views; optional shellUid from parent postMessage. */
-export async function requireTmAuthUser(auth, { shellUid = null, timeoutMs = 8000 } = {}) {
+export async function requireTmAuthUser(auth, { shellUid = null, timeoutMs = 12000 } = {}) {
   await auth.authStateReady();
   if (shellUid) {
     const matched = await waitForTmUser(auth, { uid: shellUid, timeoutMs });
     if (matched) return matched;
   }
-  return auth.currentUser || null;
+  const user = auth.currentUser;
+  if (user) return user;
+  return waitForTmUser(auth, { timeoutMs });
+}
+
+/** Wait for iframe Auth to match shell before Firestore reads (parent signs in first). */
+export async function ensureFirestoreAuth(auth, { shellUid = null, shellSignedIn = null } = {}) {
+  await auth.authStateReady();
+  if (shellSignedIn === false) return null;
+  if (shellUid) {
+    return waitForAuthUid(auth, shellUid, { timeoutMs: 12000 });
+  }
+  return auth.currentUser || waitForTmUser(auth, { timeoutMs: 12000 });
 }

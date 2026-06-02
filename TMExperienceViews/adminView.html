@@ -359,7 +359,7 @@
   
     <script type="module">
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { collection, doc, setDoc, getDoc, getDocs, updateDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { collection, doc, setDoc, getDoc, getDocs, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { importAgendaPdf, renderImportSummary } from "./scripts/tmAgendaPdfImport.js";
         import {
@@ -376,7 +376,8 @@
             saveAgendaDoc,
             patchAgendaLiveStatus,
             isMeetingLive,
-        } from "./scripts/tmAgendaFirestore.js?v=6";
+            TM_CLUB_ID,
+        } from "./scripts/tmAgendaFirestore.js?v=7";
         import {
             buildAdminAgendaCards,
             buildAdminPreviewHtml,
@@ -386,7 +387,8 @@
         } from "./scripts/tmAdminAgendaInit.js";
         import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
         import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
-        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
 
         const app = getTmApp();
         const analytics = getAnalytics(app);
@@ -411,10 +413,14 @@
             if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
                 shellSignedIn = true;
                 shellUid = event.data.uid || null;
+                initAdminData().catch((error) => {
+                    console.error("Admin init failed:", error);
+                });
             }
         });
 
         let members = []
+        let adminInitInFlight = null
         let agendaExists = false
         let isEditing = false
         let meetingIsLive = false
@@ -685,6 +691,7 @@
             window.parent.postMessage({ type: "tm-meeting-live", isLive: nextLive }, "*");
 
             try {
+                await requireAuthUser();
                 const meta = publishedAgendaDoc
                     ? getAgendaMeta(normalizeAgendaDoc(publishedAgendaDoc).data)
                     : { date: getAgendaDateValue() };
@@ -706,72 +713,109 @@
                 updateRevealVotesAccess().catch(() => {});
                 window.parent.postMessage({ type: "tm-meeting-live", isLive: revertLive }, "*");
                 console.error("setMeetingLive failed:", error)
-                showAdminMessage("Could not update live status. Check that you're signed in as an admin.", "error")
+                const hint = error?.message?.includes("No published agenda")
+                    ? "Publish the agenda first, then go live."
+                    : "Could not update live status. Confirm Firestore rules allow admin updates, then try again.";
+                showAdminMessage(hint, "error")
             }
         })
 
         document.getElementById("tmAdminCards")?.addEventListener("change", (event) => {
             if (event.target.matches("select, input")) updatePublishState()
         })
-        async function getMembers()
-        {
-            const usersRef = collection(db, "users");
-            const querySnapshot = await getDocs(usersRef)
+        function getMemberSelectElements() {
+            const cardSelects = document.querySelectorAll("#tmAdminCards select.tm-admin-member-select");
+            if (cardSelects.length) return [...cardSelects];
+            return AGENDA_ROLE_IDS.map((id) => document.getElementById(id)).filter(Boolean);
+        }
 
-            let tmRole = document.getElementById("tmRole")
-            let tmRoleCopy = document.getElementById("tmRoleCopy")
-            let grammarianRole = document.getElementById("grammarianRole")
-            let ahRole = document.getElementById("ahRole")
-            let timerRole = document.getElementById("timerRole")
-            let voteRole = document.getElementById("voteRole")
-            let firstSpeaker = document.getElementById("firstSpeaker")
-            let secondSpeaker = document.getElementById("secondSpeaker")
-            let thirdSpeaker = document.getElementById("thirdSpeaker")
-            let fourthSpeaker = document.getElementById("fourthSpeaker")
-            let tableRole = document.getElementById("tableRole")
-            let generalRole = document.getElementById("generalRole")
-            let generalRoleCopy = document.getElementById("generalRoleCopy")
-            let firstEvaluator = document.getElementById("firstEvaluator")
-            let secondEvaluator = document.getElementById("secondEvaluator")
-            let thirdEvaluator = document.getElementById("thirdEvaluator")
-            let fourthEvaluator = document.getElementById("fourthEvaluator")
-            let educationRole = document.getElementById("educationRole")
+        function populateMemberSelects(selects, memberList) {
+            selects.forEach((select) => {
+                const previous = select.value;
+                select.innerHTML = "";
+                const blank = document.createElement("option");
+                blank.value = "";
+                blank.textContent = "Select member";
+                select.appendChild(blank);
 
-            querySnapshot.forEach((doc) => {
-                const name = doc.data().name;
-                members.push({ name: name, id: doc.id });
-
-                function createOption(name) {
+                memberList.forEach((entry) => {
                     const opt = document.createElement("option");
-                    opt.value = name;
-                    opt.textContent = name;
-                    return opt;
-                }
+                    opt.value = entry.name;
+                    opt.textContent = entry.name;
+                    select.appendChild(opt);
+                });
 
-                tmRole.appendChild(createOption(name));
-                grammarianRole.appendChild(createOption(name));
-                ahRole.appendChild(createOption(name));
-                timerRole.appendChild(createOption(name));
-                voteRole.appendChild(createOption(name));
-                firstSpeaker.appendChild(createOption(name));
-                secondSpeaker.appendChild(createOption(name));
-                thirdSpeaker.appendChild(createOption(name));
-                fourthSpeaker.appendChild(createOption(name));
-                tableRole.appendChild(createOption(name));
-                generalRole.appendChild(createOption(name));
-                firstEvaluator.appendChild(createOption(name));
-                secondEvaluator.appendChild(createOption(name));
-                thirdEvaluator.appendChild(createOption(name));
-                fourthEvaluator.appendChild(createOption(name));
-                educationRole.appendChild(createOption(name));
+                if (previous && [...select.options].some((opt) => opt.value === previous)) {
+                    select.value = previous;
+                }
             });
         }
 
-        getMembers().then(() => {
-            buildAdminAgendaCards()
-            setAdminCardsEditable(false)
-            fetchAgenda()
-        })
+        async function getMembers() {
+            members = [];
+            const usersQuery = query(
+                collection(db, "users"),
+                where("clubId", "==", TM_CLUB_ID)
+            );
+            const querySnapshot = await getDocs(usersQuery);
+            const seenIds = new Set();
+
+            querySnapshot.forEach((userDoc) => {
+                const name = String(userDoc.data().name || "").trim();
+                if (!name || seenIds.has(userDoc.id)) return;
+                seenIds.add(userDoc.id);
+                members.push({ name, id: userDoc.id });
+            });
+
+            populateMemberSelects(getMemberSelectElements(), members);
+        }
+
+        async function initAdminDataImpl() {
+            const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
+            if (!user) return;
+
+            if (document.getElementById("tmAdminCards")?.dataset.ready !== "1") {
+                buildAdminAgendaCards();
+            }
+
+            await getMembers();
+            setAdminCardsEditable(false);
+            await fetchAgenda();
+        }
+
+        function initAdminData() {
+            if (adminInitInFlight) return adminInitInFlight;
+            adminInitInFlight = initAdminDataImpl()
+                .catch((error) => {
+                    console.error("Admin init failed:", error);
+                    throw error;
+                })
+                .finally(() => {
+                    adminInitInFlight = null;
+                });
+            return adminInitInFlight;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) return;
+            if (shellSignedIn === false) return;
+            if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
+            if (!shellUid) shellUid = user.uid;
+            shellSignedIn = true;
+            initAdminData().catch((error) => {
+                console.error("Admin init failed:", error);
+            });
+        });
+
+        auth.authStateReady().then(() => {
+            if (auth.currentUser) {
+                shellUid = auth.currentUser.uid;
+                shellSignedIn = true;
+            }
+            initAdminData().catch((error) => {
+                console.error("Admin init failed:", error);
+            });
+        });
 
         agendaPdfInput.addEventListener("change", async (event) => {
             const file = event.target.files?.[0];

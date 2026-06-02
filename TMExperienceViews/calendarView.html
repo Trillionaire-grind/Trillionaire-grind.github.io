@@ -189,8 +189,9 @@
     </div>
 
     <script type="module">
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { refreshAgendaCards } from "./scripts/tmAgendaInit.js";
-        import { getTmAuth, getTmDb } from "./scripts/tmFirebase.js";
+        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
         import { subscribeAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
             AGENDA_ROLE_COUNT,
@@ -201,6 +202,10 @@
 
         const auth = await getTmAuth();
         const db = getTmDb();
+
+        let shellUid = null;
+        let shellSignedIn = null;
+        let unsubAgenda = null;
 
         function applyAgendaToTable(dataArray) {
             for (let i = 0; i < AGENDA_ROLE_COUNT; i++) {
@@ -238,14 +243,81 @@
             refreshAgendaCards();
         }
 
-        await auth.authStateReady();
+        function stopAgendaListener() {
+            if (unsubAgenda) {
+                unsubAgenda();
+                unsubAgenda = null;
+            }
+        }
 
-        subscribeAgendaDoc(db, {
-            onData: renderAgenda,
-            onError: (error) => {
-                console.error("Agenda listener failed:", error);
+        async function startAgendaListener() {
+            stopAgendaListener();
+
+            if (shellSignedIn === false) {
                 refreshAgendaCards();
-            },
+                return;
+            }
+
+            const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
+            if (!user) {
+                refreshAgendaCards();
+                return;
+            }
+
+            unsubAgenda = subscribeAgendaDoc(db, {
+                onData: renderAgenda,
+                onError: (error) => {
+                    console.error("Agenda listener failed:", error);
+                    refreshAgendaCards();
+                },
+            });
+        }
+
+        window.addEventListener("message", (event) => {
+            if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                shellSignedIn = false;
+                shellUid = null;
+                stopAgendaListener();
+                refreshAgendaCards();
+                return;
+            }
+
+            if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                shellSignedIn = true;
+                shellUid = event.data.uid || null;
+                startAgendaListener().catch((error) => {
+                    console.error("Agenda listener failed:", error);
+                });
+            }
+        });
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                if (shellSignedIn !== true) {
+                    stopAgendaListener();
+                    refreshAgendaCards();
+                }
+                return;
+            }
+
+            if (shellSignedIn === false) return;
+
+            if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
+
+            if (!shellUid) shellUid = user.uid;
+
+            startAgendaListener().catch((error) => {
+                console.error("Agenda listener failed:", error);
+            });
+        });
+
+        await auth.authStateReady();
+        if (auth.currentUser) {
+            shellUid = auth.currentUser.uid;
+            shellSignedIn = true;
+        }
+        startAgendaListener().catch((error) => {
+            console.error("Agenda listener failed:", error);
         });
     </script>
 </body>

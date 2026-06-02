@@ -99,18 +99,32 @@ export async function saveAgendaDoc(db, assignments, { uid, isLive, clubId = TM_
   await Promise.all(writes);
 }
 
-/** Fast live toggle — updates isLive only (avoids rewriting full agenda). */
+/** Fast live toggle — updates isLive only on agenda docs that already exist. */
 export async function patchAgendaLiveStatus(db, isLive, { clubId = TM_CLUB_ID, meetingDate = null } = {}) {
   const live = Boolean(isLive);
   const patch = { isLive: live };
+  const writes = [];
 
-  const writes = [updateDoc(getClubAgendaRef(db, clubId, CURRENT_AGENDA_ID), patch)];
-
-  if (meetingDate) {
-    writes.push(updateDoc(getClubAgendaRef(db, clubId, meetingDate), patch));
+  const currentRef = getClubAgendaRef(db, clubId, CURRENT_AGENDA_ID);
+  if ((await getDoc(currentRef)).exists()) {
+    writes.push(updateDoc(currentRef, patch));
   }
 
-  writes.push(updateDoc(getLegacyAgendaRef(db), patch));
+  if (meetingDate) {
+    const datedRef = getClubAgendaRef(db, clubId, meetingDate);
+    if ((await getDoc(datedRef)).exists()) {
+      writes.push(updateDoc(datedRef, patch));
+    }
+  }
+
+  const legacyRef = getLegacyAgendaRef(db);
+  if ((await getDoc(legacyRef)).exists()) {
+    writes.push(updateDoc(legacyRef, patch));
+  }
+
+  if (!writes.length) {
+    throw new Error("No published agenda found to update.");
+  }
 
   await Promise.all(writes);
 }

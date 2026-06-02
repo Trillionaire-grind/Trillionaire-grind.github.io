@@ -175,7 +175,7 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
+            import { getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
             import { showTmToast } from "./scripts/tmToast.js";
             import {
                 findRoleAssignment,
@@ -646,6 +646,17 @@
                 }
 
                 if (!isSignedInForSpeeches()) {
+                    stopAgendaListener();
+                    speakers = [];
+                    showEmptyState(
+                        "Sign in to view speakers",
+                        "Sign in from the welcome screen to see tonight's speakers."
+                    );
+                    return;
+                }
+
+                const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
+                if (!user) {
                     stopAgendaListener();
                     speakers = [];
                     showEmptyState(

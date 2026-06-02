@@ -82,7 +82,7 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { collection, doc, getDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser } from "./scripts/tmFirebase.js";
+        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
         import { showTmToast } from "./scripts/tmToast.js";
         import {
             TM_PRO_BENEFITS,
@@ -299,6 +299,11 @@
             const session = profileSession;
             if (!userId) {
                 resetProfileView();
+                return;
+            }
+
+            const authedUser = await ensureFirestoreAuth(auth, { shellUid: userId, shellSignedIn: true });
+            if (!authedUser || session !== profileSession) {
                 return;
             }
 

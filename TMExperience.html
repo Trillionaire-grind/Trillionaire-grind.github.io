@@ -15,19 +15,19 @@
         <div id="mainViewDiv" class="tm-app-shell" hidden>
             <div class="tm-frame-stack">
                 <div id="calendarView" class="tm-frame-panel is-active">
-                    <iframe src="TMExperienceViews/calendarView.html?v=6" title="Upcoming meeting"></iframe>
+                    <iframe src="TMExperienceViews/calendarView.html?v=7" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=25" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=26" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
                     <iframe src="TMExperienceViews/toolsView.html?v=8" title="Tools"></iframe>
                 </div>
                 <div id="adminView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/adminView.html?v=11" title="Admin"></iframe>
+                    <iframe src="TMExperienceViews/adminView.html?v=15" title="Admin"></iframe>
                 </div>
                 <div id="profileView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/profileView.html?v=14" title="Profile"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html?v=15" title="Profile"></iframe>
                 </div>
             </div>
             <nav class="tm-tabbar" id="navBar" aria-label="Main">
@@ -131,7 +131,7 @@
                     <button type="button" id="logInBtn" class="tm-btn tm-btn--primary">Log in</button>
                     <button type="button" id="goToRegisterBtn" class="tm-btn tm-btn--secondary">Create account</button>
                 </div>
-                <p class="tm-version">version 2.0.0.0</p>
+                <p class="tm-version">version 2.0.0.1s</p>
             </div>
         </div>
 
@@ -342,17 +342,21 @@
                 });
                 selectedBtn(destination)
 
-                if (destination === 1 || destination === 3 || destination === 4) {
-                    const panel = destination === 1
-                        ? feedbackView
-                        : destination === 3
-                          ? adminView
-                          : profileView;
+                if (auth.currentUser) {
+                    const panel = destination === 0
+                        ? calendarView
+                        : destination === 1
+                          ? feedbackView
+                          : destination === 3
+                            ? adminView
+                            : destination === 4
+                              ? profileView
+                              : null;
                     const frame = panel?.querySelector("iframe");
                     frame?.contentWindow?.postMessage({
                         type: "tm-auth-state",
-                        signedIn: Boolean(auth.currentUser),
-                        uid: auth.currentUser?.uid || null,
+                        signedIn: true,
+                        uid: auth.currentUser.uid,
                     }, "*");
                 }
 
@@ -546,6 +550,14 @@
                 });
             }
 
+            function isTmAdminUser(data) {
+                if (!data) return false;
+                if (data.role === "admin") return true;
+                if (data.admin === true) return true;
+                if (data.admin === "true") return true;
+                return false;
+            }
+
             async function checkRole(userId)
             {
                 removeAdminTab();
@@ -558,7 +570,7 @@
                     return;
                 }
 
-                if(docSnap.data().role == 'admin'){
+                if (isTmAdminUser(docSnap.data())) {
                     if (!document.getElementById('adminTabBtn')) {
                         const adminTab = document.createElement('button');
                         adminTab.type = 'button';

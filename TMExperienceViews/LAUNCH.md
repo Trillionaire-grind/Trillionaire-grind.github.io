@@ -54,7 +54,7 @@ Ensure this exists (Console → Firestore):
 ## 4. First admin
 
 1. Register in the app with club ID `naples-sunrise-bay`
-2. Firestore → `users/{your-uid}` → add field: `role` = `admin` (string)
+2. Firestore → `users/{your-uid}` → set admin using **either** `role` = `admin` (string) **or** `admin` = `true` (boolean)
 3. Sign out and back in — **Admin** tab appears
 4. Assign roles and **Publish agenda**
 
