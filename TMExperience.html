@@ -3,22 +3,22 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        <link rel="icon" type="image/x-icon" href="https://ccdn.toastmasters.org/medias/images/global/toastmasterslogo2x.png">
+        <link rel="icon" type="image/png" href="TMExperienceViews/assets/toastmasters-global-logo.png">
         <title>TM Experience</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="TMExperienceViews/assets/tmTheme.css?v=23">
-        <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=6">
+        <link rel="stylesheet" href="TMExperienceViews/assets/tmShell.css?v=9">
     </head>
     <body class="tm-shell-body">
         <div id="mainViewDiv" class="tm-app-shell" hidden>
             <div class="tm-frame-stack">
                 <div id="calendarView" class="tm-frame-panel is-active">
-                    <iframe src="TMExperienceViews/calendarView.html?v=12" title="Upcoming meeting"></iframe>
+                    <iframe src="TMExperienceViews/calendarView.html?v=13" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=30" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=31" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
                     <iframe src="TMExperienceViews/toolsView.html?v=8" title="Tools"></iframe>
@@ -27,7 +27,7 @@
                     <iframe src="TMExperienceViews/adminView.html?v=21" title="Admin"></iframe>
                 </div>
                 <div id="profileView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/profileView.html?v=16" title="Profile"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html?v=17" title="Profile"></iframe>
                 </div>
             </div>
             <nav class="tm-tabbar" id="navBar" aria-label="Main">
@@ -56,6 +56,7 @@
             </header>
 
             <div class="tm-register-content">
+                <img src="TMExperienceViews/assets/toastmasters-global-logo.png" alt="Toastmasters International" class="tm-global-logo tm-global-logo--auth" decoding="async">
                 <div class="tm-auth-pitch">
                     <p class="tm-auth-pitch__eyebrow">Discover…</p>
                     <p class="tm-auth-pitch__headline">"How To Master<br>Public Speaking"</p>
@@ -112,6 +113,7 @@
 
         <div id="welcomeView" class="tm-auth-screen">
             <div class="tm-auth-hero">
+                <img src="TMExperienceViews/assets/toastmasters-global-logo.png" alt="Toastmasters International" class="tm-global-logo tm-global-logo--auth" decoding="async">
                 <h1 class="tm-auth-hero__brand">Your <em>TM</em> Experience</h1>
                 <p class="tm-auth-hero__club">At Naples Sunrise Bay</p>
             </div>
@@ -131,7 +133,7 @@
                     <button type="button" id="logInBtn" class="tm-btn tm-btn--primary">Log in</button>
                     <button type="button" id="goToRegisterBtn" class="tm-btn tm-btn--secondary">Create account</button>
                 </div>
-                <p class="tm-version">version 2.0.0.3</p>
+                <p class="tm-version">version 2.0.0.4</p>
             </div>
         </div>
 
@@ -304,16 +306,6 @@
                 document.getElementById("adminTabBtn")?.remove();
             }
 
-            function resetFramePanels() {
-                document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
-                    iframe.contentWindow?.postMessage({ type: "tm-sign-out" }, "*");
-                    iframe.contentWindow?.postMessage({
-                        type: "tm-auth-state",
-                        signedIn: false,
-                    }, "*");
-                });
-            }
-
             function clearSignedInShellState() {
                 removeAdminTab();
                 closeWelcomeModal();
@@ -437,7 +429,6 @@
                 setAuthShellMode(true);
                 showRegister(false);
                 changeTo(0);
-                resetFramePanels();
                 resetMobileViewport();
             }
 
@@ -646,7 +637,7 @@
                     }
                     await signInWithEmailAndPassword(auth, email, password);
                     await auth.authStateReady();
-                    rebroadcastAuthToFrames();
+                    queueAuthBroadcastToFrames();
                 } catch (error) {
                     pendingWelcomeVariant = null;
                     showTmToast(`Log in failed: ${error.message}`, { type: "error" });
@@ -719,7 +710,29 @@
                 });
             }
 
+            function isTmShellIframeSource(source) {
+                if (!source) return false;
+                return Array.from(document.querySelectorAll(".tm-frame-panel iframe")).some(
+                    (iframe) => iframe.contentWindow === source
+                );
+            }
+
             window.addEventListener("message", async (event) => {
+                if (event.data?.type === "tm-request-shell-auth") {
+                    if (event.origin !== window.location.origin) return;
+                    if (!isTmShellIframeSource(event.source)) return;
+                    const user = auth.currentUser;
+                    event.source?.postMessage(
+                        {
+                            type: "tm-shell-auth",
+                            signedIn: Boolean(user),
+                            uid: user?.uid || null,
+                        },
+                        event.origin
+                    );
+                    return;
+                }
+
                 if (event.data?.type === "tm-meeting-live") {
                     broadcastMeetingLiveToFrames(event.data.isLive);
                     return;

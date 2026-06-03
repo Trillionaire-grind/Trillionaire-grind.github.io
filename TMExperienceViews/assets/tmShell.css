@@ -142,6 +142,17 @@ body.tm-shell-body--auth {
   margin: 0 auto 28px;
 }
 
+.tm-global-logo {
+  display: block;
+  width: auto;
+  object-fit: contain;
+}
+
+.tm-global-logo--auth {
+  height: clamp(64px, 18vw, 80px);
+  margin: 0 auto 16px;
+}
+
 .tm-auth-hero__brand {
   font-size: 1.75rem;
   font-weight: 700;
@@ -153,6 +164,10 @@ body.tm-shell-body--auth {
 .tm-auth-hero__brand em {
   font-style: normal;
   color: var(--tm-burgundy);
+}
+
+.tm-register-content > .tm-global-logo--auth {
+  margin: 0 auto 20px;
 }
 
 .tm-auth-hero__club {

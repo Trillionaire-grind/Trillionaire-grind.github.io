@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=24">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=33">
 </head>
 <body class="tm-body">
     <header class="tm-meeting-hero">
@@ -194,9 +194,11 @@
         import {
             getTmAuth,
             getTmDb,
+            requestParentShellAuth,
             resolveTmIframeAuth,
+            shouldAcceptParentShellSignOut,
             shouldTmIframeSignOut,
-        } from "./scripts/tmFirebase.js?v=4";
+        } from "./scripts/tmFirebase.js?v=6";
         import { subscribeAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
             AGENDA_ROLE_COUNT,
@@ -211,6 +213,7 @@
 
         let shellUid = null;
         let shellSignedIn = null;
+        let parentShellAuth = null;
         let unsubAgenda = null;
         let authRetryTimer = null;
         let startAgendaInFlight = null;
@@ -269,16 +272,28 @@
         }
 
         async function startAgendaListenerImpl() {
-            if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+            if (!parentShellAuth) {
+                parentShellAuth = await requestParentShellAuth();
+            }
+            if (parentShellAuth?.signedIn) {
+                shellSignedIn = true;
+                shellUid = parentShellAuth.uid || shellUid;
+            }
+
+            if (shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
                 clearAuthRetry();
                 stopAgendaListener();
                 refreshAgendaCards();
                 return;
             }
 
-            const user = await resolveTmIframeAuth(auth, { shellUid, shellSignedIn });
+            const user = await resolveTmIframeAuth(auth, {
+                shellUid,
+                shellSignedIn,
+                parentShell: parentShellAuth,
+            });
             if (!user) {
-                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                if (shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
                     stopAgendaListener();
                     refreshAgendaCards();
                 } else {
@@ -316,6 +331,8 @@
 
         function handleParentAuthMessage(event) {
             if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                if (!shouldAcceptParentShellSignOut(shellSignedIn, auth, parentShellAuth)) return;
+                parentShellAuth = { signedIn: false, uid: null };
                 shellSignedIn = false;
                 shellUid = null;
                 clearAuthRetry();
@@ -325,6 +342,10 @@
             }
 
             if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                parentShellAuth = {
+                    signedIn: true,
+                    uid: event.data.uid || auth.currentUser?.uid || null,
+                };
                 shellSignedIn = true;
                 shellUid = event.data.uid || shellUid || auth.currentUser?.uid || null;
                 startAgendaListener();
@@ -335,7 +356,7 @@
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
-                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                if (shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
                     clearAuthRetry();
                     stopAgendaListener();
                     refreshAgendaCards();
@@ -345,7 +366,7 @@
                 return;
             }
 
-            if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
+            if (shellSignedIn === false && parentShellAuth?.signedIn !== true) return;
 
             shellSignedIn = true;
             shellUid = user.uid;
@@ -353,7 +374,11 @@
         });
 
         await auth.authStateReady();
-        if (auth.currentUser) {
+        parentShellAuth = await requestParentShellAuth();
+        if (parentShellAuth?.signedIn) {
+            shellSignedIn = true;
+            shellUid = parentShellAuth.uid || auth.currentUser?.uid || null;
+        } else if (auth.currentUser) {
             shellUid = auth.currentUser.uid;
             shellSignedIn = true;
         }

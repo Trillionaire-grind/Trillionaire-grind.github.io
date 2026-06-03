@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=24">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=33">
 </head>
 <body class="tm-body tm-profile-body">
     <div class="tm-page tm-profile-page">
@@ -87,9 +87,11 @@
             getTmAuth,
             getTmDb,
             requireTmAuthUser,
+            requestParentShellAuth,
             resolveTmIframeAuth,
+            shouldAcceptParentShellSignOut,
             shouldTmIframeSignOut,
-        } from "./scripts/tmFirebase.js?v=4";
+        } from "./scripts/tmFirebase.js?v=6";
         import { showTmToast } from "./scripts/tmToast.js";
         import {
             TM_PRO_BENEFITS,
@@ -187,7 +189,19 @@
         let shellUid = null;
         /** null = iframe not yet synced with parent; false = signed out; true = signed in. */
         let shellSignedIn = null;
+        let parentShellAuth = null;
         let cachedProfileData = null;
+
+        function showProfileLoading() {
+            exitEditMode({ restoreView: false });
+            document.getElementById("nameTV").innerText = "Member";
+            bioTV.innerText = "Loading your profile…";
+            bioTV.classList.remove("is-empty");
+            profileImage.src = DEFAULT_PROFILE_IMAGE;
+            document.getElementById("speechesDiv").innerHTML = "";
+            setProfileActionButtonsEnabled(false);
+            tmProCard.hidden = true;
+        }
         let pendingPhotoFile = null;
         let editPhotoPreviewUrl = null;
 
@@ -309,17 +323,29 @@
                 return;
             }
 
+            if (!parentShellAuth) {
+                parentShellAuth = await requestParentShellAuth();
+            }
+            if (parentShellAuth?.signedIn) {
+                shellSignedIn = true;
+                shellUid = parentShellAuth.uid || shellUid || userId;
+            }
+
             const authedUser = await resolveTmIframeAuth(auth, {
                 shellUid: userId,
                 shellSignedIn: shellSignedIn === false ? false : true,
+                parentShell: parentShellAuth,
             });
             if (!authedUser || session !== profileSession) {
-                if (!authedUser && !shouldTmIframeSignOut(shellSignedIn, auth)) {
+                if (!authedUser && !shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
+                    showProfileLoading();
                     window.setTimeout(() => {
-                        if (!shouldTmIframeSignOut(shellSignedIn, auth)) {
+                        if (!shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
                             syncProfileForUid(userId).catch(() => {});
                         }
                     }, 600);
+                } else if (!authedUser && shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
+                    resetProfileView();
                 }
                 return;
             }
@@ -488,7 +514,8 @@
 
         window.addEventListener("message", (event) => {
             if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
-                if (auth.currentUser) return;
+                if (!shouldAcceptParentSignOut()) return;
+                parentShellAuth = { signedIn: false, uid: null };
                 shellSignedIn = false;
                 shellUid = null;
                 resetProfileView();
@@ -496,6 +523,10 @@
             }
 
             if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
+                parentShellAuth = {
+                    signedIn: true,
+                    uid: event.data.uid || auth.currentUser?.uid || null,
+                };
                 shellSignedIn = true;
                 shellUid = event.data.uid || auth.currentUser?.uid || null;
                 syncProfileForUid(shellUid).catch((error) => {
@@ -511,15 +542,15 @@
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
-                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                if (shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth)) {
                     resetProfileView();
+                } else if (parentShellAuth?.signedIn || shellSignedIn !== false) {
+                    showProfileLoading();
                 }
                 return;
             }
 
-            if (shellSignedIn === false) return;
-
-            if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
+            if (shellSignedIn === false && parentShellAuth?.signedIn !== true) return;
 
             shellSignedIn = true;
             shellUid = user.uid;
@@ -529,11 +560,36 @@
         });
 
         await auth.authStateReady();
-        if (auth.currentUser) {
+        parentShellAuth = await requestParentShellAuth();
+        if (parentShellAuth?.signedIn) {
+            shellSignedIn = true;
+            shellUid = parentShellAuth.uid || auth.currentUser?.uid || null;
+            showProfileLoading();
+            syncProfileForUid(shellUid).catch((error) => {
+                console.error("Failed to sync profile on load:", error);
+            });
+        } else if (auth.currentUser) {
             shellSignedIn = true;
             shellUid = auth.currentUser.uid;
             syncProfileForUid(auth.currentUser.uid).catch((error) => {
                 console.error("Failed to sync profile on load:", error);
+            });
+        } else {
+            showProfileLoading();
+            requestParentShellAuth(4000).then((shell) => {
+                parentShellAuth = shell;
+                if (shell?.signedIn && shell.uid) {
+                    shellSignedIn = true;
+                    shellUid = shell.uid;
+                    syncProfileForUid(shell.uid).catch(() => {});
+                    return;
+                }
+                if (
+                    shouldTmIframeSignOut(shellSignedIn, auth, parentShellAuth) ||
+                    (!shell?.signedIn && !auth.currentUser)
+                ) {
+                    resetProfileView();
+                }
             });
         }
     </script>
