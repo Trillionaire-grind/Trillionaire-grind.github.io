@@ -148,6 +148,18 @@ export function getAgendaMeta(dataArray) {
   };
 }
 
+/** Meeting date from published agenda doc (top-level field or legacy array slot). */
+export function resolveMeetingDateFromAgenda(docPayload, dataArray = null) {
+  const fromDoc = String(docPayload?.meetingDate || "").trim();
+  if (fromDoc) return fromDoc;
+
+  const arr = dataArray
+    || (Array.isArray(docPayload?.data) ? migrateAgendaData(docPayload.data) : null);
+  if (!arr) return "";
+
+  return String(getAgendaMeta(arr).date || "").trim();
+}
+
 export function formatMeetingDate(dateValue) {
   const raw = String(dateValue || "").trim();
   if (!raw) return "Date TBD";

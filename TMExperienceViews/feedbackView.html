@@ -175,17 +175,23 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=2";
+            import {
+                getTmAuth,
+                getTmDb,
+                requireTmAuthUser,
+                resolveTmIframeAuth,
+                shouldTmIframeSignOut,
+            } from "./scripts/tmFirebase.js?v=4";
             import { showTmToast } from "./scripts/tmToast.js";
             import {
                 findRoleAssignment,
                 formatMeetingDate,
-                getAgendaMeta,
                 getSpeakerAssignments,
                 normalizeAgendaDoc,
+                resolveMeetingDateFromAgenda,
                 isUserVoteCounterForAgenda,
                 EVALUATOR_ROLE_IDS,
-            } from "./scripts/tmAgendaData.js?v=4";
+            } from "./scripts/tmAgendaData.js?v=7";
             import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
             import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc } from "./scripts/tmAgendaFirestore.js?v=6";
             import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
@@ -234,9 +240,23 @@
             let shellUid = null;
             let shellSignedIn = null;
             let publishedAgendaDoc = null;
+            let authRetryTimer = null;
+            let refreshSpeakersInFlight = null;
 
-            function isSignedInForSpeeches() {
-                return shellSignedIn === true || Boolean(auth.currentUser);
+            function clearAuthRetry() {
+                if (authRetryTimer) {
+                    clearTimeout(authRetryTimer);
+                    authRetryTimer = null;
+                }
+            }
+
+            function scheduleAuthRetry() {
+                clearAuthRetry();
+                authRetryTimer = setTimeout(() => {
+                    refreshSpeakers().catch((error) => {
+                        console.error("Failed to retry speaker load:", error);
+                    });
+                }, 600);
             }
 
             const voteRef = collection(db, "votes");
@@ -529,8 +549,7 @@
 
                 const normalized = normalizeAgendaDoc(loaded.data);
                 const data = normalized.data;
-                const meta = getAgendaMeta(data);
-                currentMeetingDate = String(loaded.data.meetingDate || meta.date || "").trim();
+                currentMeetingDate = resolveMeetingDateFromAgenda(loaded.data, data);
                 updateMeetingMeta(currentMeetingDate);
 
                 const assignments = getSpeakerAssignments(data);
@@ -632,10 +651,9 @@
                 });
             }
 
-            async function refreshSpeakers() {
-                await auth.authStateReady();
-
-                if (!isSignedInForSpeeches()) {
+            async function refreshSpeakersImpl() {
+                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                    clearAuthRetry();
                     stopAgendaListener();
                     speakers = [];
                     showEmptyState(
@@ -645,18 +663,40 @@
                     return;
                 }
 
-                const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
+                setViewState("loading");
+
+                const user = await resolveTmIframeAuth(auth, { shellUid, shellSignedIn });
                 if (!user) {
-                    stopAgendaListener();
-                    speakers = [];
-                    showEmptyState(
-                        "Sign in to view speakers",
-                        "Sign in from the welcome screen to see tonight's speakers."
-                    );
+                    if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                        stopAgendaListener();
+                        speakers = [];
+                        showEmptyState(
+                            "Sign in to view speakers",
+                            "Sign in from the welcome screen to see tonight's speakers."
+                        );
+                    } else {
+                        scheduleAuthRetry();
+                    }
                     return;
                 }
 
+                clearAuthRetry();
+                shellSignedIn = true;
+                shellUid = user.uid;
                 startAgendaListener();
+            }
+
+            function refreshSpeakers() {
+                if (refreshSpeakersInFlight) return refreshSpeakersInFlight;
+                refreshSpeakersInFlight = refreshSpeakersImpl()
+                    .catch((error) => {
+                        console.error("Failed to load speakers:", error);
+                        showEmptyState("Could not load speakers", "Check your connection and try again.");
+                    })
+                    .finally(() => {
+                        refreshSpeakersInFlight = null;
+                    });
+                return refreshSpeakersInFlight;
             }
 
             async function requireAuthUser() {
@@ -754,25 +794,26 @@
 
             onAuthStateChanged(auth, (user) => {
                 if (!user) {
-                    if (shellSignedIn !== true) {
+                    if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                        clearAuthRetry();
                         stopAgendaListener();
                         speakers = [];
                         showEmptyState(
                             "Sign in to view speakers",
                             "Sign in from the welcome screen to see tonight's speakers."
                         );
+                    } else {
+                        setViewState("loading");
+                        scheduleAuthRetry();
                     }
                     return;
                 }
 
                 if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
 
-                if (!shellUid) shellUid = user.uid;
-
-                refreshSpeakers().catch((error) => {
-                    console.error("Failed to load speakers:", error);
-                    showEmptyState("Could not load speakers", "Check your connection and try again.");
-                });
+                shellSignedIn = true;
+                shellUid = user.uid;
+                refreshSpeakers();
             });
 
             async function handleParentAuthMessage(event) {
@@ -782,8 +823,10 @@
                 }
 
                 if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                    if (auth.currentUser) return;
                     shellSignedIn = false;
                     shellUid = null;
+                    clearAuthRetry();
                     stopAgendaListener();
                     speakers = [];
                     index = 0;
@@ -797,11 +840,8 @@
 
                 if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
                     shellSignedIn = true;
-                    shellUid = event.data.uid || null;
-                    refreshSpeakers().catch((error) => {
-                        console.error("Failed to load speakers:", error);
-                        showEmptyState("Could not load speakers", "Check your connection and try again.");
-                    });
+                    shellUid = event.data.uid || shellUid || auth.currentUser?.uid || null;
+                    refreshSpeakers();
                     return;
                 }
 
@@ -869,13 +909,11 @@
             }, { passive: true });
 
             await auth.authStateReady();
-            if (auth.currentUser && !shellUid) {
+            if (auth.currentUser) {
+                shellSignedIn = true;
                 shellUid = auth.currentUser.uid;
             }
-            refreshSpeakers().catch((error) => {
-                console.error("Failed to load speakers:", error);
-                showEmptyState("Could not load speakers", "Check your connection and try again.");
-            });
+            refreshSpeakers();
         </script>
     </body>
 </html>

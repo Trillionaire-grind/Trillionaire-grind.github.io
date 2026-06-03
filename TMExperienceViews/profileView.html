@@ -82,7 +82,14 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { collection, doc, getDoc, getDocs, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
+        import {
+            getTmApp,
+            getTmAuth,
+            getTmDb,
+            requireTmAuthUser,
+            resolveTmIframeAuth,
+            shouldTmIframeSignOut,
+        } from "./scripts/tmFirebase.js?v=4";
         import { showTmToast } from "./scripts/tmToast.js";
         import {
             TM_PRO_BENEFITS,
@@ -302,8 +309,18 @@
                 return;
             }
 
-            const authedUser = await ensureFirestoreAuth(auth, { shellUid: userId, shellSignedIn: true });
+            const authedUser = await resolveTmIframeAuth(auth, {
+                shellUid: userId,
+                shellSignedIn: shellSignedIn === false ? false : true,
+            });
             if (!authedUser || session !== profileSession) {
+                if (!authedUser && !shouldTmIframeSignOut(shellSignedIn, auth)) {
+                    window.setTimeout(() => {
+                        if (!shouldTmIframeSignOut(shellSignedIn, auth)) {
+                            syncProfileForUid(userId).catch(() => {});
+                        }
+                    }, 600);
+                }
                 return;
             }
 
@@ -471,6 +488,7 @@
 
         window.addEventListener("message", (event) => {
             if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
+                if (auth.currentUser) return;
                 shellSignedIn = false;
                 shellUid = null;
                 resetProfileView();
@@ -479,7 +497,7 @@
 
             if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
                 shellSignedIn = true;
-                shellUid = event.data.uid || null;
+                shellUid = event.data.uid || auth.currentUser?.uid || null;
                 syncProfileForUid(shellUid).catch((error) => {
                     console.error("Failed to sync profile after sign in:", error);
                 });
@@ -493,22 +511,31 @@
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
-                if (shellSignedIn !== true) resetProfileView();
+                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                    resetProfileView();
+                }
                 return;
             }
 
             if (shellSignedIn === false) return;
 
-            if (shellSignedIn === true) {
-                if (shellUid && user.uid !== shellUid) return;
-            } else {
-                shellUid = user.uid;
-            }
+            if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
 
+            shellSignedIn = true;
+            shellUid = user.uid;
             syncProfileForUid(user.uid).catch((error) => {
                 console.error("Failed to sync profile:", error);
             });
         });
+
+        await auth.authStateReady();
+        if (auth.currentUser) {
+            shellSignedIn = true;
+            shellUid = auth.currentUser.uid;
+            syncProfileForUid(auth.currentUser.uid).catch((error) => {
+                console.error("Failed to sync profile on load:", error);
+            });
+        }
     </script>
 </body>
 </html>

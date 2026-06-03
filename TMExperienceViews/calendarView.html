@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=23">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=24">
 </head>
 <body class="tm-body">
     <header class="tm-meeting-hero">
@@ -191,15 +191,20 @@
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { refreshAgendaCards } from "./scripts/tmAgendaInit.js?v=3";
-        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=2";
+        import {
+            getTmAuth,
+            getTmDb,
+            resolveTmIframeAuth,
+            shouldTmIframeSignOut,
+        } from "./scripts/tmFirebase.js?v=4";
         import { subscribeAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
             AGENDA_ROLE_COUNT,
             formatMeetingDate,
-            getAgendaMeta,
             normalizeAgendaDoc,
+            resolveMeetingDateFromAgenda,
             syncDerivedAgendaMemberCopies,
-        } from "./scripts/tmAgendaData.js?v=6";
+        } from "./scripts/tmAgendaData.js?v=7";
 
         const auth = await getTmAuth();
         const db = getTmDb();
@@ -207,8 +212,24 @@
         let shellUid = null;
         let shellSignedIn = null;
         let unsubAgenda = null;
+        let authRetryTimer = null;
+        let startAgendaInFlight = null;
 
-        function applyAgendaToTable(dataArray) {
+        function clearAuthRetry() {
+            if (authRetryTimer) {
+                clearTimeout(authRetryTimer);
+                authRetryTimer = null;
+            }
+        }
+
+        function scheduleAuthRetry() {
+            clearAuthRetry();
+            authRetryTimer = setTimeout(() => {
+                startAgendaListener();
+            }, 600);
+        }
+
+        function applyAgendaToTable(docPayload, dataArray) {
             for (let i = 0; i < AGENDA_ROLE_COUNT; i++) {
                 const assignment = dataArray[i];
                 if (!assignment?.id) continue;
@@ -216,12 +237,6 @@
                 const element = document.getElementById(assignment.id);
                 if (element) element.textContent = assignment.member || "";
 
-                if (assignment.id === "tmRole") {
-                    document.getElementById("tmRoleCopy").textContent = assignment.member || "";
-                }
-                if (assignment.id === "generalRole") {
-                    document.getElementById("generalRoleCopy").textContent = assignment.member || "";
-                }
                 if (assignment.id.endsWith("Speaker")) {
                     const pathEl = document.getElementById(`${assignment.id}Path`);
                     const titleEl = document.getElementById(`${assignment.id}Title`);
@@ -230,7 +245,8 @@
                 }
             }
 
-            document.getElementById("meetingDateLbl").textContent = formatMeetingDate(getAgendaMeta(dataArray).date);
+            const meetingDate = resolveMeetingDateFromAgenda(docPayload, dataArray);
+            document.getElementById("meetingDateLbl").textContent = formatMeetingDate(meetingDate);
             syncDerivedAgendaMemberCopies();
         }
 
@@ -241,7 +257,7 @@
             }
 
             const normalized = normalizeAgendaDoc(loaded.data);
-            applyAgendaToTable(normalized.data);
+            applyAgendaToTable(loaded.data, normalized.data);
             refreshAgendaCards();
         }
 
@@ -252,14 +268,29 @@
             }
         }
 
-        async function startAgendaListener() {
-            stopAgendaListener();
-
-            const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
-            if (!user) {
+        async function startAgendaListenerImpl() {
+            if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                clearAuthRetry();
+                stopAgendaListener();
                 refreshAgendaCards();
                 return;
             }
+
+            const user = await resolveTmIframeAuth(auth, { shellUid, shellSignedIn });
+            if (!user) {
+                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                    stopAgendaListener();
+                    refreshAgendaCards();
+                } else {
+                    scheduleAuthRetry();
+                }
+                return;
+            }
+
+            clearAuthRetry();
+            shellSignedIn = true;
+            shellUid = user.uid;
+            stopAgendaListener();
 
             unsubAgenda = subscribeAgendaDoc(db, {
                 onData: renderAgenda,
@@ -270,10 +301,24 @@
             });
         }
 
-        window.addEventListener("message", (event) => {
+        function startAgendaListener() {
+            if (startAgendaInFlight) return startAgendaInFlight;
+            startAgendaInFlight = startAgendaListenerImpl()
+                .catch((error) => {
+                    console.error("Agenda listener failed:", error);
+                    refreshAgendaCards();
+                })
+                .finally(() => {
+                    startAgendaInFlight = null;
+                });
+            return startAgendaInFlight;
+        }
+
+        function handleParentAuthMessage(event) {
             if (event.data?.type === "tm-sign-out" || (event.data?.type === "tm-auth-state" && !event.data.signedIn)) {
                 shellSignedIn = false;
                 shellUid = null;
+                clearAuthRetry();
                 stopAgendaListener();
                 refreshAgendaCards();
                 return;
@@ -281,29 +326,30 @@
 
             if (event.data?.type === "tm-auth-state" && event.data.signedIn) {
                 shellSignedIn = true;
-                shellUid = event.data.uid || null;
-                startAgendaListener().catch((error) => {
-                    console.error("Agenda listener failed:", error);
-                });
+                shellUid = event.data.uid || shellUid || auth.currentUser?.uid || null;
+                startAgendaListener();
             }
-        });
+        }
+
+        window.addEventListener("message", handleParentAuthMessage);
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
-                if (shellSignedIn !== true) {
+                if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+                    clearAuthRetry();
                     stopAgendaListener();
                     refreshAgendaCards();
+                } else {
+                    scheduleAuthRetry();
                 }
                 return;
             }
 
             if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
 
-            if (!shellUid) shellUid = user.uid;
-
-            startAgendaListener().catch((error) => {
-                console.error("Agenda listener failed:", error);
-            });
+            shellSignedIn = true;
+            shellUid = user.uid;
+            startAgendaListener();
         });
 
         await auth.authStateReady();
@@ -311,9 +357,7 @@
             shellUid = auth.currentUser.uid;
             shellSignedIn = true;
         }
-        startAgendaListener().catch((error) => {
-            console.error("Agenda listener failed:", error);
-        });
+        startAgendaListener();
     </script>
 </body>
 </html>

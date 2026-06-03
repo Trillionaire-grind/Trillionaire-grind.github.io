@@ -86,20 +86,41 @@ export async function requireTmAuthUser(auth, { shellUid = null, timeoutMs = 120
 
 /** Wait for iframe Auth to match shell before Firestore reads (parent signs in first). */
 export async function ensureFirestoreAuth(auth, { shellUid = null, shellSignedIn = null } = {}) {
+  return resolveTmIframeAuth(auth, { shellUid, shellSignedIn, timeoutMs: 12000 });
+}
+
+/** True only when the shell and Firebase both agree the member is signed out. */
+export function shouldTmIframeSignOut(shellSignedIn, auth) {
+  return shellSignedIn === false && !auth.currentUser;
+}
+
+/**
+ * Resolve Auth for iframe tabs. Waits for Firebase session to catch up after shell login.
+ */
+export async function resolveTmIframeAuth(auth, { shellUid = null, shellSignedIn = null, timeoutMs = 15000 } = {}) {
   await auth.authStateReady();
   const current = auth.currentUser;
 
-  // Parent may broadcast signed-out during account switch; still use a live Auth session.
-  if (shellSignedIn === false) {
-    if (!current) return null;
+  if (shouldTmIframeSignOut(shellSignedIn, auth)) {
+    return null;
+  }
+
+  if (shellSignedIn === true || shellUid) {
+    const matched = await requireTmAuthUser(auth, {
+      shellUid: shellUid || undefined,
+      timeoutMs,
+    });
+    if (matched) return matched;
+  }
+
+  if (current) {
     if (shellUid && current.uid !== shellUid) return null;
     return current;
   }
 
-  if (shellUid) {
-    const matched = await waitForAuthUid(auth, shellUid, { timeoutMs: 12000 });
-    if (matched) return matched;
+  if (shellSignedIn !== false) {
+    return waitForTmUser(auth, { timeoutMs });
   }
 
-  return current || waitForTmUser(auth, { timeoutMs: 12000 });
+  return null;
 }

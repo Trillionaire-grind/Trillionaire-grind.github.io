@@ -15,10 +15,10 @@
         <div id="mainViewDiv" class="tm-app-shell" hidden>
             <div class="tm-frame-stack">
                 <div id="calendarView" class="tm-frame-panel is-active">
-                    <iframe src="TMExperienceViews/calendarView.html?v=11" title="Upcoming meeting"></iframe>
+                    <iframe src="TMExperienceViews/calendarView.html?v=12" title="Upcoming meeting"></iframe>
                 </div>
                 <div id="feedbackView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/feedbackView.html?v=27" title="Speeches"></iframe>
+                    <iframe src="TMExperienceViews/feedbackView.html?v=30" title="Speeches"></iframe>
                 </div>
                 <div id="toolsView" class="tm-frame-panel">
                     <iframe src="TMExperienceViews/toolsView.html?v=8" title="Tools"></iframe>
@@ -27,7 +27,7 @@
                     <iframe src="TMExperienceViews/adminView.html?v=21" title="Admin"></iframe>
                 </div>
                 <div id="profileView" class="tm-frame-panel">
-                    <iframe src="TMExperienceViews/profileView.html?v=15" title="Profile"></iframe>
+                    <iframe src="TMExperienceViews/profileView.html?v=16" title="Profile"></iframe>
                 </div>
             </div>
             <nav class="tm-tabbar" id="navBar" aria-label="Main">
@@ -334,6 +334,45 @@
                 });
             }
 
+            function queueAuthBroadcastToFrames() {
+                if (!auth.currentUser) return;
+                const user = auth.currentUser;
+                broadcastAuthToFrames(user);
+                window.setTimeout(() => {
+                    if (auth.currentUser) broadcastAuthToFrames(auth.currentUser);
+                }, 400);
+                window.setTimeout(() => {
+                    if (auth.currentUser) broadcastAuthToFrames(auth.currentUser);
+                }, 1200);
+            }
+
+            /** Reload tab iframes so each view picks up Auth from persistence (fixes first sign-in). */
+            function reloadFrameIframes() {
+                document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                    const raw = iframe.getAttribute("src");
+                    if (!raw || raw === "about:blank") return;
+                    try {
+                        const url = new URL(raw, window.location.href);
+                        url.searchParams.set("boot", String(Date.now()));
+                        iframe.src = `${url.pathname}${url.search}`;
+                    } catch {
+                        iframe.src = raw;
+                    }
+                });
+            }
+
+            document.querySelectorAll(".tm-frame-panel iframe").forEach((iframe) => {
+                iframe.addEventListener("load", () => {
+                    if (auth.currentUser) {
+                        iframe.contentWindow?.postMessage({
+                            type: "tm-auth-state",
+                            signedIn: true,
+                            uid: auth.currentUser.uid,
+                        }, "*");
+                    }
+                });
+            });
+
             function changeTo(destination)
             {
                 let views = [calendarView, feedbackView, toolsView, adminView, profileView]
@@ -404,11 +443,18 @@
 
             function showMainView()
             {
+                const enteringMain = mainViewDiv.hidden;
                 mainViewDiv.hidden = false;
                 registerView.hidden = true;
                 welcomeView.hidden = true;
                 setAuthShellMode(false);
                 resetMobileViewport();
+
+                if (auth.currentUser && enteringMain) {
+                    reloadFrameIframes();
+                    window.setTimeout(() => queueAuthBroadcastToFrames(), 200);
+                    window.setTimeout(() => queueAuthBroadcastToFrames(), 1000);
+                }
             }
 
             function showRegister(bool)
@@ -595,12 +641,12 @@
                     pendingWelcomeVariant = "returning";
                     await auth.authStateReady();
                     if (auth.currentUser) {
-                        resetFramePanels();
                         await signOut(auth);
                         await auth.authStateReady();
                     }
                     await signInWithEmailAndPassword(auth, email, password);
                     await auth.authStateReady();
+                    rebroadcastAuthToFrames();
                 } catch (error) {
                     pendingWelcomeVariant = null;
                     showTmToast(`Log in failed: ${error.message}`, { type: "error" });
@@ -649,15 +695,15 @@
                     return;
                 }
 
-                broadcastAuthToFrames(user);
-
                 if (user) {
                     await checkRole(user.uid);
+                    queueAuthBroadcastToFrames();
                     if (pendingWelcomeVariant) {
                         openWelcomeModal(pendingWelcomeVariant);
                         pendingWelcomeVariant = null;
                     }
                 } else if (authUiReady) {
+                    broadcastAuthToFrames(null);
                     showAuthScreen();
                 }
 
