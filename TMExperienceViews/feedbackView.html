@@ -175,7 +175,7 @@
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
             import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-            import { getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
+            import { getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=2";
             import { showTmToast } from "./scripts/tmToast.js";
             import {
                 findRoleAssignment,
@@ -635,16 +635,6 @@
             async function refreshSpeakers() {
                 await auth.authStateReady();
 
-                if (shellSignedIn === false) {
-                    stopAgendaListener();
-                    speakers = [];
-                    showEmptyState(
-                        "Sign in to view speakers",
-                        "Sign in from the welcome screen to see tonight's speakers."
-                    );
-                    return;
-                }
-
                 if (!isSignedInForSpeeches()) {
                     stopAgendaListener();
                     speakers = [];
@@ -775,13 +765,9 @@
                     return;
                 }
 
-                if (shellSignedIn === false) return;
+                if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
 
-                if (shellSignedIn === true) {
-                    if (shellUid && user.uid !== shellUid) return;
-                } else {
-                    shellUid = user.uid;
-                }
+                if (!shellUid) shellUid = user.uid;
 
                 refreshSpeakers().catch((error) => {
                     console.error("Failed to load speakers:", error);
@@ -881,6 +867,15 @@
                 if (Math.abs(delta) < 40 || speakers.length <= 1) return;
                 updateSpeaker(delta < 0 ? 1 : -1);
             }, { passive: true });
+
+            await auth.authStateReady();
+            if (auth.currentUser && !shellUid) {
+                shellUid = auth.currentUser.uid;
+            }
+            refreshSpeakers().catch((error) => {
+                console.error("Failed to load speakers:", error);
+                showEmptyState("Could not load speakers", "Check your connection and try again.");
+            });
         </script>
     </body>
 </html>

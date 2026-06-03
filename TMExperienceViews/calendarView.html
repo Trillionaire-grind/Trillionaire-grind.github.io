@@ -191,7 +191,7 @@
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { refreshAgendaCards } from "./scripts/tmAgendaInit.js?v=3";
-        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
+        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=2";
         import { subscribeAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
             AGENDA_ROLE_COUNT,
@@ -255,11 +255,6 @@
         async function startAgendaListener() {
             stopAgendaListener();
 
-            if (shellSignedIn === false) {
-                refreshAgendaCards();
-                return;
-            }
-
             const user = await ensureFirestoreAuth(auth, { shellUid, shellSignedIn });
             if (!user) {
                 refreshAgendaCards();
@@ -301,8 +296,6 @@
                 }
                 return;
             }
-
-            if (shellSignedIn === false) return;
 
             if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
 

@@ -87,9 +87,19 @@ export async function requireTmAuthUser(auth, { shellUid = null, timeoutMs = 120
 /** Wait for iframe Auth to match shell before Firestore reads (parent signs in first). */
 export async function ensureFirestoreAuth(auth, { shellUid = null, shellSignedIn = null } = {}) {
   await auth.authStateReady();
-  if (shellSignedIn === false) return null;
-  if (shellUid) {
-    return waitForAuthUid(auth, shellUid, { timeoutMs: 12000 });
+  const current = auth.currentUser;
+
+  // Parent may broadcast signed-out during account switch; still use a live Auth session.
+  if (shellSignedIn === false) {
+    if (!current) return null;
+    if (shellUid && current.uid !== shellUid) return null;
+    return current;
   }
-  return auth.currentUser || waitForTmUser(auth, { timeoutMs: 12000 });
+
+  if (shellUid) {
+    const matched = await waitForAuthUid(auth, shellUid, { timeoutMs: 12000 });
+    if (matched) return matched;
+  }
+
+  return current || waitForTmUser(auth, { timeoutMs: 12000 });
 }

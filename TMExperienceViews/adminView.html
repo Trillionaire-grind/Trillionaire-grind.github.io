@@ -737,7 +737,6 @@
 
         onAuthStateChanged(auth, (user) => {
             if (!user) return;
-            if (shellSignedIn === false) return;
             if (shellSignedIn === true && shellUid && user.uid !== shellUid) return;
             if (!shellUid) shellUid = user.uid;
             shellSignedIn = true;
