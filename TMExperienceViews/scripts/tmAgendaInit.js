@@ -1,3 +1,5 @@
+import { resolveAgendaMemberCell, DERIVED_AGENDA_MEMBER_BY_COPY_ID } from "./tmAgendaData.js?v=6";
+
 function extractRoleTitle(roleCell) {
   const strong = roleCell.querySelector("strong");
   return strong ? strong.textContent.trim() : roleCell.textContent.trim().split("\n")[0];
@@ -71,8 +73,10 @@ export function initAgendaCards(tableSelector = ".tm-agenda-table") {
     const time = formatAgendaTime(cells[0].textContent.trim());
     const roleTitle = extractRoleTitle(cells[1]);
     const detailHtml = extractRoleDetail(cells[1]);
-    const memberName = cells[2].textContent.trim();
-    const isUnassigned = !memberName;
+    const memberCell = cells[2];
+    const memberName = resolveAgendaMemberCell(memberCell);
+    const isDerivedCopy = Boolean(DERIVED_AGENDA_MEMBER_BY_COPY_ID[memberCell.id]);
+    const isUnassigned = !memberName && !isDerivedCopy;
 
     const item = document.createElement("article");
     item.className = `tm-agenda-item ${getRoleAccentClass(roleTitle)}`.trim();
@@ -96,7 +100,7 @@ export function initAgendaCards(tableSelector = ".tm-agenda-table") {
     rowBtn.querySelector(".tm-agenda-role").textContent = roleTitle;
 
     const memberEl = rowBtn.querySelector(".tm-agenda-member");
-    memberEl.textContent = isUnassigned ? "Unassigned" : memberName;
+    memberEl.textContent = memberName || (isDerivedCopy ? "" : "Unassigned");
     if (isUnassigned) memberEl.classList.add("is-unassigned");
 
     const detail = document.createElement("div");

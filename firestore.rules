@@ -160,15 +160,16 @@ service cloud.firestore {
       allow delete: if false;
 
       match /speeches/{speechId} {
-        allow read: if isTmMember();
-        allow create, update: if isTmMember() && (
-          isTmAdmin()
-          || request.resource.data.keys().hasOnly(['path', 'title', 'speechTitle'])
-        );
+        allow read: if canAccessUser(userId) || isTmAdmin();
+        allow create, update: if isTmAdmin()
+          || (signedIn()
+            && request.auth.uid == userId
+            && isTmMember()
+            && request.resource.data.keys().hasOnly(['path', 'title', 'speechTitle']));
         allow delete: if isTmAdmin();
 
         match /feedback/{feedbackId} {
-          allow read: if isTmMember();
+          allow read: if canAccessUser(userId) || isTmAdmin();
           allow create: if isTmMember()
             && request.auth.uid != userId
             && request.resource.data.feedback is string

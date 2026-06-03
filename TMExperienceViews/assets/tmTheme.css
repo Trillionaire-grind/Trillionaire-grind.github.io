@@ -151,6 +151,32 @@ body.tm-body {
   cursor: not-allowed;
 }
 
+.tm-btn__spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: tm-btn-spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.tm-btn.is-loading .tm-btn__spinner {
+  display: inline-block;
+}
+
+.tm-btn.is-loading:disabled {
+  opacity: 1;
+  cursor: wait;
+}
+
+@keyframes tm-btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 /* Agenda cards */
 .tm-agenda-list {
   display: flex;

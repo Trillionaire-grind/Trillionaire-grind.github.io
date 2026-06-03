@@ -24,7 +24,7 @@
   function collectAhCounterRows(tbody) {
     return Array.from(tbody.querySelectorAll("tr")).map((row) => {
       const nameInput = row.querySelector("th input");
-      const counters = row.querySelectorAll("td .stepper input");
+      const counters = row.querySelectorAll("td .tm-tool-stepper input");
       return {
         name: nameInput?.value || "",
         ah: parseInt(counters[0]?.value, 10) || 0,
@@ -40,7 +40,7 @@
     tableRows.forEach((row, index) => {
       const data = rows[index] || { name: "", ah: 0, um: 0, like: 0, x2: 0 };
       const nameInput = row.querySelector("th input");
-      const counters = row.querySelectorAll("td .stepper input");
+      const counters = row.querySelectorAll("td .tm-tool-stepper input");
 
       if (nameInput) nameInput.value = data.name || "";
       if (counters[0]) counters[0].value = data.ah || 0;

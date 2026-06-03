@@ -55,7 +55,7 @@
 
     <script type="module">
         import { collection, doc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getTmDb } from "./scripts/tmFirebase.js";
+        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
         import { formatMeetingDate, getAgendaMeta, loadAndMigrateAgendaDoc, normalizeAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
         import { loadAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=3";
         import {
@@ -64,6 +64,7 @@
             resolveSpeechDisplay,
         } from "./scripts/tmSpeechRecords.js?v=2";
 
+        const auth = await getTmAuth();
         const db = getTmDb();
 
         const speechDate = document.getElementById("speechDate");
@@ -223,6 +224,15 @@
             stopFeedbackListener();
 
             try {
+                const authedUser = await ensureFirestoreAuth(auth);
+                if (!authedUser) {
+                    showError(
+                        "Sign in required",
+                        "Open TM Experience, sign in to your club account, then open this speech again."
+                    );
+                    return;
+                }
+
                 const speechRef = doc(db, "users", userId, "speeches", speechId);
                 const [speechSnapshot, agendaLoaded] = await Promise.all([
                     getDoc(speechRef),
@@ -257,7 +267,13 @@
                 setViewState("content");
             } catch (error) {
                 console.error("Failed to load speech:", error);
-                showError("Could not load speech", "Check your connection and try again.");
+                const denied = error?.code === "permission-denied";
+                showError(
+                    denied ? "Could not access speech" : "Could not load speech",
+                    denied
+                        ? "Sign in with your club account and confirm your profile uses club naples-sunrise-bay."
+                        : "Check your connection and try again."
+                );
             }
         }
 

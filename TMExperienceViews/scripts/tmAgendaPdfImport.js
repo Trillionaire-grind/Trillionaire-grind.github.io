@@ -1,6 +1,8 @@
 const PDFJS_VERSION = "4.10.38";
 const PDFJS_BASE = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build`;
 
+import { syncDerivedAgendaMemberCopies } from "./tmAgendaData.js?v=6";
+
 const ROLE_DEFINITIONS = [
   { pattern: /^Presiding Officer$/i, fieldId: null, note: "Opening/closing presiding officer is fixed in the app." },
   { pattern: /^Toastmaster Presents Awards$/i, fieldId: null },
@@ -224,12 +226,6 @@ export function applyParsedAgenda(parsed, membersByFieldId = {}) {
 
     if (select && result.value) {
       select.value = result.value;
-      if (fieldId === "tmRole") {
-        document.getElementById("tmRoleCopy").textContent = result.value;
-      }
-      if (fieldId === "generalRole") {
-        document.getElementById("generalRoleCopy").textContent = result.value;
-      }
     }
 
     if (!pdfName) {
@@ -242,6 +238,7 @@ export function applyParsedAgenda(parsed, membersByFieldId = {}) {
     else summary.unmatched.push(`${label}: ${pdfName}`);
   });
 
+  syncDerivedAgendaMemberCopies();
   return summary;
 }
 

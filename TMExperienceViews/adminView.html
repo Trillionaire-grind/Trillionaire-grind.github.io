@@ -8,7 +8,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/tmTheme.css?v=23">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=24">
         <style>
             .tm-agenda-table-wrap--source { display: none; }
         </style>
@@ -36,9 +36,6 @@
             </div>
 
             <div class="tm-admin-toolbar">
-                <div id="adminRevealTools" class="tm-admin-toolbar__left">
-                    <button type="button" id="revealVotesBtn" class="tm-btn tm-btn--secondary">Reveal votes</button>
-                </div>
                 <div id="adminEditTools" class="tm-admin-toolbar__edit-tools" hidden>
                     <label class="tm-admin-import">
                         <span class="tm-btn tm-btn--secondary">Import PDF</span>
@@ -318,7 +315,10 @@
             <p id="adminStickyCopy" class="tm-admin-sticky__copy">Fill every role before publishing.</p>
             <div class="tm-admin-sticky__actions">
                 <button type="button" id="cancelBtn" class="tm-btn tm-btn--secondary">Cancel</button>
-                <button type="button" id="publishBtn" class="tm-btn tm-btn--primary" disabled>Publish agenda</button>
+                <button type="button" id="publishBtn" class="tm-btn tm-btn--primary" disabled aria-busy="false">
+                    <span class="tm-btn__spinner" aria-hidden="true"></span>
+                    <span class="tm-btn__label">Publish agenda</span>
+                </button>
             </div>
         </div>
 
@@ -344,24 +344,13 @@
             </form>
         </dialog>
 
-        <dialog id="voteResultsDialog" class="tm-admin-dialog">
-            <div class="tm-admin-dialog__panel tm-vote-results">
-                <h3>Vote results</h3>
-                <div id="voteResultsBody" class="tm-vote-results__body">
-                    <p class="tm-vote-results__loading">Loading votes…</p>
-                </div>
-                <div class="tm-admin-dialog__actions" style="margin-top:16px;">
-                    <button type="button" id="voteResultsCloseBtn" class="tm-btn tm-btn--primary">Close</button>
-                </div>
-            </div>
-        </dialog>
     </body>
   
     <script type="module">
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { collection, doc, setDoc, getDoc, getDocs, updateDoc, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-        import { importAgendaPdf, renderImportSummary } from "./scripts/tmAgendaPdfImport.js";
+        import { importAgendaPdf, renderImportSummary } from "./scripts/tmAgendaPdfImport.js?v=2";
         import {
             AGENDA_ROLE_COUNT,
             AGENDA_ROLE_IDS,
@@ -369,8 +358,8 @@
             loadAndMigrateAgendaDoc,
             normalizeAgendaDoc,
             attachMemberUserIds,
-            isUserVoteCounterForAgenda,
-        } from "./scripts/tmAgendaData.js?v=4";
+            syncDerivedAgendaMemberCopies,
+        } from "./scripts/tmAgendaData.js?v=6";
         import {
             loadAgendaDoc,
             saveAgendaDoc,
@@ -384,8 +373,7 @@
             countIncompleteAdminRoles,
             highlightIncompleteAdminRoles,
             setAdminCardsEditable,
-        } from "./scripts/tmAdminAgendaInit.js";
-        import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
+        } from "./scripts/tmAdminAgendaInit.js?v=5";
         import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
@@ -428,8 +416,9 @@
 
         const editAgendaBtn = document.getElementById("editAgendaBtn")
         const adminEditTools = document.getElementById("adminEditTools")
-        const adminRevealTools = document.getElementById("adminRevealTools")
         const publishBtn = document.getElementById("publishBtn")
+        const publishBtnLabel = publishBtn?.querySelector(".tm-btn__label")
+        let publishInFlight = false
         const cancelBtn = document.getElementById("cancelBtn")
         const previewBtn = document.getElementById("previewBtn")
         const previewDialog = document.getElementById("previewDialog")
@@ -452,10 +441,6 @@
         }
         const clearDialogCancelBtn = document.getElementById("clearDialogCancelBtn")
         const clearDialogYesBtn = document.getElementById("clearDialogYesBtn")
-        const revealVotesBtn = document.getElementById("revealVotesBtn")
-        const voteResultsDialog = document.getElementById("voteResultsDialog")
-        const voteResultsBody = document.getElementById("voteResultsBody")
-        const voteResultsCloseBtn = document.getElementById("voteResultsCloseBtn")
         const agendaPdfInput = document.getElementById("agendaPdfInput")
         const importSummary = document.getElementById("importSummary")
 
@@ -504,10 +489,25 @@
             return AGENDA_ROLE_IDS.every((id) => document.getElementById(id)?.value.trim())
         }
 
+        function setPublishLoading(loading) {
+            publishInFlight = loading
+            publishBtn.classList.toggle("is-loading", loading)
+            publishBtn.setAttribute("aria-busy", loading ? "true" : "false")
+            if (publishBtnLabel) {
+                publishBtnLabel.textContent = loading ? "Publishing…" : "Publish agenda"
+            }
+            cancelBtn.disabled = loading
+            updatePublishState()
+            if (loading) {
+                adminStickyCopy.textContent = "Publishing agenda…"
+            }
+        }
+
         function updatePublishState() {
             highlightIncompleteAdminRoles()
             const incomplete = countIncompleteAdminRoles()
-            publishBtn.disabled = !isEditing || !isFilledOut()
+            publishBtn.disabled = publishInFlight || !isEditing || !isFilledOut()
+            if (publishInFlight) return
             if (incomplete > 0) {
                 adminStickyCopy.textContent = `${incomplete} role${incomplete === 1 ? "" : "s"} still need a member.`
             } else {
@@ -524,7 +524,6 @@
         function enterEditMode() {
             isEditing = true
             document.body.classList.add("is-editing")
-            adminRevealTools.hidden = true
             adminEditTools.hidden = false
             setToolbarEditAction(true)
             adminStickyBar.classList.add("is-visible")
@@ -538,7 +537,6 @@
         function exitEditMode() {
             isEditing = false
             document.body.classList.remove("is-editing")
-            adminRevealTools.hidden = false
             adminEditTools.hidden = true
             importSummary.hidden = true
             setToolbarEditAction(false)
@@ -546,7 +544,6 @@
             setAdminCardsEditable(false)
             meetingLiveToggle.disabled = !agendaExists
             updateStatusUI()
-            updateRevealVotesAccess().catch(() => {});
         }
 
         editAgendaBtn.onclick = () => {
@@ -570,6 +567,7 @@
                 return
             }
 
+            setPublishLoading(true)
             try {
                 const preserveLive = meetingIsLive
                 await uploadToServer(getTableValues(preserveLive))
@@ -582,7 +580,6 @@
                 window.parent.postMessage({ type: "tm-meeting-live", isLive: preserveLive }, "*")
                 exitEditMode()
                 updateStatusUI()
-                updateRevealVotesAccess().catch(() => {})
                 showAdminMessage(
                     preserveLive
                         ? "Agenda updated. Meeting is still live — feedback and voting continue."
@@ -592,75 +589,18 @@
             } catch (error) {
                 console.error("Publish failed:", error)
                 showAdminMessage(error?.message || "Could not publish the agenda. Try again.", "error")
+            } finally {
+                setPublishLoading(false)
             }
         }
 
         previewBtn.onclick = () => {
+            syncDerivedAgendaMemberCopies();
             document.getElementById("previewAgendaList").innerHTML = buildAdminPreviewHtml()
             previewDialog.showModal()
         }
 
         previewCloseBtn.onclick = () => previewDialog.close()
-
-        async function updateRevealVotesAccess() {
-            if (isEditing || !agendaExists || !meetingIsLive) {
-                revealVotesBtn.hidden = true;
-                return;
-            }
-
-            try {
-                const user = await requireAuthUser();
-                const profileSnap = await getDoc(doc(db, "users", user.uid));
-                const userName = profileSnap.exists() ? profileSnap.data().name : "";
-                const canReveal = isUserVoteCounterForAgenda(
-                    publishedAgendaDoc,
-                    user.uid,
-                    userName
-                );
-                revealVotesBtn.hidden = !canReveal;
-            } catch {
-                revealVotesBtn.hidden = true;
-            }
-        }
-
-        async function revealVotes() {
-            if (!meetingIsLive) {
-                showAdminMessage("Turn on Meeting live to reveal votes.", "error");
-                return;
-            }
-
-            try {
-                const user = await requireAuthUser();
-                const profileSnap = await getDoc(doc(db, "users", user.uid));
-                const userName = profileSnap.exists() ? profileSnap.data().name : "";
-                if (!isUserVoteCounterForAgenda(publishedAgendaDoc, user.uid, userName)) {
-                    showAdminMessage(
-                        "Only tonight's Vote Counter can reveal votes while the meeting is live.",
-                        "error"
-                    );
-                    return;
-                }
-            } catch {
-                showAdminMessage("Sign in to reveal votes.", "error");
-                return;
-            }
-
-            voteResultsBody.innerHTML = `<p class="tm-vote-results__loading">Loading votes…</p>`;
-            voteResultsDialog.showModal();
-
-            try {
-                await loadVoteResultsInto(voteResultsBody, db);
-            } catch (error) {
-                console.error("Failed to load votes:", error);
-                voteResultsBody.innerHTML = `<p class="tm-vote-results__empty">Could not load votes. Try again in a moment.</p>`;
-            }
-        }
-
-        revealVotesBtn.onclick = () => {
-            revealVotes();
-        };
-
-        voteResultsCloseBtn.onclick = () => voteResultsDialog.close();
 
         clearDialogCancelBtn.onclick = () => {
             document.getElementById("clearDialog").close()
@@ -687,7 +627,6 @@
             setMeetingLiveToggle(nextLive)
             meetingIsLive = nextLive
             updateStatusUI()
-            updateRevealVotesAccess().catch(() => {});
             window.parent.postMessage({ type: "tm-meeting-live", isLive: nextLive }, "*");
 
             try {
@@ -710,7 +649,6 @@
                 setMeetingLiveToggle(revertLive)
                 meetingIsLive = revertLive
                 updateStatusUI()
-                updateRevealVotesAccess().catch(() => {});
                 window.parent.postMessage({ type: "tm-meeting-live", isLive: revertLive }, "*");
                 console.error("setMeetingLive failed:", error)
                 const hint = error?.message?.includes("No published agenda")
@@ -749,6 +687,7 @@
                     select.value = previous;
                 }
             });
+            syncDerivedAgendaMemberCopies();
         }
 
         async function getMembers() {
@@ -840,17 +779,13 @@
             }
         });
 
-        document.getElementById("tmRole").addEventListener("change", function  () {
-            const value = this.value 
-            document.getElementById("tmRoleCopy").textContent = value
-            document.getElementById("tmRoleCopyDisplay").textContent = value || "Unassigned"
-        })
+        function onPrimaryRoleChange() {
+            syncDerivedAgendaMemberCopies();
+            highlightIncompleteAdminRoles();
+        }
 
-        document.getElementById("generalRole").addEventListener("change", function  () {
-            const value = this.value 
-            document.getElementById("generalRoleCopy").textContent = value
-            document.getElementById("generalRoleCopyDisplay").textContent = value || "Unassigned"
-        })
+        document.getElementById("tmRole")?.addEventListener("change", onPrimaryRoleChange);
+        document.getElementById("generalRole")?.addEventListener("change", onPrimaryRoleChange);
 
         function getTableValues(publishLive = isMeetingLiveOn()) {
             const assignments = [];
@@ -1008,16 +943,6 @@
                     const element = document.getElementById(assignment.id);
                     if (element) element.value = assignment.member || "";
 
-                    if (assignment.id === "tmRole") {
-                        document.getElementById("tmRoleCopy").innerText = assignment.member || "";
-                        document.getElementById("tmRoleCopyDisplay").textContent = assignment.member || "Unassigned";
-                    }
-
-                    if (assignment.id === "generalRole") {
-                        document.getElementById("generalRoleCopy").innerText = assignment.member || "";
-                        document.getElementById("generalRoleCopyDisplay").textContent = assignment.member || "Unassigned";
-                    }
-
                     if (assignment.id.endsWith("Speaker")) {
                         const pathEl = document.getElementById(`${assignment.id}Path`);
                         const titleEl = document.getElementById(`${assignment.id}Title`);
@@ -1034,7 +959,7 @@
                 highlightIncompleteAdminRoles()
                 updatePublishState()
                 updateStatusUI()
-                updateRevealVotesAccess().catch(() => {});
+                syncDerivedAgendaMemberCopies()
             } catch (error) {
                 showAdminMessage("Could not load the saved agenda.", "error")
             }
@@ -1046,10 +971,7 @@
                 if (select) select.value = "";
             });
 
-            document.getElementById("tmRoleCopy").textContent = ""
-            document.getElementById("generalRoleCopy").textContent = ""
-            document.getElementById("tmRoleCopyDisplay").textContent = "Unassigned"
-            document.getElementById("generalRoleCopyDisplay").textContent = "Unassigned"
+            syncDerivedAgendaMemberCopies()
             meetingDateInput.value = ""
 
             ["firstSpeaker", "secondSpeaker", "thirdSpeaker", "fourthSpeaker"].forEach((id) => {

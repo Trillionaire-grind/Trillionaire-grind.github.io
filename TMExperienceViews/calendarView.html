@@ -190,7 +190,7 @@
 
     <script type="module">
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { refreshAgendaCards } from "./scripts/tmAgendaInit.js";
+        import { refreshAgendaCards } from "./scripts/tmAgendaInit.js?v=3";
         import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
         import { subscribeAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=6";
         import {
@@ -198,7 +198,8 @@
             formatMeetingDate,
             getAgendaMeta,
             normalizeAgendaDoc,
-        } from "./scripts/tmAgendaData.js?v=3";
+            syncDerivedAgendaMemberCopies,
+        } from "./scripts/tmAgendaData.js?v=6";
 
         const auth = await getTmAuth();
         const db = getTmDb();
@@ -230,6 +231,7 @@
             }
 
             document.getElementById("meetingDateLbl").textContent = formatMeetingDate(getAgendaMeta(dataArray).date);
+            syncDerivedAgendaMemberCopies();
         }
 
         function renderAgenda(loaded) {

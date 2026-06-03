@@ -1,4 +1,9 @@
-import { formatAgendaTime } from "./tmAgendaInit.js";
+import { formatAgendaTime } from "./tmAgendaInit.js?v=2";
+import {
+  DERIVED_AGENDA_MEMBER_BY_COPY_ID,
+  resolveAgendaMemberCell,
+  syncDerivedAgendaMemberCopies,
+} from "./tmAgendaData.js?v=6";
 
 const ADMIN_SECTIONS = [
   { beforeIndex: 0, label: "Opening" },
@@ -112,11 +117,19 @@ export function buildAdminAgendaCards(tableSelector = "#agenda", listHostId = "t
       select.addEventListener("change", () => {
         item.classList.toggle("is-incomplete", !select.value.trim());
       });
+    } else if (copyTarget && DERIVED_AGENDA_MEMBER_BY_COPY_ID[copyTarget]) {
+      item.classList.add("tm-admin-card--derived");
+      const name = resolveAgendaMemberCell(memberCell);
+      const value = document.createElement("span");
+      value.className = "tm-agenda-member";
+      value.id = `${copyTarget}Display`;
+      value.textContent = name;
+      memberSlot.appendChild(value);
     } else if (copyTarget) {
       const value = document.createElement("span");
       value.className = "tm-agenda-member";
       value.id = `${copyTarget}Display`;
-      value.textContent = memberCell.textContent.trim() || "Unassigned";
+      value.textContent = resolveAgendaMemberCell(memberCell) || "Unassigned";
       memberSlot.appendChild(value);
     } else {
       const value = document.createElement("span");
@@ -136,6 +149,7 @@ export function buildAdminAgendaCards(tableSelector = "#agenda", listHostId = "t
   });
 
   listHost.dataset.ready = "1";
+  syncDerivedAgendaMemberCopies();
 }
 
 export function setAdminCardsEditable(enabled) {
@@ -170,11 +184,13 @@ export function buildAdminPreviewHtml() {
     const linkedId = item.querySelector(".tm-agenda-member")?.id;
     let member = select?.value || staticText || "Unassigned";
 
-    if (linkedId === "generalRoleCopyDisplay") {
-      member = document.getElementById("generalRoleCopy")?.textContent.trim() || member;
-    }
-    if (linkedId === "tmRoleCopyDisplay") {
-      member = document.getElementById("tmRoleCopy")?.textContent.trim() || member;
+    if (linkedId?.endsWith("Display")) {
+      const copyId = linkedId.replace(/Display$/, "");
+      const copyCell = document.getElementById(copyId);
+      member = resolveAgendaMemberCell(copyCell);
+      if (DERIVED_AGENDA_MEMBER_BY_COPY_ID[copyId]) {
+        member = member || "";
+      }
     }
 
     html += `

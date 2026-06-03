@@ -37,7 +37,64 @@ export const AGENDA_ROLE_IDS = Object.entries(AGENDA_ROLE_INDEX)
   .sort((left, right) => left[1] - right[1])
   .map(([roleId]) => roleId);
 
+/** Closing rows that reuse Toastmaster / General Evaluator assignments. */
+export const DERIVED_AGENDA_MEMBER_BY_COPY_ID = {
+  generalRoleCopy: "generalRole",
+  tmRoleCopy: "tmRole",
+};
+
 const LEGACY_ROLE_COUNT = 14;
+
+export function readAgendaMemberElement(element) {
+  if (!element) return "";
+  if (element.tagName === "SELECT") return String(element.value || "").trim();
+  return String(element.textContent || "").trim();
+}
+
+export function resolveAgendaMemberCell(memberCell) {
+  if (!memberCell) return "";
+
+  const sourceId = DERIVED_AGENDA_MEMBER_BY_COPY_ID[memberCell.id];
+  if (sourceId) {
+    return readAgendaMemberElement(document.getElementById(sourceId));
+  }
+
+  return readAgendaMemberElement(memberCell);
+}
+
+export function refreshLinkedMemberSelects() {
+  if (typeof document === "undefined") return;
+
+  document.querySelectorAll("select[data-linked-to]").forEach((linked) => {
+    const source = document.getElementById(linked.dataset.linkedTo);
+    if (!source) return;
+
+    if (linked.options.length !== source.options.length) {
+      linked.innerHTML = source.innerHTML;
+    }
+
+    linked.value = source.value;
+    linked.disabled = source.disabled;
+  });
+}
+
+export function syncDerivedAgendaMemberCopies() {
+  if (typeof document === "undefined") return;
+
+  Object.entries(DERIVED_AGENDA_MEMBER_BY_COPY_ID).forEach(([copyId, sourceId]) => {
+    const copy = document.getElementById(copyId);
+    const source = document.getElementById(sourceId);
+    if (!copy || !source) return;
+
+    const name = readAgendaMemberElement(source);
+    copy.textContent = name;
+
+    const display = document.getElementById(`${copyId}Display`);
+    if (display) display.textContent = name;
+  });
+
+  refreshLinkedMemberSelects();
+}
 
 export function isLegacyAgendaData(dataArray) {
   if (!Array.isArray(dataArray)) return false;
