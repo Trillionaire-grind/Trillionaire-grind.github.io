@@ -133,7 +133,7 @@
                     <button type="button" id="logInBtn" class="tm-btn tm-btn--primary">Log in</button>
                     <button type="button" id="goToRegisterBtn" class="tm-btn tm-btn--secondary">Create account</button>
                 </div>
-                <p class="tm-version">version 2.0.0.5</p>
+                <p class="tm-version">version 2.0.0.6</p>
             </div>
         </div>
 
@@ -190,6 +190,7 @@
             let authUiReady = false
             let isSigningOut = false
             let isSigningIn = false
+            let currentSignedInUid = null
 
             var calendarView = document.getElementById('calendarView');
             var feedbackView = document.getElementById('feedbackView')
@@ -687,13 +688,18 @@
                 }
 
                 if (user) {
-                    await checkRole(user.uid);
+                    const alreadyActive = !mainViewDiv.hidden && currentSignedInUid === user.uid;
+                    currentSignedInUid = user.uid;
+                    if (!alreadyActive) {
+                        await checkRole(user.uid);
+                    }
                     queueAuthBroadcastToFrames();
                     if (pendingWelcomeVariant) {
                         openWelcomeModal(pendingWelcomeVariant);
                         pendingWelcomeVariant = null;
                     }
                 } else if (authUiReady) {
+                    currentSignedInUid = null;
                     broadcastAuthToFrames(null);
                     showAuthScreen();
                 }

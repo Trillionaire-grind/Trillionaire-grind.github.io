@@ -278,11 +278,14 @@
         }
 
         backBtn.addEventListener("click", () => {
-            if (window.opener && !window.opener.closed) {
-                window.close();
-                return;
-            }
-            window.location.href = "./profileView.html";
+            try {
+                const shell = window.opener?.parent ?? window.opener;
+                if (shell && !shell.closed) {
+                    if (typeof shell.changeTo === "function") shell.changeTo(4);
+                    shell.focus?.();
+                }
+            } catch {}
+            window.close();
         });
 
         const { speechId, userId } = getSpeechParams();
