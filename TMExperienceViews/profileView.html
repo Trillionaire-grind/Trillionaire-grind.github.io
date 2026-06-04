@@ -317,6 +317,7 @@
         }
 
         async function syncProfileForUid(userId) {
+            profileSession += 1;
             const session = profileSession;
             if (!userId) {
                 resetProfileView();
@@ -365,7 +366,7 @@
         }
 
         function openIndividualSpeech(speechId, uid) {
-            const url = `./individualSpeech.html?v=9&speech=${encodeURIComponent(speechId)}&user=${encodeURIComponent(uid)}`;
+            const url = `./individualSpeech.html?v=10&speech=${encodeURIComponent(speechId)}&user=${encodeURIComponent(uid)}`;
             window.open(url, "_blank")?.focus();
         }
 

@@ -367,8 +367,13 @@
                     return;
                 }
 
+                if (voteResultsDialog.open) return;
+                voteResultsBody.innerHTML = `<p class="tm-vote-results__loading">Loading votes…</p>`;
+                voteResultsDialog.showModal();
+
                 const user = await requireTmAuthUser(auth, { shellUid });
                 if (!user) {
+                    closeVoteResultsDialog();
                     showTmToast("Sign in to reveal votes.", { type: "error" });
                     return;
                 }
@@ -380,14 +385,13 @@
                 }
 
                 if (!isUserVoteCounterForAgenda(publishedAgendaDoc, user.uid, userName)) {
+                    closeVoteResultsDialog();
                     showTmToast(
                         "Only tonight's Vote Counter can reveal votes while the meeting is live.",
                         { type: "error" }
                     );
                     return;
                 }
-
-                voteResultsDialog.showModal();
 
                 try {
                     await loadVoteResultsInto(voteResultsBody, db);

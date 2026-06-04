@@ -374,9 +374,9 @@
             highlightIncompleteAdminRoles,
             setAdminCardsEditable,
         } from "./scripts/tmAdminAgendaInit.js?v=5";
-        import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
+        import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js?v=2";
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
+        import { getTmApp, getTmAuth, getTmDb, requireTmAuthUser, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=6";
 
         const app = getTmApp();
         const analytics = getAnalytics(app);
