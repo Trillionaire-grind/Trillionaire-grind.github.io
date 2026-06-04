@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=33">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=34">
 </head>
 <body class="tm-body tm-speech-detail-body">
     <div class="tm-page tm-speech-detail-page">
@@ -55,7 +55,7 @@
 
     <script type="module">
         import { collection, doc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js";
+        import { getTmAuth, getTmDb, ensureFirestoreAuth } from "./scripts/tmFirebase.js?v=6";
         import { formatMeetingDate, getAgendaMeta, loadAndMigrateAgendaDoc, normalizeAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
         import { loadAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=3";
         import {

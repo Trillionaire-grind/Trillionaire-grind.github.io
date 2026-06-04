@@ -1517,7 +1517,7 @@ html:has(.tm-speeches-body) {
   background: var(--tm-surface);
   border: 1px solid var(--tm-border);
   border-radius: var(--tm-radius);
-  padding: 40px 12px 10px;
+  padding: 60px 12px 10px;
   box-shadow: var(--tm-shadow);
   overflow: hidden;
 }
@@ -1802,7 +1802,7 @@ html:has(.tm-speeches-body) {
   }
 
   .tm-speeches-card {
-    padding-top: 36px;
+    padding-top: 56px;
   }
 
   .tm-speaker-bio {
