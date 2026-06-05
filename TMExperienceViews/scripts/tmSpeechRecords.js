@@ -51,13 +51,76 @@ export function resolveSpeechDisplay(speechId, userId, speechData, agendaDoc) {
   };
 }
 
+export function readFeedbackAuthorName(data) {
+  return String(data?.authorName || data?.name || data?.submittedBy || "").trim();
+}
+
+export function buildFeedbackDocPayload({ feedback, authorName, fromUid }) {
+  return {
+    feedback: String(feedback || "").trim(),
+    authorName: String(authorName || "").trim(),
+    fromUid: String(fromUid || "").trim(),
+  };
+}
+
+export function readFeedbackFromUid(data) {
+  return String(data?.fromUid || data?.uid || "").trim();
+}
+
 export function collectFeedbackEntries(snapshot) {
   const entries = [];
   snapshot.forEach((feedbackDoc) => {
-    const text = String(feedbackDoc.data().feedback || "").trim();
-    if (text) entries.push({ id: feedbackDoc.id, text });
+    const data = feedbackDoc.data();
+    const text = String(data.feedback || "").trim();
+    if (!text) return;
+    entries.push({
+      id: feedbackDoc.id,
+      text,
+      name: readFeedbackAuthorName(data),
+      fromUid: readFeedbackFromUid(data),
+    });
   });
   return entries;
+}
+
+export async function enrichFeedbackAuthorNames(db, entries, { doc, getDoc }) {
+  if (!entries.length) return [];
+
+  const profileNames = new Map();
+  const uidsToLoad = [
+    ...new Set(
+      entries
+        .filter((entry) => !entry.name && entry.fromUid)
+        .map((entry) => entry.fromUid)
+    ),
+  ];
+
+  await Promise.all(
+    uidsToLoad.map(async (uid) => {
+      try {
+        const profileSnap = await getDoc(doc(db, "users", uid));
+        const profileName = profileSnap.exists()
+          ? String(profileSnap.data().name || "").trim()
+          : "";
+        profileNames.set(uid, profileName);
+      } catch (error) {
+        console.warn("Could not load feedback author profile:", uid, error);
+        profileNames.set(uid, "");
+      }
+    })
+  );
+
+  return entries.map((entry) => {
+    const storedName = String(entry.name || "").trim();
+    const fromUid = String(entry.fromUid || "").trim();
+    const resolvedName = storedName || (fromUid ? profileNames.get(fromUid) || "" : "");
+    const displayName = resolvedName || (fromUid ? "Club member" : "");
+
+    return {
+      ...entry,
+      name: displayName,
+    };
+  });
 }
 
 /**

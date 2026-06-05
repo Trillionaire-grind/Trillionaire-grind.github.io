@@ -1293,6 +1293,28 @@ html:has(.tm-tool-sheet-body) {
   padding: 16px;
 }
 
+.tm-speech-detail-feedback-card__header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 10px;
+}
+
+.tm-speech-detail-feedback-card__author-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tm-muted, #5c6b7a);
+}
+
+.tm-speech-detail-feedback-card__author {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--tm-navy);
+}
+
 .tm-speech-detail-feedback-card__text {
   margin: 0;
   font-size: 15px;

@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/tmTheme.css?v=34">
+    <link rel="stylesheet" href="assets/tmTheme.css?v=38">
 </head>
 <body class="tm-body tm-speech-detail-body">
     <div class="tm-page tm-speech-detail-page">
@@ -59,10 +59,10 @@
         import { formatMeetingDate, getAgendaMeta, loadAndMigrateAgendaDoc, normalizeAgendaDoc } from "./scripts/tmAgendaData.js?v=3";
         import { loadAgendaDoc } from "./scripts/tmAgendaFirestore.js?v=3";
         import {
-            collectFeedbackEntries,
             getFeedbackSpeechIds,
+            readFeedbackAuthorName,
             resolveSpeechDisplay,
-        } from "./scripts/tmSpeechRecords.js?v=2";
+        } from "./scripts/tmSpeechRecords.js?v=5";
 
         const auth = await getTmAuth();
         const db = getTmDb();
@@ -111,9 +111,72 @@
             return matches.map((part) => part.trim()).filter(Boolean);
         }
 
-        function createFeedbackCard(text) {
+        function readFeedbackEntry(feedbackDoc) {
+            const data = feedbackDoc.data() || {};
+            const text = String(data.feedback || "").trim();
+            if (!text) return null;
+
+            return {
+                id: feedbackDoc.id,
+                text,
+                authorName: readFeedbackAuthorName(data),
+                fromUid: String(data.fromUid || "").trim(),
+            };
+        }
+
+        async function resolveFeedbackAuthors(entries) {
+            const authorNames = new Map(
+                entries.map((entry) => [entry.id, String(entry.authorName || "").trim()])
+            );
+            const uidsToLoad = [
+                ...new Set(
+                    entries
+                        .filter((entry) => !authorNames.get(entry.id) && entry.fromUid)
+                        .map((entry) => entry.fromUid)
+                ),
+            ];
+
+            await Promise.all(
+                uidsToLoad.map(async (uid) => {
+                    try {
+                        const profileSnap = await getDoc(doc(db, "users", uid));
+                        const profileName = profileSnap.exists()
+                            ? String(profileSnap.data().name || "").trim()
+                            : "";
+                        entries
+                            .filter((entry) => entry.fromUid === uid && !authorNames.get(entry.id))
+                            .forEach((entry) => {
+                                if (profileName) authorNames.set(entry.id, profileName);
+                            });
+                    } catch (error) {
+                        console.warn("Could not load feedback author profile:", uid, error);
+                    }
+                })
+            );
+
+            return entries.map((entry) => ({
+                ...entry,
+                authorName: authorNames.get(entry.id) || (entry.fromUid ? "Club member" : "Club member"),
+            }));
+        }
+
+        function createFeedbackCard({ text, authorName = "Club member" }) {
             const card = document.createElement("article");
             card.className = "tm-card tm-speech-detail-feedback-card";
+
+            const header = document.createElement("div");
+            header.className = "tm-speech-detail-feedback-card__header";
+
+            const labelEl = document.createElement("span");
+            labelEl.className = "tm-speech-detail-feedback-card__author-label";
+            labelEl.textContent = "From";
+
+            const nameEl = document.createElement("span");
+            nameEl.className = "tm-speech-detail-feedback-card__author";
+            nameEl.textContent = String(authorName || "Club member").trim() || "Club member";
+
+            header.append(labelEl, nameEl);
+            card.appendChild(header);
 
             const sentences = splitSentences(text);
             const needsTruncation = sentences.length > 2;
@@ -158,8 +221,8 @@
             feedbackCount.textContent = String(entries.length);
             feedbackEmpty.hidden = entries.length > 0;
 
-            entries.forEach(({ text }) => {
-                feedbackList.appendChild(createFeedbackCard(text));
+            entries.forEach(({ text, authorName }) => {
+                feedbackList.appendChild(createFeedbackCard({ text, authorName }));
             });
         }
 
@@ -187,9 +250,21 @@
 
             const speechIds = getFeedbackSpeechIds(speechId, agendaMeetingDate);
             const mergedEntries = new Map();
+            let publishGeneration = 0;
 
-            function publishFeedback() {
-                renderFeedbackEntries([...mergedEntries.values()]);
+            async function publishFeedback() {
+                const generation = ++publishGeneration;
+                const entries = [...mergedEntries.values()];
+
+                renderFeedbackEntries(entries);
+
+                try {
+                    const resolved = await resolveFeedbackAuthors(entries);
+                    if (generation !== publishGeneration) return;
+                    renderFeedbackEntries(resolved);
+                } catch (error) {
+                    console.error("Failed to resolve feedback author names:", error);
+                }
             }
 
             const unsubscribers = speechIds.map((id) =>
@@ -200,8 +275,9 @@
                             .filter((key) => key.startsWith(`${id}:`))
                             .forEach((key) => mergedEntries.delete(key));
 
-                        collectFeedbackEntries(snapshot).forEach((entry) => {
-                            mergedEntries.set(`${id}:${entry.id}`, entry);
+                        snapshot.forEach((feedbackDoc) => {
+                            const entry = readFeedbackEntry(feedbackDoc);
+                            if (entry) mergedEntries.set(`${id}:${entry.id}`, entry);
                         });
 
                         publishFeedback();

@@ -195,7 +195,7 @@
                 isUserVoteCounterForAgenda,
                 EVALUATOR_ROLE_IDS,
             } from "./scripts/tmAgendaData.js?v=8";
-            import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
+            import { buildFeedbackDocPayload, buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js?v=5";
             import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc, TM_CLUB_ID } from "./scripts/tmAgendaFirestore.js?v=6";
             import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
 
@@ -444,6 +444,29 @@
                 document.getElementById("feedbackDialog").classList.add("is-open");
             }
 
+            async function resolveFeedbackAuthorName(user) {
+                if (!user) return "";
+
+                let userName = "";
+                try {
+                    const profileSnap = await getDoc(doc(db, "users", user.uid));
+                    if (profileSnap.exists()) {
+                        userName = String(profileSnap.data().name || "").trim();
+                    }
+                } catch (error) {
+                    console.warn("Could not load profile for feedback:", error);
+                }
+
+                if (!userName) {
+                    userName = String(user.displayName || user.email || "").trim();
+                    if (userName.includes("@")) {
+                        userName = userName.split("@")[0];
+                    }
+                }
+
+                return userName || "Club member";
+            }
+
             async function addFeedback() {
                 const feedbackValue = feedbackTV.value.trim();
                 const speaker = speakers[index];
@@ -461,19 +484,35 @@
                     return;
                 }
 
-                try {
-                    await setDoc(
-                        doc(db, "users", id, "speeches", currentMeetingDate),
-                        buildSpeechDocPayload({
-                            path: speaker.path,
-                            title: speaker.title,
-                        }),
-                        { merge: true }
-                    );
+                const user = await requireTmAuthUser(auth, { shellUid });
+                if (!user) {
+                    showTmToast("Sign in to submit feedback.", { type: "error" });
+                    return;
+                }
 
-                    await addDoc(collection(db, "users", id, "speeches", currentMeetingDate, "feedback"), {
-                        feedback: feedbackValue,
+                try {
+                    const authorName = await resolveFeedbackAuthorName(user);
+                    const speechPayload = buildSpeechDocPayload({
+                        path: speaker.path,
+                        title: speaker.title,
                     });
+
+                    if (Object.keys(speechPayload).length) {
+                        await setDoc(
+                            doc(db, "users", id, "speeches", currentMeetingDate),
+                            speechPayload,
+                            { merge: true }
+                        );
+                    }
+
+                    await addDoc(
+                        collection(db, "users", id, "speeches", currentMeetingDate, "feedback"),
+                        buildFeedbackDocPayload({
+                            feedback: feedbackValue,
+                            authorName,
+                            fromUid: user.uid,
+                        })
+                    );
 
                     showTmToast("Feedback submitted. Thank you!", { type: "success" });
                     feedbackTV.value = "";

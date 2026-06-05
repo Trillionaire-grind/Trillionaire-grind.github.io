@@ -82,6 +82,10 @@ service cloud.firestore {
         );
     }
 
+    function isSpeechMetadataPayload() {
+      return request.resource.data.keys().hasOnly(['path', 'title', 'speechTitle']);
+    }
+
     // --- Liv Lakay ---
     match /accessCodes/{codeId} {
       allow get: if resource.data.consumed == false &&
@@ -165,16 +169,26 @@ service cloud.firestore {
           || (signedIn()
             && request.auth.uid == userId
             && isTmMember()
-            && request.resource.data.keys().hasOnly(['path', 'title', 'speechTitle']));
+            && isSpeechMetadataPayload())
+          || (signedIn()
+            && request.auth.uid != userId
+            && isTmMember()
+            && canAccessUser(userId)
+            && isSpeechMetadataPayload());
         allow delete: if isTmAdmin();
 
         match /feedback/{feedbackId} {
           allow read: if canAccessUser(userId) || isTmAdmin();
           allow create: if isTmMember()
             && request.auth.uid != userId
+            && request.resource.data.keys().hasOnly(['feedback', 'authorName', 'fromUid'])
             && request.resource.data.feedback is string
             && request.resource.data.feedback.size() > 0
-            && request.resource.data.feedback.size() <= 8000;
+            && request.resource.data.feedback.size() <= 8000
+            && request.resource.data.authorName is string
+            && request.resource.data.authorName.size() > 0
+            && request.resource.data.authorName.size() <= 120
+            && request.resource.data.fromUid == request.auth.uid;
           allow update, delete: if false;
         }
       }
