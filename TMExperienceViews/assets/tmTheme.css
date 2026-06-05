@@ -1733,6 +1733,11 @@ html:has(.tm-speeches-body) {
   overflow: hidden;
 }
 
+.tm-speaker-bio.is-empty {
+  color: var(--tm-muted);
+  font-style: italic;
+}
+
 .tm-speeches-feedback-btn {
   width: auto;
   margin: 0;

@@ -223,6 +223,23 @@ export function getSpeakerAssignments(dataArray) {
   });
 }
 
+/** Merge published role metadata (userId, bio, image) from agenda.roles onto a row assignment. */
+export function mergeAssignmentWithRoleMeta(assignment, roles = {}) {
+  if (!assignment?.id) return assignment;
+
+  const role = roles[assignment.id];
+  if (!role) return assignment;
+
+  return {
+    ...assignment,
+    userId: assignment.userId || role.userId || "",
+    imageUrl: assignment.imageUrl || role.imageUrl || "",
+    bio: assignment.bio || role.bio || "",
+    path: assignment.path || role.path || "",
+    title: assignment.title || role.title || role.speechTitle || "",
+  };
+}
+
 /** True when the signed-in user is assigned Vote Counter on the published agenda. */
 export function isUserVoteCounterForAgenda(agendaDoc, userId, userName = "") {
   if (!userId || !agendaDoc) return false;

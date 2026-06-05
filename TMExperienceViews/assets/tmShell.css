@@ -136,6 +136,12 @@ body.tm-shell-body--auth {
   display: none !important;
 }
 
+/* Hide auth/main until Firebase finishes first auth read (prevents login flicker on refresh). */
+body.tm-shell-booting .tm-auth-screen,
+body.tm-shell-booting .tm-app-shell {
+  visibility: hidden;
+}
+
 .tm-auth-hero {
   text-align: center;
   max-width: 420px;

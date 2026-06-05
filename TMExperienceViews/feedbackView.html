@@ -7,7 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="assets/tmTheme.css?v=34">
+        <link rel="stylesheet" href="assets/tmTheme.css?v=35">
 
         <script>
             function closeVoteModal() {
@@ -174,7 +174,7 @@
 
         <script type="module">
             import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-            import { collection, doc, addDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+            import { collection, doc, addDoc, setDoc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
             import {
                 getTmAuth,
                 getTmDb,
@@ -189,13 +189,14 @@
                 findRoleAssignment,
                 formatMeetingDate,
                 getSpeakerAssignments,
+                mergeAssignmentWithRoleMeta,
                 normalizeAgendaDoc,
                 resolveMeetingDateFromAgenda,
                 isUserVoteCounterForAgenda,
                 EVALUATOR_ROLE_IDS,
-            } from "./scripts/tmAgendaData.js?v=7";
+            } from "./scripts/tmAgendaData.js?v=8";
             import { buildSpeechDocPayload } from "./scripts/tmSpeechRecords.js";
-            import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc } from "./scripts/tmAgendaFirestore.js?v=6";
+            import { subscribeAgendaDoc, isMeetingLive as readMeetingLiveFromDoc, TM_CLUB_ID } from "./scripts/tmAgendaFirestore.js?v=6";
             import { loadVoteResultsInto } from "./scripts/tmVoteReveal.js";
 
             const auth = await getTmAuth();
@@ -483,11 +484,39 @@
                 }
             }
 
+            async function buildMembersNameIndex() {
+                const index = new Map();
+                try {
+                    await resolveTmIframeAuth(auth, {
+                        shellUid,
+                        shellSignedIn,
+                        parentShell: parentShellAuth,
+                    });
+                    const snap = await getDocs(
+                        query(collection(db, "users"), where("clubId", "==", TM_CLUB_ID))
+                    );
+                    snap.forEach((docSnap) => {
+                        const name = String(docSnap.data().name || "").trim();
+                        if (name) index.set(name, docSnap.id);
+                    });
+                } catch (error) {
+                    console.warn("Could not load club members for speaker lookup:", error);
+                }
+                return index;
+            }
+
+            function resolveAssignmentUserId(assignment, membersByName) {
+                if (assignment.userId) return assignment.userId;
+                const name = String(assignment.member || "").trim();
+                if (!name || !membersByName?.size) return "";
+                return membersByName.get(name) || "";
+            }
+
             async function loadSpeakerProfile(assignment) {
                 const speaker = {
                     id: assignment.userId || "",
                     name: String(assignment.member || "").trim() || "Speaker",
-                    bio: "",
+                    bio: String(assignment.bio || "").trim(),
                     imageUrl: resolveSpeakerImage(assignment.imageUrl),
                     path: assignment.path || "",
                     title: assignment.title || "",
@@ -496,11 +525,16 @@
                 if (!assignment.userId) return speaker;
 
                 try {
+                    await resolveTmIframeAuth(auth, {
+                        shellUid,
+                        shellSignedIn,
+                        parentShell: parentShellAuth,
+                    });
                     const docSnap = await getDoc(doc(db, "users", assignment.userId));
                     if (docSnap.exists()) {
                         const data = docSnap.data();
                         speaker.name = data.name || speaker.name;
-                        speaker.bio = data.bio || speaker.bio;
+                        speaker.bio = String(data.bio || speaker.bio).trim();
                         speaker.imageUrl = resolveSpeakerImage(data.imageUrl || assignment.imageUrl);
                         speaker.id = assignment.userId;
                     }
@@ -554,12 +588,19 @@
                 meetingIsLive = loaded.isLive ?? readMeetingLiveFromDoc(loaded.data);
                 publishedAgendaDoc = loaded.data;
 
-                const normalized = normalizeAgendaDoc(loaded.data);
+                const agendaDoc = loaded.data;
+                const normalized = normalizeAgendaDoc(agendaDoc);
                 const data = normalized.data;
-                currentMeetingDate = resolveMeetingDateFromAgenda(loaded.data, data);
+                const roles = agendaDoc?.roles || {};
+                currentMeetingDate = resolveMeetingDateFromAgenda(agendaDoc, data);
                 updateMeetingMeta(currentMeetingDate);
 
-                const assignments = getSpeakerAssignments(data);
+                const membersByName = await buildMembersNameIndex();
+                const assignments = getSpeakerAssignments(data).map((assignment) => {
+                    const merged = mergeAssignmentWithRoleMeta(assignment, roles);
+                    const userId = resolveAssignmentUserId(merged, membersByName);
+                    return userId ? { ...merged, userId } : merged;
+                });
                 speakers = await Promise.all(assignments.map((assignment) => loadSpeakerProfile(assignment)));
 
                 speakers.forEach((speaker, speakerIndex) => {
@@ -622,7 +663,10 @@
                 document.getElementById("currentSpeakerName").textContent = speaker.name;
                 document.getElementById("currentSpeakerTitle").textContent = speaker.title || "";
                 document.getElementById("currentSpeakerPath").textContent = speaker.path || "";
-                document.getElementById("currentSpeakerBio").textContent = speaker.bio || "";
+                const bioEl = document.getElementById("currentSpeakerBio");
+                const hasBio = Boolean(String(speaker.bio || "").trim());
+                bioEl.textContent = hasBio ? speaker.bio : "No bio yet.";
+                bioEl.classList.toggle("is-empty", !hasBio);
 
                 const imgEl = document.getElementById("currentSpeakerImg");
                 const photoWrap = document.getElementById("speakerPhotoWrap");
