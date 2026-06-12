@@ -1,7 +1,13 @@
 import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 export function normalizeClubId(value) {
-  return String(value || "").trim();
+  return String(value || "").trim().toLowerCase();
+}
+
+export function clubIdsMatch(rawA, rawB) {
+  const a = normalizeClubId(rawA);
+  const b = normalizeClubId(rawB);
+  return Boolean(a) && a === b;
 }
 
 /**

@@ -1,0 +1,32 @@
+{
+  "name": "The Strangest Secret",
+  "short_name": "Strangest Secret",
+  "description": "Earl Nightingale's 30-day challenge — one goal on a card, listen daily.",
+  "start_url": "/strangestSecret.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/strangestSecretViews/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/strangestSecretViews/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/strangestSecretViews/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

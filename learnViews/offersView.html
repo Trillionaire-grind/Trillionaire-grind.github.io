@@ -137,6 +137,12 @@
       max-width: 36rem;
     }
 
+    .offers-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
     .offer-card {
       background: var(--surface);
       border-radius: var(--radius);
@@ -301,6 +307,7 @@
 
     .offer-visual--cover {
       background: #e8eaed;
+      min-height: 200px;
     }
 
     .offer-visual--cover img {
@@ -310,6 +317,32 @@
       height: 100%;
       object-fit: cover;
       object-position: center center;
+    }
+
+    .offer-visual--photo img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 35%;
+    }
+
+    .offer-visual--icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: linear-gradient(160deg, rgba(0, 32, 160, 0.06), rgba(211, 16, 52, 0.06));
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      min-height: 160px;
+    }
+
+    .offer-visual--icon img {
+      width: auto;
+      max-width: 100%;
+      max-height: 120px;
+      object-fit: contain;
     }
 
     .offer-visual--funnel {
@@ -379,174 +412,32 @@
         aspect-ratio: 2 / 3;
       }
 
-      .offer-visual--cover img {
+      .offer-visual--cover img,
+      .offer-visual--photo img {
         position: relative;
         inset: auto;
         height: 100%;
+      }
+
+      .offer-visual--photo {
+        aspect-ratio: 16 / 9;
+        max-height: 200px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="offers-page" data-filter="all">
-    <p class="offers-intro">
-      This site is mostly about <strong>education</strong> — notes on apps, business, and cities. Offers are different:
-      some help you <strong>earn</strong>, others are purely for <strong>enjoyment</strong>. Use the tabs below to focus on one lane.
-    </p>
-
-    <div class="offers-lanes" role="tablist" aria-label="Offer types">
-      <button type="button" class="offers-lane-pill offers-lane-pill--all is-active" role="tab" aria-selected="true" data-lane="all">
-        All offers
-      </button>
-      <button type="button" class="offers-lane-pill offers-lane-pill--earn" role="tab" aria-selected="false" data-lane="earn">
-        <span class="offers-lane-dot offers-lane-dot--earn" aria-hidden="true"></span>
-        Build &amp; earn — productive
-      </button>
-      <button type="button" class="offers-lane-pill offers-lane-pill--fun" role="tab" aria-selected="false" data-lane="fun">
-        <span class="offers-lane-dot offers-lane-dot--fun" aria-hidden="true"></span>
-        Entertainment — off the clock
-      </button>
-    </div>
-
-    <section class="offers-section offers-section--earn" aria-labelledby="earn-heading">
-      <div class="offers-section-head">
-        <h2 id="earn-heading">Build &amp; earn</h2>
-        <p>Practical offers tied to making money — learn the strategy, then hire us to implement if you want the shortcut.</p>
-      </div>
-
-      <article class="offer-card offer-card--earn">
-        <div class="offer-hero">
-          <div class="offer-copy">
-            <p class="offer-type">Productive · Service</p>
-            <h3>How To Build Your Own Online Marketing Funnel</h3>
-            <p class="offer-subtitle">We teach you what to do — and we can build it for you.</p>
-
-            <p class="offer-lead">
-              A funnel is not one page or one ad. It's the full path: stranger → lead → trust → purchase.
-              Most people jump straight to traffic and wonder why nothing converts.
-            </p>
-
-            <div class="offer-split">
-              <div class="offer-split-box">
-                <h4>Learn the how</h4>
-                <p>
-                  We walk you through what a real funnel needs — offer, landing page, capture, follow-up,
-                  checkout — and how the pieces connect before you spend on ads.
-                </p>
-              </div>
-              <div class="offer-split-box">
-                <h4>We build it</h4>
-                <p>
-                  Don't want to wire it yourself? We implement the funnel for you — pages, flow, and handoff —
-                  so you can focus on your product and sales.
-                </p>
-              </div>
-            </div>
-
-            <ul class="offer-list">
-              <li>For founders, creators, and sellers who need leads that actually convert</li>
-              <li>Education first — implementation optional</li>
-              <li>Aligned with the business notes on this site, applied to your offer</li>
-            </ul>
-
-            <div class="offer-actions">
-              <a class="btn-primary-offer" href="learn.html#speak" data-offers-nav="speak">Book a funnel build call</a>
-              <a class="btn-secondary-offer" href="learn.html#notes" data-offers-nav="notes">Read business notes</a>
-              <span class="offer-note">On the call we'll scope your offer and quote a build if you want done-for-you.</span>
-            </div>
-          </div>
-
-          <div class="offer-visual offer-visual--funnel" aria-hidden="true">
-            <img src="assets/banknote_b.svg" alt="">
-            <span>Traffic → Capture → Nurture → Convert</span>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <section class="offers-section offers-section--fun" aria-labelledby="fun-heading">
-      <div class="offers-section-head">
-        <h2 id="fun-heading">Entertainment</h2>
-        <p>Not everything here is a lesson. This is fiction — read it because you want to, not because it will teach you SQL.</p>
-      </div>
-
-      <article class="offer-card offer-card--fun">
-        <div class="offer-hero">
-          <div class="offer-copy">
-            <p class="offer-type">Entertainment · Fiction</p>
-            <h3>A Secret Attraction Between Mentor and Mentee</h3>
-            <p class="offer-subtitle">On mentorship, ambition, and the tension between guidance and desire.</p>
-
-            <p class="offer-lead">
-              What happens when the person shaping your future becomes the person you can't stop thinking about?
-              This book explores the emotional complexity of mentorship — respect, rivalry, attraction, and the
-              choices that define who you become.
-            </p>
-            <p class="offer-lead">
-              It's written for anyone who has ever had a mentor (or been one) and felt the line between
-              admiration and something deeper.
-            </p>
-
-            <ul class="offer-list">
-              <li>For readers who like character-driven stories with real stakes</li>
-              <li>If you've ever learned more from a person than from a textbook</li>
-              <li>If you're building a life and asking who you're becoming along the way</li>
-            </ul>
-
-            <div class="offer-actions">
-              <a
-                class="btn-primary-offer"
-                href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H"
-                target="_blank"
-                rel="noopener noreferrer">
-                Buy on Amazon
-              </a>
-              <span class="offer-note">Opens Amazon in a new tab</span>
-            </div>
-          </div>
-
-          <div class="offer-visual offer-visual--cover">
-            <img
-              src="../secretAttractionViews/assets/book_cover.jpg"
-              alt="Cover of A Secret Attraction Between Mentor and Mentee">
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <nav class="offers-links" aria-label="Related pages">
-      <a href="learn.html#notes" data-offers-nav="notes">Free education — notes</a>
-      <a href="learn.html#speak" data-offers-nav="speak">Talk to me</a>
-      <a href="learn.html#kotfe" data-offers-nav="kotfe">Mangé Lakay project</a>
-    </nav>
-  </div>
+  <div id="offersRoot" class="offers-page" data-filter="all"></div>
 
   <script type="module">
     import { initLearnNav, goToPage } from "./scripts/learnNav.js";
+    import { renderOffersPage, wireOffersPage } from "./scripts/offersPage.js";
+
     initLearnNav("offers");
 
-    document.querySelectorAll("[data-offers-nav]").forEach((el) => {
-      el.addEventListener("click", (event) => {
-        event.preventDefault();
-        goToPage(el.dataset.offersNav);
-      });
-    });
-
-    const offersPage = document.querySelector(".offers-page");
-    const laneTabs = document.querySelectorAll("[data-lane]");
-
-    laneTabs.forEach((tab) => {
-      tab.addEventListener("click", () => {
-        const lane = tab.dataset.lane;
-        offersPage.dataset.filter = lane;
-
-        laneTabs.forEach((t) => {
-          const active = t === tab;
-          t.classList.toggle("is-active", active);
-          t.setAttribute("aria-selected", active ? "true" : "false");
-        });
-      });
-    });
+    const root = document.getElementById("offersRoot");
+    renderOffersPage(root);
+    wireOffersPage(root, { goToPage });
   </script>
 </body>
 </html>

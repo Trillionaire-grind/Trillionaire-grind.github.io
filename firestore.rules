@@ -27,11 +27,19 @@ service cloud.firestore {
       return userExists() ? userData().clubId : '';
     }
 
+    function normalizeClubId(value) {
+      return value.lower();
+    }
+
+    function clubIdsMatch(storedClubId, expectedClubId) {
+      return normalizeClubId(storedClubId) == normalizeClubId(expectedClubId);
+    }
+
     // Signed in and in this club (or profile not created yet after Auth sign-in)
     function isTmMember() {
       return signedIn() && (
         !userExists()
-        || userClubId() == tmClub()
+        || clubIdsMatch(userClubId(), tmClub())
       );
     }
 
@@ -154,7 +162,7 @@ service cloud.firestore {
       );
       allow create: if signedIn()
         && request.auth.uid == userId
-        && request.resource.data.clubId == tmClub()
+        && clubIdsMatch(request.resource.data.clubId, tmClub())
         && request.resource.data.name is string
         && request.resource.data.email is string
         && !('role' in request.resource.data);

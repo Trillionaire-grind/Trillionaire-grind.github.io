@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" type="image/x-icon" href="../assets/book_cover.jpg"/>
+    <title>A Secret Attraction Between Mentor and Mentee</title>
+    <style>
+      :root {
+        --black: #000;
+        --red: #e50914;
+        --red-dark: #b8070f;
+        --yellow: #ffff3a;
+        --white: #fff;
+        --gray-100: #f7f7f7;
+        --gray-500: #888;
+        --max-width: 680px;
+        --sticky-h: 72px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: 0 0 var(--sticky-h);
+        font-family: Arial, Helvetica, sans-serif;
+        background: var(--white);
+        color: var(--black);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      header {
+        background: var(--black);
+        color: var(--white);
+        text-align: center;
+        padding: 18px 16px;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(14px, 3.5vw, 18px);
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .line {
+        height: 4px;
+        background: var(--red);
+      }
+
+      .hero {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 28px 20px 0;
+        text-align: center;
+      }
+
+      .badge {
+        display: inline-block;
+        background: var(--yellow);
+        color: var(--black);
+        font-size: 13px;
+        font-weight: 700;
+        padding: 8px 18px;
+        margin-bottom: 20px;
+      }
+
+      .headline {
+        font-size: clamp(26px, 6vw, 36px);
+        font-weight: 800;
+        line-height: 1.15;
+        margin: 0 0 12px;
+      }
+
+      .subhead {
+        font-size: clamp(15px, 3.5vw, 17px);
+        line-height: 1.45;
+        color: #333;
+        margin: 0 auto 28px;
+        max-width: 380px;
+      }
+
+      .cover-wrap {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 28px;
+      }
+
+      .cover-wrap img {
+        height: clamp(280px, 55vw, 420px);
+        width: auto;
+        display: block;
+        border-radius: 4px;
+        box-shadow:
+          0 4px 0 var(--red),
+          0 12px 32px rgba(0, 0, 0, 0.22);
+      }
+
+      .salesLetter {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 20px 32px;
+        line-height: 1.55;
+        font-size: 16px;
+      }
+
+      .salesLetter p {
+        margin: 0 0 16px;
+      }
+
+      .pull-quote {
+        border-left: 4px solid var(--red);
+        background: var(--gray-100);
+        padding: 14px 18px;
+        margin: 24px 0;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.4;
+      }
+
+      .bundle {
+        background: var(--black);
+        color: var(--white);
+        padding: 20px 20px;
+        margin: 28px 0;
+        border-top: 4px solid var(--red);
+      }
+
+      .bundle h2 {
+        margin: 0 0 12px;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: var(--yellow);
+      }
+
+      .bundle ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .bundle li {
+        position: relative;
+        padding: 8px 0 8px 22px;
+        border-bottom: 1px solid #333;
+        font-size: 15px;
+        line-height: 1.4;
+      }
+
+      .bundle li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .bundle li::before {
+        content: "♥";
+        position: absolute;
+        left: 0;
+        color: var(--red);
+        font-size: 12px;
+        top: 11px;
+      }
+
+      .cta-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 28px 0;
+      }
+
+      .cta-btn {
+        display: block;
+        width: 100%;
+        max-width: 340px;
+        background: var(--red);
+        color: var(--white);
+        text-align: center;
+        text-decoration: none;
+        font-size: 17px;
+        font-weight: 800;
+        padding: 16px 24px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        letter-spacing: 0.02em;
+        box-shadow: 0 4px 14px rgba(229, 9, 20, 0.35);
+        transition: background 0.2s, transform 0.15s;
+      }
+
+      .cta-btn:hover {
+        background: var(--red-dark);
+        transform: translateY(-1px);
+      }
+
+      .cta-sub {
+        display: block;
+        font-size: 12px;
+        font-weight: 400;
+        margin-top: 4px;
+        opacity: 0.85;
+      }
+
+      .ps {
+        border: 2px solid var(--yellow);
+        padding: 16px 18px;
+        margin-top: 28px;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .ps strong {
+        display: block;
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 6px;
+        color: var(--red);
+      }
+
+      footer {
+        background: var(--black);
+        color: var(--gray-500);
+        text-align: center;
+        font-size: 11px;
+        padding: 14px;
+      }
+
+      footer span {
+        color: var(--yellow);
+      }
+
+      .divider {
+        width: 48px;
+        height: 3px;
+        background: var(--red);
+        margin: 28px auto;
+      }
+
+      /* Sticky CTA */
+      .sticky-cta {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        background: var(--black);
+        border-top: 3px solid var(--red);
+        padding: 12px 16px;
+        display: flex;
+        justify-content: center;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .sticky-cta .cta-btn {
+        max-width: 420px;
+        margin: 0;
+        padding: 14px 20px;
+        font-size: 16px;
+        box-shadow: none;
+      }
+
+      @media (min-width: 600px) {
+        .hero {
+          padding-top: 40px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>A Secret Attraction Between Mentor and Mentee</h1>
+    </header>
+    <div class="line"></div>
+
+    <section class="hero">
+      <span class="badge">new black romance</span>
+      <h2 class="headline">
+        The Secret Attraction<br>Between LaShana &amp; Michael
+      </h2>
+      <p class="subhead">
+        Mentor. Mentee. One rule he never breaks — until she wins.
+      </p>
+    </section>
+
+    <div class="cover-wrap">
+      <img src="../assets/book_cover.jpg" alt="A Secret Attraction Between Mentor and Mentee book cover">
+    </div>
+
+    <div class="cta-wrap">
+      <a class="cta-btn" href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H" target="_blank" rel="noopener noreferrer">
+        Get My Copy on Amazon
+        <span class="cta-sub">Kindle &amp; Paperback</span>
+      </a>
+    </div>
+
+    <div class="salesLetter">
+      <p>LaShana built a hotel on family legacy — grandparents in hospitality, parents who met in a hotel, her name on the door.</p>
+
+      <p>She joins WEM at Tech &amp; Tech to grow faster. Michael Katz built the startup to $20M and mentors Black women entrepreneurs. His rule: never mentor a woman he's attracted to.</p>
+
+      <p>LaShana wins. The chemistry is instant. Both try to keep business and desire separate.</p>
+
+      <div class="pull-quote">
+        Will the attraction wreck everything they're building?
+      </div>
+
+      <div class="bundle">
+        <h2>Inside the book</h2>
+        <ul>
+          <li>Full novel — mentor/mentee forbidden romance</li>
+          <li>NYC startups, hotels, black excellence</li>
+          <li>Secrets that refuse to stay buried</li>
+        </ul>
+      </div>
+
+      <div class="divider"></div>
+
+      <p>Michael paused the video when he saw her name. Chris said ten women were texting him. Michael knew there weren't — LaShana wasn't texting at all.</p>
+
+      <div class="cta-wrap">
+        <a class="cta-btn" href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H" target="_blank" rel="noopener noreferrer">
+          Read It on Amazon
+        </a>
+      </div>
+
+      <div class="ps">
+        <strong>P.S.</strong>
+        He almost didn't let her in the program. Find out why — and what happens at the first dinner.
+      </div>
+    </div>
+
+    <footer>
+      <span>composer_2.5</span>
+    </footer>
+
+    <div class="sticky-cta">
+      <a class="cta-btn" href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H" target="_blank" rel="noopener noreferrer">
+        Get on Amazon →
+      </a>
+    </div>
+  </body>
+</html>
