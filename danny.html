@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Danny's Delights — artisan bakery in Naples, FL. Fresh croissants, custom cakes, breads, and cookies baked from scratch daily. Call to order.">
+    <meta name="theme-color" content="#3D7A52">
+    <meta property="og:title" content="Danny's Delights | Artisan Bakery — Naples, FL">
+    <meta property="og:description" content="Fresh-baked pastries, custom cakes, and artisan breads made with love in Naples, Florida.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="assets/cake.jpg">
+    <meta property="og:locale" content="en_US">
+    <title>Danny's Delights | Artisan Bakery — Naples, FL</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&family=Nunito:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ── Reset & Base ─────────────────────────────────────────── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --green:       #3D7A52;
+            --green-dark:  #2A5C3A;
+            --green-light: #6AAB82;
+            --green-bg:    #EBF5EE;
+            --green-pale:  #F4FAF6;
+            --lemon:       #F0F7A8;
+            --lemon-dark:  #C8D640;
+            --cream:       #FEFCF5;
+            --white:       #FFFFFF;
+            --text:        #1B2F22;
+            --text2:       #3D5446;
+            --text3:       #6B8070;
+            --text4:       #9DB8A4;
+            --border:      #D4E8D8;
+            --shadow:      0 4px 24px rgba(40,80,50,0.10);
+            --shadow-lg:   0 12px 48px rgba(40,80,50,0.14);
+            --radius:      14px;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Nunito', sans-serif; background: var(--cream); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        img { max-width: 100%; display: block; }
+        .hero-img-main img,
+        .sig-img img,
+        .about-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+        /* ── Buttons ──────────────────────────────────────────────── */
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 30px; border-radius: 50px; font-family: 'Nunito', sans-serif; font-size: 15px; font-weight: 800; cursor: pointer; border: none; transition: all 0.22s; letter-spacing: 0.02em; }
+        .btn-primary { background: var(--green); color: #fff; box-shadow: 0 4px 16px rgba(61,122,82,0.30); }
+        .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(61,122,82,0.35); }
+        .btn-outline { background: transparent; color: var(--green); border: 2.5px solid var(--green); }
+        .btn-outline:hover { background: var(--green); color: #fff; transform: translateY(-2px); }
+        .btn-white { background: #fff; color: var(--green-dark); }
+        .btn-white:hover { background: var(--lemon); transform: translateY(-2px); }
+
+        /* ── Section headers ──────────────────────────────────────── */
+        .section-tag { display: inline-block; background: var(--green-bg); color: var(--green-dark); font-size: 11px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; padding: 5px 14px; border-radius: 50px; margin-bottom: 14px; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; color: var(--text); line-height: 1.2; margin-bottom: 16px; }
+        .section-sub { font-size: 16px; color: var(--text2); max-width: 540px; line-height: 1.7; }
+        .section-head { margin-bottom: 52px; }
+        .section-head.center { text-align: center; }
+        .section-head.center .section-sub { margin: 0 auto; }
+
+        /* ── NAV ──────────────────────────────────────────────────── */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 0; transition: all 0.3s; }
+        nav.scrolled { background: rgba(254,252,245,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); box-shadow: 0 2px 20px rgba(40,80,50,0.08); }
+        .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px; max-width: 1180px; margin: 0 auto; }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: var(--text); }
+        .nav-logo span { color: var(--green); }
+        .nav-logo small { display: block; font-family: 'Nunito', sans-serif; font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-top: -2px; }
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        .nav-links a { font-size: 14px; font-weight: 700; color: var(--text2); transition: color 0.18s; letter-spacing: 0.02em; }
+        .nav-links a:hover { color: var(--green); }
+        .nav-cta { padding: 10px 22px; font-size: 13px; }
+        .hamburger { display: none; background: none; border: none; font-size: 26px; line-height: 1; cursor: pointer; color: var(--text); z-index: 1002; position: relative; width: 40px; height: 40px; padding: 0; }
+        .hamburger.open { font-size: 32px; font-weight: 300; }
+        .mobile-menu { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--cream); z-index: 999; flex-direction: column; align-items: center; justify-content: center; gap: 32px; }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--text); }
+        .mobile-menu a:hover { color: var(--green); }
+
+        /* ── Phone modal ──────────────────────────────────────────── */
+        .phone-modal-backdrop {
+            position: fixed; inset: 0; z-index: 3000;
+            background: rgba(30, 50, 38, 0.45);
+            backdrop-filter: blur(4px);
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.22s ease, visibility 0.22s;
+        }
+        .phone-modal-backdrop.visible { opacity: 1; visibility: visible; }
+        .phone-modal {
+            position: fixed; z-index: 3001;
+            top: 50%; left: 50%;
+            width: min(360px, calc(100vw - 32px));
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 24px;
+            padding: 36px 32px;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(40, 80, 50, 0.25);
+            opacity: 0; visibility: hidden;
+            transform: translate(-50%, calc(-50% + 12px)) scale(0.97);
+            transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+        }
+        .phone-modal.visible { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .phone-modal-icon { font-size: 40px; margin-bottom: 12px; }
+        .phone-modal-title { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .phone-modal-sub { font-size: 14px; color: var(--text2); margin-bottom: 20px; line-height: 1.6; }
+        .phone-modal-number { display: block; font-size: 28px; font-weight: 800; color: var(--green-dark); margin-bottom: 24px; letter-spacing: 0.02em; }
+        .phone-modal-close { position: absolute; top: 14px; right: 18px; background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text3); line-height: 1; }
+
+        /* ── HERO ─────────────────────────────────────────────────── */
+        #hero {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #F0FAF3 0%, #E6F5EB 40%, #F4FAF0 70%, #FEFCF5 100%);
+            display: flex; align-items: center;
+            position: relative; overflow: hidden;
+            padding-top: 80px;
+        }
+        .hero-decor { position: absolute; border-radius: 50%; opacity: 0.25; }
+        .hero-decor-1 { width: 500px; height: 500px; background: radial-gradient(circle, #6AAB82, transparent); top: -120px; right: -100px; }
+        .hero-decor-2 { width: 300px; height: 300px; background: radial-gradient(circle, #C8D640, transparent); bottom: 40px; left: -80px; }
+        .hero-decor-3 { width: 180px; height: 180px; background: radial-gradient(circle, #3D7A52, transparent); top: 30%; right: 30%; opacity: 0.12; }
+        .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; width: 100%; }
+        .hero-text .eyebrow { display: inline-flex; align-items: center; gap: 8px; background: var(--white); border: 1.5px solid var(--border); border-radius: 50px; padding: 6px 16px; font-size: 12px; font-weight: 800; color: var(--green-dark); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; box-shadow: var(--shadow); }
+        .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(42px, 5.5vw, 72px); font-weight: 900; color: var(--text); line-height: 1.1; margin-bottom: 22px; }
+        .hero-title em { font-style: italic; color: var(--green); }
+        .hero-sub { font-size: 18px; color: var(--text2); line-height: 1.7; margin-bottom: 36px; max-width: 440px; }
+        .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 48px; }
+        .hero-stats { display: flex; gap: 36px; }
+        .hero-stat-num { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--green); line-height: 1; }
+        .hero-stat-label { font-size: 12px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+        .hero-visual { position: relative; }
+        .hero-img-main { width: 100%; aspect-ratio: 4/5; border-radius: 28px; overflow: hidden; box-shadow: var(--shadow-lg); background: linear-gradient(160deg, #B5DCC0 0%, #7CBF93 40%, #4A9463 100%); position: relative; }
+        .hero-img-main .hero-emoji { font-size: 120px; filter: drop-shadow(0 8px 20px rgba(0,0,0,0.15)); }
+        .hero-badge { position: absolute; bottom: 28px; left: -24px; background: var(--white); border-radius: 16px; padding: 16px 20px; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; }
+        .hero-badge-icon { font-size: 28px; }
+        .hero-badge-text strong { display: block; font-size: 15px; font-weight: 800; color: var(--text); }
+        .hero-badge-text span { font-size: 12px; color: var(--text3); }
+        .hero-badge-2 { position: absolute; top: 28px; right: -20px; background: var(--green); border-radius: 16px; padding: 14px 18px; box-shadow: var(--shadow-lg); color: white; text-align: center; }
+        .hero-badge-2 strong { display: block; font-size: 20px; font-weight: 900; }
+        .hero-badge-2 span { font-size: 11px; opacity: 0.85; }
+
+        /* ── MARQUEE ──────────────────────────────────────────────── */
+        .marquee-strip { background: var(--green); padding: 14px 0; overflow: hidden; }
+        .marquee-track { display: flex; gap: 0; animation: marquee 22s linear infinite; white-space: nowrap; }
+        .marquee-item { display: inline-flex; align-items: center; gap: 12px; padding: 0 28px; font-size: 14px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 0.05em; text-transform: uppercase; }
+        .marquee-dot { width: 6px; height: 6px; background: rgba(255,255,255,0.5); border-radius: 50%; }
+        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+        /* ── SIGNATURE ITEMS ──────────────────────────────────────── */
+        #signature { padding: 100px 0; background: var(--white); }
+        .sig-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+        .sig-card { border-radius: var(--radius); overflow: hidden; border: 1.5px solid var(--border); transition: all 0.25s; cursor: default; }
+        .sig-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); border-color: var(--green-light); }
+        .sig-img { height: 200px; overflow: hidden; position: relative; }
+        .sig-img.pastry  { background: linear-gradient(135deg, #FFF8E8, #FFE9B0); }
+        .sig-img.bread   { background: linear-gradient(135deg, #F5ECD8, #E8D4A8); }
+        .sig-img.cake    { background: linear-gradient(135deg, #FFE8F0, #F9C2D6); }
+        .sig-img.cookie  { background: linear-gradient(135deg, #FFF0E0, #FFD9A8); }
+        .sig-body { padding: 22px 20px; }
+        .sig-name { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; margin-bottom: 6px; }
+        .sig-desc { font-size: 13px; color: var(--text3); line-height: 1.6; margin-bottom: 14px; }
+        .sig-price { font-size: 14px; font-weight: 800; color: var(--green); }
+
+        /* ── ABOUT ────────────────────────────────────────────────── */
+        #about { padding: 100px 0; background: var(--green-pale); }
+        .about-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+        .about-img { position: relative; }
+        .about-photo { width: 100%; aspect-ratio: 4/5; border-radius: 24px; background: linear-gradient(160deg, #A8D4B8 0%, #5FAD7E 50%, #2E7A4E 100%); box-shadow: var(--shadow-lg); overflow: hidden; position: relative; }
+        .about-badge { position: absolute; bottom: -20px; right: -20px; background: var(--lemon); border: 3px solid var(--white); border-radius: 20px; padding: 18px 22px; box-shadow: var(--shadow-lg); text-align: center; }
+        .about-badge strong { display: block; font-family: 'Playfair Display', serif; font-size: 36px; font-weight: 900; color: var(--green-dark); line-height: 1; }
+        .about-badge span { font-size: 12px; font-weight: 700; color: var(--text2); text-transform: uppercase; letter-spacing: 0.08em; }
+        .about-text .section-sub { max-width: 100%; margin-bottom: 24px; }
+        .about-list { display: flex; flex-direction: column; gap: 14px; margin: 28px 0 36px; }
+        .about-item { display: flex; align-items: flex-start; gap: 14px; }
+        .about-item-icon { width: 38px; height: 38px; background: var(--green-bg); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+        .about-item-text strong { display: block; font-size: 15px; font-weight: 800; color: var(--text); }
+        .about-item-text span { font-size: 13px; color: var(--text3); }
+
+        /* ── MENU ─────────────────────────────────────────────────── */
+        #menu { padding: 100px 0; background: var(--white); }
+        .menu-tabs { display: flex; gap: 8px; margin-bottom: 44px; flex-wrap: wrap; }
+        .menu-tab { padding: 10px 22px; border-radius: 50px; font-size: 14px; font-weight: 700; cursor: pointer; border: 2px solid var(--border); background: var(--white); color: var(--text2); transition: all 0.18s; }
+        .menu-tab.active, .menu-tab:hover { background: var(--green); color: #fff; border-color: var(--green); }
+        .menu-section { display: none; }
+        .menu-section.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+        .menu-item { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 84px; padding: 18px 20px; border: 1.5px solid var(--border); border-radius: var(--radius); transition: all 0.18s; gap: 16px; position: relative; cursor: pointer; box-sizing: border-box; }
+        .menu-item:hover { border-color: var(--green-light); background: var(--green-pale); }
+        .menu-item-left { display: flex; align-items: center; gap: 14px; min-width: 0; flex: 1; pointer-events: none; }
+        .menu-item-info { min-width: 0; flex: 1; pointer-events: none; }
+        .menu-item-emoji { width: 48px; height: 48px; overflow: hidden; background: var(--green-bg); border-radius: 12px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; pointer-events: none; }
+        .menu-item-emoji img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+        .menu-item-name { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; pointer-events: none; }
+        .menu-item-desc { font-size: 12px; color: var(--text3); pointer-events: none; }
+        .menu-item-price { font-size: 16px; font-weight: 800; color: var(--green); white-space: nowrap; flex-shrink: 0; pointer-events: none; }
+
+        /* ── Menu hover preview ───────────────────────────────────── */
+        .menu-preview {
+            position: fixed;
+            z-index: 2000;
+            top: 50%;
+            left: 50%;
+            width: min(340px, calc(100vw - 32px));
+            background: var(--white);
+            border: 1.5px solid var(--border);
+            border-radius: 20px;
+            box-shadow: 0 24px 60px rgba(40, 80, 50, 0.22);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, calc(-50% + 12px)) scale(0.97);
+            transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+            pointer-events: none;
+        }
+        .menu-preview.visible { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+        .menu-preview-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 1999;
+            background: rgba(30, 50, 38, 0.35);
+            backdrop-filter: blur(3px);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.22s ease, visibility 0.22s;
+            pointer-events: none;
+        }
+        .menu-preview-backdrop.visible { opacity: 1; visibility: visible; pointer-events: auto; }
+        @media (hover: hover) {
+            .menu-preview.visible { pointer-events: none; }
+            .menu-preview-backdrop.visible { opacity: 0; visibility: hidden; pointer-events: none; }
+        }
+        .menu-preview-img-wrap { aspect-ratio: 4/3; overflow: hidden; background: var(--green-bg); }
+        .menu-preview-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .menu-preview-body { padding: 18px 20px 20px; }
+        .menu-preview-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.2; }
+        .menu-preview-copy { font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 12px; }
+        .menu-preview-price { display: inline-block; font-size: 14px; font-weight: 800; color: var(--green-dark); background: var(--green-bg); padding: 6px 14px; border-radius: 50px; }
+        .menu-preview-hint { font-size: 11px; color: var(--text3); margin-top: 10px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+        @media (hover: none) {
+            .menu-item { cursor: default; }
+        }
+
+        /* ── CATERING / CUSTOM ────────────────────────────────────── */
+        #services { padding: 100px 0; background: linear-gradient(160deg, #EBF5EE 0%, #F4FAF6 100%); }
+        .services-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+        @media (max-width: 1040px) { .services-grid { grid-template-columns: 1fr; } }
+        .service-card { background: var(--white); border-radius: 24px; padding: 44px 40px; border: 1.5px solid var(--border); box-shadow: var(--shadow); }
+        .service-icon { font-size: 48px; margin-bottom: 20px; }
+        .service-title { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .service-desc { font-size: 15px; color: var(--text2); line-height: 1.7; margin-bottom: 28px; }
+        .service-features { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+        .service-feat { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text2); font-weight: 600; }
+        .service-feat::before { content: '✓'; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: var(--green-bg); color: var(--green-dark); border-radius: 50%; font-size: 11px; font-weight: 900; flex-shrink: 0; }
+
+        /* ── TESTIMONIALS ─────────────────────────────────────────── */
+        #testimonials { padding: 100px 0; background: var(--white); }
+        .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .testi-card { background: var(--green-pale); border: 1.5px solid var(--border); border-radius: 20px; padding: 32px 28px; position: relative; transition: all 0.25s; }
+        .testi-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); }
+        .testi-quote { font-size: 48px; font-family: 'Playfair Display', serif; color: var(--green-light); line-height: 0.8; margin-bottom: 16px; }
+        .testi-text { font-size: 15px; color: var(--text2); line-height: 1.7; margin-bottom: 24px; font-style: italic; }
+        .testi-stars { color: #F59E0B; font-size: 16px; letter-spacing: 2px; margin-bottom: 16px; }
+        .testi-author { display: flex; align-items: center; gap: 12px; }
+        .testi-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--green-light), var(--green-dark)); display: flex; align-items: center; justify-content: center; font-size: 18px; color: white; font-weight: 800; font-family: 'Playfair Display', serif; }
+        .testi-name { font-size: 14px; font-weight: 800; color: var(--text); }
+        .testi-location { font-size: 12px; color: var(--text3); }
+
+        /* ── FOOTER ───────────────────────────────────────────────── */
+        footer { background: var(--text); color: #fff; padding: 60px 0 28px; }
+        .footer-inner { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-logo { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; margin-bottom: 14px; }
+        .footer-logo span { color: var(--green-light); }
+        .footer-tagline { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.7; margin-bottom: 24px; max-width: 260px; }
+        .footer-socials { display: flex; gap: 10px; }
+        .footer-social { width: 38px; height: 38px; background: rgba(255,255,255,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: background 0.18s; color: inherit; }
+        .footer-social:hover { background: var(--green); }
+        .footer-phone { display: block; font-size: 18px; font-weight: 800; color: var(--green-light); margin-bottom: 6px; }
+        .footer-phone-note { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.5; }
+        .footer-heading { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.5); margin-bottom: 18px; }
+        .footer-links { display: flex; flex-direction: column; gap: 10px; }
+        .footer-links a { font-size: 14px; color: rgba(255,255,255,0.7); font-weight: 600; transition: color 0.18s; }
+        .footer-links a:hover { color: var(--green-light); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+        .footer-copy { font-size: 13px; color: rgba(255,255,255,0.4); }
+        .footer-love { font-size: 13px; color: rgba(255,255,255,0.4); }
+
+        /* ── CTA BANNER ───────────────────────────────────────────── */
+        #cta-banner { padding: 80px 0; background: var(--green-dark); text-align: center; position: relative; overflow: hidden; }
+        #cta-banner::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(110,180,130,0.25), transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(200,214,64,0.15), transparent 60%); }
+        .cta-content { position: relative; z-index: 1; }
+        .cta-title { font-family: 'Playfair Display', serif; font-size: clamp(30px, 4vw, 52px); font-weight: 700; color: #fff; margin-bottom: 16px; }
+        .cta-sub { font-size: 17px; color: rgba(255,255,255,0.75); margin-bottom: 36px; }
+        .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+
+        /* ── Responsive ───────────────────────────────────────────── */
+        @media (max-width: 960px) {
+            .hero-inner { grid-template-columns: 1fr; }
+            .hero-visual { display: none; }
+            .about-inner { grid-template-columns: 1fr; }
+            .about-img { display: none; }
+            .sig-grid { grid-template-columns: repeat(2, 1fr); }
+            /* services grid handled above */
+            .testi-grid { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+            .menu-section.active { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 640px) {
+            .nav-links, .nav-cta { display: none; }
+            .hamburger { display: block; }
+            .hero-stats { gap: 20px; }
+            .sig-grid { grid-template-columns: 1fr; }
+            .menu-section.active { grid-template-columns: 1fr; }
+            .footer-inner { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+    <a href="#menu" onclick="closeMobile()">Menu</a>
+    <a href="#services" onclick="closeMobile()">Custom Orders</a>
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="tel:2395551234" class="btn btn-primary phone-cta">Call to Order</a>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">Danny's <span>Delights</span><small>Artisan Bakery · Naples, FL</small></a>
+        <ul class="nav-links">
+            <li><a href="#menu">Menu</a></li>
+            <li><a href="#services">Custom Orders</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <a href="tel:2395551234" class="btn btn-primary nav-cta phone-cta">Call to Order</a>
+        <button class="hamburger" id="hamburger" type="button" aria-label="Open menu">☰</button>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-decor hero-decor-1"></div>
+    <div class="hero-decor hero-decor-2"></div>
+    <div class="hero-decor hero-decor-3"></div>
+    <div class="container">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <div class="eyebrow">🌿 Fresh-baked daily in Naples, FL</div>
+                <h1 class="hero-title">
+                    Baked Fresh.<br>
+                    Made with <em>Love.</em>
+                </h1>
+                <p class="hero-sub">
+                    From buttery croissants to stunning custom cakes — Danny's Delights brings artisan baking to the heart of Naples, Florida. Every item crafted by hand, every day.
+                </p>
+                <div class="hero-btns">
+                    <a href="#menu" class="btn btn-primary">Explore Our Menu</a>
+                    <a href="tel:2395551234" class="btn btn-outline phone-cta">Custom Orders</a>
+                </div>
+                <div class="hero-stats">
+                    <div>
+                        <div class="hero-stat-num">500+</div>
+                        <div class="hero-stat-label">Items Baked Weekly</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">8+</div>
+                        <div class="hero-stat-label">Years in Naples</div>
+                    </div>
+                    <div>
+                        <div class="hero-stat-num">100%</div>
+                        <div class="hero-stat-label">Made from Scratch</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-img-main">
+                    <img src="assets/cake.jpg" alt="Custom cake from Danny's Delights">
+                </div>
+                <div class="hero-badge">
+                    <div class="hero-badge-icon">⭐</div>
+                    <div class="hero-badge-text">
+                        <strong>5-Star Reviews</strong>
+                        <span>Loved by Naples locals</span>
+                    </div>
+                </div>
+                <div class="hero-badge-2">
+                    <strong>🎂</strong>
+                    <span>Custom Cakes<br>Available</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+    <div class="marquee-track" id="marquee-track">
+        <span class="marquee-item">🥐 Fresh Croissants <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎂 Custom Cakes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍫 Luxury Brownie Boxes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍪 Stuffed Cookies <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🌀 Gourmet Cinnamon Rolls <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎂 Cookie Cakes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍞 Artisan Breads <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🌿 Fresh Daily in Naples <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🥐 Fresh Croissants <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎂 Custom Cakes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍫 Luxury Brownie Boxes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍪 Stuffed Cookies <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🌀 Gourmet Cinnamon Rolls <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎂 Cookie Cakes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🍞 Artisan Breads <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
+        <span class="marquee-item">🌿 Fresh Daily in Naples <span class="marquee-dot"></span></span>
+    </div>
+</div>
+
+<!-- SIGNATURE ITEMS -->
+<section id="signature">
+    <div class="container">
+        <div class="section-head center">
+            <div class="section-tag">Our Specialties</div>
+            <h2 class="section-title">Something for Every Sweet Tooth</h2>
+            <p class="section-sub">Handcrafted from the finest ingredients — baked fresh every single morning before you walk through the door.</p>
+        </div>
+        <div class="sig-grid">
+            <div class="sig-card">
+                <div class="sig-img pastry"><img src="assets/menu-butter-croissant.jpg" alt="Butter croissants" loading="lazy"></div>
+                <div class="sig-body">
+                    <div class="sig-name">Pastries & Croissants</div>
+                    <div class="sig-desc">Laminated, buttery, golden. Made the proper way — layers of dough folded by hand every morning.</div>
+                    <div class="sig-price">From $3.25</div>
+                </div>
+            </div>
+            <div class="sig-card">
+                <div class="sig-img bread"><img src="assets/menu-sourdough.jpg" alt="Artisan sourdough bread" loading="lazy"></div>
+                <div class="sig-body">
+                    <div class="sig-name">Artisan Breads</div>
+                    <div class="sig-desc">Sourdough, focaccia, baguettes — slow-fermented for deep flavor and the perfect crust.</div>
+                    <div class="sig-price">From $4.00</div>
+                </div>
+            </div>
+            <div class="sig-card">
+                <div class="sig-img cake"><img src="assets/cake.jpg" alt="Custom birthday cake" loading="lazy"></div>
+                <div class="sig-body">
+                    <div class="sig-name">Custom Cakes</div>
+                    <div class="sig-desc">Birthdays, weddings, any occasion. Every cake designed to your vision and baked to perfection.</div>
+                    <div class="sig-price">From $45.00</div>
+                </div>
+            </div>
+            <div class="sig-card">
+                <div class="sig-img cookie"><img src="assets/IMG_2169.jpg" alt="Chocolate-drizzled cookies" loading="lazy"></div>
+                <div class="sig-body">
+                    <div class="sig-name">Cookies & Treats</div>
+                    <div class="sig-desc">Stuffed cookies, luxury brownie boxes, cookie cakes, and gift boxes — indulgent treats for every occasion.</div>
+                    <div class="sig-price">From $2.50</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="container">
+        <div class="about-inner">
+            <div class="about-img">
+                <div class="about-photo"><img src="assets/00D82A96-5A5B-4713-89FB-AB484739F84B.PNG" alt="Danny, founder of Danny's Delights" loading="lazy"></div>
+                <div class="about-badge">
+                    <strong>8+</strong>
+                    <span>Years Baking<br>in Naples</span>
+                </div>
+            </div>
+            <div class="about-text">
+                <div class="section-tag">Meet Danny</div>
+                <h2 class="section-title">A Passion for Baking, Rooted in Naples</h2>
+                <p class="section-sub">What started as a childhood love of his grandmother's kitchen has grown into Naples' favorite neighborhood bakery. Danny brings over 8 years of artisan baking experience to every item that comes out of his oven.</p>
+                <div class="about-list">
+                    <div class="about-item">
+                        <div class="about-item-icon">🌾</div>
+                        <div class="about-item-text">
+                            <strong>Locally sourced ingredients</strong>
+                            <span>We partner with Florida farms for the freshest butter, eggs, and produce.</span>
+                        </div>
+                    </div>
+                    <div class="about-item">
+                        <div class="about-item-icon">⏰</div>
+                        <div class="about-item-text">
+                            <strong>Baked before sunrise, every day</strong>
+                            <span>Danny starts at 4am so everything is warm and fresh when you arrive.</span>
+                        </div>
+                    </div>
+                    <div class="about-item">
+                        <div class="about-item-icon">🎂</div>
+                        <div class="about-item-text">
+                            <strong>No preservatives. Ever.</strong>
+                            <span>Real butter, real flour, real flavor. Nothing artificial in our kitchen.</span>
+                        </div>
+                    </div>
+                </div>
+                <a href="tel:2395551234" class="btn btn-primary phone-cta">Get in Touch with Danny</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+    <div class="container">
+        <div class="section-head">
+            <div class="section-tag">Full Menu</div>
+            <h2 class="section-title">What's Baking Today</h2>
+            <p class="section-sub">Our menu rotates with the seasons — here's a taste of what you can find at Danny's Delights.</p>
+        </div>
+        <div class="menu-tabs">
+            <button class="menu-tab active" onclick="showTab('pastries', this)">🥐 Pastries</button>
+            <button class="menu-tab" onclick="showTab('breads', this)">🍞 Breads</button>
+            <button class="menu-tab" onclick="showTab('cakes', this)">🎂 Cakes</button>
+            <button class="menu-tab" onclick="showTab('treats', this)">🍪 Treats</button>
+        </div>
+
+        <div class="menu-section active" id="tab-pastries">
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-butter-croissant.jpg" alt="Butter croissant" loading="lazy"></div><div><div class="menu-item-name">Butter Croissant</div><div class="menu-item-desc">Classic French-style, laminated by hand</div></div></div><div class="menu-item-price">$3.25</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-pain-au-chocolat.jpg" alt="Pain au chocolat" loading="lazy"></div><div><div class="menu-item-name">Pain au Chocolat</div><div class="menu-item-desc">Dark chocolate tucked in flaky pastry</div></div></div><div class="menu-item-price">$4.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-almond-croissant.jpg" alt="Almond croissant" loading="lazy"></div><div><div class="menu-item-name">Almond Croissant</div><div class="menu-item-desc">Filled with frangipane, toasted almonds</div></div></div><div class="menu-item-price">$4.50</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_8323.jpg" alt="Fruit danish" loading="lazy"></div><div><div class="menu-item-name">Fruit Danish</div><div class="menu-item-desc">Seasonal fruit, cream cheese, pastry glaze</div></div></div><div class="menu-item-price">$3.75</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_4207.jpg" alt="Éclair" loading="lazy"></div><div><div class="menu-item-name">Éclair</div><div class="menu-item-desc">Choux pastry, pastry cream, chocolate glaze</div></div></div><div class="menu-item-price">$4.50</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-cinnamon-roll.jpg" alt="Gourmet cinnamon roll" loading="lazy"></div><div><div class="menu-item-name">Gourmet Cinnamon Roll</div><div class="menu-item-desc">Oversized, pillowy roll with brown butter cream cheese frosting</div></div></div><div class="menu-item-price">$5.50</div></div>
+        </div>
+
+        <div class="menu-section" id="tab-breads">
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-sourdough.jpg" alt="Sourdough boule" loading="lazy"></div><div><div class="menu-item-name">Sourdough Boule</div><div class="menu-item-desc">72-hour ferment, crispy crust, open crumb</div></div></div><div class="menu-item-price">$9.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-focaccia.jpg" alt="Rosemary focaccia" loading="lazy"></div><div><div class="menu-item-name">Rosemary Focaccia</div><div class="menu-item-desc">Olive oil, sea salt, fresh rosemary</div></div></div><div class="menu-item-price">$8.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-baguette.jpg" alt="French baguette" loading="lazy"></div><div><div class="menu-item-name">French Baguette</div><div class="menu-item-desc">Classic crispy crust, soft chewy interior</div></div></div><div class="menu-item-price">$4.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-multigrain-loaf.jpg" alt="Multigrain loaf" loading="lazy"></div><div><div class="menu-item-name">Multigrain Loaf</div><div class="menu-item-desc">Seeds, oats, whole wheat — hearty and delicious</div></div></div><div class="menu-item-price">$10.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-cheddar-herb-loaf.jpg" alt="Cheddar herb loaf" loading="lazy"></div><div><div class="menu-item-name">Cheddar Herb Loaf</div><div class="menu-item-desc">Sharp cheddar, chives, black pepper</div></div></div><div class="menu-item-price">$11.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-blueberry-banana-bread.jpg" alt="Blueberry banana bread" loading="lazy"></div><div><div class="menu-item-name">Blueberry Banana Bread</div><div class="menu-item-desc">Fresh blueberries, ripe banana, walnut crunch</div></div></div><div class="menu-item-price">$8.50</div></div>
+        </div>
+
+        <div class="menu-section" id="tab-cakes">
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/cake.jpg" alt="6 inch custom cake" loading="lazy"></div><div><div class="menu-item-name">6" Custom Cake</div><div class="menu-item-desc">Serves 8–10 · your choice of flavor & design</div></div></div><div class="menu-item-price">From $45</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_8595.jpg" alt="8 inch custom cake" loading="lazy"></div><div><div class="menu-item-name">8" Custom Cake</div><div class="menu-item-desc">Serves 14–18 · custom decoration available</div></div></div><div class="menu-item-price">From $65</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_0354.jpg" alt="10 inch custom cake" loading="lazy"></div><div><div class="menu-item-name">10" Custom Cake</div><div class="menu-item-desc">Serves 22–28 · perfect for parties</div></div></div><div class="menu-item-price">From $85</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-tiered-cake.jpg" alt="Wedding tiered cake" loading="lazy"></div><div><div class="menu-item-name">Wedding / Tiered Cakes</div><div class="menu-item-desc">Multi-tier, custom flavors & florals</div></div></div><div class="menu-item-price">Quote on request</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-cupcake-dozen.jpg" alt="Cupcake dozen" loading="lazy"></div><div><div class="menu-item-name">Cupcake Dozen</div><div class="menu-item-desc">Assorted flavors, custom frosting, boxed</div></div></div><div class="menu-item-price">$28.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_9047.jpg" alt="Sheet cake" loading="lazy"></div><div><div class="menu-item-name">Sheet Cake (1/4 sheet)</div><div class="menu-item-desc">Serves 20+ · great for office parties</div></div></div><div class="menu-item-price">From $55</div></div>
+        </div>
+
+        <div class="menu-section" id="tab-treats">
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-brownie-box.jpg" alt="Luxury brownie box" loading="lazy"></div><div><div class="menu-item-name">Luxury Brownie Box</div><div class="menu-item-desc">Rich fudge brownies, gift-boxed & ready to impress</div></div></div><div class="menu-item-price">From $18</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_2169.jpg" alt="Stuffed cookies" loading="lazy"></div><div><div class="menu-item-name">Stuffed Cookies</div><div class="menu-item-desc">Thick & loaded — Nutella, cookie butter, cheesecake fills</div></div></div><div class="menu-item-price">$4.50</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_4227.jpg" alt="Cookie cake" loading="lazy"></div><div><div class="menu-item-name">Cookie Cake</div><div class="menu-item-desc">Giant decorated cookie cake, perfect for celebrations</div></div></div><div class="menu-item-price">From $28</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_2169.jpg" alt="Classic chocolate chip cookie" loading="lazy"></div><div><div class="menu-item-name">Classic Chocolate Chip</div><div class="menu-item-desc">Crispy edges, gooey center, sea salt finish</div></div></div><div class="menu-item-price">$2.75</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/IMG_4227.jpg" alt="Cookie gift box" loading="lazy"></div><div><div class="menu-item-name">Cookie Gift Box (12)</div><div class="menu-item-desc">Assorted cookies, beautifully packaged for gifting</div></div></div><div class="menu-item-price">$26.00</div></div>
+            <div class="menu-item"><div class="menu-item-left"><div class="menu-item-emoji"><img src="assets/menu-lemon-bars.jpg" alt="Lemon bars" loading="lazy"></div><div><div class="menu-item-name">Lemon Bars</div><div class="menu-item-desc">Buttery shortbread crust, zesty lemon curd</div></div></div><div class="menu-item-price">$3.00</div></div>
+        </div>
+    </div>
+
+    <div id="menu-preview-backdrop" class="menu-preview-backdrop" aria-hidden="true"></div>
+    <div id="menu-preview" class="menu-preview" role="dialog" aria-hidden="true">
+        <div class="menu-preview-img-wrap">
+            <img class="menu-preview-img" src="" alt="">
+        </div>
+        <div class="menu-preview-body">
+            <h3 class="menu-preview-title"></h3>
+            <p class="menu-preview-copy"></p>
+            <span class="menu-preview-price"></span>
+            <div class="menu-preview-hint">Baked fresh daily</div>
+        </div>
+    </div>
+</section>
+
+<!-- CUSTOM ORDERS -->
+<section id="services">
+    <div class="container">
+        <div class="section-head center">
+            <div class="section-tag">Services</div>
+            <h2 class="section-title">What Danny Offers</h2>
+            <p class="section-sub">Custom cakes and hands-on decorating classes — Danny's does it all.</p>
+        </div>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">🎂</div>
+                <div class="service-title">Custom Cakes</div>
+                <div class="service-desc">Birthdays, weddings, quinceañeras, baby showers — Danny works with you one-on-one to design the perfect cake for your moment.</div>
+                <div class="service-features">
+                    <div class="service-feat">Custom flavors & fillings</div>
+                    <div class="service-feat">Hand-crafted decorations & florals</div>
+                    <div class="service-feat">Cookie cakes & tiered cakes</div>
+                    <div class="service-feat">72-hour minimum lead time</div>
+                </div>
+                <a href="tel:2395551234" class="btn btn-primary phone-cta">Order a Custom Cake</a>
+            </div>
+            <div class="service-card">
+                <div class="service-icon">🎓</div>
+                <div class="service-title">Decorating Classes</div>
+                <div class="service-desc">Learn the art of cake and cookie decorating straight from Danny. Fun, hands-on classes for all skill levels — perfect for date nights, birthdays, and team events.</div>
+                <div class="service-features">
+                    <div class="service-feat">Beginner & intermediate levels</div>
+                    <div class="service-feat">Private & group sessions</div>
+                    <div class="service-feat">All supplies included</div>
+                    <div class="service-feat">Take your creation home!</div>
+                </div>
+                <a href="tel:2395551234" class="btn btn-outline phone-cta">Book a Class</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+    <div class="container">
+        <div class="section-head center">
+            <div class="section-tag">Reviews</div>
+            <h2 class="section-title">What Naples is Saying</h2>
+            <p class="section-sub">We let our baking speak for itself — but here's what our regulars have to say.</p>
+        </div>
+        <div class="testi-grid">
+            <div class="testi-card">
+                <div class="testi-quote">"</div>
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">Danny's croissants are absolutely unreal. I've had croissants in Paris and these are on the same level. We make the drive from Bonita Springs every single Saturday.</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">M</div>
+                    <div>
+                        <div class="testi-name">Maria T.</div>
+                        <div class="testi-location">Bonita Springs, FL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-quote">"</div>
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">Ordered a custom birthday cake for my daughter's quinceañera. Danny nailed every detail — the design, the flavors, everything. The entire family was blown away.</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">R</div>
+                    <div>
+                        <div class="testi-name">Rosa G.</div>
+                        <div class="testi-location">Naples, FL</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testi-card">
+                <div class="testi-quote">"</div>
+                <div class="testi-stars">★★★★★</div>
+                <p class="testi-text">We order from Danny's for every office birthday now. Fresh pastries, beautiful presentation, and everyone always asks where we ordered from. Will keep coming back!</p>
+                <div class="testi-author">
+                    <div class="testi-avatar">J</div>
+                    <div>
+                        <div class="testi-name">James K.</div>
+                        <div class="testi-location">Naples, FL</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA BANNER -->
+<section id="cta-banner">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Place Your Order?</h2>
+            <p class="cta-sub">Walk in daily · Custom orders by request · Serving Naples & Collier County</p>
+            <div class="cta-btns">
+                <a href="tel:2395551234" class="btn btn-white phone-cta">Call Danny</a>
+                <a href="#menu" class="btn btn-outline" style="color:white;border-color:rgba(255,255,255,0.6);">View Full Menu</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="footer-inner">
+            <div>
+                <div class="footer-logo">Danny's <span>Delights</span></div>
+                <p class="footer-tagline">Artisan breads, pastries, custom cakes, and cookies — baked fresh every morning in Naples, Florida.</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Instagram">📸</a>
+                    <a href="https://www.facebook.com/" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="Facebook">👍</a>
+                    <a href="https://www.tiktok.com/" class="footer-social" target="_blank" rel="noopener noreferrer" aria-label="TikTok">🎵</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-heading">Quick Links</div>
+                <div class="footer-links">
+                    <a href="#menu">Menu</a>
+                    <a href="#services">Custom Orders</a>
+                    <a href="#about">About Danny</a>
+                </div>
+            </div>
+            <div>
+                <div class="footer-heading">Contact</div>
+                <a href="tel:2395551234" class="footer-phone phone-cta">239-555-1234</a>
+                <p class="footer-phone-note">Call to place an order or ask about custom cakes.</p>
+                <div class="footer-heading" style="margin-top:20px;margin-bottom:10px;">Hours</div>
+                <div class="footer-links" style="gap:6px;">
+                    <span style="color:rgba(255,255,255,0.7);font-size:14px;">Mon–Fri: 7am – 4pm</span>
+                    <span style="color:rgba(255,255,255,0.7);font-size:14px;">Saturday: 7am – 3pm</span>
+                    <span style="color:rgba(255,255,255,0.7);font-size:14px;">Sunday: 8am – 2pm</span>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-copy">© 2026 Danny's Delights. All rights reserved.</div>
+            <div class="footer-love">Made with 🤍 in Naples, FL</div>
+        </div>
+    </div>
+</footer>
+
+<div id="phone-modal-backdrop" class="phone-modal-backdrop" aria-hidden="true"></div>
+<div id="phone-modal" class="phone-modal" role="dialog" aria-labelledby="phone-modal-title" aria-hidden="true">
+    <button class="phone-modal-close" type="button" aria-label="Close">&times;</button>
+    <div class="phone-modal-icon">📞</div>
+    <h2 class="phone-modal-title" id="phone-modal-title">Give Us a Call</h2>
+    <p class="phone-modal-sub">Ready to place an order? Call Danny's Delights and we'll take care of you.</p>
+    <a href="tel:2395551234" class="phone-modal-number">239-555-1234</a>
+    <button type="button" class="btn btn-primary phone-modal-close-btn" style="width:100%;justify-content:center;">Close</button>
+</div>
+
+<script>
+    // ── Site phone (update here when you have the real number) ─
+    const SITE_PHONE_DISPLAY = '239-555-1234';
+    const SITE_PHONE_TEL = '2395551234';
+
+    function applySitePhone() {
+        document.querySelectorAll('.phone-cta, .phone-modal-number').forEach(el => {
+            el.href = 'tel:' + SITE_PHONE_TEL;
+            if (el.classList.contains('phone-modal-number') || el.classList.contains('footer-phone')) {
+                el.textContent = SITE_PHONE_DISPLAY;
+            }
+        });
+    }
+    applySitePhone();
+
+    // ── Nav scroll ────────────────────────────────────────────
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── Mobile menu ───────────────────────────────────────────
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    function openMobile() {
+        mobileMenu.classList.add('open');
+        hamburger.classList.add('open');
+        hamburger.textContent = '×';
+        hamburger.setAttribute('aria-label', 'Close menu');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobile() {
+        mobileMenu.classList.remove('open');
+        hamburger.classList.remove('open');
+        hamburger.textContent = '☰';
+        hamburger.setAttribute('aria-label', 'Open menu');
+        document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+        if (mobileMenu.classList.contains('open')) closeMobile();
+        else openMobile();
+    });
+
+    // ── Phone CTA ─────────────────────────────────────────────
+    const PHONE_TEL = SITE_PHONE_TEL;
+    const phoneModal = document.getElementById('phone-modal');
+    const phoneModalBackdrop = document.getElementById('phone-modal-backdrop');
+
+    function showPhoneModal() {
+        phoneModal.classList.add('visible');
+        phoneModalBackdrop.classList.add('visible');
+        phoneModal.setAttribute('aria-hidden', 'false');
+        phoneModalBackdrop.setAttribute('aria-hidden', 'false');
+    }
+
+    function hidePhoneModal() {
+        phoneModal.classList.remove('visible');
+        phoneModalBackdrop.classList.remove('visible');
+        phoneModal.setAttribute('aria-hidden', 'true');
+        phoneModalBackdrop.setAttribute('aria-hidden', 'true');
+    }
+
+    function isMobilePhone() {
+        return window.matchMedia('(max-width: 768px)').matches;
+    }
+
+    document.querySelectorAll('.phone-cta').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            if (!isMobilePhone()) {
+                e.preventDefault();
+                closeMobile();
+                showPhoneModal();
+            } else {
+                closeMobile();
+            }
+        });
+    });
+
+    phoneModalBackdrop.addEventListener('click', hidePhoneModal);
+    document.querySelectorAll('.phone-modal-close, .phone-modal-close-btn').forEach(el => {
+        el.addEventListener('click', hidePhoneModal);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && phoneModal.classList.contains('visible')) hidePhoneModal();
+    });
+
+    // ── Menu tabs ─────────────────────────────────────────────
+    function showTab(id, btn) {
+        document.querySelectorAll('.menu-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+        document.getElementById('tab-' + id).classList.add('active');
+        btn.classList.add('active');
+        hideMenuPreview();
+    }
+
+    // ── Menu hover preview ────────────────────────────────────
+    const menuPreview = document.getElementById('menu-preview');
+    const menuPreviewBackdrop = document.getElementById('menu-preview-backdrop');
+    const menuPreviewImg = menuPreview.querySelector('.menu-preview-img');
+    const menuPreviewTitle = menuPreview.querySelector('.menu-preview-title');
+    const menuPreviewCopy = menuPreview.querySelector('.menu-preview-copy');
+    const menuPreviewPrice = menuPreview.querySelector('.menu-preview-price');
+    let activePreviewItem = null;
+    let previewHideTimer = null;
+
+    const MENU_PREVIEW_COPY = {
+        'Butter Croissant': 'Hand-laminated with French butter and baked until golden — shatteringly crisp outside, soft and flaky within.',
+        'Pain au Chocolat': 'Flaky pastry wrapped around rich dark chocolate batons. A classic Parisian morning treat, made in-house.',
+        'Almond Croissant': 'Buttery croissant filled with almond frangipane and topped with toasted sliced almonds and a dusting of powdered sugar.',
+        'Fruit Danish': 'Buttery pastry filled with sweet cream cheese and topped with glossy seasonal fruit. A bakery counter favorite.',
+        'Éclair': 'Light choux shell piped full of vanilla pastry cream and finished with a smooth chocolate glaze.',
+        'Gourmet Cinnamon Roll': 'An oversized, pillowy roll swirled with cinnamon sugar and crowned with brown butter cream cheese frosting.',
+        'Sourdough Boule': 'Slow-fermented for 72 hours for a tangy flavor, crackly crust, and an open, airy crumb.',
+        'Rosemary Focaccia': 'Dimpled Italian flatbread brushed with olive oil, flaky sea salt, and fresh rosemary from the oven.',
+        'French Baguette': 'Long and lean with a shattering crust and a soft, chewy interior — perfect torn warm with butter.',
+        'Multigrain Loaf': 'Hearty loaf packed with seeds, oats, and whole grains. Nutty, wholesome, and slice-ready.',
+        'Cheddar Herb Loaf': 'Savory quick bread loaded with sharp cheddar, fresh chives, and cracked black pepper.',
+        'Blueberry Banana Bread': 'Moist banana bread studded with fresh blueberries and finished with a walnut crunch.',
+        '6" Custom Cake': 'Personal-sized celebration cake for 8–10 guests. Pick your flavors, filling, and custom design.',
+        '8" Custom Cake': 'Our most popular size — serves 14–18 with room for custom decoration and message.',
+        '10" Custom Cake': 'Party-ready cake serving 22–28. Ideal for birthdays, showers, and family gatherings.',
+        'Wedding / Tiered Cakes': 'Elegant multi-tier designs tailored to your wedding palette, flavors, and guest count.',
+        'Cupcake Dozen': 'Twelve assorted gourmet cupcakes in a gift-ready box — great for offices and celebrations.',
+        'Sheet Cake (1/4 sheet)': 'Feeds 20+ with your choice of flavor and simple custom messaging on top.',
+        'Luxury Brownie Box': 'A curated gift box of rich, fudgy brownies in rotating flavors — ready to impress.',
+        'Stuffed Cookies': 'Thick, bakery-style cookies loaded with indulgent fills like Nutella, cookie butter, or cheesecake.',
+        'Cookie Cake': 'A giant soft-baked cookie decorated for birthdays and celebrations — feeds a crowd.',
+        'Classic Chocolate Chip': 'Golden edges, gooey center, premium chocolate chips, and a pinch of sea salt.',
+        'Cookie Gift Box (12)': 'A dozen assorted cookies beautifully boxed — our go-to gift for any occasion.',
+        'Lemon Bars': 'Buttery shortbread base topped with bright, tangy lemon curd and a dusting of powdered sugar.'
+    };
+
+    function hideMenuPreview() {
+        clearTimeout(previewHideTimer);
+        menuPreview.classList.remove('visible');
+        menuPreviewBackdrop.classList.remove('visible');
+        menuPreview.setAttribute('aria-hidden', 'true');
+        menuPreviewBackdrop.setAttribute('aria-hidden', 'true');
+        activePreviewItem = null;
+    }
+
+    function showMenuPreview(item) {
+        const img = item.querySelector('.menu-item-emoji img');
+        if (!img) return;
+
+        const name = item.querySelector('.menu-item-name').textContent.trim();
+        const desc = item.querySelector('.menu-item-desc').textContent.trim();
+        const price = item.querySelector('.menu-item-price').textContent.trim();
+
+        menuPreviewImg.src = img.src;
+        menuPreviewImg.alt = img.alt || name;
+        menuPreviewTitle.textContent = name;
+        menuPreviewCopy.textContent = MENU_PREVIEW_COPY[name] || desc;
+        menuPreviewPrice.textContent = price;
+
+        const touch = window.matchMedia('(hover: none)').matches;
+        menuPreviewBackdrop.classList.toggle('visible', touch);
+        menuPreview.classList.add('visible');
+        menuPreview.setAttribute('aria-hidden', 'false');
+        menuPreviewBackdrop.setAttribute('aria-hidden', touch ? 'false' : 'true');
+        activePreviewItem = item;
+    }
+
+    const menuSection = document.getElementById('menu');
+    const isTouch = () => window.matchMedia('(hover: none)').matches;
+
+    menuSection.addEventListener('mouseover', (e) => {
+        if (isTouch()) return;
+        const item = e.target.closest('.menu-item');
+        if (!item) return;
+        clearTimeout(previewHideTimer);
+        if (activePreviewItem !== item) showMenuPreview(item);
+    });
+
+    menuSection.addEventListener('mouseout', (e) => {
+        if (isTouch()) return;
+        const item = e.target.closest('.menu-item');
+        if (!item) return;
+        const to = e.relatedTarget;
+        if (to && item.contains(to)) return;
+        if (to && to.closest && to.closest('.menu-item')) return;
+        previewHideTimer = setTimeout(hideMenuPreview, 100);
+    });
+
+    menuSection.addEventListener('click', (e) => {
+        if (!isTouch()) return;
+        const item = e.target.closest('.menu-item');
+        if (!item) return;
+        if (activePreviewItem === item && menuPreview.classList.contains('visible')) {
+            hideMenuPreview();
+        } else {
+            showMenuPreview(item);
+        }
+    });
+
+    menuPreviewBackdrop.addEventListener('click', hideMenuPreview);
+
+    window.addEventListener('scroll', hideMenuPreview, { passive: true });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') hideMenuPreview();
+    });
+
+</script>
+</body>
+</html>
