@@ -1,0 +1,146 @@
+[
+  {
+    "id": "7th-ave-n",
+    "name": "7th Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "6th-ave-n",
+    "name": "6th Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "5th-ave-n",
+    "name": "5th Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "4th-ave-n",
+    "name": "4th Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "3rd-ave-n",
+    "name": "3rd Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "2nd-ave-n",
+    "name": "2nd Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "1st-ave-n",
+    "name": "1st Ave N",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "central-ave",
+    "name": "Central Ave",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "1st-ave-s",
+    "name": "1st Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "2nd-ave-s",
+    "name": "2nd Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "3rd-ave-s",
+    "name": "3rd Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "4th-ave-s",
+    "name": "4th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "5th-ave-s",
+    "name": "5th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "6th-ave-s",
+    "name": "6th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "7th-ave-s",
+    "name": "7th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "8th-ave-s",
+    "name": "8th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "9th-ave-s",
+    "name": "9th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "10th-ave-s",
+    "name": "10th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "11th-ave-s",
+    "name": "11th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "broad-ave-s",
+    "name": "Broad Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "12th-ave-s",
+    "name": "12th Ave S",
+    "lat": 26.1315525,
+    "lng": -81.8077312,
+    "sub": "Public beach access"
+  },
+  {
+    "id": "13th-ave-s",
+    "name": "13th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "14th-ave-s",
+    "name": "14th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "15th-ave-s",
+    "name": "15th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "16th-ave-s",
+    "name": "16th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "17th-ave-s",
+    "name": "17th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "18th-ave-s",
+    "name": "18th Ave S",
+    "sub": "Public beach access"
+  },
+  {
+    "id": "lowdermilk-park",
+    "name": "Lowdermilk Park",
+    "lat": 26.1629918,
+    "lng": -81.8101099,
+    "sub": "Public beach access"
+  }
+]

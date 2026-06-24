@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff" id="metaThemeColor">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Beach Delivery — Naples</title>
+  <script>
+    try {
+      document.documentElement.setAttribute("data-theme", localStorage.getItem("bd-theme") || "classic");
+    } catch (_) {}
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root,
+    [data-theme="classic"] {
+      --black: #000;
+      --white: #fff;
+      --gray-100: #f5f5f5;
+      --gray-200: #e5e5e5;
+      --gray-400: #999;
+      --gray-600: #666;
+      --accent: #000;
+      --accent-text: #fff;
+      --overlay: rgba(0, 0, 0, 0.4);
+      --meta-theme: #ffffff;
+      --header-h: 52px;
+      --subheader-h: 52px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --page-x: max(20px, var(--safe-left), var(--safe-right));
+    }
+
+    [data-theme="dark"] {
+      --black: #f0f0f0;
+      --white: #121212;
+      --gray-100: #1c1c1c;
+      --gray-200: #2e2e2e;
+      --gray-400: #888;
+      --gray-600: #aaa;
+      --accent: #f0f0f0;
+      --accent-text: #121212;
+      --overlay: rgba(0, 0, 0, 0.65);
+      --meta-theme: #121212;
+    }
+
+    [data-theme="beach"] {
+      --black: #1a3a4a;
+      --white: #fff8f0;
+      --gray-100: #fff0e0;
+      --gray-200: #e8d5c0;
+      --gray-400: #8b7355;
+      --gray-600: #5c7a8a;
+      --accent: #0077b6;
+      --accent-text: #fff;
+      --overlay: rgba(26, 58, 74, 0.45);
+      --meta-theme: #fff8f0;
+    }
+
+    [data-theme="badass"] {
+      --black: #4b3621;
+      --white: #ffffff;
+      --gray-100: #eef7f8;
+      --gray-200: #c5e4e7;
+      --gray-400: #6b8e8f;
+      --gray-600: #6b5a48;
+      --accent: #1e919d;
+      --accent-text: #ffffff;
+      --overlay: rgba(75, 54, 33, 0.5);
+      --meta-theme: #ffffff;
+    }
+
+    html { -webkit-tap-highlight-color: transparent; height: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--white);
+      color: var(--black);
+      min-height: 100dvh;
+      overflow-x: hidden;
+      overscroll-behavior-y: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body.sheet-open,
+    body.modal-open { overflow: hidden; }
+
+    .app { width: 100%; min-height: 100dvh; display: flex; flex-direction: column; }
+
+    /* ── Views ── */
+    .view { display: none; flex-direction: column; flex: 1; }
+    .view.active { display: flex; }
+
+    /* ── Headers ── */
+    .header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-shrink: 0;
+      height: calc(var(--header-h) + var(--safe-top));
+      padding: var(--safe-top) var(--page-x) 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .header.hidden { display: none; }
+
+    .sub-header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center;
+      flex-shrink: 0;
+      height: calc(var(--subheader-h) + var(--safe-top));
+      padding: var(--safe-top) var(--page-x) 0;
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+      gap: 4px;
+    }
+
+    .sub-header.hidden { display: none; }
+
+    .sub-header-title {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-right: 44px;
+    }
+
+    .header-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 44px; height: 44px;
+      background: none; border: none; cursor: pointer;
+      color: var(--black); border-radius: 50%;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+
+    .header-btn:active { background: var(--gray-100); }
+
+    .header-btn.hamburger {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .hamburger span {
+      display: block; width: 18px; height: 2px;
+      background: var(--black); border-radius: 1px;
+      flex-shrink: 0;
+    }
+
+    .location-picker { position: relative; flex: 1; display: flex; justify-content: center; }
+
+    .location-btn {
+      display: flex; align-items: center; gap: 4px;
+      background: none; border: none; cursor: pointer;
+      font-size: 16px; font-weight: 700; letter-spacing: -0.3px;
+      color: var(--black); padding: 8px 12px; border-radius: 8px;
+    }
+
+    .location-btn:active, .location-btn.open { background: var(--gray-100); }
+    .location-btn svg { transition: transform 0.2s; }
+    .location-btn.open svg { transform: rotate(180deg); }
+
+    .street-dropdown {
+      position: absolute; top: calc(100% + 4px); left: 50%;
+      min-width: 240px; max-width: min(300px, 92vw); max-height: min(70dvh, 420px);
+      background: var(--white);
+      border: 1px solid var(--gray-200); border-radius: 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12); overflow-x: hidden; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0; visibility: hidden;
+      transform: translateX(-50%) translateY(-8px);
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+    }
+
+    .street-dropdown.open {
+      opacity: 1; visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .street-option {
+      display: block; width: 100%; padding: 14px 16px;
+      background: none; border: none; text-align: left;
+      font-size: 15px; font-weight: 500; color: var(--black); cursor: pointer;
+    }
+
+    .street-option:not(:last-child) { border-bottom: 1px solid var(--gray-200); }
+    .street-option:active, .street-option.active { background: var(--gray-100); }
+    .street-option.active::after { content: "✓"; float: right; font-weight: 700; }
+
+    .street-option.locate-option {
+      font-weight: 700; position: sticky; top: 0; z-index: 1;
+      background: var(--white); border-bottom: 1px solid var(--gray-200);
+    }
+
+    .street-option.closed { opacity: 0.55; }
+
+    .cart-btn { position: relative; }
+
+    .cart-badge {
+      position: absolute; top: 4px; right: 4px;
+      min-width: 18px; height: 18px; padding: 0 5px;
+      background: var(--accent); color: var(--accent-text);
+      font-size: 11px; font-weight: 700; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: scale(0.5);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .cart-badge.visible { opacity: 1; transform: scale(1); }
+
+    /* ── Drawer ── */
+    .overlay {
+      position: fixed; inset: 0; background: var(--overlay);
+      z-index: 200; opacity: 0; visibility: hidden;
+      transition: opacity 0.25s, visibility 0.25s;
+    }
+
+    .overlay.open { opacity: 1; visibility: visible; }
+
+    .drawer {
+      position: fixed; top: 0; left: 0;
+      width: min(300px, 88vw); height: 100dvh;
+      background: var(--white); z-index: 201;
+      transform: translateX(-100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: calc(20px + var(--safe-top)) calc(20px + var(--safe-left)) calc(20px + var(--safe-bottom));
+      display: flex; flex-direction: column;
+    }
+
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-user {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 28px; padding-bottom: 20px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .drawer-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--accent); color: var(--accent-text);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; overflow: hidden;
+    }
+
+    .drawer-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .drawer-user-name { font-size: 16px; font-weight: 700; }
+    .drawer-user-email { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+
+    .drawer-link {
+      display: block; padding: 14px 0;
+      font-size: 16px; font-weight: 500; color: var(--black);
+      text-decoration: none; border-bottom: 1px solid var(--gray-200);
+      background: none; border-left: none; border-right: none; border-top: none;
+      width: 100%; text-align: left; cursor: pointer;
+    }
+
+    /* ── Page body ── */
+    .page-body {
+      flex: 1;
+      padding: 20px var(--page-x);
+      padding-bottom: calc(24px + var(--safe-bottom));
+    }
+
+    .page-body.tight-top { padding-top: 12px; }
+    .page-body.with-cart-bar { padding-bottom: calc(80px + var(--safe-bottom)); }
+    .page-body.with-footer-btn { padding-bottom: calc(88px + var(--safe-bottom)); }
+
+    /* ── Forms ── */
+    .form-group { margin-bottom: 16px; }
+
+    .form-label {
+      display: block; font-size: 13px; font-weight: 600;
+      margin-bottom: 6px; letter-spacing: 0.2px;
+    }
+
+    .form-input {
+      width: 100%; padding: 14px 14px;
+      font-size: 16px; border: 1.5px solid var(--gray-200);
+      border-radius: 10px; background: var(--white);
+      color: var(--black); outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus { border-color: var(--accent); }
+
+    .btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; min-height: 52px; padding: 14px 20px;
+      font-size: 16px; font-weight: 700; border: none;
+      border-radius: 12px; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.98); opacity: 0.85; }
+
+    .btn-primary { background: var(--accent); color: var(--accent-text); }
+    .btn-outline { background: var(--white); color: var(--black); border: 1.5px solid var(--gray-200); }
+    .btn-danger { background: var(--white); color: var(--black); border: 1.5px solid var(--accent); }
+    .btn-ghost { background: none; color: var(--gray-600); font-weight: 600; font-size: 15px; min-height: auto; padding: 8px; }
+
+    .form-footer {
+      text-align: center; margin-top: 20px;
+      font-size: 15px; color: var(--gray-600);
+    }
+
+    .form-footer button {
+      background: none; border: none; color: var(--black);
+      font-weight: 700; cursor: pointer; font-size: 15px;
+      text-decoration: underline; text-underline-offset: 2px;
+    }
+
+    .auth-logo {
+      font-size: 28px; font-weight: 800; letter-spacing: -0.8px;
+      margin-bottom: 6px;
+    }
+
+    .auth-sub {
+      font-size: 15px; color: var(--gray-600);
+      margin-bottom: 28px; line-height: 1.4;
+    }
+
+    /* ── Hero / search ── */
+    .hero { padding: 16px var(--page-x) 4px; }
+
+    .hero h1 {
+      font-size: clamp(22px, 6vw, 28px); font-weight: 800;
+      letter-spacing: -0.8px; line-height: 1.15; margin-bottom: 4px;
+    }
+
+    .hero p { font-size: 14px; color: var(--gray-600); margin-bottom: 12px; line-height: 1.4; }
+
+    .location-banner {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+
+    .location-locate-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 10px 14px; font-size: 14px; font-weight: 700;
+      border: 1.5px solid var(--accent); border-radius: 10px;
+      background: var(--white); color: var(--black); cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .location-locate-btn:active { background: var(--gray-100); }
+
+    .location-hint { font-size: 13px; color: var(--gray-600); line-height: 1.35; flex: 1; min-width: 160px; }
+
+    .search-bar {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 14px; min-height: 48px;
+      background: var(--gray-100); border-radius: 12px;
+      border: 1px solid transparent;
+    }
+
+    .search-bar:focus-within { border-color: var(--accent); background: var(--white); }
+
+    .search-bar input {
+      flex: 1; border: none; background: none;
+      font-size: 16px; outline: none; color: var(--black); min-width: 0;
+    }
+
+    .search-bar input::placeholder { color: var(--gray-400); }
+
+    /* ── Categories ── */
+    .categories-wrap {
+      position: sticky;
+      top: calc(var(--header-h) + var(--safe-top));
+      z-index: 90; background: var(--white);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .categories {
+      display: flex; gap: 8px; padding: 10px var(--page-x);
+      overflow-x: auto; scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+      scroll-padding-inline: var(--page-x);
+    }
+
+    .categories::-webkit-scrollbar { display: none; }
+
+    .category-chip {
+      flex-shrink: 0; padding: 10px 16px; font-size: 14px;
+      min-height: 40px; font-weight: 600;
+      border: 1.5px solid var(--gray-200); border-radius: 20px;
+      background: var(--white); color: var(--black); cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .category-chip.active {
+      background: var(--accent); border-color: var(--accent); color: var(--accent-text);
+    }
+
+    /* ── Menu ── */
+    .menu-section {
+      flex: 1; padding: 12px var(--page-x) 0;
+      padding-bottom: calc(72px + var(--safe-bottom));
+    }
+
+    .section-label {
+      font-size: 18px; font-weight: 800;
+      letter-spacing: -0.4px; margin-bottom: 4px;
+    }
+
+    .menu-grid { display: flex; flex-direction: column; }
+
+    .menu-item {
+      display: flex; gap: 12px; padding: 16px 0;
+      border-bottom: 1px solid var(--gray-200);
+      cursor: pointer;
+    }
+
+    .menu-item:last-child { border-bottom: none; }
+
+    .item-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+
+    .item-name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+
+    .item-desc {
+      font-size: 13px; color: var(--gray-600); line-height: 1.35;
+      margin-bottom: 8px; display: -webkit-box;
+      -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    .item-meta { display: flex; align-items: center; gap: 8px; }
+    .item-price { font-size: 15px; font-weight: 700; }
+
+    .item-tag {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.5px; padding: 2px 8px;
+      border: 1px solid var(--accent); border-radius: 4px; color: var(--black);
+    }
+
+    .item-image-wrap {
+      position: relative; flex-shrink: 0;
+      overflow: visible; padding: 0 6px 6px 0;
+    }
+
+    .item-image {
+      width: clamp(96px, 26vw, 120px); height: clamp(96px, 26vw, 120px);
+      border-radius: 10px; background: var(--gray-100);
+      border: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+    }
+
+    .item-image svg { width: 48px; height: 48px; opacity: 0.35; color: var(--black); }
+
+    .item-image img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+    }
+
+    .add-btn {
+      position: absolute; bottom: 0; right: 0;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--white); border: 1.5px solid var(--gray-200);
+      color: var(--black);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      z-index: 2;
+    }
+
+    [data-theme="dark"] .add-btn {
+      background: var(--gray-200);
+      border-color: var(--gray-400);
+      color: #fff;
+    }
+
+    .empty-state { text-align: center; padding: 48px 24px; color: var(--gray-600); }
+    .empty-state p { font-size: 15px; margin-top: 8px; }
+
+    /* ── Account ── */
+    .account-avatar-section {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 8px 0 28px; border-bottom: 1px solid var(--gray-200);
+      margin-bottom: 24px;
+    }
+
+    .account-avatar {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: var(--accent); color: var(--accent-text);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 32px; font-weight: 700; overflow: hidden;
+      position: relative; cursor: pointer;
+    }
+
+    .account-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .account-avatar-edit {
+      margin-top: 12px; font-size: 14px; font-weight: 600;
+      color: var(--black); text-decoration: underline;
+      text-underline-offset: 3px; cursor: pointer;
+      background: none; border: none;
+    }
+
+    .settings-section { margin-bottom: 28px; }
+
+    .settings-title {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.6px; color: var(--gray-600); margin-bottom: 12px;
+    }
+
+    .location-option {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid var(--gray-200);
+      cursor: pointer;
+    }
+
+    .location-option:last-child { border-bottom: none; }
+
+    .location-radio {
+      width: 20px; height: 20px; border-radius: 50%;
+      border: 2px solid var(--gray-200); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+
+    .location-option.selected .location-radio {
+      border-color: var(--accent);
+    }
+
+    .location-option.selected .location-radio::after {
+      content: ""; width: 10px; height: 10px;
+      background: var(--accent); border-radius: 50%;
+    }
+
+    .location-option-label { font-size: 16px; font-weight: 500; }
+    .location-option-sub { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+
+    .delete-section {
+      margin-top: 40px; padding-top: 24px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .delete-btn {
+      width: 100%; padding: 14px; background: none; border: none;
+      font-size: 15px; font-weight: 600; color: var(--black);
+      cursor: pointer; text-align: center;
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    /* ── Theme picker ── */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .theme-option {
+      display: flex; flex-direction: column; align-items: flex-start;
+      gap: 8px; padding: 12px;
+      border: 1.5px solid var(--gray-200); border-radius: 12px;
+      background: var(--white); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      text-align: left;
+    }
+
+    .theme-option.selected {
+      border-color: var(--accent);
+      background: var(--gray-100);
+    }
+
+    .theme-option:active { opacity: 0.85; }
+
+    .theme-swatches {
+      display: flex; gap: 5px;
+    }
+
+    .theme-swatch {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 1.5px solid var(--gray-200);
+      flex-shrink: 0;
+    }
+
+    .theme-option-name {
+      font-size: 14px; font-weight: 700; color: var(--black);
+    }
+
+    .theme-option-desc {
+      font-size: 12px; color: var(--gray-600); line-height: 1.3;
+    }
+
+    /* ── Cart sheet ── */
+    .sheet-backdrop {
+      position: fixed; inset: 0; background: var(--overlay);
+      z-index: 250; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .sheet-backdrop.open { opacity: 1; visibility: visible; }
+
+    .sheet {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      z-index: 251; background: var(--white);
+      border-radius: 16px 16px 0 0;
+      max-height: 92dvh;
+      display: flex; flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sheet.open { transform: translateY(0); }
+
+    .sheet-handle {
+      width: 36px; height: 4px; background: var(--gray-200);
+      border-radius: 2px; margin: 10px auto 0; flex-shrink: 0;
+    }
+
+    .sheet-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px var(--page-x) 16px;
+      border-bottom: 1px solid var(--gray-200); flex-shrink: 0;
+    }
+
+    .sheet-title { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+
+    .sheet-close {
+      width: 36px; height: 36px; border: none; background: var(--gray-100);
+      border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .sheet-body {
+      flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch;
+      padding: 8px var(--page-x);
+    }
+
+    .sheet-footer {
+      padding: 12px var(--page-x);
+      padding-bottom: calc(12px + var(--safe-bottom));
+      border-top: 1px solid var(--gray-200); flex-shrink: 0;
+    }
+
+    .cart-line {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 0; border-bottom: 1px solid var(--gray-200);
+    }
+
+    .cart-line-info { flex: 1; min-width: 0; }
+    .cart-line-name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .cart-line-notes {
+      font-size: 13px; color: var(--gray-600); line-height: 1.35;
+      margin-bottom: 2px;
+    }
+    .cart-line-price { font-size: 14px; color: var(--gray-600); }
+
+    .detail-notes { margin-bottom: 16px; }
+    .detail-notes-label {
+      display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px;
+    }
+    .detail-notes-label span { font-weight: 400; color: var(--gray-600); }
+    .detail-notes textarea { width: 100%; resize: none; min-height: 72px; }
+
+    .checkout-item-notes {
+      font-size: 13px; color: var(--gray-600); margin: -2px 0 8px;
+      padding-left: 0;
+    }
+
+    .wallet-buttons {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+
+    .wallet-btn {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; min-height: 52px; border-radius: 12px;
+      font-size: 17px; font-weight: 600; cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+
+    .wallet-btn:active:not(:disabled) { transform: scale(0.98); opacity: 0.9; }
+    .wallet-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+    .apple-pay-btn {
+      background: #000; color: #fff; border: none;
+    }
+
+    .google-pay-btn {
+      background: var(--white); color: var(--black);
+      border: 1.5px solid var(--gray-200);
+    }
+
+    .wallet-btn svg { height: 22px; width: auto; flex-shrink: 0; }
+
+    .test-pay-btn {
+      background: var(--gray-100); color: var(--black);
+      border: 2px dashed var(--accent); margin-bottom: 8px;
+    }
+
+    .test-pay-note {
+      font-size: 12px; color: var(--gray-600); line-height: 1.4;
+      text-align: center; margin-bottom: 14px;
+    }
+
+    .pay-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0 16px; color: var(--gray-600); font-size: 13px; font-weight: 600;
+    }
+
+    .pay-divider::before,
+    .pay-divider::after {
+      content: ""; flex: 1; height: 1px; background: var(--gray-200);
+    }
+
+    .card-form-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+    }
+
+    .form-group { margin-bottom: 12px; }
+    .form-label {
+      display: block; font-size: 13px; font-weight: 700;
+      margin-bottom: 6px; color: var(--gray-600);
+    }
+
+    .wallet-pay-backdrop {
+      align-items: flex-end; padding: 0;
+      padding-bottom: var(--safe-bottom);
+    }
+
+    .wallet-pay-sheet {
+      width: 100%; max-width: 480px;
+      background: var(--white);
+      border-radius: 16px 16px 0 0;
+      padding: 20px var(--page-x) calc(20px + var(--safe-bottom));
+      transform: translateY(100%);
+      transition: transform 0.28s ease;
+    }
+
+    .wallet-pay-backdrop.open .wallet-pay-sheet { transform: translateY(0); }
+
+    .wallet-pay-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+
+    .wallet-pay-brand {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 17px; font-weight: 700;
+    }
+
+    .wallet-pay-close {
+      width: 32px; height: 32px; border: none; background: var(--gray-100);
+      border-radius: 50%; font-size: 18px; cursor: pointer; color: var(--gray-600);
+    }
+
+    .wallet-pay-merchant { font-size: 15px; color: var(--gray-600); margin-bottom: 4px; }
+    .wallet-pay-total { font-size: 34px; font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+
+    .wallet-pay-card {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px; border: 1.5px solid var(--gray-200); border-radius: 12px;
+      margin-bottom: 20px; font-size: 15px; font-weight: 600;
+    }
+
+    .wallet-pay-card-icon {
+      width: 38px; height: 26px; border-radius: 4px;
+      background: linear-gradient(135deg, #1a1f71, #0057ff);
+      flex-shrink: 0;
+    }
+
+    .wallet-pay-confirm {
+      min-height: 52px; border-radius: 12px; border: none;
+      font-size: 16px; font-weight: 700; cursor: pointer; width: 100%;
+    }
+
+    .wallet-pay-confirm.apple { background: #000; color: #fff; }
+    .wallet-pay-confirm.google { background: #1a73e8; color: #fff; }
+
+    .wallet-pay-processing {
+      text-align: center; padding: 24px 0 8px; display: none;
+    }
+
+    .wallet-pay-processing.visible { display: block; }
+    .wallet-pay-processing p { font-size: 15px; color: var(--gray-600); margin-top: 12px; }
+
+    .wallet-spinner {
+      width: 36px; height: 36px; margin: 0 auto;
+      border: 3px solid var(--gray-200); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .qty-control {
+      display: flex; align-items: center; gap: 0;
+      border: 1.5px solid var(--gray-200); border-radius: 8px; overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 36px; height: 36px; border: none; background: var(--white);
+      font-size: 18px; font-weight: 500; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .qty-btn:active { background: var(--gray-100); }
+
+    .qty-val {
+      width: 32px; text-align: center; font-size: 15px; font-weight: 700;
+      border-left: 1.5px solid var(--gray-200);
+      border-right: 1.5px solid var(--gray-200);
+      line-height: 36px;
+    }
+
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 8px 0; font-size: 15px;
+    }
+
+    .summary-row.total {
+      font-weight: 800; font-size: 17px;
+      padding-top: 12px; margin-top: 4px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    /* ── Item detail sheet ── */
+    .detail-hero {
+      width: 100%; height: 200px; background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .detail-hero svg { width: 72px; height: 72px; opacity: 0.35; color: var(--black); }
+
+    .detail-hero.has-photo { padding: 0; overflow: hidden; }
+    .detail-hero.has-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .detail-content { padding: 20px var(--page-x); }
+
+    .detail-name { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; margin-bottom: 6px; }
+    .detail-desc { font-size: 15px; color: var(--gray-600); line-height: 1.45; margin-bottom: 20px; }
+    .detail-price { font-size: 18px; font-weight: 800; margin-bottom: 24px; }
+
+    .modifier-group { margin-bottom: 20px; }
+
+    .modifier-label {
+      font-size: 14px; font-weight: 700; margin-bottom: 10px;
+    }
+
+    .modifier-label span { font-weight: 400; color: var(--gray-600); }
+
+    .modifier-option {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; border: 1.5px solid var(--gray-200);
+      border-radius: 10px; margin-bottom: 8px; cursor: pointer;
+    }
+
+    .modifier-option.selected { border-color: var(--accent); background: var(--gray-100); }
+
+    .modifier-option-left { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; }
+
+    .modifier-check {
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid var(--gray-200);
+    }
+
+    .modifier-option.selected .modifier-check {
+      border-color: var(--accent); background: var(--accent);
+      box-shadow: inset 0 0 0 3px var(--white);
+    }
+
+    .detail-qty-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .detail-qty-row span { font-size: 15px; font-weight: 700; }
+
+    #itemSheet { overflow: hidden; }
+    #itemSheetContent {
+      flex: 1; min-height: 0; overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: calc(20px + var(--safe-bottom));
+    }
+
+    #detailAddBtn { width: 100%; margin-top: 4px; }
+
+    /* ── Checkout ── */
+    .checkout-card {
+      border: 1.5px solid var(--gray-200); border-radius: 12px;
+      padding: 16px; margin-bottom: 16px;
+    }
+
+    .checkout-card-title {
+      font-size: 14px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--gray-600); margin-bottom: 12px;
+    }
+
+    .checkout-line {
+      display: flex; justify-content: space-between;
+      font-size: 15px; padding: 6px 0;
+    }
+
+    .checkout-line.name { font-weight: 600; }
+
+    .delivery-pin {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 15px; line-height: 1.4;
+    }
+
+    .sticky-footer {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 12px var(--page-x);
+      padding-bottom: calc(12px + var(--safe-bottom));
+      background: var(--white); border-top: 1px solid var(--gray-200);
+      z-index: 50;
+    }
+
+    /* ── Orders ── */
+    .order-card {
+      border: 1.5px solid var(--gray-200); border-radius: 12px;
+      padding: 16px; margin-bottom: 12px; cursor: pointer;
+    }
+
+    .order-card:active { background: var(--gray-100); }
+
+    .order-card-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .order-card-id { font-size: 15px; font-weight: 700; }
+    .order-card-date { font-size: 13px; color: var(--gray-600); }
+    .order-card-status {
+      font-size: 12px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.4px; padding: 4px 8px;
+      border: 1px solid var(--accent); border-radius: 4px; color: var(--black);
+    }
+
+    .order-card-items { font-size: 14px; color: var(--gray-600); margin-bottom: 8px; }
+    .order-card-total { font-size: 15px; font-weight: 700; }
+
+    /* ── Admin ── */
+    .admin-gate { padding-top: 24px; }
+    .admin-gate-copy { font-size: 15px; color: var(--gray-600); line-height: 1.45; margin-bottom: 20px; }
+    .admin-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; gap: 12px;
+    }
+    .admin-toolbar-title { font-size: 15px; font-weight: 700; }
+    .admin-toolbar-meta { font-size: 13px; color: var(--gray-600); }
+    .admin-refresh-btn {
+      background: var(--gray-100); border: 1px solid var(--gray-200);
+      border-radius: 8px; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .admin-order {
+      border: 1.5px solid var(--gray-200); border-radius: 12px;
+      padding: 16px; margin-bottom: 12px;
+    }
+    .admin-order.is-new { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .admin-order-top {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 10px; margin-bottom: 10px;
+    }
+    .admin-order-id { font-size: 16px; font-weight: 800; letter-spacing: -0.3px; }
+    .admin-order-time { font-size: 13px; color: var(--gray-600); margin-top: 2px; }
+    .admin-order-badge {
+      font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+      padding: 4px 8px; border-radius: 4px; border: 1px solid var(--accent); white-space: nowrap;
+    }
+    .admin-order-meta { font-size: 14px; line-height: 1.45; margin-bottom: 10px; }
+    .admin-order-items {
+      font-size: 14px; color: var(--gray-600); line-height: 1.5;
+      margin-bottom: 12px; padding-top: 10px; border-top: 1px solid var(--gray-200);
+    }
+    .admin-order-items strong { color: var(--black); font-weight: 700; }
+    .admin-order-controls {
+      display: grid; grid-template-columns: 1fr 88px; gap: 10px; margin-bottom: 10px;
+    }
+    .admin-order-controls label { display: block; font-size: 12px; font-weight: 700; color: var(--gray-600); margin-bottom: 6px; }
+    .admin-order-actions { display: flex; gap: 8px; }
+    .admin-order-actions .btn { min-height: 44px; font-size: 14px; }
+    .admin-section-label {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--gray-600); margin: 8px 0 12px;
+    }
+    .drawer-link.admin-link {
+      margin-top: auto; border-top: 1px solid var(--gray-200);
+      color: var(--gray-600); font-size: 14px;
+    }
+    .is-hidden { display: none !important; }
+
+    .tracking-order-id {
+      font-size: 14px; color: var(--gray-600); margin-bottom: 8px;
+    }
+
+    .tracking-status.cancelled .tracking-eta { font-size: 28px; }
+
+    /* ── Tracking ── */
+    .tracking-status {
+      text-align: center; padding: 24px 0 32px;
+      border-bottom: 1px solid var(--gray-200); margin-bottom: 28px;
+    }
+
+    .tracking-eta { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 4px; }
+    .tracking-label { font-size: 15px; color: var(--gray-600); }
+
+    .timeline { padding: 0 4px; }
+
+    .timeline-step {
+      display: flex; gap: 16px; position: relative;
+      padding-bottom: 28px;
+    }
+
+    .timeline-step:last-child { padding-bottom: 0; }
+
+    .timeline-step:not(:last-child)::before {
+      content: ""; position: absolute;
+      left: 11px; top: 24px; bottom: 0;
+      width: 2px; background: var(--gray-200);
+    }
+
+    .timeline-step.done:not(:last-child)::before { background: var(--accent); }
+
+    .timeline-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid var(--gray-200); background: var(--white);
+      flex-shrink: 0; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .timeline-step.done .timeline-dot {
+      border-color: var(--accent); background: var(--accent);
+    }
+
+    .timeline-step.done .timeline-dot::after {
+      content: "✓"; color: var(--accent-text); font-size: 12px; font-weight: 700;
+    }
+
+    .timeline-step.active .timeline-dot {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--gray-100);
+    }
+
+    .timeline-text { padding-top: 2px; }
+    .timeline-title { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .timeline-sub { font-size: 13px; color: var(--gray-600); }
+
+    .timeline-step.done .timeline-title,
+    .timeline-step.active .timeline-title { color: var(--black); }
+
+    .timeline-step:not(.done):not(.active) .timeline-title { color: var(--gray-400); }
+
+    /* ── Help ── */
+    .help-item {
+      padding: 16px 0; border-bottom: 1px solid var(--gray-200);
+    }
+
+    .help-q { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .help-a { font-size: 14px; color: var(--gray-600); line-height: 1.45; }
+
+    /* ── Modal ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: var(--overlay);
+      z-index: 300; opacity: 0; visibility: hidden;
+      display: flex; align-items: flex-end; justify-content: center;
+      transition: opacity 0.25s, visibility 0.25s;
+      padding: var(--page-x);
+      padding-bottom: calc(20px + var(--safe-bottom));
+    }
+
+    .modal-backdrop.center { align-items: center; padding-bottom: var(--page-x); }
+
+    .modal-backdrop.open { opacity: 1; visibility: visible; }
+
+    .modal {
+      background: var(--white); border-radius: 16px;
+      width: 100%; max-width: 400px;
+      padding: 24px var(--page-x);
+      transform: translateY(20px);
+      transition: transform 0.25s;
+    }
+
+    .modal-backdrop.open .modal { transform: translateY(0); }
+
+    .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; letter-spacing: -0.3px; }
+    .modal-sub { font-size: 14px; color: var(--gray-600); margin-bottom: 20px; line-height: 1.4; }
+
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+    /* ── Cart bar ── */
+    .cart-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 80;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px var(--page-x);
+      padding-bottom: calc(14px + var(--safe-bottom));
+      background: var(--accent); color: var(--accent-text);
+      cursor: pointer; transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cart-bar.visible { transform: translateY(0); }
+    .cart-bar.hidden-bar { display: none; }
+
+    .cart-bar-left { display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; }
+
+    .cart-bar-count {
+      width: 24px; height: 24px; background: var(--accent-text); color: var(--accent);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 800;
+    }
+
+    .cart-bar-total { font-size: 15px; font-weight: 700; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: calc(64px + var(--safe-bottom)); left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      max-width: calc(100% - 32px);
+      background: var(--accent); color: var(--accent-text);
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 14px; font-weight: 500; z-index: 400;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s, transform 0.25s, visibility 0.25s;
+    }
+
+    .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .toast.show.with-cart-bar { bottom: calc(120px + var(--safe-bottom)); }
+
+    .hidden-input { display: none; }
+
+    @media (min-width: 768px) {
+      .menu-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 24px; }
+      .modal-backdrop { align-items: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Main header (home only) -->
+  <header class="header" id="mainHeader">
+    <button class="header-btn hamburger" id="menuBtn" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+    <div class="location-picker">
+      <button class="location-btn" id="locationBtn" aria-haspopup="listbox" aria-expanded="false">
+        <span id="streetLabel">18th Ave S</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="street-dropdown" id="streetDropdown" role="listbox"></div>
+    </div>
+    <button class="header-btn cart-btn" id="cartIconBtn" aria-label="View cart">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+      </svg>
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </header>
+
+  <!-- Sub header (other views) -->
+  <header class="sub-header hidden" id="subHeader">
+    <button class="header-btn" id="backBtn" aria-label="Go back">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <div class="sub-header-title" id="subHeaderTitle">Page</div>
+  </header>
+
+  <!-- ── HOME ── -->
+  <div class="view active" id="viewHome">
+    <section class="hero">
+      <h1 id="heroTitle">Good morning ☀️</h1>
+      <p>Bad Ass Coffee delivered to <strong id="heroStreet">18th Ave S</strong> beach access</p>
+      <div class="location-banner">
+        <button type="button" class="location-locate-btn" id="findNearestBtn">📍 Use my location</button>
+        <span class="location-hint" id="locationHint">Tap to find the closest downtown Naples beach access</span>
+      </div>
+      <div class="search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="search" id="searchInput" placeholder="Search menu…" autocomplete="off">
+      </div>
+    </section>
+    <div class="categories-wrap">
+      <div class="categories" id="categories"></div>
+    </div>
+    <section class="menu-section">
+      <h2 class="section-label" id="sectionLabel">Featured & popular</h2>
+      <div class="menu-grid" id="menuGrid"></div>
+      <div class="empty-state" id="emptyState" hidden>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <p>No items found</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── REGISTER ── -->
+  <div class="view" id="viewRegister">
+    <div class="page-body">
+      <div class="auth-logo">Beach Delivery</div>
+      <p class="auth-sub">Create an account to order coffee & breakfast to your spot on the sand.</p>
+      <form id="registerForm">
+        <div class="form-group">
+          <label class="form-label" for="regName">Full name</label>
+          <input class="form-input" type="text" id="regName" placeholder="Alex Rivera" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regEmail">Email</label>
+          <input class="form-input" type="email" id="regEmail" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPhone">Phone</label>
+          <input class="form-input" type="tel" id="regPhone" placeholder="(555) 123-4567" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regPassword">Password</label>
+          <input class="form-input" type="password" id="regPassword" placeholder="At least 8 characters" minlength="8" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Create account</button>
+      </form>
+      <button type="button" class="btn btn-outline" id="bypassRegisterBtn" style="margin-top:12px">Bypass register</button>
+      <p class="form-footer">Already have an account? <button type="button" id="openLoginBtn">Log in</button></p>
+    </div>
+  </div>
+
+  <!-- ── ACCOUNT ── -->
+  <div class="view" id="viewAccount">
+    <div class="page-body tight-top">
+      <div class="account-avatar-section">
+        <div class="account-avatar" id="accountAvatar">
+          <span id="avatarInitials">?</span>
+          <img id="avatarImg" alt="" hidden>
+        </div>
+        <button type="button" class="account-avatar-edit" id="changePhotoBtn">Change photo</button>
+        <input type="file" id="photoInput" class="hidden-input" accept="image/*">
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title">Preferred drop-off</div>
+        <p style="font-size:13px;color:var(--gray-600);margin-bottom:12px;line-height:1.4">Downtown Naples public beach access points. Closed accesses are marked.</p>
+        <div id="dropoffOptions"></div>
+        <button type="button" class="location-locate-btn" id="accountLocateBtn" style="margin-top:14px;width:100%;justify-content:center">📍 Find closest to me</button>
+      </div>
+
+      <div class="settings-section">
+        <div class="settings-title">Theme</div>
+        <div class="theme-grid" id="themeGrid">
+          <button type="button" class="theme-option selected" data-theme="classic">
+            <div class="theme-swatches">
+              <span class="theme-swatch" style="background:#000"></span>
+              <span class="theme-swatch" style="background:#fff"></span>
+              <span class="theme-swatch" style="background:#e5e5e5"></span>
+            </div>
+            <span class="theme-option-name">Classic</span>
+            <span class="theme-option-desc">Black & white</span>
+          </button>
+          <button type="button" class="theme-option" data-theme="dark">
+            <div class="theme-swatches">
+              <span class="theme-swatch" style="background:#121212"></span>
+              <span class="theme-swatch" style="background:#f0f0f0"></span>
+              <span class="theme-swatch" style="background:#2e2e2e"></span>
+            </div>
+            <span class="theme-option-name">Dark</span>
+            <span class="theme-option-desc">Easy on the eyes</span>
+          </button>
+          <button type="button" class="theme-option" data-theme="beach">
+            <div class="theme-swatches">
+              <span class="theme-swatch" style="background:#0077b6"></span>
+              <span class="theme-swatch" style="background:#fff8f0"></span>
+              <span class="theme-swatch" style="background:#1a3a4a"></span>
+            </div>
+            <span class="theme-option-name">Beach</span>
+            <span class="theme-option-desc">Sand & ocean</span>
+          </button>
+          <button type="button" class="theme-option" data-theme="badass">
+            <div class="theme-swatches">
+              <span class="theme-swatch" style="background:#1e919d"></span>
+              <span class="theme-swatch" style="background:#4b3621"></span>
+              <span class="theme-swatch" style="background:#fff"></span>
+            </div>
+            <span class="theme-option-name">Bad Ass</span>
+            <span class="theme-option-desc">Coffee of Hawaii</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="delete-section">
+        <button type="button" class="delete-btn" id="deleteAccountBtn">Delete my account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── CHECKOUT ── -->
+  <div class="view" id="viewCheckout">
+    <div class="page-body with-footer-btn">
+      <div class="checkout-card">
+        <div class="checkout-card-title">Deliver to</div>
+        <div class="delivery-pin">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-4.5 7-11a7 7 0 1 0-14 0c0 6.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          <div>
+            <strong id="checkoutStreet">18th Ave S</strong><br>
+            <span style="color:var(--gray-600);font-size:14px">Public beach access · Olde Naples</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="checkout-card">
+        <div class="checkout-card-title">Order</div>
+        <div id="checkoutItems"></div>
+        <div class="summary-row" style="margin-top:8px"><span>Subtotal</span><span id="checkoutSubtotal">$0.00</span></div>
+        <div class="summary-row"><span>Delivery</span><span>$2.00</span></div>
+        <div class="summary-row total"><span>Total</span><span id="checkoutTotal">$0.00</span></div>
+      </div>
+
+      <div class="checkout-card">
+        <div class="checkout-card-title">Delivery notes</div>
+        <textarea class="form-input" id="deliveryNotes" rows="3" placeholder="Near the blue umbrella, etc." style="resize:none"></textarea>
+      </div>
+
+      <div class="checkout-card">
+        <div class="checkout-card-title">Payment</div>
+        <button type="button" class="wallet-btn test-pay-btn" id="testPayBtn" disabled>
+          Test payment · <span id="testPayTotal">$0.00</span>
+        </button>
+        <p class="test-pay-note">Skips real payment — places a live order on the restaurant admin board for testing.</p>
+        <div class="pay-divider"><span>or pay with wallet / card</span></div>
+        <div class="wallet-buttons">
+          <button type="button" class="wallet-btn apple-pay-btn" id="applePayBtn" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.365 1.43c0 1.14-.467 2.223-1.177 3.08-.788.94-2.066 1.66-3.276 1.56-.14-1.09.404-2.243 1.07-3.01.82-.94 2.24-1.64 3.383-1.73.12 1.04-.04 2.01.001 3.1zm1.117 4.51c-1.89-.114-3.488 1.077-4.388 1.077-.93 0-2.352-1.02-3.867-1.01-1.993.03-3.826 1.16-4.857 2.953-2.077 3.59-.537 8.903 1.491 11.823 1.005 1.444 2.195 3.063 3.764 3.005 1.515-.06 2.085-.977 3.915-.977 1.83 0 2.325.977 3.915.947 1.62-.03 2.646-1.474 3.642-2.923 1.147-1.674 1.618-3.295 1.645-3.378-.036-.016-3.158-1.212-3.19-4.815-.028-3.015 2.465-4.457 2.577-4.534-1.403-2.055-3.585-2.3-4.352-2.34z"/></svg>
+            <span>Pay</span>
+          </button>
+          <button type="button" class="wallet-btn google-pay-btn" id="googlePayBtn" disabled>
+            <svg viewBox="0 0 41 17" aria-hidden="true"><path fill="#5F6368" d="M19.2 8.4v4.8h-1.5V.9h4c1.1 0 2 .4 2.7 1.1.7.7 1.1 1.6 1.1 2.7 0 1.1-.4 2-1.1 2.7-.7.7-1.6 1.1-2.7 1.1h-2.5zm0-6.2v4.7h2.6c.6 0 1.1-.2 1.5-.6.4-.4.6-.9.6-1.5 0-.6-.2-1.1-.6-1.5-.4-.4-.9-.6-1.5-.6h-2.6z"/><path fill="#4285F4" d="M28.8 3.3c1 0 1.8.3 2.4.9.6.6.9 1.4.9 2.4 0 1-.3 1.8-.9 2.4-.6.6-1.4.9-2.4.9h-1.9v1.5h-1.5V.9h3.4zm-1.9 4.2h1.9c.6 0 1.1-.2 1.5-.5.4-.4.6-.8.6-1.4 0-.6-.2-1-.6-1.4-.4-.4-.9-.5-1.5-.5h-1.9v3.8z"/><path fill="#34A853" d="M38.1 6.1l1.2 1.2c-.5.7-1.1 1.2-1.8 1.6-.7.4-1.5.6-2.4.6-1.3 0-2.4-.4-3.3-1.3-.9-.9-1.3-2-1.3-3.3 0-1.3.4-2.4 1.3-3.3.9-.9 2-1.3 3.3-1.3.9 0 1.7.2 2.4.6.7.4 1.3.9 1.8 1.6l-1.2 1.2c-.7-.8-1.6-1.2-2.7-1.2-1 0-1.8.3-2.5 1-.7.7-1 1.5-1 2.5s.3 1.8 1 2.5c.7.7 1.5 1 2.5 1 1.1 0 2-.4 2.7-1.2z"/><path fill="#EA4335" d="M13.1 7.5l-4.2 1.8L8.5 8.2l8.3-3.8.8 3.1z"/><path fill="#FBBC04" d="M8.5 8.2l.4 2.1-1.8.8C6.4 9.5 5.5 7.6 5.5 5.5c0-.4 0-.8.1-1.2l2.9 3.9z"/><path fill="#4285F4" d="M13.1 7.5L10.2 3.6c.8-.4 1.7-.6 2.7-.6 1.3 0 2.4.4 3.3 1.3.4.4.7.9.9 1.4l-3.9 1.8z"/></svg>
+            <span>Pay</span>
+          </button>
+        </div>
+        <div class="pay-divider"><span>or pay with card</span></div>
+        <div class="form-group">
+          <label class="form-label" for="cardNumber">Card number</label>
+          <input class="form-input" type="text" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" maxlength="19">
+        </div>
+        <div class="card-form-row">
+          <div class="form-group">
+            <label class="form-label" for="cardExpiry">Expiry</label>
+            <input class="form-input" type="text" id="cardExpiry" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cardCvc">CVC</label>
+            <input class="form-input" type="text" id="cardCvc" inputmode="numeric" autocomplete="cc-csc" placeholder="123" maxlength="4">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-footer">
+      <button type="button" class="btn btn-primary" id="placeOrderBtn" disabled>Pay with card · <span id="checkoutBtnTotal">$0.00</span></button>
+    </div>
+  </div>
+
+  <!-- ── ORDERS ── -->
+  <div class="view" id="viewOrders">
+    <div class="page-body tight-top" id="ordersList"></div>
+  </div>
+
+  <!-- ── TRACKING ── -->
+  <div class="view" id="viewTracking">
+    <div class="page-body tight-top">
+      <div class="tracking-order-id" id="trackingOrderId"></div>
+      <div class="tracking-status" id="trackingStatusBlock">
+        <div class="tracking-eta" id="trackingEta">—</div>
+        <div class="tracking-label" id="trackingLabel">Estimated arrival</div>
+      </div>
+      <div class="timeline" id="trackingTimeline"></div>
+    </div>
+  </div>
+
+  <!-- ── ADMIN ── -->
+  <div class="view" id="viewAdmin">
+    <div class="page-body admin-gate" id="adminGate">
+      <div class="auth-logo">Restaurant</div>
+      <p class="admin-gate-copy">Sign in to view incoming orders, update status, and set delivery ETA for customers.</p>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label class="form-label" for="adminPin">Staff PIN</label>
+          <input class="form-input" type="password" id="adminPin" inputmode="numeric" placeholder="Enter PIN" autocomplete="off" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Open order board</button>
+      </form>
+      <p class="form-footer" style="margin-top:16px">Demo PIN: <strong>1234</strong></p>
+      <p class="form-footer" id="adminPendingHint" style="margin-top:8px"></p>
+    </div>
+    <div class="page-body tight-top is-hidden" id="adminPanel">
+      <div class="admin-toolbar">
+        <div>
+          <div class="admin-toolbar-title">Live orders</div>
+          <div class="admin-toolbar-meta" id="adminOrderMeta">0 active</div>
+        </div>
+        <button type="button" class="admin-refresh-btn" id="adminRefreshBtn">Refresh</button>
+      </div>
+      <div id="adminActiveOrders"></div>
+      <div class="admin-section-label" id="adminCompletedLabel">Completed</div>
+      <div id="adminCompletedOrders"></div>
+    </div>
+  </div>
+
+  <!-- ── HELP ── -->
+  <div class="view" id="viewHelp">
+    <div class="page-body tight-top">
+      <div class="help-item">
+        <div class="help-q">Where do you deliver?</div>
+        <div class="help-a">We deliver to 24 public beach access points in Olde Naples — from 7th Ave N and North Lake Drive south to 33rd Ave S, including Central Ave and Broad Ave S.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-q">How do I find the closest access?</div>
+        <div class="help-a">Tap <strong>Use my location</strong> on the home screen or in Account. We'll pick the nearest open beach access based on your GPS.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-q">How do I change my drop-off spot?</div>
+        <div class="help-a">Go to Account to set a preferred access, or tap the access name in the header to choose from all downtown Naples beach accesses.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-q">Can I cancel an order?</div>
+        <div class="help-a">Contact us within 2 minutes of placing your order and we'll do our best to cancel before preparation starts.</div>
+      </div>
+      <div class="help-item">
+        <div class="help-q">Need more help?</div>
+        <div class="help-a">Email hello@beachdelivery.com or text (555) 000-1234.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Drawer -->
+  <div class="overlay" id="drawerOverlay"></div>
+  <nav class="drawer" id="drawer">
+    <div class="drawer-user" id="drawerUser">
+      <div class="drawer-avatar" id="drawerAvatar"><span id="drawerInitials">?</span></div>
+      <div>
+        <div class="drawer-user-name" id="drawerName">Guest</div>
+        <div class="drawer-user-email" id="drawerEmail">Sign in to order</div>
+      </div>
+    </div>
+    <button class="drawer-link" data-nav="orders">Orders</button>
+    <button class="drawer-link" data-nav="account">Account</button>
+    <button class="drawer-link" data-nav="help">Help</button>
+    <button class="drawer-link admin-link" id="drawerAdminBtn">Restaurant admin</button>
+    <button class="drawer-link" id="drawerAuthBtn">Sign in</button>
+  </nav>
+
+  <!-- Cart sheet -->
+  <div class="sheet-backdrop" id="cartSheetBackdrop"></div>
+  <div class="sheet" id="cartSheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-header">
+      <div class="sheet-title">Your cart</div>
+      <button class="sheet-close" id="closeCartSheet" aria-label="Close">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>
+      </button>
+    </div>
+    <div class="sheet-body" id="cartSheetBody"></div>
+    <div class="sheet-footer">
+      <div class="summary-row"><span>Subtotal</span><span id="cartSubtotal">$0.00</span></div>
+      <div class="summary-row"><span>Delivery</span><span>$2.00</span></div>
+      <div class="summary-row total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+      <button type="button" class="btn btn-primary" id="goCheckoutBtn" style="margin-top:12px">Go to checkout</button>
+    </div>
+  </div>
+
+  <!-- Item detail sheet -->
+  <div class="sheet-backdrop" id="itemSheetBackdrop"></div>
+  <div class="sheet" id="itemSheet">
+    <div class="sheet-handle"></div>
+    <div id="itemSheetContent"></div>
+  </div>
+
+  <!-- Login modal -->
+  <div class="modal-backdrop center" id="loginModalBackdrop">
+    <div class="modal" role="dialog" aria-labelledby="loginTitle">
+      <div class="modal-title" id="loginTitle">Welcome back</div>
+      <p class="modal-sub">Log in to your Beach Delivery account.</p>
+      <form id="loginForm">
+        <div class="form-group">
+          <label class="form-label" for="loginEmail">Email</label>
+          <input class="form-input" type="email" id="loginEmail" placeholder="you@email.com" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="loginPassword">Password</label>
+          <input class="form-input" type="password" id="loginPassword" placeholder="Your password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Log in</button>
+      </form>
+      <p class="form-footer">Don't have an account? <button type="button" id="loginToRegisterBtn">Sign up</button></p>
+      <button type="button" class="btn btn-ghost" id="closeLoginBtn" style="margin:8px auto 0">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Wallet payment sheet -->
+  <div class="modal-backdrop wallet-pay-backdrop" id="walletPayBackdrop">
+    <div class="wallet-pay-sheet" role="dialog" aria-labelledby="walletPayTitle">
+      <div class="wallet-pay-header">
+        <div class="wallet-pay-brand" id="walletPayBrand"></div>
+        <button type="button" class="wallet-pay-close" id="closeWalletPayBtn" aria-label="Close">×</button>
+      </div>
+      <div id="walletPayBody">
+        <div class="wallet-pay-merchant">Beach Delivery</div>
+        <div class="wallet-pay-total" id="walletPayTotal">$0.00</div>
+        <div class="wallet-pay-card">
+          <div class="wallet-pay-card-icon"></div>
+          <span id="walletPayCardLabel">Visa ·••• 4242</span>
+        </div>
+        <button type="button" class="wallet-pay-confirm" id="walletPayConfirmBtn">Confirm payment</button>
+      </div>
+      <div class="wallet-pay-processing" id="walletPayProcessing">
+        <div class="wallet-spinner"></div>
+        <p id="walletPayProcessingText">Processing payment…</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete account modal -->
+  <div class="modal-backdrop center" id="deleteModalBackdrop">
+    <div class="modal" role="alertdialog">
+      <div class="modal-title">Delete account?</div>
+      <p class="modal-sub">This permanently removes your account, order history, and saved items. This can't be undone.</p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, delete my account</button>
+        <button type="button" class="btn btn-outline" id="cancelDeleteBtn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart bar -->
+  <div class="cart-bar" id="cartBar">
+    <div class="cart-bar-left">
+      <span class="cart-bar-count" id="cartBarCount">0</span>
+      <span>View cart</span>
+    </div>
+    <span class="cart-bar-total" id="cartBarTotal">$0.00</span>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script src="beachDeliveryThings/firebase-config.js"></script>
+<script src="beachDeliveryThings/firebase-service.js"></script>
+<script src="beachDeliveryThings/access-points.js"></script>
+<script src="beachDeliveryThings/menu-data.js"></script>
+<script>
+  const ICONS = {
+    coffee: '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 18h22v14a4 4 0 0 1-4 4H14a4 4 0 0 1-4-4V18z"/><path d="M32 22h4a4 4 0 0 1 0 8h-4"/><path d="M14 10c0-2 2-4 6-4s6 2 6 4"/></svg>'
+  };
+
+  const VIEW_TITLES = { register: "Sign up", account: "Account", checkout: "Checkout", orders: "Orders", tracking: "Track order", help: "Help", admin: "Restaurant" };
+  const DELIVERY_FEE = 2.00;
+  const THEME_META = { classic: "#ffffff", dark: "#121212", beach: "#fff8f0", badass: "#ffffff" };
+  const ADMIN_PIN = "1234";
+  const ORDERS_KEY = "bd-orders";
+  const ORDER_COUNTER_KEY = "bd-order-counter";
+  const ACTIVE_ORDER_KEY = "bd-active-order";
+  const ADMIN_AUTH_KEY = "bd-admin-auth";
+
+  const ORDER_STATUSES = [
+    { id: "received", label: "Received", customer: "Order received" },
+    { id: "preparing", label: "Preparing", customer: "Preparing your order" },
+    { id: "ready", label: "Ready", customer: "Ready for pickup" },
+    { id: "out_for_delivery", label: "On the way", customer: "On the way" },
+    { id: "delivered", label: "Delivered", customer: "Delivered" },
+    { id: "cancelled", label: "Cancelled", customer: "Cancelled" },
+  ];
+
+  const TIMELINE_STEPS = [
+    { title: "Order placed", sub: (o) => formatOrderTime(o.createdAt) },
+    { title: "Preparing", sub: () => "Your order is being made" },
+    { title: "On the way", sub: (o) => `Heading to ${escapeHtml(o.dropoff.name)}` },
+    { title: "Delivered", sub: () => "Enjoy!" },
+  ];
+
+  let activeCategory = "all";
+  let searchQuery = "";
+  let cart = {};
+  let toastTimer;
+  let currentView = "home";
+  let viewHistory = ["home"];
+  let user = null;
+  let firebaseUser = null;
+  let firebaseIsStaff = false;
+  let ordersCache = [];
+  let useFirebase = false;
+  let currentAccessId = "18th-ave-s";
+  let preferredDropoffId = "18th-ave-s";
+  let userLocation = null;
+  let currentTheme = "classic";
+  let detailItem = null;
+  let detailQty = 1;
+  let detailSizeId = null;
+  let activeOrderId = null;
+  let adminAuthed = false;
+  let orderPollTimer = null;
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  function formatOrderTime(iso) {
+    const d = new Date(iso);
+    const now = new Date();
+    const sameDay = d.toDateString() === now.toDateString();
+    const time = d.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    if (sameDay) return `Today, ${time}`;
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    if (d.toDateString() === yesterday.toDateString()) return `Yesterday, ${time}`;
+    return d.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" }) + `, ${time}`;
+  }
+
+  function formatRelativeTime(iso) {
+    const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+    if (mins < 1) return "Just now";
+    if (mins === 1) return "1 min ago";
+    if (mins < 60) return `${mins} min ago`;
+    const hrs = Math.floor(mins / 60);
+    return hrs === 1 ? "1 hr ago" : `${hrs} hr ago`;
+  }
+
+  function getStatusMeta(statusId) {
+    return ORDER_STATUSES.find(s => s.id === statusId) || ORDER_STATUSES[0];
+  }
+
+  function loadOrdersLocal() {
+    try {
+      const raw = localStorage.getItem(ORDERS_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function saveOrdersLocal(orders) {
+    try { localStorage.setItem(ORDERS_KEY, JSON.stringify(orders)); } catch (_) {}
+    window.dispatchEvent(new CustomEvent("bd-orders-updated"));
+  }
+
+  function loadOrders() {
+    if (useFirebase) return ordersCache;
+    return loadOrdersLocal();
+  }
+
+  function saveOrders(orders) {
+    if (useFirebase) {
+      ordersCache = orders;
+      onOrdersUpdated();
+      return;
+    }
+    saveOrdersLocal(orders);
+  }
+
+  function setOrdersCache(orders) {
+    ordersCache = orders;
+    onOrdersUpdated();
+  }
+
+  function upsertOrderCache(order) {
+    ordersCache = [order, ...ordersCache.filter(o => o.id !== order.id)];
+    onOrdersUpdated();
+  }
+
+  async function refreshOrdersFromFirebase() {
+    if (!useFirebase || !firebaseUser) return;
+    try {
+      const orders = (currentView === "admin" && adminAuthed && firebaseIsStaff)
+        ? await BDFirebase.fetchAllOrders()
+        : await BDFirebase.fetchMyOrders(firebaseUser.uid);
+      setOrdersCache(orders);
+    } catch (err) {
+      console.error("refreshOrdersFromFirebase failed:", err);
+    }
+  }
+
+  async function onOrdersListenError(err) {
+    console.warn("Live order sync failed — loading orders directly.", err?.message || err);
+    await refreshOrdersFromFirebase();
+  }
+
+  function getNextOrderNumber() {
+    let n = 1000;
+    try {
+      n = parseInt(localStorage.getItem(ORDER_COUNTER_KEY) || "1000", 10) + 1;
+      localStorage.setItem(ORDER_COUNTER_KEY, String(n));
+    } catch (_) {}
+    return n;
+  }
+
+  function getOrderById(id) {
+    return loadOrders().find(o => o.id === id) || null;
+  }
+
+  function getActiveOrder() {
+    if (!activeOrderId) return null;
+    const order = getOrderById(activeOrderId);
+    if (!order || order.status === "delivered" || order.status === "cancelled") return null;
+    return order;
+  }
+
+  function getCustomerOrders() {
+    if (useFirebase && firebaseUser) {
+      return ordersCache.filter(o => o.customerUid === firebaseUser.uid);
+    }
+    const email = user?.email || "guest";
+    return loadOrdersLocal().filter(o => o.customer.email === email);
+  }
+
+  function buildOrderItemsFromCart() {
+    return getCartLines().filter(line => line.qty > 0).map(line => {
+      const item = findMenuItem(line.variantId);
+      return {
+        variantId: line.variantId,
+        name: item?.name || "Menu item",
+        qty: line.qty,
+        unitPrice: item?.price || 0,
+        notes: line.notes || "",
+      };
+    });
+  }
+
+  async function createOrderFromCart(paymentMethod) {
+    const items = buildOrderItemsFromCart();
+    if (!items.length) throw new Error("Cart is empty");
+    const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+    const total = subtotal + DELIVERY_FEE;
+    const dropoff = getAccess(preferredDropoffId);
+    const now = new Date().toISOString();
+    const orderPayload = {
+      createdAt: now,
+      updatedAt: now,
+      status: "received",
+      etaMinutes: 15,
+      customer: {
+        name: user?.name || "Guest",
+        email: user?.email || "guest",
+        phone: user?.phone || "",
+      },
+      dropoff: { id: dropoff.id, name: dropoff.name },
+      deliveryNotes: ($("#deliveryNotes")?.value || "").trim(),
+      paymentMethod,
+      items,
+      subtotal,
+      deliveryFee: DELIVERY_FEE,
+      total,
+    };
+
+    if (useFirebase) {
+      const order = await BDFirebase.createOrder(orderPayload);
+      activeOrderId = order.id;
+      upsertOrderCache(order);
+      try { localStorage.setItem(ACTIVE_ORDER_KEY, order.id); } catch (_) {}
+      return order;
+    }
+
+    const number = getNextOrderNumber();
+    const order = {
+      id: `ord-${number}`,
+      number,
+      ...orderPayload,
+    };
+    const orders = loadOrdersLocal();
+    orders.unshift(order);
+    saveOrdersLocal(orders);
+    ordersCache = orders;
+    activeOrderId = order.id;
+    try { localStorage.setItem(ACTIVE_ORDER_KEY, order.id); } catch (_) {}
+    return order;
+  }
+
+  async function updateOrder(orderId, patch) {
+    if (useFirebase) {
+      const order = await BDFirebase.updateOrder(orderId, patch);
+      if (order) upsertOrderCache(order);
+      return order;
+    }
+    const orders = loadOrdersLocal();
+    const idx = orders.findIndex(o => o.id === orderId);
+    if (idx === -1) return null;
+    orders[idx] = { ...orders[idx], ...patch, updatedAt: new Date().toISOString() };
+    saveOrdersLocal(orders);
+    ordersCache = orders;
+    return orders[idx];
+  }
+
+  function statusTimelineIndex(status) {
+    const map = {
+      received: 0,
+      preparing: 1,
+      ready: 1,
+      out_for_delivery: 2,
+      delivered: 3,
+      cancelled: -1,
+    };
+    return map[status] ?? 0;
+  }
+
+  function renderOrdersList() {
+    const container = $("#ordersList");
+    if (!user) {
+      container.innerHTML = '<div class="empty-state"><p>Sign in to see your orders</p></div>';
+      return;
+    }
+    const orders = getCustomerOrders();
+    if (!orders.length) {
+      container.innerHTML = '<div class="empty-state"><p>No orders yet</p></div>';
+      return;
+    }
+    container.innerHTML = orders.map(order => {
+      const status = getStatusMeta(order.status);
+      const itemSummary = order.items.map(i => i.name).join(", ");
+      return `
+        <div class="order-card" data-order-id="${escapeHtml(order.id)}">
+          <div class="order-card-top">
+            <div>
+              <div class="order-card-id">Order #${order.number}</div>
+              <div class="order-card-date">${formatOrderTime(order.createdAt)}</div>
+            </div>
+            <span class="order-card-status">${escapeHtml(status.customer)}</span>
+          </div>
+          <div class="order-card-items">${escapeHtml(itemSummary)}</div>
+          <div class="order-card-total">${formatPrice(order.total)}</div>
+        </div>`;
+    }).join("");
+  }
+
+  function renderTracking() {
+    const order = activeOrderId ? getOrderById(activeOrderId) : null;
+    const block = $("#trackingStatusBlock");
+    const timeline = $("#trackingTimeline");
+
+    if (!order) {
+      $("#trackingOrderId").textContent = "";
+      $("#trackingEta").textContent = "—";
+      $("#trackingLabel").textContent = "No active order";
+      block.classList.remove("cancelled");
+      timeline.innerHTML = '<div class="empty-state"><p>Place an order to track delivery here</p></div>';
+      return;
+    }
+
+    $("#trackingOrderId").textContent = `Order #${order.number}`;
+    block.classList.toggle("cancelled", order.status === "cancelled");
+
+    if (order.status === "delivered") {
+      $("#trackingEta").textContent = "Delivered";
+      $("#trackingLabel").textContent = getStatusMeta(order.status).customer;
+    } else if (order.status === "cancelled") {
+      $("#trackingEta").textContent = "Cancelled";
+      $("#trackingLabel").textContent = "This order was cancelled";
+    } else {
+      $("#trackingEta").textContent = `${order.etaMinutes} min`;
+      $("#trackingLabel").textContent = "Estimated arrival";
+    }
+
+    if (order.status === "cancelled") {
+      timeline.innerHTML = `
+        <div class="timeline-step active">
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <div class="timeline-title">Order cancelled</div>
+            <div class="timeline-sub">${formatOrderTime(order.updatedAt)}</div>
+          </div>
+        </div>`;
+      return;
+    }
+
+    const activeIdx = statusTimelineIndex(order.status);
+    timeline.innerHTML = TIMELINE_STEPS.map((step, idx) => {
+      let state = "";
+      if (order.status === "delivered") state = "done";
+      else if (idx < activeIdx) state = "done";
+      else if (idx === activeIdx) state = "active";
+      const sub = typeof step.sub === "function" ? step.sub(order) : step.sub;
+      return `
+        <div class="timeline-step${state ? ` ${state}` : ""}">
+          <div class="timeline-dot"></div>
+          <div class="timeline-text">
+            <div class="timeline-title">${step.title}</div>
+            <div class="timeline-sub">${sub}</div>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  function renderAdminOrders() {
+    const orders = loadOrders();
+    const active = orders.filter(o => o.status !== "delivered" && o.status !== "cancelled");
+    const pendingHint = $("#adminPendingHint");
+    if (pendingHint) {
+      pendingHint.textContent = active.length
+        ? `${active.length} order${active.length === 1 ? "" : "s"} waiting in queue`
+        : "No orders in queue yet — place one from checkout with Test payment";
+    }
+
+    if (!adminAuthed) {
+      $("#adminGate").classList.remove("is-hidden");
+      $("#adminPanel").classList.add("is-hidden");
+      if (pendingHint && useFirebase && user && !firebaseIsStaff) {
+        pendingHint.textContent = "Sign in with a staff email (see STAFF_EMAILS in firebase-config.js) to see all customer orders.";
+      }
+      return;
+    }
+    if (useFirebase && !firebaseIsStaff) {
+      $("#adminGate").classList.remove("is-hidden");
+      $("#adminPanel").classList.add("is-hidden");
+      if (pendingHint) {
+        pendingHint.textContent = "Staff PIN unlocks the board in demo mode. With Firebase on, sign in using a staff email to manage live orders.";
+      }
+      return;
+    }
+    $("#adminGate").classList.add("is-hidden");
+    $("#adminPanel").classList.remove("is-hidden");
+
+    const completed = orders.filter(o => o.status === "delivered" || o.status === "cancelled");
+
+    $("#adminOrderMeta").textContent = `${active.length} active · ${orders.length} total`;
+    $("#adminActiveOrders").innerHTML = active.length
+      ? active.map(o => adminOrderCardHtml(o, true)).join("")
+      : '<div class="empty-state"><p>No active orders — new ones appear here instantly</p></div>';
+    $("#adminCompletedOrders").innerHTML = completed.length
+      ? completed.slice(0, 10).map(o => adminOrderCardHtml(o, false)).join("")
+      : '<div class="empty-state"><p>No completed orders yet</p></div>';
+    $("#adminCompletedLabel").classList.toggle("is-hidden", !completed.length);
+  }
+
+  function adminOrderCardHtml(order, isActive) {
+    const status = getStatusMeta(order.status);
+    const itemsHtml = order.items.map(item => {
+      const note = item.notes ? ` <em>(${escapeHtml(item.notes)})</em>` : "";
+      return `<div>${escapeHtml(item.name)} × ${item.qty}${note}</div>`;
+    }).join("");
+    const notesBlock = order.deliveryNotes
+      ? `<div><strong>Drop-off notes:</strong> ${escapeHtml(order.deliveryNotes)}</div>`
+      : "";
+    const statusOptions = ORDER_STATUSES.map(s =>
+      `<option value="${s.id}"${s.id === order.status ? " selected" : ""}>${s.label}</option>`
+    ).join("");
+
+    return `
+      <article class="admin-order${order.status === "received" ? " is-new" : ""}" data-order-id="${escapeHtml(order.id)}">
+        <div class="admin-order-top">
+          <div>
+            <div class="admin-order-id">#${order.number}</div>
+            <div class="admin-order-time">${formatRelativeTime(order.createdAt)} · ${formatOrderTime(order.createdAt)}</div>
+          </div>
+          <span class="admin-order-badge">${escapeHtml(status.label)}</span>
+        </div>
+        <div class="admin-order-meta">
+          <div><strong>${escapeHtml(order.customer.name)}</strong> · ${escapeHtml(order.dropoff.name)}</div>
+          <div>${escapeHtml(order.paymentMethod)} · ${formatPrice(order.total)}</div>
+          ${notesBlock}
+        </div>
+        <div class="admin-order-items"><strong>Items</strong>${itemsHtml}</div>
+        ${isActive ? `
+          <div class="admin-order-controls">
+            <div>
+              <label for="status-${order.id}">Status</label>
+              <select class="form-input admin-status-select" id="status-${order.id}" data-order-id="${escapeHtml(order.id)}">${statusOptions}</select>
+            </div>
+            <div>
+              <label for="eta-${order.id}">ETA (min)</label>
+              <input class="form-input admin-eta-input" type="number" id="eta-${order.id}" data-order-id="${escapeHtml(order.id)}" min="1" max="120" value="${order.etaMinutes}">
+            </div>
+          </div>
+          <div class="admin-order-actions">
+            <button type="button" class="btn btn-primary admin-save-btn" data-order-id="${escapeHtml(order.id)}">Update order</button>
+            <button type="button" class="btn btn-outline admin-advance-btn" data-order-id="${escapeHtml(order.id)}">Next step</button>
+          </div>` : ""}
+      </article>`;
+  }
+
+  function advanceOrderStatus(orderId) {
+    const order = getOrderById(orderId);
+    if (!order) return;
+    const flow = ["received", "preparing", "ready", "out_for_delivery", "delivered"];
+    const idx = flow.indexOf(order.status);
+    if (idx === -1 || idx >= flow.length - 1) return;
+    updateOrder(orderId, { status: flow[idx + 1] }).then(() => {
+      renderAdminOrders();
+      if (orderId === activeOrderId) renderTracking();
+      showToast(`Order #${order.number} → ${getStatusMeta(flow[idx + 1]).label}`);
+    });
+  }
+
+  function saveAdminOrder(orderId) {
+    const order = getOrderById(orderId);
+    if (!order) return;
+    const statusEl = $(`.admin-status-select[data-order-id="${orderId}"]`);
+    const etaEl = $(`.admin-eta-input[data-order-id="${orderId}"]`);
+    const status = statusEl?.value || order.status;
+    const etaMinutes = Math.max(1, Math.min(120, parseInt(etaEl?.value, 10) || order.etaMinutes));
+    updateOrder(orderId, { status, etaMinutes }).then(() => {
+      renderAdminOrders();
+      if (orderId === activeOrderId) renderTracking();
+      showToast(`Order #${order.number} updated`);
+    });
+  }
+
+  function setAdminAuthed(value) {
+    adminAuthed = value;
+    try {
+      if (value) localStorage.setItem(ADMIN_AUTH_KEY, "1");
+      else localStorage.removeItem(ADMIN_AUTH_KEY);
+    } catch (_) {}
+    setupOrderListeners();
+    renderAdminOrders();
+  }
+
+  function setupOrderListeners() {
+    if (!useFirebase) return;
+    BDFirebase.stopOrdersListeners();
+    if (!firebaseUser) return;
+    if (adminAuthed && firebaseIsStaff && currentView === "admin") {
+      BDFirebase.subscribeAllOrders(setOrdersCache, onOrdersListenError);
+    } else {
+      BDFirebase.subscribeMyOrders(firebaseUser.uid, setOrdersCache, onOrdersListenError);
+    }
+  }
+
+  async function handleFirebaseAuth(fbUser, profile) {
+    firebaseUser = fbUser;
+    if (!fbUser) {
+      firebaseIsStaff = false;
+      setUser(null);
+      ordersCache = [];
+      setupOrderListeners();
+      return;
+    }
+    setUser({
+      uid: fbUser.uid,
+      name: profile?.name || fbUser.displayName || "User",
+      email: fbUser.email,
+      phone: profile?.phone || "",
+    });
+    if (profile?.preferredDropoffId) {
+      preferredDropoffId = profile.preferredDropoffId;
+      setAccessPoint(preferredDropoffId, { silent: true });
+    }
+    if (profile?.theme) applyTheme(profile.theme);
+    firebaseIsStaff = await BDFirebase.isStaffUser(fbUser);
+    if (firebaseIsStaff) setAdminAuthed(true);
+    await refreshOrdersFromFirebase();
+    setupOrderListeners();
+  }
+
+  function initOrders() {
+    try { activeOrderId = localStorage.getItem(ACTIVE_ORDER_KEY); } catch (_) {}
+    try { adminAuthed = localStorage.getItem(ADMIN_AUTH_KEY) === "1"; } catch (_) {}
+    if (!useFirebase) ordersCache = loadOrdersLocal();
+  }
+
+  function startOrderPolling() {
+    stopOrderPolling();
+    orderPollTimer = setInterval(() => {
+      if (currentView === "tracking") renderTracking();
+      if (currentView === "admin" && adminAuthed) renderAdminOrders();
+    }, 3000);
+  }
+
+  function stopOrderPolling() {
+    if (orderPollTimer) clearInterval(orderPollTimer);
+    orderPollTimer = null;
+  }
+
+  function onOrdersUpdated() {
+    if (currentView === "orders") renderOrdersList();
+    if (currentView === "tracking") renderTracking();
+    if (currentView === "admin") renderAdminOrders();
+  }
+
+  /* ── Helpers ── */
+  function formatPrice(n) { return "$" + n.toFixed(2); }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
+  }
+
+  function findMenuGroup(id) {
+    return MENU.find(m => String(m.id) === String(id));
+  }
+
+  function findVariant(cartId) {
+    for (const g of MENU) {
+      if (g.sizes) {
+        const s = g.sizes.find(x => String(x.id) === String(cartId));
+        if (s) {
+          return {
+            price: s.price,
+            desc: s.desc,
+            name: s.label ? `${g.name} · ${s.label}` : g.name,
+            image: g.image,
+            cat: g.cat,
+          };
+        }
+      }
+      if (String(g.id) === String(cartId)) {
+        return { price: g.price, desc: g.desc, name: g.name, image: g.image, cat: g.cat };
+      }
+    }
+    return null;
+  }
+
+  function findMenuItem(id) {
+    return findVariant(id);
+  }
+
+  function getSelectedSize(item) {
+    if (!item?.sizes?.length) return null;
+    return item.sizes.find(s => String(s.id) === String(detailSizeId)) || item.sizes[0];
+  }
+
+  function resolveDetailVariantId() {
+    if (!detailItem) return null;
+    if (detailItem.sizes?.length) {
+      return getSelectedSize(detailItem)?.id ?? detailItem.sizes[0]?.id ?? null;
+    }
+    return detailItem.id;
+  }
+
+  function getItemPriceDisplay(item) {
+    if (item.fromPrice && item.sizes?.length) return `From ${formatPrice(item.price)}`;
+    return formatPrice(item.price);
+  }
+
+  function itemSearchText(item) {
+    const parts = [item.name, item.desc, item.cat];
+    if (item.sizes) item.sizes.forEach(s => parts.push(s.label, s.desc));
+    return parts.join(" ").toLowerCase();
+  }
+
+  function matchesSearch(item, query) {
+    if (!query) return true;
+    const words = query.split(/\s+/).filter(Boolean);
+    const hay = itemSearchText(item);
+    return words.every(w => hay.includes(w));
+  }
+
+  function itemImageHtml(item) {
+    if (item.image) {
+      return `<div class="item-image"><img src="${item.image}" alt="${escapeHtml(item.name)}" loading="lazy"></div>`;
+    }
+    return `<div class="item-image">${ICONS.coffee}</div>`;
+  }
+
+  function getSectionLabel() {
+    const q = searchQuery.trim();
+    if (q) return `Results for “${q}”`;
+    if (activeCategory === "all") return "Featured & popular";
+    if (activeCategory === "my-stuff") return "My Stuff";
+    const cat = CATEGORIES.find(c => c.id === activeCategory);
+    return cat ? cat.name : "Menu";
+  }
+
+  function getAccess(id) {
+    return BEACH_ACCESS.find(p => p.id === id) || BEACH_ACCESS.find(p => p.id === "18th-ave-s");
+  }
+
+  function formatDistance(meters) {
+    if (meters < 1000) return Math.round(meters) + " m";
+    return (meters / 1609.344).toFixed(1) + " mi";
+  }
+
+  function haversineMeters(lat1, lng1, lat2, lng2) {
+    const R = 6371000;
+    const toRad = (d) => d * Math.PI / 180;
+    const dLat = toRad(lat2 - lat1);
+    const dLng = toRad(lng2 - lng1);
+    const a = Math.sin(dLat / 2) ** 2
+      + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function findNearestAccess(lat, lng, preferOpen = true) {
+    let pool = preferOpen ? BEACH_ACCESS.filter(p => p.open) : BEACH_ACCESS;
+    if (!pool.length) pool = BEACH_ACCESS;
+    return pool.reduce((best, point) => {
+      const dist = haversineMeters(lat, lng, point.lat, point.lng);
+      return !best || dist < best.dist ? { point, dist } : best;
+    }, null);
+  }
+
+  function updateLocationHint() {
+    const hint = $("#locationHint");
+    const point = getAccess(currentAccessId);
+    if (userLocation && point) {
+      const dist = haversineMeters(userLocation.lat, userLocation.lng, point.lat, point.lng);
+      hint.textContent = `${point.name} is ${formatDistance(dist)} from you${point.open ? "" : " · Closed"}`;
+    } else {
+      hint.textContent = "Tap to find the closest downtown Naples beach access";
+    }
+  }
+
+  function updateTrackingLocation() {
+    const el = $("#trackingLocationSub");
+    if (el) el.textContent = `Heading to ${getAccess(currentAccessId).name}`;
+  }
+
+  function renderAccessDropdown() {
+    const sorted = [...BEACH_ACCESS].sort((a, b) => {
+      if (a.open !== b.open) return b.open - a.open;
+      return a.name.localeCompare(b.name, undefined, { numeric: true });
+    });
+    $("#streetDropdown").innerHTML = `
+      <button type="button" class="street-option locate-option" id="dropdownLocateBtn">📍 Use my location</button>
+      ${sorted.map(p => `
+        <button type="button" class="street-option${p.id === currentAccessId ? " active" : ""}${p.open ? "" : " closed"}"
+          data-access="${p.id}" role="option">
+          ${escapeHtml(p.name)}${p.open ? "" : " · Closed"}
+        </button>`).join("")}
+    `;
+  }
+
+  function renderDropoffOptions() {
+    $("#dropoffOptions").innerHTML = BEACH_ACCESS.map(p => `
+      <div class="location-option${p.id === preferredDropoffId ? " selected" : ""}" data-access="${p.id}">
+        <div class="location-radio"></div>
+        <div>
+          <div class="location-option-label">${escapeHtml(p.name)}${p.open ? "" : " · Closed"}</div>
+          <div class="location-option-sub">${escapeHtml(p.sub)}</div>
+        </div>
+      </div>`).join("");
+  }
+
+  function setAccessPoint(id, { silent = false } = {}) {
+    const point = getAccess(id);
+    if (!point) return;
+    currentAccessId = point.id;
+    preferredDropoffId = point.id;
+    $("#streetLabel").textContent = point.name;
+    $("#heroStreet").textContent = point.name;
+    $("#checkoutStreet").textContent = point.name;
+    renderAccessDropdown();
+    renderDropoffOptions();
+    updateLocationHint();
+    updateTrackingLocation();
+    try { localStorage.setItem("bd-access", point.id); } catch (_) {}
+    if (useFirebase && firebaseUser) {
+      BDFirebase.saveUserProfile(firebaseUser.uid, { preferredDropoffId: point.id });
+    }
+  }
+
+  function requestUserLocation() {
+    if (!navigator.geolocation) {
+      showToast("Location not supported on this device");
+      return;
+    }
+    showToast("Getting your location…");
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        userLocation = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        try { localStorage.setItem("bd-user-loc", JSON.stringify(userLocation)); } catch (_) {}
+        const nearest = findNearestAccess(userLocation.lat, userLocation.lng, true);
+        if (nearest) {
+          setAccessPoint(nearest.point.id);
+          showToast(`Nearest open access: ${nearest.point.name} (${formatDistance(nearest.dist)})`);
+        }
+      },
+      (err) => {
+        const msg = err.code === 1 ? "Location permission denied"
+          : err.code === 2 ? "Location unavailable"
+          : "Could not get your location";
+        showToast(msg);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 }
+    );
+  }
+
+  function initAccessPoints() {
+    try {
+      const saved = localStorage.getItem("bd-access");
+      if (saved && getAccess(saved)) currentAccessId = preferredDropoffId = saved;
+      const loc = localStorage.getItem("bd-user-loc");
+      if (loc) userLocation = JSON.parse(loc);
+    } catch (_) {}
+    renderAccessDropdown();
+    renderDropoffOptions();
+    setAccessPoint(currentAccessId);
+  }
+
+  function getInitials(name) {
+    return name.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2);
+  }
+
+  function cartLineKey(variantId, notes) {
+    return `${variantId}::${notes.trim()}`;
+  }
+
+  function getCartLines() {
+    return Object.entries(cart).map(([key, line]) => ({ key, ...line }));
+  }
+
+  function getCartCount() {
+    return Object.values(cart).reduce((s, line) => s + line.qty, 0);
+  }
+
+  function getCartSubtotal() {
+    return Object.values(cart).reduce((sum, line) => {
+      const item = findMenuItem(line.variantId);
+      return sum + (item ? item.price * line.qty : 0);
+    }, 0);
+  }
+
+  function showToast(msg) {
+    const toast = $("#toast");
+    toast.textContent = msg;
+    toast.classList.toggle("with-cart-bar", getCartCount() > 0 && currentView === "home");
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+
+  /* ── Navigation ── */
+  function navigate(view, { push = true } = {}) {
+    if (push && currentView !== view) viewHistory.push(view);
+    currentView = view;
+
+    $$(".view").forEach(v => v.classList.remove("active"));
+    const el = $(`#view${view.charAt(0).toUpperCase() + view.slice(1)}`);
+    if (el) el.classList.add("active");
+
+    const isHome = view === "home";
+    $("#mainHeader").classList.toggle("hidden", !isHome);
+    $("#subHeader").classList.toggle("hidden", isHome);
+    if (!isHome) $("#subHeaderTitle").textContent = VIEW_TITLES[view] || view;
+
+    $("#cartBar").classList.toggle("hidden-bar", view !== "home");
+    closeDrawer();
+    closeAllSheets();
+    closeAllModals();
+
+    if (view === "checkout") renderCheckout();
+    if (view === "account") syncAccountUI();
+    if (view === "orders") renderOrdersList();
+    if (view === "tracking") renderTracking();
+    if (useFirebase && firebaseUser) setupOrderListeners();
+    if (view === "admin") renderAdminOrders();
+    if (view === "tracking" || view === "admin") startOrderPolling();
+    else stopOrderPolling();
+    window.scrollTo(0, 0);
+  }
+
+  function goBack() {
+    if (viewHistory.length > 1) {
+      viewHistory.pop();
+      navigate(viewHistory[viewHistory.length - 1], { push: false });
+    } else {
+      navigate("home", { push: false });
+      viewHistory = ["home"];
+    }
+  }
+
+  /* ── User state (UI only) ── */
+  function setUser(u) {
+    user = u;
+    const loggedIn = !!user;
+    $("#drawerName").textContent = loggedIn ? user.name : "Guest";
+    $("#drawerEmail").textContent = loggedIn ? user.email : "Sign in to order";
+    $("#drawerInitials").textContent = loggedIn ? getInitials(user.name) : "?";
+    $("#drawerAuthBtn").textContent = loggedIn ? "Sign out" : "Sign in";
+    if (loggedIn) syncAccountUI();
+  }
+
+  function syncAccountUI() {
+    if (!user) return;
+    $("#avatarInitials").textContent = getInitials(user.name);
+    if (user.photo) {
+      $("#avatarImg").src = user.photo;
+      $("#avatarImg").hidden = false;
+      $("#avatarInitials").hidden = true;
+    } else {
+      $("#avatarImg").hidden = true;
+      $("#avatarInitials").hidden = false;
+    }
+    $$("#dropoffOptions .location-option").forEach(opt => {
+      opt.classList.toggle("selected", opt.dataset.access === preferredDropoffId);
+    });
+    $$("#themeGrid .theme-option").forEach(opt => {
+      opt.classList.toggle("selected", opt.dataset.theme === currentTheme);
+    });
+  }
+
+  function applyTheme(theme) {
+    currentTheme = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    $("#metaThemeColor").setAttribute("content", THEME_META[theme] || "#ffffff");
+    $$("#themeGrid .theme-option").forEach(opt => {
+      opt.classList.toggle("selected", opt.dataset.theme === theme);
+    });
+    try { localStorage.setItem("bd-theme", theme); } catch (_) {}
+    if (useFirebase && firebaseUser) {
+      BDFirebase.saveUserProfile(firebaseUser.uid, { theme });
+    }
+  }
+
+  function initTheme() {
+    let saved = "classic";
+    try { saved = localStorage.getItem("bd-theme") || "classic"; } catch (_) {}
+    applyTheme(THEME_META[saved] !== undefined ? saved : "classic");
+  }
+
+  function setStreet(street) {
+    const byName = BEACH_ACCESS.find(p => p.name === street);
+    if (byName) setAccessPoint(byName.id);
+  }
+
+  /* ── Cart ── */
+  function updateCartUI() {
+    const count = getCartCount();
+    const sub = getCartSubtotal();
+    $("#cartBadge").textContent = count;
+    $("#cartBadge").classList.toggle("visible", count > 0);
+    $("#cartBar").classList.toggle("visible", count > 0 && currentView === "home");
+    $("#cartBarCount").textContent = count;
+    $("#cartBarTotal").textContent = formatPrice(sub + (count > 0 ? DELIVERY_FEE : 0));
+  }
+
+  function addToCart(variantId, qty = 1, notes = "") {
+    const id = String(variantId);
+    const trimmedNotes = notes.trim();
+    const key = cartLineKey(id, trimmedNotes);
+    if (cart[key]) cart[key].qty += qty;
+    else cart[key] = { variantId: id, qty, notes: trimmedNotes };
+    updateCartUI();
+    const item = findVariant(id);
+    showToast(`Added ${item?.name || "item"}`);
+  }
+
+  function renderCartSheet() {
+    const body = $("#cartSheetBody");
+    const lines = getCartLines().filter(line => line.qty > 0);
+
+    if (lines.length === 0) {
+      body.innerHTML = '<div class="empty-state"><p>Your cart is empty</p></div>';
+    } else {
+      body.innerHTML = lines.map(line => {
+        const item = findMenuItem(line.variantId);
+        const notesHtml = line.notes
+          ? `<div class="cart-line-notes">${escapeHtml(line.notes)}</div>`
+          : "";
+        return `
+          <div class="cart-line" data-cart-key="${escapeHtml(line.key)}">
+            <div class="cart-line-info">
+              <div class="cart-line-name">${escapeHtml(item.name)}</div>
+              ${notesHtml}
+              <div class="cart-line-price">${formatPrice(item.price * line.qty)}</div>
+            </div>
+            <div class="qty-control">
+              <button class="qty-btn" data-action="dec" data-key="${escapeHtml(line.key)}">−</button>
+              <span class="qty-val">${line.qty}</span>
+              <button class="qty-btn" data-action="inc" data-key="${escapeHtml(line.key)}">+</button>
+            </div>
+          </div>`;
+      }).join("");
+    }
+
+    const sub = getCartSubtotal();
+    $("#cartSubtotal").textContent = formatPrice(sub);
+    $("#cartTotal").textContent = formatPrice(sub + (lines.length ? DELIVERY_FEE : 0));
+    $("#goCheckoutBtn").disabled = lines.length === 0;
+    $("#goCheckoutBtn").style.opacity = lines.length ? "1" : "0.4";
+  }
+
+  function renderCheckout() {
+    const container = $("#checkoutItems");
+    const lines = getCartLines().filter(line => line.qty > 0);
+    container.innerHTML = lines.map(line => {
+      const item = findMenuItem(line.variantId);
+      const notesHtml = line.notes
+        ? `<div class="checkout-item-notes">${escapeHtml(line.notes)}</div>`
+        : "";
+      return `
+        <div>
+          <div class="checkout-line name">
+            <span>${escapeHtml(item.name)} × ${line.qty}</span>
+            <span>${formatPrice(item.price * line.qty)}</span>
+          </div>
+          ${notesHtml}
+        </div>`;
+    }).join("");
+
+    const sub = getCartSubtotal();
+    const total = sub + DELIVERY_FEE;
+    $("#checkoutSubtotal").textContent = formatPrice(sub);
+    $("#checkoutTotal").textContent = formatPrice(total);
+    $("#checkoutBtnTotal").textContent = formatPrice(total);
+    $("#checkoutStreet").textContent = getAccess(preferredDropoffId).name;
+    updateCheckoutPaymentUI();
+  }
+
+  /* ── Payment ── */
+  let activeWallet = null;
+  let walletPayTimer;
+
+  function getCheckoutTotal() {
+    return getCartSubtotal() + (getCartCount() ? DELIVERY_FEE : 0);
+  }
+
+  function walletBrandHtml(wallet) {
+    if (wallet === "apple") {
+      return `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.365 1.43c0 1.14-.467 2.223-1.177 3.08-.788.94-2.066 1.66-3.276 1.56-.14-1.09.404-2.243 1.07-3.01.82-.94 2.24-1.64 3.383-1.73.12 1.04-.04 2.01.001 3.1zm1.117 4.51c-1.89-.114-3.488 1.077-4.388 1.077-.93 0-2.352-1.02-3.867-1.01-1.993.03-3.826 1.16-4.857 2.953-2.077 3.59-.537 8.903 1.491 11.823 1.005 1.444 2.195 3.063 3.764 3.005 1.515-.06 2.085-.977 3.915-.977 1.83 0 2.325.977 3.915.947 1.62-.03 2.646-1.474 3.642-2.923 1.147-1.674 1.618-3.295 1.645-3.378-.036-.016-3.158-1.212-3.19-4.815-.028-3.015 2.465-4.457 2.577-4.534-1.403-2.055-3.585-2.3-4.352-2.34z"/></svg><span id="walletPayTitle">Apple Pay</span>`;
+    }
+    return `<svg viewBox="0 0 41 17" width="52" height="18" aria-hidden="true"><path fill="#5F6368" d="M19.2 8.4v4.8h-1.5V.9h4c1.1 0 2 .4 2.7 1.1.7.7 1.1 1.6 1.1 2.7 0 1.1-.4 2-1.1 2.7-.7.7-1.6 1.1-2.7 1.1h-2.5zm0-6.2v4.7h2.6c.6 0 1.1-.2 1.5-.6.4-.4.6-.9.6-1.5 0-.6-.2-1.1-.6-1.5-.4-.4-.9-.6-1.5-.6h-2.6z"/><path fill="#4285F4" d="M28.8 3.3c1 0 1.8.3 2.4.9.6.6.9 1.4.9 2.4 0 1-.3 1.8-.9 2.4-.6.6-1.4.9-2.4.9h-1.9v1.5h-1.5V.9h3.4zm-1.9 4.2h1.9c.6 0 1.1-.2 1.5-.5.4-.4.6-.8.6-1.4 0-.6-.2-1-.6-1.4-.4-.4-.9-.5-1.5-.5h-1.9v3.8z"/><path fill="#34A853" d="M38.1 6.1l1.2 1.2c-.5.7-1.1 1.2-1.8 1.6-.7.4-1.5.6-2.4.6-1.3 0-2.4-.4-3.3-1.3-.9-.9-1.3-2-1.3-3.3 0-1.3.4-2.4 1.3-3.3.9-.9 2-1.3 3.3-1.3.9 0 1.7.2 2.4.6.7.4 1.3.9 1.8 1.6l-1.2 1.2c-.7-.8-1.6-1.2-2.7-1.2-1 0-1.8.3-2.5 1-.7.7-1 1.5-1 2.5s.3 1.8 1 2.5c.7.7 1.5 1 2.5 1 1.1 0 2-.4 2.7-1.2z"/></svg><span id="walletPayTitle">Google Pay</span>`;
+  }
+
+  function openWalletPayModal(wallet) {
+    if (!getCartCount()) return;
+    activeWallet = wallet;
+    const total = getCheckoutTotal();
+    $("#walletPayBrand").innerHTML = walletBrandHtml(wallet);
+    $("#walletPayTotal").textContent = formatPrice(total);
+    const confirmBtn = $("#walletPayConfirmBtn");
+    confirmBtn.className = `wallet-pay-confirm ${wallet}`;
+    confirmBtn.textContent = wallet === "apple" ? "Pay with Face ID" : "Pay with Google Pay";
+    $("#walletPayBody").style.display = "";
+    $("#walletPayProcessing").classList.remove("visible");
+    const backdrop = document.getElementById("walletPayBackdrop");
+    if (backdrop) backdrop.classList.add("open");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeWalletPay() {
+    const backdrop = document.getElementById("walletPayBackdrop");
+    if (backdrop) backdrop.classList.remove("open");
+    if (!document.querySelector(".modal-backdrop.open")) {
+      document.body.classList.remove("modal-open");
+    }
+    clearTimeout(walletPayTimer);
+    activeWallet = null;
+  }
+
+  async function startWalletPayment(wallet) {
+    if (!getCartCount()) return;
+    openWalletPayModal(wallet);
+  }
+
+  function confirmWalletPayment() {
+    if (!activeWallet || !getCartCount()) return;
+    $("#walletPayBody").style.display = "none";
+    $("#walletPayProcessing").classList.add("visible");
+    $("#walletPayProcessingText").textContent = activeWallet === "apple"
+      ? "Authorizing with Face ID…"
+      : "Authorizing with Google Pay…";
+    clearTimeout(walletPayTimer);
+    walletPayTimer = setTimeout(() => {
+      completeOrder(activeWallet === "apple" ? "Apple Pay" : "Google Pay");
+    }, 1400);
+  }
+
+  async function completeOrder(paymentMethod) {
+    if (!getCartCount()) {
+      showToast("Your cart is empty");
+      return null;
+    }
+    if (useFirebase && !firebaseUser) {
+      showToast("Sign in to place an order");
+      navigate("register");
+      return null;
+    }
+    try {
+      const order = await createOrderFromCart(paymentMethod);
+      cart = {};
+      updateCartUI();
+      activeWallet = null;
+      clearTimeout(walletPayTimer);
+      showToast(`Order #${order.number} placed`);
+      viewHistory = user ? ["home", "orders"] : ["home"];
+      navigate("tracking");
+      return order;
+    } catch (err) {
+      console.error("completeOrder failed:", err);
+      showToast(err.message || "Could not place order — try again");
+      return null;
+    }
+  }
+
+  function runTestPayment() {
+    if (!getCartCount()) {
+      showToast("Add items to your cart first");
+      return;
+    }
+    if (useFirebase && !firebaseUser) {
+      showToast("Sign in to place an order");
+      navigate("register");
+      return;
+    }
+    completeOrder("Test");
+  }
+
+  function digitsOnly(value) {
+    return value.replace(/\D/g, "");
+  }
+
+  function formatCardNumberInput(value) {
+    const digits = digitsOnly(value).slice(0, 16);
+    return digits.replace(/(\d{4})(?=\d)/g, "$1 ").trim();
+  }
+
+  function formatExpiryInput(value) {
+    const digits = digitsOnly(value).slice(0, 4);
+    if (digits.length <= 2) return digits;
+    return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
+  }
+
+  function validateCardForm() {
+    const number = digitsOnly($("#cardNumber").value);
+    const expiry = digitsOnly($("#cardExpiry").value);
+    const cvc = digitsOnly($("#cardCvc").value);
+    return number.length >= 15 && expiry.length === 4 && cvc.length >= 3;
+  }
+
+  function updateCheckoutPaymentUI() {
+    const hasItems = getCartCount() > 0;
+    const total = formatPrice(getCheckoutTotal());
+    $("#applePayBtn").disabled = !hasItems;
+    $("#googlePayBtn").disabled = !hasItems;
+    $("#testPayBtn").disabled = !hasItems;
+    $("#testPayTotal").textContent = total;
+    $("#placeOrderBtn").disabled = !hasItems || !validateCardForm();
+    $("#walletPayTotal").textContent = total;
+  }
+
+  /* ── Item detail ── */
+  function updateDetailAddBtn() {
+    if (!detailItem) return;
+    const size = getSelectedSize(detailItem);
+    const unit = size ? size.price : detailItem.price;
+    const btn = $("#detailAddBtn");
+    if (btn) btn.textContent = `Add to cart · ${formatPrice(unit * detailQty)}`;
+    const priceEl = $("#detailPrice");
+    if (priceEl) priceEl.textContent = formatPrice(unit);
+    const descEl = $("#detailDesc");
+    if (descEl && size?.desc) descEl.textContent = size.desc.replace(/^\d+\s*oz\s*\|\s*/i, "");
+  }
+
+  function openItemDetail(id) {
+    detailItem = findMenuGroup(id);
+    if (!detailItem) return;
+    detailQty = 1;
+    detailSizeId = detailItem.sizes?.[0]?.id ?? detailItem.id;
+
+    const sizeHtml = detailItem.sizes?.length > 1 ? `
+      <div class="modifier-group">
+        <div class="modifier-label">Size <span>· Pick 1</span></div>
+        ${detailItem.sizes.map(s => `
+          <div class="modifier-option size-option${String(s.id) === String(detailSizeId) ? " selected" : ""}" data-size-id="${s.id}">
+            <div class="modifier-option-left">
+              <div class="modifier-check"></div>
+              <span>${escapeHtml(s.label)}</span>
+            </div>
+            <span>${formatPrice(s.price)}</span>
+          </div>`).join("")}
+      </div>` : "";
+
+    const heroHtml = detailItem.image
+      ? `<div class="detail-hero has-photo"><img src="${detailItem.image}" alt="${escapeHtml(detailItem.name)}"></div>`
+      : `<div class="detail-hero">${ICONS.coffee}</div>`;
+
+    const size = getSelectedSize(detailItem);
+    const desc = (size?.desc || detailItem.desc || "").replace(/^\d+\s*oz\s*\|\s*/i, "");
+
+    $("#itemSheetContent").innerHTML = `
+      ${heroHtml}
+      <div class="detail-content">
+        <div class="detail-name">${escapeHtml(detailItem.name)}</div>
+        <div class="detail-desc" id="detailDesc">${escapeHtml(desc)}</div>
+        <div class="detail-price" id="detailPrice">${formatPrice(size?.price ?? detailItem.price)}</div>
+        ${sizeHtml}
+        <div class="detail-qty-row">
+          <span>Quantity</span>
+          <div class="qty-control">
+            <button class="qty-btn" id="detailDec">−</button>
+            <span class="qty-val" id="detailQtyVal">1</span>
+            <button class="qty-btn" id="detailInc">+</button>
+          </div>
+        </div>
+        <div class="detail-notes">
+          <label class="detail-notes-label" for="detailNotes">Special instructions <span>· Optional</span></label>
+          <textarea class="form-input" id="detailNotes" rows="3" placeholder="Extra shot, light ice, no whip, etc." maxlength="200"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" id="detailAddBtn">Add to cart</button>
+      </div>`;
+
+    updateDetailAddBtn();
+    openSheet("itemSheet");
+  }
+
+  /* ── Sheets & modals ── */
+  function openSheet(id) {
+    const backdrop = $(`#${id}Backdrop`);
+    const sheet = $(`#${id}`);
+    backdrop.classList.add("open");
+    sheet.classList.add("open");
+    document.body.classList.add("sheet-open");
+    if (id === "cartSheet") renderCartSheet();
+  }
+
+  function closeSheet(id) {
+    $(`#${id}Backdrop`).classList.remove("open");
+    $(`#${id}`).classList.remove("open");
+    if (!$(".sheet.open")) document.body.classList.remove("sheet-open");
+  }
+
+  function closeAllSheets() {
+    $$(".sheet-backdrop").forEach(b => b.classList.remove("open"));
+    $$(".sheet").forEach(s => s.classList.remove("open"));
+    document.body.classList.remove("sheet-open");
+  }
+
+  function openModal(id) {
+    const el = $(`#${id}Backdrop`);
+    if (!el) return;
+    el.classList.add("open");
+    document.body.classList.add("modal-open");
+  }
+
+  function closeModal(id) {
+    const el = $(`#${id}Backdrop`);
+    if (!el) return;
+    el.classList.remove("open");
+    if (!$(".modal-backdrop.open")) document.body.classList.remove("modal-open");
+  }
+
+  function closeAllModals() {
+    $$(".modal-backdrop").forEach(m => m.classList.remove("open"));
+    document.body.classList.remove("modal-open");
+  }
+
+  function openDrawer() {
+    $("#drawerOverlay").classList.add("open");
+    $("#drawer").classList.add("open");
+  }
+
+  function closeDrawer() {
+    $("#drawerOverlay").classList.remove("open");
+    $("#drawer").classList.remove("open");
+  }
+
+  /* ── Menu render ── */
+  function renderCategories() {
+    const chips = [
+      `<button class="category-chip${activeCategory === "all" ? " active" : ""}" data-cat="all">All</button>`,
+      ...CATEGORIES.map(c =>
+        `<button class="category-chip${activeCategory === c.id ? " active" : ""}" data-cat="${c.id}">${escapeHtml(c.name)}</button>`
+      ),
+      `<button class="category-chip${activeCategory === "my-stuff" ? " active" : ""}" data-cat="my-stuff">My Stuff</button>`
+    ];
+    $("#categories").innerHTML = chips.join("");
+  }
+
+  function getFilteredItems() {
+    const q = searchQuery.trim().toLowerCase();
+    return MENU.filter(item => {
+      if (q) return matchesSearch(item, q);
+      return activeCategory === "all"
+        || (activeCategory === "my-stuff" && item.favorite)
+        || item.catId === activeCategory;
+    });
+  }
+
+  function renderMenu() {
+    const items = getFilteredItems();
+    const grid = $("#menuGrid");
+    const empty = $("#emptyState");
+    $("#sectionLabel").textContent = getSectionLabel();
+
+    if (!items.length) {
+      grid.innerHTML = "";
+      empty.hidden = false;
+      return;
+    }
+
+    empty.hidden = true;
+    grid.innerHTML = items.map(item => `
+      <article class="menu-item" data-id="${item.id}">
+        <div class="item-info">
+          <div class="item-name">${escapeHtml(item.name)}</div>
+          <div class="item-desc">${escapeHtml(item.desc)}</div>
+          <div class="item-meta">
+            <span class="item-price">${getItemPriceDisplay(item)}</span>
+            ${item.favorite ? '<span class="item-tag">Saved</span>' : ''}
+            ${item.sizes?.length > 1 ? '<span class="item-tag">Sizes</span>' : ''}
+          </div>
+        </div>
+        <div class="item-image-wrap">
+          ${itemImageHtml(item)}
+          <button class="add-btn" data-add="${item.id}" aria-label="Add ${escapeHtml(item.name)}">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 8h10"/></svg>
+          </button>
+        </div>
+      </article>`).join("");
+  }
+
+  /* ── Event listeners ── */
+  $("#backBtn").addEventListener("click", goBack);
+
+  $("#menuBtn").addEventListener("click", openDrawer);
+  $("#drawerOverlay").addEventListener("click", closeDrawer);
+
+  $$(".drawer-link[data-nav]").forEach(link => {
+    link.addEventListener("click", () => {
+      const dest = link.dataset.nav;
+      if (dest === "account" && !user) { navigate("register"); return; }
+      navigate(dest);
+    });
+  });
+
+  $("#drawerAuthBtn").addEventListener("click", async () => {
+    if (user) {
+      if (useFirebase) await BDFirebase.signOut();
+      else setUser(null);
+      setAdminAuthed(false);
+      showToast("Signed out");
+      navigate("home");
+    } else {
+      openModal("loginModal");
+    }
+  });
+
+  /* Street dropdown */
+  $("#locationBtn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = $("#streetDropdown").classList.toggle("open");
+    $("#locationBtn").classList.toggle("open", open);
+    $("#locationBtn").setAttribute("aria-expanded", open);
+  });
+
+  $("#streetDropdown").addEventListener("click", (e) => {
+    e.stopPropagation();
+    if (e.target.closest("#dropdownLocateBtn")) {
+      $("#streetDropdown").classList.remove("open");
+      $("#locationBtn").classList.remove("open");
+      requestUserLocation();
+      return;
+    }
+    const opt = e.target.closest(".street-option[data-access]");
+    if (!opt) return;
+    setAccessPoint(opt.dataset.access);
+    $("#streetDropdown").classList.remove("open");
+    $("#locationBtn").classList.remove("open");
+    showToast(`Drop-off: ${getAccess(opt.dataset.access).name}`);
+  });
+
+  document.addEventListener("click", () => {
+    $("#streetDropdown").classList.remove("open");
+    $("#locationBtn").classList.remove("open");
+    $("#locationBtn").setAttribute("aria-expanded", "false");
+  });
+
+  $("#findNearestBtn").addEventListener("click", requestUserLocation);
+  $("#accountLocateBtn").addEventListener("click", requestUserLocation);
+
+  /* Categories & search */
+  $("#categories").addEventListener("click", (e) => {
+    const chip = e.target.closest(".category-chip");
+    if (!chip) return;
+    activeCategory = chip.dataset.cat;
+    $$(".category-chip").forEach(c => c.classList.toggle("active", c === chip));
+    renderMenu();
+  });
+
+  function onSearchInput(e) {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderMenu();
+  }
+
+  $("#searchInput").addEventListener("input", onSearchInput);
+  $("#searchInput").addEventListener("search", onSearchInput);
+
+  /* Menu interactions */
+  $("#menuGrid").addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-add]");
+    if (btn) {
+      e.stopPropagation();
+      openItemDetail(btn.dataset.add);
+      return;
+    }
+    const item = e.target.closest(".menu-item");
+    if (item) openItemDetail(item.dataset.id);
+  });
+
+  /* Cart sheet */
+  $("#cartBar").addEventListener("click", () => openSheet("cartSheet"));
+  $("#cartIconBtn").addEventListener("click", () => {
+    getCartCount() ? openSheet("cartSheet") : showToast("Your cart is empty");
+  });
+  $("#closeCartSheet").addEventListener("click", () => closeSheet("cartSheet"));
+  $("#cartSheetBackdrop").addEventListener("click", () => closeSheet("cartSheet"));
+
+  $("#cartSheetBody").addEventListener("click", (e) => {
+    const btn = e.target.closest(".qty-btn");
+    if (!btn) return;
+    const key = btn.dataset.key;
+    if (!cart[key]) return;
+    if (btn.dataset.action === "inc") cart[key].qty++;
+    else {
+      cart[key].qty--;
+      if (cart[key].qty <= 0) delete cart[key];
+    }
+    updateCartUI();
+    renderCartSheet();
+  });
+
+  $("#goCheckoutBtn").addEventListener("click", () => {
+    if (!getCartCount()) return;
+    closeSheet("cartSheet");
+    if (!user) { showToast("Please sign in first"); navigate("register"); return; }
+    if (useFirebase && !firebaseUser) { showToast("Please sign in first"); navigate("register"); return; }
+    navigate("checkout");
+  });
+
+  /* Item sheet */
+  $("#itemSheetBackdrop").addEventListener("click", () => closeSheet("itemSheet"));
+
+  $("#itemSheetContent").addEventListener("click", (e) => {
+    const sizeOpt = e.target.closest(".size-option");
+    if (sizeOpt) {
+      detailSizeId = sizeOpt.dataset.sizeId;
+      $$("#itemSheetContent .size-option").forEach(o => o.classList.toggle("selected", o === sizeOpt));
+      updateDetailAddBtn();
+      return;
+    }
+    if (e.target.id === "detailDec" && detailQty > 1) {
+      detailQty--;
+      $("#detailQtyVal").textContent = detailQty;
+      updateDetailAddBtn();
+    }
+    if (e.target.id === "detailInc") {
+      detailQty++;
+      $("#detailQtyVal").textContent = detailQty;
+      updateDetailAddBtn();
+    }
+    if (e.target.closest("#detailAddBtn")) {
+      const variantId = resolveDetailVariantId();
+      if (!variantId) {
+        showToast("Pick a size to continue");
+        return;
+      }
+      const notes = $("#detailNotes")?.value || "";
+      addToCart(variantId, detailQty, notes);
+      closeSheet("itemSheet");
+    }
+  });
+
+  /* Checkout & payment */
+  $("#testPayBtn").addEventListener("click", runTestPayment);
+  $("#applePayBtn").addEventListener("click", () => startWalletPayment("apple"));
+  $("#googlePayBtn").addEventListener("click", () => startWalletPayment("google"));
+  $("#walletPayConfirmBtn").addEventListener("click", confirmWalletPayment);
+  $("#closeWalletPayBtn").addEventListener("click", closeWalletPay);
+  $("#walletPayBackdrop").addEventListener("click", (e) => {
+    if (e.target === e.currentTarget) closeWalletPay();
+  });
+
+  $("#cardNumber").addEventListener("input", (e) => {
+    e.target.value = formatCardNumberInput(e.target.value);
+    updateCheckoutPaymentUI();
+  });
+  $("#cardExpiry").addEventListener("input", (e) => {
+    e.target.value = formatExpiryInput(e.target.value);
+    updateCheckoutPaymentUI();
+  });
+  $("#cardCvc").addEventListener("input", (e) => {
+    e.target.value = digitsOnly(e.target.value).slice(0, 4);
+    updateCheckoutPaymentUI();
+  });
+
+  $("#placeOrderBtn").addEventListener("click", () => {
+    if (!getCartCount() || !validateCardForm()) {
+      showToast("Enter a valid card to continue");
+      return;
+    }
+    completeOrder("Card");
+  });
+
+  /* Orders → tracking */
+  $("#ordersList").addEventListener("click", (e) => {
+    const card = e.target.closest(".order-card");
+    if (!card) return;
+    activeOrderId = card.dataset.orderId;
+    try { localStorage.setItem(ACTIVE_ORDER_KEY, activeOrderId); } catch (_) {}
+    navigate("tracking");
+  });
+
+  /* Admin */
+  $("#drawerAdminBtn").addEventListener("click", () => {
+    renderAdminOrders();
+    navigate("admin");
+  });
+
+  $("#adminLoginForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    if ($("#adminPin").value === ADMIN_PIN) {
+      setAdminAuthed(true);
+      $("#adminPin").value = "";
+      showToast("Order board unlocked");
+    } else {
+      showToast("Incorrect PIN");
+    }
+  });
+
+  $("#adminRefreshBtn").addEventListener("click", async () => {
+    if (useFirebase) await refreshOrdersFromFirebase();
+    else ordersCache = loadOrdersLocal();
+    renderAdminOrders();
+    showToast("Orders refreshed");
+  });
+
+  $("#adminPanel").addEventListener("click", (e) => {
+    const saveBtn = e.target.closest(".admin-save-btn");
+    if (saveBtn) {
+      saveAdminOrder(saveBtn.dataset.orderId);
+      return;
+    }
+    const advanceBtn = e.target.closest(".admin-advance-btn");
+    if (advanceBtn) advanceOrderStatus(advanceBtn.dataset.orderId);
+  });
+
+  window.addEventListener("storage", (e) => {
+    if (e.key === ORDERS_KEY || e.key === null) onOrdersUpdated();
+  });
+  window.addEventListener("bd-orders-updated", onOrdersUpdated);
+  window.addEventListener("focus", () => {
+    if (currentView === "admin") renderAdminOrders();
+  });
+
+  /* Register & login */
+  $("#registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const name = $("#regName").value.trim();
+    const email = $("#regEmail").value.trim();
+    const phone = $("#regPhone").value.trim();
+    const password = $("#regPassword").value;
+    try {
+      if (useFirebase) {
+        await BDFirebase.signUp(email, password, {
+          name, phone, preferredDropoffId: currentAccessId,
+        });
+      } else {
+        setUser({ name, email, phone });
+        preferredDropoffId = currentAccessId;
+      }
+      showToast("Account created!");
+      navigate("home");
+    } catch (err) {
+      showToast(friendlyAuthError(err));
+    }
+  });
+
+  $("#bypassRegisterBtn").addEventListener("click", () => {
+    if (useFirebase) {
+      showToast("Create a real account — Firebase auth is enabled");
+      return;
+    }
+    setUser({ name: "Test User", email: "test@beachdelivery.com", phone: "(555) 000-0000" });
+    preferredDropoffId = currentAccessId;
+    showToast("Bypassed — logged in as Test User");
+    navigate("home");
+  });
+
+  $("#loginForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = $("#loginEmail").value.trim();
+    const password = $("#loginPassword").value;
+    try {
+      if (useFirebase) {
+        await BDFirebase.signIn(email, password);
+      } else {
+        setUser({ name: "Alex Rivera", email });
+      }
+      closeModal("loginModal");
+      showToast("Welcome back!");
+      navigate("home");
+    } catch (err) {
+      showToast(friendlyAuthError(err));
+    }
+  });
+
+  $("#openLoginBtn").addEventListener("click", () => openModal("loginModal"));
+  $("#loginToRegisterBtn").addEventListener("click", () => { closeModal("loginModal"); navigate("register"); });
+  $("#closeLoginBtn").addEventListener("click", () => closeModal("loginModal"));
+  $("#loginModalBackdrop").addEventListener("click", (e) => { if (e.target === e.currentTarget) closeModal("loginModal"); });
+
+  /* Account */
+  $("#changePhotoBtn").addEventListener("click", () => $("#photoInput").click());
+  $("#accountAvatar").addEventListener("click", () => $("#photoInput").click());
+
+  $("#photoInput").addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    if (user) user.photo = url;
+    $("#avatarImg").src = url;
+    $("#avatarImg").hidden = false;
+    $("#avatarInitials").hidden = true;
+    showToast("Photo updated");
+  });
+
+  $("#dropoffOptions").addEventListener("click", (e) => {
+    const opt = e.target.closest(".location-option");
+    if (!opt) return;
+    preferredDropoffId = opt.dataset.access;
+    setAccessPoint(preferredDropoffId);
+    showToast(`Preferred drop-off: ${getAccess(preferredDropoffId).name}`);
+  });
+
+  $("#themeGrid").addEventListener("click", (e) => {
+    const opt = e.target.closest(".theme-option");
+    if (!opt) return;
+    applyTheme(opt.dataset.theme);
+    showToast(`Theme: ${opt.querySelector(".theme-option-name").textContent}`);
+  });
+
+  $("#deleteAccountBtn").addEventListener("click", () => openModal("deleteModal"));
+  $("#cancelDeleteBtn").addEventListener("click", () => closeModal("deleteModal"));
+  $("#deleteModalBackdrop").addEventListener("click", (e) => { if (e.target === e.currentTarget) closeModal("deleteModal"); });
+  $("#confirmDeleteBtn").addEventListener("click", async () => {
+    if (useFirebase && firebaseUser) {
+      try {
+        await firebaseUser.delete();
+      } catch (_) {
+        showToast("Sign out and contact support to delete your account");
+        closeModal("deleteModal");
+        return;
+      }
+    } else {
+      setUser(null);
+    }
+    preferredDropoffId = "18th-ave-s";
+    closeModal("deleteModal");
+    showToast("Account deleted");
+    navigate("register");
+  });
+
+  function friendlyAuthError(err) {
+    const code = err?.code || "";
+    const map = {
+      "auth/email-already-in-use": "That email is already registered",
+      "auth/invalid-email": "Invalid email address",
+      "auth/weak-password": "Password must be at least 6 characters",
+      "auth/user-not-found": "No account found with that email",
+      "auth/wrong-password": "Incorrect password",
+      "auth/invalid-credential": "Invalid email or password",
+    };
+    return map[code] || err.message || "Authentication failed";
+  }
+
+  /* Greeting */
+  (function () {
+    const h = new Date().getHours();
+    $("#heroTitle").textContent = h < 12 ? "Good morning ☀️" : h < 17 ? "Good afternoon" : "Good evening";
+  })();
+
+  async function bootApp() {
+    useFirebase = await BDFirebase.init();
+    if (useFirebase) {
+      BDFirebase.onAuthChange(handleFirebaseAuth);
+    } else {
+      ordersCache = loadOrdersLocal();
+    }
+    initOrders();
+    renderCategories();
+    renderMenu();
+    updateCartUI();
+    initTheme();
+    initAccessPoints();
+  }
+
+  bootApp();
+</script>
+</body>
+</html>
