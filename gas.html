@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#111111" />
+    <meta name="description" content="Gas Tracker — log fill-ups, track MPG, and monitor fuel costs." />
+    <title>Gas Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="gasViews/assets/gasApp.css" />
+  </head>
+  <body>
+    <div class="gas-app">
+      <header class="gas-header">
+        <h1 id="gasHeaderTitle">Gas Tracker</h1>
+        <button type="button" class="gas-header__action" id="gasHeaderAction" hidden>Sign out</button>
+      </header>
+
+      <main class="gas-main">
+        <!-- Auth -->
+        <section class="gas-screen" data-screen="auth" id="gasAuthScreen">
+          <p class="gas-lead">Track every fill-up, see your MPG, and know what you're paying per gallon.</p>
+
+          <div id="gasAuthRegister">
+            <form id="gasRegisterForm">
+              <p class="gas-section-label">Registration</p>
+              <div class="gas-field">
+                <label for="regName">Name</label>
+                <input id="regName" type="text" autocomplete="name" required placeholder="Your name" />
+              </div>
+              <div class="gas-field">
+                <label for="regEmail">Email</label>
+                <input id="regEmail" type="email" autocomplete="email" required placeholder="you@email.com" />
+              </div>
+              <div class="gas-field">
+                <label for="regPassword">Password</label>
+                <input id="regPassword" type="password" autocomplete="new-password" required minlength="8" placeholder="8+ characters" />
+              </div>
+
+              <p class="gas-section-label">Your car</p>
+              <div class="gas-grid-2">
+                <div class="gas-field">
+                  <label for="regMake">Make</label>
+                  <select id="regMake" required>
+                    <option value="" disabled selected>Select make</option>
+                  </select>
+                </div>
+                <div class="gas-field">
+                  <label for="regYear">Year</label>
+                  <select id="regYear" required>
+                    <option value="" disabled selected>Year</option>
+                  </select>
+                </div>
+              </div>
+              <div class="gas-grid-2">
+                <div class="gas-field">
+                  <label for="regModel">Model</label>
+                  <select id="regModel" required disabled>
+                    <option value="" disabled selected>Select make first</option>
+                  </select>
+                </div>
+                <div class="gas-field">
+                  <label for="regMileage">Odometer (mi)</label>
+                  <input id="regMileage" type="number" inputmode="numeric" required min="0" placeholder="45000" />
+                </div>
+              </div>
+
+              <button type="submit" class="gas-btn gas-btn--primary">Create account</button>
+            </form>
+          </div>
+
+          <div id="gasAuthLogin" hidden>
+            <form id="gasLoginForm">
+              <p class="gas-section-label">Log in</p>
+              <div class="gas-field">
+                <label for="loginEmail">Email</label>
+                <input id="loginEmail" type="email" autocomplete="email" required />
+              </div>
+              <div class="gas-field">
+                <label for="loginPassword">Password</label>
+                <input id="loginPassword" type="password" autocomplete="current-password" required />
+              </div>
+              <button type="submit" class="gas-btn gas-btn--primary">Sign in</button>
+            </form>
+          </div>
+
+          <p class="gas-auth-switch">
+            <span id="gasAuthSwitchLabel">Already have an account?</span>
+            <button type="button" id="gasAuthSwitchBtn">Log in</button>
+          </p>
+        </section>
+
+        <!-- Trips -->
+        <section class="gas-screen" data-screen="trips" id="gasTripsScreen" hidden>
+          <div class="gas-car-card" id="gasCarCard"></div>
+
+          <div class="gas-stats">
+            <div class="gas-stat">
+              <p class="gas-stat__label">Last MPG</p>
+              <p class="gas-stat__value" id="gasStatMpg">—</p>
+            </div>
+            <div class="gas-stat">
+              <p class="gas-stat__label">Last $/gal</p>
+              <p class="gas-stat__value" id="gasStatPpg">—</p>
+            </div>
+          </div>
+
+          <div id="gasTripList"></div>
+        </section>
+      </main>
+
+      <button type="button" class="gas-fab" id="gasFab" hidden aria-label="Add fill-up">+</button>
+
+      <div class="gas-sheet-backdrop" id="gasSheetBackdrop" hidden></div>
+      <div class="gas-sheet" id="gasSheet" hidden role="dialog" aria-labelledby="gasSheetTitle">
+        <div class="gas-sheet__handle"></div>
+        <h2 id="gasSheetTitle">New fill-up</h2>
+        <form id="gasEntryForm">
+          <div class="gas-field">
+            <label for="entryName">Station</label>
+            <input id="entryName" type="text" required placeholder="Wawa, Shell, Costco…" />
+          </div>
+          <div class="gas-field">
+            <label for="entryLocation">Address</label>
+            <input id="entryLocation" type="text" required placeholder="123 Main St, Naples FL" />
+          </div>
+          <div class="gas-grid-2">
+            <div class="gas-field">
+              <label for="entryGallons">Gallons</label>
+              <input id="entryGallons" type="number" step="0.01" min="0" required />
+            </div>
+            <div class="gas-field">
+              <label for="entryCost">Total cost ($)</label>
+              <input id="entryCost" type="number" step="0.01" min="0" required />
+            </div>
+          </div>
+          <div class="gas-field">
+            <label for="entryMileage">Odometer (mi)</label>
+            <input id="entryMileage" type="number" min="0" required placeholder="Current mileage" />
+          </div>
+          <div class="gas-sheet__actions">
+            <button type="button" class="gas-btn gas-btn--ghost" id="gasEntryCancel">Cancel</button>
+            <button type="submit" class="gas-btn gas-btn--green">Save</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="gas-toast" id="gasToast" aria-live="polite"></div>
+    </div>
+
+    <script src="gasViews/scripts/gasCars.js"></script>
+    <script type="module" src="gasViews/scripts/gasApp.js"></script>
+  </body>
+</html>

@@ -1,11 +1,12 @@
-/** Firebase web config for keplersiguineau.com / learnViews */
+/** Firebase web config for keplersiguineau.com / learnViews (naples-sunrise-bay) */
 export const learnFirebaseConfig = {
-  apiKey: "",
-  authDomain: "",
-  projectId: "",
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: "",
+  apiKey: "AIzaSyBoFkUtcSFuwuSiUV8y434de-u8t5-MriM",
+  authDomain: "naples-sunrise-bay.firebaseapp.com",
+  projectId: "naples-sunrise-bay",
+  storageBucket: "naples-sunrise-bay.appspot.com",
+  messagingSenderId: "39028676552",
+  appId: "1:39028676552:web:82d59b7cb863113f9e12fd",
+  measurementId: "G-L0QCNW7C6W",
 };
 
 /** Only these emails may stay signed in on Notes admin */

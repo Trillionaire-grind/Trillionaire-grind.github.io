@@ -8,56 +8,70 @@
     <item>
       <title>How To Build An App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/fannyApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>The full walkthrough — planning, UI, Firebase, and shipping a real app from scratch.</description>
       <pubDate>Sat, 23 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/fannyApp.html</guid>
     </item>
     <item>
+      <title>How to Create a Basic Web App</title>
+      <link>https://keplersiguineau.com/learnViews/content/apps/ai/webApp.html</link>
+      <description>Build a message-board app with HTML, CSS, JavaScript, and Node.js — no database required.</description>
+      <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/webApp.html</guid>
+    </item>
+    <item>
+      <title>How to Build a Haitian App</title>
+      <link>https://keplersiguineau.com/learnViews/content/apps/ai/haitianApp.html</link>
+      <description>Share Haitian culture through code — a proverbs app with Creole and English translations.</description>
+      <pubDate>Tue, 03 Oct 2023 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/haitianApp.html</guid>
+    </item>
+    <item>
       <title>How To Build A Calendar App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/calendarApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Build a simple calendar and task planner with vanilla JavaScript.</description>
       <pubDate>Sun, 24 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/calendarApp.html</guid>
     </item>
     <item>
       <title>How To Build A Coffee App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/coffeeApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Design a coffee-shop ordering flow — menu, cart, and checkout.</description>
       <pubDate>Mon, 25 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/coffeeApp.html</guid>
     </item>
     <item>
       <title>How To Build A Dating App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/datingApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Core patterns for profiles, matching, and messaging in a dating app.</description>
       <pubDate>Tue, 26 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/datingApp.html</guid>
     </item>
     <item>
       <title>How To Build A Fish App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/fishApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Log catches, species, and locations — a field journal in app form.</description>
       <pubDate>Wed, 27 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/fishApp.html</guid>
     </item>
     <item>
       <title>How To Build A Geography App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/geographyApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Quiz and map mechanics for a geography learning app.</description>
       <pubDate>Thu, 28 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/geographyApp.html</guid>
     </item>
     <item>
       <title>How To Build A Notes App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/notesApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Capture ideas fast — notes, tags, and search without over-engineering.</description>
       <pubDate>Fri, 29 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/notesApp.html</guid>
     </item>
     <item>
       <title>How To Build A Workout App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/workoutApp.html</link>
-      <description>In this thing we are talkig about how to build an app...</description>
+      <description>Track sets, reps, and progress in a minimal workout logger.</description>
       <pubDate>Sat, 30 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/workoutApp.html</guid>
     </item>
@@ -67,6 +81,13 @@
       <description>Selling is an important skillset</description>
       <pubDate>Sat, 23 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/howSell.html</guid>
+    </item>
+    <item>
+      <title>How To Sell Door To Door</title>
+      <link>https://keplersiguineau.com/learnViews/content/business/ai/doorSales.html</link>
+      <description>From your first knock to closing the deal — resilience, scripts, and follow-up.</description>
+      <pubDate>Tue, 03 Oct 2023 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/ai/doorSales.html</guid>
     </item>
     <item>
       <title>Be. Do. Have.</title>
@@ -139,6 +160,13 @@
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/capitalismSlavery.html</guid>
     </item>
     <item>
+      <title>How To Use Your River Effectively</title>
+      <link>https://keplersiguineau.com/learnViews/content/city/ai/cityRiver.html</link>
+      <description>Rivers as living infrastructure — recreation, ecology, access, and flood resilience.</description>
+      <pubDate>Sun, 01 Oct 2023 00:00:00 GMT</pubDate>
+      <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/ai/cityRiver.html</guid>
+    </item>
+    <item>
       <title>How To Profit From Your Seacoast</title>
       <link>https://keplersiguineau.com/learnViews/content/city/ai/profitSeacoast.html</link>
       <description>Your coastline is more than just a scenic boundary—it’s an economic engine...</description>
@@ -189,3 +217,4 @@
     </item>
   </channel>
 </rss>
+

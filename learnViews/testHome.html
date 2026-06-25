@@ -316,7 +316,7 @@
       color: var(--muted);
     }
 
-    /* —— Pitch (from homeView) —— */
+    /* —— Pitch —— */
     #pitchPage {
       display: none;
       min-height: 100vh;
@@ -465,7 +465,7 @@
         </div>
       </div>
       <div class="hero-photo">
-        <img src="assets/sitting.png" alt="Siguineau, Képler">
+        <img src="assets/sitting.webp" alt="Siguineau, Képler">
       </div>
     </section>
 
@@ -474,17 +474,17 @@
         <h2 class="section-title">How can I help you?</h2>
         <p class="section-sub">Pick a lane — each one is a different way I think about building wealth and impact.</p>
         <div class="help-grid">
-          <a class="help-card help-card--apps" href="learn.html#notes" data-learn-nav="notes">
+          <a class="help-card help-card--apps" href="learn.html#notes" data-notes-genre="apps">
             <img src="assets/app_r.svg" alt="">
             <h3>Apps</h3>
             <p>Learn how to build software — tutorials, ideas, and projects you can ship yourself.</p>
           </a>
-          <a class="help-card help-card--business" href="learn.html#notes" data-learn-nav="notes">
+          <a class="help-card help-card--business" href="learn.html#notes" data-notes-genre="business">
             <img src="assets/banknote_b.svg" alt="">
             <h3>Businesses</h3>
             <p>Sales, investing, and entrepreneurship — practical notes from the field.</p>
           </a>
-          <a class="help-card help-card--city" href="learn.html#notes" data-learn-nav="notes">
+          <a class="help-card help-card--city" href="learn.html#notes" data-notes-genre="city">
             <img src="assets/building_g.svg" alt="">
             <h3>Cities</h3>
             <p>How cities grow, zone, and create prosperity — and what that means for Haiti.</p>
@@ -496,7 +496,7 @@
     <section class="section">
       <div class="container about-grid">
         <div class="about-photo">
-          <img src="assets/beach.png" alt="Siguineau, Képler at the beach">
+          <img src="assets/beach.webp" alt="Siguineau, Képler at the beach">
         </div>
         <div>
           <h2>Hey, I'm Siguineau, Képler</h2>
@@ -528,7 +528,7 @@
     </section>
 
     <footer class="site-footer container">
-      Version 0.2.9.3 · <a href="homeView.html" style="color: var(--blue);">Classic home</a>
+      Version 0.2.9.3
     </footer>
   </div>
 
@@ -548,7 +548,10 @@
     });
 
     document.querySelectorAll("[data-notes-genre]").forEach((el) => {
-      el.addEventListener("click", () => goToNotesGenre(el.dataset.notesGenre));
+      el.addEventListener("click", (event) => {
+        if (el.tagName === "A") event.preventDefault();
+        goToNotesGenre(el.dataset.notesGenre);
+      });
     });
   </script>
   <script>

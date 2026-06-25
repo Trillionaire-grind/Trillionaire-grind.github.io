@@ -1,0 +1,367 @@
+:root {
+  --gas-bg: #f9fafc;
+  --gas-surface: #ffffff;
+  --gas-text: #111827;
+  --gas-muted: #6b7280;
+  --gas-border: #e5e7eb;
+  --gas-black: #111111;
+  --gas-green: #2abf5b;
+  --gas-green-dark: #229647;
+  --gas-radius: 12px;
+  --gas-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --gas-header-h: 56px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  background: var(--gas-bg);
+  color: var(--gas-text);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+.gas-app {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.gas-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--gas-black);
+  color: #fff;
+  min-height: var(--gas-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+}
+
+.gas-header h1 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.gas-header__action {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.gas-main {
+  flex: 1;
+  width: min(560px, 100%);
+  margin: 0 auto;
+  padding: 16px 16px 88px;
+}
+
+.gas-screen[hidden] {
+  display: none !important;
+}
+
+.gas-lead {
+  margin: 0 0 20px;
+  color: var(--gas-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.gas-section-label {
+  margin: 20px 0 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gas-muted);
+}
+
+.gas-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.gas-field {
+  margin-bottom: 12px;
+}
+
+.gas-field label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.gas-field input,
+.gas-field select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--gas-border);
+  border-radius: var(--gas-radius);
+  background: var(--gas-surface);
+}
+
+.gas-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--gas-radius);
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.gas-btn--primary {
+  width: 100%;
+  background: var(--gas-black);
+  color: #fff;
+}
+
+.gas-btn--primary:hover {
+  background: #333;
+}
+
+.gas-btn--green {
+  background: var(--gas-green);
+  color: #fff;
+}
+
+.gas-btn--green:hover {
+  background: var(--gas-green-dark);
+}
+
+.gas-btn--ghost {
+  background: transparent;
+  color: var(--gas-muted);
+}
+
+.gas-auth-switch {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--gas-muted);
+}
+
+.gas-auth-switch button {
+  background: none;
+  border: none;
+  color: var(--gas-black);
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.gas-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.gas-stat {
+  background: var(--gas-surface);
+  border: 1px solid var(--gas-border);
+  border-radius: var(--gas-radius);
+  padding: 12px;
+  box-shadow: var(--gas-shadow);
+}
+
+.gas-stat__label {
+  margin: 0 0 4px;
+  font-size: 0.75rem;
+  color: var(--gas-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.gas-stat__value {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.gas-car-card {
+  background: var(--gas-surface);
+  border: 1px solid var(--gas-border);
+  border-radius: var(--gas-radius);
+  padding: 14px;
+  margin-bottom: 16px;
+  box-shadow: var(--gas-shadow);
+}
+
+.gas-car-card h2 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+}
+
+.gas-car-card p {
+  margin: 0;
+  color: var(--gas-muted);
+  font-size: 0.875rem;
+}
+
+.gas-empty {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--gas-muted);
+}
+
+.gas-trip {
+  background: var(--gas-surface);
+  border: 1px solid var(--gas-border);
+  border-radius: var(--gas-radius);
+  padding: 14px;
+  margin-bottom: 12px;
+  box-shadow: var(--gas-shadow);
+}
+
+.gas-trip__top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.gas-trip__station {
+  margin: 0;
+  font-weight: 700;
+}
+
+.gas-trip__date {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--gas-muted);
+  white-space: nowrap;
+}
+
+.gas-trip__address {
+  margin: 0 0 10px;
+  font-size: 0.875rem;
+  color: var(--gas-muted);
+}
+
+.gas-trip__meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.gas-trip__meta span {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--gas-muted);
+}
+
+.gas-trip__meta strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+
+.gas-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gas-black);
+  color: #fff;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.gas-fab:hover {
+  background: #333;
+}
+
+.gas-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 40;
+}
+
+.gas-sheet-backdrop[hidden],
+.gas-sheet[hidden] {
+  display: none !important;
+}
+
+.gas-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--gas-surface);
+  border-radius: 16px 16px 0 0;
+  padding: 12px 16px calc(16px + env(safe-area-inset-bottom));
+  max-height: 90dvh;
+  overflow-y: auto;
+}
+
+.gas-sheet__handle {
+  width: 40px;
+  height: 4px;
+  background: var(--gas-border);
+  border-radius: 4px;
+  margin: 0 auto 12px;
+}
+
+.gas-sheet h2 {
+  margin: 0 0 12px;
+  font-size: 1.125rem;
+}
+
+.gas-sheet__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.gas-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  transform: translateX(-50%);
+  background: var(--gas-black);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  z-index: 60;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+.gas-toast.is-visible {
+  opacity: 1;
+}

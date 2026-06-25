@@ -476,7 +476,7 @@ function onAdminChanged(event) {
 
 window.addEventListener("learn-admin-changed", onAdminChanged);
 
-if (sessionStorage.getItem("learnNotesDemoAdmin") === "1") {
+if (isLearnDemoMode() && sessionStorage.getItem("learnNotesDemoAdmin") === "1") {
   isAdmin = true;
   updateAdminUi();
 }

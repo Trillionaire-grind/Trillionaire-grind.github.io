@@ -31,6 +31,10 @@ const STATIC_WORD_COUNTS = {
   citySchool: 411,
   mountainRoads: 848,
   richestCities: 345,
+  webApp: 711,
+  haitianApp: 590,
+  doorSales: 751,
+  cityRiver: 780,
 };
 
 function legacyNote(genre, slug, title, summary, isAi, order, youtubeId = "") {
@@ -50,16 +54,19 @@ function legacyNote(genre, slug, title, summary, isAi, order, youtubeId = "") {
 }
 
 export const STATIC_NOTES = [
-  legacyNote("apps", "fannyApp", "How To Build An App", "In this thing we are talkig about how to build an app...", false, 100, "AZVQ2W6nr44"),
-  legacyNote("apps", "calendarApp", "How To Build A Calendar App", "In this thing we are talkig about how to build an app...", true, 99),
-  legacyNote("apps", "coffeeApp", "How To Build A Coffee App", "In this thing we are talkig about how to build an app...", true, 98),
-  legacyNote("apps", "datingApp", "How To Build A Dating App", "In this thing we are talkig about how to build an app...", true, 97),
-  legacyNote("apps", "fishApp", "How To Build A Fish App", "In this thing we are talkig about how to build an app...", true, 96),
-  legacyNote("apps", "geographyApp", "How To Build A Geography App", "In this thing we are talkig about how to build an app...", true, 95),
-  legacyNote("apps", "notesApp", "How To Build A Notes App", "In this thing we are talkig about how to build an app...", true, 94),
-  legacyNote("apps", "workoutApp", "How To Build A Workout App", "In this thing we are talkig about how to build an app...", true, 93),
+  legacyNote("apps", "fannyApp", "How To Build An App", "The full walkthrough — planning, UI, Firebase, and shipping a real app from scratch.", false, 100, "AZVQ2W6nr44"),
+  legacyNote("apps", "webApp", "How to Create a Basic Web App", "Build a message-board app with HTML, CSS, JavaScript, and Node.js — no database required.", true, 91),
+  legacyNote("apps", "haitianApp", "How to Build a Haitian App", "Share Haitian culture through code — a proverbs app with Creole and English translations.", true, 90),
+  legacyNote("apps", "calendarApp", "How To Build A Calendar App", "Build a simple calendar and task planner with vanilla JavaScript.", true, 99),
+  legacyNote("apps", "coffeeApp", "How To Build A Coffee App", "Design a coffee-shop ordering flow — menu, cart, and checkout.", true, 98),
+  legacyNote("apps", "datingApp", "How To Build A Dating App", "Core patterns for profiles, matching, and messaging in a dating app.", true, 97),
+  legacyNote("apps", "fishApp", "How To Build A Fish App", "Log catches, species, and locations — a field journal in app form.", true, 96),
+  legacyNote("apps", "geographyApp", "How To Build A Geography App", "Quiz and map mechanics for a geography learning app.", true, 95),
+  legacyNote("apps", "notesApp", "How To Build A Notes App", "Capture ideas fast — notes, tags, and search without over-engineering.", true, 94),
+  legacyNote("apps", "workoutApp", "How To Build A Workout App", "Track sets, reps, and progress in a minimal workout logger.", true, 93),
 
   legacyNote("business", "howSell", "How To Sell Anything", "Selling is an important skillset", false, 100, "GcaXjsNrP90"),
+  legacyNote("business", "doorSales", "How To Sell Door To Door", "From your first knock to closing the deal — resilience, scripts, and follow-up.", true, 90),
   legacyNote("business", "beDoHave", "Be. Do. Have.", "learn the secret those 3 words contain", true, 99),
   legacyNote("business", "berkInvest", "Why You Should Invest in Berkshire Hathaway", "Berkshire Hathaway isn’t a typical company—it’s a collection of businesses hand-picked by Warren Buffett and his team over decades.", true, 98),
   legacyNote("business", "coldCall", "How To Cold Call", "Cold calling is one of the fastest ways to create pipeline", true, 97),
@@ -71,6 +78,7 @@ export const STATIC_NOTES = [
   legacyNote("business", "warrenMethod", "How To Invest Like Warren Buffett", "Warren Buffett is one of the most successful investors in history...", true, 91),
 
   legacyNote("city", "capitalismSlavery", "Is Capitalism Pro-Slavery?", "\"wage labor you are renting yourself. which is not very different from being a slave...\"", false, 100, "PKx9IOnIZTs"),
+  legacyNote("city", "cityRiver", "How To Use Your River Effectively", "Rivers as living infrastructure — recreation, ecology, access, and flood resilience.", true, 92),
   legacyNote("city", "profitSeacoast", "How To Profit From Your Seacoast", "Your coastline is more than just a scenic boundary—it’s an economic engine...", true, 99),
   legacyNote("city", "cityBuilding", "How To Build A City", "Building a city is one of humanity’s most ambitious undertakings...", true, 98),
   legacyNote("city", "cityDiversity", "The Pros and Cons Of Diversity In A City", "Diversity—across culture, language, age, income, and ability—shapes how a city feels, grows, and solves problems...", true, 97),

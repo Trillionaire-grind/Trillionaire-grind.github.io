@@ -105,11 +105,11 @@ async function enforceAdmin(user) {
 async function initConfiguredAuth() {
   const { GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup } =
     await import("https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js");
-  const { initLearnFirebase } = await import("./learnFirebase.js");
+  const { getLearnAuthReady } = await import("./learnFirebase.js");
 
-  const firebase = initLearnFirebase();
-  if (!firebase) return;
-  auth = firebase.auth;
+  sessionStorage.removeItem(DEMO_ADMIN_KEY);
+  auth = await getLearnAuthReady();
+  if (!auth) return;
 
   if (setupNotice) setupNotice.hidden = true;
   if (demoLoginBtn) demoLoginBtn.hidden = true;

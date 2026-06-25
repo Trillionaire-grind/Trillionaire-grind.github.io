@@ -46,41 +46,6 @@
                 display: block;
                 z-index: 1;
             }
-
-            footer {
-                display: none;
-            }
-
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            }
-
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-
-            footer nav a:hover {
-                color: #007bff;
-            }
-
-            .fab {
-                position: fixed;
-                bottom: 20px;
-                right: 50%;
-                transform: translateX(50%);
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-            }
         </style>
     </head>
     <body>
@@ -98,7 +63,7 @@
                     <a href="#notes" data-page="notes">Notes</a>
                     <a href="#speak" data-page="speak">Talk to me</a>
                     <a href="#offers" data-page="offers">Offers</a>
-                    <a href="../strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
+                    <a href="/strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
                     <a href="#kotfe" data-page="kotfe">Mangé Lakay</a>
                 </div>
             </div>
@@ -111,7 +76,6 @@
             <iframe data-src="speakView.html" id="speakView" class="view-frame" title="Talk to me"></iframe>
             <iframe data-src="offersView.html" id="offersView" class="view-frame" title="Offers"></iframe>
             <iframe data-src="mangeKotfeView.html" id="kotfeView" class="view-frame" title="Mangé Lakay"></iframe>
-            <!-- <iframe data-src="settingsView.html" id="settingsView" class="view-frame"></iframe> -->
         </div>
         <script>
             (function () {
@@ -135,16 +99,6 @@
                 window.__learnInitialPage = page;
             })();
         </script>
-
-        <footer>
-            <nav>
-            <a href="#"><img id="homeBtn" src="assets/house.svg" height="24px" onclick="changeTo(0)"></a>
-            <a href="#"><img id="notesBtn" src="assets/clipboard.svg" height="24px" onclick="changeTo(1)"></a>
-            <a href="#"><img id="speakBtn" src="assets/bubble.svg" height="24px" onclick="changeTo(2)"></a>
-            <a href="#"><img id="offersBtn" src="assets/tag.svg" height="24px" onclick="changeTo(3)"></a>
-            <!-- <a href="#"><img id="settingsBtn" src="views/assets/gearshape.svg" height="24px" onclick="changeTo(4)"></a> -->
-            </nav>
-        </footer>
 
         <script type="module">
             import { initLearnAnalytics, trackLearnPageView } from "./scripts/learnAnalytics.js";
@@ -230,6 +184,7 @@
 
             navLinks.forEach((link) => {
                 link.addEventListener('click', (event) => {
+                    if (!link.dataset.page) return;
                     event.preventDefault();
                     changeTo(link.dataset.page);
                 });
