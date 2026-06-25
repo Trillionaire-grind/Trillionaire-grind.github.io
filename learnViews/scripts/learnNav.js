@@ -1,9 +1,12 @@
+export const LEARN_APP_VERSION = "0.2.9.4";
+
 export const PAGE_INDEX = {
   home: 0,
   notes: 1,
   speak: 2,
   offers: 3,
   kotfe: 4,
+  projects: 5,
 };
 
 export const NAV_ITEMS = [
@@ -12,6 +15,7 @@ export const NAV_ITEMS = [
   { id: "speak", label: "Talk to me" },
   { id: "offers", label: "Offers" },
   { id: "kotfe", label: "Mangé Lakay" },
+  { id: "projects", label: "Projects" },
 ];
 
 export const LEARN_NAV_LOGO_SRC = "../generalAssets/logo_ks.png";

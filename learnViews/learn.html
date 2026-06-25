@@ -65,6 +65,7 @@
                     <a href="#offers" data-page="offers">Offers</a>
                     <a href="/strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
                     <a href="#kotfe" data-page="kotfe">Mangé Lakay</a>
+                    <a href="#projects" data-page="projects">Projects</a>
                 </div>
             </div>
             <div class="learn-app-nav__backdrop" id="learnNavBackdrop" hidden></div>
@@ -76,6 +77,7 @@
             <iframe data-src="speakView.html" id="speakView" class="view-frame" title="Talk to me"></iframe>
             <iframe data-src="offersView.html" id="offersView" class="view-frame" title="Offers"></iframe>
             <iframe data-src="mangeKotfeView.html" id="kotfeView" class="view-frame" title="Mangé Lakay"></iframe>
+            <iframe data-src="projectsView.html" id="projectsView" class="view-frame" title="Projects"></iframe>
         </div>
         <script>
             (function () {
@@ -85,6 +87,7 @@
                     speak: "speakView",
                     offers: "offersView",
                     kotfe: "kotfeView",
+                    projects: "projectsView",
                 };
                 const hash = (location.hash || "#home").slice(1);
                 const page = Object.prototype.hasOwnProperty.call(VIEW_IDS, hash) ? hash : "home";
@@ -114,6 +117,7 @@
                 speak: document.getElementById('speakView'),
                 offers: document.getElementById('offersView'),
                 kotfe: document.getElementById('kotfeView'),
+                projects: document.getElementById('projectsView'),
             };
 
             const navLinks = document.querySelectorAll('#learnAppNav .learn-app-nav__links a');

@@ -527,18 +527,21 @@
       </div>
     </section>
 
-    <footer class="site-footer container">
-      Version 0.2.9.3
+    <footer class="site-footer container" id="learnVersionFooter">
+      Version 0.2.9.4
     </footer>
   </div>
 
   <audio id="audio" src="assets/name.mp3"></audio>
 
   <script type="module">
-    import { initLearnNav, goToPage, goToNotesGenre } from "./scripts/learnNav.js";
+    import { initLearnNav, goToPage, goToNotesGenre, LEARN_APP_VERSION } from "./scripts/learnNav.js";
 
     initLearnNav("home");
     window.goToPage = goToPage;
+
+    const versionFooter = document.getElementById("learnVersionFooter");
+    if (versionFooter) versionFooter.textContent = `Version ${LEARN_APP_VERSION}`;
 
     document.querySelectorAll("[data-learn-nav]").forEach((el) => {
       el.addEventListener("click", (event) => {
