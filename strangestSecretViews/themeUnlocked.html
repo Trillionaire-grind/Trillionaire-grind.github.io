@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme unlocked · The Strangest Secret</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0a0a0a;
+      color: #f0ebe3;
+      padding: 24px;
+      text-align: center;
+    }
+    p { margin: 0 0 8px; line-height: 1.5; }
+    .muted { color: #9a958c; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div>
+    <p id="status">Unlocking your theme…</p>
+    <p class="muted">Returning to the app.</p>
+  </div>
+  <script src="scripts/ssThemeStoreConfig.js"></script>
+  <script>
+    (function () {
+      var STORAGE_KEY = "ssUnlockedThemes";
+      var params = new URLSearchParams(window.location.search);
+      var unlock = (params.get("unlock") || "").trim().toLowerCase();
+      var catalog = window.SS_THEME_CATALOG;
+      var status = document.getElementById("status");
+
+      function readUnlocks() {
+        try {
+          var raw = localStorage.getItem(STORAGE_KEY);
+          var list = raw ? JSON.parse(raw) : [];
+          return Array.isArray(list) ? list : [];
+        } catch (_) {
+          return [];
+        }
+      }
+
+      function writeUnlocks(list) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(new Set(list))));
+      }
+
+      function unlockThemes(ids) {
+        var current = readUnlocks();
+        ids.forEach(function (id) {
+          if (id && current.indexOf(id) === -1) current.push(id);
+        });
+        writeUnlocks(current);
+      }
+
+      var redirect = "../strangestSecret.html";
+      var applied = false;
+
+      if (unlock === "bundle" && catalog && catalog.bundle) {
+        unlockThemes(catalog.bundle.includes || []);
+        if (status) status.textContent = "All premium themes unlocked. Thank you!";
+        applied = true;
+      } else if (unlock && catalog && catalog.themes && catalog.themes[unlock]) {
+        unlockThemes([unlock]);
+        if (status) status.textContent = catalog.themes[unlock].name + " unlocked. Thank you!";
+        applied = true;
+      } else if (status) {
+        status.textContent = "No unlock code found — open Themes in the app to purchase.";
+      }
+
+      if (applied) {
+        if (unlock === "arcadia" || unlock === "bundle") {
+          sessionStorage.setItem("ssShowArcadiaCert", "1");
+        }
+        redirect += "?theme=" + encodeURIComponent(unlock === "bundle" ? "arcadia" : unlock);
+      }
+
+      setTimeout(function () {
+        window.location.replace(redirect);
+      }, applied ? 1200 : 2200);
+    })();
+  </script>
+</body>
+</html>

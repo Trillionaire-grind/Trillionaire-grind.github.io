@@ -7,28 +7,39 @@ const STORAGE = {
   audioPos: "ssAudioPosition",
   playbackSpeed: "ssPlaybackSpeed",
   theme: "ssTheme",
+  unlockedThemes: "ssUnlockedThemes",
 };
 
-const THEMES = ["gold", "blue", "cream", "mint", "burgundy", "black", "grey"];
+const THEMES = [
+  "gold", "blue", "cream", "cherryblossom", "burgundy", "black",
+  "sakura", "fastred", "purplefever", "starrynights", "arcadia",
+];
 const THEME_META = {
   gold: "#0a0a0a",
   blue: "#080f1a",
   cream: "#f4efe4",
-  mint: "#e8f8f2",
+  cherryblossom: "#e4e9ef",
   burgundy: "#160c10",
   black: "#000000",
-  grey: "#2a2a2c",
+  sakura: "#064e56",
+  fastred: "#0a0a0a",
+  purplefever: "#12081f",
+  starrynights: "#0a1628",
+  arcadia: "#f0ece6",
 };
 const LEGACY_THEMES = {
   midnight: "blue",
   paper: "cream",
-  meadow: "mint",
-  mintchip: "mint",
-  forest: "mint",
+  meadow: "cherryblossom",
+  mint: "cherryblossom",
+  mintchip: "cherryblossom",
+  forest: "cherryblossom",
   crimson: "burgundy",
+  grey: "black",
 };
 
 const CHALLENGE_DAYS = 30;
+const SS_APP_VERSION = "0.0.0.4";
 const LISTEN_THRESHOLD = 0.9;
 const PLAYBACK_MIN_SECONDS = 30;
 const RING_CIRC = 100.53;
@@ -555,33 +566,314 @@ function initGoal() {
 
 initAudio();
 initGoal();
-initTheme();
 initPwa();
 
-function initTheme() {
-  const swatches = document.querySelectorAll(".ss-theme-swatch");
-  if (!swatches.length) return;
+function getThemeCatalog() {
+  return window.SS_THEME_CATALOG || { themes: {}, bundle: {}, previewSeconds: 8 };
+}
 
-  function applyTheme(id) {
-    const theme = THEMES.includes(id) ? id : "gold";
-    document.documentElement.dataset.ssTheme = theme;
-    localStorage.setItem(STORAGE.theme, theme);
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = THEME_META[theme];
-    swatches.forEach((btn) => {
-      const active = btn.dataset.theme === theme;
-      btn.classList.toggle("is-active", active);
-      btn.setAttribute("aria-pressed", active ? "true" : "false");
-    });
+function getUnlockedThemes() {
+  try {
+    const raw = localStorage.getItem(STORAGE.unlockedThemes);
+    const list = raw ? JSON.parse(raw) : [];
+    return Array.isArray(list) ? list : [];
+  } catch (_) {
+    return [];
+  }
+}
+
+function isThemeFree(id) {
+  return Boolean(getThemeCatalog().themes[id]?.free);
+}
+
+function isThemeUnlocked(id) {
+  return THEMES.includes(id) && (isThemeFree(id) || getUnlockedThemes().includes(id));
+}
+
+let previewTimer = null;
+let themeBeforePreview = null;
+let previewBanner = null;
+
+function ensurePreviewBanner() {
+  if (previewBanner) return previewBanner;
+  previewBanner = document.createElement("p");
+  previewBanner.className = "ss-theme-preview-banner";
+  previewBanner.hidden = true;
+  document.body.appendChild(previewBanner);
+  return previewBanner;
+}
+
+function clearThemePreview() {
+  if (previewTimer) {
+    clearTimeout(previewTimer);
+    previewTimer = null;
+  }
+  if (previewBanner) previewBanner.hidden = true;
+  themeBeforePreview = null;
+  document.body.classList.remove("ss-theme-previewing");
+}
+
+function syncThemeStoreSelection(theme) {
+  const store = document.getElementById("ssThemeStore");
+  if (!store?.classList.contains("is-open")) return;
+
+  store.querySelectorAll(".ss-theme-item").forEach((row) => {
+    const id = row.getAttribute("data-theme");
+    const isActive = id === theme;
+    row.classList.toggle("is-active", isActive);
+    const useBtn = row.querySelector("[data-use-theme]");
+    if (useBtn) {
+      useBtn.textContent = isActive ? "Selected" : "Use";
+      useBtn.setAttribute("aria-pressed", isActive ? "true" : "false");
+    }
+  });
+}
+
+function refreshThemeStoreUI() {
+  const store = document.getElementById("ssThemeStore");
+  if (!store?.classList.contains("is-open")) return;
+  const active = localStorage.getItem(STORAGE.theme) || "gold";
+  renderThemeStore();
+  store.classList.add("is-open");
+  syncThemeStoreSelection(active);
+}
+
+function paintTheme(theme) {
+  document.documentElement.setAttribute("data-ss-theme", theme);
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) meta.content = THEME_META[theme] || THEME_META.gold;
+  document.querySelectorAll(".ss-theme-swatch").forEach((btn) => {
+    const active = btn.getAttribute("data-theme") === theme;
+    btn.classList.toggle("is-active", active);
+    btn.setAttribute("aria-pressed", active ? "true" : "false");
+  });
+}
+
+function applyTheme(id, { persist = true, openStoreOnLock = true } = {}) {
+  const theme = THEMES.includes(id) ? id : "gold";
+  if (persist && !isThemeUnlocked(theme)) {
+    if (openStoreOnLock) openThemeStore(theme);
+    return false;
   }
 
-  swatches.forEach((btn) => {
-    btn.addEventListener("click", () => applyTheme(btn.dataset.theme));
+  paintTheme(theme);
+  if (persist) {
+    localStorage.setItem(STORAGE.theme, theme);
+    clearThemePreview();
+  }
+  syncThemeStoreSelection(theme);
+  return true;
+}
+
+function previewTheme(id) {
+  const themeId = String(id || "").trim();
+  if (!THEMES.includes(themeId)) return;
+
+  if (isThemeUnlocked(themeId)) {
+    applyTheme(themeId);
+    refreshThemeStoreUI();
+    return;
+  }
+
+  const seconds = getThemeCatalog().previewSeconds || 8;
+  const revertTo = localStorage.getItem(STORAGE.theme) || "gold";
+
+  clearThemePreview();
+  themeBeforePreview = revertTo;
+
+  closeThemeStore();
+
+  paintTheme(themeId);
+
+  const banner = ensurePreviewBanner();
+  const name = getThemeCatalog().themes[themeId]?.name || themeId;
+  banner.textContent = `Previewing ${name} — reverting in ${seconds}s`;
+  banner.hidden = false;
+  document.body.classList.add("ss-theme-previewing");
+
+  if (previewTimer) clearTimeout(previewTimer);
+  previewTimer = window.setTimeout(() => {
+    applyTheme(themeBeforePreview || "gold", { openStoreOnLock: false });
+    clearThemePreview();
+  }, seconds * 1000);
+}
+
+function openThemeStore(highlightId) {
+  const store = document.getElementById("ssThemeStore");
+  if (!store) return;
+  renderThemeStore();
+  store.classList.add("is-open");
+  document.getElementById("ssThemeOpenBtn")?.setAttribute("aria-expanded", "true");
+  if (highlightId) {
+    const row = store.querySelector(`.ss-theme-item[data-theme="${highlightId}"]`);
+    row?.scrollIntoView({ block: "nearest" });
+  }
+}
+
+function closeThemeStore() {
+  const store = document.getElementById("ssThemeStore");
+  store?.classList.remove("is-open");
+  document.getElementById("ssThemeOpenBtn")?.setAttribute("aria-expanded", "false");
+}
+
+function purchaseTheme(stripeUrl) {
+  if (!stripeUrl) return;
+  window.open(stripeUrl, "_blank", "noopener,noreferrer");
+}
+
+function renderThemeStore() {
+  const catalog = getThemeCatalog();
+  const listEl = document.getElementById("ssThemeList");
+  const bundleEl = document.getElementById("ssThemeBundle");
+  if (!listEl || !bundleEl) return;
+
+  const active = localStorage.getItem(STORAGE.theme) || "gold";
+  const bundle = catalog.bundle || {};
+  const bundleOwned = (bundle.includes || []).every((id) => isThemeUnlocked(id));
+  const bundleReady = Boolean(bundle.stripeUrl);
+
+  bundleEl.innerHTML = `
+    <h4>${bundle.name || "All premium themes"}</h4>
+    <p>${(bundle.includes || []).map((id) => catalog.themes[id]?.name || id).join(" · ")}</p>
+    ${
+      bundleOwned
+        ? `<span class="ss-theme-item__status">Bundle owned — all premium themes unlocked</span>`
+        : `<button type="button" class="ss-btn ss-btn--gold" data-buy-bundle ${bundleReady ? "" : "disabled"}>
+            ${bundleReady ? `Unlock bundle · ${bundle.priceLabel || ""}` : "Bundle link pending"}
+          </button>`
+    }
+  `;
+
+  listEl.innerHTML = THEMES.map((id) => {
+    const info = catalog.themes[id] || { name: id };
+    const unlocked = isThemeUnlocked(id);
+    const isActive = active === id;
+    const buyReady = Boolean(info.stripeUrl);
+    const status = info.free
+      ? "Included free"
+      : unlocked
+        ? "Unlocked on this device"
+        : info.premium
+          ? `Signature · ${info.priceLabel || "Paid"}`
+          : `Premium · ${info.priceLabel || "Paid"}`;
+
+    let actions = "";
+    if (unlocked) {
+      actions = `<button type="button" class="ss-btn ss-btn--gold" data-use-theme="${id}">${isActive ? "Selected" : "Use"}</button>`;
+      if (id === "arcadia") {
+        actions += `<button type="button" class="ss-btn ss-btn--ghost" data-view-cert>Certificate</button>`;
+      }
+    } else {
+      actions = `
+        <button type="button" class="ss-btn ss-btn--ghost" data-preview-theme="${id}">Preview</button>
+        <button type="button" class="ss-btn ss-btn--gold" data-buy-theme="${id}" ${buyReady ? "" : "disabled"}>
+          ${buyReady ? `Buy ${info.priceLabel || ""}` : "Link pending"}
+        </button>`;
+    }
+
+    return `
+      <li class="ss-theme-item${isActive ? " is-active" : ""}" data-theme="${id}">
+        <button type="button" class="ss-theme-swatch ss-theme-swatch--lg${unlocked ? "" : " is-locked"}"
+          data-theme="${id}" title="${info.name}" aria-label="${info.name}"></button>
+        <div class="ss-theme-item__meta">
+          <p class="ss-theme-item__name">${info.name}</p>
+          <p class="ss-theme-item__status">${status}</p>
+        </div>
+        <div class="ss-theme-item__actions">${actions}</div>
+      </li>`;
+  }).join("");
+
+  wireThemeStoreActions();
+}
+
+function wireThemeStoreActions() {
+  const store = document.getElementById("ssThemeStore");
+  if (!store) return;
+
+  store.querySelectorAll("[data-preview-theme]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      previewTheme(btn.getAttribute("data-preview-theme"));
+    });
   });
 
-  const saved = localStorage.getItem(STORAGE.theme);
-  const initial = LEGACY_THEMES[saved] || saved;
-  applyTheme(initial || document.documentElement.dataset.ssTheme || "gold");
+  store.querySelectorAll("[data-use-theme]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      const themeId = btn.getAttribute("data-use-theme");
+      if (applyTheme(themeId)) refreshThemeStoreUI();
+    });
+  });
+
+  store.querySelectorAll("[data-buy-theme]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      const themeId = btn.getAttribute("data-buy-theme");
+      purchaseTheme(getThemeCatalog().themes[themeId]?.stripeUrl);
+    });
+  });
+
+  store.querySelectorAll("[data-buy-bundle]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      if (!btn.disabled) purchaseTheme(getThemeCatalog().bundle?.stripeUrl);
+    });
+  });
+
+  store.querySelectorAll("[data-view-cert]").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      document.dispatchEvent(new CustomEvent("ss-show-arcadia-cert"));
+    });
+  });
+
+  store.querySelectorAll(".ss-theme-swatch").forEach((swatch) => {
+    swatch.addEventListener("click", (event) => {
+      event.preventDefault();
+      const themeId = swatch.getAttribute("data-theme");
+      if (isThemeUnlocked(themeId)) {
+        if (applyTheme(themeId)) refreshThemeStoreUI();
+      } else {
+        previewTheme(themeId);
+      }
+    });
+  });
+}
+
+function initTheme() {
+  const openBtn = document.getElementById("ssThemeOpenBtn");
+  const store = document.getElementById("ssThemeStore");
+  const closeBtn = document.getElementById("ssThemeStoreClose");
+
+  openBtn?.addEventListener("click", () => openThemeStore());
+  closeBtn?.addEventListener("click", closeThemeStore);
+  store?.addEventListener("click", (event) => {
+    if (event.target === store) closeThemeStore();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && store?.classList.contains("is-open")) {
+      closeThemeStore();
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const fromPurchase = params.get("theme");
+  if (fromPurchase && isThemeUnlocked(fromPurchase)) {
+    applyTheme(fromPurchase);
+    params.delete("theme");
+    const next = params.toString();
+    history.replaceState(null, "", window.location.pathname + (next ? `?${next}` : "") + window.location.hash);
+  } else {
+    const saved = localStorage.getItem(STORAGE.theme);
+    const initial = LEGACY_THEMES[saved] || saved;
+    const pick = initial || document.documentElement.dataset.ssTheme || "gold";
+    if (isThemeUnlocked(pick)) {
+      applyTheme(pick, { openStoreOnLock: false });
+    } else {
+      applyTheme("gold", { persist: true, openStoreOnLock: false });
+    }
+  }
 }
 
 function isStandalone() {
@@ -596,6 +888,16 @@ function isIosSafari() {
   return /iphone|ipad|ipod/i.test(ua) && !window.MSStream;
 }
 
+function isLocalDevHost() {
+  const host = window.location.hostname;
+  return host === "localhost" || host === "127.0.0.1" || host === "[::1]";
+}
+
+function clearStrangestSecretCaches() {
+  if (!("caches" in window)) return Promise.resolve();
+  return caches.keys().then((keys) => Promise.all(keys.filter((k) => k.startsWith("ss-app-")).map((k) => caches.delete(k))));
+}
+
 function initPwa() {
   const installBanner = document.getElementById("ssInstall");
   const installBtn = document.getElementById("ssInstallBtn");
@@ -604,9 +906,14 @@ function initPwa() {
   const installDismissKey = "ssInstallDismissed";
 
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/strangestSecret-sw.js").catch(() => {});
-    });
+    if (isLocalDevHost()) {
+      navigator.serviceWorker.getRegistrations().then((regs) => Promise.all(regs.map((r) => r.unregister())));
+      clearStrangestSecretCaches();
+    } else {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("/strangestSecret-sw.js?v=10").catch(() => {});
+      });
+    }
   }
 
   if (!installBanner || isStandalone() || localStorage.getItem(installDismissKey)) return;
@@ -648,3 +955,8 @@ function initPwa() {
     if (installBtn) installBtn.textContent = "Got it";
   }
 }
+
+initTheme();
+
+const versionEl = document.getElementById("ssVersion");
+if (versionEl) versionEl.textContent = `v${SS_APP_VERSION}`;
