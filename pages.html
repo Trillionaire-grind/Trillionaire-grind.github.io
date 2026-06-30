@@ -4,13 +4,22 @@
   <meta charset="UTF-8">
   <title>My Projects</title>
   <style>
+    html {
+      height: 100%;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background-color: #f0f2f5;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100%;
+      margin: 0;
       padding: 50px;
+      box-sizing: border-box;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     h1 {
@@ -41,7 +50,7 @@
 </head>
 <body>
 
-  <h1>My Projects <span>version 0.2.9.4</span></h1>
+  <h1>My Projects <span>version 0.2.9.5</span></h1>
   <a class="project-button" href="https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H" target="_blank" rel="noopener noreferrer">A Secret Attraction (Book)</a>
   <a class="project-button" href="/secretAttraction.html" target="_blank" rel="noopener noreferrer">A Secret Attraction (Site)</a>
   <a class="project-button" href="/arcadia.html" target="_blank" rel="noopener noreferrer">Arcadia</a>
