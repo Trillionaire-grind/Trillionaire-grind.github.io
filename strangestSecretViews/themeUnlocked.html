@@ -18,12 +18,14 @@
     }
     p { margin: 0 0 8px; line-height: 1.5; }
     .muted { color: #9a958c; font-size: 14px; }
+    .support-fallback a { color: #d4af37; }
   </style>
 </head>
 <body>
   <div>
     <p id="status">Unlocking your theme…</p>
-    <p class="muted">Returning to the app.</p>
+    <p class="muted" id="supportLine">Returning to the app.</p>
+    <p class="muted support-fallback" id="supportFallback" hidden>Need help? <a href="mailto:buildingwithkepler@gmail.com?subject=Strangest%20Secret%20—%20unlock%20help">buildingwithkepler@gmail.com</a></p>
   </div>
   <script src="scripts/ssThemeStoreConfig.js"></script>
   <script>
@@ -69,6 +71,8 @@
         applied = true;
       } else if (status) {
         status.textContent = "No unlock code found — open Themes in the app to purchase.";
+        var fallback = document.getElementById("supportFallback");
+        if (fallback) fallback.removeAttribute("hidden");
       }
 
       if (applied) {
