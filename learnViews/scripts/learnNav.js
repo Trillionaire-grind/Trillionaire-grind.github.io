@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.4";
+export const LEARN_APP_VERSION = "0.2.9.5";
 
 export const PAGE_INDEX = {
   home: 0,
