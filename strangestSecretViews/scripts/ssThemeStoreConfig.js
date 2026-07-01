@@ -71,7 +71,7 @@ window.SS_THEME_CATALOG = {
   },
   bundle: {
     name: "All themes",
-    priceLabel: "$5.99",
+    priceLabel: "$6.99",
     includes: [
       "cream", "cherryblossom", "burgundy",
       "sakura", "fastred", "purplefever", "starrynights", "arcadia",
