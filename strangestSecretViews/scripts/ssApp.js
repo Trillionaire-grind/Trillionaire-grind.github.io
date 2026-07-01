@@ -675,6 +675,8 @@ function previewTheme(id) {
     return;
   }
 
+  ssTrack("theme_preview", { theme_id: themeId });
+
   const seconds = getThemeCatalog().previewSeconds || 8;
   const revertTo = localStorage.getItem(STORAGE.theme) || "gold";
 
@@ -698,9 +700,14 @@ function previewTheme(id) {
   }, seconds * 1000);
 }
 
+function ssTrack(name, params) {
+  window.ssAnalytics?.track(name, params);
+}
+
 function openThemeStore(highlightId) {
   const store = document.getElementById("ssThemeStore");
   if (!store) return;
+  ssTrack("theme_store_open", highlightId ? { highlight_theme: highlightId } : {});
   renderThemeStore();
   store.classList.add("is-open");
   document.getElementById("ssThemeOpenBtn")?.setAttribute("aria-expanded", "true");
@@ -716,8 +723,35 @@ function closeThemeStore() {
   document.getElementById("ssThemeOpenBtn")?.setAttribute("aria-expanded", "false");
 }
 
-function purchaseTheme(stripeUrl) {
+function purchaseTheme(stripeUrl, productId) {
   if (!stripeUrl) return;
+
+  const catalog = getThemeCatalog();
+  let itemName = productId || "unknown";
+  let value = 0;
+  let productType = "theme";
+
+  if (productId === "bundle") {
+    productType = "bundle";
+    itemName = catalog.bundle?.name || "bundle";
+    value = parseFloat(String(catalog.bundle?.priceLabel || "").replace(/[^\d.]/g, "")) || 0;
+  } else if (productId && catalog.themes[productId]) {
+    itemName = catalog.themes[productId].name || productId;
+    value = parseFloat(String(catalog.themes[productId].priceLabel || "").replace(/[^\d.]/g, "")) || 0;
+  }
+
+  ssTrack("theme_buy_click", {
+    theme_id: productId || "unknown",
+    product_type: productType,
+    value,
+    currency: "USD",
+  });
+  ssTrack("begin_checkout", {
+    currency: "USD",
+    value,
+    items: [{ item_id: productId || "unknown", item_name: itemName, price: value }],
+  });
+
   window.open(stripeUrl, "_blank", "noopener,noreferrer");
 }
 
@@ -806,14 +840,14 @@ function wireThemeStoreActions() {
     btn.addEventListener("click", (event) => {
       event.preventDefault();
       const themeId = btn.getAttribute("data-buy-theme");
-      purchaseTheme(getThemeCatalog().themes[themeId]?.stripeUrl);
+      purchaseTheme(getThemeCatalog().themes[themeId]?.stripeUrl, themeId);
     });
   });
 
   store.querySelectorAll("[data-buy-bundle]").forEach((btn) => {
     btn.addEventListener("click", (event) => {
       event.preventDefault();
-      if (!btn.disabled) purchaseTheme(getThemeCatalog().bundle?.stripeUrl);
+      if (!btn.disabled) purchaseTheme(getThemeCatalog().bundle?.stripeUrl, "bundle");
     });
   });
 
@@ -947,6 +981,7 @@ function initPwa() {
 }
 
 initTheme();
+window.ssAnalytics?.pageView("/strangestSecret.html", "The Strangest Secret");
 
 const versionEl = document.getElementById("ssVersion");
 if (versionEl) versionEl.textContent = `v${SS_APP_VERSION}`;

@@ -1,10 +1,12 @@
-const CACHE = "ss-app-v11";
+const CACHE = "ss-app-v12";
 
 const PRECACHE = [
   "/strangestSecret.html",
   "/strangestSecretViews/manifest.webmanifest",
   "/strangestSecretViews/assets/ssApp.css",
   "/strangestSecretViews/scripts/ssApp.js",
+  "/strangestSecretViews/scripts/ssAnalytics.js",
+  "/strangestSecretViews/scripts/ssAnalyticsUnlock.js",
   "/strangestSecretViews/scripts/ssThemeStoreConfig.js",
   "/strangestSecretViews/themeUnlocked.html",
   "/strangestSecretViews/assets/gold_key.webp",

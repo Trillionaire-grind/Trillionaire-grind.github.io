@@ -7,8 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="shortcut icon" type="image/x-icon" href="../generalAssets/favicon.ico" />
 
-        <title>Siguineau, Képler</title>
-        <!-- Optional: set window.LEARN_GA_MEASUREMENT_ID = 'G-XXXXXXXX' for analytics -->
+        <title>Képler Siguineau</title>
+        <script>window.LEARN_GA_MEASUREMENT_ID = "G-L0QCNW7C6W";</script>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
             <div class="learn-app-nav__inner">
                 <a href="#home" class="learn-app-nav__brand" data-page="home">
                     <img class="learn-app-nav__logo" src="../generalAssets/logo_ks.png" alt="" width="32" height="32" />
-                    <span class="learn-app-nav__brand-text">Siguineau, Képler</span>
+                    <span class="learn-app-nav__brand-text">Képler Siguineau</span>
                 </a>
                 <button type="button" class="learn-app-nav__toggle" id="learnNavToggle" aria-expanded="false" aria-controls="learnAppNavMenu" aria-label="Open menu">
                     <span class="learn-app-nav__toggle-bars" aria-hidden="true"></span>
@@ -63,9 +63,9 @@
                     <a href="#notes" data-page="notes">Notes</a>
                     <a href="#speak" data-page="speak">Talk to me</a>
                     <a href="#offers" data-page="offers">Offers</a>
-                    <a href="/strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
                     <a href="#kotfe" data-page="kotfe">Mangé Lakay</a>
                     <a href="#projects" data-page="projects">Projects</a>
+                    <a href="/strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
                 </div>
             </div>
             <div class="learn-app-nav__backdrop" id="learnNavBackdrop" hidden></div>
@@ -107,7 +107,7 @@
             import { initLearnAnalytics, trackLearnPageView } from "./scripts/learnAnalytics.js";
             import { wireLearnAppNav } from "./scripts/learnNav.js";
             initLearnAnalytics();
-            trackLearnPageView("/learn", "Siguineau, Képler");
+            trackLearnPageView("/learn", "Képler Siguineau");
             wireLearnAppNav(document.getElementById("learnAppNav"));
         </script>
         <script>
@@ -151,6 +151,13 @@
 
                 if (pageId === 'notes') {
                     applyPendingNotesGenre();
+                }
+
+                if (typeof window.gtag === 'function') {
+                    window.gtag('event', 'page_view', {
+                        page_path: '/learn/' + pageId,
+                        page_title: 'Learn · ' + pageId,
+                    });
                 }
             }
 

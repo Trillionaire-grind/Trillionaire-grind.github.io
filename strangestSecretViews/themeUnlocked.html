@@ -27,6 +27,7 @@
     <p class="muted" id="supportLine">Returning to the app.</p>
     <p class="muted support-fallback" id="supportFallback" hidden>Need help? <a href="mailto:buildingwithkepler@gmail.com?subject=Strangest%20Secret%20—%20unlock%20help">buildingwithkepler@gmail.com</a></p>
   </div>
+  <script src="scripts/ssAnalyticsUnlock.js?v=1"></script>
   <script src="scripts/ssThemeStoreConfig.js"></script>
   <script>
     (function () {
@@ -73,6 +74,10 @@
         status.textContent = "No unlock code found — open Themes in the app to purchase.";
         var fallback = document.getElementById("supportFallback");
         if (fallback) fallback.removeAttribute("hidden");
+      }
+
+      if (typeof window.ssTrackUnlock === "function") {
+        window.ssTrackUnlock(unlock, applied);
       }
 
       if (applied) {
