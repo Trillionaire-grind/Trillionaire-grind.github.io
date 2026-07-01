@@ -760,9 +760,6 @@ function renderThemeStore() {
     let actions = "";
     if (unlocked) {
       actions = `<button type="button" class="ss-btn ss-btn--gold" data-use-theme="${id}">${isActive ? "Selected" : "Use"}</button>`;
-      if (id === "arcadia") {
-        actions += `<button type="button" class="ss-btn ss-btn--ghost" data-view-cert>Certificate</button>`;
-      }
     } else {
       actions = `
         <button type="button" class="ss-btn ss-btn--ghost" data-preview-theme="${id}">Preview</button>
@@ -817,13 +814,6 @@ function wireThemeStoreActions() {
     btn.addEventListener("click", (event) => {
       event.preventDefault();
       if (!btn.disabled) purchaseTheme(getThemeCatalog().bundle?.stripeUrl);
-    });
-  });
-
-  store.querySelectorAll("[data-view-cert]").forEach((btn) => {
-    btn.addEventListener("click", (event) => {
-      event.preventDefault();
-      document.dispatchEvent(new CustomEvent("ss-show-arcadia-cert"));
     });
   });
 

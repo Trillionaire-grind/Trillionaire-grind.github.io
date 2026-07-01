@@ -76,9 +76,6 @@
       }
 
       if (applied) {
-        if (unlock === "arcadia" || unlock === "bundle") {
-          sessionStorage.setItem("ssShowArcadiaCert", "1");
-        }
         redirect += "?theme=" + encodeURIComponent(unlock === "bundle" ? "arcadia" : unlock);
       }
 
