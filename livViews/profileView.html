@@ -174,8 +174,8 @@
                     <img id="profileAvatarPhoto" alt="">
                 </div>
                 <div class="identity-text">
-                    <p class="name" id="profileDisplayName">Jean-Phillipe</p>
-                    <p class="email" id="profileEmail">jeanphillipe@gmail.com</p>
+                    <p class="name" id="profileDisplayName">…</p>
+                    <p class="email" id="profileEmail">…</p>
                 </div>
                 <button type="button" class="link-edit" id="profileEditBtn" data-i18n="profile.edit">Modifye</button>
                 <button type="button" class="link-edit" id="profileSignOutBtn" hidden data-i18n="auth.signOut">Dekonekte</button>
@@ -204,8 +204,12 @@
                     <span data-i18n="profile.menuAbout">Sou aplikasyon an</span>
                     <span class="chev" aria-hidden="true">›</span>
                 </button>
-                <a class="menu-row" href="https://buy.stripe.com/bIYaFB5m9cD2asw4gh" target="_blank" rel="noopener noreferrer">
+                <a class="menu-row" href="../livPass.html" target="_top">
                     <span data-i18n="profile.menuSupport">Bay sipò</span>
+                    <span class="chev" aria-hidden="true">›</span>
+                </a>
+                <a class="menu-row" id="livProfileSupportEmail" href="mailto:buildingwithkepler@gmail.com">
+                    <span data-i18n="profile.menuEmailSupport">Imèl sipò</span>
                     <span class="chev" aria-hidden="true">›</span>
                 </a>
             </nav>
@@ -266,20 +270,20 @@
         </div>
 
         <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+            import { initLivFirebase } from "./scripts/livFirebaseInit.js";
             import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-            import { getFirestore, doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+            import { doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
-            import { livFirebaseConfig } from "./scripts/livFirebaseConfig.js";
             import { initLivI18n, setLivLang, getLivLang, applyLivI18n, t } from "./scripts/livI18n.js";
+            import { LIV_SUPPORT_EMAIL, livSupportMailto } from "./scripts/livCheckoutConfig.js";
 
             initLivI18n();
+            const profileSupportEmail = document.getElementById("livProfileSupportEmail");
+            if (profileSupportEmail) {
+                profileSupportEmail.href = livSupportMailto();
+            }
 
-            const fbApp = initializeApp(livFirebaseConfig);
-            getAnalytics(fbApp);
-            const auth = getAuth(fbApp);
-            const db = getFirestore(fbApp);
+            const { app, auth, db } = initLivFirebase();
 
             const profileDisplayName = document.getElementById("profileDisplayName");
             const profileEmail = document.getElementById("profileEmail");
@@ -542,7 +546,7 @@
                             (file.name.split(".").pop() || "jpg")
                                 .replace(/[^a-z0-9]/gi, "")
                                 .slice(0, 8) || "jpg";
-                        const storage = getStorage(fbApp);
+                        const storage = getStorage(app);
                         const storageRef = ref(
                             storage,
                             "users/" + u.uid + "/profile-" + Date.now() + "." + ext

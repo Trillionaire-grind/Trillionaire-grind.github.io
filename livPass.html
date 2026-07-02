@@ -121,13 +121,22 @@
         aspect-ratio: 16 / 9;
         border-radius: 12px;
         overflow: hidden;
-        background: #000;
-        border: 1px solid #d1d5db;
+        background: #ecfdf5;
+        border: 1px solid #bbf7d0;
       }
-      .video-wrap iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
+      .liv-pass-video-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+        box-sizing: border-box;
+      }
+      .liv-pass-video-placeholder p {
+        margin: 0;
+        text-align: center;
+        color: #166534;
+        font-size: 0.95rem;
+        line-height: 1.5;
       }
       .price {
         font-size: 1.35rem;
@@ -206,6 +215,17 @@
         color: #6b7280;
         margin-top: 10px;
       }
+      .liv-support-footer {
+        text-align: center;
+        margin: 20px auto 0;
+        font-size: 0.85rem;
+        color: #4b5563;
+        line-height: 1.45;
+      }
+      .liv-support-footer a {
+        color: #166534;
+        font-weight: 600;
+      }
       .liv-pass-dev-card {
         margin-top: 16px;
         max-width: 860px;
@@ -268,16 +288,9 @@
 
       <div class="grid">
         <div class="card">
-          <div class="video-wrap">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              data-i18n-title="pass.videoIframeTitle"
-              title="Liv Lakay introduction video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe>
+          <div class="video-wrap liv-pass-video-placeholder">
+            <p data-i18n="pass.videoHint">Intro video coming soon. Your $10 pass unlocks the full Kreyòl library.</p>
           </div>
-          <p class="small" data-i18n="pass.videoHint">Replace this video URL with your real sales/intro video.</p>
         </div>
 
         <div class="card">
@@ -299,6 +312,11 @@
           </div>
         </div>
       </div>
+
+      <p class="liv-support-footer">
+        <span data-i18n="support.emailPrefix">Questions? Email us at</span>
+        <a id="livPassSupportEmail" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
+      </p>
 
       <div id="livPassDevPanel" class="liv-pass-dev-card" hidden>
         <h3>Local test (dev only)</h3>
@@ -324,11 +342,19 @@
         LIV_CREATE_CHECKOUT_SESSION_URL,
         LIV_REVEAL_ACCESS_CODE_URL,
         LIV_DEV_MINT_URL,
+        LIV_SUPPORT_EMAIL,
+        livSupportMailto,
       } from "./livViews/scripts/livCheckoutConfig.js";
       import { initLivI18n, applyLivI18n, setLivLang, t } from "./livViews/scripts/livI18n.js?v=20260423b";
 
       initLivI18n();
       applyLivI18n(document);
+
+      const passSupportLink = document.getElementById("livPassSupportEmail");
+      if (passSupportLink) {
+        passSupportLink.href = livSupportMailto("Liv Lakay pass");
+        passSupportLink.textContent = LIV_SUPPORT_EMAIL;
+      }
 
       const buyBtn = document.getElementById("buyBtn");
       const copyBtn = document.getElementById("copyBtn");

@@ -3,9 +3,8 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        <link rel="stylesheet" href="assets/styles.css">
         <link rel="stylesheet" href="livViews/assets/styles.css">
-        <link rel="shortcut icon" type="image/x-icon" href="livViews/assets/coats.svg.png"/>
+        <link rel="shortcut icon" type="image/x-icon" href="livViews/assets/books.svg"/>
 
         <title data-i18n="landing.browserTitle">Liv Lakay</title>
         <style>
@@ -285,6 +284,18 @@
                 color: #1f2937;
                 font-size: 0.95rem;
             }
+            .liv-support-footer {
+                text-align: center;
+                margin: 16px auto 8px;
+                padding: 0 12px;
+                font-size: 0.82rem;
+                color: #4b5563;
+                line-height: 1.45;
+            }
+            .liv-support-footer a {
+                color: #166534;
+                font-weight: 600;
+            }
             @keyframes liv-spin {
                 to {
                     transform: rotate(360deg);
@@ -304,7 +315,7 @@
         </div>
         <div class="liv-landing-shell">
             <div class="liv-landing-hero">
-                <img src="livViews/assets/coats.svg.png" alt="">
+                <img src="livViews/assets/books.svg" alt="">
             </div>
             <p class="liv-landing-short-note" data-i18n="landing.shortNoteCompact">
                 Constitutional quote links are still available on larger screens.
@@ -330,6 +341,10 @@
                 <br>
                 <button type="button" class="liv-landing-btn liv-landing-btn--secondary" id="livOpenLogin" data-i18n="auth.loginTitle">Konekte</button>
             </div>
+            <p class="liv-support-footer">
+                <span data-i18n="support.emailPrefix">Kesyon? Kontakte nou nan</span>
+                <a id="livLandingSupportEmail" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
+            </p>
         </div>
 
         <div id="livSignupModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livSignupTitle">
@@ -465,6 +480,8 @@
             import {
                 LIV_CREATE_CHECKOUT_SESSION_URL,
                 LIV_REVEAL_ACCESS_CODE_URL,
+                LIV_SUPPORT_EMAIL,
+                livSupportMailto,
             } from "./livViews/scripts/livCheckoutConfig.js";
             import {
                 LIV_ALLOW_BYPASS_TEST_CODE,
@@ -479,6 +496,12 @@
 
             initLivI18n();
             applyLivI18n(document);
+            (function wireSupportEmail() {
+                const link = document.getElementById("livLandingSupportEmail");
+                if (!link) return;
+                link.href = livSupportMailto();
+                link.textContent = LIV_SUPPORT_EMAIL;
+            })();
             window.addEventListener("load", function () {
                 applyLivI18n(document);
             });

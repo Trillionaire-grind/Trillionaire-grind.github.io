@@ -1,19 +1,25 @@
 /**
- * URLs for Stripe-backed pass checkout (Firebase Functions).
- * Deploy functions, then paste the HTTPS function URLs here (no trailing slash on path).
+ * Liv Lakay site + Stripe checkout (Firebase Functions, project liv-lakay).
+ * Deploy functions: firebase use liv-lakay && firebase deploy --only functions
  *
- * Example (replace with your deployed URLs):
- *   createLivPassCheckout → https://us-central1-liv-lakay.cloudfunctions.net/createLivPassCheckout
- *   revealLivAccessCode   → https://us-central1-liv-lakay.cloudfunctions.net/revealLivAccessCode
+ * Payment Links alone are not enough — the webhook must mint accessCodes in Firestore.
  */
 
-export const LIV_CREATE_CHECKOUT_SESSION_URL = "";
-export const LIV_REVEAL_ACCESS_CODE_URL = "";
+export const LIV_SUPPORT_EMAIL = "buildingwithkepler@gmail.com";
+
+export function livSupportMailto(subject = "Liv Lakay support") {
+  return `mailto:${LIV_SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}`;
+}
+
+export const LIV_CREATE_CHECKOUT_SESSION_URL =
+  "https://us-central1-liv-lakay.cloudfunctions.net/createLivPassCheckout";
+
+export const LIV_REVEAL_ACCESS_CODE_URL =
+  "https://us-central1-liv-lakay.cloudfunctions.net/revealLivAccessCode";
 
 /**
- * Dev/staging only: POST to mintLivDevAccessCode with header X-Liv-Dev-Mint: <same value as Firebase param LIV_DEV_MINT_KEY>.
- * Leave empty in production. Shown on livPass only on localhost / 127.0.0.1 / ?devMint=1
- *
- * Example: https://us-central1-liv-lakay.cloudfunctions.net/mintLivDevAccessCode
+ * Dev/staging only: POST to mintLivDevAccessCode with header X-Liv-Dev-Mint.
+ * Shown on livPass only on localhost / 127.0.0.1 / ?devMint=1
  */
-export const LIV_DEV_MINT_URL = "";
+export const LIV_DEV_MINT_URL =
+  "https://us-central1-liv-lakay.cloudfunctions.net/mintLivDevAccessCode";
