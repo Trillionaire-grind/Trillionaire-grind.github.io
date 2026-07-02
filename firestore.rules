@@ -95,6 +95,69 @@ service cloud.firestore {
     }
 
     // --- Liv Lakay ---
+    function isLivFirestoreAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
+
+    function livProfileCreate(data) {
+      return data.email is string
+        && data.fullName is string
+        && data.grade is string
+        && data.books is list
+        && data.admin == false
+        && data.accessCodeId is string
+        && !('clubId' in data)
+        && !('role' in data);
+    }
+
+    function isLivUserDoc() {
+      return userExists()
+        && (!('clubId' in userData()) || userData().clubId == null || userData().clubId == '');
+    }
+
+    match /books/{bookId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isLivFirestoreAdmin();
+
+      match /chapters/{chapterId} {
+        allow read: if signedIn();
+        allow create, update, delete: if isLivFirestoreAdmin();
+
+        match /pages/{pageId} {
+          allow read: if signedIn();
+          allow create, update, delete: if isLivFirestoreAdmin();
+        }
+      }
+    }
+
+    match /Books/{bookId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isLivFirestoreAdmin();
+
+      match /{document=**} {
+        allow read: if signedIn();
+        allow create, update, delete: if isLivFirestoreAdmin();
+      }
+    }
+
+    // --- Liv Lakay purchased access codes (current) ---
+    match /codesPurchased/{codeId} {
+      allow get: if resource.data.used != true &&
+        resource.data.active != false;
+
+      allow update: if request.auth != null &&
+        request.auth.uid != null &&
+        resource.data.used != true &&
+        resource.data.active != false &&
+        request.resource.data.used == true &&
+        request.resource.data.redeemedByUid == request.auth.uid;
+
+      allow create, delete: if false;
+    }
+
+    // --- Liv Lakay access codes (legacy; older passes) ---
     match /accessCodes/{codeId} {
       allow get: if resource.data.consumed == false &&
         resource.data.active != false;
@@ -162,13 +225,18 @@ service cloud.firestore {
       );
       allow create: if signedIn()
         && request.auth.uid == userId
-        && clubIdsMatch(request.resource.data.clubId, tmClub())
-        && request.resource.data.name is string
-        && request.resource.data.email is string
-        && !('role' in request.resource.data);
+        && (
+          (
+            clubIdsMatch(request.resource.data.clubId, tmClub())
+            && request.resource.data.name is string
+            && request.resource.data.email is string
+            && !('role' in request.resource.data)
+          )
+          || livProfileCreate(request.resource.data)
+        );
       allow update: if signedIn()
         && request.auth.uid == userId
-        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'clubId', 'admin']);
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'clubId', 'admin', 'accessCodeId']);
       allow delete: if false;
 
       match /speeches/{speechId} {

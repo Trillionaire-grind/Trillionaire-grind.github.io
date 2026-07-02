@@ -16,7 +16,7 @@ const stripeSecretKey = defineSecret("STRIPE_SECRET_KEY");
 const stripeWebhookSecret = defineSecret("STRIPE_WEBHOOK_SECRET");
 const stripePriceId = defineString("STRIPE_PRICE_ID");
 const livPublicUrl = defineString("LIV_PUBLIC_URL", {
-  default: "https://trillionaire-grind.github.io",
+  default: "https://keplersiguineau.com",
 });
 
 /** Set only on dev/staging. Client sends same value in header X-Liv-Dev-Mint. Leave empty to disable mint. */
@@ -42,8 +42,19 @@ function safeRelativePath(value, fallback) {
   return trimmed;
 }
 
+const CODES_PURCHASED_COLL = "codesPurchased";
+
+function purchasedCodePayload(extra) {
+  return {
+    used: false,
+    active: true,
+    createdAt: FieldValue.serverTimestamp(),
+    ...extra,
+  };
+}
+
 /**
- * Idempotently create accessCodes/{code} after a paid Checkout Session.
+ * Idempotently create codesPurchased/{code} after a paid Checkout Session.
  */
 async function issueAccessCodeFromCheckoutSession(session) {
   const sessionId = session.id;
@@ -63,14 +74,14 @@ async function issueAccessCodeFromCheckoutSession(session) {
       purchaserEmail: email,
     });
 
-    tx.set(db.collection("accessCodes").doc(code), {
-      consumed: false,
-      active: true,
-      stripeSessionId: sessionId,
-      stripePaymentIntent: session.payment_intent || null,
-      purchaserEmail: email,
-      createdAt: FieldValue.serverTimestamp(),
-    });
+    tx.set(
+      db.collection(CODES_PURCHASED_COLL).doc(code),
+      purchasedCodePayload({
+        stripeSessionId: sessionId,
+        stripePaymentIntent: session.payment_intent || null,
+        purchaserEmail: email,
+      }),
+    );
   });
 }
 
@@ -240,7 +251,7 @@ exports.revealLivAccessCode = onRequest(
 );
 
 /**
- * POST / — dev/staging only: mint a real accessCodes/{id} doc (same shape as Stripe webhook).
+ * POST / — dev/staging only: mint a real codesPurchased/{id} doc (same shape as Stripe webhook).
  * Requires function param LIV_DEV_MINT_KEY (non-empty) and matching header: X-Liv-Dev-Mint: <key>
  * Body: {} (ignored). Do NOT set LIV_DEV_MINT_KEY in production projects.
  */
@@ -266,12 +277,10 @@ mintDevApp.post("/", async (req, res) => {
   }
   try {
     const code = generateAccessCode();
-    await db.collection("accessCodes").doc(code).set({
-      consumed: false,
-      active: true,
-      devMinted: true,
-      createdAt: FieldValue.serverTimestamp(),
-    });
+    await db
+      .collection(CODES_PURCHASED_COLL)
+      .doc(code)
+      .set(purchasedCodePayload({ devMinted: true }));
     res.status(200).json({ accessCodeId: code });
   } catch (err) {
     logger.error("mintLivDevAccessCode", err);

@@ -63,6 +63,8 @@
                 border-top: 1px solid #e8eaed;
                 padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 0px));
                 box-sizing: border-box;
+                position: relative;
+                z-index: 10;
             }
 
             .liv-shell-footer nav {
@@ -71,18 +73,43 @@
                 align-items: center;
             }
 
-            .liv-shell-footer nav a {
-                text-decoration: none;
+            .liv-shell-tab {
+                appearance: none;
+                -webkit-appearance: none;
+                border: none;
+                background: transparent;
                 color: #333;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-width: 44px;
-                min-height: 44px;
+                min-width: 48px;
+                min-height: 48px;
+                padding: 8px 16px;
+                margin: 0;
+                cursor: pointer;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+                user-select: none;
+                -webkit-user-select: none;
             }
 
-            .liv-shell-footer nav a:hover {
-                color: #007bff;
+            .liv-shell-tab img {
+                display: block;
+                width: 24px;
+                height: 24px;
+                pointer-events: none;
+            }
+
+            @media (hover: hover) {
+                .liv-shell-tab:hover {
+                    color: #007bff;
+                }
+            }
+
+            .liv-shell-tab:focus-visible {
+                outline: 2px solid #2abf5b;
+                outline-offset: 2px;
+                border-radius: 8px;
             }
         </style>
     </head>
@@ -99,10 +126,16 @@
             </div>
         </div>
         <footer class="liv-shell-footer">
-            <nav>
-                <a href="#" aria-label="Akèy"><img id="homeBtn" src="assets/house_g.svg" alt="" width="24" height="24" onclick="changeTo(0); return false;"></a>
-                <a href="#" aria-label="Bibliyotèk"><img id="libraryBtn" src="assets/books.svg" alt="" width="24" height="24" onclick="changeTo(1); return false;"></a>
-                <a href="#" aria-label="Profil"><img id="profileBtn" src="assets/person.svg" alt="" width="24" height="24" onclick="changeTo(2); return false;"></a>
+            <nav aria-label="Main">
+                <button type="button" class="liv-shell-tab" id="homeTabBtn" aria-label="Akèy" aria-current="page">
+                    <img id="homeBtn" src="assets/house_g.svg" alt="" width="24" height="24">
+                </button>
+                <button type="button" class="liv-shell-tab" id="libraryTabBtn" aria-label="Bibliyotèk">
+                    <img id="libraryBtn" src="assets/books.svg" alt="" width="24" height="24">
+                </button>
+                <button type="button" class="liv-shell-tab" id="profileTabBtn" aria-label="Profil">
+                    <img id="profileBtn" src="assets/person.svg" alt="" width="24" height="24">
+                </button>
             </nav>
         </footer>
     </body>
@@ -153,10 +186,17 @@
             var homeBtn = document.getElementById("homeBtn");
             var libraryBtn = document.getElementById("libraryBtn");
             var profileBtn = document.getElementById("profileBtn");
+            var homeTabBtn = document.getElementById("homeTabBtn");
+            var libraryTabBtn = document.getElementById("libraryTabBtn");
+            var profileTabBtn = document.getElementById("profileTabBtn");
 
             homeBtn.src = "assets/house.svg";
             libraryBtn.src = "assets/books.svg";
             profileBtn.src = "assets/person.svg";
+
+            homeTabBtn.setAttribute("aria-current", destination === 0 ? "page" : "false");
+            libraryTabBtn.setAttribute("aria-current", destination === 1 ? "page" : "false");
+            profileTabBtn.setAttribute("aria-current", destination === 2 ? "page" : "false");
 
             switch (destination) {
                 case 0:
@@ -171,6 +211,16 @@
             }
         }
 
+        document.getElementById("homeTabBtn").addEventListener("click", function () {
+            changeTo(0);
+        });
+        document.getElementById("libraryTabBtn").addEventListener("click", function () {
+            changeTo(1);
+        });
+        document.getElementById("profileTabBtn").addEventListener("click", function () {
+            changeTo(2);
+        });
+
         (function initTabFromUrl() {
             var q = new URLSearchParams(window.location.search);
             var t = q.get("tab");
@@ -182,5 +232,16 @@
                 changeTo(0);
             }
         })();
+    </script>
+    <script type="module">
+        import { initLivFirebase } from "./scripts/livFirebaseInit.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+        const { auth } = initLivFirebase();
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.replace("../liv.html");
+            }
+        });
     </script>
 </html>

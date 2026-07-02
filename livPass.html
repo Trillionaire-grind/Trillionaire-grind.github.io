@@ -302,6 +302,7 @@
             <li data-i18n="pass.benefit3">✅ Supports your education mission</li>
           </ul>
           <button id="buyBtn" type="button" class="btn btn-primary" data-i18n="pass.buyBtn">Buy access code</button>
+          <button id="registerBtn" type="button" class="btn btn-primary" hidden data-i18n="pass.registerNow">Create account now</button>
           <button id="copyBtn" type="button" class="btn btn-secondary" hidden data-i18n="pass.copyBtn">Copy code</button>
 
           <div id="status" class="status info" hidden></div>
@@ -309,6 +310,7 @@
             <div data-i18n="pass.yourCodeLabel">Your access code:</div>
             <div id="code" class="code"></div>
             <div class="hint" data-i18n="pass.codeHint">Keep this code safe. It is consumed when used for signup.</div>
+            <div class="hint" data-i18n="pass.codeSavedNote">This code is saved in Firebase. Copy it for someone else, or create your account now.</div>
           </div>
         </div>
       </div>
@@ -317,24 +319,6 @@
         <span data-i18n="support.emailPrefix">Questions? Email us at</span>
         <a id="livPassSupportEmail" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
       </p>
-
-      <div id="livPassDevPanel" class="liv-pass-dev-card" hidden>
-        <h3>Local test (dev only)</h3>
-        <p>
-          Deploy <code>mintLivDevAccessCode</code>, set the Firebase function parameter
-          <code>LIV_DEV_MINT_KEY</code> (dev/staging project only), paste the HTTPS URL into
-          <code>livViews/scripts/livCheckoutConfig.js</code> as <code>LIV_DEV_MINT_URL</code>, then use the same key below.
-        </p>
-        <label class="liv-pass-dev-label" for="livPassDevKey">Dev mint key</label>
-        <input
-          type="password"
-          id="livPassDevKey"
-          class="liv-pass-dev-input"
-          autocomplete="off"
-          placeholder="Matches LIV_DEV_MINT_KEY on the function"
-        >
-        <button type="button" id="livPassDevMintBtn" class="btn btn-secondary">Generate test code &amp; open signup</button>
-      </div>
     </div>
 
     <script type="module">
@@ -345,7 +329,13 @@
         LIV_SUPPORT_EMAIL,
         livSupportMailto,
       } from "./livViews/scripts/livCheckoutConfig.js";
-      import { initLivI18n, applyLivI18n, setLivLang, t } from "./livViews/scripts/livI18n.js?v=20260423b";
+      import {
+        LIV_DEV_MINT_KEY,
+        isLivDevBypassUiEnabled,
+        livRememberDevIssuedCode,
+        livGenerateLocalTestCode,
+      } from "./livViews/scripts/livAccessTestConfig.js";
+      import { initLivI18n, applyLivI18n, setLivLang, t } from "./livViews/scripts/livI18n.js?v=20260608a";
 
       initLivI18n();
       applyLivI18n(document);
@@ -357,6 +347,7 @@
       }
 
       const buyBtn = document.getElementById("buyBtn");
+      const registerBtn = document.getElementById("registerBtn");
       const copyBtn = document.getElementById("copyBtn");
       const statusEl = document.getElementById("status");
       const codeWrap = document.getElementById("codeWrap");
@@ -365,27 +356,21 @@
       const langBtn = document.getElementById("livPassLangBtn");
       const langMenu = document.getElementById("livPassLangMenu");
 
-      const LIV_DEV_MINT_STORAGE = "livDevMintKey";
+      let currentAccessCode = "";
+      const devBypassMode = isLivDevBypassUiEnabled();
 
-      function isDevMintUiEnabled() {
-        try {
-          if (new URLSearchParams(window.location.search).get("devMint") === "1") {
-            return true;
-          }
-          const h = window.location.hostname;
-          return h === "localhost" || h === "127.0.0.1";
-        } catch {
-          return false;
+      function signupUrlForCode(code) {
+        const base = "liv.html?openSignup=1&code=" + encodeURIComponent(code);
+        if (devBypassMode && new URLSearchParams(window.location.search).get("devBypass") === "1") {
+          return base + "&devBypass=1";
         }
+        return base;
       }
 
-      function showDevPanelIfLocal() {
-        const panel = document.getElementById("livPassDevPanel");
-        if (!panel || !isDevMintUiEnabled()) return;
-        panel.hidden = false;
-        const input = document.getElementById("livPassDevKey");
-        const saved = sessionStorage.getItem(LIV_DEV_MINT_STORAGE);
-        if (input && saved) input.value = saved;
+      function applyDevBypassBuyLabel() {
+        if (!devBypassMode) return;
+        buyBtn.textContent = t("pass.buyBtnTest");
+        buyBtn.setAttribute("data-i18n", "pass.buyBtnTest");
       }
 
       function showStatus(msg, kind) {
@@ -395,12 +380,54 @@
       }
 
       function showCode(code) {
+        currentAccessCode = code;
         codeEl.textContent = code;
         codeWrap.hidden = false;
         copyBtn.hidden = false;
+        registerBtn.hidden = false;
+        buyBtn.hidden = true;
+      }
+
+      async function tryMintDevCode() {
+        const url = String(LIV_DEV_MINT_URL || "").trim();
+        const key = String(LIV_DEV_MINT_KEY || "").trim();
+        if (!url || !key) return null;
+        try {
+          const r = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Liv-Dev-Mint": key,
+            },
+            body: "{}",
+          });
+          const data = await r.json().catch(() => ({}));
+          if (r.ok && data.accessCodeId) return data.accessCodeId;
+        } catch (e) {
+          console.warn("Dev mint skipped:", e);
+        }
+        return null;
+      }
+
+      async function startTestCheckout() {
+        buyBtn.disabled = true;
+        showStatus(t("pass.statusTestGenerating"), "info");
+        await new Promise((resolve) => setTimeout(resolve, 800));
+        let code = await tryMintDevCode();
+        if (!code) {
+          code = livGenerateLocalTestCode();
+          livRememberDevIssuedCode(code);
+        }
+        showCode(code);
+        showStatus(t("pass.statusRevealOk"), "success");
+        buyBtn.disabled = false;
       }
 
       async function startCheckout() {
+        if (devBypassMode) {
+          await startTestCheckout();
+          return;
+        }
         if (!LIV_CREATE_CHECKOUT_SESSION_URL) {
           showStatus(t("pass.statusCheckoutMissing"), "error");
           return;
@@ -450,6 +477,11 @@
       }
 
       buyBtn.addEventListener("click", startCheckout);
+      registerBtn.addEventListener("click", function () {
+        const code = currentAccessCode || codeEl.textContent.trim();
+        if (!code) return;
+        window.location.href = signupUrlForCode(code);
+      });
       copyBtn.addEventListener("click", async function () {
         const v = codeEl.textContent.trim();
         if (!v) return;
@@ -474,6 +506,7 @@
             if (!next) return;
             setLivLang(next);
             applyLivI18n(document);
+            applyDevBypassBuyLabel();
             langMenu.classList.remove("is-open");
             langBtn.setAttribute("aria-expanded", "false");
           });
@@ -487,54 +520,9 @@
         });
       }
 
-      document.getElementById("livPassDevMintBtn")?.addEventListener("click", async function () {
-        const url = String(LIV_DEV_MINT_URL || "").trim();
-        if (!url) {
-          window.alert(
-            "Set LIV_DEV_MINT_URL in livViews/scripts/livCheckoutConfig.js to your deployed mintLivDevAccessCode URL."
-          );
-          return;
-        }
-        const keyInput = document.getElementById("livPassDevKey");
-        let key = (keyInput && keyInput.value.trim()) || sessionStorage.getItem(LIV_DEV_MINT_STORAGE) || "";
-        if (!key) {
-          key = String(
-            window.prompt(
-              "Enter dev mint key (must match Firebase param LIV_DEV_MINT_KEY on mintLivDevAccessCode):"
-            ) || ""
-          ).trim();
-          if (!key) return;
-        }
-        sessionStorage.setItem(LIV_DEV_MINT_STORAGE, key);
-        if (keyInput) keyInput.value = key;
-        try {
-          const r = await fetch(url, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "X-Liv-Dev-Mint": key,
-            },
-            body: "{}",
-          });
-          const data = await r.json().catch(() => ({}));
-          if (!r.ok || !data.accessCodeId) {
-            console.error(data);
-            window.alert("Mint failed: " + (data.error || "HTTP " + r.status));
-            return;
-          }
-          window.location.href =
-            "liv.html?openSignup=1&code=" + encodeURIComponent(data.accessCodeId);
-        } catch (e) {
-          console.error(e);
-          window.alert(
-            "Mint request failed. Check the function URL, CORS, and that LIV_DEV_MINT_KEY is set on the function."
-          );
-        }
-      });
-
       (function initFromUrl() {
         applyLivI18n(document);
-        showDevPanelIfLocal();
+        applyDevBypassBuyLabel();
         const params = new URLSearchParams(window.location.search);
         const state = params.get("pass");
         const sessionId = params.get("session_id");

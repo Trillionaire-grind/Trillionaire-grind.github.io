@@ -560,6 +560,15 @@ body.liv-body.liv-page-reader {
   line-height: 1.4;
 }
 
+.liv-signup-version {
+  margin: -4px 0 12px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--liv-muted);
+  text-align: center;
+}
+
 .liv-landing-title {
   white-space: normal;
 }

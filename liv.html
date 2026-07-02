@@ -351,6 +351,7 @@
             <div class="liv-modal-inner liv-modal-inner--wide">
                 <button type="button" class="liv-modal-close" id="livSignupClose" data-i18n-aria="auth.close">&times;</button>
                 <h2 id="livSignupTitle" data-i18n="auth.signupTitle">Kreye yon kont</h2>
+                <p id="livSignupVersion" class="liv-signup-version" aria-label="App version"></p>
                 <div id="livSignupError" class="liv-auth-error" hidden></div>
 
                 <div class="liv-admin-field">
@@ -486,16 +487,29 @@
             import {
                 LIV_ALLOW_BYPASS_TEST_CODE,
                 LIV_BYPASS_TEST_CODE_ID,
+                livIsDevIssuedCode,
             } from "./livViews/scripts/livAccessTestConfig.js";
-            import { initLivI18n, t, applyLivI18n, setLivLang } from "./livViews/scripts/livI18n.js?v=20260423a";
+            import {
+                LIV_CODES_PURCHASED_COLL,
+                LIV_ACCESS_CODES_LEGACY_COLL,
+                livCodeIsAvailable,
+                livCodeIsUsed,
+            } from "./livViews/scripts/livCodesConfig.js";
+            import { livVersionLabel } from "./livViews/scripts/livVersion.js";
+            import { initLivI18n, t, applyLivI18n, setLivLang } from "./livViews/scripts/livI18n.js?v=20260608a";
 
             const APP_PATH = "livViews/primaryView.html";
             const MAX_PROFILE_BYTES = 5 * 1024 * 1024;
             /** One document per pass: id = normalized code (A–Z0–9). Issued when a user buys a pass; consumed once at signup. */
-            const ACCESS_CODES_COLL = "accessCodes";
+            const CODES_PURCHASED_COLL = LIV_CODES_PURCHASED_COLL;
+            const ACCESS_CODES_LEGACY_COLL = LIV_ACCESS_CODES_LEGACY_COLL;
 
             initLivI18n();
             applyLivI18n(document);
+            (function wireSignupVersion() {
+                const el = document.getElementById("livSignupVersion");
+                if (el) el.textContent = livVersionLabel();
+            })();
             (function wireSupportEmail() {
                 const link = document.getElementById("livLandingSupportEmail");
                 if (!link) return;
@@ -561,9 +575,24 @@
                 const configuredBypassCode = normalizeAccessCode(LIV_BYPASS_TEST_CODE_ID || "");
                 return (
                     localBypass ||
+                    livIsDevIssuedCode(codeId) ||
                     (LIV_ALLOW_BYPASS_TEST_CODE === true &&
                         codeId === configuredBypassCode)
                 );
+            }
+
+            async function loadPurchasedCodeSnap(codeId) {
+                const purchasedRef = doc(db, CODES_PURCHASED_COLL, codeId);
+                const purchasedSnap = await getDoc(purchasedRef);
+                if (purchasedSnap.exists()) {
+                    return { snap: purchasedSnap, collection: CODES_PURCHASED_COLL };
+                }
+                const legacyRef = doc(db, ACCESS_CODES_LEGACY_COLL, codeId);
+                const legacySnap = await getDoc(legacyRef);
+                if (legacySnap.exists()) {
+                    return { snap: legacySnap, collection: ACCESS_CODES_LEGACY_COLL };
+                }
+                return { snap: null, collection: null };
             }
 
             async function validateAccessCodeBeforeSignup(codeId) {
@@ -572,11 +601,11 @@
                     return { ok: true };
                 }
                 try {
-                    const snap = await getDoc(doc(db, ACCESS_CODES_COLL, codeId));
-                    if (!snap.exists()) return { ok: false, reason: "invalid" };
+                    const { snap } = await loadPurchasedCodeSnap(codeId);
+                    if (!snap) return { ok: false, reason: "invalid" };
                     const d = snap.data();
-                    if (d.consumed === true) return { ok: false, reason: "used" };
-                    if (d.active === false) return { ok: false, reason: "inactive" };
+                    if (livCodeIsUsed(d)) return { ok: false, reason: "used" };
+                    if (!livCodeIsAvailable(d)) return { ok: false, reason: "inactive" };
                     return { ok: true };
                 } catch (e) {
                     if (e.code === "permission-denied") return { ok: false, reason: "permission" };
@@ -596,18 +625,30 @@
                     return;
                 }
                 await runTransaction(db, async (txn) => {
-                    const ref = doc(db, ACCESS_CODES_COLL, codeId);
-                    const snap = await txn.get(ref);
+                    const purchasedRef = doc(db, CODES_PURCHASED_COLL, codeId);
+                    const legacyRef = doc(db, ACCESS_CODES_LEGACY_COLL, codeId);
+                    const purchasedSnap = await txn.get(purchasedRef);
+                    const ref = purchasedSnap.exists() ? purchasedRef : legacyRef;
+                    const snap = purchasedSnap.exists() ? purchasedSnap : await txn.get(legacyRef);
                     if (!snap.exists()) throw Object.assign(new Error("invalid"), { redeem: "invalid" });
                     const d = snap.data();
-                    if (d.consumed === true) throw Object.assign(new Error("used"), { redeem: "used" });
-                    if (d.active === false) throw Object.assign(new Error("inactive"), { redeem: "inactive" });
-                    txn.update(ref, {
-                        consumed: true,
-                        consumedAt: serverTimestamp(),
-                        redeemedByUid: uid,
-                        redeemedByEmail: email,
-                    });
+                    if (livCodeIsUsed(d)) throw Object.assign(new Error("used"), { redeem: "used" });
+                    if (!livCodeIsAvailable(d)) throw Object.assign(new Error("inactive"), { redeem: "inactive" });
+                    if (purchasedSnap.exists()) {
+                        txn.update(ref, {
+                            used: true,
+                            usedAt: serverTimestamp(),
+                            redeemedByUid: uid,
+                            redeemedByEmail: email,
+                        });
+                    } else {
+                        txn.update(ref, {
+                            consumed: true,
+                            consumedAt: serverTimestamp(),
+                            redeemedByUid: uid,
+                            redeemedByEmail: email,
+                        });
+                    }
                 });
             }
 

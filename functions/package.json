@@ -1,6 +1,6 @@
 {
   "name": "liv-lakay-functions",
-  "description": "Stripe Checkout + webhook to issue single-use Liv Lakay accessCodes",
+  "description": "Stripe Checkout + webhook to issue single-use Liv Lakay codesPurchased",
   "engines": {
     "node": "20"
   },

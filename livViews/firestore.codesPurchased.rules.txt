@@ -1,0 +1,54 @@
+Liv Lakay — codesPurchased (single-use pass codes)
+==================================================
+
+Data model (collection: codesPurchased)
+---------------------------------------
+Document ID: the normalized code (A–Z and 0–9 only, no spaces). The app strips
+spaces/dashes from user input and uppercases before lookup.
+
+Fields used by liv.html:
+  used            (bool)   required — false until registration completes
+  active          (bool)   optional — omit or true = valid; false blocks signup
+  usedAt          (timestamp) set by client on redeem
+  redeemedByUid   (string)
+  redeemedByEmail (string)
+
+Optional fields from Stripe / dev mint:
+  stripeSessionId, stripePaymentIntent, purchaserEmail, devMinted, createdAt
+
+Legacy collection accessCodes (consumed instead of used) is still honored at signup.
+
+Issuing a code when someone buys a pass
+---------------------------------------
+Do NOT create codes from the public web app. Use Cloud Functions after payment:
+
+  • createLivPassCheckout → Stripe Checkout
+  • stripeWebhook → writes codesPurchased/{code} with used: false
+  • revealLivAccessCode → returns code after redirect
+
+Dev/staging: mintLivDevAccessCode (requires LIV_DEV_MINT_KEY param).
+
+Example security rules (merge into firestore.rules)
+---------------------------------------------------
+    match /codesPurchased/{codeId} {
+      allow get: if resource.data.used != true
+                 && resource.data.active != false;
+
+      allow update: if request.auth != null
+        && request.auth.uid != null
+        && resource.data.used != true
+        && resource.data.active != false
+        && request.resource.data.used == true
+        && request.resource.data.redeemedByUid == request.auth.uid;
+
+      allow create, delete: if false;
+    }
+
+    match /stripeCheckoutSessions/{sessionId} {
+      allow read, write: if false;
+    }
+
+Local testing (no payment)
+--------------------------
+  • livPass.html on localhost or ?devBypass=1 → "Get free test code" (mintLivDevAccessCode)
+  • liv.html on localhost → signup with code TEST skips Firestore (UI shortcut only)

@@ -6,7 +6,7 @@ Functions (region: us-central1, project: liv-lakay)
   stripeWebhook          POST (Stripe signed events only)
   revealLivAccessCode    POST JSON { sessionId } → JSON { accessCodeId } or { pending: true }
   mintLivDevAccessCode   POST (dev/staging only) header X-Liv-Dev-Mint → JSON { accessCodeId }
-                         Disabled when param LIV_DEV_MINT_KEY is empty. Writes accessCodes/{code}.
+                         Disabled when param LIV_DEV_MINT_KEY is empty. Writes codesPurchased/{code}.
 
 Prerequisites
   • Node 20+
