@@ -15,6 +15,13 @@
             <h2 class="liv-section-label" data-i18n="home.myBooks">Liv mwen</h2>
             <div class="liv-book-grid" id="cardsDiv"></div>
             <p id="homeEmptyBooks" class="liv-library-empty" hidden data-i18n="home.noBooks"></p>
+
+            <section class="liv-mission-card" aria-labelledby="livHomeSupportTitle">
+                <p class="liv-mission-eyebrow" data-i18n="home.supportEyebrow">Misyon</p>
+                <h3 class="liv-mission-title" id="livHomeSupportTitle" data-i18n="home.supportMissionTitle">Ede nou mete liv Kreyòl nan plis lekòl</h3>
+                <p class="liv-mission-sub" data-i18n="home.supportMissionSub">Sponsorize aksè pou yon fanmi, yon klas, oswa yon lekòl — depi $30.</p>
+                <a class="liv-mission-btn" href="livSupportView.html" target="_top" data-i18n="home.supportMissionBtn">Bay sipò</a>
+            </section>
         </div>
 
         <div id="homeRemoveModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="homeRemoveModalTitle">
@@ -30,31 +37,16 @@
         </div>
     </body>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { initLivFirebase } from "./scripts/livFirebaseInit.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
         import { collection, doc, getDoc, getDocs, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
         import { initLivI18n, applyLivI18n, t } from "./scripts/livI18n.js";
         import { getPinnedBookIds, removePinnedBook } from "./scripts/livPins.js";
         import { removeUserBookFromFirestore } from "./scripts/livUserBooks.js";
 
         initLivI18n();
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
-          authDomain: "liv-lakay.firebaseapp.com",
-          projectId: "liv-lakay",
-          storageBucket: "liv-lakay.appspot.com",
-          messagingSenderId: "896987078937",
-          appId: "1:896987078937:web:acc868befefa57564fa588",
-          measurementId: "G-YP58T0S16P"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        getAnalytics(app);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        const { auth, db } = initLivFirebase();
 
         const pinnedHeading = document.getElementById("pinnedHeading");
         const pinnedHint = document.getElementById("pinnedHint");

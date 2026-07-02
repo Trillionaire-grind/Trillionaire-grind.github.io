@@ -1,0 +1,63 @@
+Liv Lakay — Stripe Payment Links (Give support tiers)
+=====================================================
+
+These are SEPARATE from the $10 access pass (livPass.html → Cloud Functions webhook → codesPurchased).
+
+Support tiers ($30 / $100 / $3,000) are donations/sponsorship — you fulfill codes manually or build bulk-mint later.
+
+THANK-YOU URL (same for all support tiers)
+------------------------------------------
+  https://keplersiguineau.com/livViews/livSupportThankYou.html
+
+STRIPE DASHBOARD — create 3 products / payment links
+----------------------------------------------------
+For each tier: Products → Add product → One-time price → Payment link.
+
+  Tier 1 — Three students
+    Name:     Liv Lakay — Three students
+    Price:    $30.00 USD (one time)
+    Redirect: https://keplersiguineau.com/livViews/livSupportThankYou.html
+    Paste URL into livViews/scripts/livSupportConfig.js → tiers[0].stripeUrl
+
+  Tier 2 — Classroom
+    Name:     Liv Lakay — Classroom (~30 students)
+    Price:    $100.00 USD (one time)
+    Redirect: (same thank-you URL)
+    Paste URL into tiers[1].stripeUrl
+
+  Tier 3 — Fuel a school
+    Name:     Liv Lakay — Fuel a school
+    Price:    $3,000.00 USD (one time)
+    Redirect: (same thank-you URL)
+    Paste URL into tiers[2].stripeUrl
+
+  Tier 4 — Regional partner ($45,000)
+    Do NOT use instant Payment Link for this size.
+    Keep action: "calendly" in livSupportConfig.js — invoice or wire after call.
+
+OPTIONAL — any amount
+---------------------
+  Create a Payment Link with “Customers choose what to pay” if you want.
+  Paste into LIV_SUPPORT.anyAmountUrl in livSupportConfig.js.
+
+AFTER YOU PASTE URLS
+--------------------
+  1. Commit livSupportConfig.js
+  2. Push to GitHub Pages
+  3. Test each tier in Stripe test mode first, then live mode
+
+FULFILLMENT (manual for now)
+----------------------------
+  Support payments do NOT auto-create codesPurchased docs today.
+  When someone pays:
+    • Email them bulk codes (Admin SDK script or Firebase Console), OR
+    • Build a future webhook that mints N codes from metadata (amount tier id)
+
+$10 ACCESS PASS (future real Stripe — separate checklist)
+---------------------------------------------------------
+  See functions/README.txt:
+    • Deploy createLivPassCheckout + stripeWebhook + revealLivAccessCode
+    • STRIPE_PRICE_ID for $10 one-time
+    • Webhook → codesPurchased only (never from browser)
+    • LIV_DEV_MINT_KEY empty on production Firebase project
+    • Dev bypass: localhost only (see LIV_PRODUCTION_SECURITY.txt)

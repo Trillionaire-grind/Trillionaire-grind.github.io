@@ -1,0 +1,61 @@
+Liv Lakay — preventing payment bypass (production)
+==================================================
+
+Goal: a real access code exists in Firestore ONLY after Stripe confirms payment (or you manually mint via Admin SDK).
+
+WHAT BLOCKS CHEATING TODAY (when configured)
+---------------------------------------------
+  1. codesPurchased documents are created ONLY by:
+       • stripeWebhook Cloud Function (after checkout.session.completed + paid)
+       • mintLivDevAccessCode (disabled when LIV_DEV_MINT_KEY is empty)
+
+  2. Firestore rules (firestore.rules):
+       • allow create, delete: if false  on codesPurchased
+       • allow get: only if used != true (validate before signup)
+       • allow update: only authenticated user marking used=true for themselves
+
+  3. Signup (liv.html):
+       • Validates code exists in codesPurchased (or legacy accessCodes)
+       • Redeem transaction sets used=true atomically
+
+  4. revealLivAccessCode:
+       • Retrieves Stripe session server-side
+       • Returns code only if payment_status === "paid"
+
+DEV / TEST BYPASSES (must NOT work in production)
+-------------------------------------------------
+  These are for local development only:
+
+  A) livPass.html “Buy access code (test)”
+       • Enabled only on localhost / 127.0.0.1
+       • ?devBypass=1 does NOT enable test mode on keplersiguineau.com
+
+  B) sessionStorage “LIV…” test codes
+       • Accepted at signup only when isLivDevBypassUiEnabled() (localhost)
+
+  C) Code TEST at signup
+       • Accepted only on localhost / 127.0.0.1
+
+  D) mintLivDevAccessCode
+       • Leave LIV_DEV_MINT_KEY unset (empty) on liv-lakay production project
+       • Function returns 503 dev_mint_not_configured
+
+BEFORE REAL LAUNCH CHECKLIST
+----------------------------
+  [ ] LIV_DEV_MINT_KEY = "" on production Cloud Functions
+  [ ] LIV_ALLOW_BYPASS_TEST_CODE = false in livAccessTestConfig.js
+  [ ] LIV_DEV_MINT_KEY = "" in livAccessTestConfig.js (client never sends key)
+  [ ] Firestore rules deployed to liv-lakay
+  [ ] stripeWebhook deployed and receiving events in Stripe Dashboard
+  [ ] Test: random string fails signup (permission-denied or invalid)
+  [ ] Test: ?devBypass=1 on live site does NOT show “(test)” buy button
+  [ ] Test: paid checkout creates codesPurchased doc; signup consumes it once
+
+WHY CLIENT-SIDE CAN NEVER BE TRUSTED
+------------------------------------
+  Anyone can edit JavaScript in the browser. Security lives in:
+    • Stripe (payment truth)
+    • Cloud Functions + Admin SDK (mint codes)
+    • Firestore rules (no client create, single-use redeem)
+
+  Never add a “generate code” button that writes to Firestore from the browser in production.

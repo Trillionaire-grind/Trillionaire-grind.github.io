@@ -296,6 +296,33 @@
                 color: #166534;
                 font-weight: 600;
             }
+            .liv-app-version {
+                margin: 8px auto 0;
+                text-align: center;
+                font-size: 0.72rem;
+                font-weight: 600;
+                letter-spacing: 0.04em;
+                color: #9ca3af;
+            }
+            .liv-landing-support-wrap {
+                margin: 14px 10px 0;
+            }
+            .liv-landing-support-link {
+                display: inline-block;
+                font-size: 0.88rem;
+                font-weight: 600;
+                color: #166534;
+                text-decoration: none;
+                border-bottom: 1px solid rgba(22, 101, 52, 0.35);
+                padding-bottom: 2px;
+                touch-action: manipulation;
+            }
+            @media (hover: hover) {
+                .liv-landing-support-link:hover {
+                    color: #15803d;
+                    border-bottom-color: #15803d;
+                }
+            }
             @keyframes liv-spin {
                 to {
                     transform: rotate(360deg);
@@ -340,18 +367,21 @@
                 <button type="button" class="liv-landing-btn liv-landing-btn--primary" id="livOpenSignup" data-i18n="auth.signupTitle">Kreye yon kont</button>
                 <br>
                 <button type="button" class="liv-landing-btn liv-landing-btn--secondary" id="livOpenLogin" data-i18n="auth.loginTitle">Konekte</button>
+                <p class="liv-landing-support-wrap">
+                    <a class="liv-landing-support-link" href="livViews/livSupportView.html" data-i18n="landing.supportMission">Bay sipò pou misyon an →</a>
+                </p>
             </div>
             <p class="liv-support-footer">
                 <span data-i18n="support.emailPrefix">Kesyon? Kontakte nou nan</span>
                 <a id="livLandingSupportEmail" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
             </p>
+            <p id="livLandingVersion" class="liv-app-version" aria-label="App version"></p>
         </div>
 
         <div id="livSignupModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livSignupTitle">
             <div class="liv-modal-inner liv-modal-inner--wide">
                 <button type="button" class="liv-modal-close" id="livSignupClose" data-i18n-aria="auth.close">&times;</button>
                 <h2 id="livSignupTitle" data-i18n="auth.signupTitle">Kreye yon kont</h2>
-                <p id="livSignupVersion" class="liv-signup-version" aria-label="App version"></p>
                 <div id="livSignupError" class="liv-auth-error" hidden></div>
 
                 <div class="liv-admin-field">
@@ -506,8 +536,8 @@
 
             initLivI18n();
             applyLivI18n(document);
-            (function wireSignupVersion() {
-                const el = document.getElementById("livSignupVersion");
+            (function wireLandingVersion() {
+                const el = document.getElementById("livLandingVersion");
                 if (el) el.textContent = livVersionLabel();
             })();
             (function wireSupportEmail() {

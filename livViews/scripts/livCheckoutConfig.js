@@ -19,7 +19,7 @@ export const LIV_REVEAL_ACCESS_CODE_URL =
 
 /**
  * Dev/staging only: POST to mintLivDevAccessCode with header X-Liv-Dev-Mint.
- * Shown on livPass on localhost / 127.0.0.1 / ?devBypass=1
+ * Shown on livPass on localhost / 127.0.0.1 only (not on production live site).
  */
 export const LIV_DEV_MINT_URL =
   "https://us-central1-liv-lakay.cloudfunctions.net/mintLivDevAccessCode";
