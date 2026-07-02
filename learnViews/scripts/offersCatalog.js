@@ -177,7 +177,7 @@ export const OFFERS = [
     actions: [
       { label: "Pick a time on Calendly", nav: "speak", primary: true },
     ],
-    visual: { kind: "photo", src: "assets/sitting.webp", alt: "Siguineau, Képler" },
+    visual: { kind: "photo", src: "assets/sitting.webp", alt: "Képler Siguineau" },
   },
   {
     id: "strangest-secret",

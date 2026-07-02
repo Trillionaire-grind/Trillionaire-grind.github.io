@@ -117,6 +117,26 @@
       padding: 12px 16px;
     }
 
+    .btn-donate--call {
+      background: var(--blue);
+      box-shadow: 0 4px 16px rgba(0, 32, 160, 0.22);
+    }
+
+    .btn-donate--call:hover {
+      background: #001670;
+    }
+
+    .kotfe-tier--flagship {
+      grid-column: 1 / -1;
+      border-color: rgba(218, 161, 35, 0.35);
+      background: rgba(218, 161, 35, 0.06);
+    }
+
+    .kotfe-tier--flagship .kotfe-tier-amount {
+      color: var(--gold);
+      font-size: 1.5rem;
+    }
+
     .kotfe-quote {
       border-left: 4px solid var(--gold);
       padding: 14px 18px;
@@ -617,40 +637,20 @@
       </div>
 
       <p style="text-align: center; margin: 0 0 20px;">
-        <button type="button" class="btn-donate btn-donate--hero" data-donate>Support Mangé Lakay</button>
+        <button type="button" class="btn-donate btn-donate--hero" data-donate="any">Support Mangé Lakay</button>
       </p>
 
       <aside class="kotfe-donate-panel">
         <h2>Support Mangé Lakay</h2>
         <p>100% of donations fund operations on the ground — feed, stock, labor, and land. Pick a tier (or enter any amount on Stripe):</p>
-        <div class="kotfe-tiers">
-          <div class="kotfe-tier">
-            <p class="kotfe-tier-amount">$25</p>
-            <p class="kotfe-tier-desc">About a week of chicken feed for our current flock — keeps daily egg sales running.</p>
-            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $25</button>
-          </div>
-          <div class="kotfe-tier">
-            <p class="kotfe-tier-amount">$100</p>
-            <p class="kotfe-tier-desc">Roughly 8 laying hens — ~500 days of eggs per bird after maturity.</p>
-            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $100</button>
-          </div>
-          <div class="kotfe-tier kotfe-tier--major">
-            <p class="kotfe-tier-amount">$1,000</p>
-            <p class="kotfe-tier-desc">A real scale step — housing, stock, and labor toward our next flock expansion.</p>
-            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $1,000</button>
-          </div>
-          <div class="kotfe-tier kotfe-tier--major">
-            <p class="kotfe-tier-amount">$10,000+</p>
-            <p class="kotfe-tier-desc">Major push toward the first $100K deployment — land, buildings, and thousands of birds.</p>
-            <button type="button" class="btn-donate btn-donate--tier" data-donate>Give $10,000+</button>
-          </div>
-        </div>
-        <p class="kotfe-donate-note">Not a registered charity — a direct contribution to Mangé Lakay. You receive updates, not shares. Secure checkout via Stripe.</p>
+        <div class="kotfe-tiers" id="kotfeTiers"></div>
+        <p class="kotfe-donate-note">Not a registered charity — a direct contribution to Mangé Lakay. You receive updates, not shares. Tiers up to $10,000 checkout via Stripe; the $100,000 deployment is scheduled by call (invoice or wire).</p>
+        <p class="kotfe-donate-note" id="kotfeDonateHint" hidden></p>
       </aside>
 
       <div class="kotfe-cta-block">
         <p>If you're ready now, any amount helps.</p>
-        <button type="button" class="btn-donate" data-donate>Donate any amount</button>
+        <button type="button" class="btn-donate" data-donate="any">Donate any amount</button>
       </div>
     </div>
 
@@ -856,14 +856,92 @@
   </div>
 
   <div class="kotfe-sticky">
-    <button type="button" class="btn-donate" data-donate>Donate to Mangé Lakay</button>
+    <button type="button" class="btn-donate" data-donate="any">Donate to Mangé Lakay</button>
   </div>
 
   <script type="module">
     import { initLearnNav, goToPage } from "./scripts/learnNav.js";
     import { KOTFE_REPORTS } from "./scripts/kotfeReportsCatalog.js";
+    import { KOTFE_DONATE } from "./scripts/kotfeDonateConfig.js";
 
     initLearnNav("kotfe");
+
+    function formatUsd(amount) {
+      return amount.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      });
+    }
+
+    function openKotfeDonate(tierId) {
+      const tier = KOTFE_DONATE.tiers.find((item) => item.id === tierId);
+      if (tier?.action === "calendly") {
+        const calendlyUrl = new URL(KOTFE_DONATE.calendlyUrl);
+        calendlyUrl.searchParams.set("utm_source", "mange-lakay");
+        calendlyUrl.searchParams.set("utm_campaign", "100k-deployment");
+        window.open(calendlyUrl.toString(), "_blank", "noopener,noreferrer")?.focus();
+        return;
+      }
+
+      const url = (tier?.stripeUrl || KOTFE_DONATE.anyAmountUrl).trim();
+      if (!url) return;
+
+      window.open(url, "_blank", "noopener,noreferrer")?.focus();
+
+      if (tier?.amount && !tier.stripeUrl) {
+        const hint = document.getElementById("kotfeDonateHint");
+        if (hint) {
+          hint.textContent = `On Stripe checkout, enter ${formatUsd(tier.amount)} for this tier.`;
+          hint.hidden = false;
+        }
+      }
+    }
+
+    function openKotfeAnyAmount() {
+      window.open(KOTFE_DONATE.anyAmountUrl, "_blank", "noopener,noreferrer")?.focus();
+      const hint = document.getElementById("kotfeDonateHint");
+      if (hint) hint.hidden = true;
+    }
+
+    function renderKotfeTiers() {
+      const container = document.getElementById("kotfeTiers");
+      if (!container) return;
+
+      container.innerHTML = KOTFE_DONATE.tiers
+        .map((tier) => {
+          const classes = [
+            "kotfe-tier",
+            tier.major ? "kotfe-tier--major" : "",
+            tier.flagship ? "kotfe-tier--flagship" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          const btnClass =
+            tier.action === "calendly"
+              ? "btn-donate btn-donate--tier btn-donate--call"
+              : "btn-donate btn-donate--tier";
+
+          return `
+            <div class="${classes}">
+              <p class="kotfe-tier-amount">${tier.label}</p>
+              <p class="kotfe-tier-desc">${tier.description}</p>
+              <button type="button" class="${btnClass}" data-donate-tier="${tier.id}">${tier.cta}</button>
+            </div>`;
+        })
+        .join("");
+
+      container.querySelectorAll("[data-donate-tier]").forEach((el) => {
+        el.addEventListener("click", () => openKotfeDonate(el.dataset.donateTier));
+      });
+    }
+
+    renderKotfeTiers();
+
+    document.querySelectorAll('[data-donate="any"]').forEach((el) => {
+      el.addEventListener("click", openKotfeAnyAmount);
+    });
 
     document.querySelectorAll("[data-kotfe-nav]").forEach((el) => {
       el.addEventListener("click", (event) => {
@@ -921,16 +999,6 @@
     }
   </script>
   <script>
-    const STRIPE_DONATE_URL = "https://buy.stripe.com/eVaaFBaGtfPe7gk8wA";
-
-    function openDonate() {
-      window.open(STRIPE_DONATE_URL, "_blank", "noopener,noreferrer")?.focus();
-    }
-
-    document.querySelectorAll("[data-donate]").forEach((el) => {
-      el.addEventListener("click", openDonate);
-    });
-
     const stickyCta = document.querySelector(".kotfe-sticky");
     const STICKY_SCROLL_THRESHOLD = 80;
 

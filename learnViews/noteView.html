@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Note — Siguineau, Képler</title>
-  <meta id="metaDescription" name="description" content="Notes by Siguineau, Képler">
-  <meta id="ogTitle" property="og:title" content="Siguineau, Képler">
+  <title>Note — Képler Siguineau</title>
+  <meta id="metaDescription" name="description" content="Notes by Képler Siguineau">
+  <meta id="ogTitle" property="og:title" content="Képler Siguineau">
   <meta id="ogDescription" property="og:description" content="">
   <meta property="og:type" content="article">
   <meta id="ogImage" property="og:image" content="">
@@ -96,12 +96,12 @@
         bodyEl.innerHTML = formatNoteBody(note.body || "");
         statusEl.hidden = true;
         contentEl.hidden = false;
-        document.title = `${note.title} — Siguineau, Képler`;
+        document.title = `${note.title} — Képler Siguineau`;
 
         const desc = note.summary || note.title;
         const thumb = noteThumbnailUrl(note);
         setMeta("metaDescription", desc);
-        setMeta("ogTitle", `${note.title} — Siguineau, Képler`);
+        setMeta("ogTitle", `${note.title} — Képler Siguineau`);
         setMeta("ogDescription", desc);
         if (thumb) setMeta("ogImage", thumb);
 

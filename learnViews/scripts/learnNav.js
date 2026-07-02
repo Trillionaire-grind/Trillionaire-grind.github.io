@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.4";
+export const LEARN_APP_VERSION = "0.2.9.5";
 
 export const PAGE_INDEX = {
   home: 0,
@@ -18,8 +18,16 @@ export const NAV_ITEMS = [
   { id: "projects", label: "Projects" },
 ];
 
+export const EXTERNAL_NAV_ITEMS = [
+  {
+    href: "/strangestSecret.html",
+    label: "Strangest Secret",
+    external: true,
+  },
+];
+
 export const LEARN_NAV_LOGO_SRC = "../generalAssets/logo_ks.png";
-export const LEARN_NAV_BRAND_LABEL = "Siguineau, Képler";
+export const LEARN_NAV_BRAND_LABEL = "Képler Siguineau";
 
 const MOBILE_NAV_BREAKPOINT = 768;
 
@@ -145,6 +153,17 @@ export function initLearnNav(activeId) {
       event.preventDefault();
       goToPage(item.id);
     });
+    links.appendChild(a);
+  });
+
+  EXTERNAL_NAV_ITEMS.forEach((item) => {
+    const a = document.createElement("a");
+    a.href = item.href;
+    a.textContent = item.label;
+    if (item.external) {
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
     links.appendChild(a);
   });
 
