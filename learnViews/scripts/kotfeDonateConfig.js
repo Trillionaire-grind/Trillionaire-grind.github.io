@@ -3,30 +3,16 @@
  *
  * STRIPE SETUP
  * ────────────
- * For each Payment Link → After payment → Redirect to the thank-you URL below.
- *
- *   $25      → …/kotfeThankYou.html?tier=feed
- *   $100     → …/kotfeThankYou.html?tier=starter-flock
- *   $300     → …/kotfeThankYou.html?tier=land
- *   $1,000   → …/kotfeThankYou.html?tier=scale
- *   $10,000  → …/kotfeThankYou.html?tier=major
- *   Any amt  → …/kotfeThankYou.html?tier=any
+ * For every Payment Link → After payment → Redirect to thankYouUrl (same for all tiers).
  *
  * $100K uses Calendly + invoice — not instant card checkout.
  */
-const KOTFE_SITE_ORIGIN = "https://keplersiguineau.com";
-
-export const KOTFE_THANK_YOU_PATH = "/learnViews/kotfeThankYou.html";
-
-export function kotfeThankYouUrl(tierId) {
-  const url = new URL(KOTFE_THANK_YOU_PATH, KOTFE_SITE_ORIGIN);
-  if (tierId) url.searchParams.set("tier", tierId);
-  return url.href;
-}
+export const KOTFE_THANK_YOU_URL =
+  "https://keplersiguineau.com/learnViews/kotfeThankYou.html";
 
 export const KOTFE_DONATE = {
+  thankYouUrl: KOTFE_THANK_YOU_URL,
   anyAmountUrl: "https://buy.stripe.com/eVaaFBaGtfPe7gk8wA",
-  anyAmountThankYouUrl: kotfeThankYouUrl("any"),
   calendlyUrl: "https://calendly.com/buildingwithkepler",
   supportEmail: "buildingwithkepler@gmail.com",
   tiers: [
@@ -38,7 +24,6 @@ export const KOTFE_DONATE = {
         "About a week of chicken feed for our current flock — keeps daily egg sales running.",
       cta: "Give $25",
       stripeUrl: "https://buy.stripe.com/fZu9AS2PNdZr1RMh1K6Ri0F",
-      thankYouUrl: kotfeThankYouUrl("feed"),
     },
     {
       id: "starter-flock",
@@ -48,7 +33,6 @@ export const KOTFE_DONATE = {
         "Roughly 8 laying hens — ~500 days of eggs per bird after maturity.",
       cta: "Give $100",
       stripeUrl: "https://buy.stripe.com/3cIeVccqn9Jb53Y4eY6Ri0G",
-      thankYouUrl: kotfeThankYouUrl("starter-flock"),
     },
     {
       id: "land",
@@ -58,7 +42,6 @@ export const KOTFE_DONATE = {
         "One centième of land — a permanent step toward scaling the flock on the ground in Kotfè.",
       cta: "Give $300",
       stripeUrl: "https://buy.stripe.com/bJecN49eb8F7dAu12M6Ri0H",
-      thankYouUrl: kotfeThankYouUrl("land"),
     },
     {
       id: "scale",
@@ -69,7 +52,6 @@ export const KOTFE_DONATE = {
       cta: "Give $1,000",
       major: true,
       stripeUrl: "https://buy.stripe.com/00w5kCcqnf3v0NI9zi6Ri0I",
-      thankYouUrl: kotfeThankYouUrl("scale"),
     },
     {
       id: "major",
@@ -80,7 +62,6 @@ export const KOTFE_DONATE = {
       cta: "Give $10,000",
       major: true,
       stripeUrl: "https://buy.stripe.com/cNi7sK0HF9Jb0NIfXG6Ri0J",
-      thankYouUrl: kotfeThankYouUrl("major"),
     },
     {
       id: "deployment",

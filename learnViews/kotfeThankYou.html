@@ -82,26 +82,9 @@
     }
 
     .thank-lead {
-      margin: 0 0 20px;
+      margin: 0 0 24px;
       color: var(--muted);
       font-size: 15px;
-    }
-
-    .thank-tier {
-      margin: 0 0 24px;
-      padding: 14px 16px;
-      border-radius: 12px;
-      background: rgba(218, 161, 35, 0.08);
-      border: 1px solid rgba(218, 161, 35, 0.25);
-      font-size: 14px;
-      text-align: left;
-    }
-
-    .thank-tier strong {
-      display: block;
-      color: var(--gold);
-      font-size: 1.1rem;
-      margin-bottom: 4px;
     }
 
     .thank-next {
@@ -184,15 +167,10 @@
     <article class="thank-card">
       <div class="thank-icon" aria-hidden="true">✓</div>
       <p class="thank-eyebrow">Mangé Lakay · Kotfè, Haiti</p>
-      <h1 id="thankTitle">Thank you for your support</h1>
-      <p class="thank-lead" id="thankLead">
-        Your contribution goes directly to operations on the ground — feed, stock, labor, and land.
+      <h1>Thank you for your support</h1>
+      <p class="thank-lead">
+        Your contribution goes directly to operations on the ground — feed, stock, labor, and land in Kotfè.
       </p>
-
-      <div class="thank-tier" id="thankTier" hidden>
-        <strong id="thankTierLabel"></strong>
-        <span id="thankTierDesc"></span>
-      </div>
 
       <ul class="thank-next">
         <li>Stripe sends a receipt to your email automatically.</li>
@@ -218,47 +196,13 @@
 
     initLearnAnalytics();
     trackLearnPageView("/learnViews/kotfeThankYou.html", "Mangé Lakay — Thank you");
+    trackLearnEvent("donate_thank_you");
 
-    const params = new URLSearchParams(window.location.search);
-    const tierId = (params.get("tier") || "").trim().toLowerCase();
-    const tier = KOTFE_DONATE.tiers.find((item) => item.id === tierId);
-    const isAny = tierId === "any" || tierId === "custom";
-
-    const titleEl = document.getElementById("thankTitle");
-    const leadEl = document.getElementById("thankLead");
-    const tierBox = document.getElementById("thankTier");
-    const tierLabel = document.getElementById("thankTierLabel");
-    const tierDesc = document.getElementById("thankTierDesc");
     const supportLink = document.getElementById("thankSupportEmail");
-
     if (supportLink) {
       supportLink.href = `mailto:${KOTFE_DONATE.supportEmail}?subject=Mang%C3%A9%20Lakay%20donation`;
       supportLink.textContent = KOTFE_DONATE.supportEmail;
     }
-
-    if (tier) {
-      if (titleEl) titleEl.textContent = `Thank you for your ${tier.label} gift`;
-      if (leadEl) {
-        leadEl.textContent =
-          "Your support helps Mangé Lakay keep daily operations running and move toward the first full deployment in Kotfè.";
-      }
-      if (tierBox && tierLabel && tierDesc) {
-        tierBox.hidden = false;
-        tierLabel.textContent = tier.label + " tier";
-        tierDesc.textContent = tier.description;
-      }
-    } else if (isAny) {
-      if (titleEl) titleEl.textContent = "Thank you for your gift";
-      if (leadEl) {
-        leadEl.textContent =
-          "Every amount helps — feed, stock, labor, and land on the ground in Kotfè.";
-      }
-    }
-
-    trackLearnEvent("donate_thank_you", {
-      tier_id: tier?.id || (isAny ? "any" : "unknown"),
-      tier_amount: tier?.amount || null,
-    });
   </script>
 </body>
 </html>
