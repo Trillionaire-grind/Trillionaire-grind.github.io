@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank you · Mangé Lakay</title>
+  <meta name="description" content="Thank you for supporting Mangé Lakay in Kotfè, Haiti.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>window.LEARN_GA_MEASUREMENT_ID = "G-L0QCNW7C6W";</script>
+  <style>
+    :root {
+      --red: #D31034;
+      --blue: #0020A0;
+      --green: #005315;
+      --cta: #FF0C36;
+      --gold: #DAA123;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+      --max: 560px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      padding: 32px 16px 48px;
+    }
+
+    .thank-page {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .thank-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-left: 4px solid var(--green);
+      padding: 32px 28px;
+      text-align: center;
+    }
+
+    .thank-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: rgba(0, 83, 21, 0.1);
+      color: var(--green);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .thank-eyebrow {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--green);
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.5rem, 4vw, 1.85rem);
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .thank-lead {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .thank-tier {
+      margin: 0 0 24px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: rgba(218, 161, 35, 0.08);
+      border: 1px solid rgba(218, 161, 35, 0.25);
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .thank-tier strong {
+      display: block;
+      color: var(--gold);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .thank-next {
+      margin: 0 0 24px;
+      padding: 0;
+      list-style: none;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .thank-next li {
+      position: relative;
+      padding: 0 0 12px 22px;
+      color: var(--muted);
+    }
+
+    .thank-next li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .thank-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .btn-primary {
+      background: var(--cta);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(255, 12, 54, 0.28);
+    }
+
+    .btn-primary:hover {
+      background: #000;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-ghost:hover {
+      border-color: rgba(0, 0, 0, 0.16);
+    }
+
+    .thank-footer {
+      margin-top: 20px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .thank-footer a {
+      color: var(--blue);
+    }
+  </style>
+</head>
+<body>
+  <div class="thank-page">
+    <article class="thank-card">
+      <div class="thank-icon" aria-hidden="true">✓</div>
+      <p class="thank-eyebrow">Mangé Lakay · Kotfè, Haiti</p>
+      <h1 id="thankTitle">Thank you for your support</h1>
+      <p class="thank-lead" id="thankLead">
+        Your contribution goes directly to operations on the ground — feed, stock, labor, and land.
+      </p>
+
+      <div class="thank-tier" id="thankTier" hidden>
+        <strong id="thankTierLabel"></strong>
+        <span id="thankTierDesc"></span>
+      </div>
+
+      <ul class="thank-next">
+        <li>Stripe sends a receipt to your email automatically.</li>
+        <li>We publish <strong>quarterly reports</strong> showing exactly where support went.</li>
+        <li>This is not an investment — you receive updates, not shares.</li>
+      </ul>
+
+      <div class="thank-actions">
+        <a class="btn btn-primary" href="learn.html#kotfe" id="thankBackKotfe">Back to Mangé Lakay</a>
+        <a class="btn btn-ghost" href="mangeKotfeView.html#reports">Read quarterly reports</a>
+        <a class="btn btn-ghost" href="learn.html#speak">Talk to me about the project</a>
+      </div>
+
+      <p class="thank-footer">
+        Questions? <a id="thankSupportEmail" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
+      </p>
+    </article>
+  </div>
+
+  <script type="module">
+    import { initLearnAnalytics, trackLearnEvent, trackLearnPageView } from "./scripts/learnAnalytics.js";
+    import { KOTFE_DONATE } from "./scripts/kotfeDonateConfig.js";
+
+    initLearnAnalytics();
+    trackLearnPageView("/learnViews/kotfeThankYou.html", "Mangé Lakay — Thank you");
+
+    const params = new URLSearchParams(window.location.search);
+    const tierId = (params.get("tier") || "").trim().toLowerCase();
+    const tier = KOTFE_DONATE.tiers.find((item) => item.id === tierId);
+    const isAny = tierId === "any" || tierId === "custom";
+
+    const titleEl = document.getElementById("thankTitle");
+    const leadEl = document.getElementById("thankLead");
+    const tierBox = document.getElementById("thankTier");
+    const tierLabel = document.getElementById("thankTierLabel");
+    const tierDesc = document.getElementById("thankTierDesc");
+    const supportLink = document.getElementById("thankSupportEmail");
+
+    if (supportLink) {
+      supportLink.href = `mailto:${KOTFE_DONATE.supportEmail}?subject=Mang%C3%A9%20Lakay%20donation`;
+      supportLink.textContent = KOTFE_DONATE.supportEmail;
+    }
+
+    if (tier) {
+      if (titleEl) titleEl.textContent = `Thank you for your ${tier.label} gift`;
+      if (leadEl) {
+        leadEl.textContent =
+          "Your support helps Mangé Lakay keep daily operations running and move toward the first full deployment in Kotfè.";
+      }
+      if (tierBox && tierLabel && tierDesc) {
+        tierBox.hidden = false;
+        tierLabel.textContent = tier.label + " tier";
+        tierDesc.textContent = tier.description;
+      }
+    } else if (isAny) {
+      if (titleEl) titleEl.textContent = "Thank you for your gift";
+      if (leadEl) {
+        leadEl.textContent =
+          "Every amount helps — feed, stock, labor, and land on the ground in Kotfè.";
+      }
+    }
+
+    trackLearnEvent("donate_thank_you", {
+      tier_id: tier?.id || (isAny ? "any" : "unknown"),
+      tier_amount: tier?.amount || null,
+    });
+  </script>
+</body>
+</html>
