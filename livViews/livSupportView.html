@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Bay sipò · Liv Lakay</title>
+  <style>
+    :root {
+      --green: #2abf5b;
+      --green-dark: #166534;
+      --green-deep: #239a4b;
+      --gold: #b45309;
+      --bg: #f0fdf4;
+      --surface: #fff;
+      --text: #0f172a;
+      --muted: #4b5563;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      --max: 720px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0 0 100px;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .liv-support-page {
+      width: min(var(--max), 92%);
+      margin: 0 auto;
+      padding: 16px 0 40px;
+    }
+    .top-link {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: var(--green-dark);
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.95rem;
+    }
+    .liv-support-hero { text-align: center; margin-bottom: 28px; }
+    .eyebrow {
+      display: inline-block;
+      background: #dcfce7;
+      color: var(--green-dark);
+      border: 1px solid #86efac;
+      border-radius: 999px;
+      padding: 4px 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      margin-bottom: 12px;
+    }
+    h1 {
+      margin: 0 0 12px;
+      font-size: clamp(1.55rem, 4.5vw, 2.1rem);
+      line-height: 1.15;
+      color: var(--text);
+    }
+    .hero-sub {
+      margin: 0 auto;
+      max-width: 36rem;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+    .video-wrap {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+      margin-bottom: 20px;
+    }
+    .video-frame {
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+      color: var(--green-dark);
+      font-size: 0.95rem;
+    }
+    .donate-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+      border-left: 4px solid var(--green);
+      padding: 22px 20px;
+      margin-bottom: 24px;
+    }
+    .donate-panel h2 { margin: 0 0 8px; font-size: 1.2rem; color: var(--green-dark); }
+    .donate-panel > p { margin: 0 0 16px; font-size: 0.92rem; color: var(--muted); }
+    .tiers {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .tier {
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+    }
+    .tier--major { background: #ecfdf5; border-color: rgba(42, 191, 91, 0.25); }
+    .tier--flagship {
+      grid-column: 1 / -1;
+      background: #fffbeb;
+      border-color: rgba(180, 83, 9, 0.25);
+    }
+    .tier-amount { margin: 0 0 4px; font-size: 1.35rem; font-weight: 800; color: var(--green-dark); }
+    .tier--flagship .tier-amount { color: var(--gold); font-size: 1.5rem; }
+    .tier-name { margin: 0 0 6px; font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .tier-desc { margin: 0 0 12px; flex: 1; font-size: 0.82rem; color: var(--muted); line-height: 1.45; }
+    .btn-give {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      background: var(--green);
+      color: #fff;
+    }
+    .btn-give--call { background: var(--green-dark); }
+    .btn-give:hover { filter: brightness(0.95); }
+    .donate-note { margin: 14px 0 0; font-size: 0.78rem; color: var(--muted); line-height: 1.45; }
+    #livSupportHint { margin-top: 10px; font-size: 0.85rem; color: var(--green-dark); }
+    .section { margin-bottom: 32px; }
+    .section h2 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      color: var(--green-dark);
+    }
+    .section p, .section li { font-size: 0.95rem; color: var(--text); }
+    .section ul { margin: 0 0 12px; padding-left: 1.2em; }
+    .section li { margin-bottom: 8px; }
+    .callout {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 14px 16px;
+      border-left: 4px solid var(--green);
+      box-shadow: var(--shadow);
+      font-size: 0.94rem;
+      margin: 16px 0;
+    }
+    .callout--gold { border-left-color: var(--gold); background: #fffbeb; }
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+    .proof-card {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid #e5e7eb;
+    }
+    .proof-card strong { display: block; font-size: 1.35rem; color: var(--green-dark); }
+    .proof-card span { font-size: 0.75rem; color: var(--muted); line-height: 1.35; }
+    .cta-block {
+      text-align: center;
+      padding: 24px 18px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-top: 28px;
+    }
+    .pass-link {
+      display: inline-block;
+      margin-top: 12px;
+      color: var(--green-dark);
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    .sticky {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 16px;
+      z-index: 30;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .sticky.is-visible { opacity: 1; transform: translateY(0); }
+    .sticky .btn-give {
+      display: block;
+      width: min(420px, 88%);
+      margin: 0 auto;
+      pointer-events: none;
+      padding: 14px;
+      font-size: 1rem;
+    }
+    .sticky.is-visible .btn-give { pointer-events: auto; }
+    @media (max-width: 640px) {
+      .tiers, .proof-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="liv-support-page">
+    <a class="top-link" href="primaryView.html?tab=2" id="livSupportBack">← Retounen nan Liv Lakay</a>
+
+    <header class="liv-support-hero">
+      <span class="eyebrow">Liv Lakay · Edikasyon an Kreyòl</span>
+      <h1>Mete bon liv lekòl nan men timoun Ayiti yo</h1>
+      <p class="hero-sub">
+        Chak $10 bay yon elèv aksè nan bibliyotèk Liv Lakay la. Ou ka sipòte yon fanmi, yon klas, yon lekòl — oswa ede nou deplwaye nan tout yon rejyon.
+      </p>
+    </header>
+
+    <div id="give">
+      <div class="video-wrap">
+        <div class="video-frame" id="livSupportVideo">
+          <p><strong>Videyo prezantasyon ap vini</strong><br>Missyon Liv Lakay, liv Kreyòl, ak enpak sou teren.</p>
+        </div>
+      </div>
+
+      <aside class="donate-panel">
+        <h2>Chwazi nivo sipò ou</h2>
+        <p>100% ale nan aksè elèv, kontni, ak deplwayman lekòl. Pa yon envestisman — yon kado dirèk pou edikasyon.</p>
+        <div class="tiers" id="livSupportTiers"></div>
+        <p class="donate-note">
+          Pès endividyèl ($10) toujou disponib pou yon timoun. Nivo $45,000: nou fè yon apèl anvan peman (faktirasyon oswa virement).
+        </p>
+        <p id="livSupportHint" hidden></p>
+      </aside>
+    </div>
+
+    <section class="section">
+      <h2>Poukisa Liv Lakay?</h2>
+      <p>Anpil timoun Ayiti pa gen aksè nan liv lekòl ki fasil pou li — espesyalman nan lang manman yo.</p>
+      <ul>
+        <li>Liv Lakay bay <strong>liv lekòl nan Kreyòl</strong> sou telefòn ak òdinatè.</li>
+        <li>Yon pès <strong>$10</strong> = yon kòd aksè pou <strong>yon elèv</strong> (enskripsyon yon sèl fwa).</li>
+        <li>Sipò ou peye kòd yo, devlopman kontni, ak ede lekòl adopte aplikasyon an.</li>
+      </ul>
+    </section>
+
+    <section class="section">
+      <h2>Kijan chak nivo ede</h2>
+      <div class="proof-grid">
+        <div class="proof-card">
+          <strong>$30</strong>
+          <span>3 elèv · fanmi oswa ti gwoup</span>
+        </div>
+        <div class="proof-card">
+          <strong>$100</strong>
+          <span>~30 elèv · yon klas antye</span>
+        </div>
+        <div class="proof-card">
+          <strong>$3,000</strong>
+          <span>Yon lekòl · kòd an gwoup + fòmasyon</span>
+        </div>
+      </div>
+      <div class="callout callout--gold">
+        <strong>Patnè rejyonal — $45,000</strong><br>
+        Vize ~5,000 elèv nan plizyè lekòl nan menm rejyon an. Non sa a ka chanje selon patnè a (komin, depatman, oswa diosèz). Nou travay ak ou sou yon plan anvan lajan la deplase.
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Sijesyon pou gwo nivo a</h2>
+      <p>Pa sèten sou non oswa pri? Men kèk fason pou panse l:</p>
+      <ul>
+        <li><strong>Patnè rejyonal</strong> (~5,000 elèv) — bon si w vle kouvri plizyè lekòl nan yon zòn.</li>
+        <li><strong>Transfo yon komin</strong> — menm kantite, plis aksan sou yon vil oswa komin.</li>
+        <li><strong>Eritaj edikatif</strong> — gwo don ki nonmen ou oswa yon fanmi nan rapò yo.</li>
+      </ul>
+      <p>Matimatik: $10 × 5,000 = $50,000 nan pès retail. <strong>$45,000</strong> se pri patnè (~10% rabè) pou deplwayman an gwoup. Nou ka ajiste selon kantite reyèl lekòl yo.</p>
+    </section>
+
+    <section class="section">
+      <h2>Sonèt limit</h2>
+      <p>Liv Lakay se yon pwojè misyon, pa yon òganizasyon charite anrejistre. Sipò ou pa bay aksyon oswa retou finansye — li bay aksè elèv ak transparans sou itilizasyon lajan an.</p>
+      <div class="callout">
+        Kesyon? <a id="livSupportEmailLink" href="mailto:buildingwithkepler@gmail.com">buildingwithkepler@gmail.com</a>
+      </div>
+    </section>
+
+    <div class="cta-block">
+      <p><strong>Pare pou ede?</strong></p>
+      <button type="button" class="btn-give" data-scroll-give>Chwazi yon nivo sipò</button>
+      <a class="pass-link" href="../livPass.html" id="livSupportSinglePass">Oswa achte yon pès $10 pou yon timoun</a>
+    </div>
+  </div>
+
+  <div class="sticky">
+    <button type="button" class="btn-give" data-scroll-give>Bay sipò · Liv Lakay</button>
+  </div>
+
+  <script type="module">
+    import { LIV_SUPPORT } from "./scripts/livSupportConfig.js";
+
+    function formatUsd(amount) {
+      return amount.toLocaleString("en-US", {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      });
+    }
+
+    function supportMailto(tier) {
+      const subject = tier
+        ? `Liv Lakay support — ${tier.label} (${tier.nameEn || tier.name})`
+        : "Liv Lakay support";
+      const body = tier
+        ? `I want to support Liv Lakay at the ${tier.label} tier (${tier.nameEn || tier.name}).\n\n`
+        : "";
+      return `mailto:${LIV_SUPPORT.supportEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    }
+
+    function openLivSupportTier(tierId) {
+      const tier = LIV_SUPPORT.tiers.find((t) => t.id === tierId);
+      if (!tier) return;
+
+      if (tier.action === "calendly") {
+        const url = new URL(LIV_SUPPORT.calendlyUrl);
+        url.searchParams.set("utm_source", "liv-lakay");
+        url.searchParams.set("utm_campaign", "regional-partner");
+        window.open(url.toString(), "_blank", "noopener,noreferrer")?.focus();
+        return;
+      }
+
+      const stripeUrl = (tier.stripeUrl || "").trim();
+      if (stripeUrl) {
+        window.open(stripeUrl, "_blank", "noopener,noreferrer")?.focus();
+        return;
+      }
+
+      const hint = document.getElementById("livSupportHint");
+      if (hint) {
+        hint.textContent =
+          "Lyen Stripe pou nivo sa a poko pare. Nou ouvri imèl ou — ou ka reponn pou finalize peman.";
+        hint.hidden = false;
+      }
+      window.location.href = supportMailto(tier);
+    }
+
+    function renderTiers() {
+      const container = document.getElementById("livSupportTiers");
+      if (!container) return;
+
+      container.innerHTML = LIV_SUPPORT.tiers
+        .map((tier) => {
+          const classes = [
+            "tier",
+            tier.major ? "tier--major" : "",
+            tier.flagship ? "tier--flagship" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
+          const btnClass =
+            tier.action === "calendly" ? "btn-give btn-give--call" : "btn-give";
+          const cta = tier.ctaEn && document.documentElement.lang === "en" ? tier.ctaEn : tier.cta;
+          return `
+            <div class="${classes}">
+              <p class="tier-amount">${tier.label}</p>
+              <p class="tier-name">${tier.name}${tier.nameEn ? ` · ${tier.nameEn}` : ""}</p>
+              <p class="tier-desc">${tier.description}</p>
+              <button type="button" class="${btnClass}" data-tier="${tier.id}">${cta}</button>
+            </div>`;
+        })
+        .join("");
+
+      container.querySelectorAll("[data-tier]").forEach((btn) => {
+        btn.addEventListener("click", () => openLivSupportTier(btn.dataset.tier));
+      });
+    }
+
+    renderTiers();
+
+    document.querySelectorAll("[data-scroll-give]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.getElementById("give")?.scrollIntoView({ behavior: "smooth" });
+      });
+    });
+
+    const emailLink = document.getElementById("livSupportEmailLink");
+    if (emailLink) {
+      emailLink.href = supportMailto();
+      emailLink.textContent = LIV_SUPPORT.supportEmail;
+    }
+
+    const passLink = document.getElementById("livSupportSinglePass");
+    if (passLink && LIV_SUPPORT.singlePassUrl) {
+      passLink.href = LIV_SUPPORT.singlePassUrl;
+    }
+
+    const back = document.getElementById("livSupportBack");
+    if (back && window.location.pathname.indexOf("/livViews/") === -1) {
+      back.href = "livViews/primaryView.html?tab=2";
+    }
+  </script>
+  <script>
+    const sticky = document.querySelector(".sticky");
+    function updateSticky() {
+      if (!sticky) return;
+      sticky.classList.toggle("is-visible", window.scrollY > 120);
+    }
+    window.addEventListener("scroll", updateSticky, { passive: true });
+    updateSticky();
+  </script>
+</body>
+</html>
