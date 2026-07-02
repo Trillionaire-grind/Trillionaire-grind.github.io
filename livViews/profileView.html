@@ -40,6 +40,15 @@
                 position: relative;
             }
 
+            .avatar-initial {
+                position: relative;
+                z-index: 1;
+            }
+
+            .avatar.has-photo .avatar-initial {
+                display: none;
+            }
+
             .avatar img {
                 position: absolute;
                 inset: 0;
@@ -169,8 +178,8 @@
             <h1 class="profile-heading" data-i18n="profile.heading">Profil mwen</h1>
 
             <section class="profile-identity" aria-label="Itilizatè">
-                <div class="avatar" id="profileAvatarInitial" aria-hidden="true">
-                    J
+                <div class="avatar" id="profileAvatar">
+                    <span class="avatar-initial" id="profileAvatarLetter" aria-hidden="true">J</span>
                     <img id="profileAvatarPhoto" alt="">
                 </div>
                 <div class="identity-text">
@@ -287,7 +296,8 @@
 
             const profileDisplayName = document.getElementById("profileDisplayName");
             const profileEmail = document.getElementById("profileEmail");
-            const profileAvatarInitial = document.getElementById("profileAvatarInitial");
+            const profileAvatar = document.getElementById("profileAvatar");
+            const profileAvatarLetter = document.getElementById("profileAvatarLetter");
             const profileAvatarPhoto = document.getElementById("profileAvatarPhoto");
             const profileEditBtn = document.getElementById("profileEditBtn");
             const profileSignOutBtn = document.getElementById("profileSignOutBtn");
@@ -325,35 +335,49 @@
                 }
             }
 
+            function avatarCacheBust(url) {
+                if (!url) return "";
+                const sep = url.includes("?") ? "&" : "?";
+                return url + sep + "t=" + Date.now();
+            }
+
             async function updateAvatar(disp, email, photoURL) {
                 const initial = (disp || email || "?").trim().charAt(0) || "?";
-                profileAvatarInitial.textContent = initial.toUpperCase();
+                if (profileAvatarLetter) {
+                    profileAvatarLetter.textContent = initial.toUpperCase();
+                }
+                if (!profileAvatar || !profileAvatarPhoto) return;
+
                 if (photoURL) {
                     const myToken = ++avatarLoadToken;
                     if (avatarBlobUrl) {
                         URL.revokeObjectURL(avatarBlobUrl);
                         avatarBlobUrl = "";
                     }
-                    try {
-                        const r = await fetch(photoURL, { cache: "no-store" });
-                        if (!r.ok) throw new Error("avatar_fetch_failed");
-                        const blob = await r.blob();
+                    profileAvatarPhoto.onload = function () {
+                        if (myToken === avatarLoadToken) {
+                            profileAvatar.classList.add("has-photo");
+                        }
+                    };
+                    profileAvatarPhoto.onerror = function () {
                         if (myToken !== avatarLoadToken) return;
-                        avatarBlobUrl = URL.createObjectURL(blob);
-                        profileAvatarPhoto.src = avatarBlobUrl;
-                    } catch (_e) {
-                        if (myToken !== avatarLoadToken) return;
-                        profileAvatarPhoto.src = photoURL;
+                        profileAvatar.classList.remove("has-photo");
+                        profileAvatarPhoto.removeAttribute("src");
+                    };
+                    profileAvatarPhoto.src = avatarCacheBust(photoURL);
+                    if (profileAvatarPhoto.complete && profileAvatarPhoto.naturalWidth > 0) {
+                        profileAvatar.classList.add("has-photo");
                     }
-                    profileAvatarInitial.classList.add("has-photo");
                 } else {
                     avatarLoadToken++;
+                    profileAvatarPhoto.onload = null;
+                    profileAvatarPhoto.onerror = null;
                     if (avatarBlobUrl) {
                         URL.revokeObjectURL(avatarBlobUrl);
                         avatarBlobUrl = "";
                     }
                     profileAvatarPhoto.removeAttribute("src");
-                    profileAvatarInitial.classList.remove("has-photo");
+                    profileAvatar.classList.remove("has-photo");
                 }
             }
 
@@ -375,11 +399,12 @@
                             const data = snap.exists() ? snap.data() : {};
                             const fromDocName = String(data.fullName || "").trim();
                             const fromDocPhoto = String(data.photoURL || "").trim();
-                            const resolvedName = fromDocName || user.displayName || (user.email ? user.email.split("@")[0] : "") || "—";
-                            const resolvedPhoto = fromDocPhoto || user.photoURL || "";
+                            const authPhoto = auth.currentUser?.photoURL || "";
+                            const resolvedName = fromDocName || auth.currentUser?.displayName || (auth.currentUser?.email ? auth.currentUser.email.split("@")[0] : "") || "—";
+                            const resolvedPhoto = fromDocPhoto || authPhoto || "";
                             profileDisplayName.textContent = resolvedName;
-                            profileEmail.textContent = user.email || "—";
-                            updateAvatar(resolvedName, user.email, resolvedPhoto);
+                            profileEmail.textContent = auth.currentUser?.email || user.email || "—";
+                            updateAvatar(resolvedName, auth.currentUser?.email || user.email, resolvedPhoto);
 
                             const isAdmin =
                                 snap.exists() && snap.data().admin === true;
@@ -565,7 +590,7 @@
                         { merge: true }
                     );
                     profileDisplayName.textContent = fullName;
-                    updateAvatar(fullName, u.email || "", photoURL);
+                    await updateAvatar(fullName, u.email || "", photoURL);
                     closeProfileEditModal();
                     openStatusModal(t("profile.saved"));
                 } catch (e) {
