@@ -1,5 +1,5 @@
 /** Bump this on each Liv Lakay release push. */
-export const LIV_APP_VERSION = "0.0.0.3";
+export const LIV_APP_VERSION = "0.0.0.4";
 
 export function livVersionLabel() {
   return "v" + LIV_APP_VERSION;

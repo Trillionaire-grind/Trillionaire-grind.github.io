@@ -39,36 +39,16 @@
             <p class="liv-chapter-hint" data-i18n="book.chapterHint">Touche yon chapit pou li. Peze long pou modifye.</p>
             <div id="chaptersDiv"></div>
         </div>
-
-        <div id="myModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="chapterModalTitle">
-            <div class="liv-modal-inner">
-                <button type="button" class="liv-modal-close" onclick="closeDialog()" aria-label="Fèmen">&times;</button>
-                <h2 id="chapterModalTitle">Ajoute yon chapit</h2>
-                <div>
-                    <label for="chapterTV">Tit chapit la</label>
-                    <input type="text" id="chapterTV" name="title" placeholder="Mete tit chapit la">
-
-                    <label for="pageTV">Konben paj</label>
-                    <input type="number" id="pageTV" name="description" min="1" max="15" placeholder="Kantite paj">
-                    <p style="font-size: 0.85rem; color: var(--liv-muted); margin-top: 6px;">Maksimòm 15 paj.</p>
-
-                    <button type="button" id="submitBtn">Voye</button>
-                </div>
-            </div>
-        </div>
     </body>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
+        import { initLivFirebase } from "./scripts/livFirebaseInit.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
         import {
-            getFirestore,
             query,
             orderBy,
             collection,
             doc,
-            setDoc,
             getDocs,
             getDoc,
             onSnapshot,
@@ -89,20 +69,7 @@
             applyLivI18n(back);
         })();
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
-          authDomain: "liv-lakay.firebaseapp.com",
-          projectId: "liv-lakay",
-          storageBucket: "liv-lakay.appspot.com",
-          messagingSenderId: "896987078937",
-          appId: "1:896987078937:web:acc868befefa57564fa588",
-          measurementId: "G-YP58T0S16P"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        getAnalytics(app);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
+        const { auth, db } = initLivFirebase();
 
         let myBookIds = new Set();
 
@@ -248,32 +215,6 @@
             }
         }
 
-        function addChapter(bookId, chapterName) {
-            const pageTV = document.getElementById("pageTV");
-            const pages = parseInt(pageTV.value, 10);
-            if (!chapterName || !chapterName.trim()) {
-                alert("Antre tit chapit la.");
-                return;
-            }
-            if (!pages || pages < 1 || pages > 15) {
-                alert("Antre ant 1 ak 15 paj.");
-                return;
-            }
-
-            const chapterRef = doc(db, "books", `${bookId}`, "chapters", `${chapterName}`);
-            setDoc(chapterRef, {
-                chapter_name: `${chapterName}`,
-                chapter_pages: `${pageTV.value}`
-            });
-            createPages(bookId, chapterName, pages);
-            closeDialog();
-        }
-
-        document.getElementById("submitBtn").onclick = () => {
-            const chapter = document.getElementById("chapterTV").value;
-            addChapter(book, chapter);
-        };
-
         function extractParamsFromUrl(url) {
             let id;
             try {
@@ -307,33 +248,15 @@
             const p = document.createElement("p");
             p.textContent = label;
             div.appendChild(p);
-
-            let pressTimer;
-            let longPressed = false;
-
-            const startPress = (event) => {
-                event.preventDefault();
-                longPressed = false;
-                pressTimer = setTimeout(() => {
-                    longPressed = true;
-                    openEdit(bookId, chapterDocId);
-                }, 500);
-            };
-
-            const endPress = () => {
-                clearTimeout(pressTimer);
-                if (!longPressed) {
+            div.addEventListener("click", () => openPage(bookId, chapterDocId));
+            div.setAttribute("role", "button");
+            div.setAttribute("tabindex", "0");
+            div.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
                     openPage(bookId, chapterDocId);
                 }
-            };
-
-            div.addEventListener("mousedown", startPress);
-            div.addEventListener("mouseup", endPress);
-            div.addEventListener("mouseleave", endPress);
-            div.addEventListener("touchstart", startPress, { passive: false });
-            div.addEventListener("touchend", endPress);
-            div.addEventListener("touchcancel", endPress);
-            div.addEventListener("contextmenu", (e) => e.preventDefault());
+            });
 
             return div;
         }
@@ -341,37 +264,6 @@
         function openPage(bookId, chapterName) {
             const url = "./pagesView.html?id=" + encodeURIComponent(bookId) + "&chapter=" + encodeURIComponent(chapterName);
             window.open(url, "_blank").focus();
-        }
-
-        function createPages(bookId, chapterName, pages) {
-            for (let i = 1; i <= pages; i++) {
-                const pagesRef = doc(db, "books", `${bookId}`, "chapters", `${chapterName}`, "pages", `page${i}`);
-                setDoc(pagesRef, {
-                    text: "no text transcribed"
-                });
-            }
-            const chaptersDiv = document.getElementById("chaptersDiv");
-            chaptersDiv.appendChild(createChapterDiv(bookId, chapterName, chapterName));
-        }
-    </script>
-
-    <script>
-        function openDialog() {
-            document.getElementById("myModal").classList.add("is-open");
-        }
-
-        function closeDialog() {
-            document.getElementById("myModal").classList.remove("is-open");
-        }
-
-        document.getElementById("myModal").addEventListener("click", function (e) {
-            if (e.target === this) closeDialog();
-        });
-
-        function openEdit(bookId, chapterName) {
-            const url = "./editView.html?id=" + encodeURIComponent(bookId) + "?chapter=" + encodeURIComponent(chapterName);
-            const newWindow = window.open(url, "_blank");
-            if (newWindow) newWindow.focus();
         }
     </script>
 </html>

@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
-        <title>Liv — Li paj</title>
+        <title data-i18n="reader.title">Liv — Li paj</title>
     </head>
     <body class="liv-body liv-page-reader">
         <div class="liv-page liv-page-reader-inner">
@@ -13,13 +13,13 @@
             </header>
 
             <div class="liv-reader-stage">
-                <button type="button" id="leftBtn" class="liv-reader-arrow liv-reader-arrow-left" aria-label="Paj anvan">&#9664;</button>
+                <button type="button" id="leftBtn" class="liv-reader-arrow liv-reader-arrow-left" data-i18n-aria="reader.prevPage">&#9664;</button>
                 <article class="liv-book-surface">
                     <img id="pageImage" class="liv-reader-image" alt="" hidden>
                     <p id="contentTV" class="liv-reader-text"></p>
                     <p id="imageCaptionTV" class="liv-reader-image-caption" hidden></p>
                 </article>
-                <button type="button" id="rightBtn" class="liv-reader-arrow liv-reader-arrow-right" aria-label="Pwochen paj">&#9654;</button>
+                <button type="button" id="rightBtn" class="liv-reader-arrow liv-reader-arrow-right" data-i18n-aria="reader.nextPage">&#9654;</button>
             </div>
 
             <footer class="liv-reader-footer">
@@ -28,10 +28,14 @@
         </div>
     </body>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-        import { getFirestore, collection, doc, getDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { initLivFirebase } from "./scripts/livFirebaseInit.js";
+        import { collection, doc, getDoc, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+        import { initLivI18n, t, applyLivI18n } from "./scripts/livI18n.js";
 
+        initLivI18n();
+        applyLivI18n(document);
+
+        const { db } = initLivFirebase();
         const leftBtn = document.getElementById("leftBtn");
         const rightBtn = document.getElementById("rightBtn");
         let pagePosition = 0;
@@ -44,19 +48,11 @@
         let chapterOrder = [];
         let currentChapterIndex = -1;
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
-          authDomain: "liv-lakay.firebaseapp.com",
-          projectId: "liv-lakay",
-          storageBucket: "liv-lakay.appspot.com",
-          messagingSenderId: "896987078937",
-          appId: "1:896987078937:web:acc868befefa57564fa588",
-          measurementId: "G-YP58T0S16P"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        getAnalytics(app);
-        const db = getFirestore(app);
+        function pageCounterLabel(current, total) {
+            return t("reader.pageCounter")
+                .replace("{current}", String(current))
+                .replace("{total}", String(total));
+        }
 
         async function getBookCollectionName(bookDocId) {
             const inBooks = await getDoc(doc(db, "books", bookDocId));
@@ -137,7 +133,7 @@
                 const pageImage = document.getElementById("pageImage");
                 const imageCaptionTV = document.getElementById("imageCaptionTV");
                 contentTV.hidden = false;
-                contentTV.textContent = "Pa gen paj nan chapit sa a.";
+                contentTV.textContent = t("reader.noPages");
                 pageImage.hidden = true;
                 pageImage.removeAttribute("src");
                 imageCaptionTV.hidden = true;
@@ -161,7 +157,9 @@
 
             if (first && hasPrevChapter()) {
                 leftBtn.innerHTML =
-                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">◀</span><span class="liv-arrow-chapter-words">Chapit anvan</span></span>';
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">◀</span><span class="liv-arrow-chapter-words">' +
+                    t("reader.prevChapter") +
+                    "</span></span>";
             } else if (position > 0) {
                 leftBtn.innerHTML =
                     '<span class="liv-arrow-chev" aria-hidden="true">◀</span>';
@@ -171,7 +169,9 @@
 
             if (last && hasNextChapter()) {
                 rightBtn.innerHTML =
-                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">▶</span><span class="liv-arrow-chapter-words">Chapit swivan</span></span>';
+                    '<span class="liv-arrow-stack"><span class="liv-arrow-chev" aria-hidden="true">▶</span><span class="liv-arrow-chapter-words">' +
+                    t("reader.nextChapter") +
+                    "</span></span>";
             } else if (position < n - 1) {
                 rightBtn.innerHTML =
                     '<span class="liv-arrow-chev" aria-hidden="true">▶</span>';
@@ -191,7 +191,7 @@
             const n = pagesContent.length;
             if (n === 0) return;
 
-            pageCounter.textContent = "Paj " + (position + 1) + " / " + n;
+            pageCounter.textContent = pageCounterLabel(position + 1, n);
 
             const first = position === 0;
             const last = position === n - 1;
@@ -203,14 +203,14 @@
             setArrowVisible(rightBtn, canRight);
 
             if (first && hasPrevChapter()) {
-                leftBtn.setAttribute("aria-label", "Chapit anvan");
+                leftBtn.setAttribute("aria-label", t("reader.prevChapter"));
             } else {
-                leftBtn.setAttribute("aria-label", "Paj anvan");
+                leftBtn.setAttribute("aria-label", t("reader.prevPage"));
             }
             if (last && hasNextChapter()) {
-                rightBtn.setAttribute("aria-label", "Chapit swivan");
+                rightBtn.setAttribute("aria-label", t("reader.nextChapter"));
             } else {
-                rightBtn.setAttribute("aria-label", "Pwochen paj");
+                rightBtn.setAttribute("aria-label", t("reader.nextPage"));
             }
 
             updateArrowContents(position, n);
@@ -298,8 +298,7 @@
             if (id && chapter) {
                 getPages(id, chapter, "first");
             } else {
-                document.getElementById("contentTV").textContent =
-                    "Lyen an pa konplè (id oswa chapit manke).";
+                document.getElementById("contentTV").textContent = t("reader.badLink");
             }
         }
 

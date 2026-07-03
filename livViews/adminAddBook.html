@@ -96,30 +96,16 @@
         </div>
 
         <script type="module">
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-            import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-analytics.js";
-            import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            import { initLivFirebase } from "./scripts/livFirebaseInit.js";
+            import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+            import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
             import Tesseract from "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.esm.min.js?v=20260422a";
             import * as pdfjsLib from "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.5.136/build/pdf.min.mjs";
 
             const ADMIN_KEY = "livAdminMode";
 
-            const firebaseConfig = {
-                apiKey: "AIzaSyDFwikLo75uY2KqIsK-GfrZwPbej-MZt_c",
-                authDomain: "liv-lakay.firebaseapp.com",
-                projectId: "liv-lakay",
-                storageBucket: "liv-lakay.appspot.com",
-                messagingSenderId: "896987078937",
-                appId: "1:896987078937:web:acc868befefa57564fa588",
-                measurementId: "G-YP58T0S16P"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            getAnalytics(app);
-            const db = getFirestore(app);
-            const auth = getAuth(app);
+            const { app, auth, db } = initLivFirebase();
 
             const gate = document.getElementById("adminGate");
             const form = document.getElementById("adminBookForm");

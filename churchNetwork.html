@@ -3,8 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Church Network — grow your faith daily while supporting your church." />
-    <title>Church Network</title>
+    <meta name="description" content="Church Network — daily faith content that supports your church. Launching soon." />
+    <title>Church Network — Grow Your Faith Daily</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <style>
       *,
       *::before,
@@ -12,21 +15,32 @@
         box-sizing: border-box;
       }
 
+      :root {
+        --navy: #002f3c;
+        --navy-dark: #001f28;
+        --gold: #ddae37;
+        --gold-dark: #c49a2e;
+        --cream: #faf8f3;
+        --text: #1a1a1a;
+        --muted: #5a5a5a;
+      }
+
       body {
         margin: 0;
-        font-family: Arial, sans-serif;
-        background: #f3f3f3;
-        color: #1a1a1a;
+        font-family: "Inter", Arial, sans-serif;
+        background: var(--cream);
+        color: var(--text);
+        line-height: 1.6;
       }
 
       header {
-        background: #002f3c;
+        background: var(--navy);
         color: #fff;
-        padding: 14px 16px;
+        padding: 16px 20px;
       }
 
       .header-inner {
-        max-width: 700px;
+        max-width: 760px;
         margin: 0 auto;
         display: flex;
         align-items: center;
@@ -37,99 +51,168 @@
       .header-inner h1 {
         margin: 0;
         font-size: 1.125rem;
+        font-weight: 800;
+        letter-spacing: 0.02em;
       }
 
       .badge {
-        background: #fff;
-        color: #002f3c;
-        font-size: 0.75rem;
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        font-size: 0.6875rem;
         font-weight: 700;
-        padding: 6px 10px;
+        padding: 6px 12px;
         border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      main {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 0 20px 56px;
       }
 
       .hero-banner {
-        margin: 12px auto 0;
-        width: min(90%, 400px);
+        display: inline-block;
+        margin: 28px auto 0;
+        width: 100%;
+        max-width: 420px;
         background: #ffeb3b;
         text-align: center;
-        padding: 8px 12px;
-        font-weight: 600;
+        padding: 10px 16px;
+        font-weight: 700;
+        font-size: 0.9375rem;
+        border-radius: 8px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .hero-wrap {
+        text-align: center;
       }
 
       .hero-title {
-        text-align: center;
-        font-size: clamp(1.35rem, 4vw, 1.65rem);
-        font-weight: 700;
-        margin: 16px 12px 8px;
-        line-height: 1.35;
+        font-size: clamp(1.75rem, 5vw, 2.25rem);
+        font-weight: 800;
+        margin: 20px 0 12px;
+        line-height: 1.25;
+        color: var(--navy);
+      }
+
+      .hero-lead {
+        margin: 0 auto 28px;
+        max-width: 540px;
+        color: var(--muted);
+        font-size: 1.0625rem;
       }
 
       .video-wrap {
-        width: min(90%, 700px);
-        margin: 16px auto 0;
+        margin: 0 auto;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(0, 47, 60, 0.15);
+        background: #fff;
       }
 
       .video-label {
-        background: #002f3c;
+        background: var(--navy);
         color: #fff;
         margin: 0;
-        padding: 12px 16px;
-        border-radius: 10px 10px 0 0;
+        padding: 14px 18px;
         font-size: 0.9375rem;
+        font-weight: 600;
+        text-align: left;
       }
 
       .video-wrap iframe {
         display: block;
         width: 100%;
-        height: 40vh;
+        height: min(42vh, 380px);
         min-height: 220px;
         border: none;
-        border-bottom: 8px solid #000;
-        border-radius: 0 0 12px 12px;
+        background: #000;
+      }
+
+      .features {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+        margin: 36px 0 0;
+      }
+
+      .feature {
         background: #fff;
+        border: 1px solid rgba(0, 47, 60, 0.08);
+        border-radius: 12px;
+        padding: 20px 18px;
+        text-align: left;
+      }
+
+      .feature strong {
+        display: block;
+        font-size: 0.9375rem;
+        margin-bottom: 6px;
+        color: var(--navy);
+      }
+
+      .feature span {
+        font-size: 0.875rem;
+        color: var(--muted);
       }
 
       .cta {
-        max-width: 700px;
-        margin: 0 auto;
-        padding: 24px 20px 48px;
+        margin-top: 40px;
+        padding: 32px 24px;
         text-align: center;
+        background: #fff;
+        border-radius: 16px;
+        border: 1px solid rgba(0, 47, 60, 0.08);
+        box-shadow: 0 8px 24px rgba(0, 47, 60, 0.06);
       }
 
       .cta h2 {
-        font-size: 1.125rem;
-        margin: 0 0 16px;
-        color: #333;
+        font-size: 1.25rem;
+        margin: 0 0 10px;
+        color: var(--navy);
       }
 
       .cta p {
-        margin: 0 0 20px;
-        color: #555;
-        line-height: 1.5;
+        margin: 0 0 22px;
+        color: var(--muted);
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
       }
 
       .cta-btn {
         display: inline-block;
-        background: #ddae37;
+        background: var(--gold);
         color: #fff;
         padding: 14px 28px;
-        font-size: 1.125rem;
+        font-size: 1rem;
         font-weight: 700;
         border-radius: 999px;
         text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 4px 14px rgba(221, 174, 55, 0.35);
+        transition: background 0.2s, transform 0.15s;
       }
 
       .cta-btn:hover {
-        background: #000;
+        background: var(--navy);
+        transform: translateY(-1px);
       }
 
       footer {
         text-align: center;
-        padding: 16px;
+        padding: 24px 20px 32px;
         font-size: 0.8125rem;
-        color: #666;
+        color: var(--muted);
+      }
+
+      footer a {
+        color: var(--navy);
+        font-weight: 600;
       }
     </style>
   </head>
@@ -137,34 +220,61 @@
     <header>
       <div class="header-inner">
         <h1>Church Network</h1>
-        <span class="badge">Coming soon</span>
+        <span class="badge">Launching soon</span>
       </div>
     </header>
 
-    <p class="hero-banner">get your daily bread</p>
-    <p class="hero-title">
-      How to Grow Your Faith Daily<br />
-      While Supporting Your Church
-    </p>
+    <main>
+      <div class="hero-wrap">
+        <p class="hero-banner">get your daily bread</p>
+        <h2 class="hero-title">
+          Grow Your Faith Daily<br />
+          While Supporting Your Church
+        </h2>
+        <p class="hero-lead">
+          Short daily devotionals, community, and giving tools — built so members stay connected and churches keep more of every gift.
+        </p>
+      </div>
 
-    <div class="video-wrap">
-      <p class="video-label">Press play to learn more</p>
-      <iframe
-        src="https://www.youtube.com/embed/d9zUVFzPtJ4"
-        title="Church Network overview"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
-    </div>
+      <div class="video-wrap">
+        <p class="video-label">Press play to learn more</p>
+        <iframe
+          src="https://www.youtube.com/embed/d9zUVFzPtJ4"
+          title="Church Network overview"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
 
-    <section class="cta">
-      <h2>Ready to grow in your relationship with God?</h2>
-      <p>
-        The full Church Network app is on the way. This page is the landing spot for now — check back soon.
-      </p>
-      <span class="cta-btn" style="cursor: default; opacity: 0.85">Launching soon</span>
-    </section>
+      <div class="features">
+        <div class="feature">
+          <strong>Daily devotionals</strong>
+          <span>Bite-sized faith content delivered every morning.</span>
+        </div>
+        <div class="feature">
+          <strong>Church-first giving</strong>
+          <span>Tools designed to support your congregation, not replace it.</span>
+        </div>
+        <div class="feature">
+          <strong>Community</strong>
+          <span>Stay connected with your church between Sundays.</span>
+        </div>
+      </div>
 
-    <footer>Church Network &copy; 2026</footer>
+      <section class="cta">
+        <h2>Be first to know when we launch</h2>
+        <p>
+          The full Church Network app is on the way. Join the waitlist and we'll email you when early access opens.
+        </p>
+        <a
+          class="cta-btn"
+          href="mailto:buildingwithkepler@gmail.com?subject=Church%20Network%20waitlist&amp;body=Hi%20%E2%80%94%20please%20notify%20me%20when%20Church%20Network%20launches.%0A%0AName%3A%20%0AChurch%3A%20"
+        >Join the waitlist</a>
+      </section>
+    </main>
+
+    <footer>
+      Church Network &copy; 2026 · <a href="/pages.html">Back to projects</a>
+    </footer>
   </body>
 </html>
