@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Michael CRM</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #eff6ff;
+            --surface: #ffffff;
+            --surface-strong: #f8fafc;
+            --text: #0f172a;
+            --muted: #475569;
+            --accent: #2563eb;
+            --accent-soft: rgba(37, 99, 235, 0.12);
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --danger: #dc2626;
+            --border: rgba(148, 163, 184, 0.24);
+            font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+        body { padding: 24px 24px 110px; }
+        a, button { font: inherit; }
+        button { cursor: pointer; }
+        .page { max-width: 1200px; margin: 0 auto; }
+        .hero { display: grid; gap: 18px; margin-bottom: 28px; }
+        .hero-top { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 16px; }
+        .hero h1 { margin: 0; font-size: clamp(2rem, 3vw, 3.2rem); letter-spacing: -0.03em; color: #0f172a; }
+        .hero p { margin: 0; color: var(--muted); max-width: 820px; line-height: 1.7; }
+        .demo-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(22, 163, 74, 0.1); color: var(--success); border: 1px solid rgba(22, 163, 74, 0.22); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+        .demo-badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.18); }
+        .nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+        .nav button { border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 10px 16px; border-radius: 999px; transition: all 0.18s ease; font-weight: 600; }
+        .nav button.active, .nav button:hover { color: white; border-color: var(--accent); background: var(--accent); }
+        .nav button:focus-visible { outline: 3px solid rgba(37, 99, 235, 0.35); outline-offset: 2px; }
+        .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 24px; padding: 24px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08); animation: panel-in 0.2s ease; }
+        @keyframes panel-in { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .panel + .panel { margin-top: 22px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .grid-3 { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 18px; }
+        .card { background: var(--surface-strong); border: 1px solid var(--border); border-radius: 18px; padding: 18px; }
+        .card h2 { margin: 0 0 12px; font-size: 1.05rem; color: #0f172a; }
+        .badge { display: inline-flex; align-items:center; gap:6px; padding: 5px 11px; border-radius: 999px; font-size: 0.79rem; font-weight: 700; letter-spacing: 0.01em; background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(37, 99, 235, 0.18); }
+        .badge.success { background: rgba(22, 163, 74, 0.12); color: var(--success); border-color: rgba(22, 163, 74, 0.18); }
+        .badge.warning { background: rgba(245, 158, 11, 0.12); color: var(--warning); border-color: rgba(245, 158, 11, 0.18); }
+        .badge.danger { background: rgba(220, 38, 38, 0.12); color: var(--danger); border-color: rgba(220, 38, 38, 0.18); }
+        table { width: 100%; border-collapse: collapse; }
+        .card > .table-wrap { margin-top: 4px; }
+        .table-wrap table { margin-top: 0; }
+        th, td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--border); font-size: 0.95rem; vertical-align: top; }
+        th { color: var(--muted); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.12em; position: sticky; top: 0; background: var(--surface-strong); z-index: 1; }
+        tr:hover { background: rgba(37, 99, 235, 0.08); }
+        .table-wrap { overflow-x: auto; border-radius: 14px; border: 1px solid rgba(148, 163, 184, 0.16); -webkit-overflow-scrolling: touch; }
+        .table-wrap .button { padding: 8px 14px; font-size: 0.84rem; white-space: nowrap; }
+        .table-link { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .table-link:hover { text-decoration: underline; }
+        .tag-group { display: flex; flex-wrap: wrap; gap: 6px; }
+        .pill { display: inline-flex; align-items: center; padding: 5px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 700; text-transform: capitalize; border: 1px solid transparent; }
+        .pill.buyer { background: rgba(22, 163, 74, 0.12); color: var(--success); border-color: rgba(22, 163, 74, 0.2); }
+        .pill.seller { background: rgba(37, 99, 235, 0.12); color: var(--accent); border-color: rgba(37, 99, 235, 0.2); }
+        .pill.conduit { background: rgba(245, 158, 11, 0.12); color: var(--warning); border-color: rgba(245, 158, 11, 0.2); }
+        .toolbox { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; align-items: flex-end; }
+        .toolbox-field { flex: 1; min-width: 250px; }
+        .toolbox-field label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+        .toolbox input, .toolbox select, .toolbox textarea { width: 100%; background: var(--surface-strong); color: var(--text); border: 1px solid var(--border); border-radius: 14px; padding: 12px 14px; outline: none; transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+        .toolbox input:focus, .toolbox select:focus, .toolbox textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+        .secondary { color: var(--text); background: rgba(15, 23, 42, 0.05); border-color: var(--border); }
+        .button { display: inline-flex; align-items:center; justify-content:center; gap: 8px; border: none; border-radius: 999px; padding: 12px 18px; font-weight: 700; letter-spacing: 0.01em; transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, color 0.16s ease, border-color 0.16s ease; }
+        .button:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(15, 23, 42, 0.16); }
+        .button:focus-visible { outline: 3px solid rgba(37, 99, 235, 0.35); outline-offset: 2px; }
+        .button.primary { background: linear-gradient(135deg, #1d4ed8, #2563eb); color: white; }
+        .button.outline { background: #ffffff; border: 1px solid var(--border); color: var(--text); }
+        .button.outline:hover { background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #ffffff; border-color: #2563eb; }
+        .dim { color: var(--muted); }
+        .note-list { margin-top: 18px; display: grid; gap: 12px; }
+        .note-card { background: var(--surface-strong); border: 1px solid rgba(100, 116, 139, 0.16); border-radius: 16px; padding: 16px; }
+        .note-card time { display: block; color: var(--muted); margin-bottom: 10px; font-size: 0.85rem; }
+        .note-card p { margin: 0; line-height: 1.7; color: #1e293b; }
+        .fab { position: fixed; right: 26px; bottom: 26px; width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg,#60a5fa,#2563eb); color: white; border:none; box-shadow: 0 24px 60px rgba(37, 99, 235, 0.32); display:flex; align-items:center; justify-content:center; font-size: 1.8rem; z-index: 20; transition: transform 0.18s ease, opacity 0.18s ease; }
+        .fab:hover { transform: scale(1.04); }
+        .fab:focus-visible { outline: 3px solid rgba(37, 99, 235, 0.45); outline-offset: 3px; }
+        .fab.hidden-fab { opacity: 0; pointer-events: none; transform: scale(0.92); }
+        .fab-menu { position: fixed; right: 26px; bottom: 100px; display:grid; gap: 12px; z-index: 20; }
+        .fab-menu button { width: 220px; justify-content: flex-start; padding: 14px 18px; background: #ffffff; border: 1px solid rgba(148, 163, 184, 0.24); color: #0f172a; border-radius: 16px; font-weight: 600; box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12); transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease, transform 0.16s ease; }
+        .fab-menu button:hover { border-color: #2563eb; background: linear-gradient(135deg, #1d4ed8, #2563eb); color: #ffffff; transform: translateY(-1px); }
+        body.modal-open { overflow: hidden; }
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.45); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 30; backdrop-filter: blur(2px); }
+        .modal { width: min(720px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: 28px; padding: 32px; position: relative; max-height: calc(100vh - 48px); overflow-y: auto; box-shadow: 0 24px 96px rgba(15, 23, 42, 0.18); }
+        .modal h3 { margin-top: 0; margin-bottom: 24px; color: #0f172a; font-size: 1.35rem; font-weight: 800; }
+        .modal-close { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border-radius: 50%; background: rgba(15, 23, 42, 0.06); border: 1px solid var(--border); display:flex; align-items:center; justify-content:center; color: var(--text); cursor: pointer; font-size: 1.2rem; transition: all 0.18s ease; }
+        .modal-close:hover { background: rgba(15, 23, 42, 0.12); }
+        .hidden { display: none !important; }
+        .form-grid { display: grid; gap: 18px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .form-row.single { grid-template-columns: 1fr; }
+        .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border); }
+        label { display:block; font-size: 0.9rem; margin-bottom: 10px; color: var(--muted); font-weight: 600; }
+        .form-row label input, .form-row label select, .form-row label textarea { width: 100%; display: block; margin-top: 6px; }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="search"], input[type="date"], select, textarea { width: 100%; background: var(--surface-strong); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 11px 14px; outline: none; transition: border-color 0.18s ease, box-shadow 0.18s ease; font-size: 0.95rem; }
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus, input[type="search"]:focus, input[type="date"]:focus, select:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+        .tag-list label { display: flex; align-items: center; margin-bottom: 0; gap: 6px; }
+        .tag-list span { background: rgba(15, 23, 42, 0.04); border:1px solid rgba(148, 163, 184, 0.18); border-radius: 8px; padding: 8px 12px; font-size: 0.85rem; }
+        .product-row { background: rgba(37, 99, 235, 0.06); border: 1px solid rgba(37, 99, 235, 0.12); border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .product-row-controls { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: flex-end; }
+        .summary-box { display: grid; gap: 12px; }
+        .summary-heading { margin: 0 0 4px; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+        .summary-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items:center; padding: 16px; background: var(--surface-strong); border:1px solid rgba(148, 163, 184, 0.16); border-radius: 18px; }
+        .summary-label { color: var(--muted); font-size: 0.9rem; }
+        .summary-value { font-size: 1.3rem; font-weight: 800; color: #0f172a; }
+        .empty-state { padding: 26px; border-radius: 20px; background: rgba(255, 255, 255, 0.8); border: 1px dashed rgba(148, 163, 184, 0.3); color: var(--muted); margin-top: 16px; text-align: center; line-height: 1.6; }
+        .card .empty-state { margin-top: 0; }
+        .product-toggle { background: none; border: none; padding: 0; cursor: pointer; color: var(--accent); text-decoration: underline; font-weight: 600; font-size: 0.9rem; }
+        .product-toggle[aria-expanded="true"] { color: #1d4ed8; }
+        .product-toggle:focus-visible { outline: 2px solid rgba(37, 99, 235, 0.35); outline-offset: 2px; border-radius: 4px; }
+        .report-filters { margin-top: 22px; padding: 18px; border-radius: 18px; background: rgba(255,255,255,0.85); border: 1px solid rgba(148,163,184,0.24); }
+        .report-filter-row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; margin-bottom: 18px; }
+        .report-filter-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 16px; }
+        .report-filters.collapsed { display: none; }
+        .filter-help { margin: 0 0 16px; color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+        .filter-group { margin-bottom: 16px; }
+        .filter-group:last-child { margin-bottom: 0; }
+        .filter-group-label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: var(--text); }
+        .filter-inline-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+        .checkbox-grid { display: flex; flex-wrap: wrap; gap: 8px; max-height: 168px; overflow-y: auto; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-strong); -webkit-overflow-scrolling: touch; }
+        .checkbox-grid.searchable-options { display: grid; grid-template-columns: 1fr; gap: 6px; align-content: start; }
+        .checkbox-grid.searchable-options .filter-chip { border-radius: 12px; width: 100%; }
+        .filter-search { width: 100%; margin-bottom: 10px; background: var(--surface-strong); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; outline: none; transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+        .filter-search:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12); }
+        .selected-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+        .selected-filters:empty { display: none; margin-bottom: 0; }
+        .selected-filter-chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(37, 99, 235, 0.22); font-size: 0.84rem; font-weight: 600; }
+        .selected-filter-chip button { border: none; background: transparent; color: inherit; cursor: pointer; font-size: 1rem; line-height: 1; padding: 0 2px; opacity: 0.75; }
+        .selected-filter-chip button:hover { opacity: 1; }
+        .filter-match-count { margin: 0 0 8px; color: var(--muted); font-size: 0.8rem; font-weight: 500; }
+        .filter-chip.hidden-match { display: none; }
+        .filter-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-size: 0.88rem; font-weight: 600; user-select: none; transition: background 0.15s ease, border-color 0.15s ease; }
+        .filter-chip:hover { border-color: rgba(37, 99, 235, 0.35); }
+        .filter-chip:has(input:checked) { background: var(--accent-soft); border-color: rgba(37, 99, 235, 0.35); color: var(--accent); }
+        .filter-chip input { cursor: pointer; width: 15px; height: 15px; margin: 0; accent-color: var(--accent); }
+        .filter-empty { color: var(--muted); font-size: 0.88rem; padding: 4px 2px; }
+        .filter-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(148, 163, 184, 0.18); }
+        .filter-actions button { padding: 8px 14px; font-size: 0.84rem; }
+        .toast-stack { position: fixed; top: 20px; right: 20px; display: grid; gap: 10px; z-index: 50; max-width: min(360px, calc(100vw - 32px)); }
+        .toast { padding: 14px 18px; border-radius: 14px; background: #0f172a; color: white; box-shadow: 0 16px 40px rgba(15, 23, 42, 0.24); font-size: 0.92rem; line-height: 1.5; animation: toast-in 0.22s ease; }
+        .toast.error { background: #7f1d1d; }
+        .toast.success { background: #14532d; }
+        @keyframes toast-in { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+        .report-card { margin-top: 0; }
+        .report-summary-panel { margin-top: 20px; }
+        .report-toolbar { margin-bottom: 0; }
+        .report-output { margin-top: 20px; }
+        .section-lead { margin: 0 0 16px; color: var(--muted); font-size: 0.92rem; line-height: 1.6; }
+        .detail-actions { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+        input[type="checkbox"] { margin-right: 8px; cursor: pointer; }
+        .report-filter-grid label { display: flex; flex-direction: column; gap: 8px; }
+        .report-filters select, .report-filters input[type="search"] { width: 100%; background: var(--surface-strong); color: var(--text); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
+        .report-filters label.field-label { color: var(--text); font-weight: 700; font-size: 0.92rem; }
+        .product-list { transition: all 0.15s ease; }
+        .product-list.hidden { display: none; }
+        .product-item { color: var(--muted); font-size: 0.85rem; padding: 4px 0; }
+        .filter-group-hint { display: block; margin-top: 6px; color: var(--muted); font-size: 0.8rem; font-weight: 500; }
+        @media (max-width: 900px) {
+            .grid-2, .grid-3, .form-row, .report-filter-grid { grid-template-columns: 1fr; }
+            .filter-inline-row { grid-template-columns: 1fr; }
+            .nav { justify-content: flex-start; }
+            .fab, .fab-menu { right: 14px; }
+            body { padding: 16px 16px 100px; }
+            .panel { padding: 18px; border-radius: 18px; }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="hero">
+        <div class="hero-top">
+            <div>
+                <h1>Michael CRM</h1>
+                <p>Manage people, companies, and dated notes in one lightweight CRM. Add buyers, sellers, and conduits, connect people with companies, and generate quick reports from your data.</p>
+            </div>
+            <span class="demo-badge">Local demo</span>
+        </div>
+        <div class="nav" role="tablist" aria-label="Main sections">
+            <button id="tabPeople" class="active" type="button" role="tab" aria-selected="true" data-section="people">People</button>
+            <button id="tabCompanies" type="button" role="tab" aria-selected="false" data-section="companies">Companies</button>
+            <button id="tabReports" type="button" role="tab" aria-selected="false" data-section="reports">Reports</button>
+        </div>
+    </div>
+
+    <div id="sectionPeople" class="panel" role="tabpanel" aria-labelledby="tabPeople">
+        <p class="section-lead">Browse contacts, filter by tag or product, and open notes from each row.</p>
+        <div class="toolbox">
+            <div class="toolbox-field">
+                <label for="searchPeople">Search people</label>
+                <input id="searchPeople" type="search" placeholder="Search by name, email, company, tag" />
+            </div>
+            <button class="button outline" type="button" onclick="openModal('addPerson')">Add person</button>
+        </div>
+        <div class="card">
+            <h2>People</h2>
+            <div id="peopleTableContainer"></div>
+        </div>
+    </div>
+
+    <div id="sectionCompanies" class="panel hidden" role="tabpanel" aria-labelledby="tabCompanies">
+        <p class="section-lead">Track company categories, product catalogs, and linked notes.</p>
+        <div class="toolbox">
+            <div class="toolbox-field">
+                <label for="searchCompanies">Search companies</label>
+                <input id="searchCompanies" type="search" placeholder="Search by company name or product" />
+            </div>
+            <button class="button outline" type="button" onclick="openModal('addCompany')">Add company</button>
+        </div>
+        <div class="card">
+            <h2>Companies</h2>
+            <div id="companyTableContainer"></div>
+        </div>
+    </div>
+
+    <div id="sectionReports" class="panel hidden" role="tabpanel" aria-labelledby="tabReports">
+        <p class="section-lead">Choose a report type below. Summary shows your totals; Filtered report opens search and filters.</p>
+        <div class="card report-card">
+            <h2>Report details</h2>
+            <div class="toolbox report-toolbar">
+                <div class="toolbox-field">
+                    <label for="reportType">Choose report</label>
+                    <select id="reportType" onchange="renderReports()">
+                        <option value="summary">Summary</option>
+                        <option value="filtered">Filtered report</option>
+                    </select>
+                </div>
+                <button class="button primary" type="button" onclick="renderReports()">Refresh</button>
+            </div>
+            <div class="report-filters collapsed" id="reportFilters">
+                <p class="filter-help" id="filterHelp">Select filters below. Results update as you click.</p>
+                <div id="filterGroupActivity" class="filter-group">
+                    <span class="filter-group-label">Last activity</span>
+                    <div class="filter-inline-row">
+                        <div>
+                            <label class="field-label" for="lastActivityFilter">Show activity within</label>
+                            <select id="lastActivityFilter" onchange="renderReportOutput()">
+                                <option value="all">Any</option>
+                                <option value="7">Last 7 days</option>
+                                <option value="30">Last 30 days</option>
+                                <option value="90">Last 90 days</option>
+                                <option value="none">No activity</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="field-label" for="lastActivitySort">Sort by date</label>
+                            <select id="lastActivitySort" onchange="renderReportOutput()">
+                                <option value="desc">Newest first (descending)</option>
+                                <option value="asc">Oldest first (ascending)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <span class="filter-group-hint">Filter who appears in the list, then sort results by most or least recent note.</span>
+                </div>
+                <div id="filterGroupName" class="filter-group">
+                    <label class="field-label" for="nameFilter">Name</label>
+                    <input id="nameFilter" type="search" placeholder="Search by name" oninput="renderReportOutput()" />
+                </div>
+                <div id="filterGroupTags" class="filter-group">
+                    <span class="filter-group-label">Person tags</span>
+                    <div id="tagFilter" class="checkbox-grid"></div>
+                    <span class="filter-group-hint">Leave all unchecked to include every tag.</span>
+                </div>
+                <div id="filterGroupCompanies" class="filter-group">
+                    <span class="filter-group-label">Company</span>
+                    <div id="companySelected" class="selected-filters" aria-live="polite"></div>
+                    <input id="companySearch" class="filter-search" type="search" placeholder="Search companies..." oninput="filterOptionList('companyFilter', this.value)" />
+                    <p class="filter-match-count" id="companyMatchCount"></p>
+                    <div id="companyFilter" class="checkbox-grid searchable-options"></div>
+                    <span class="filter-group-hint">Search to narrow the list, then check companies to filter. Selections stay active even if you search again.</span>
+                </div>
+                <div id="filterGroupProducts" class="filter-group">
+                    <span class="filter-group-label">Product</span>
+                    <div id="productSelected" class="selected-filters" aria-live="polite"></div>
+                    <input id="productSearch" class="filter-search" type="search" placeholder="Search products..." oninput="filterOptionList('productFilter', this.value)" />
+                    <p class="filter-match-count" id="productMatchCount"></p>
+                    <div id="productFilter" class="checkbox-grid searchable-options"></div>
+                    <span class="filter-group-hint">Search to narrow the list, then check products to filter. Leave empty to include all products.</span>
+                </div>
+                <div id="filterGroupCategories" class="filter-group">
+                    <span class="filter-group-label">Company category</span>
+                    <div id="categorySelected" class="selected-filters" aria-live="polite"></div>
+                    <input id="categorySearch" class="filter-search" type="search" placeholder="Search categories..." oninput="filterOptionList('categoryFilter', this.value)" />
+                    <p class="filter-match-count" id="categoryMatchCount"></p>
+                    <div id="categoryFilter" class="checkbox-grid searchable-options"></div>
+                    <span class="filter-group-hint">Search to narrow the list, then check categories to filter.</span>
+                </div>
+                <div class="filter-actions">
+                    <button class="button outline" type="button" onclick="clearReportFilters()">Clear filters</button>
+                </div>
+            </div>
+            <div id="reportOutput" class="report-output hidden"></div>
+        </div>
+        <div id="reportSummaryPanel" class="grid-2 report-summary-panel">
+            <div class="summary-box">
+                <h3 class="summary-heading">Overview</h3>
+                <div class="summary-row"><div class="summary-label">Total people</div><div class="summary-value" id="totalPeople">0</div></div>
+                <div class="summary-row"><div class="summary-label">Total companies</div><div class="summary-value" id="totalCompanies">0</div></div>
+                <div class="summary-row"><div class="summary-label">Total notes</div><div class="summary-value" id="totalNotes">0</div></div>
+            </div>
+            <div id="tagSummary" class="summary-box">
+                <h3 class="summary-heading">By role</h3>
+                <div class="summary-row"><div class="summary-label">Buyers</div><div class="summary-value" id="buyerCount">0</div></div>
+                <div class="summary-row"><div class="summary-label">Sellers</div><div class="summary-value" id="sellerCount">0</div></div>
+                <div class="summary-row"><div class="summary-label">Conduits</div><div class="summary-value" id="conduitCount">0</div></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button class="fab" id="fabButton" type="button" aria-label="Quick actions" aria-expanded="false" aria-controls="fabMenu" onclick="toggleFabMenu()">+</button>
+<div id="fabMenu" class="fab-menu hidden">
+    <button type="button" onclick="openModal('addPerson'); hideFabMenu();">Add person</button>
+    <button type="button" onclick="openModal('addCompany'); hideFabMenu();">Add company</button>
+    <button type="button" onclick="openModal('addNote'); hideFabMenu();">Add note</button>
+</div>
+
+<div id="toastStack" class="toast-stack" aria-live="polite"></div>
+
+<div id="modalBackdrop" class="modal-backdrop" onclick="closeModal(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <button class="modal-close" type="button" onclick="closeModal()">×</button>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<script>
+    const STORAGE_KEY = 'michaelCrmData';
+    const state = {
+        section: 'people',
+        openFab: false,
+        data: {
+            people: [],
+            companies: [],
+            notes: []
+        }
+    };
+
+    const defaultPeople = [
+        { id: crypto.randomUUID(), name: 'Ava Mitchell', email: 'ava@greensphere.com', phone: '+1 303 555 0123', company: 'Greensphere Ventures', tags: ['buyer'], products: { buyer: ['renewable energy kits', 'solar equipment'] } },
+        { id: crypto.randomUUID(), name: 'Leo Park', email: 'leo.park@horizontrades.com', phone: '+1 415 555 0198', company: 'Horizon Trades', tags: ['seller', 'conduit'], products: { seller: ['industrial lithium batteries'], conduit: ['logistics services'] } },
+    ];
+    const defaultCompanies = [
+        { id: crypto.randomUUID(), name: 'Greensphere Ventures', category: 'Energy', products: ['solar panels', 'battery storage'] },
+        { id: crypto.randomUUID(), name: 'Horizon Trades', category: 'Distribution', products: ['electrical parts', 'maintenance supplies'] },
+    ];
+    const defaultNotes = [
+        { id: crypto.randomUUID(), targetType: 'person', targetId: null, targetName: 'Ava Mitchell', date: '2026-07-02', content: 'Called to confirm buyer interest in product bundles for Q3.' },
+    ];
+
+    const modalBackdrop = document.getElementById('modalBackdrop');
+    const modalContent = document.getElementById('modalContent');
+    const fabButton = document.getElementById('fabButton');
+    const peopleTableContainer = document.getElementById('peopleTableContainer');
+    const companyTableContainer = document.getElementById('companyTableContainer');
+    const reportOutput = document.getElementById('reportOutput');
+
+    const SEARCHABLE_FILTER_CONFIG = {
+        companyFilter: { selectedId: 'companySelected', searchId: 'companySearch', matchCountId: 'companyMatchCount' },
+        productFilter: { selectedId: 'productSelected', searchId: 'productSearch', matchCountId: 'productMatchCount' },
+        categoryFilter: { selectedId: 'categorySelected', searchId: 'categorySearch', matchCountId: 'categoryMatchCount' },
+    };
+
+    const reportFilterSelections = {
+        companyFilter: new Set(),
+        productFilter: new Set(),
+        categoryFilter: new Set(),
+    };
+
+    const reportFilterLabels = {
+        companyFilter: new Map(),
+        productFilter: new Map(),
+        categoryFilter: new Map(),
+    };
+
+    function showToast(message, type = 'info') {
+        const stack = document.getElementById('toastStack');
+        const toast = document.createElement('div');
+        toast.className = `toast${type === 'error' ? ' error' : type === 'success' ? ' success' : ''}`;
+        toast.textContent = message;
+        stack.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.2s ease';
+            setTimeout(() => toast.remove(), 220);
+        }, 3200);
+    }
+
+    function normalizePeopleCompanies() {
+        let changed = false;
+        state.data.people.forEach(person => {
+            if (!person.companyId && person.company) {
+                const match = state.data.companies.find(company => company.name === person.company);
+                if (match) {
+                    person.companyId = match.id;
+                    changed = true;
+                }
+            }
+        });
+        return changed;
+    }
+
+    function loadData() {
+        const json = localStorage.getItem(STORAGE_KEY);
+        if (json) {
+            try {
+                const parsed = JSON.parse(json);
+                state.data = parsed;
+                if (normalizePeopleCompanies()) saveData();
+                return;
+            } catch (err) {
+                console.warn('Could not parse CRM storage, resetting.', err);
+            }
+        }
+        state.data.people = defaultPeople;
+        state.data.companies = defaultCompanies;
+        state.data.notes = defaultNotes.map(note => ({ ...note, targetId: note.targetId || state.data.people[0]?.id || '' }));
+        normalizePeopleCompanies();
+        saveData();
+    }
+
+    function saveData() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+    }
+
+    function setActiveSection(section) {
+        state.section = section;
+        document.querySelectorAll('.nav button').forEach(btn => {
+            const isActive = btn.dataset.section === section;
+            btn.classList.toggle('active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+        document.querySelectorAll('[id^="section"]').forEach(sectionEl => {
+            sectionEl.classList.toggle('hidden', sectionEl.id !== `section${capitalize(section)}`);
+        });
+        if (section === 'reports') renderReports();
+    }
+
+    function capitalize(value) {
+        return value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    function toggleFabMenu() {
+        state.openFab = !state.openFab;
+        document.getElementById('fabMenu').classList.toggle('hidden', !state.openFab);
+        fabButton?.setAttribute('aria-expanded', state.openFab ? 'true' : 'false');
+    }
+
+    function hideFabMenu() {
+        state.openFab = false;
+        document.getElementById('fabMenu').classList.add('hidden');
+        fabButton?.setAttribute('aria-expanded', 'false');
+    }
+
+    function setModalOpen(isOpen) {
+        document.body.classList.toggle('modal-open', isOpen);
+        fabButton?.classList.toggle('hidden-fab', isOpen);
+        if (isOpen) hideFabMenu();
+    }
+
+    function toggleProductList(elementId, button) {
+        const element = document.getElementById(elementId);
+        if (!element) return;
+        const isHidden = element.classList.toggle('hidden');
+        if (button) button.setAttribute('aria-expanded', isHidden ? 'false' : 'true');
+    }
+
+    function openModal(formType) {
+        hideFabMenu();
+        modalBackdrop.style.display = 'flex';
+        setModalOpen(true);
+        modalContent.innerHTML = buildModalContent(formType);
+        attachModalEvents(formType);
+        const firstInput = modalContent.querySelector('input:not([type="checkbox"]), textarea, select');
+        if (firstInput) firstInput.focus();
+    }
+
+    function closeModal(event) {
+        if (event && event.target !== modalBackdrop) return;
+        modalBackdrop.style.display = 'none';
+        modalContent.innerHTML = '';
+        setModalOpen(false);
+    }
+
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape' && modalBackdrop.style.display === 'flex') {
+            closeModal();
+        }
+    });
+
+    function buildModalContent(type) {
+        if (type === 'addPerson') {
+            return `
+                <h3>Add Person</h3>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>Name<input id="personName" type="text" placeholder="Full name" /></label>
+                        <label>Email<input id="personEmail" type="email" placeholder="you@example.com" /></label>
+                    </div>
+                    <div class="form-row">
+                        <label>Phone<input id="personPhone" type="tel" placeholder="+1 555 000 0000" /></label>
+                        <label>Company
+                            <select id="personCompany">
+                                <option value="unassigned">Unassigned</option>
+                                <option value="new-company">+ Add new company...</option>
+                                ${state.data.companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-row single" id="personCompanyNewRow" style="display:none;">
+                        <label>New company name<input id="personCompanyNew" type="text" placeholder="New company name" /></label>
+                    </div>
+                    <div class="form-row single">
+                        <label>Tags</label>
+                        <div class="tag-list">
+                            <label><input type="checkbox" class="person-tag" value="buyer" /> buyer</label>
+                            <label><input type="checkbox" class="person-tag" value="seller" /> seller</label>
+                            <label><input type="checkbox" class="person-tag" value="conduit" /> conduit</label>
+                        </div>
+                    </div>
+                    <div id="productInputs" class="form-row single"></div>
+                    <div class="form-row single">
+                        <label>Notes<textarea id="personNotes" rows="3" placeholder="Optional internal note or first interaction details"></textarea></label>
+                    </div>
+                    <div class="form-actions">
+                        <button class="button outline" type="button" onclick="closeModal()">Cancel</button>
+                        <button class="button primary" type="button" onclick="submitPerson()">Save person</button>
+                    </div>
+                </div>
+            `;
+        }
+        if (type === 'addCompany') {
+            return `
+                <h3>Add Company</h3>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>Company name<input id="companyName" type="text" placeholder="Company name" /></label>
+                        <label>Business category<input id="companyCategory" type="text" placeholder="e.g. Distribution, Retail, Manufacturing" /></label>
+                    </div>
+                    <div class="form-row single">
+                        <label>Products sold<textarea id="companyProducts" rows="3" placeholder="Comma-separated products"></textarea></label>
+                    </div>
+                    <div class="form-actions">
+                        <button class="button outline" type="button" onclick="closeModal()">Cancel</button>
+                        <button class="button primary" type="button" onclick="submitCompany()">Save company</button>
+                    </div>
+                </div>
+            `;
+        }
+        if (type === 'addNote') {
+            return `
+                <h3>Add Note</h3>
+                <div class="form-grid">
+                    <div class="form-row">
+                        <label>Target type
+                            <select id="noteTargetType"><option value="person">Person</option><option value="company">Company</option></select>
+                        </label>
+                        <label>Target
+                            <select id="noteTargetId"></select>
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label>Date<input id="noteDate" type="date" /></label>
+                    </div>
+                    <div class="form-row single">
+                        <label>Note<textarea id="noteContent" rows="4" placeholder="Write the note here..."></textarea></label>
+                    </div>
+                    <div class="form-actions">
+                        <button class="button outline" type="button" onclick="closeModal()">Cancel</button>
+                        <button class="button primary" type="button" onclick="submitNote()">Save note</button>
+                    </div>
+                </div>
+            `;
+        }
+        return '<p>Unknown form type.</p>';
+    }
+
+    function attachModalEvents(type) {
+        if (type === 'addPerson') {
+            document.querySelectorAll('.person-tag').forEach(el => el.addEventListener('change', updateProductInputs));
+            const companySelect = document.getElementById('personCompany');
+            companySelect.addEventListener('change', handlePersonCompanyChange);
+            updateProductInputs();
+        }
+        if (type === 'addNote') {
+            const targetType = document.getElementById('noteTargetType');
+            targetType.addEventListener('change', populateNoteTargetOptions);
+            const today = new Date().toISOString().slice(0, 10);
+            document.getElementById('noteDate').value = today;
+            populateNoteTargetOptions();
+        }
+    }
+
+    function handlePersonCompanyChange() {
+        const companySelect = document.getElementById('personCompany');
+        const newCompanyRow = document.getElementById('personCompanyNewRow');
+        if (!companySelect || !newCompanyRow) return;
+        if (companySelect.value === 'new-company') {
+            newCompanyRow.style.display = 'block';
+        } else {
+            newCompanyRow.style.display = 'none';
+        }
+    }
+
+    function updateProductInputs() {
+        const selectedTags = [...document.querySelectorAll('.person-tag:checked')].map(el => el.value);
+        const container = document.getElementById('productInputs');
+        container.innerHTML = '';
+        if (!selectedTags.length) {
+            container.innerHTML = '<p class="dim">Select a tag to add the products this person buys, sells, or routes.</p>';
+            return;
+        }
+        selectedTags.forEach(tag => {
+            const tagLabel = tag === 'conduit' ? 'Products managed' : `Products this person ${tag}s`;
+            const section = document.createElement('div');
+            section.innerHTML = `<div style="margin-bottom: 16px;"><strong style="color: var(--text);">${tagLabel}</strong></div><div id="productList_${tag}" class="product-list-container"></div><button type="button" class="button outline" style="margin-top: 8px; width: 100%;" onclick="addProductRow('${tag}')">+ Add product</button>`;
+            container.appendChild(section);
+        });
+    }
+    
+    function addProductRow(tag) {
+        const allExistingProducts = new Set();
+        state.data.companies.forEach(company => {
+            company.products.forEach(product => allExistingProducts.add(product));
+        });
+        state.data.people.forEach(person => {
+            Object.values(person.products || {}).forEach(items => items.forEach(item => allExistingProducts.add(item)));
+        });
+        
+        const container = document.getElementById(`productList_${tag}`);
+        const rowId = `productRow_${tag}_${Date.now()}`;
+        const row = document.createElement('div');
+        row.id = rowId;
+        row.className = 'product-row';
+        row.innerHTML = `
+            <div class="product-row-controls">
+                <label style="margin-bottom: 0; width: 100%;">
+                    <select class="product-select" data-tag="${tag}">
+                        <option value="">Select existing product...</option>
+                        <option value="new-product">+ Add new product...</option>
+                        ${Array.from(allExistingProducts).sort().map(p => `<option value="${p}">${p}</option>`).join('')}
+                    </select>
+                </label>
+                <button type="button" class="button outline" onclick="document.getElementById('${rowId}').remove()" style="padding: 10px 12px;">Remove</button>
+            </div>
+            <div id="productCustom_${rowId}" style="display:none; margin-top: 12px;">
+                <label>New product name<input type="text" class="product-custom-input" data-tag="${tag}" placeholder="Enter product name" /></label>
+            </div>
+            <div style="margin-top: 12px;">
+                <label style="display: flex; align-items: center; gap: 8px; margin-bottom: 0;">
+                    <input type="checkbox" class="product-company-checkbox" data-tag="${tag}" /> Link to company
+                </label>
+                <select class="product-company-select" data-tag="${tag}" style="display: none; margin-top: 8px; width: 100%;">
+                    <option value="">Select a company...</option>
+                    ${state.data.companies.map(c => `<option value="${c.id}">${c.name}</option>`).join('')}
+                </select>
+            </div>
+        `;
+        container.appendChild(row);
+        
+        const productSelect = row.querySelector('.product-select');
+        const customInput = row.querySelector(`#productCustom_${rowId}`);
+        const checkbox = row.querySelector('.product-company-checkbox');
+        const select = row.querySelector('.product-company-select');
+        productSelect.addEventListener('change', () => {
+            customInput.style.display = productSelect.value === 'new-product' ? 'block' : 'none';
+        });
+        checkbox.addEventListener('change', () => {
+            select.style.display = checkbox.checked ? 'block' : 'none';
+        });
+    }
+
+    function populateNoteTargetOptions() {
+        const targetType = document.getElementById('noteTargetType').value;
+        const select = document.getElementById('noteTargetId');
+        select.innerHTML = '';
+        const list = targetType === 'company' ? state.data.companies : state.data.people;
+        if (!list.length) {
+            select.innerHTML = '<option value="">No options available</option>';
+            return;
+        }
+        list.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = targetType === 'company' ? item.name : item.name + ' — ' + (item.company || 'No company');
+            select.appendChild(option);
+        });
+    }
+
+    function submitPerson() {
+        const name = document.getElementById('personName').value.trim();
+        const email = document.getElementById('personEmail').value.trim();
+        const phone = document.getElementById('personPhone').value.trim();
+        const companySelect = document.getElementById('personCompany');
+        const companyId = companySelect.value;
+        const tags = [...document.querySelectorAll('.person-tag:checked')].map(el => el.value);
+        const companyNameOverride = document.getElementById('personCompanyNew')?.value.trim();
+        
+        if (!name || !email) {
+            showToast('Please add at least name and email.', 'error');
+            return;
+        }
+        
+        let savedCompanyId = null;
+        let savedCompanyName = '';
+        if (companyId === 'new-company') {
+            if (!companyNameOverride) {
+                showToast('Enter the new company name.', 'error');
+                return;
+            }
+            const newCompany = { id: crypto.randomUUID(), name: companyNameOverride, category: '', products: [] };
+            state.data.companies.push(newCompany);
+            savedCompanyId = newCompany.id;
+            savedCompanyName = newCompany.name;
+        } else if (companyId === 'unassigned' || !companyId) {
+            savedCompanyId = null;
+            savedCompanyName = '';
+        } else {
+            const selectedCompany = state.data.companies.find(c => c.id === companyId);
+            if (selectedCompany) {
+                savedCompanyId = selectedCompany.id;
+                savedCompanyName = selectedCompany.name;
+            }
+        }
+        
+        const products = {};
+        const productCompanyLinks = {};
+        tags.forEach(tag => {
+            products[tag] = [];
+            const rows = document.querySelectorAll(`[id^="productRow_${tag}_"]`);
+            rows.forEach(row => {
+                const productSelect = row.querySelector('.product-select');
+                const customInput = row.querySelector('.product-custom-input');
+                const linkedCheckbox = row.querySelector('.product-company-checkbox');
+                const linkedSelect = row.querySelector('.product-company-select');
+                
+                let productValue = productSelect.value;
+                if (productValue === 'new-product') {
+                    productValue = customInput?.value.trim() || '';
+                }
+                if (!productValue) return;
+                
+                products[tag].push(productValue);
+                
+                if (linkedCheckbox.checked && linkedSelect.value) {
+                    if (!productCompanyLinks[tag]) productCompanyLinks[tag] = {};
+                    productCompanyLinks[tag][productValue] = linkedSelect.value;
+                    const linkedCompany = state.data.companies.find(c => c.id === linkedSelect.value);
+                    if (linkedCompany && !linkedCompany.products.includes(productValue)) {
+                        linkedCompany.products.push(productValue);
+                    }
+                }
+            });
+        });
+        
+        const newPerson = {
+            id: crypto.randomUUID(),
+            name, email, phone,
+            company: savedCompanyName,
+            companyId: savedCompanyId,
+            tags,
+            products,
+            productCompanyLinks,
+        };
+        
+        state.data.people.push(newPerson);
+
+        const initialNote = document.getElementById('personNotes')?.value.trim();
+        if (initialNote) {
+            state.data.notes.push({
+                id: crypto.randomUUID(),
+                targetType: 'person',
+                targetId: newPerson.id,
+                targetName: newPerson.name,
+                date: new Date().toISOString().slice(0, 10),
+                content: initialNote,
+            });
+        }
+
+        saveData();
+        closeModal();
+        renderPeople();
+        if (state.section === 'reports') renderReports();
+        showToast(`${name} added successfully.`, 'success');
+    }
+
+    function submitCompany() {
+        const name = document.getElementById('companyName').value.trim();
+        const category = document.getElementById('companyCategory').value.trim();
+        const products = document.getElementById('companyProducts').value.split(',').map(item => item.trim()).filter(Boolean);
+        if (!name) {
+            showToast('Add a company name.', 'error');
+            return;
+        }
+        state.data.companies.push({ id: crypto.randomUUID(), name, category, products });
+        saveData();
+        closeModal();
+        renderCompanies();
+        if (state.section === 'reports') renderReports();
+        showToast(`${name} added successfully.`, 'success');
+    }
+
+    function submitNote() {
+        const targetType = document.getElementById('noteTargetType').value;
+        const targetId = document.getElementById('noteTargetId').value;
+        const date = document.getElementById('noteDate').value;
+        const content = document.getElementById('noteContent').value.trim();
+        if (!targetId || !content) {
+            showToast('Select a target and write a note.', 'error');
+            return;
+        }
+        const targetList = targetType === 'company' ? state.data.companies : state.data.people;
+        const target = targetList.find(item => item.id === targetId);
+        state.data.notes.push({ id: crypto.randomUUID(), targetType, targetId, targetName: target?.name || '', date, content });
+        saveData();
+        closeModal();
+        renderPeople();
+        renderCompanies();
+        if (state.section === 'reports') renderReports();
+        showToast('Note saved.', 'success');
+    }
+
+    function renderPeople() {
+        const filter = document.getElementById('searchPeople')?.value.toLowerCase() || '';
+        const people = state.data.people.filter(person => {
+            const productText = Object.values(person.products || {}).flat().join(' ');
+            return [person.name, person.email, person.phone, person.company, person.tags.join(' '), productText].some(value => value.toLowerCase().includes(filter));
+        });
+        if (!people.length) {
+            peopleTableContainer.innerHTML = '<div class="empty-state">No people found. Use Add person to create your first contact.</div>';
+            return;
+        }
+        const rows = people.map(person => {
+            const notesCount = state.data.notes.filter(note => note.targetType === 'person' && note.targetId === person.id).length;
+            const tagHtml = person.tags.map(tag => `<span class="pill ${tag}">${escapeHtml(tag)}</span>`).join('');
+            
+            // Build products display with dropdowns per tag
+            const productHtml = person.tags.map(tag => {
+                const items = person.products?.[tag] || [];
+                if (items.length === 0) return '';
+                const productsId = `products-${person.id}-${tag}`;
+                return `
+                    <div style="margin-bottom: 8px;">
+                        <button class="product-toggle" type="button" aria-expanded="false" onclick="toggleProductList('${productsId}', this)">
+                            ${tag} (${items.length})
+                        </button>
+                        <div id="${productsId}" class="product-list hidden" style="margin-top: 6px; padding-left: 12px;">
+                            ${items.map(item => {
+                                const linkedCompanyId = person.productCompanyLinks?.[tag]?.[item];
+                                const linkedCompany = linkedCompanyId ? state.data.companies.find(c => c.id === linkedCompanyId) : null;
+                                const linkSuffix = linkedCompany ? ` → ${escapeHtml(linkedCompany.name)}` : '';
+                                return `<div class="product-item">• ${escapeHtml(item)}${linkSuffix}</div>`;
+                            }).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            return `
+                <tr>
+                    <td>${escapeHtml(person.name)}</td>
+                    <td><a class="table-link" href="mailto:${escapeAttr(person.email)}">${escapeHtml(person.email)}</a></td>
+                    <td>${escapeHtml(person.phone || '—')}</td>
+                    <td>${escapeHtml(person.company || '—')}</td>
+                    <td>${tagHtml ? `<div class="tag-group">${tagHtml}</div>` : '<span class="dim">No tags</span>'}</td>
+                    <td>${productHtml || '<span class="dim">No products</span>'}</td>
+                    <td><button class="button outline" type="button" onclick="showDetail('person','${person.id}')">Notes (${notesCount})</button></td>
+                </tr>
+            `;
+        }).join('');
+        peopleTableContainer.innerHTML = `
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Phone</th><th>Company</th><th>Tags</th><th>Products</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function renderCompanies() {
+        const filter = document.getElementById('searchCompanies')?.value.toLowerCase() || '';
+        const companies = state.data.companies.filter(company => {
+            return [company.name, company.category, company.products.join(' ')].some(value => value.toLowerCase().includes(filter));
+        });
+        if (!companies.length) {
+            companyTableContainer.innerHTML = '<div class="empty-state">No companies found. Use Add company to create your first record.</div>';
+            return;
+        }
+        const rows = companies.map(company => {
+            const notesCount = state.data.notes.filter(note => note.targetType === 'company' && note.targetId === company.id).length;
+            return `
+                <tr>
+                    <td>${escapeHtml(company.name)}</td>
+                    <td>${escapeHtml(company.category || '—')}</td>
+                    <td>${escapeHtml(company.products.join(', ') || '—')}</td>
+                    <td><button class="button outline" type="button" onclick="showDetail('company','${company.id}')">Notes (${notesCount})</button></td>
+                </tr>
+            `;
+        }).join('');
+        companyTableContainer.innerHTML = `
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>Company</th><th>Category</th><th>Products</th><th>Notes</th></tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    function showDetail(targetType, id) {
+        const targetList = targetType === 'company' ? state.data.companies : state.data.people;
+        const target = targetList.find(item => item.id === id);
+        if (!target) return;
+        const notes = state.data.notes.filter(note => note.targetType === targetType && note.targetId === id).sort((a, b) => b.date.localeCompare(a.date));
+        const content = `
+            <h3>${targetType === 'company' ? 'Company' : 'Person'} details</h3>
+            <div class="card" style="margin-top: 12px;">
+                <p><strong>${escapeHtml(target.name)}</strong></p>
+                ${targetType === 'person' ? `<p>${escapeHtml(target.email)} · ${escapeHtml(target.phone || 'No phone')}</p><p>Company: ${escapeHtml(target.company || 'None')}</p><p>Tags: ${escapeHtml(target.tags.join(', ') || 'None')}</p>` : `<p>Category: ${escapeHtml(target.category || 'None')}</p><p>Products: ${escapeHtml(target.products.join(', ') || 'None')}</p>`}
+            </div>
+            <div class="note-list">
+                ${notes.length ? notes.map(note => `
+                    <article class="note-card">
+                        <time>${escapeHtml(note.date)}</time>
+                        <p>${escapeHtml(note.content)}</p>
+                    </article>
+                `).join('') : '<div class="empty-state">No notes yet for this contact.</div>'}
+            </div>
+        `;
+        modalBackdrop.style.display = 'flex';
+        setModalOpen(true);
+        modalContent.innerHTML = content + `
+            <div class="detail-actions">
+                <button class="button outline" type="button" onclick="openNoteForTarget('${targetType}','${id}')">Add note</button>
+                <button class="button outline" type="button" onclick="closeModal()">Close</button>
+            </div>`;
+    }
+
+    function openNoteForTarget(targetType, targetId) {
+        closeModal();
+        openModal('addNote');
+        const typeSelect = document.getElementById('noteTargetType');
+        const targetSelect = document.getElementById('noteTargetId');
+        if (typeSelect) typeSelect.value = targetType;
+        populateNoteTargetOptions();
+        if (targetSelect) targetSelect.value = targetId;
+    }
+
+    function getCheckedFilterValues(containerId) {
+        if (reportFilterSelections[containerId]) {
+            return [...reportFilterSelections[containerId]];
+        }
+        const container = document.getElementById(containerId);
+        if (!container) return [];
+        return [...container.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value);
+    }
+
+    function buildCheckboxFilter(containerId, options, { searchable = false } = {}) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const selectedValues = searchable
+            ? [...(reportFilterSelections[containerId] || [])]
+            : [...container.querySelectorAll('input[type="checkbox"]:checked')].map(input => input.value);
+
+        if (!options.length) {
+            container.innerHTML = '<span class="filter-empty">No options yet.</span>';
+            if (searchable) updateFilterMatchCount(containerId);
+            return;
+        }
+
+        const changeHandler = searchable
+            ? `toggleSearchableFilter('${containerId}', this.value, this.checked)`
+            : 'renderReportOutput()';
+
+        container.innerHTML = options.map(option => `
+            <label class="filter-chip" ${searchable ? `data-label="${escapeAttr(option.label.toLowerCase())}"` : ''}>
+                <input type="checkbox" value="${escapeAttr(option.value)}" ${selectedValues.includes(option.value) ? 'checked' : ''} onchange="${changeHandler}" />
+                ${escapeHtml(option.label)}
+            </label>
+        `).join('');
+
+        if (searchable) {
+            const searchInput = document.getElementById(SEARCHABLE_FILTER_CONFIG[containerId]?.searchId);
+            filterOptionList(containerId, searchInput?.value || '');
+            renderSelectedFilterChips(containerId);
+        }
+    }
+
+    function buildSearchableFilter(containerId, options) {
+        reportFilterLabels[containerId] = new Map(options.map(option => [option.value, option.label]));
+        buildCheckboxFilter(containerId, options, { searchable: true });
+    }
+
+    function toggleSearchableFilter(containerId, value, checked) {
+        if (!reportFilterSelections[containerId]) return;
+        if (checked) reportFilterSelections[containerId].add(value);
+        else reportFilterSelections[containerId].delete(value);
+        renderSelectedFilterChips(containerId);
+        renderReportOutput();
+    }
+
+    function removeSearchableFilter(containerId, value) {
+        if (!reportFilterSelections[containerId]) return;
+        reportFilterSelections[containerId].delete(value);
+        const checkbox = [...document.querySelectorAll(`#${containerId} input[type="checkbox"]`)].find(input => input.value === value);
+        if (checkbox) checkbox.checked = false;
+        renderSelectedFilterChips(containerId);
+        renderReportOutput();
+    }
+
+    function renderSelectedFilterChips(containerId) {
+        const config = SEARCHABLE_FILTER_CONFIG[containerId];
+        const chipContainer = config ? document.getElementById(config.selectedId) : null;
+        if (!chipContainer || !reportFilterSelections[containerId]) return;
+
+        const labels = reportFilterLabels[containerId] || new Map();
+        chipContainer.innerHTML = [...reportFilterSelections[containerId]].map(value => {
+            const label = labels.get(value) || value;
+            return `
+            <span class="selected-filter-chip">
+                ${escapeHtml(label)}
+                <button type="button" aria-label="Remove ${escapeAttr(label)}" data-value="${escapeAttr(value)}" onclick="removeSearchableFilter('${containerId}', this.dataset.value)">×</button>
+            </span>`;
+        }).join('');
+    }
+
+    function filterOptionList(containerId, query) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const normalizedQuery = query.trim().toLowerCase();
+        const chips = container.querySelectorAll('.filter-chip[data-label]');
+        let visibleCount = 0;
+
+        chips.forEach(chip => {
+            const matches = !normalizedQuery || chip.dataset.label.includes(normalizedQuery);
+            chip.classList.toggle('hidden-match', !matches);
+            if (matches) visibleCount += 1;
+        });
+
+        updateFilterMatchCount(containerId, visibleCount, chips.length);
+    }
+
+    function updateFilterMatchCount(containerId, visibleCount, totalCount) {
+        const config = SEARCHABLE_FILTER_CONFIG[containerId];
+        const countEl = config ? document.getElementById(config.matchCountId) : null;
+        if (!countEl) return;
+
+        if (typeof visibleCount !== 'number') {
+            const container = document.getElementById(containerId);
+            const chips = container?.querySelectorAll('.filter-chip[data-label]') || [];
+            visibleCount = [...chips].filter(chip => !chip.classList.contains('hidden-match')).length;
+            totalCount = chips.length;
+        }
+
+        if (!totalCount) {
+            countEl.textContent = '';
+            return;
+        }
+
+        const searchInput = document.getElementById(config.searchId);
+        const hasQuery = Boolean(searchInput?.value.trim());
+        countEl.textContent = hasQuery
+            ? `${visibleCount} of ${totalCount} shown`
+            : `${totalCount} available — type to search`;
+    }
+
+    function syncReportFilterOptions() {
+        buildCheckboxFilter('tagFilter', [
+            { value: 'buyer', label: 'Buyer' },
+            { value: 'seller', label: 'Seller' },
+            { value: 'conduit', label: 'Conduit' },
+        ]);
+
+        const companies = [...state.data.companies].sort((a, b) => a.name.localeCompare(b.name));
+        buildSearchableFilter('companyFilter', companies.map(c => ({ value: c.id, label: c.name })));
+
+        const products = new Set();
+        state.data.companies.forEach(company => company.products.forEach(product => products.add(product)));
+        state.data.people.forEach(person => Object.values(person.products || {}).forEach(list => list.forEach(product => products.add(product))));
+        buildSearchableFilter('productFilter', Array.from(products).sort((a, b) => a.localeCompare(b)).map(product => ({ value: product, label: product })));
+
+        const categories = [...new Set(state.data.companies.map(company => company.category || 'Uncategorized'))].sort((a, b) => a.localeCompare(b));
+        buildSearchableFilter('categoryFilter', categories.map(category => ({ value: category, label: category })));
+    }
+
+    function clearReportFilters() {
+        document.querySelectorAll('#reportFilters input[type="checkbox"]').forEach(input => { input.checked = false; });
+        Object.values(reportFilterSelections).forEach(selection => selection.clear());
+        ['companyFilter', 'productFilter', 'categoryFilter'].forEach(containerId => renderSelectedFilterChips(containerId));
+
+        const nameFilter = document.getElementById('nameFilter');
+        const activityFilter = document.getElementById('lastActivityFilter');
+        const activitySort = document.getElementById('lastActivitySort');
+        if (nameFilter) nameFilter.value = '';
+        if (activityFilter) activityFilter.value = 'all';
+        if (activitySort) activitySort.value = 'desc';
+
+        Object.values(SEARCHABLE_FILTER_CONFIG).forEach(config => {
+            const searchInput = document.getElementById(config.searchId);
+            if (searchInput) searchInput.value = '';
+        });
+
+        ['companyFilter', 'productFilter', 'categoryFilter'].forEach(containerId => filterOptionList(containerId, ''));
+        renderReportOutput();
+    }
+
+    function getPersonLastNoteDate(person) {
+        const personNotes = state.data.notes.filter(note => note.targetType === 'person' && note.targetId === person.id);
+        return personNotes.length ? personNotes.map(note => note.date).sort((a, b) => b.localeCompare(a))[0] : null;
+    }
+
+    function sortPeopleByLastActivity(people, sortOrder = 'desc') {
+        return [...people].sort((a, b) => {
+            const dateA = getPersonLastNoteDate(a);
+            const dateB = getPersonLastNoteDate(b);
+
+            if (!dateA && !dateB) return a.name.localeCompare(b.name);
+            if (!dateA) return 1;
+            if (!dateB) return -1;
+
+            const cmp = dateA.localeCompare(dateB);
+            return sortOrder === 'asc' ? cmp : -cmp;
+        });
+    }
+
+    function getPersonCompany(person) {
+        const companyId = person.companyId || state.data.companies.find(company => company.name === person.company)?.id;
+        return companyId ? state.data.companies.find(company => company.id === companyId) : null;
+    }
+
+    function getPersonCompanyCategory(person) {
+        const company = getPersonCompany(person);
+        return company?.category?.trim() || 'Uncategorized';
+    }
+
+    function updateReportFilterVisibility(reportType) {
+        const filters = document.getElementById('reportFilters');
+        const help = document.getElementById('filterHelp');
+        const summaryPanel = document.getElementById('reportSummaryPanel');
+        const reportOutputEl = document.getElementById('reportOutput');
+        const showFilters = reportType === 'filtered';
+        const showSummary = reportType === 'summary';
+
+        if (filters) filters.classList.toggle('collapsed', !showFilters);
+        if (summaryPanel) summaryPanel.classList.toggle('hidden', !showSummary);
+        if (reportOutputEl) reportOutputEl.classList.toggle('hidden', showSummary);
+
+        if (help) {
+            help.textContent = showFilters
+                ? 'Filter people by name, activity, tags, company, company category, or product. Sort results by newest or oldest last activity date.'
+                : '';
+        }
+    }
+
+    function renderReports() {
+        syncReportFilterOptions();
+        const reportType = document.getElementById('reportType')?.value || 'summary';
+        updateReportFilterVisibility(reportType);
+        renderReportOutput();
+    }
+
+    function renderReportOutput() {
+        const reportType = document.getElementById('reportType')?.value || 'summary';
+        document.getElementById('totalPeople').textContent = state.data.people.length;
+        document.getElementById('totalCompanies').textContent = state.data.companies.length;
+        document.getElementById('totalNotes').textContent = state.data.notes.length;
+        document.getElementById('buyerCount').textContent = state.data.people.filter(p => p.tags.includes('buyer')).length;
+        document.getElementById('sellerCount').textContent = state.data.people.filter(p => p.tags.includes('seller')).length;
+        document.getElementById('conduitCount').textContent = state.data.people.filter(p => p.tags.includes('conduit')).length;
+
+        let output = '';
+        if (reportType === 'summary') {
+            output = '';
+        } else if (reportType === 'filtered') {
+            const lastActivity = document.getElementById('lastActivityFilter')?.value || 'all';
+            const lastActivitySort = document.getElementById('lastActivitySort')?.value || 'desc';
+            const nameQuery = (document.getElementById('nameFilter')?.value || '').toLowerCase().trim();
+            const selectedCompanies = getCheckedFilterValues('companyFilter');
+            const selectedProducts = getCheckedFilterValues('productFilter');
+            const selectedTags = getCheckedFilterValues('tagFilter');
+            const selectedCategories = getCheckedFilterValues('categoryFilter');
+
+            const today = new Date();
+            const people = state.data.people.filter(person => {
+                if (nameQuery && !person.name.toLowerCase().includes(nameQuery)) return false;
+
+                if (selectedTags.length && !selectedTags.some(tag => person.tags.includes(tag))) return false;
+
+                if (selectedCompanies.length) {
+                    const personCompanyId = person.companyId || state.data.companies.find(company => company.name === person.company)?.id;
+                    if (!personCompanyId || !selectedCompanies.includes(personCompanyId)) return false;
+                }
+
+                if (selectedCategories.length && !selectedCategories.includes(getPersonCompanyCategory(person))) return false;
+
+                const personNotes = state.data.notes.filter(note => note.targetType === 'person' && note.targetId === person.id);
+                const lastNoteDate = getPersonLastNoteDate(person);
+                if (lastActivity === 'none') {
+                    if (personNotes.length !== 0) return false;
+                } else if (lastActivity !== 'all') {
+                    if (!lastNoteDate) return false;
+                    const cutoff = new Date(today);
+                    cutoff.setDate(cutoff.getDate() - Number(lastActivity));
+                    if (!(new Date(lastNoteDate) >= cutoff)) return false;
+                }
+
+                if (selectedProducts.length) {
+                    const personProducts = Object.values(person.products || {}).flat();
+                    if (!selectedProducts.some(product => personProducts.includes(product))) return false;
+                }
+
+                return true;
+            });
+
+            const sortedPeople = sortPeopleByLastActivity(people, lastActivitySort);
+
+            if (!sortedPeople.length) {
+                output = '<div class="empty-state">No people match the selected filters.</div>';
+            } else {
+                const rows = sortedPeople.map(person => {
+                    const personNotes = state.data.notes.filter(note => note.targetType === 'person' && note.targetId === person.id);
+                    const lastNoteDate = getPersonLastNoteDate(person) || 'None';
+                    const noteCount = personNotes.length;
+                    const productList = Object.entries(person.products || {}).flatMap(([tag, items]) => items.map(item => `${tag}: ${item}`));
+                    return `
+                        <tr>
+                            <td>${escapeHtml(person.name)}</td>
+                            <td>${escapeHtml(person.company || 'Unassigned')}</td>
+                            <td>${escapeHtml(getPersonCompanyCategory(person))}</td>
+                            <td>${person.tags.length ? `<div class="tag-group">${person.tags.map(tag => `<span class="pill ${tag}">${escapeHtml(tag)}</span>`).join('')}</div>` : 'None'}</td>
+                            <td>${escapeHtml(lastNoteDate)}</td>
+                            <td>${noteCount}</td>
+                            <td>${productList.length ? escapeHtml(productList.join(', ')) : 'None'}</td>
+                        </tr>
+                    `;
+                }).join('');
+                output = `
+                    <div class="table-wrap">
+                        <table>
+                            <thead>
+                                <tr><th>Name</th><th>Company</th><th>Category</th><th>Tags</th><th>Last activity</th><th>Notes</th><th>Products</th></tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                `;
+            }
+        }
+        reportOutput.innerHTML = output;
+    }
+
+    function escapeHtml(text) {
+        return String(text ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[char]));
+    }
+
+    function escapeAttr(value) {
+        return String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[char]));
+    }
+
+    document.addEventListener('click', event => {
+        const fabMenu = document.getElementById('fabMenu');
+        if (!state.openFab || !fabMenu || fabMenu.contains(event.target) || fabButton?.contains(event.target)) return;
+        hideFabMenu();
+    });
+
+    document.querySelectorAll('.nav button').forEach(button => {
+        button.addEventListener('click', () => setActiveSection(button.dataset.section));
+    });
+
+    document.getElementById('searchPeople').addEventListener('input', renderPeople);
+    document.getElementById('searchCompanies').addEventListener('input', renderCompanies);
+
+    loadData();
+    renderPeople();
+    renderCompanies();
+    renderReports();
+</script>
+</body>
+</html>
