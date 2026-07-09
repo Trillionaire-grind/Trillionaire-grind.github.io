@@ -1,0 +1,153 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userDoc().data.admin == true;
+    }
+
+    function profileCreate(data) {
+      return data.app == 'minorities'
+        && data.email is string
+        && data.displayName is string
+        && data.username is string
+        && data.tier == 'free'
+        && data.subscriptionId == 'waterboy'
+        && data.admin == false
+        && !('stripeCustomerId' in data)
+        && !('stripeSubscriptionId' in data);
+    }
+
+    function postCreate(data) {
+      return data.authorUid == request.auth.uid
+        && data.authorName is string
+        && data.authorName.size() > 0
+        && data.authorUsername is string
+        && data.authorUsername.size() >= 2
+        && data.type in ['text', 'video']
+        && data.likes == 0
+        && data.commentCount == 0;
+    }
+
+    function commentCreate(data) {
+      return data.authorUid == request.auth.uid
+        && data.authorName is string
+        && data.text is string
+        && data.text.size() > 0
+        && data.text.size() <= 2000;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && profileCreate(request.resource.data);
+      allow update: if isOwner(userId)
+        && !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['tier', 'subscriptionId', 'stripeCustomerId', 'stripeSubscriptionId', 'app', 'admin']);
+      allow delete: if false;
+
+      match /fcmTokens/{tokenId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId)
+          && request.resource.data.token is string
+          && request.resource.data.token.size() > 0
+          && request.resource.data.tier in ['free', 'member', 'vip'];
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if signedIn() && postCreate(request.resource.data);
+      allow update: if signedIn()
+        && (
+          (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['commentCount'])
+            && request.resource.data.commentCount == resource.data.commentCount + 1
+          )
+          || (
+            request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes'])
+            && (
+              request.resource.data.likes == resource.data.likes + 1
+              || request.resource.data.likes == resource.data.likes - 1
+            )
+          )
+        );
+      allow delete: if isAdmin()
+        || (signedIn() && resource.data.authorUid == request.auth.uid);
+
+      match /comments/{commentId} {
+        allow read: if true;
+        allow create: if signedIn() && commentCreate(request.resource.data);
+        allow update, delete: if false;
+      }
+
+      match /likes/{userId} {
+        allow read: if true;
+        allow create: if signedIn() && request.auth.uid == userId;
+        allow delete: if signedIn() && request.auth.uid == userId;
+        allow update: if false;
+      }
+    }
+
+    match /contentCards/{cardId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    function messageCreate(data) {
+      return data.authorUid == request.auth.uid
+        && data.authorName is string
+        && data.text is string
+        && data.text.size() > 0
+        && data.text.size() <= 2000;
+    }
+
+    function roomCreate(data) {
+      return data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 120
+        && data.vip is bool
+        && data.preview is string;
+    }
+
+    function isVipMember() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userDoc().data.tier == 'vip';
+    }
+
+    match /chatrooms/{roomId} {
+      allow read: if signedIn()
+        && (resource.data.vip != true || isVipMember());
+      allow create: if signedIn() && roomCreate(request.resource.data);
+      allow update: if signedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['preview', 'lastMessageAt']);
+      allow delete: if isAdmin();
+
+      match /messages/{messageId} {
+        allow read: if signedIn()
+          && (get(/databases/$(database)/documents/chatrooms/$(roomId)).data.vip != true || isVipMember());
+        allow create: if signedIn() && messageCreate(request.resource.data);
+        allow update, delete: if false;
+      }
+    }
+
+    match /stripeCheckoutSessions/{sessionId} {
+      allow read, write: if false;
+    }
+  }
+}

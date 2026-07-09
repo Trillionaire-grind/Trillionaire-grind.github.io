@@ -1,0 +1,16 @@
+{
+  "name": "the-minorities-functions",
+  "description": "Mux video upload and FCM push for The Minorities app",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "scripts": {
+    "serve": "firebase emulators:start --only functions",
+    "deploy": "firebase deploy --only functions --config ../firebase.minorities.json --project the-minorities"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.0"
+  }
+}

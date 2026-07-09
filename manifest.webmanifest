@@ -1,0 +1,20 @@
+{
+  "name": "The Minorities",
+  "short_name": "Minorities",
+  "description": "Community, posts, chat, and exclusive content from The Minorities.",
+  "start_url": "minorities.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f3f3f3",
+  "theme_color": "#af2d0b",
+  "categories": ["social", "entertainment"],
+  "icons": [
+    {
+      "src": "minoritiesView/assets/graduation.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

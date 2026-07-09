@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="The Minorities — community, exclusive content, member chat, live classes, and merch drops." />
+    <title>The Minorities — Community App</title>
+    <link rel="icon" type="image/svg+xml" href="minoritiesView/assets/graduation.svg" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#af2d0b" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Minorities" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f3f3f3;
+      }
+
+      header {
+        background-color: #000;
+        color: #fff;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .line {
+        max-width: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 4px;
+        background-color: #af2d0b;
+      }
+
+      .header-icon {
+        max-width: 22px;
+        max-height: 22px;
+        filter: brightness(0) invert(1);
+      }
+
+      .login-btn {
+        background-color: white;
+        color: black;
+        padding: 6px 10px;
+        font-size: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-align: center;
+      }
+
+      .login-btn:hover {
+        background-color: #af2d0b;
+        color: white;
+      }
+
+      .ctaBtn {
+        background-color: #af2d0b;
+        color: white;
+      }
+
+      .ctaBtn:hover {
+        background-color: black;
+        color: white;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        max-width: 400px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .modal-content input {
+        width: calc(100% - 20px);
+        margin-bottom: 10px;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .modal-actions {
+        float: right;
+        margin-top: 8px;
+      }
+
+      .modal-cancel {
+        background-color: #fff;
+        color: #000;
+        border: none;
+        margin-left: auto;
+        padding: 8px;
+        cursor: pointer;
+      }
+
+      .modal-submit {
+        background-color: #af2d0b;
+        color: white;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+      }
+
+      .tagline {
+        margin-left: auto;
+        margin-right: auto;
+        background-color: yellow;
+        width: 60%;
+        text-align: center;
+        max-width: 400px;
+      }
+
+      .headline {
+        font-weight: bold;
+        font-size: 26px;
+        text-align: center;
+        margin: 8px;
+      }
+
+      .video-label {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        max-width: 700px;
+        color: #fff;
+        margin-bottom: 0;
+        margin-top: 16px;
+        background-color: #af2d0b;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+
+      .video-label p {
+        color: #fff;
+        margin: 8px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+
+      .video-frame {
+        margin-bottom: 2px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 0;
+        height: 40vh;
+        max-width: 700px;
+        width: 90%;
+        background-color: #fff;
+        border: none;
+        border-bottom: 8px solid black;
+        border-radius: 0 0 12px 12px;
+      }
+
+      .cta-section {
+        padding: 10px 20px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+      }
+
+      .cta-section h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        margin-top: 0;
+        color: #333;
+      }
+
+      .cta-section p {
+        font-size: 16px;
+        margin-bottom: 25px;
+        color: #555;
+      }
+
+      .cta-link {
+        display: inline-block;
+        background-color: #af2d0b;
+        color: white;
+        padding: 15px 30px;
+        font-size: 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .cta-link:hover {
+        background-color: #000;
+      }
+
+      .cta-note {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #777;
+      }
+
+      .bonus-list {
+        max-width: 520px;
+        margin: 24px auto;
+        text-align: left;
+        color: #333;
+        line-height: 1.6;
+      }
+
+      .forgot-link {
+        text-align: center;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <div style="display: flex">
+          <p style="margin-left: auto; margin-right: auto; font-weight: bold; font-size: 18px">The Minorities</p>
+          <div class="image" style="margin-top: auto; margin-bottom: auto; padding: 8px">
+            <img class="header-icon" src="minoritiesView/assets/graduation.svg" alt="" />
+          </div>
+          <button style="margin-top: auto; margin-bottom: auto" class="login-btn" id="logInBtn" type="button">Log In</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="line"></div>
+
+    <p class="tagline">join the movement</p>
+
+    <p class="headline">Community, Content, Chat &amp; Merch — All In One App</p>
+
+    <div class="video-label">
+      <p>Press play to learn more</p>
+    </div>
+    <iframe
+      class="video-frame"
+      title="The Minorities app overview"
+      src="https://www.youtube.com/embed/TG0ErRPkvYQ"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+    ></iframe>
+
+    <div class="cta-section">
+      <h2>Ready to Join The Minorities?</h2>
+      <a class="cta-link" href="minorities.html#register">Get the App — Register Free</a>
+      <p>
+        Join the community for exclusive content, member chat, live classes,<br />
+        early merch drops, and <strong>The Minorities App</strong>.
+      </p>
+      <ul class="bonus-list">
+        <li>Get access to content first</li>
+        <li>Get discounts on merch</li>
+        <li>Member community chat</li>
+        <li>Live class access</li>
+      </ul>
+    </div>
+
+    <div id="myModal" class="modal">
+      <div class="modal-content" style="padding-bottom: 64px">
+        <h2>Log In</h2>
+        <label for="emailET">Email</label>
+        <input type="email" id="emailET" placeholder="Enter your email" /><br />
+        <label for="passwordET">Password</label>
+        <input type="password" id="passwordET" placeholder="Enter your password" /><br />
+        <p class="forgot-link" id="forgotBtn">forgot password?</p>
+        <div class="modal-actions">
+          <button type="button" id="cancelBtn" class="modal-cancel">Cancel</button>
+          <button type="button" id="signInBtn" class="modal-submit">Sign In</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="resetModal" class="modal">
+      <div class="modal-content" style="padding-bottom: 64px">
+        <h2>Reset Your Password</h2>
+        <label for="resetEmailET">Enter Your Email</label>
+        <input type="email" id="resetEmailET" placeholder="Enter your email" /><br />
+        <div class="modal-actions">
+          <button type="button" id="resetCancelBtn" class="modal-cancel">Cancel</button>
+          <button type="button" id="resetSendBtn" class="modal-submit">Reset Password</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import {
+        sendPasswordResetEmail,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+      import { getMinAuthReady, initMinFirebase } from "./minoritiesView/scripts/minFirebase.js";
+
+      const firebase = initMinFirebase();
+      if (!firebase) {
+        console.error("Firebase is not configured for The Minorities.");
+      }
+      const auth = firebase && firebase.auth;
+      await getMinAuthReady();
+
+      const logInBtn = document.getElementById("logInBtn");
+      const myModal = document.getElementById("myModal");
+      const emailET = document.getElementById("emailET");
+      const passwordET = document.getElementById("passwordET");
+      const signInBtn = document.getElementById("signInBtn");
+      const cancelBtn = document.getElementById("cancelBtn");
+
+      const resetModal = document.getElementById("resetModal");
+      const forgotBtn = document.getElementById("forgotBtn");
+      const resetEmailET = document.getElementById("resetEmailET");
+      const resetCancelBtn = document.getElementById("resetCancelBtn");
+      const resetSendBtn = document.getElementById("resetSendBtn");
+
+      logInBtn.onclick = () => {
+        myModal.style.display = "block";
+      };
+
+      [emailET, passwordET].forEach((field) => {
+        if (!field) return;
+        field.addEventListener("keydown", (event) => {
+          if (event.key === "Enter") {
+            event.preventDefault();
+            logIn(emailET.value, passwordET.value);
+          }
+        });
+      });
+
+      cancelBtn.onclick = () => {
+        myModal.style.display = "none";
+      };
+
+      signInBtn.onclick = () => {
+        logIn(emailET.value, passwordET.value);
+      };
+
+      forgotBtn.onclick = () => {
+        myModal.style.display = "none";
+        resetModal.style.display = "block";
+      };
+
+      resetSendBtn.onclick = () => {
+        requestEmail(resetEmailET.value);
+      };
+
+      resetCancelBtn.onclick = () => {
+        resetModal.style.display = "none";
+      };
+
+      window.addEventListener("click", (event) => {
+        if (event.target === myModal) myModal.style.display = "none";
+        if (event.target === resetModal) resetModal.style.display = "none";
+      });
+
+      function logIn(email, password) {
+        if (!auth) {
+          alert("Firebase is not configured yet.");
+          return;
+        }
+        const trimmedEmail = String(email || "").trim();
+        const trimmedPassword = String(password || "");
+        if (!trimmedEmail || !trimmedPassword) {
+          alert("Enter your email and password.");
+          return;
+        }
+
+        signInBtn.disabled = true;
+        signInBtn.textContent = "Signing in…";
+
+        signInWithEmailAndPassword(auth, trimmedEmail, trimmedPassword)
+          .then(() => {
+            myModal.style.display = "none";
+            window.location.replace("minorities.html#home");
+          })
+          .catch((error) => {
+            alert(error.message || "There was an error signing in.");
+          })
+          .finally(() => {
+            signInBtn.disabled = false;
+            signInBtn.textContent = "Sign In";
+          });
+      }
+
+      function requestEmail(email) {
+        if (!auth) {
+          alert("Firebase is not configured yet.");
+          return;
+        }
+        sendPasswordResetEmail(auth, email)
+          .then(() => {
+            alert("Check your email to reset your password!");
+            resetModal.style.display = "none";
+          })
+          .catch((error) => {
+            alert(error.message || "There was an error sending the reset email.");
+          });
+      }
+    </script>
+  </body>
+</html>

@@ -41,7 +41,7 @@
         img { max-width: 100%; display: block; }
         .hero-img-main img,
         .sig-img img,
-        .about-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+        .about-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
         .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
@@ -295,10 +295,38 @@
 
         /* ── Responsive ───────────────────────────────────────────── */
         @media (max-width: 960px) {
-            .hero-inner { grid-template-columns: 1fr; }
-            .hero-visual { display: none; }
-            .about-inner { grid-template-columns: 1fr; }
-            .about-img { display: none; }
+            .hero-inner {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+            }
+            .hero-text { display: contents; }
+            .hero-text .eyebrow { order: 1; }
+            .hero-text .hero-title { order: 2; }
+            .hero-visual {
+                display: block;
+                order: 3;
+                max-width: 440px;
+                width: 100%;
+                margin: 0 auto;
+            }
+            .hero-text .hero-sub { order: 4; }
+            .hero-btns { order: 5; }
+            .hero-stats { order: 6; }
+            .hero-img-main { aspect-ratio: 4 / 3; }
+            .hero-badge { left: 12px; bottom: 12px; }
+            .hero-badge-2 { right: 12px; top: 12px; }
+            #hero { min-height: auto; padding-bottom: 56px; }
+            .about-inner { grid-template-columns: 1fr; gap: 40px; }
+            .about-img {
+                display: block;
+                max-width: 440px;
+                width: 100%;
+                margin: 0 auto;
+            }
+            .about-photo { aspect-ratio: 3 / 4; }
+            .about-photo img { object-position: center 14%; }
+            .about-badge { bottom: -12px; right: 12px; }
             .sig-grid { grid-template-columns: repeat(2, 1fr); }
             /* services grid handled above */
             .testi-grid { grid-template-columns: 1fr; }
@@ -308,7 +336,9 @@
         @media (max-width: 640px) {
             .nav-links, .nav-cta { display: none; }
             .hamburger { display: block; }
-            .hero-stats { gap: 20px; }
+            .hero-stats { gap: 20px; flex-wrap: wrap; }
+            .hero-visual,
+            .about-img { max-width: 100%; }
             .sig-grid { grid-template-columns: 1fr; }
             .menu-section.active { grid-template-columns: 1fr; }
             .footer-inner { grid-template-columns: 1fr; }
@@ -329,7 +359,7 @@
 <!-- NAV -->
 <nav id="navbar">
     <div class="nav-inner">
-        <a href="#" class="nav-logo">Danny's <span>Delights</span><small>Artisan Bakery · Naples, FL</small></a>
+        <a href="#hero" class="nav-logo">Danny's <span>Delights</span><small>Artisan Bakery · Naples, FL</small></a>
         <ul class="nav-links">
             <li><a href="#menu">Menu</a></li>
             <li><a href="#services">Custom Orders</a></li>
@@ -358,7 +388,7 @@
                 </p>
                 <div class="hero-btns">
                     <a href="#menu" class="btn btn-primary">Explore Our Menu</a>
-                    <a href="tel:2392008708" class="btn btn-outline phone-cta">Custom Orders</a>
+                    <a href="#services" class="btn btn-outline">Custom Orders</a>
                 </div>
                 <div class="hero-stats">
                     <div>
@@ -377,7 +407,7 @@
             </div>
             <div class="hero-visual">
                 <div class="hero-img-main">
-                    <img src="assets/cake.jpg" alt="Custom cake from Danny's Delights">
+                    <img src="assets/cake.jpg" alt="Custom cake from Danny's Delights" fetchpriority="high" decoding="async">
                 </div>
                 <div class="hero-badge">
                     <div class="hero-badge-icon">⭐</div>
@@ -406,7 +436,6 @@
         <span class="marquee-item">🎂 Cookie Cakes <span class="marquee-dot"></span></span>
         <span class="marquee-item">🍞 Artisan Breads <span class="marquee-dot"></span></span>
         <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
-        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
         <span class="marquee-item">🌿 Fresh Daily in Naples <span class="marquee-dot"></span></span>
         <span class="marquee-item">🥐 Fresh Croissants <span class="marquee-dot"></span></span>
         <span class="marquee-item">🎂 Custom Cakes <span class="marquee-dot"></span></span>
@@ -415,7 +444,6 @@
         <span class="marquee-item">🌀 Gourmet Cinnamon Rolls <span class="marquee-dot"></span></span>
         <span class="marquee-item">🎂 Cookie Cakes <span class="marquee-dot"></span></span>
         <span class="marquee-item">🍞 Artisan Breads <span class="marquee-dot"></span></span>
-        <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
         <span class="marquee-item">🎓 Decorating Classes <span class="marquee-dot"></span></span>
         <span class="marquee-item">🌿 Fresh Daily in Naples <span class="marquee-dot"></span></span>
     </div>
@@ -806,6 +834,13 @@
             } else {
                 closeMobile();
             }
+        });
+    });
+
+    document.querySelectorAll('img[src^="assets/"]').forEach(img => {
+        img.addEventListener('error', () => {
+            img.removeAttribute('src');
+            img.style.display = 'none';
         });
     });
 

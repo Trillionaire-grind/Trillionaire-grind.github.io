@@ -2,6 +2,7 @@
   "projects": {
     "default": "naples-sunrise-bay",
     "liv-lakay": "liv-lakay",
-    "tm": "naples-sunrise-bay"
+    "tm": "naples-sunrise-bay",
+    "minorities": "the-minorities"
   }
 }

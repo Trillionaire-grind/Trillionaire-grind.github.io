@@ -1,0 +1,21 @@
+{
+  "firestore": {
+    "rules": "minoritiesView/firestore.rules"
+  },
+  "storage": {
+    "rules": "minoritiesView/storage.rules"
+  },
+  "functions": [
+    {
+      "source": "minoritiesFunctions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ window.MIN_DATA = {
     {
       id: "hooters",
       title: "First to Pick-Up at HOOTERS WINS!",
+      author: "The Minorities",
       date: "Dec 12, 2024",
       comments: 44,
       image: "minoritiesView/assets/girls.png",
@@ -17,6 +18,7 @@ window.MIN_DATA = {
     {
       id: "editing",
       title: "How to edit your content the right way to get more views",
+      author: "Jason/Jay",
       date: "Dec 12, 2024",
       comments: 44,
       image: null,
@@ -25,6 +27,7 @@ window.MIN_DATA = {
     {
       id: "vip-preview",
       title: "First to Pick-Up at HOOTERS WINS!",
+      author: "Zed",
       date: "Dec 12, 2024",
       comments: 44,
       image: "minoritiesView/assets/girls.png",
@@ -75,6 +78,7 @@ window.MIN_DATA = {
   postDetail: {
     hooters: {
       title: "First to Pick-Up at HOOTERS WINS!",
+      author: "The Minorities",
       image: "minoritiesView/assets/girls.png",
       body: "This is the kind of content that will be posted. This is all going to be for the use of being like a text posts thing. Nothing here will be like home which will contain content and sales for the company.",
       comments: [
@@ -84,9 +88,17 @@ window.MIN_DATA = {
     },
     editing: {
       title: "How to edit your content the right way to get more views",
+      author: "Jason/Jay",
       image: null,
       body: "Learn the editing workflow that keeps viewers watching — hooks, pacing, and captions that convert casual scrollers into subscribers.",
       comments: [{ author: "Chris Stip", text: "Needed this breakdown." }],
+    },
+    "vip-preview": {
+      title: "First to Pick-Up at HOOTERS WINS!",
+      author: "Zed",
+      image: "minoritiesView/assets/girls.png",
+      body: "This is the kind of content that will be posted. This is all going to be for the use of being like a text posts thing. Nothing here will be like home which will contain content and sales for the company.",
+      comments: [],
     },
   },
 
