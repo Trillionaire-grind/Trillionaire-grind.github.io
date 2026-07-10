@@ -18,14 +18,58 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
 import { getMinAuthReady, initMinFirebase } from "./minFirebase.js";
 import { getMinCheckoutApiUrl } from "./minFirebaseConfig.js";
+import {
+  PROFILE_AVATAR_MAX_BYTES,
+  compressProfileAvatar,
+} from "./minImageCompress.js";
+import {
+  DEFAULT_USER_FIELDS,
+  SUBSCRIPTION_IDS,
+  TEAM_ROLES,
+  adminFlagFromTeamRole,
+  canCreateAsTeam,
+  canModerate,
+  normalizeUserProfile,
+  teamRoleLabel,
+  tierFromSubscriptionId,
+  isTeamAuthoredPost,
+} from "./minUserSchema.js";
 
 const USERS_COLLECTION = "users";
 
+export { PROFILE_AVATAR_MAX_BYTES };
+
+export function validateProfileAvatarFile(file) {
+  if (!file) return null;
+  if (!String(file.type || "").startsWith("image/")) {
+    return "Choose a JPEG, PNG, WebP, or GIF image.";
+  }
+  return null;
+}
+
+export async function prepareProfileAvatar(file) {
+  return compressProfileAvatar(file);
+}
+
 const SUBSCRIPTION_TIERS = {
   waterboy: "free",
-  bench: "member",
-  starter: "member",
-  vip: "vip",
+  bench: "bench",
+  starter: "starter",
+  owner: "owner",
+};
+
+const SUBSCRIPTION_RANK = {
+  waterboy: 0,
+  bench: 1,
+  starter: 2,
+  owner: 3,
+};
+
+const CONTENT_ACCESS_RANK = {
+  free: 0,
+  bench: 1,
+  starter: 2,
+  owner: 3,
 };
 
 let auth = null;
@@ -41,17 +85,17 @@ async function applyAuthState(user) {
   currentUser = user;
   if (user) {
     try {
-      currentProfile = await loadProfile(user.uid);
+      currentProfile = normalizeUserProfile(await loadProfile(user.uid));
       if (!currentProfile) {
-        currentProfile = {
+        currentProfile = normalizeUserProfile({
           id: user.uid,
           email: user.email || "",
           displayName: user.displayName || "",
           username: "",
           bio: "",
-          tier: "free",
-          subscriptionId: "waterboy",
-        };
+          avatarUrl: "",
+          ...DEFAULT_USER_FIELDS,
+        });
       }
     } catch (err) {
       console.error("MIN_AUTH profile load failed", err);
@@ -88,12 +132,44 @@ function authErrorMessage(error) {
   }
   if (code === "auth/network-request-failed") return "Network error. Check your connection and try again.";
   if (code === "permission-denied") return "Firestore permission denied. Check your database rules.";
+  if (code === "storage/unauthorized") {
+    return "Storage permission denied. Check file size (max 1 MB for profile pictures) and try again.";
+  }
+  if (code === "storage/unauthenticated") return "Sign in again to upload images.";
+  if (code === "storage/canceled") return "Upload canceled.";
+  if (code.startsWith("storage/")) {
+    return "Image upload failed. Confirm Firebase Storage is enabled for this project.";
+  }
   return (error && error.message) || "Something went wrong. Try again.";
 }
 
 export function tierFromSubscription(subscriptionId) {
-  return SUBSCRIPTION_TIERS[subscriptionId] || "free";
+  return tierFromSubscriptionId(subscriptionId);
 }
+
+export function getTeamRole() {
+  if (!currentProfile) return "member";
+  return currentProfile.teamRole || "member";
+}
+
+export function isAdmin() {
+  if (!currentProfile) return false;
+  return currentProfile.admin === true || currentProfile.teamRole === "admin";
+}
+
+export function isModerator() {
+  return canModerate(getTeamRole());
+}
+
+export function isCreator() {
+  return canCreateAsTeam(getTeamRole());
+}
+
+export function getTeamRoleLabel() {
+  return teamRoleLabel(getTeamRole());
+}
+
+export { isTeamAuthoredPost };
 
 export function onMinAuthChange(fn) {
   listeners.add(fn);
@@ -151,6 +227,39 @@ export function getSubscriptionId() {
   return currentProfile.subscriptionId || "waterboy";
 }
 
+export function getSubscriptionRank() {
+  return SUBSCRIPTION_RANK[getSubscriptionId()] ?? 0;
+}
+
+export function hasBenchAccess() {
+  return getSubscriptionRank() >= SUBSCRIPTION_RANK.bench;
+}
+
+export function hasStarterAccess() {
+  return getSubscriptionRank() >= SUBSCRIPTION_RANK.starter;
+}
+
+export function hasOwnerAccess() {
+  return getSubscriptionId() === "owner";
+}
+
+export function hasChatAccess() {
+  return hasBenchAccess();
+}
+
+export function hasCommentAccess() {
+  return hasBenchAccess();
+}
+
+export function hasTrainingAccess() {
+  return hasStarterAccess();
+}
+
+export function canAccessContentLevel(level) {
+  const required = CONTENT_ACCESS_RANK[level] ?? 0;
+  return getSubscriptionRank() >= required;
+}
+
 export function isSignedIn() {
   return Boolean(currentUser);
 }
@@ -159,7 +268,7 @@ async function loadProfile(uid) {
   if (!db) return null;
   const snap = await getDoc(doc(db, USERS_COLLECTION, uid));
   if (!snap.exists()) return null;
-  return { id: snap.id, ...snap.data() };
+  return normalizeUserProfile({ id: snap.id, ...snap.data() });
 }
 
 async function ensureFirebase() {
@@ -208,7 +317,7 @@ export async function initMinAuth() {
 
 export async function refreshProfile() {
   if (!currentUser) return null;
-  currentProfile = await loadProfile(currentUser.uid);
+  currentProfile = normalizeUserProfile(await loadProfile(currentUser.uid));
   notify();
   return currentProfile;
 }
@@ -237,19 +346,21 @@ export async function registerAccount(fields) {
     }
 
     const uid = credential.user.uid;
-    const profile = {
-      app: "minorities",
+    const profile = normalizeUserProfile({
+      app: DEFAULT_USER_FIELDS.app,
       email,
       displayName,
       username,
       bio,
       avatarUrl: "",
-      tier: "free",
-      subscriptionId: "waterboy",
-      admin: false,
+      teamRole: DEFAULT_USER_FIELDS.teamRole,
+      tier: DEFAULT_USER_FIELDS.tier,
+      subscriptionId: DEFAULT_USER_FIELDS.subscriptionId,
+      subscriptionStatus: DEFAULT_USER_FIELDS.subscriptionStatus,
+      admin: DEFAULT_USER_FIELDS.admin,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
-    };
+    });
 
     try {
       await setDoc(doc(db, USERS_COLLECTION, uid), profile);
@@ -258,6 +369,24 @@ export async function registerAccount(fields) {
       throw new Error(
         "Your account was created, but the profile could not be saved. Check Firestore rules, then try signing in.",
       );
+    }
+
+    if (fields.avatarFile) {
+      try {
+        const avatarUrl = await uploadProfileAvatarForUser(fields.avatarFile, uid);
+        await setDoc(
+          doc(db, USERS_COLLECTION, uid),
+          { avatarUrl, updatedAt: serverTimestamp() },
+          { merge: true },
+        );
+        profile.avatarUrl = avatarUrl;
+      } catch (error) {
+        console.warn("MIN_AUTH register avatar upload failed", error);
+        throw new Error(
+          (error && error.message) ||
+            "Account created, but the profile picture could not be uploaded. Sign in and try again from Profile.",
+        );
+      }
     }
 
     await refreshProfile();
@@ -287,28 +416,41 @@ export async function logoutAccount() {
   await signOut(auth);
 }
 
-async function uploadProfileAvatar(file) {
-  if (!storage || !currentUser) {
+async function uploadProfileAvatarForUser(file, userId) {
+  if (!storage || !userId) {
     throw new Error("Sign in to update your profile picture.");
   }
-  if (!file || !String(file.type || "").startsWith("image/")) {
-    throw new Error("Choose an image file.");
-  }
-  if (file.size > 5 * 1024 * 1024) {
-    throw new Error("Image must be 5 MB or smaller.");
-  }
 
-  const extension = String(file.name || "")
-    .split(".")
-    .pop()
-    .toLowerCase();
-  const safeExtension = ["jpg", "jpeg", "png", "webp", "gif"].includes(extension)
-    ? extension
-    : "jpg";
-  const storageRef = ref(storage, `users/${currentUser.uid}/avatar.${safeExtension}`);
+  const validationError = validateProfileAvatarFile(file);
+  if (validationError) throw new Error(validationError);
 
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef);
+  const readyFile = await compressProfileAvatar(file);
+  const storageRef = ref(storage, `users/${userId}/avatar.jpg`);
+
+  try {
+    await uploadBytes(storageRef, readyFile, { contentType: "image/jpeg" });
+    return getDownloadURL(storageRef);
+  } catch (error) {
+    const code = error && error.code ? error.code : "";
+    const message = error && error.message ? String(error.message) : "";
+    if (
+      code.startsWith("storage/") ||
+      message.includes("CORS") ||
+      message.includes("ERR_FAILED")
+    ) {
+      throw new Error(
+        "Profile picture upload failed. In Firebase Console open Build → Storage → Get started, then run: firebase deploy -c firebase.minorities.json --only storage",
+      );
+    }
+    throw new Error(authErrorMessage(error));
+  }
+}
+
+async function uploadProfileAvatar(file) {
+  if (!currentUser) {
+    throw new Error("Sign in to update your profile picture.");
+  }
+  return uploadProfileAvatarForUser(file, currentUser.uid);
 }
 
 export async function updateProfile(fields) {
@@ -352,6 +494,53 @@ export async function resetPassword(email) {
   } catch (error) {
     throw new Error(authErrorMessage(error));
   }
+}
+
+export async function selectSubscriptionPlan(tierId) {
+  await ensureFirebase();
+  if (!currentUser) throw new Error("Sign in to choose a subscription.");
+  if (!SUBSCRIPTION_IDS.includes(tierId)) throw new Error("Unknown plan.");
+
+  const tier = tierFromSubscriptionId(tierId);
+  const subscriptionStatus = tierId === "waterboy" ? "none" : "active";
+
+  const updates = {
+    subscriptionId: tierId,
+    tier,
+    subscriptionStatus,
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    await setDoc(doc(db, USERS_COLLECTION, currentUser.uid), updates, { merge: true });
+  } catch (error) {
+    throw new Error(authErrorMessage(error));
+  }
+
+  await refreshProfile();
+  return currentProfile;
+}
+
+export async function assignTeamRole(targetUid, teamRole) {
+  await ensureFirebase();
+  if (!currentUser) throw new Error("Sign in as an admin.");
+  if (!isAdmin()) throw new Error("Only admins can assign team roles.");
+  if (!targetUid || typeof targetUid !== "string") throw new Error("Enter a user ID.");
+  if (!TEAM_ROLES.includes(teamRole)) throw new Error("Invalid team role.");
+
+  const updates = {
+    teamRole,
+    admin: adminFlagFromTeamRole(teamRole),
+    updatedAt: serverTimestamp(),
+  };
+
+  try {
+    await setDoc(doc(db, USERS_COLLECTION, targetUid), updates, { merge: true });
+  } catch (error) {
+    throw new Error(authErrorMessage(error));
+  }
+
+  return updates;
 }
 
 export async function startSubscriptionCheckout(tierId) {

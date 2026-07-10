@@ -1,0 +1,123 @@
+================================================================================
+OUTREACH EMAIL — The Minorities (COLD — context first, link last)
+================================================================================
+
+WHY THE LINK LOOKS "WEIRD"
+--------------------------------------------------------------------------------
+trillionaire-grind.github.io is MY dev host — not your brand. For cold email,
+don't lead with it. Lead with: who you are, why you reached out, what problem
+you solve, THEN offer a private demo link or call.
+
+When they're interested, the real product lives on THEIR domain (~$1,500 —
+one-time, professional, fans trust it). You build on the prototype; launch on
+theminorities.com / app.2minorities.com / whatever they own or buy.
+
+
+TO: [their-email@example.com]
+
+SUBJECT: Idea for The Minorities — owned platform (not another IG)
+
+--------------------------------------------------------------------------------
+VERSION A — Email first (recommended for cold)
+--------------------------------------------------------------------------------
+
+Hey Jay, Zed, and The Minorities team,
+
+I'm [YOUR NAME] — [one real line: fan / developer / saw your merch & content /
+  follow the movement]. I'm reaching out cold, so I'll keep this short.
+
+You've built an audience platforms keep taking away. I don't have a business
+relationship with you — I built a working prototype on my own time because I
+think you need something you actually own: signups, posts, video, member chat,
+merch, and a paywall — without an algorithm deciding if fans see it.
+
+What I'm NOT sending in this email: a random link and "check it out." That
+would be weird.
+
+What I AM offering:
+  • 15 minutes on a call — I screen-share the app on my phone
+  • OR, if you prefer async: I'll send a 30-second video walkthrough + demo
+    link only after you reply "send it"
+
+Rough model (you'd set the rules):
+  • FREE — teasers, drop announcements, shop, polls (pulls people in)
+  • PAID — full vlogs, locked content, member/VIP chat, early merch codes
+
+If it's useful, next step is putting it on YOUR domain (not my dev URL).
+Domains in your space run about $1,500 — not cheap, but cheap compared to
+losing another account with 100k followers on it. You'd own the link, the list,
+and the app.
+
+Not asking for money upfront. I want to know if this solves a real problem for
+you two before anyone spends a dollar on a domain or hosting.
+
+Worth a quick reply — yes, no, or "send the walkthrough"?
+
+— [YOUR NAME]
+[YOUR EMAIL]
+[OPTIONAL: link to your LinkedIn / GitHub / portfolio — builds trust for cold]
+
+
+--------------------------------------------------------------------------------
+VERSION B — After they reply "send it" (NOW you send the link)
+--------------------------------------------------------------------------------
+
+Thanks for getting back. Here's the prototype — still on my dev host until you
+want your own domain on it:
+
+https://trillionaire-grind.github.io/minoritiesLanding.html
+
+Register free → Home tab shows free teasers + locked member content → Posts /
+Chat / Shop tabs. Beta v0.0.0.1. Payments aren't wired yet; the paywall UI is
+there so you can feel the flow.
+
+On a call I can show: video upload, notifications, and what launch on your
+domain would look like.
+
+— [YOUR NAME]
+
+
+--------------------------------------------------------------------------------
+VERSION C — If you already own / want to pitch the domain
+--------------------------------------------------------------------------------
+
+Add this paragraph to Version A or B:
+
+"I looked at putting this on a proper domain for you — roughly $1,500 for
+[exact domain if you know it, e.g. theminorities.app]. That's a one-time cost
+for a link you control forever: something like app.theminorities.com instead of
+a social bio that gets banned. Happy to handle setup if you want to move
+forward."
+
+
+--------------------------------------------------------------------------------
+FOLLOW-UP (5–7 days, still no reply)
+--------------------------------------------------------------------------------
+
+SUBJECT: Re: owned platform for The Minorities
+
+Hey — last note from me. I know inboxes are brutal.
+
+Short version: I built a member-app prototype (posts, video, chat, paywall)
+because platforms keep wiping your reach. I'm not a company pitching you — just
+a dev with something working who thought it might help.
+
+If you want the 30-sec walkthrough video or a call, reply anytime. If not,
+all good — keep building.
+
+— [YOUR NAME]
+
+
+--------------------------------------------------------------------------------
+COLD OUTREACH CHECKLIST
+--------------------------------------------------------------------------------
+
+[ ] Replace [YOUR NAME] + add ONE line of real context (how you found them)
+[ ] Do NOT put the GitHub URL in the subject line
+[ ] Prefer: call or Loom video BEFORE raw link
+[ ] Attach 1 screenshot in follow-up only (Home: free card + locked card)
+[ ] Know the exact domain + $1,500 figure if you're going to mention it
+[ ] Be ready to say: "You own Firebase + domain; I can hand it off"
+[ ] Don't promise Stripe for explicit content — discuss processor on call
+
+================================================================================

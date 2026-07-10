@@ -1,20 +1,40 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    match /users/{userId}/{allPaths=**} {
+
+    // Profile pictures — users/{uid}/avatar.{jpg|png|webp|gif}
+    // Max 1 MB (1,048,576 bytes) — keep in sync with PROFILE_AVATAR_MAX_BYTES in minAuth.js
+    function isProfileAvatarName(fileName) {
+      return fileName.matches('avatar\\.(jpe?g|png|webp|gif)');
+    }
+
+    function isProfileAvatarUpload() {
+      return request.resource.size > 0
+        && request.resource.size <= 1048576
+        && (
+          request.resource.contentType == null
+          || request.resource.contentType.matches('image/(jpeg|png|webp|gif|heic|heif)')
+        );
+    }
+
+    match /users/{userId}/{fileName} {
       allow read: if true;
       allow write: if request.auth != null
         && request.auth.uid == userId
-        && request.resource.size < 5 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+        && isProfileAvatarName(fileName)
+        && isProfileAvatarUpload();
     }
 
     match /posts/{userId}/{fileName} {
       allow read: if true;
       allow write: if request.auth != null
         && request.auth.uid == userId
-        && request.resource.size < 8 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
+        && request.resource.size > 0
+        && request.resource.size <= 8 * 1024 * 1024
+        && (
+          request.resource.contentType == null
+          || request.resource.contentType.matches('image/.*')
+        );
     }
   }
 }

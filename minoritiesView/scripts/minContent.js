@@ -4,6 +4,7 @@ import {
   deleteDoc,
   doc,
   getDoc,
+  getDocs,
   increment,
   limit,
   onSnapshot,
@@ -20,110 +21,49 @@ import {
   uploadBytes,
 } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
 import { initMinFirebase } from "./minFirebase.js";
+import {
+  SEED_APP_CONFIG,
+  SEED_CONTENT_CARDS,
+  SEED_POSTS,
+  SEED_PRODUCTS,
+} from "./minSeedFirestore.js";
 
 const POSTS_COLLECTION = "posts";
 const CARDS_COLLECTION = "contentCards";
+const PRODUCTS_COLLECTION = "products";
+const APP_CONFIG_COLLECTION = "appConfig";
+
+const DEFAULT_LEARN = {
+  nextSession: "Schedule posted soon",
+  previewNote: "Starter+ joins live group training.",
+  zoomUrl: "",
+};
+
+const DEFAULT_PROMO = {
+  title: "Shop",
+  body: "University collection — live now",
+  cta: "Shop the collection ›",
+  image: "minoritiesView/assets/shop/uni_hd.webp",
+  linkTab: "shop",
+};
 
 let db = null;
 let postsCache = [];
 let cardsCache = [];
+let productsCache = [];
+let appConfigCache = null;
 const commentsCache = new Map();
 const likedPostIds = new Set();
-const staticLikeDeltas = new Map();
-const staticLikedPostIds = new Set();
 const listeners = new Set();
 
 let postsUnsub = null;
 let cardsUnsub = null;
+let productsUnsub = null;
+let appConfigUnsub = null;
 let commentsUnsub = null;
 let activeCommentsPostId = null;
 let listenersStarted = false;
-
-function getDisplayLikes(post) {
-  const base = post.likes || 0;
-  if (post._firestore) return base;
-  return base + (staticLikeDeltas.get(post.id) || 0);
-}
-
-export function isPostLiked(postId) {
-  if (isFirestorePostId(postId)) return likedPostIds.has(postId);
-  return staticLikedPostIds.has(postId);
-}
-
-export function getPostLikeCount(postId) {
-  const post = getPosts().find((entry) => entry.id === postId);
-  if (!post) return 0;
-  return getDisplayLikes(post);
-}
-
-export async function refreshUserLikes(postIds) {
-  const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
-  if (!user || !db || !Array.isArray(postIds)) return;
-
-  await Promise.all(
-    postIds.filter(isFirestorePostId).map(async (postId) => {
-      const snap = await getDoc(doc(db, POSTS_COLLECTION, postId, "likes", user.uid));
-      if (snap.exists()) likedPostIds.add(postId);
-      else likedPostIds.delete(postId);
-    }),
-  );
-}
-
-export async function togglePostLike(postId) {
-  const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
-  if (!user) throw new Error("Sign in to like posts.");
-
-  if (!isFirestorePostId(postId)) {
-    if (staticLikedPostIds.has(postId)) {
-      staticLikedPostIds.delete(postId);
-      staticLikeDeltas.set(postId, (staticLikeDeltas.get(postId) || 0) - 1);
-    } else {
-      staticLikedPostIds.add(postId);
-      staticLikeDeltas.set(postId, (staticLikeDeltas.get(postId) || 0) + 1);
-    }
-    notify();
-    return getPostLikeCount(postId);
-  }
-
-  const likeRef = doc(db, POSTS_COLLECTION, postId, "likes", user.uid);
-  const postRef = doc(db, POSTS_COLLECTION, postId);
-  const likeSnap = await getDoc(likeRef);
-
-  if (likeSnap.exists()) {
-    await deleteDoc(likeRef);
-    await updateDoc(postRef, { likes: increment(-1) });
-    likedPostIds.delete(postId);
-  } else {
-    await setDoc(likeRef, { createdAt: serverTimestamp() });
-    await updateDoc(postRef, { likes: increment(1) });
-    likedPostIds.add(postId);
-  }
-
-  notify();
-  return getPostLikeCount(postId);
-}
-
-async function uploadPostImage(file, userId) {
-  const firebase = initMinFirebase();
-  if (!firebase?.storage) throw new Error("Image upload is not configured yet.");
-  if (!file || !String(file.type || "").startsWith("image/")) {
-    throw new Error("Choose an image file.");
-  }
-  if (file.size > 8 * 1024 * 1024) {
-    throw new Error("Image must be 8 MB or smaller.");
-  }
-
-  const extension = String(file.name || "")
-    .split(".")
-    .pop()
-    .toLowerCase();
-  const safeExtension = ["jpg", "jpeg", "png", "webp", "gif"].includes(extension)
-    ? extension
-    : "jpg";
-  const storageRef = ref(firebase.storage, `posts/${userId}/${Date.now()}.${safeExtension}`);
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef);
-}
+let seedInFlight = null;
 
 function notify() {
   listeners.forEach((fn) => {
@@ -167,7 +107,8 @@ function normalizePost(docSnap) {
     type: data.type || "text",
     likes: data.likes || 0,
     comments: data.commentCount || 0,
-    threadComments: [],
+    authorType: data.authorType || "",
+    authorTeamRole: data.authorTeamRole || "",
     _firestore: true,
   };
 }
@@ -181,8 +122,23 @@ function normalizeCard(docSnap) {
     date: formatDate(data.createdAt) || data.date || "",
     comments: data.commentCount || 0,
     image: data.image || null,
-    locked: Boolean(data.locked),
+    video: data.video || null,
     body: data.body || "",
+    locked: Boolean(data.locked),
+    access: data.access || (data.locked ? "starter" : "free"),
+    _firestore: true,
+  };
+}
+
+function normalizeProduct(docSnap) {
+  const data = docSnap.data();
+  return {
+    id: docSnap.id,
+    name: data.name || "",
+    price: data.price || "",
+    image: data.image || "",
+    url: data.url || "",
+    sortOrder: data.sortOrder || 0,
     _firestore: true,
   };
 }
@@ -197,18 +153,6 @@ function normalizeComment(docSnap) {
   };
 }
 
-function staticPosts() {
-  return (window.MIN_DATA && window.MIN_DATA.posts) || [];
-}
-
-function staticCards() {
-  return (window.MIN_DATA && window.MIN_DATA.contentCards) || [];
-}
-
-function staticPostDetail() {
-  return (window.MIN_DATA && window.MIN_DATA.postDetail) || {};
-}
-
 function stopPostsListener() {
   if (postsUnsub) {
     postsUnsub();
@@ -220,6 +164,20 @@ function stopCardsListener() {
   if (cardsUnsub) {
     cardsUnsub();
     cardsUnsub = null;
+  }
+}
+
+function stopProductsListener() {
+  if (productsUnsub) {
+    productsUnsub();
+    productsUnsub = null;
+  }
+}
+
+function stopAppConfigListener() {
+  if (appConfigUnsub) {
+    appConfigUnsub();
+    appConfigUnsub = null;
   }
 }
 
@@ -240,7 +198,7 @@ function startPostsListener() {
 function startCardsListener() {
   if (!db || cardsUnsub) return;
   cardsUnsub = onSnapshot(
-    query(collection(db, CARDS_COLLECTION), orderBy("createdAt", "desc"), limit(20)),
+    query(collection(db, CARDS_COLLECTION), orderBy("sortOrder", "desc"), limit(30)),
     (snap) => {
       cardsCache = snap.docs.map(normalizeCard);
       notify();
@@ -249,6 +207,28 @@ function startCardsListener() {
       console.warn("MIN_CONTENT cards listener failed", err);
     },
   );
+}
+
+function startProductsListener() {
+  if (!db || productsUnsub) return;
+  productsUnsub = onSnapshot(
+    query(collection(db, PRODUCTS_COLLECTION), orderBy("sortOrder", "desc"), limit(40)),
+    (snap) => {
+      productsCache = snap.docs.map(normalizeProduct);
+      notify();
+    },
+    (err) => {
+      console.warn("MIN_CONTENT products listener failed", err);
+    },
+  );
+}
+
+function startAppConfigListener() {
+  if (!db || appConfigUnsub) return;
+  appConfigUnsub = onSnapshot(doc(db, APP_CONFIG_COLLECTION, "main"), (snap) => {
+    appConfigCache = snap.exists() ? snap.data() : null;
+    notify();
+  });
 }
 
 export function onMinContentChange(fn) {
@@ -270,16 +250,140 @@ export async function initMinContent() {
   return true;
 }
 
+async function seedDefaultFirestoreContent() {
+  if (!db) return false;
+  if (!(window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin())) return false;
+
+  const user = window.MIN_AUTH.getCurrentUser();
+  if (!user) return false;
+
+  const metaRef = doc(db, APP_CONFIG_COLLECTION, "meta");
+  const metaSnap = await getDoc(metaRef);
+  if (metaSnap.exists() && metaSnap.data().seeded) return false;
+
+  const cardsSnap = await getDocs(query(collection(db, CARDS_COLLECTION), limit(1)));
+  if (!cardsSnap.empty) {
+    await setDoc(metaRef, { seeded: true, updatedAt: serverTimestamp() }, { merge: true });
+    return false;
+  }
+
+  const now = serverTimestamp();
+  const teamRole =
+    window.MIN_AUTH.getTeamRole && window.MIN_AUTH.getTeamRole
+      ? window.MIN_AUTH.getTeamRole()
+      : "admin";
+
+  await Promise.all(
+    SEED_CONTENT_CARDS.map((card) =>
+      setDoc(doc(db, CARDS_COLLECTION, card.id), {
+        title: card.title,
+        author: card.author,
+        image: card.image,
+        video: card.video || null,
+        body: card.body || "",
+        access: card.access,
+        locked: Boolean(card.locked),
+        commentCount: 0,
+        sortOrder: card.sortOrder || 0,
+        createdAt: now,
+        updatedAt: now,
+      }),
+    ),
+  );
+
+  await Promise.all(
+    SEED_POSTS.map((post) =>
+      setDoc(doc(db, POSTS_COLLECTION, post.id), {
+        authorUid: user.uid,
+        authorName: post.authorName,
+        authorUsername: post.authorUsername,
+        authorType: post.authorType || "team",
+        authorTeamRole: teamRole,
+        headline: post.headline || "",
+        body: post.body || "",
+        image: post.image || null,
+        video: post.video || null,
+        muxPlaybackId: null,
+        muxAssetId: null,
+        muxUploadId: null,
+        videoProvider: post.videoProvider || (post.video ? "youtube" : null),
+        videoStatus: null,
+        type: post.type || "text",
+        likes: 0,
+        commentCount: 0,
+        sortOrder: post.sortOrder || 0,
+        createdAt: now,
+        updatedAt: now,
+      }),
+    ),
+  );
+
+  await Promise.all(
+    SEED_PRODUCTS.map((product) =>
+      setDoc(doc(db, PRODUCTS_COLLECTION, product.id), {
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        url: product.url,
+        sortOrder: product.sortOrder || 0,
+        createdAt: now,
+        updatedAt: now,
+      }),
+    ),
+  );
+
+  await setDoc(
+    doc(db, APP_CONFIG_COLLECTION, "main"),
+    {
+      learn: SEED_APP_CONFIG.learn,
+      promo: SEED_APP_CONFIG.promo,
+      updatedAt: now,
+    },
+    { merge: true },
+  );
+
+  await setDoc(
+    metaRef,
+    {
+      seeded: true,
+      seededAt: now,
+      seededBy: user.uid,
+    },
+    { merge: true },
+  );
+
+  notify();
+  return true;
+}
+
+export function ensureDefaultFirestoreContent() {
+  if (seedInFlight) return seedInFlight;
+  seedInFlight = seedDefaultFirestoreContent()
+    .catch((err) => {
+      console.warn("MIN_CONTENT seed failed", err);
+      return false;
+    })
+    .finally(() => {
+      seedInFlight = null;
+    });
+  return seedInFlight;
+}
+
 export function startContentListeners() {
   if (!db || listenersStarted) return;
   startPostsListener();
   startCardsListener();
+  startProductsListener();
+  startAppConfigListener();
   listenersStarted = true;
+  ensureDefaultFirestoreContent();
 }
 
 export function stopContentListeners() {
   stopPostsListener();
   stopCardsListener();
+  stopProductsListener();
+  stopAppConfigListener();
   stopWatchingComments();
   listenersStarted = false;
 }
@@ -289,21 +393,40 @@ export async function refreshFeed() {
 }
 
 export function getPosts() {
-  const seen = new Set(postsCache.map((p) => p.id));
-  const merged = postsCache.slice();
-  staticPosts().forEach((post) => {
-    if (!seen.has(post.id)) merged.push(post);
-  });
-  return merged.sort((a, b) => {
-    if (a._firestore && !b._firestore) return -1;
-    if (!a._firestore && b._firestore) return 1;
-    return 0;
-  });
+  return postsCache.slice();
 }
 
 export function getContentCards() {
-  if (cardsCache.length) return cardsCache;
-  return staticCards();
+  return cardsCache.slice();
+}
+
+export function getProducts() {
+  return productsCache.slice();
+}
+
+function configString(value, fallback) {
+  const trimmed = String(value || "").trim();
+  return trimmed || fallback;
+}
+
+export function getLearnConfig() {
+  const learn = appConfigCache && appConfigCache.learn;
+  return {
+    nextSession: configString(learn && learn.nextSession, DEFAULT_LEARN.nextSession),
+    previewNote: configString(learn && learn.previewNote, DEFAULT_LEARN.previewNote),
+    zoomUrl: configString(learn && learn.zoomUrl, DEFAULT_LEARN.zoomUrl),
+  };
+}
+
+export function getHomePromo() {
+  const promo = appConfigCache && appConfigCache.promo;
+  return {
+    title: configString(promo && promo.title, DEFAULT_PROMO.title),
+    body: configString(promo && promo.body, DEFAULT_PROMO.body),
+    cta: configString(promo && promo.cta, DEFAULT_PROMO.cta),
+    image: configString(promo && promo.image, DEFAULT_PROMO.image),
+    linkTab: configString(promo && promo.linkTab, DEFAULT_PROMO.linkTab),
+  };
 }
 
 export function isCommunityPostId(id) {
@@ -312,6 +435,79 @@ export function isCommunityPostId(id) {
 
 export function isFirestorePostId(id) {
   return postsCache.some((p) => p.id === id);
+}
+
+export function isFirestoreCardId(id) {
+  return cardsCache.some((c) => c.id === id);
+}
+
+export function isPostLiked(postId) {
+  return likedPostIds.has(postId);
+}
+
+export function getPostLikeCount(postId) {
+  const post = getPosts().find((entry) => entry.id === postId);
+  if (!post) return 0;
+  return post.likes || 0;
+}
+
+export async function refreshUserLikes(postIds) {
+  const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
+  if (!user || !db || !Array.isArray(postIds)) return;
+
+  await Promise.all(
+    postIds.filter(isFirestorePostId).map(async (postId) => {
+      const snap = await getDoc(doc(db, POSTS_COLLECTION, postId, "likes", user.uid));
+      if (snap.exists()) likedPostIds.add(postId);
+      else likedPostIds.delete(postId);
+    }),
+  );
+}
+
+export async function togglePostLike(postId) {
+  const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
+  if (!user) throw new Error("Sign in to like posts.");
+  if (!isFirestorePostId(postId)) throw new Error("This post is not available to like yet.");
+
+  const likeRef = doc(db, POSTS_COLLECTION, postId, "likes", user.uid);
+  const postRef = doc(db, POSTS_COLLECTION, postId);
+  const likeSnap = await getDoc(likeRef);
+
+  if (likeSnap.exists()) {
+    await deleteDoc(likeRef);
+    await updateDoc(postRef, { likes: increment(-1) });
+    likedPostIds.delete(postId);
+  } else {
+    await setDoc(likeRef, { createdAt: serverTimestamp() });
+    await updateDoc(postRef, { likes: increment(1) });
+    likedPostIds.add(postId);
+  }
+
+  notify();
+  return getPostLikeCount(postId);
+}
+
+async function uploadPostImage(file, userId) {
+  const firebase = initMinFirebase();
+  if (!firebase?.storage) throw new Error("Image upload is not configured yet.");
+  if (!file || !String(file.type || "").startsWith("image/")) {
+    throw new Error("Choose an image file.");
+  }
+  if (file.size > 8 * 1024 * 1024) {
+    throw new Error("Image must be 8 MB or smaller.");
+  }
+
+  const extension = String(file.name || "")
+    .split(".")
+    .pop()
+    .toLowerCase();
+  const safeExtension = ["jpg", "jpeg", "png", "webp", "gif"].includes(extension)
+    ? extension
+    : "jpg";
+  const storageRef = ref(firebase.storage, `posts/${userId}/${Date.now()}.${safeExtension}`);
+  const contentType = file.type && file.type.startsWith("image/") ? file.type : "image/jpeg";
+  await uploadBytes(storageRef, file, { contentType });
+  return getDownloadURL(storageRef);
 }
 
 export function resolvePost(id) {
@@ -335,42 +531,27 @@ export function resolvePost(id) {
       muxUploadId: community.muxUploadId || "",
       videoProvider: community.videoProvider || "",
       videoStatus: community.videoStatus || "",
-      comments: cachedComments || community.threadComments || [],
-      _firestore: Boolean(community._firestore),
+      comments: cachedComments || [],
+      authorType: community.authorType || "",
+      authorTeamRole: community.authorTeamRole || "",
+      _firestore: true,
     };
   }
 
   const card = getContentCards().find((entry) => entry.id === id);
   if (card) {
     const cachedComments = commentsCache.get(id);
-    const detail = staticPostDetail()[id] || {};
     return {
       kind: "content",
       id: card.id,
-      title: card.title || detail.title || "Post",
-      author: card.author || detail.author || "The Minorities",
+      title: card.title || "Post",
+      author: card.author || "The Minorities",
       date: card.date || "",
-      body: card.body || detail.body || "",
-      image: card.image != null ? card.image : detail.image,
-      video: card.video || detail.video || null,
-      comments: cachedComments || detail.comments || [],
-      _firestore: Boolean(card._firestore),
-    };
-  }
-
-  const content = staticPostDetail()[id];
-  if (content) {
-    const cachedComments = commentsCache.get(id);
-    return {
-      kind: "content",
-      id: id,
-      title: content.title,
-      author: content.author || "The Minorities",
-      body: content.body || "",
-      image: content.image,
-      video: content.video,
-      comments: cachedComments || content.comments || [],
-      _firestore: false,
+      body: card.body || "",
+      image: card.image,
+      video: card.video || null,
+      comments: cachedComments || [],
+      _firestore: true,
     };
   }
 
@@ -385,7 +566,6 @@ export function watchComments(postId) {
 
   if (!isFirestorePostId(postId)) {
     stopWatchingComments();
-    loadComments(postId);
     return;
   }
 
@@ -422,20 +602,6 @@ export function stopWatchingComments() {
 
 export async function loadComments(postId) {
   if (!postId) return [];
-  if (commentsCache.has(postId)) return commentsCache.get(postId);
-
-  const staticPost = staticPosts().find((p) => p.id === postId);
-  if (staticPost && staticPost.threadComments) {
-    commentsCache.set(postId, staticPost.threadComments);
-    return staticPost.threadComments;
-  }
-
-  const staticContent = staticPostDetail()[postId];
-  if (staticContent && staticContent.comments) {
-    commentsCache.set(postId, staticContent.comments);
-    return staticContent.comments;
-  }
-
   return commentsCache.get(postId) || [];
 }
 
@@ -471,6 +637,16 @@ export async function createPost(fields) {
 
   const authorName =
     String((profile && profile.displayName) || "").trim() || authorUsername;
+  const teamRole =
+    window.MIN_AUTH && window.MIN_AUTH.getTeamRole ? window.MIN_AUTH.getTeamRole() : "member";
+  const authorType =
+    window.MIN_AUTH && window.MIN_AUTH.isCreator && window.MIN_AUTH.isCreator()
+      ? "team"
+      : window.MIN_AUTH && window.MIN_AUTH.isModerator && window.MIN_AUTH.isModerator()
+        ? "team"
+        : window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin()
+          ? "team"
+          : "community";
 
   let imageUrl = null;
   if (imageFile) {
@@ -481,6 +657,8 @@ export async function createPost(fields) {
     authorUid: user.uid,
     authorName,
     authorUsername,
+    authorType,
+    authorTeamRole: teamRole,
     headline,
     body,
     image: imageUrl,
@@ -494,6 +672,7 @@ export async function createPost(fields) {
     likes: 0,
     commentCount: 0,
     createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
   });
 
   notify();
@@ -522,15 +701,19 @@ export async function deletePost(postId) {
   const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
   if (!user) throw new Error("Sign in to delete a post.");
   if (!isFirestorePostId(postId)) {
-    throw new Error("Only your uploaded posts can be deleted.");
+    throw new Error("Only uploaded posts can be deleted.");
   }
 
   const post = postsCache.find((entry) => entry.id === postId);
-  if (!post || post.authorUid !== user.uid) {
+  const isAdmin = window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin();
+  if (!post) {
+    throw new Error("Post not found.");
+  }
+  if (!isAdmin && post.authorUid !== user.uid) {
     throw new Error("You can only delete your own posts.");
   }
 
-  if (post.image) {
+  if (post.image && post.authorUid === user.uid) {
     await deleteStorageFileIfOwned(post.image, user.uid);
   }
 
@@ -544,11 +727,63 @@ export async function deletePost(postId) {
   return true;
 }
 
+export async function createContentCard(fields) {
+  if (!db) throw new Error("Content is not connected yet.");
+  const isAdmin = window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin();
+  if (!isAdmin) throw new Error("Only admins can add content cards.");
+
+  const title = String(fields.title || "").trim();
+  const image = String(fields.image || "").trim();
+  const access = String(fields.access || "free").trim();
+  const author = String(fields.author || "The Minorities").trim();
+  const video = String(fields.video || "").trim();
+  const body = String(fields.body || "").trim();
+
+  if (title.length < 2) throw new Error("Enter a title.");
+  if (!image) throw new Error("Enter an image URL.");
+  if (!["free", "bench", "starter", "owner"].includes(access)) {
+    throw new Error("Invalid access level.");
+  }
+
+  const docRef = await addDoc(collection(db, CARDS_COLLECTION), {
+    title,
+    image,
+    author,
+    video: video || null,
+    body,
+    access,
+    locked: access !== "free",
+    commentCount: 0,
+    sortOrder: Date.now(),
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  });
+
+  notify();
+  return docRef.id;
+}
+
+export async function deleteContentCard(cardId) {
+  if (!db) throw new Error("Content is not connected yet.");
+  const isAdmin = window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin();
+  if (!isAdmin) throw new Error("Only admins can remove content cards.");
+  if (!cardId || !isFirestoreCardId(cardId)) {
+    throw new Error("Only library cards stored in Firestore can be removed here.");
+  }
+
+  await deleteDoc(doc(db, CARDS_COLLECTION, cardId));
+  notify();
+  return true;
+}
+
 export async function publishComment(postId, text) {
   if (!db) throw new Error("Comments are not connected yet.");
   const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
   const profile = window.MIN_AUTH && window.MIN_AUTH.getCurrentProfile();
   if (!user) throw new Error("Sign in to comment.");
+  if (!isFirestorePostId(postId)) {
+    throw new Error("Comments are only available on live posts.");
+  }
 
   const trimmed = String(text || "").trim();
   if (!trimmed) throw new Error("Write a comment first.");
@@ -556,22 +791,13 @@ export async function publishComment(postId, text) {
   const authorName =
     (profile && (profile.displayName || profile.username)) || user.email || "Member";
 
-  const postRef = resolvePost(postId);
-  if (postRef && postRef._firestore) {
-    await addDoc(collection(db, POSTS_COLLECTION, postId, "comments"), {
-      authorUid: user.uid,
-      authorName,
-      text: trimmed,
-      createdAt: serverTimestamp(),
-    });
-    await updateDoc(doc(db, POSTS_COLLECTION, postId), {
-      commentCount: increment(1),
-    });
-    return;
-  }
-
-  const local = commentsCache.get(postId) || [];
-  const next = local.concat({ author: authorName, text: trimmed });
-  commentsCache.set(postId, next);
-  notify();
+  await addDoc(collection(db, POSTS_COLLECTION, postId, "comments"), {
+    authorUid: user.uid,
+    authorName,
+    text: trimmed,
+    createdAt: serverTimestamp(),
+  });
+  await updateDoc(doc(db, POSTS_COLLECTION, postId), {
+    commentCount: increment(1),
+  });
 }

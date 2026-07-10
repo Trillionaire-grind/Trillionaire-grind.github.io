@@ -2,19 +2,33 @@ import {
 
   createPost,
 
+  createContentCard,
+
+  deleteContentCard,
+
   deletePost,
 
+  ensureDefaultFirestoreContent,
+
   getContentCards,
+
+  getLearnConfig,
+
+  getHomePromo,
 
   getPostLikeCount,
 
   getPosts,
+
+  getProducts,
 
   initMinContent,
 
   isCommunityPostId,
 
   isFirestorePostId,
+
+  isFirestoreCardId,
 
   isPostLiked,
 
@@ -42,6 +56,8 @@ import {
 
 import {
 
+  ensureDefaultChatrooms,
+
   getChatRoom,
 
   getChats,
@@ -49,6 +65,10 @@ import {
   getMessages,
 
   initMinChat,
+
+  isChatReady,
+
+  isRoomMessagesLoaded,
 
   onMinChatChange,
 
@@ -94,7 +114,37 @@ import {
 
   getSubscriptionId,
 
+  getSubscriptionRank,
+
   getTier,
+
+  assignTeamRole,
+
+  getTeamRole,
+
+  getTeamRoleLabel,
+
+  isAdmin,
+
+  isCreator,
+
+  isModerator,
+
+  isTeamAuthoredPost,
+
+  canAccessContentLevel,
+
+  hasBenchAccess,
+
+  hasChatAccess,
+
+  hasCommentAccess,
+
+  hasOwnerAccess,
+
+  hasStarterAccess,
+
+  hasTrainingAccess,
 
   handleCheckoutReturn,
 
@@ -118,11 +168,19 @@ import {
 
   resetPassword,
 
+  selectSubscriptionPlan,
+
   startSubscriptionCheckout,
 
   tierFromSubscription,
 
   updateProfile,
+
+  prepareProfileAvatar,
+
+  validateProfileAvatarFile,
+
+  PROFILE_AVATAR_MAX_BYTES,
 
   waitForAuthReady,
 
@@ -151,7 +209,37 @@ window.MIN_AUTH = {
 
   getSubscriptionId,
 
+  getSubscriptionRank,
+
   getTier,
+
+  assignTeamRole,
+
+  getTeamRole,
+
+  getTeamRoleLabel,
+
+  isAdmin,
+
+  isCreator,
+
+  isModerator,
+
+  isTeamAuthoredPost,
+
+  canAccessContentLevel,
+
+  hasBenchAccess,
+
+  hasChatAccess,
+
+  hasCommentAccess,
+
+  hasOwnerAccess,
+
+  hasStarterAccess,
+
+  hasTrainingAccess,
 
   handleCheckoutReturn,
 
@@ -175,11 +263,19 @@ window.MIN_AUTH = {
 
   resetPassword,
 
+  selectSubscriptionPlan,
+
   startSubscriptionCheckout,
 
   tierFromSubscription,
 
   updateProfile,
+
+  prepareProfileAvatar,
+
+  validateProfileAvatarFile,
+
+  PROFILE_AVATAR_MAX_BYTES,
 
   waitForAuthReady,
 
@@ -191,19 +287,33 @@ window.MIN_CONTENT = {
 
   createPost,
 
+  createContentCard,
+
+  deleteContentCard,
+
   deletePost,
 
+  ensureDefaultFirestoreContent,
+
   getContentCards,
+
+  getLearnConfig,
+
+  getHomePromo,
 
   getPostLikeCount,
 
   getPosts,
+
+  getProducts,
 
   initMinContent,
 
   isCommunityPostId,
 
   isFirestorePostId,
+
+  isFirestoreCardId,
 
   isPostLiked,
 
@@ -243,6 +353,8 @@ window.MIN_MUX = {
 
 window.MIN_CHAT = {
 
+  ensureDefaultChatrooms,
+
   getChatRoom,
 
   getChats,
@@ -250,6 +362,10 @@ window.MIN_CHAT = {
   getMessages,
 
   initMinChat,
+
+  isChatReady,
+
+  isRoomMessagesLoaded,
 
   onMinChatChange,
 
@@ -342,6 +458,18 @@ async function boot() {
     ) {
       await window.MIN_PUSH.registerPushToken().catch((err) => {
         console.warn("MIN_PUSH token refresh on auth", err);
+      });
+    }
+
+    if (
+      window.MIN_AUTH &&
+      window.MIN_AUTH.isAdmin &&
+      window.MIN_AUTH.isAdmin() &&
+      window.MIN_CONTENT &&
+      window.MIN_CONTENT.ensureDefaultFirestoreContent
+    ) {
+      await window.MIN_CONTENT.ensureDefaultFirestoreContent().catch((err) => {
+        console.warn("MIN_CONTENT seed on auth", err);
       });
     }
   });

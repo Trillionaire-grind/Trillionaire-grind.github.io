@@ -26,7 +26,7 @@ async function collectPushTokens(excludeUid, options = {}) {
 
     const data = docSnap.data() || {};
     if (!data.token || typeof data.token !== "string") return;
-    if (vipOnly && data.tier !== "vip") return;
+    if (vipOnly && data.tier !== "owner") return;
 
     tokens.push(data.token);
   });

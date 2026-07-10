@@ -15,6 +15,38 @@ import { initMinFirebase } from "./minFirebase.js";
 
 const CHATROOMS_COLLECTION = "chatrooms";
 
+const DEFAULT_CHATROOMS = [
+  {
+    id: "general",
+    name: "Member Chat",
+    vip: false,
+  },
+  {
+    id: "announcements",
+    name: "Announcements",
+    vip: false,
+  },
+  {
+    id: "vlog-talk",
+    name: "Vlog Talk",
+    vip: false,
+  },
+  {
+    id: "vip",
+    name: "Owner Mastermind",
+    vip: true,
+  },
+];
+
+/** Legacy seed copy — hide so list rows don't flash fake previews. */
+const LEGACY_PREVIEW_COPY = new Set([
+  "Community lounge — no messages yet",
+  "Drops and news — no messages yet",
+  "Episode chat — no messages yet",
+  "Owner members only — no messages yet",
+  "No messages yet",
+]);
+
 let db = null;
 let roomsCache = [];
 const messagesCache = new Map();
@@ -24,6 +56,8 @@ let roomsUnsub = null;
 let messagesUnsub = null;
 let activeRoomId = null;
 let listenersStarted = false;
+let roomsLoaded = false;
+const messagesLoadedRooms = new Set();
 
 function notify() {
   listeners.forEach((fn) => {
@@ -35,17 +69,15 @@ function notify() {
   });
 }
 
-function staticChats() {
-  return (window.MIN_DATA && window.MIN_DATA.chats) || [];
-}
-
-function staticMessages() {
-  return (window.MIN_DATA && window.MIN_DATA.threadMessages) || {};
-}
-
 function formatPreview(text) {
   const trimmed = String(text || "").trim();
   if (!trimmed) return "";
+  return trimmed.length > 80 ? trimmed.slice(0, 77) + "…" : trimmed;
+}
+
+function normalizePreview(preview) {
+  const trimmed = String(preview || "").trim();
+  if (!trimmed || LEGACY_PREVIEW_COPY.has(trimmed)) return "";
   return trimmed.length > 80 ? trimmed.slice(0, 77) + "…" : trimmed;
 }
 
@@ -54,7 +86,7 @@ function normalizeRoom(docSnap) {
   return {
     id: docSnap.id,
     name: data.name || "Chat",
-    preview: data.preview || "",
+    preview: normalizePreview(data.preview),
     vip: Boolean(data.vip),
     _firestore: true,
   };
@@ -86,7 +118,11 @@ export function onMinChatChange(fn) {
 }
 
 export function isChatReady() {
-  return listenersStarted;
+  return listenersStarted && roomsLoaded;
+}
+
+export function isRoomMessagesLoaded(roomId) {
+  return Boolean(roomId && messagesLoadedRooms.has(roomId));
 }
 
 export async function initMinChat() {
@@ -96,14 +132,46 @@ export async function initMinChat() {
   return true;
 }
 
+export async function ensureDefaultChatrooms() {
+  if (!db) return;
+  if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) return;
+  const canSeed =
+    (window.MIN_AUTH && window.MIN_AUTH.hasBenchAccess && window.MIN_AUTH.hasBenchAccess()) ||
+    (window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin());
+  if (!canSeed) return;
+
+  await Promise.all(
+    DEFAULT_CHATROOMS.map(async (room) => {
+      const roomRef = doc(db, CHATROOMS_COLLECTION, room.id);
+      const roomSnap = await getDoc(roomRef);
+      if (roomSnap.exists()) return;
+
+      await setDoc(roomRef, {
+        name: room.name,
+        vip: Boolean(room.vip),
+        preview: "",
+        lastMessageAt: serverTimestamp(),
+        createdAt: serverTimestamp(),
+      });
+    }),
+  );
+
+  notify();
+}
+
 export function startChatListeners() {
   if (!db || listenersStarted) return;
   if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) return;
+
+  ensureDefaultChatrooms().catch((err) => {
+    console.warn("MIN_CHAT ensureDefaultChatrooms failed", err);
+  });
 
   roomsUnsub = onSnapshot(
     query(collection(db, CHATROOMS_COLLECTION), orderBy("lastMessageAt", "desc"), limit(30)),
     (snap) => {
       roomsCache = snap.docs.map(normalizeRoom);
+      roomsLoaded = true;
       notify();
     },
     (err) => {
@@ -122,25 +190,12 @@ export function stopChatListeners() {
   stopWatchingRoom();
   roomsCache = [];
   listenersStarted = false;
+  roomsLoaded = false;
+  messagesLoadedRooms.clear();
 }
 
 export function getChats() {
-  const seen = new Set(roomsCache.map((room) => room.id));
-  const merged = roomsCache.slice();
-
-  staticChats().forEach((chat) => {
-    if (!seen.has(chat.id)) {
-      merged.push({
-        id: chat.id,
-        name: chat.name,
-        preview: chat.preview || "",
-        vip: Boolean(chat.vip),
-        _firestore: false,
-      });
-    }
-  });
-
-  return merged;
+  return roomsCache.slice();
 }
 
 export function getChatRoom(roomId) {
@@ -149,20 +204,6 @@ export function getChatRoom(roomId) {
 
 export function getMessages(roomId) {
   if (messagesCache.has(roomId)) return messagesCache.get(roomId);
-
-  const staticThread = staticMessages()[roomId];
-  if (staticThread) {
-    const uid = currentUid();
-    return staticThread.map((message, index) => ({
-      id: "static-" + index,
-      text: message.text,
-      mine: Boolean(message.mine),
-      authorName: message.mine ? "You" : "Member",
-      authorUid: message.mine ? uid : "",
-      _firestore: false,
-    }));
-  }
-
   return [];
 }
 
@@ -176,9 +217,11 @@ export function watchRoom(roomId) {
 
   stopWatchingRoom();
   activeRoomId = roomId;
+  messagesLoadedRooms.delete(roomId);
 
   if (!db) {
     messagesCache.set(roomId, getMessages(roomId));
+    messagesLoadedRooms.add(roomId);
     notify();
     return;
   }
@@ -192,11 +235,13 @@ export function watchRoom(roomId) {
     (snap) => {
       const uid = currentUid();
       messagesCache.set(roomId, snap.docs.map((docSnap) => normalizeMessage(docSnap, uid)));
+      messagesLoadedRooms.add(roomId);
       notify();
     },
     (err) => {
       console.warn("MIN_CHAT messages listener failed", err);
       messagesCache.set(roomId, getMessages(roomId));
+      messagesLoadedRooms.add(roomId);
       notify();
     },
   );
@@ -206,6 +251,9 @@ export function stopWatchingRoom() {
   if (messagesUnsub) {
     messagesUnsub();
     messagesUnsub = null;
+  }
+  if (activeRoomId) {
+    messagesLoadedRooms.delete(activeRoomId);
   }
   activeRoomId = null;
 }
@@ -222,7 +270,7 @@ async function ensureRoom(roomId, previewText) {
     return;
   }
 
-  const staticRoom = staticChats().find((chat) => chat.id === roomId);
+  const staticRoom = DEFAULT_CHATROOMS.find((chat) => chat.id === roomId);
   await setDoc(roomRef, {
     name: staticRoom ? staticRoom.name : roomId,
     vip: staticRoom ? Boolean(staticRoom.vip) : false,
@@ -244,8 +292,11 @@ export async function sendMessage(roomId, text) {
 
   const room = getChatRoom(roomId);
   if (room && room.vip) {
-    const tier = window.MIN_AUTH.getTier ? window.MIN_AUTH.getTier() : "free";
-    if (tier !== "vip") throw new Error("Upgrade to V.I.P. to access this chat.");
+    if (!(window.MIN_AUTH && window.MIN_AUTH.hasOwnerAccess && window.MIN_AUTH.hasOwnerAccess())) {
+      throw new Error("Upgrade to Owner to access the mastermind chat.");
+    }
+  } else if (!(window.MIN_AUTH && window.MIN_AUTH.hasChatAccess && window.MIN_AUTH.hasChatAccess())) {
+    throw new Error("Upgrade to Bench Player to access member chat.");
   }
 
   const authorName =
