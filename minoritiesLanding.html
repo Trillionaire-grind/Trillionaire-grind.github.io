@@ -232,6 +232,16 @@
         text-align: center;
         cursor: pointer;
       }
+
+      .app-version {
+        display: block;
+        margin: 32px auto 20px;
+        padding-bottom: env(safe-area-inset-bottom, 0);
+        text-align: center;
+        font-size: 12px;
+        color: #999;
+        letter-spacing: 0.02em;
+      }
     </style>
   </head>
   <body>
@@ -305,6 +315,8 @@
         </div>
       </div>
     </div>
+
+    <p class="app-version" aria-label="App version">v0.0.0.1</p>
 
     <script type="module">
       import {

@@ -47,7 +47,8 @@ export function isMinMuxConfigured() {
  * Web Push VAPID key — Firebase Console → Project settings → Cloud Messaging
  * → Web Push certificates → Key pair → copy public key.
  */
-export const minFcmVapidKey = "";
+export const minFcmVapidKey =
+  "BP2sfWq9F-cXso4Ns9xO_iVsiXmeUQA5-ualGGGUcO897Pl7OKq0obygpZZqbTqCBzeDFODVBQJBTGZKLmTx5AM";
 
 export function isMinFcmConfigured() {
   return Boolean(
