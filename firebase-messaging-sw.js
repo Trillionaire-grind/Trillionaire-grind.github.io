@@ -17,9 +17,12 @@ const DEFAULT_URL = "minorities.html";
 const ICON = "minoritiesView/assets/graduation.svg";
 
 messaging.onBackgroundMessage(function (payload) {
-  const title = (payload.notification && payload.notification.title) || "The Minorities";
-  const body = (payload.notification && payload.notification.body) || "";
   const data = payload.data || {};
+  const title =
+    data.title ||
+    (payload.notification && payload.notification.title) ||
+    "The Minorities";
+  const body = data.body || (payload.notification && payload.notification.body) || "";
   const url = data.url || DEFAULT_URL;
 
   return self.registration.showNotification(title, {
@@ -29,6 +32,30 @@ messaging.onBackgroundMessage(function (payload) {
     tag: data.tag || "min-push",
     data: { url: url, tag: data.tag || "" },
   });
+});
+
+self.addEventListener("push", function (event) {
+  if (!event.data) return;
+  let payload = {};
+  try {
+    payload = event.data.json();
+  } catch (err) {
+    return;
+  }
+  const data = payload.data || payload;
+  const title = data.title || "The Minorities";
+  const body = data.body || "";
+  const url = data.url || DEFAULT_URL;
+
+  event.waitUntil(
+    self.registration.showNotification(title, {
+      body: body,
+      icon: ICON,
+      badge: ICON,
+      tag: data.tag || "min-push",
+      data: { url: url, tag: data.tag || "" },
+    }),
+  );
 });
 
 self.addEventListener("notificationclick", function (event) {

@@ -11,6 +11,7 @@ const SW_PATH = "firebase-messaging-sw.js";
 const ICON_PATH = "minoritiesView/assets/graduation.svg";
 
 let messaging = null;
+let swRegistration = null;
 let currentToken = null;
 let foregroundBound = false;
 
@@ -35,6 +36,7 @@ function canUsePush() {
 async function ensureServiceWorker() {
   const registration = await navigator.serviceWorker.register(SW_PATH, { scope: "./" });
   await navigator.serviceWorker.ready;
+  swRegistration = registration;
   return registration;
 }
 
@@ -43,9 +45,12 @@ function bindForegroundMessages() {
   foregroundBound = true;
 
   onMessage(messaging, function (payload) {
-    const title = (payload.notification && payload.notification.title) || "The Minorities";
-    const body = (payload.notification && payload.notification.body) || "";
     const data = payload.data || {};
+    const title =
+      data.title ||
+      (payload.notification && payload.notification.title) ||
+      "The Minorities";
+    const body = data.body || (payload.notification && payload.notification.body) || "";
 
     if (typeof Notification === "undefined" || Notification.permission !== "granted") {
       return;
@@ -109,8 +114,8 @@ export async function initMinPush() {
   try {
     const firebase = initMinFirebase();
     if (!firebase?.app) return false;
-    messaging = getMessaging(firebase.app);
-    await ensureServiceWorker();
+    const registration = await ensureServiceWorker();
+    messaging = getMessaging(firebase.app, { serviceWorkerRegistration: registration });
     bindForegroundMessages();
     return true;
   } catch (err) {
@@ -136,11 +141,11 @@ export async function registerPushToken() {
     throw new Error("Sign in to enable push notifications.");
   }
 
-  await ensureServiceWorker();
+  const registration = swRegistration || (await ensureServiceWorker());
 
   const token = await getToken(messaging, {
     vapidKey: minFcmVapidKey,
-    serviceWorkerRegistration: await navigator.serviceWorker.ready,
+    serviceWorkerRegistration: registration,
   });
 
   if (!token) {
@@ -177,6 +182,42 @@ export async function clearPushToken() {
 export async function refreshPushTokenTier() {
   if (!currentToken) return;
   await saveTokenToFirestore(currentToken);
+}
+
+/** Re-register FCM token when permission is already granted (e.g. iOS PWA reopen). */
+export async function syncPushTokenIfPermitted() {
+  if (!canUsePush() || !isMinFcmConfigured()) return false;
+  if (typeof Notification === "undefined" || Notification.permission !== "granted") return false;
+
+  const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
+  if (!user) return false;
+
+  if (!messaging) {
+    const ok = await initMinPush();
+    if (!ok) return false;
+  }
+
+  try {
+    await registerPushToken();
+    return true;
+  } catch (err) {
+    console.warn("MIN_PUSH syncPushTokenIfPermitted failed", err);
+    return false;
+  }
+}
+
+export function isStandalonePwa() {
+  if (typeof window === "undefined") return false;
+  return (
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true
+  );
+}
+
+export function isIosDevice() {
+  if (typeof navigator === "undefined") return false;
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 }
 
 export function getMessagingSenderId() {

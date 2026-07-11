@@ -104,6 +104,8 @@ import {
 
   setNotificationsEnabled,
 
+  syncNotificationOptInFromBrowser,
+
 } from "./minNotifications.js";
 
 import {
@@ -197,6 +199,9 @@ import {
   isPushSupported,
   refreshPushTokenTier,
   registerPushToken,
+  syncPushTokenIfPermitted,
+  isStandalonePwa,
+  isIosDevice,
 } from "./minPush.js";
 
 
@@ -403,6 +408,8 @@ window.MIN_NOTIFY = {
 
   setNotificationsEnabled,
 
+  syncNotificationOptInFromBrowser,
+
 };
 
 
@@ -414,7 +421,39 @@ window.MIN_PUSH = {
   isPushSupported,
   refreshPushTokenTier,
   registerPushToken,
+  syncPushTokenIfPermitted,
+  isStandalonePwa,
+  isIosDevice,
 };
+
+
+
+async function refreshPushIfAllowed() {
+  if (!window.MIN_AUTH || !window.MIN_AUTH.isSignedIn || !window.MIN_AUTH.isSignedIn()) {
+    return;
+  }
+
+  if (
+    window.MIN_NOTIFY &&
+    window.MIN_NOTIFY.syncNotificationOptInFromBrowser
+  ) {
+    window.MIN_NOTIFY.syncNotificationOptInFromBrowser();
+  }
+
+  if (
+    !window.MIN_NOTIFY ||
+    !window.MIN_NOTIFY.areNotificationsEnabled ||
+    !window.MIN_NOTIFY.areNotificationsEnabled()
+  ) {
+    return;
+  }
+
+  if (window.MIN_PUSH && window.MIN_PUSH.syncPushTokenIfPermitted) {
+    await window.MIN_PUSH.syncPushTokenIfPermitted().catch((err) => {
+      console.warn("MIN_PUSH refresh on open", err);
+    });
+  }
+}
 
 
 
@@ -448,15 +487,12 @@ async function boot() {
       return;
     }
 
-    if (
-      window.MIN_NOTIFY &&
-      window.MIN_NOTIFY.areNotificationsEnabled &&
-      window.MIN_NOTIFY.areNotificationsEnabled() &&
-      window.MIN_PUSH &&
-      window.MIN_PUSH.isPushConfigured &&
-      window.MIN_PUSH.isPushConfigured()
-    ) {
-      await window.MIN_PUSH.registerPushToken().catch((err) => {
+    if (window.MIN_NOTIFY && window.MIN_NOTIFY.syncNotificationOptInFromBrowser) {
+      window.MIN_NOTIFY.syncNotificationOptInFromBrowser();
+    }
+
+    if (window.MIN_PUSH && window.MIN_PUSH.syncPushTokenIfPermitted) {
+      await window.MIN_PUSH.syncPushTokenIfPermitted().catch((err) => {
         console.warn("MIN_PUSH token refresh on auth", err);
       });
     }
@@ -515,6 +551,18 @@ async function boot() {
     window.__minOnBootstrapReady();
 
   }
+
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden) {
+      refreshPushIfAllowed().catch(() => null);
+    }
+  });
+
+  window.addEventListener("pageshow", function () {
+    refreshPushIfAllowed().catch(() => null);
+  });
+
+  await refreshPushIfAllowed().catch(() => null);
 
 }
 

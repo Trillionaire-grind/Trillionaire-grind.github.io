@@ -35,6 +35,19 @@ export function areNotificationsEnabled() {
   return enabled && getNotificationPermission() === "granted";
 }
 
+/** Keep local opt-in in sync when the browser already granted permission. */
+export function syncNotificationOptInFromBrowser() {
+  if (!isNotificationSupported()) return false;
+  if (Notification.permission !== "granted") return false;
+  enabled = true;
+  try {
+    localStorage.setItem("minNotificationsEnabled", "1");
+  } catch (err) {
+    /* ignore */
+  }
+  return true;
+}
+
 export async function requestNotificationPermission() {
   if (!isNotificationSupported()) return "unsupported";
 

@@ -1,6 +1,7 @@
 {
   "firestore": {
-    "rules": "minoritiesView/firestore.rules"
+    "rules": "minoritiesView/firestore.rules",
+    "indexes": "firestore.minorities.indexes.json"
   },
   "storage": {
     "rules": "minoritiesView/storage.rules"

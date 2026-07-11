@@ -2217,9 +2217,17 @@
           .requestNotificationPermission()
           .then(function (result) {
             if (result === "granted") {
+              var iosHint =
+                window.MIN_PUSH &&
+                window.MIN_PUSH.isIosDevice &&
+                window.MIN_PUSH.isIosDevice() &&
+                window.MIN_PUSH.isStandalonePwa &&
+                !window.MIN_PUSH.isStandalonePwa()
+                  ? " On iPhone: Share → Add to Home Screen, then open that app and enable notifications again."
+                  : "";
               var pushNote =
                 window.MIN_PUSH && window.MIN_PUSH.isPushConfigured && window.MIN_PUSH.isPushConfigured()
-                  ? " Push works when the app is closed. On iPhone, Add to Home Screen first."
+                  ? " Alerts work when the app is closed (iPhone: use the Home Screen icon, not Safari)." + iosHint
                   : " Add your FCM VAPID key in minFirebaseConfig.js for push when the app is closed.";
               alert("Notifications enabled." + pushNote);
               if (window.MIN_NOTIFY.resetNotificationSnapshot) {

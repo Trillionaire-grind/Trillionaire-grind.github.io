@@ -12,7 +12,7 @@ const db = admin.firestore();
 const muxTokenId = defineSecret("MUX_TOKEN_ID");
 const muxTokenSecret = defineSecret("MUX_TOKEN_SECRET");
 
-const DEFAULT_PUBLIC_URL = "https://keplersiguineau.com";
+const DEFAULT_PUBLIC_URL = "https://trillionaire-grind.github.io";
 const PUSH_ICON = "/minoritiesView/assets/graduation.svg";
 
 async function collectPushTokens(excludeUid, options = {}) {
@@ -31,31 +31,41 @@ async function collectPushTokens(excludeUid, options = {}) {
     tokens.push(data.token);
   });
 
+  logger.info("collectPushTokens", { count: tokens.length, excludeUid: excludeUid || null, vipOnly });
   return [...new Set(tokens)];
 }
 
 async function sendPushMulticast(tokens, notification, data = {}) {
-  if (!tokens.length) return;
+  if (!tokens.length) {
+    logger.warn("sendPushMulticast skipped — no tokens");
+    return;
+  }
 
   const messaging = admin.messaging();
   const url = data.url || `${DEFAULT_PUBLIC_URL}/minorities.html`;
+  const absoluteLink = url.startsWith("http")
+    ? url
+    : `${DEFAULT_PUBLIC_URL}/${url.replace(/^\//, "")}`;
   const payloadData = {
-    ...data,
-    url,
+    title: String(notification.title || "The Minorities"),
+    body: String(notification.body || ""),
+    url: url,
+    tag: String(data.tag || "min-push"),
+    type: String(data.type || "general"),
   };
 
   for (let i = 0; i < tokens.length; i += 500) {
     const batch = tokens.slice(i, i + 500);
     const response = await messaging.sendEachForMulticast({
       tokens: batch,
-      notification,
+      // Data-only so the service worker always runs onBackgroundMessage (iOS PWA).
       data: payloadData,
       webpush: {
-        notification: {
-          icon: PUSH_ICON,
+        headers: {
+          Urgency: "high",
         },
         fcmOptions: {
-          link: url.startsWith("http") ? url : `${DEFAULT_PUBLIC_URL}/${url.replace(/^\//, "")}`,
+          link: absoluteLink,
         },
       },
     });
@@ -64,7 +74,15 @@ async function sendPushMulticast(tokens, notification, data = {}) {
       logger.warn("sendPushMulticast partial failure", {
         success: response.successCount,
         failure: response.failureCount,
+        errors: response.responses
+          .map((entry, index) =>
+            entry.success ? null : { token: batch[index].slice(0, 12) + "…", error: entry.error?.message },
+          )
+          .filter(Boolean)
+          .slice(0, 5),
       });
+    } else {
+      logger.info("sendPushMulticast ok", { count: response.successCount });
     }
   }
 }
