@@ -110,6 +110,15 @@ function currentUid() {
   return user ? user.uid : "";
 }
 
+function canAccessChatFirestore() {
+  if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) {
+    return false;
+  }
+  if (window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin()) return true;
+  if (window.MIN_AUTH.hasBenchAccess && window.MIN_AUTH.hasBenchAccess()) return true;
+  return false;
+}
+
 export function onMinChatChange(fn) {
   listeners.add(fn);
   return function unsubscribe() {
@@ -134,11 +143,7 @@ export async function initMinChat() {
 
 export async function ensureDefaultChatrooms() {
   if (!db) return;
-  if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) return;
-  const canSeed =
-    (window.MIN_AUTH && window.MIN_AUTH.hasBenchAccess && window.MIN_AUTH.hasBenchAccess()) ||
-    (window.MIN_AUTH && window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin());
-  if (!canSeed) return;
+  if (!canAccessChatFirestore()) return;
 
   await Promise.all(
     DEFAULT_CHATROOMS.map(async (room) => {
@@ -161,6 +166,7 @@ export async function ensureDefaultChatrooms() {
 
 export function startChatListeners() {
   if (!db || listenersStarted) return;
+  if (!canAccessChatFirestore()) return;
   if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) return;
 
   ensureDefaultChatrooms().catch((err) => {

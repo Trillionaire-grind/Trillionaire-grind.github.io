@@ -166,7 +166,7 @@ service cloud.firestore {
         && data.name.size() > 0
         && data.name.size() <= 120
         && data.vip is bool
-        && data.preview is string;
+        && (!('preview' in data) || data.preview is string);
     }
 
     function subscriptionRank() {
@@ -190,13 +190,13 @@ service cloud.firestore {
     }
 
     match /chatrooms/{roomId} {
-      allow read: if signedIn()
-        && hasBenchAccess()
-        && (resource.data.vip != true || isOwnerMember());
+      // Bench+ (and admins) can list rooms. VIP message content stays gated below.
+      allow read: if signedIn() && (hasBenchAccess() || isAdmin());
       allow create: if signedIn()
         && roomCreate(request.resource.data)
         && (hasBenchAccess() || isAdmin());
       allow update: if signedIn()
+        && hasBenchAccess()
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['preview', 'lastMessageAt']);
       allow delete: if isAdmin();
 
