@@ -580,10 +580,21 @@
       var btn = card.querySelector(".min-tier-select");
       if (btn) {
         var tierPlan = getPlanById(tier);
+        var paidLocked =
+          signedIn &&
+          tierPlan &&
+          tierPlan.price > 0 &&
+          !isSubscribeDemoMode() &&
+          !tierUsesLiveCheckout(tier) &&
+          !isSavedPlan;
         if (isSavedPlan) {
           btn.disabled = true;
           btn.setAttribute("aria-disabled", "true");
           btn.textContent = "Current plan";
+        } else if (paidLocked) {
+          btn.disabled = true;
+          btn.setAttribute("aria-disabled", "true");
+          btn.textContent = "Checkout coming soon";
         } else {
           btn.disabled = false;
           btn.removeAttribute("aria-disabled");
@@ -608,20 +619,41 @@
     return null;
   }
 
+  function isSubscribeDemoMode() {
+    return !(
+      window.MIN_STRIPE &&
+      window.MIN_STRIPE.isAnyPaidCheckoutReady &&
+      window.MIN_STRIPE.isAnyPaidCheckoutReady()
+    );
+  }
+
+  function tierUsesLiveCheckout(tierId) {
+    return (
+      window.MIN_STRIPE &&
+      window.MIN_STRIPE.isTierCheckoutReady &&
+      window.MIN_STRIPE.isTierCheckoutReady(tierId)
+    );
+  }
+
   function tierSelectCta(sub, subscriptionId, signedIn) {
     if (!signedIn) return "Join " + sub.name;
     if (sub.id === subscriptionId) return "Current plan";
-    var currentRank =
-      window.MIN_AUTH && window.MIN_AUTH.getSubscriptionRank
-        ? window.MIN_AUTH.getSubscriptionRank()
-        : 0;
-    var targetRank = 0;
-    if (sub.id === "bench") targetRank = 1;
-    else if (sub.id === "starter") targetRank = 2;
-    else if (sub.id === "owner") targetRank = 3;
-    if (targetRank > currentRank) return "Upgrade to " + sub.name;
-    if (targetRank < currentRank) return "Switch to " + sub.name;
-    return "Select " + sub.name;
+    if (sub.id === "waterboy") return "Select free plan";
+    if (tierUsesLiveCheckout(sub.id)) {
+      var currentRank =
+        window.MIN_AUTH && window.MIN_AUTH.getSubscriptionRank
+          ? window.MIN_AUTH.getSubscriptionRank()
+          : 0;
+      var targetRank = 0;
+      if (sub.id === "bench") targetRank = 1;
+      else if (sub.id === "starter") targetRank = 2;
+      else if (sub.id === "owner") targetRank = 3;
+      if (targetRank > currentRank) return "Upgrade to " + sub.name;
+      if (targetRank < currentRank) return "Switch to " + sub.name;
+      return "Checkout — " + sub.name;
+    }
+    if (isSubscribeDemoMode()) return "Preview " + sub.name + " (demo)";
+    return "Checkout coming soon";
   }
 
   function subscriptionPlansForDisplay() {
@@ -868,7 +900,8 @@
     var cards = contentCardsList();
     if (!cards.length) {
       html +=
-        '<p class="min-auth-hint" style="margin-bottom:12px">Content library loads from Firestore. Check back in a moment.</p>';
+        '<div class="min-empty" style="margin-bottom:16px"><p>No content yet.</p>' +
+        '<p class="min-auth-hint">Library drops will show here once published.</p></div>';
     }
 
     cards.forEach(function (card) {
@@ -936,9 +969,15 @@
       "</div>";
 
     if (!filtered.length) {
-      html +=
-        '<div class="min-empty"><p>No posts match this filter.</p>' +
-        '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minFilterClear">Show all posts</button></div>';
+      if (!filterActive && !postsList().length) {
+        html +=
+          '<div class="min-empty"><p>No posts yet.</p>' +
+          '<p class="min-auth-hint">Be the first to share something with the community.</p></div>';
+      } else {
+        html +=
+          '<div class="min-empty"><p>No posts match this filter.</p>' +
+          '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minFilterClear">Show all posts</button></div>';
+      }
       html += "</div>";
       return html;
     }
@@ -1049,7 +1088,7 @@
       });
 
       html +=
-        '<button type="button" class="min-btn min-btn--ghost min-btn--block" id="minNewChatBtn" style="margin-top:8px">+ New Chatroom</button>';
+        '<p class="min-auth-hint" style="margin-top:8px">Custom chatrooms coming soon — use the rooms above for now.</p>';
     }
 
     html += "</div>";
@@ -1091,7 +1130,8 @@
       '<div class="min-screen min-screen--wide"><div class="min-shop-grid">';
     if (!products.length) {
       html +=
-        '<p class="min-auth-hint" style="grid-column:1/-1">Shop products load from Firestore. Check back in a moment.</p>';
+        '<div class="min-empty" style="grid-column:1/-1"><p>Shop is empty for now.</p>' +
+        '<p class="min-auth-hint">Merch will appear here once products are published.</p></div>';
     }
     products.forEach(function (p) {
       html +=
@@ -1268,14 +1308,24 @@
     var selectedId = getSubscribeSelectedId();
     var displayedPlan = getPlanById(selectedId);
     var isSavedSelection = signedIn && savedId === selectedId;
+    var demoMode = isSubscribeDemoMode();
     var html =
       '<div class="min-screen min-screen--subscribe min-screen--wide"><h2 class="min-page-title">Subscription Options</h2>';
+
+    if (demoMode) {
+      html +=
+        '<p class="min-auth-hint min-subscribe-demo" role="status">' +
+        "<strong>Demo / preview.</strong> Plan selection saves to your profile for walkthroughs. " +
+        "Paid Stripe checkout is not live yet — no card will be charged.</p>";
+    }
 
     html +=
       '<p class="min-auth-hint min-subscribe-hint">Tap any plan to preview it above' +
       (signedIn
-        ? '. Use the button to save your choice.'
-        : '. <button type="button" class="min-link-btn" data-nav="#login">Sign in</button> to save.') +
+        ? demoMode
+          ? ". Use the button to preview a plan on your profile."
+          : ". Use the button to checkout or select the free plan."
+        : '. <button type="button" class="min-link-btn" data-nav="#login">Sign in</button> to continue.') +
       "</p>";
 
     if (displayedPlan) {
@@ -1296,6 +1346,7 @@
       var priceLine =
         formatPlanPrice(sub.price) + (sub.price ? '<span style="font-size:0.75rem;font-weight:400;color:var(--min-muted)">/month</span>' : "");
       var tierImage = sub.image || A + "stack.svg";
+      var paidLocked = signedIn && sub.price > 0 && !demoMode && !tierUsesLiveCheckout(sub.id) && !isSavedPlan;
       html +=
         '<article class="min-tier-card min-tier-card--pickable min-tier-card--' +
         esc(sub.id) +
@@ -1323,14 +1374,17 @@
         priceLine +
         "</p>" +
         (sub.limited ? '<p class="min-tier-limited">Limited to 20 members</p>' : "") +
+        (demoMode && sub.price > 0
+          ? '<p class="min-tier-limited">Demo preview — not billed</p>'
+          : "") +
         '<p class="min-tier-perks">' +
         esc(sub.perks) +
         '</p><button type="button" class="min-btn min-btn--primary min-btn--block min-tier-select"' +
-        (isSavedPlan ? ' disabled aria-disabled="true"' : "") +
+        (isSavedPlan || paidLocked ? ' disabled aria-disabled="true"' : "") +
         ' data-tier="' +
         esc(sub.id) +
         '">' +
-        esc(isSavedPlan ? "Current plan" : cta) +
+        esc(isSavedPlan ? "Current plan" : paidLocked ? "Checkout coming soon" : cta) +
         "</button></div></article>";
     });
     html += "</div></div></div>";
@@ -1670,13 +1724,7 @@
       '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minCreateVideoClear" style="display:none">Remove video</button>' +
       '<p class="min-auth-hint" id="minCreateVideoName" style="display:none"></p>' +
       '<p class="min-auth-hint" id="minCreateVideoProgress" style="display:none"></p>' +
-      '<p class="min-auth-hint">Add an image or a video, not both. Videos upload through Mux.</p></div></div></div>' +
-      '<div class="min-overlay" id="minChatroomOverlay">' +
-      '<div class="min-sheet">' +
-      '<div class="min-sheet-header"><button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minChatroomClose">Cancel</button>' +
-      '<h2>New chatroom</h2><button type="button" class="min-btn min-btn--ghost min-btn--sm" style="color:var(--min-primary)">Done</button></div>' +
-      '<div class="min-field"><input type="text" id="minChatroomName" placeholder="Chatroom name"></div>' +
-      '<p class="min-auth-hint">Custom chatrooms are coming soon. Use the default rooms for now.</p></div></div>'
+      '<p class="min-auth-hint">Add an image or a video, not both. Videos upload through Mux.</p></div></div></div>'
     );
   }
 
@@ -1797,15 +1845,6 @@
     if (filterClear) filterClear.onclick = function () {
       savePostsFilter("all");
       render();
-    };
-
-    var newChat = $("#minNewChatBtn");
-    if (newChat) newChat.onclick = function () {
-      openOverlay("minChatroomOverlay");
-    };
-    var chatroomClose = $("#minChatroomClose");
-    if (chatroomClose) chatroomClose.onclick = function () {
-      closeOverlay("minChatroomOverlay");
     };
 
     var createClose = $("#minCreateClose");
@@ -2064,10 +2103,26 @@
           subscribePreviewId = t;
           applySubscribeSelection();
           if (!requireAuthForAction()) return;
-          if (!window.MIN_AUTH || !window.MIN_AUTH.selectSubscriptionPlan) return;
+          if (!window.MIN_AUTH) return;
+
+          var useLiveCheckout = tierUsesLiveCheckout(t);
+          if (useLiveCheckout) {
+            if (!window.MIN_AUTH.startSubscriptionCheckout) return;
+            btn.disabled = true;
+            var checkoutText = btn.textContent;
+            btn.textContent = "Opening checkout…";
+            window.MIN_AUTH.startSubscriptionCheckout(t).catch(function (err) {
+              alert(err && err.message ? err.message : "Could not start checkout.");
+              btn.disabled = false;
+              btn.textContent = checkoutText;
+            });
+            return;
+          }
+
+          if (!window.MIN_AUTH.selectSubscriptionPlan) return;
           btn.disabled = true;
           var previousText = btn.textContent;
-          btn.textContent = "Saving…";
+          btn.textContent = isSubscribeDemoMode() && t !== "waterboy" ? "Saving preview…" : "Saving…";
           window.MIN_AUTH
             .selectSubscriptionPlan(t)
             .then(function () {

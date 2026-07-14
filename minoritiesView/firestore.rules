@@ -45,6 +45,9 @@ service cloud.firestore {
         );
     }
 
+    // Demo allows clients to preview paid tiers on their profile.
+    // When Stripe is live, prefer webhook updates for paid tiers and
+    // tighten this to waterboy-only self updates.
     function subscriptionSelfUpdate() {
       let changed = request.resource.data.diff(resource.data).affectedKeys();
       return changed.hasOnly(['subscriptionId', 'tier', 'subscriptionStatus', 'updatedAt'])

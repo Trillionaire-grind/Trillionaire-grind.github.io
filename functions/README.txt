@@ -107,9 +107,11 @@ Separate Firebase project — NOT naples-sunrise-bay or liv-lakay.
    firebase functions:secrets:set MUX_TOKEN_SECRET
    firebase functions:secrets:set MUX_WEBHOOK_SECRET
 
-5) Stripe — create 4 monthly Prices, set function params:
-   MIN_STRIPE_PRICE_WATERBOY, MIN_STRIPE_PRICE_BENCH,
-   MIN_STRIPE_PRICE_STARTER, MIN_STRIPE_PRICE_VIP, MIN_PUBLIC_URL
+5) Stripe — create 3 monthly Prices (Waterboy is free), set function params:
+   MIN_STRIPE_PRICE_BENCH, MIN_STRIPE_PRICE_STARTER, MIN_STRIPE_PRICE_OWNER, MIN_PUBLIC_URL
+
+   Leave params as CLEAR_REQUIRED until real price_… IDs exist.
+   Also paste Price IDs into minoritiesView/scripts/minStripeConfig.js and set CHECKOUT_LIVE = true.
 
    Webhook URL:
    https://us-central1-the-minorities.cloudfunctions.net/stripeWebhook
@@ -118,6 +120,8 @@ Separate Firebase project — NOT naples-sunrise-bay or liv-lakay.
 
    Secrets (same names as Liv): STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
 
+   Full steps: minoritiesFunctions/README.txt
+
 Firestore (minoritiesView/firestore.rules):
-  users/{uid}                  profiles + tier (tier updated by webhook only)
+  users/{uid}                  profiles + tier (paid tiers should be webhook-updated when live)
   stripeCheckoutSessions/{id}  webhook idempotency (client blocked)

@@ -1,13 +1,19 @@
-Breakdown of the topics for the first year 
-1) How To Use Any Technology 
+Breakdown of the topics for the first year
+(Curriculum outline — months 1–6 have topic titles; months 7–12 are planned placeholders until lesson content is written. Do not treat empty months as completed.)
+
+1) How To Use Any Technology
 2) How To Navigate Your CellPhone
-3) How To Navigate Your Computer 
+3) How To Navigate Your Computer
 4) How To Navigate Your Tablet
-5) How To Navigate The Internet 
+5) How To Navigate The Internet
 6) How To Use The Basic Phone Functions
-7)
-8)
-9)
-10)
-11)
-12)
+7) How To Stay Safe Online (planned — content not ready)
+8) How To Use Email & Messaging Confidently (planned — content not ready)
+9) How To Manage Photos, Files & Cloud Storage (planned — content not ready)
+10) How To Use Video Calls Beyond Zoom Basics (planned — content not ready)
+11) How To Spot A.I. Tools You’ll Actually Use (planned — content not ready)
+12) Capstone: Build Your Personal Tech Routine (planned — content not ready)
+
+Status key:
+- Months 1–6: topic titles defined (lesson media may still be in progress)
+- Months 7–12: honest placeholders only — no fake completed lessons

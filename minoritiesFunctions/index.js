@@ -2,18 +2,70 @@
 
 const { onRequest } = require("firebase-functions/v2/https");
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
-const { defineSecret } = require("firebase-functions/params");
+const { defineSecret, defineString } = require("firebase-functions/params");
 const logger = require("firebase-functions/logger");
 const admin = require("firebase-admin");
+const Stripe = require("stripe");
 
 admin.initializeApp();
 const db = admin.firestore();
+const FieldValue = admin.firestore.FieldValue;
 
 const muxTokenId = defineSecret("MUX_TOKEN_ID");
 const muxTokenSecret = defineSecret("MUX_TOKEN_SECRET");
+const stripeSecretKey = defineSecret("STRIPE_SECRET_KEY");
+const stripeWebhookSecret = defineSecret("STRIPE_WEBHOOK_SECRET");
 
-const DEFAULT_PUBLIC_URL = "https://trillionaire-grind.github.io";
+/** Public site origin for Checkout redirects + push deep links (no trailing slash). */
+const minPublicUrl = defineString("MIN_PUBLIC_URL", {
+  default: "https://trillionaire-grind.github.io",
+});
+
+/** Stripe Price IDs — leave CLEAR_REQUIRED / empty until live prices exist. Waterboy is free. */
+const minStripePriceBench = defineString("MIN_STRIPE_PRICE_BENCH", { default: "CLEAR_REQUIRED" });
+const minStripePriceStarter = defineString("MIN_STRIPE_PRICE_STARTER", { default: "CLEAR_REQUIRED" });
+const minStripePriceOwner = defineString("MIN_STRIPE_PRICE_OWNER", { default: "CLEAR_REQUIRED" });
+
+const TIER_FROM_SUBSCRIPTION = {
+  waterboy: "free",
+  bench: "bench",
+  starter: "starter",
+  owner: "owner",
+};
+
 const PUSH_ICON = "/minoritiesView/assets/graduation.svg";
+
+function publicBaseUrl() {
+  return String(minPublicUrl.value() || "https://trillionaire-grind.github.io").replace(/\/$/, "");
+}
+
+function isPriceConfigured(value) {
+  if (!value || typeof value !== "string") return false;
+  const trimmed = value.trim();
+  if (!trimmed || trimmed === "CLEAR_REQUIRED") return false;
+  if (trimmed.startsWith("LIVE_REQUIRED")) return false;
+  return trimmed.startsWith("price_");
+}
+
+function priceIdForTier(tierId) {
+  const map = {
+    bench: minStripePriceBench.value(),
+    starter: minStripePriceStarter.value(),
+    owner: minStripePriceOwner.value(),
+  };
+  const priceId = map[tierId];
+  return isPriceConfigured(priceId) ? priceId.trim() : null;
+}
+
+function safeRelativePath(value, fallback) {
+  if (typeof value !== "string") return fallback;
+  const trimmed = value.trim();
+  if (!trimmed.startsWith("/")) return fallback;
+  if (trimmed.startsWith("//")) return fallback;
+  if (trimmed.includes("..")) return fallback;
+  const pathOnly = trimmed.split("?")[0].split("#")[0];
+  return pathOnly || fallback;
+}
 
 async function collectPushTokens(excludeUid, options = {}) {
   const { vipOnly = false } = options;
@@ -42,10 +94,11 @@ async function sendPushMulticast(tokens, notification, data = {}) {
   }
 
   const messaging = admin.messaging();
-  const url = data.url || `${DEFAULT_PUBLIC_URL}/minorities.html`;
+  const base = publicBaseUrl();
+  const url = data.url || `${base}/minorities.html`;
   const absoluteLink = url.startsWith("http")
     ? url
-    : `${DEFAULT_PUBLIC_URL}/${url.replace(/^\//, "")}`;
+    : `${base}/${url.replace(/^\//, "")}`;
   const payloadData = {
     title: String(notification.title || "The Minorities"),
     body: String(notification.body || ""),
@@ -114,7 +167,121 @@ function pickCorsOrigin(req) {
   if (typeof origin === "string" && origin.startsWith("http")) {
     return origin;
   }
-  return DEFAULT_PUBLIC_URL.replace(/\/$/, "");
+  return publicBaseUrl();
+}
+
+async function applyUserSubscription(uid, updates) {
+  if (!uid || typeof uid !== "string") {
+    throw new Error("missing_uid");
+  }
+  await db.collection("users").doc(uid).set(
+    {
+      ...updates,
+      updatedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true },
+  );
+}
+
+async function fulfillCheckoutSession(session) {
+  const sessionId = session.id;
+  const ref = db.collection("stripeCheckoutSessions").doc(sessionId);
+  const existing = await ref.get();
+  if (existing.exists) {
+    return;
+  }
+
+  const tierId = (session.metadata && session.metadata.tierId) || null;
+  const uid =
+    (session.metadata && session.metadata.firebaseUid) ||
+    session.client_reference_id ||
+    null;
+
+  if (!uid || !tierId || !TIER_FROM_SUBSCRIPTION[tierId] || tierId === "waterboy") {
+    logger.warn("fulfillCheckoutSession skipped — missing tier/uid", {
+      sessionId,
+      uid: uid || null,
+      tierId: tierId || null,
+    });
+    await ref.set({
+      skipped: true,
+      reason: "missing_tier_or_uid",
+      createdAt: FieldValue.serverTimestamp(),
+    });
+    return;
+  }
+
+  const tier = TIER_FROM_SUBSCRIPTION[tierId];
+  const subscriptionId =
+    typeof session.subscription === "string"
+      ? session.subscription
+      : session.subscription && session.subscription.id
+        ? session.subscription.id
+        : null;
+  const customerId =
+    typeof session.customer === "string"
+      ? session.customer
+      : session.customer && session.customer.id
+        ? session.customer.id
+        : null;
+
+  await applyUserSubscription(uid, {
+    subscriptionId: tierId,
+    tier,
+    subscriptionStatus: "active",
+    ...(customerId ? { stripeCustomerId: customerId } : {}),
+    ...(subscriptionId ? { stripeSubscriptionId: subscriptionId } : {}),
+  });
+
+  await ref.set({
+    firebaseUid: uid,
+    tierId,
+    stripeCustomerId: customerId,
+    stripeSubscriptionId: subscriptionId,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+}
+
+async function syncSubscriptionStatus(subscription) {
+  const uid =
+    (subscription.metadata && subscription.metadata.firebaseUid) || null;
+  if (!uid) {
+    logger.warn("syncSubscriptionStatus skipped — no firebaseUid metadata");
+    return;
+  }
+
+  const statusMap = {
+    active: "active",
+    trialing: "trialing",
+    past_due: "past_due",
+    canceled: "canceled",
+    unpaid: "past_due",
+    incomplete: "past_due",
+    incomplete_expired: "canceled",
+    paused: "canceled",
+  };
+  const subscriptionStatus = statusMap[subscription.status] || "none";
+  const tierId = (subscription.metadata && subscription.metadata.tierId) || null;
+
+  const updates = {
+    subscriptionStatus,
+    stripeSubscriptionId: subscription.id,
+  };
+  if (typeof subscription.customer === "string") {
+    updates.stripeCustomerId = subscription.customer;
+  }
+  if (subscriptionStatus === "canceled" || subscriptionStatus === "none") {
+    updates.subscriptionId = "waterboy";
+    updates.tier = "free";
+  } else if (tierId && TIER_FROM_SUBSCRIPTION[tierId]) {
+    updates.subscriptionId = tierId;
+    updates.tier = TIER_FROM_SUBSCRIPTION[tierId];
+  }
+  if (subscription.current_period_end) {
+    updates.subscriptionRenewsAt = new Date(subscription.current_period_end * 1000);
+  }
+
+  await applyUserSubscription(uid, updates);
 }
 
 async function muxApi(path, options = {}) {
@@ -133,6 +300,172 @@ async function muxApi(path, options = {}) {
   }
   return payload.data;
 }
+
+/**
+ * POST JSON { tierId, successPath?, cancelPath? }
+ * Authorization: Bearer <Firebase ID token>
+ * Returns { url } Stripe Checkout Session URL when Price IDs are configured.
+ */
+exports.createMinSubscriptionCheckout = onRequest(
+  {
+    secrets: [stripeSecretKey],
+    cors: true,
+    region: "us-central1",
+    invoker: "public",
+  },
+  async (req, res) => {
+    if (req.method === "OPTIONS") {
+      res.status(204).send("");
+      return;
+    }
+    if (req.method !== "POST") {
+      res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    try {
+      const decoded = await verifyBearerToken(req);
+      if (!decoded || !decoded.uid) {
+        res.status(401).json({ error: "unauthorized" });
+        return;
+      }
+
+      const tierId = req.body && req.body.tierId;
+      if (!tierId || typeof tierId !== "string" || !TIER_FROM_SUBSCRIPTION[tierId]) {
+        res.status(400).json({ error: "invalid_tier" });
+        return;
+      }
+      if (tierId === "waterboy") {
+        res.status(400).json({ error: "free_tier_no_checkout" });
+        return;
+      }
+
+      const priceId = priceIdForTier(tierId);
+      if (!priceId) {
+        res.status(503).json({ error: "tier_not_configured" });
+        return;
+      }
+
+      const stripe = new Stripe(stripeSecretKey.value());
+      const base = publicBaseUrl();
+      const successPath = safeRelativePath(
+        req.body && req.body.successPath,
+        "/minorities.html",
+      );
+      const cancelPath = safeRelativePath(
+        req.body && req.body.cancelPath,
+        "/minorities.html",
+      );
+
+      const userSnap = await db.collection("users").doc(decoded.uid).get();
+      const userData = userSnap.exists ? userSnap.data() || {} : {};
+      const existingCustomerId =
+        typeof userData.stripeCustomerId === "string" && userData.stripeCustomerId
+          ? userData.stripeCustomerId
+          : null;
+
+      const sessionParams = {
+        mode: "subscription",
+        line_items: [{ price: priceId, quantity: 1 }],
+        success_url: `${base}${successPath}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${base}${cancelPath}?checkout=cancelled`,
+        client_reference_id: decoded.uid,
+        metadata: {
+          app: "the-minorities",
+          firebaseUid: decoded.uid,
+          tierId,
+        },
+        subscription_data: {
+          metadata: {
+            app: "the-minorities",
+            firebaseUid: decoded.uid,
+            tierId,
+          },
+        },
+      };
+
+      if (existingCustomerId) {
+        sessionParams.customer = existingCustomerId;
+      } else if (decoded.email) {
+        sessionParams.customer_email = decoded.email;
+      }
+
+      const session = await stripe.checkout.sessions.create(sessionParams);
+      res.status(200).json({ url: session.url, sessionId: session.id });
+    } catch (err) {
+      logger.error("createMinSubscriptionCheckout", err);
+      res.status(500).json({ error: err.message || "checkout_failed" });
+    }
+  },
+);
+
+/**
+ * Stripe webhook — uses req.rawBody for signature verification.
+ * Events: checkout.session.completed, async_payment_succeeded,
+ *         customer.subscription.updated, customer.subscription.deleted
+ */
+exports.stripeWebhook = onRequest(
+  {
+    secrets: [stripeSecretKey, stripeWebhookSecret],
+    region: "us-central1",
+    invoker: "public",
+  },
+  async (req, res) => {
+    if (req.method !== "POST") {
+      res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    const sig = req.headers["stripe-signature"];
+    if (!sig) {
+      res.status(400).send("Missing stripe-signature");
+      return;
+    }
+
+    let event;
+    try {
+      const stripe = new Stripe(stripeSecretKey.value());
+      const payload = req.rawBody || req.body;
+      event = stripe.webhooks.constructEvent(payload, sig, stripeWebhookSecret.value());
+    } catch (err) {
+      logger.error("stripeWebhook signature failed", err.message);
+      res.status(400).send(`Webhook Error: ${err.message}`);
+      return;
+    }
+
+    try {
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object;
+          if (session.mode === "subscription") {
+            await fulfillCheckoutSession(session);
+          }
+          break;
+        }
+        case "checkout.session.async_payment_succeeded": {
+          const session = event.data.object;
+          if (session.mode === "subscription") {
+            await fulfillCheckoutSession(session);
+          }
+          break;
+        }
+        case "customer.subscription.updated":
+        case "customer.subscription.deleted": {
+          await syncSubscriptionStatus(event.data.object);
+          break;
+        }
+        default:
+          break;
+      }
+    } catch (err) {
+      logger.error("stripeWebhook handler error", err);
+      res.status(500).json({ error: "handler_failed" });
+      return;
+    }
+
+    res.status(200).json({ received: true });
+  },
+);
 
 /**
  * POST JSON { title? }

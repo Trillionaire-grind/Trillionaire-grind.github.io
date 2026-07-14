@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <title data-i18n="library.title">Bibliyotèk — Liv Lakay</title>
         <link rel="stylesheet" href="assets/styles.css">
+        <script src="scripts/livShellBridge.js"></script>
     </head>
     <body class="liv-body">
         <div class="liv-page">
@@ -12,10 +13,10 @@
 
             <div class="liv-toolbar">
                 <h2 class="liv-section-label" data-i18n="meta.year">Ane</h2>
-                <button type="button" class="liv-search-btn" id="livOpenSearchBtn" data-i18n="library.search">Rechèch</button>
+                <button type="button" class="liv-search-btn" id="livOpenSearchBtn" hidden data-i18n="library.search">Rechèch</button>
             </div>
 
-            <p id="livLibraryEmpty" class="liv-library-empty" hidden data-i18n="search.noResults"></p>
+            <p id="livLibraryEmpty" class="liv-library-empty" hidden data-i18n="library.empty">Pa gen liv pibliye nan bibliyotèk la ankò.</p>
             <div id="yearSections"></div>
         </div>
 
@@ -129,6 +130,24 @@
 
         function normalizeIsbn(s) {
             return String(s).replace(/[\s-]/g, "").toUpperCase();
+        }
+
+        function isLivBookListable(docSnap) {
+            const d = docSnap.data() || {};
+            if (d.draft === true || d.published === false || d.isMock === true) return false;
+            const title = String(d.bookTitle || "").trim();
+            if (!title) return false;
+            const lower = title.toLowerCase();
+            if (
+                lower === "test" ||
+                lower === "mock" ||
+                lower === "sample" ||
+                lower.indexOf("placeholder") >= 0 ||
+                lower.indexOf("coming soon") >= 0
+            ) {
+                return false;
+            }
+            return true;
         }
 
         function filterBookDocs(docs, crit) {
@@ -252,6 +271,11 @@
                 emptyEl.hidden = false;
                 applyLivI18n(emptyEl);
                 lastLibraryPinsKeyRendered = currentHomeListPinsKey();
+                if (typeof window.livReportShellHeight === "function") {
+                    requestAnimationFrame(function () {
+                        window.livReportShellHeight();
+                    });
+                }
                 return;
             }
             emptyEl.hidden = true;
@@ -306,6 +330,11 @@
                 yearSections.appendChild(section);
             });
             lastLibraryPinsKeyRendered = currentHomeListPinsKey();
+            if (typeof window.livReportShellHeight === "function") {
+                requestAnimationFrame(function () {
+                    window.livReportShellHeight();
+                });
+            }
         }
 
         function openIndividualBook(id) {
@@ -322,11 +351,17 @@
             const debugFab = window.location.search.indexOf("debugFab=1") !== -1;
             const show = debugFab || (livFirestoreIsAdmin && lsOn);
             fab.hidden = !show;
+            if (typeof window.livReportShellFab === "function") {
+                window.livReportShellFab(show);
+            }
+            if (typeof window.livReportShellHeight === "function") {
+                window.livReportShellHeight();
+            }
         }
 
         async function getBooks() {
             const querySnapshot = await getDocs(collection(db, "books"));
-            cachedBookDocs = querySnapshot.docs;
+            cachedBookDocs = querySnapshot.docs.filter(isLivBookListable);
             await refreshMyBooksFromServer();
             renderCurrentGrid();
         }
@@ -385,11 +420,13 @@
 
         function openSearchModal() {
             applyLivI18n(searchModal);
+            if (typeof window.livShellModalOpen === "function") window.livShellModalOpen();
             searchModal.classList.add("is-open");
         }
 
         function closeSearchModal() {
             searchModal.classList.remove("is-open");
+            if (typeof window.livShellModalClose === "function") window.livShellModalClose();
         }
 
         function readSearchCriteria() {

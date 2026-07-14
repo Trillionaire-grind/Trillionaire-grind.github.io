@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <title>Liv Lakay</title>
+        <link rel="shortcut icon" type="image/x-icon" href="assets/books.svg"/>
         <style>
             .liv-shell-html,
             .liv-shell-html body {
@@ -28,32 +29,72 @@
                 min-height: 0;
                 position: relative;
                 width: 100%;
-                max-width: 1400px;
-                margin: 0 auto;
+                /* Full-bleed scroll surface — content width is handled inside iframes
+                   (.liv-page). A max-width here made desktop look like a smaller
+                   scroll pane floated inside the larger app chrome. */
             }
 
-            /* Stack tabs with opacity instead of display:none so iframe layers stay
-               composited — avoids a full repaint of heavy home/library on each switch. */
+            /* One scrollbar on the active tab pane — iframes grow to content height. */
             .liv-shell-view {
                 position: absolute;
                 inset: 0;
                 z-index: 0;
                 opacity: 0;
                 pointer-events: none;
+                overflow: hidden;
+                -webkit-overflow-scrolling: touch;
+                overscroll-behavior: contain;
             }
 
             .liv-shell-view.is-active {
                 z-index: 1;
                 opacity: 1;
                 pointer-events: auto;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+
+            .liv-shell-view.is-modal-lock {
+                overflow: hidden;
             }
 
             .liv-shell-view iframe {
                 width: 100%;
                 height: 100%;
+                min-height: 100%;
                 border: 0;
                 display: block;
                 vertical-align: top;
+                overflow: hidden;
+            }
+
+            .liv-shell-fab {
+                position: fixed;
+                bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+                right: max(16px, env(safe-area-inset-right, 0px));
+                width: 56px;
+                height: 56px;
+                border-radius: 50%;
+                border: none;
+                background: #2abf5b;
+                color: #fff;
+                font-size: 28px;
+                line-height: 1;
+                cursor: pointer;
+                box-shadow: 0 2px 6px rgba(42, 191, 91, 0.35);
+                z-index: 20;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 300;
+            }
+
+            .liv-shell-fab:active {
+                transform: scale(0.96);
+            }
+
+            .liv-shell-fab[hidden] {
+                display: none !important;
             }
 
             .liv-shell-footer {
@@ -122,9 +163,10 @@
                 <iframe id="libraryIframe" src="libraryView.html" title="Bibliyotèk"></iframe>
             </div>
             <div class="liv-shell-view" id="profileView">
-                <iframe src="profileView.html" title="Profil"></iframe>
+                <iframe id="profileIframe" src="profileView.html" title="Profil"></iframe>
             </div>
         </div>
+        <button type="button" id="livShellLibraryFab" class="liv-shell-fab" hidden aria-label="Ajoute yon liv">+</button>
         <footer class="liv-shell-footer">
             <nav aria-label="Main">
                 <button type="button" class="liv-shell-tab" id="homeTabBtn" aria-label="Akèy" aria-current="page">
@@ -143,29 +185,64 @@
         var homeView = document.getElementById("homeView");
         var libraryView = document.getElementById("libraryView");
         var profileView = document.getElementById("profileView");
+        var homeIframe = homeView.querySelector("iframe");
+        var libraryIframe = document.getElementById("libraryIframe");
+        var profileIframe = document.getElementById("profileIframe");
+        var shellFab = document.getElementById("livShellLibraryFab");
 
         var views = [homeView, libraryView, profileView];
+        var iframes = [homeIframe, libraryIframe, profileIframe];
+        var frameHeights = [0, 0, 0];
+        var activeTab = 0;
+        var libraryFabWanted = false;
+        var modalLockDepth = 0;
+        var modalSavedScroll = 0;
+        var modalSavedHeight = 0;
 
         function notifyLibraryFabSync() {
-            var lib = document.getElementById("libraryIframe");
-            if (lib && lib.contentWindow) {
+            if (libraryIframe && libraryIframe.contentWindow) {
                 try {
-                    lib.contentWindow.postMessage({ type: "liv-sync-fab" }, "*");
+                    libraryIframe.contentWindow.postMessage({ type: "liv-sync-fab" }, "*");
                 } catch (e) {}
             }
         }
 
+        function minFrameHeight(view) {
+            return Math.max(1, view.clientHeight || 1);
+        }
+
+        function applyFrameHeight(index) {
+            var view = views[index];
+            var iframe = iframes[index];
+            if (!view || !iframe) return;
+            var locked = modalLockDepth > 0 && index === activeTab;
+            var h = locked
+                ? minFrameHeight(view)
+                : Math.max(frameHeights[index] || 0, minFrameHeight(view));
+            iframe.style.height = h + "px";
+        }
+
+        function syncShellFab() {
+            if (!shellFab) return;
+            shellFab.hidden = !(libraryFabWanted && activeTab === 1 && modalLockDepth === 0);
+        }
+
         function changeTo(destination) {
+            activeTab = destination;
             views.forEach(function (view, index) {
                 if (index === destination) {
                     view.classList.add("is-active");
                     view.setAttribute("aria-hidden", "false");
+                    view.scrollTop = 0;
+                    applyFrameHeight(index);
                 } else {
                     view.classList.remove("is-active");
                     view.setAttribute("aria-hidden", "true");
+                    view.classList.remove("is-modal-lock");
                 }
             });
             selectedBtn(destination);
+            syncShellFab();
             if (destination === 1) {
                 requestAnimationFrame(function () {
                     notifyLibraryFabSync();
@@ -173,13 +250,83 @@
             }
         }
 
+        function iframeIndexFromSource(source) {
+            for (var i = 0; i < iframes.length; i++) {
+                try {
+                    if (iframes[i] && iframes[i].contentWindow === source) return i;
+                } catch (e) {}
+            }
+            return -1;
+        }
+
+        function openShellModal(index) {
+            if (index < 0 || index !== activeTab) return;
+            modalLockDepth += 1;
+            if (modalLockDepth === 1) {
+                var view = views[index];
+                modalSavedScroll = view.scrollTop;
+                modalSavedHeight = frameHeights[index] || minFrameHeight(view);
+                view.scrollTop = 0;
+                view.classList.add("is-modal-lock");
+                applyFrameHeight(index);
+                syncShellFab();
+            }
+        }
+
+        function closeShellModal(index) {
+            if (index < 0 || modalLockDepth === 0) return;
+            modalLockDepth = Math.max(0, modalLockDepth - 1);
+            if (modalLockDepth === 0) {
+                var view = views[index];
+                view.classList.remove("is-modal-lock");
+                if (modalSavedHeight > 0) frameHeights[index] = modalSavedHeight;
+                applyFrameHeight(index);
+                view.scrollTop = modalSavedScroll || 0;
+                syncShellFab();
+            }
+        }
+
         window.addEventListener("message", function (e) {
-            if (e.data && e.data.type === "liv-admin-changed") {
+            if (!e.data || typeof e.data !== "object") return;
+            var idx = iframeIndexFromSource(e.source);
+
+            if (e.data.type === "liv-frame-height" && idx >= 0) {
+                var next = Math.max(0, Number(e.data.height) || 0);
+                if (next === frameHeights[idx] && iframes[idx].style.height) {
+                    /* still re-apply in case viewport changed */
+                }
+                frameHeights[idx] = next;
+                if (modalLockDepth === 0 || idx !== activeTab) {
+                    applyFrameHeight(idx);
+                }
+            }
+
+            if (e.data.type === "liv-library-fab") {
+                libraryFabWanted = !!e.data.visible;
+                syncShellFab();
+            }
+
+            if (e.data.type === "liv-shell-modal" && idx >= 0) {
+                if (e.data.open) openShellModal(idx);
+                else closeShellModal(idx);
+            }
+
+            if (e.data.type === "liv-admin-changed") {
                 notifyLibraryFabSync();
             }
-            if (e.data && e.data.type === "liv-tab" && typeof e.data.tab === "number") {
+            if (e.data.type === "liv-tab" && typeof e.data.tab === "number") {
                 changeTo(e.data.tab);
             }
+        });
+
+        if (shellFab) {
+            shellFab.addEventListener("click", function () {
+                window.location.href = "adminAddBook.html";
+            });
+        }
+
+        window.addEventListener("resize", function () {
+            applyFrameHeight(activeTab);
         });
 
         function selectedBtn(destination) {

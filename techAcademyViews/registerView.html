@@ -203,12 +203,11 @@
                         }
                     })
                     .catch((error) => {
-                        const errorCode = error.code 
-                        const errorMessage = error.message; 
-                        alert(`RV: 191: There was an error ${errorMessage}`)
+                        alert("Could not create your account. Please check your email and password and try again.")
+                        console.error(error)
                     })
             }else{
-                alert('make sure to include your name, or email, or password')
+                alert('Please enter your name, a valid email, and a password (8+ characters).')
             }
         }
 
@@ -235,10 +234,12 @@
             setDoc(doc(usersRef, id), {
                 name : `${name}`,
                 email : `${email}`,
-                accessLevel : accessLevel
+                accessLevel : Number(accessLevel ?? 0)
             }).then(() => {
-                alert("Account Created Successfully")
-                if(accessLevel == 2){
+                localStorage.setItem('userUID', id);
+                localStorage.setItem('userEmail', email);
+                alert("Account created successfully. Welcome!")
+                if(Number(accessLevel) == 2){
                     openScheduleBuilder()
                 }else{
                     openApp()

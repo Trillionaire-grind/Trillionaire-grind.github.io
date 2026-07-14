@@ -496,6 +496,10 @@ export async function resetPassword(email) {
   }
 }
 
+/**
+ * Demo / free-plan path: writes subscription fields on the user doc without Stripe.
+ * Paid live checkout uses startSubscriptionCheckout → Cloud Function + webhook.
+ */
 export async function selectSubscriptionPlan(tierId) {
   await ensureFirebase();
   if (!currentUser) throw new Error("Sign in to choose a subscription.");
@@ -545,6 +549,9 @@ export async function assignTeamRole(targetUid, teamRole) {
 
 export async function startSubscriptionCheckout(tierId) {
   if (!currentUser) throw new Error("Sign in to choose a subscription.");
+  if (tierId === "waterboy") {
+    return selectSubscriptionPlan("waterboy");
+  }
   const checkoutUrl = getMinCheckoutApiUrl();
   if (!checkoutUrl) throw new Error("Checkout is not configured yet.");
 
@@ -557,8 +564,8 @@ export async function startSubscriptionCheckout(tierId) {
     },
     body: JSON.stringify({
       tierId,
-      successPath: "/minorities.html#subscribe",
-      cancelPath: "/minorities.html#subscribe",
+      successPath: "/minorities.html",
+      cancelPath: "/minorities.html",
     }),
   });
 
@@ -570,6 +577,9 @@ export async function startSubscriptionCheckout(tierId) {
     if (payload.error === "unauthorized") {
       throw new Error("Sign in again to continue checkout.");
     }
+    if (payload.error === "free_tier_no_checkout") {
+      return selectSubscriptionPlan("waterboy");
+    }
     throw new Error(payload.error || payload.message || "Could not start checkout.");
   }
   if (!payload.url) throw new Error("Checkout URL missing from server.");
@@ -578,9 +588,11 @@ export async function startSubscriptionCheckout(tierId) {
 
 export async function handleCheckoutReturn() {
   const params = new URLSearchParams(window.location.search);
-  if (params.get("checkout") !== "success") return false;
-  await refreshProfile();
-  const hash = window.location.hash || "#subscribe";
-  window.history.replaceState({}, "", window.location.pathname + hash);
-  return true;
+  const checkout = params.get("checkout");
+  if (checkout !== "success" && checkout !== "cancelled") return false;
+  if (checkout === "success") {
+    await refreshProfile();
+  }
+  window.history.replaceState({}, "", window.location.pathname + "#subscribe");
+  return checkout === "success";
 }

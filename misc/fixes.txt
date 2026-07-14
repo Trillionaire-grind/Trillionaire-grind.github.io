@@ -53,11 +53,11 @@ We have 4 apps that needs to be worked on and a few sales pages
 
 5) Tech Mastery For Seniors Academy
     [part 1]
-    1) Create UX/UI for Tech Mastery For Seniors Academy [in-review]
-    2) Implement Zoom into app [in-review]
-    3) design a backend for it [in-review]
-    4) Create logic for the App [in-review]
-    5) Add payment option for it  [in-review]
+    1) Create UX/UI for Tech Mastery For Seniors Academy [done-v1 soft]
+    2) Implement Zoom into app [partial — hardcoded meeting link in educationView]
+    3) design a backend for it [partial — Firebase auth/Firestore users]
+    4) Create logic for the App [partial — accessLevel gates]
+    5) Add payment option for it  [blocked — live Stripe Payment Links LIVE_REQUIRED in techAcademyViews/scripts/techStripeConfig.js]
     6) Create Copy 
         - FREE Guides 
         - Paid Guides 
@@ -75,7 +75,7 @@ We have 4 apps that needs to be worked on and a few sales pages
         - How To Use The Basic Features Of Your Cell Phone 
         - How To Avoid Scams 
         - Top 5 Things You Need To Know About A.I.  
-    9) Write the corriculum [done]
+    9) Write the corriculum [done outline; months 7–12 placeholders in classes.txt]
 
     focus for part 2 or until paid completion 
     [part 2]

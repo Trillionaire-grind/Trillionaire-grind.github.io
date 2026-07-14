@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title data-i18n="pass.pageTitle">Liv Lakay Access Pass</title>
+    <link rel="shortcut icon" type="image/x-icon" href="livViews/assets/books.svg"/>
     <style>
       body {
         margin: 0;
@@ -19,10 +20,10 @@
       /* Same language switcher as liv.html landing */
       .liv-landing-lang-wrap {
         position: fixed;
-        top: 12px;
-        right: 12px;
+        top: max(10px, env(safe-area-inset-top, 0px));
+        right: max(10px, env(safe-area-inset-right, 0px));
         z-index: 1200;
-        width: 106px;
+        width: 112px;
       }
       .liv-landing-lang-btn {
         display: block;
@@ -32,11 +33,14 @@
         background: #fff;
         color: #1e293b;
         border-radius: 999px;
-        padding: 6px 10px;
-        font-size: 12px;
+        min-height: 44px;
+        padding: 8px 10px;
+        font-size: 13px;
+        font-weight: 600;
         text-align: center;
         white-space: nowrap;
         cursor: pointer;
+        touch-action: manipulation;
       }
       .liv-landing-lang-btn:active {
         transform: none;
@@ -270,12 +274,12 @@
   </head>
   <body>
     <div class="liv-landing-lang-wrap" id="livPassLangWrap">
-      <button type="button" class="liv-landing-lang-btn" id="livPassLangBtn" aria-haspopup="true" aria-expanded="false" aria-controls="livPassLangMenu">KR/EN/ES/FR</button>
+      <button type="button" class="liv-landing-lang-btn" id="livPassLangBtn" aria-haspopup="true" aria-expanded="false" aria-controls="livPassLangMenu">HT / EN</button>
       <div class="liv-landing-lang-menu" id="livPassLangMenu" role="menu" aria-label="Language">
         <button type="button" class="liv-landing-lang-option" data-lang="ht" role="menuitem" lang="ht">Kreyòl (HT)</button>
+        <button type="button" class="liv-landing-lang-option" data-lang="en" role="menuitem" lang="en">English (EN)</button>
         <button type="button" class="liv-landing-lang-option" data-lang="fr" role="menuitem" lang="fr">Français (FR)</button>
         <button type="button" class="liv-landing-lang-option" data-lang="es" role="menuitem" lang="es">Español (ES)</button>
-        <button type="button" class="liv-landing-lang-option" data-lang="en" role="menuitem" lang="en">English (EN)</button>
       </div>
     </div>
     <div class="wrap">
@@ -289,7 +293,7 @@
       <div class="grid">
         <div class="card">
           <div class="video-wrap liv-pass-video-placeholder">
-            <p data-i18n="pass.videoHint">Intro video coming soon. Your $10 pass unlocks the full Kreyòl library.</p>
+            <p data-i18n="pass.videoHint">Intro video is not ready yet — this is an honest placeholder. Your $10 pass unlocks the Kreyòl library.</p>
           </div>
         </div>
 
@@ -335,7 +339,7 @@
         livRememberDevIssuedCode,
         livGenerateLocalTestCode,
       } from "./livViews/scripts/livAccessTestConfig.js";
-      import { initLivI18n, applyLivI18n, setLivLang, t } from "./livViews/scripts/livI18n.js?v=20260608a";
+      import { initLivI18n, applyLivI18n, setLivLang, getLivLang, t } from "./livViews/scripts/livI18n.js?v=20260608a";
 
       initLivI18n();
       applyLivI18n(document);
@@ -493,7 +497,14 @@
         }
       });
 
+      function syncPassLangBtn() {
+        const labels = { ht: "HT / EN", en: "EN / HT", fr: "FR / HT", es: "ES / HT" };
+        const lang = getLivLang();
+        if (langBtn) langBtn.textContent = labels[lang] || "HT / EN";
+      }
+
       if (langBtn && langMenu && langWrap) {
+        syncPassLangBtn();
         langBtn.addEventListener("click", function () {
           const open = !langMenu.classList.contains("is-open");
           langMenu.classList.toggle("is-open", open);
@@ -507,6 +518,7 @@
             setLivLang(next);
             applyLivI18n(document);
             applyDevBypassBuyLabel();
+            syncPassLangBtn();
             langMenu.classList.remove("is-open");
             langBtn.setAttribute("aria-expanded", "false");
           });

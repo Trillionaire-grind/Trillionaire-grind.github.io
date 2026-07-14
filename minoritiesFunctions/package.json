@@ -1,6 +1,6 @@
 {
   "name": "the-minorities-functions",
-  "description": "Mux video upload and FCM push for The Minorities app",
+  "description": "Mux video, Stripe subscription checkout, and FCM push for The Minorities app",
   "engines": {
     "node": "20"
   },
@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "firebase-admin": "^12.7.0",
-    "firebase-functions": "^6.3.0"
+    "firebase-functions": "^6.3.0",
+    "stripe": "^17.7.0"
   }
 }

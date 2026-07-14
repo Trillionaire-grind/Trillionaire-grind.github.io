@@ -153,19 +153,31 @@
         <!--<button class="ctaBtn" onclick="openPayment()" style="margin-right: auto; display:block; margin-left: auto; cursor:pointer; width: 90%; max-width: 600px; margin-top:16px; border: none; border-radius: 10px; padding: 8px; height: 8vh; font-weight: bold;">
             <p style=" font-size: 16px;text-align: start; margin-top: auto; margin-bottom: auto;">Yes, I want to join the academy call 786-309-8015</p>
         </button>-->
-        <!-- CTA Section -->
+        <!-- CTA Section — offer ladder; live Stripe via techStripeConfig.js -->
         <div style="padding: 10px 20px;  text-align: center; font-family: Arial, sans-serif;">
             <h2 style="font-size: 18px; margin-bottom: 10px; margin-top: 0px; color: #333;">
             Ready to Master Technology?
             </h2>
-            <a href="tel:+17863098015"
-            style="display: inline-block; background-color: #FF0C11; color: white; padding: 15px 30px; font-size: 20px; border-radius: 50px; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-            Call Now: (786) 309-8015
-            </a>
-            <p style="font-size: 16px; margin-bottom: 25px; color: #555;">
-            Call now to reserve your spot for <br><strong>Tech Mastery For Seniors Academy</strong>.
+            <p style="font-size: 16px; margin-bottom: 16px; color: #555;">
+            Reserve your spot for <br><strong>Tech Mastery For Seniors Academy</strong>.
             </p>
-           
+            <button type="button" id="academyCtaBtn" onclick="openPayment()"
+            style="display: inline-block; background-color: #FF0C11; color: white; padding: 15px 30px; font-size: 18px; border-radius: 50px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+            Call to reserve: (786) 309-8015
+            </button>
+            <p id="academyCtaHint" style="font-size: 14px; margin-top: 12px; color: #777;">
+            Online checkout coming soon — call to enroll.
+            </p>
+            <p style="margin-top: 20px; font-size: 14px; color: #555; line-height: 1.6;">
+            Or start where you are:<br>
+            <a href="techAcademyViews/secret.html" style="color: #333;">Secret $1</a>
+            &nbsp;·&nbsp;
+            <a href="techAcademyViews/nobs.html" style="color: #333;">Guide $297</a>
+            &nbsp;·&nbsp;
+            <a href="techAcademyViews/academyOffer.html" style="color: #333;">Academy</a>
+            &nbsp;·&nbsp;
+            <a href="techAcademyViews/vip.html" style="color: #333;">VIP</a>
+            </p>
             <p style="margin-top: 15px; font-size: 14px; color: #777;">
             Limited spaces each month. Don't wait!
             </p>
@@ -199,22 +211,13 @@
             </div>
         </div>
 
-        <script>
-            function openPayment() {
-                window.location.replace("tel:+2393835236");
-            }
-        </script>
         <script type="module">
-            // Firebase SDK and login code
-            // Import the functions you need from the SDKs you need
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
             import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
-            // TODO: Add SDKs for Firebase products that you want to use
-            // https://firebase.google.com/docs/web/setup#available-libraries
+            import { startCheckout, getCtaCopy } from "./techAcademyViews/scripts/techStripeConfig.js";
+            import { friendlyAuthError, friendlyResetError, validateEmail } from "./techAcademyViews/scripts/techAuthUi.js";
 
-            // Your web app's Firebase configuration
-            // For Firebase JS SDK v7.20.0 and later, measurementId is optional
             const firebaseConfig = {
                 apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
                 authDomain: "tech-mastery-academy.firebaseapp.com",
@@ -225,14 +228,21 @@
                 measurementId: "G-KLKCTD047P"
             };
 
-            // Initialize Firebase
             const app = initializeApp(firebaseConfig);
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
 
+            const academyCopy = getCtaCopy("academy");
+            const academyCtaBtn = document.getElementById("academyCtaBtn");
+            const academyCtaHint = document.getElementById("academyCtaHint");
+            if (academyCtaBtn) academyCtaBtn.textContent = academyCopy.buttonText;
+            if (academyCtaHint && academyCopy.hint) academyCtaHint.textContent = academyCopy.hint;
+
+            window.openPayment = function openPayment() {
+                startCheckout("academy");
+            };
 
             let logInBtn = document.getElementById("logInBtn")
-
             let myModal = document.getElementById("myModal")
             let emailET = document.getElementById("emailET")
             let passwordET = document.getElementById("passwordET")
@@ -254,11 +264,8 @@
             }
 
             signInBtn.onclick = () => {
-                let email = emailET.value 
-                let password = passwordET.value
-                logIn(email, password)
+                logIn(emailET.value, passwordET.value)
             }
-            
 
             forgotBtn.onclick = () => {
                 myModal.style.display = 'none'
@@ -266,10 +273,7 @@
             }
 
             resetSendBtn.onclick = () => {
-               
-                let email = resetEmailET.value
-                alert(`touched ${email}`)
-                requestEmail(email)
+                requestEmail(resetEmailET.value)
             }
 
             resetCancelBtn.onclick = () => {
@@ -278,38 +282,36 @@
 
             function logIn(email, password)
             {
+                if (!validateEmail(email) || !password) {
+                    alert("Please enter your email and password.")
+                    return
+                }
                 signInWithEmailAndPassword(auth, email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
                     myModal.style.display = 'none'
                     localStorage.setItem('userUID', user.uid);
                     localStorage.setItem('userEmail', user.email);
-                    alert('welcome back')
                     openMainView()
                 })
                 .catch((error) => {
-                    const errorode = error.code 
-                    const errorMessage = error.message
-                    alert(`there was an error ${errorMessage}`)
+                    alert(friendlyAuthError(error))
                 })
-
             }
 
             function requestEmail(email)
             {
-                alert('request was called')
+                if (!validateEmail(email)) {
+                    alert("Please enter a valid email address.")
+                    return
+                }
                 sendPasswordResetEmail(auth, email)
                 .then(() => {
-                    // Password reset email sent!
-                    // ..
-                    alert('check your email to reset your password!')
+                    alert("If an account exists for that email, you will receive a reset link shortly.")
                     resetModal.style.display = 'none'
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(`there was an error ${error}`)
-                    // ..
+                    alert(friendlyResetError(error))
                 })
             }
 

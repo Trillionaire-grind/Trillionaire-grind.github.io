@@ -967,6 +967,15 @@ img {
   margin-bottom: 20px;
 }
 
+.min-subscribe-demo {
+  text-align: center;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--min-outline);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--min-primary) 8%, transparent);
+}
+
 .min-tier-grid-wrap {
   display: flex;
   justify-content: center;

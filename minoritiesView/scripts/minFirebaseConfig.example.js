@@ -63,5 +63,10 @@ FCM setup:
 
 Mux setup (free plan):
 1. https://dashboard.mux.com → Settings → Access Tokens
-2. Deploy functions + secrets (see functions/README.txt Minorities section)
+2. Deploy functions + secrets (see minoritiesFunctions/README.txt)
+
+Stripe subscription checkout:
+1. Create monthly Prices for bench / starter / owner in Stripe
+2. Set CF params MIN_STRIPE_PRICE_* + secrets (see minoritiesFunctions/README.txt)
+3. Paste the same Price IDs into minStripeConfig.js and set CHECKOUT_LIVE = true
 */

@@ -1,6 +1,7 @@
 /**
- * Local app catalog — subscription tiers and checkout defaults.
+ * Local app catalog — subscription tiers and display defaults.
  * User-generated content (posts, cards, shop, learn) lives in Firestore.
+ * Stripe Price IDs / live checkout live in minStripeConfig.js (not here).
  */
 window.MIN_CATALOG = {
   profile: {
@@ -48,6 +49,4 @@ window.MIN_CATALOG = {
         "All content. 1:1 coaching on dating & wealth mindset. Private Owner mastermind (max 20 members). Premium high-ticket tier.",
     },
   ],
-
-  stripeUrl: "https://buy.stripe.com/test_14k8xh7RXg5e6nmdQZ",
 };

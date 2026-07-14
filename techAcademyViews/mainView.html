@@ -6,7 +6,6 @@
         <title>Tech Mastery For Seniors Academy</title>
         <link rel="icon" type="image/x-icon" href="assets/icon.ico">
         <style>
-            /* General reset and basic styles */
             body {
                 margin: 0;
                 padding: 0;
@@ -20,47 +19,12 @@
                 background-color: #f0f0f0;
                 text-align: center;
                 padding: 10px 0;
-                box-sizing: border-box; /* Ensure padding is accounted for in the width */
-
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50px;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            /*footer{
-                background-color: white;
-
-            }* original footer that worked/
-
-            
-            /*footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }*/
-
-            footer{
+                box-sizing: border-box;
                 margin: 0;
-                padding: 10px 0;
-                width: 100%;
             }
-            footer nav{
+            footer nav {
                 display: none;
-                justify-content: space-evenly; /* Distribute space between items */
-                
+                justify-content: space-evenly;
             }
             footer nav a {
                 text-decoration: none;
@@ -117,14 +81,11 @@
                 <a href="#"><img id="homeBtn" src="assets/house.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
                 <a href="#"><img id="educationBtn" src="assets/graduation.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
                 <a href="#"><img id="chatBtn" src="assets/message.svg" height="24px" width="24px"  onclick="changeTo(2)"></a>            
-           
             </nav>
             <nav id="secondNav">
-                <a href="#"><img id="homeBtn" src="assets/house.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
-                <a href="#"><img id="educationBtn" src="assets/graduation.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
-           
+                <a href="#"><img id="homeBtnLow" src="assets/house.svg" height="24px" width="24px" onclick="changeTo(0)"></a>            
+                <a href="#"><img id="educationBtnLow" src="assets/graduation.svg" height="24px" width="24px"  onclick="changeTo(1)"></a> 
             </nav>
-           <!--<div class="fab">+</div>--> 
         </footer>
     </body>
     <script>
@@ -145,26 +106,31 @@
             selectedBtn(destination)
         }
 
-
         function selectedBtn(destination)
         {
             let homeBtn = document.getElementById("homeBtn")
             let educationBtn = document.getElementById("educationBtn")
             let chatBtn = document.getElementById("chatBtn")
+            let homeBtnLow = document.getElementById("homeBtnLow")
+            let educationBtnLow = document.getElementById("educationBtnLow")
 
-            homeBtn.src = "assets/house.svg"
-            educationBtn.src = "assets/graduation.svg"
-            chatBtn.src = "assets/info.png"
+            if (homeBtn) homeBtn.src = "assets/house.svg"
+            if (educationBtn) educationBtn.src = "assets/graduation.svg"
+            if (chatBtn) chatBtn.src = "assets/message.svg"
+            if (homeBtnLow) homeBtnLow.src = "assets/house.svg"
+            if (educationBtnLow) educationBtnLow.src = "assets/graduation.svg"
             
             switch (destination){
                 case 0:
-                    homeBtn.src = "assets/house_b.svg"
+                    if (homeBtn) homeBtn.src = "assets/house_b.svg"
+                    if (homeBtnLow) homeBtnLow.src = "assets/house_b.svg"
                     break
                 case 1:
-                    educationBtn.src = "assets/graduation_b.svg"
+                    if (educationBtn) educationBtn.src = "assets/graduation_b.svg"
+                    if (educationBtnLow) educationBtnLow.src = "assets/graduation_b.svg"
                     break
                 case 2:
-                    chatBtn.src = "assets/info_b.png"
+                    if (chatBtn) chatBtn.src = "assets/message_b.svg"
                     break
             }
         }
@@ -174,7 +140,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAuth, signOut ,signInWithEmailAndPassword,createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
@@ -186,16 +152,20 @@
             measurementId: "G-KLKCTD047P"
         };
 
-
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app)
         const db = getFirestore(app);
 
+        function showDefaultNav() {
+            const firstNav = document.getElementById("firstNav")
+            const secondNav = document.getElementById("secondNav")
+            firstNav.style.display = 'none'
+            secondNav.style.display = 'flex'
+        }
        
         async function getAccount(userId) {
             const docRef = doc(db, "users", userId);
-
             let firstNav = document.getElementById("firstNav")
             let secondNav = document.getElementById("secondNav")
 
@@ -214,18 +184,29 @@
                         secondNav.style.display = 'none'
                     }
                 } else {
-                    alert("No document found with the given ID");
+                    console.warn("No user document found; showing limited nav.");
+                    showDefaultNav()
                 }
             } catch (error) {
                 console.error("Error fetching document:", error);
-                alert("There was an error fetching the document.");
+                showDefaultNav()
             }
         }
 
-        window.onload = function() 
-        {
-            const userUID = localStorage.getItem('userUID');
-            getAccount(userUID)
-        }
+        onAuthStateChanged(auth, (user) => {
+            const storedUid = localStorage.getItem('userUID');
+            if (user) {
+                localStorage.setItem('userUID', user.uid);
+                localStorage.setItem('userEmail', user.email || '');
+                getAccount(user.uid)
+                return
+            }
+            if (storedUid) {
+                // Soft demo: allow shell to load from stored session even if auth persistence lags
+                getAccount(storedUid)
+                return
+            }
+            window.location.replace("../techAcademy.html");
+        });
     </script>
 </html>

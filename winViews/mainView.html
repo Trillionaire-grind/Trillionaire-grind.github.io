@@ -284,6 +284,15 @@
         background-color: #00ACEE;
         color: #fff;
       }
+
+      #crmHint {
+        line-height: 1.4;
+      }
+
+      #followUpList .friend-info p:last-child,
+      #recentList .friend-info p {
+        color: #666;
+      }
     </style>
     <script>
       function toggleOptionalFields() {
@@ -353,8 +362,8 @@
           </div>
 
           <div class="modal-buttons">
-            <button type="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
-            <button id="saveFriendBtn" type="button" onclick="saveFriend()">Save Friend</button>
+            <button type="button" id="cancelFriendBtn" onclick="closeAddFriend()">Cancel</button>
+            <button id="saveFriendBtn" type="button">Save Friend</button>
           </div>
         </div>
       </div>
@@ -399,7 +408,6 @@
                               <p>Student of Ben Graham</p>
                               </div>
                           </div>-->
-          </div>
         </main>
       </section>
 
@@ -407,7 +415,9 @@
         <header>
           <h1>Keep Friends</h1>
         </header>
-        <button id="interactionBtn" >+ New Interaction</button>
+        <p id="crmHint" style="font-size: 0.9rem; color: #555; margin: 0 0 0.75rem;">
+          Open a friend to add an interaction. Follow-ups appear below when it’s been a while.
+        </p>
         <div style="display: flex;">
           <h2>📍 Near You<span style="margin-left: 8px;font-size: 14px; font-weight: normal;">(within 1 mile)</span></h2>
           <p id="updateBtn" style="margin-left: auto; cursor: pointer; margin-top: auto; margin-bottom:auto; font-size: 12px;"> update
@@ -416,35 +426,16 @@
         <div id="nearList">
 
         </div>
-        <!--<ul id="nearUl">
-                        <li class="nearLi" onclick="window.location.href='newProfile.html?id=L9BZzfBEgTaqBRKUZs9V'">Sarah </li>
-                        <li class="nearLi" onclick="window.location.href='newProfile.html?id=rv2dofQgOKMJUqFoP88u'">Adam</li>
-                      </ul>-->
-        <!--<div>
-                      <h2>🔁 Follow-up Soon</h2>
-                      <ul>
-                          <li>Alex (14 days ago)</li>
-                          <li>Priya (30 days ago)</li>
-                      </ul>
-                  </div>-->
 
-        <!--<div class="interactions">
-                      <h2>🤝 Interactions</h2>
-                      <div class="search-bar">
-                        <input 
-                          type="text" 
-                          id="interaction-search" 
-                          placeholder="🔍 Search interactions..." 
-                        />
-                      </div>
-                      <ul id="interaction-list" class="interaction-list">
-                        Interactions dynamically populated 
-                        <ul>
-                          <li class="nearLi">Alex (14 days ago)</li>
-                          <li class="nearLi">Priya (30 days ago)</li>
-                        </ul>
-                      </ul>
-                  </div>-->
+        <div style="margin-top: 1.5rem;">
+          <h2>🔁 Follow-up Soon</h2>
+          <div id="followUpList"></div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-bottom: 4rem;">
+          <h2>🤝 Recent Interactions</h2>
+          <div id="recentList"></div>
+        </div>
       </section>
     </main>
 
@@ -512,30 +503,24 @@
     const auth = getAuth(app)
     const storage = getStorage(app);
 
-    const interactionBtn = document.getElementById("interactionBtn")
     const updateBtn = document.getElementById("updateBtn")
 
     const newFriendBtn = document.getElementById("newFriendBtn")
-    let searchFriendsInput = document.getElementById("searchFriendsInput")
+    const searchFriendsInput = document.getElementById("interaction-search")
+    const FOLLOW_UP_DAYS = 14
 
     newFriendBtn.onclick = () => {
       openAddFriend()
     }
 
-    interactionBtn.onclick = () => {
-      alert('upcoming feature')
-    }
-
     updateBtn.onclick = async () => {
       const location = await getCurrentLocation();
-      if(location){
-        const nearbyFriends = await getNearbyFriends(`${userId}`, 1, location.latitude, location.longitude)
+      if (location && auth.currentUser) {
+        const nearbyFriends = await getNearbyFriends(auth.currentUser.uid, 1, location.latitude, location.longitude)
         renderNear(nearbyFriends)
-      }else{
+      } else {
         alert(`location not available`)
       }
-      //const nearbyFriends = await getNearbyFriends(`${userId}`, 1)
-      //renderNear(nearbyFriends)
     }
 
     function openAddFriend() {
@@ -574,6 +559,11 @@
       const friendListDiv = document.getElementById("friendList");
       friendListDiv.innerHTML = ""; // Clear previous results
 
+      if (!friends.length) {
+        friendListDiv.innerHTML = `<p style="text-align:center; color:#555; margin-top:1rem;">No matches.</p>`;
+        return;
+      }
+
       friends.forEach(friend => {
         let { name, funFact, imageUrl, id } = friend;
 
@@ -581,13 +571,13 @@
           imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
         }
 
+        const factText = funFact || "No fun fact yet";
         let cardHTML = `
                     <div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
                         <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
                         <div class="friend-info">
                             <h2>${name}</h2>
-                            <p>${funFact}</p>
-                            <p id="userId" style="display: none;">${id}</p>
+                            <p>${factText}</p>
                         </div>
                     </div>
                 `;
@@ -602,15 +592,118 @@
         imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80"
       }
 
+      const factText = funFact || "No fun fact yet";
       let tester = `<div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
                               <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
                               <div class="friend-info">
                                   <h2>${name}</h2>
-                                  <p>${funFact}</p>
-                                  <p id="userId" style="display: none;"> ${id} </p>
+                                  <p>${factText}</p>
                               </div>
                           </div>`
       friendListDiv.innerHTML = friendListDiv.innerHTML + tester
+    }
+
+    function toJsDate(value) {
+      if (!value) return null;
+      if (typeof value.toDate === "function") return value.toDate();
+      if (value instanceof Date) return value;
+      if (typeof value.seconds === "number") return new Date(value.seconds * 1000);
+      const parsed = new Date(value);
+      return isNaN(parsed.getTime()) ? null : parsed;
+    }
+
+    function getLastContactDate(friend) {
+      let latest = null;
+      if (Array.isArray(friend.interactions)) {
+        friend.interactions.forEach((item) => {
+          const d = toJsDate(item.date);
+          if (d && (!latest || d > latest)) latest = d;
+        });
+      }
+      if (latest) return latest;
+      return toJsDate(friend.createdAt);
+    }
+
+    function formatDaysAgo(date) {
+      if (!date) return "no contact yet";
+      const days = Math.floor((Date.now() - date.getTime()) / (1000 * 60 * 60 * 24));
+      if (days <= 0) return "today";
+      if (days === 1) return "1 day ago";
+      return `${days} days ago`;
+    }
+
+    async function loadCrmLists(userId) {
+      const friendsSnapshot = await getDocs(collection(db, `users/${userId}/friends`));
+      const friends = friendsSnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+
+      const followUpList = document.getElementById("followUpList");
+      const recentList = document.getElementById("recentList");
+      followUpList.innerHTML = "";
+      recentList.innerHTML = "";
+
+      const followUps = friends
+        .map((friend) => {
+          const lastContact = getLastContactDate(friend);
+          const days = lastContact
+            ? Math.floor((Date.now() - lastContact.getTime()) / (1000 * 60 * 60 * 24))
+            : FOLLOW_UP_DAYS + 1;
+          return { ...friend, lastContact, days };
+        })
+        .filter((friend) => friend.days >= FOLLOW_UP_DAYS)
+        .sort((a, b) => b.days - a.days);
+
+      if (followUps.length < 1) {
+        followUpList.innerHTML = `<p style="width: 100%; text-align: center; color: #555;">You're caught up — no follow-ups due.</p>`;
+      } else {
+        followUps.forEach((friend) => {
+          const imageUrl = friend.imageUrl || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
+          const factText = friend.funFact || "No fun fact yet";
+          followUpList.innerHTML += `
+            <div class="friend-card" onclick="window.location.href='newProfile.html?id=${friend.id}'">
+              <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
+              <div class="friend-info">
+                <h2>${friend.name || "Friend"}</h2>
+                <p>${factText}</p>
+                <p>Last contact: ${formatDaysAgo(friend.lastContact)}</p>
+              </div>
+            </div>`;
+        });
+      }
+
+      const recentItems = [];
+      friends.forEach((friend) => {
+        if (!Array.isArray(friend.interactions)) return;
+        friend.interactions.forEach((item) => {
+          const date = toJsDate(item.date);
+          if (!date) return;
+          recentItems.push({
+            friendId: friend.id,
+            friendName: friend.name || "Friend",
+            title: item.title || "Interaction",
+            notes: item.notes || "",
+            date
+          });
+        });
+      });
+
+      recentItems.sort((a, b) => b.date - a.date);
+      const topRecent = recentItems.slice(0, 10);
+
+      if (topRecent.length < 1) {
+        recentList.innerHTML = `<p style="width: 100%; text-align: center; color: #555;">No interactions yet. Open a friend and tap Add Interaction.</p>`;
+      } else {
+        topRecent.forEach((item) => {
+          const dateLabel = `${item.date.getFullYear()}-${item.date.getMonth() + 1}-${item.date.getDate()}`;
+          recentList.innerHTML += `
+            <div class="friend-card" onclick="window.location.href='newProfile.html?id=${item.friendId}'">
+              <div class="friend-info" style="margin-left: 0;">
+                <h2>${item.friendName}</h2>
+                <p>${dateLabel} — ${item.title}</p>
+                <p>${item.notes ? item.notes : ""}</p>
+              </div>
+            </div>`;
+        });
+      }
     }
 
     function closeAddFriend() {
@@ -766,6 +859,7 @@
 
         alert("Friend added successfully!");
         fetchFriends(auth.currentUser.uid)
+        loadCrmLists(auth.currentUser.uid)
 
         closeAddFriend();
 
@@ -825,12 +919,15 @@
 
     async function fetchFriends(userId) {
       const friendsRef = collection(db, `users/${userId}/friends`)
-      const first = query(friendsRef, orderBy("name"), limit(10))
+      const first = query(friendsRef, orderBy("name"), limit(50))
       const documentSnapshots = await getDocs(first);
 
-      const friends = []
       const friendListDiv = document.getElementById("friendList");
       friendListDiv.innerHTML = "";
+      if (documentSnapshots.empty) {
+        friendListDiv.innerHTML = `<p style="text-align:center; color:#555; margin-top:1rem;">No friends yet. Tap + New Friend to add one.</p>`;
+        return;
+      }
       documentSnapshots.forEach((doc) => {
         let name = doc.data().name
         let imageUrl = doc.data().imageUrl
@@ -838,38 +935,26 @@
         let id = doc.id
         updateDiv(name, funFact, imageUrl, id)
       })
-
-
-      //alert(`last value ${lastVisible.data().name}`)
-
-      //const lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1]
-
-
-      /*const next = query(collection(db, "users/micheal_uid/friends"), 
-        orderBy("name"),
-        startAfter(lastVisible), 
-        //limit(2)
-        //might not have to include a limit
-      );*/
     }
 
     let timer;
 
     searchFriendsInput.addEventListener("input", (e) => {
-      const value = e.target.value;
+      const value = e.target.value.trim();
 
       clearTimeout(timer);
-      timer = setTimeout(async () => {   // <-- make callback async
+      timer = setTimeout(async () => {
+        if (!auth.currentUser) return;
         if (value === "") {
-          // Optional: fetch first 10 friends again
           fetchFriends(auth.currentUser.uid)
         } else {
           const results = await searchFriends(value);
           renderFriends(results);
-        }    // show results properly
+        }
       }, 200);
     });
 
+    const saveFriendBtn = document.getElementById("saveFriendBtn");
     saveFriendBtn.onclick = () => {
       const name = document.getElementById('friendName').value.trim();
       const fact = document.getElementById('friendFact').value.trim();
@@ -884,22 +969,32 @@
         return;
       }
 
-      // You could extend this to save data somewhere
       addFriend(name, fact, email, phone, group, picture)
-      //addFriend()
     }
 
 
     async function searchFriends(searchTerm) {
-      const q = searchTerm.toLowerCase();
-      const qRef = query(
-        collection(db, `users/${auth.currentUser.uid}/friends`),
-        where("searchIndex", "array-contains", q)
-      );
+      const q = searchTerm.toLowerCase().trim();
+      if (!q || !auth.currentUser) return [];
 
+      const friendsRef = collection(db, `users/${auth.currentUser.uid}/friends`);
+      const qRef = query(friendsRef, where("searchIndex", "array-contains", q));
       const snapshot = await getDocs(qRef);
+      let results = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
-      return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Fallback for older friends missing searchIndex
+      if (results.length === 0) {
+        const allSnap = await getDocs(friendsRef);
+        results = allSnap.docs
+          .map(doc => ({ id: doc.id, ...doc.data() }))
+          .filter((friend) => {
+            const name = (friend.name || "").toLowerCase();
+            const fact = (friend.funFact || "").toLowerCase();
+            return name.includes(q) || fact.includes(q) || name.replace(/\s+/g, "").includes(q);
+          });
+      }
+
+      return results;
     }
 
     async function getNearbyFriends(userId, maxMiles, userLat, userLong) {
@@ -953,13 +1048,13 @@
           imageUrl = "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
         }
 
+        const factText = funFact || "No fun fact yet";
         let cardHTML = `
                     <div class="friend-card" onclick="window.location.href='newProfile.html?id=${id}'">
                         <img src="${imageUrl}" alt="User Profile Pic" class="avatar" />
                         <div class="friend-info">
                             <h2>${name}</h2>
-                            <p>${funFact}</p>
-                            <p id="userId" style="display: none;">${id}</p>
+                            <p>${factText}</p>
                         </div>
                     </div>
                 `;
@@ -971,17 +1066,13 @@
 
     onAuthStateChanged(auth, (user) => {
       if (!user) {
-        window.location.href = "winFriends.html";
+        window.location.href = "../winFriends.html";
         return;
-        //alert(`user not logged in still`)
       }
       else {
-
         fetchFriends(user.uid);
-        //showNearby(user.uid);
+        loadCrmLists(user.uid);
       }
-      //fetchFriends(user.uid);
-      //sshowNearby(user.uid);
     });
     //getCurrentUser()
   </script>
