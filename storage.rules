@@ -1,43 +1,16 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
-    function livUserDoc() {
-      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid));
-    }
 
-    function isLivAdmin() {
-      return request.auth != null
-        && firestore.exists(/databases/(default)/documents/users/$(request.auth.uid))
-        && (
-          livUserDoc().data.admin == true
-          || livUserDoc().data.admin == 'true'
-        );
-    }
-
-    function isAllowedBookUpload() {
-      return request.resource.size < 50 * 1024 * 1024
-        && (
-          request.resource.contentType.matches('image/.*')
-          || request.resource.contentType == 'application/pdf'
-          // Phone galleries sometimes omit a real MIME type.
-          || request.resource.contentType == 'application/octet-stream'
-          || request.resource.contentType == ''
-        );
-    }
-
-    // Profile photos: owner upload; any signed-in member can view.
-    match /users/{userId}/{allPaths=**} {
+    // Anyone signed in can read.
+    // Only Firestore users/{uid}.admin == true can write anywhere in Storage.
+    match /{allPaths=**} {
       allow read: if request.auth != null;
+
       allow write: if request.auth != null
-        && request.auth.uid == userId
-        && request.resource.size < 5 * 1024 * 1024
-        && request.resource.contentType.matches('image/.*');
-    }
-
-    // Book covers, chapter scans, and page images (admin ingest).
-    match /books/{allPaths=**} {
-      allow read: if request.auth != null;
-      allow write: if isLivAdmin() && isAllowedBookUpload();
+        && firestore.get(
+             /databases/(default)/documents/users/$(request.auth.uid)
+           ).data.admin == true;
     }
   }
 }

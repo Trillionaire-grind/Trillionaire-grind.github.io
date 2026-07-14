@@ -1387,6 +1387,73 @@ html.liv-html-full body.liv-page-reader {
   cursor: not-allowed;
 }
 
+.liv-upload-hint {
+  margin: 10px 0 0;
+  font-size: 0.88rem;
+  color: var(--liv-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.liv-upload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.liv-upload-overlay[hidden] {
+  display: none !important;
+}
+
+.liv-upload-card {
+  width: min(92vw, 320px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.liv-upload-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  border: 3px solid rgba(42, 191, 91, 0.22);
+  border-top-color: var(--liv-green);
+  animation: liv-spin 0.85s linear infinite;
+}
+
+.liv-upload-title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--liv-text);
+}
+
+.liv-upload-detail {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--liv-muted);
+  line-height: 1.45;
+}
+
+body.liv-is-uploading {
+  overflow: hidden;
+}
+
+@keyframes liv-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .liv-page-fields {
   margin-top: 12px;
   display: flex;
