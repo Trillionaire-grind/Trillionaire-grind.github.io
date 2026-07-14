@@ -2,6 +2,9 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebas
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 import { getAuth,connectAuthEmulator ,signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
 import { doc, connectFirestoreEmulator,setDoc, serverTimestamp,collection, addDoc, updateDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import { greenVersionLabel } from "./greenVersion.js";
+
+document.title = "Green Books App - Home " + greenVersionLabel();
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries

@@ -327,14 +327,29 @@
             chaptersContainer.appendChild(buildChapterBlock());
 
             async function uploadCover(fileOrBlob, bookId, fileNameHint) {
-                const storage = getStorage();
+                const storage = getStorage(app);
                 const baseName =
                     (fileNameHint || fileOrBlob.name || "cover.jpg")
                         .replace(/[^a-z0-9._-]/gi, "_");
                 const path = `books/${bookId}/${Date.now()}_${baseName}`;
                 const storageRef = ref(storage, path);
-                await uploadBytes(storageRef, fileOrBlob);
+                const contentType =
+                    fileOrBlob.type ||
+                    guessUploadContentType(baseName) ||
+                    "image/jpeg";
+                await uploadBytes(storageRef, fileOrBlob, { contentType });
                 return getDownloadURL(storageRef);
+            }
+
+            function guessUploadContentType(fileName) {
+                const lower = String(fileName || "").toLowerCase();
+                if (lower.endsWith(".png")) return "image/png";
+                if (lower.endsWith(".webp")) return "image/webp";
+                if (lower.endsWith(".gif")) return "image/gif";
+                if (lower.endsWith(".heic") || lower.endsWith(".heif")) return "image/heic";
+                if (lower.endsWith(".pdf")) return "application/pdf";
+                if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+                return "";
             }
 
             async function buildCoverBlobFromPdf(pdfUrl) {
@@ -378,11 +393,15 @@
             });
 
             async function uploadPageImage(file, bookId, chapterId, pageNumber) {
-                const storage = getStorage();
+                const storage = getStorage(app);
                 const safeName = file.name.replace(/[^a-z0-9._-]/gi, "_");
                 const path = `books/${bookId}/chapters/${chapterId}/pages/page${pageNumber}_${Date.now()}_${safeName}`;
                 const storageRef = ref(storage, path);
-                await uploadBytes(storageRef, file);
+                const contentType =
+                    file.type ||
+                    guessUploadContentType(safeName) ||
+                    "image/jpeg";
+                await uploadBytes(storageRef, file, { contentType });
                 return getDownloadURL(storageRef);
             }
 
