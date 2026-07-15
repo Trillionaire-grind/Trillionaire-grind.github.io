@@ -1,0 +1,57 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isMinAdmin() {
+      return signedIn()
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.admin == true;
+    }
+
+    function isMember() {
+      return signedIn()
+        && firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data.tier in ['bench', 'starter', 'vip'];
+    }
+
+    // Profile avatars — owner upload; signed-in members can view.
+    match /users/{userId}/avatar/{fileName} {
+      allow read: if signedIn();
+      allow write: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Post images — author or admin.
+    match /posts/{userId}/{fileName} {
+      allow read: if signedIn();
+      allow write: if signedIn()
+        && request.auth.uid == userId
+        && isMember()
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Official content card images — admin only.
+    match /content/{allPaths=**} {
+      allow read: if signedIn();
+      allow write: if isMinAdmin()
+        && request.resource.size < 15 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Class replays — admin upload; tier-gated read via Firestore learnSessions.replayUrl.
+    match /replays/{allPaths=**} {
+      allow read: if signedIn();
+      allow write: if isMinAdmin()
+        && request.resource.size < 500 * 1024 * 1024
+        && (
+          request.resource.contentType.matches('video/.*')
+          || request.resource.contentType == 'application/pdf'
+        );
+    }
+  }
+}

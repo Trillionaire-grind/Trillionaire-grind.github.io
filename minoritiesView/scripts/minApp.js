@@ -4,6 +4,7 @@
   var A = "minoritiesView/assets/";
   var D = window.MIN_DATA;
   var learnInClass = false;
+  var postFilter = "all";
 
   function $(sel, root) {
     return (root || document).querySelector(sel);
@@ -72,6 +73,7 @@
         image: community.image,
         video: community.video,
         comments: community.threadComments || [],
+        official: isOfficialAuthor(community.author),
       };
     }
     var content = D.postDetail[id];
@@ -83,23 +85,30 @@
         image: content.image,
         video: content.video,
         comments: content.comments || [],
+        official: true,
       };
     }
     return null;
   }
 
   function renderCommentsSheet(comments) {
+    var list = comments || [];
     var html =
       '<div class="min-comments-sheet" id="minCommentsSheet">' +
       '<button type="button" class="min-comments-handle" id="minCommentsHandle" aria-label="Expand comments"></button>' +
-      '<p class="min-comments-preview" id="minCommentsPreview">Tap to open comments</p>' +
+      '<p class="min-comments-preview" id="minCommentsPreview">Tap to open comments' +
+      (list.length ? " · " + list.length : "") +
+      "</p>" +
       '<div class="min-comments-panel" id="minCommentsPanel">';
-    (comments || []).forEach(function (c) {
+    if (!list.length) {
+      html += '<p class="min-comments-empty">No comments yet. Be the first.</p>';
+    }
+    list.forEach(function (c) {
       html +=
         '<div class="min-comment"><img src="' +
         A +
         'person.svg" alt=""><div><p class="min-comment-meta">' +
-        esc(c.author) +
+        renderCommentMeta(c.author, !!c.isYou) +
         "</p><p style=\"margin:0\">" +
         esc(c.text) +
         "</p></div></div>";
@@ -112,24 +121,109 @@
     return html;
   }
 
+  function getProfile() {
+    try {
+      var saved = JSON.parse(localStorage.getItem("minProfile") || "null");
+      if (saved && saved.name) return saved;
+    } catch (e) {}
+    return { name: D.profile.name, avatar: D.profile.avatar };
+  }
+
+  function saveProfile(data) {
+    localStorage.setItem("minProfile", JSON.stringify(data));
+  }
+
   function getTier() {
-    return localStorage.getItem("minMemberTier") || "member";
+    return localStorage.getItem("minMemberTier") || "free";
   }
 
   function setTier(t) {
     localStorage.setItem("minMemberTier", t);
   }
 
+  function tierRank(t) {
+    if (t === "vip") return 4;
+    if (t === "starter") return 3;
+    if (t === "bench") return 2;
+    if (t === "waterboy") return 1;
+    return 0;
+  }
+
+  function hasContentAccess() {
+    return tierRank(getTier()) >= 2;
+  }
+
   function tierLabel(t) {
     if (t === "vip") return "V.I.P.";
-    if (t === "member") return "Member";
+    if (t === "starter") return "Starter";
+    if (t === "bench") return "Bench Player";
+    if (t === "waterboy") return "Waterboy";
     return "Free";
   }
 
   function tierClass(t) {
     if (t === "vip") return "min-tier--vip";
-    if (t === "member") return "min-tier--member";
+    if (t === "starter" || t === "bench") return "min-tier--member";
+    if (t === "waterboy") return "min-tier--waterboy";
     return "min-tier--free";
+  }
+
+  function showToast(message) {
+    var existing = document.getElementById("minToast");
+    if (existing) existing.remove();
+    var el = document.createElement("div");
+    el.id = "minToast";
+    el.className = "min-toast";
+    el.setAttribute("role", "status");
+    el.textContent = message;
+    document.body.appendChild(el);
+    requestAnimationFrame(function () {
+      el.classList.add("is-visible");
+    });
+    setTimeout(function () {
+      el.classList.remove("is-visible");
+      setTimeout(function () {
+        if (el.parentNode) el.remove();
+      }, 300);
+    }, 2800);
+  }
+
+  function screenTitle(label) {
+    return '<h2 class="min-page-title min-page-title--screen">' + esc(label) + "</h2>";
+  }
+
+  function isOfficialAuthor(author) {
+    return author === "The Minorities";
+  }
+
+  function officialBadge() {
+    return '<span class="min-official-badge">Official</span>';
+  }
+
+  function renderMessageRow(m) {
+    var bubble =
+      '<div class="min-bubble ' +
+      (m.mine ? "min-bubble--mine" : "min-bubble--them") +
+      '">' +
+      esc(m.text) +
+      "</div>";
+    var avatar = '<img src="' + A + 'person.svg" alt="">';
+    return (
+      '<div class="min-msg-row' +
+      (m.mine ? " is-mine" : "") +
+      '">' +
+      bubble +
+      avatar +
+      "</div>"
+    );
+  }
+
+  function renderCommentMeta(author, isYou) {
+    var html = esc(author);
+    if (isYou) {
+      html += ' <span class="min-comment-you">(you)</span>';
+    }
+    return html;
   }
 
   function parseRoute() {
@@ -171,12 +265,6 @@
         sales: "The Minorities",
       };
       var title = titles[route.name] || "The Minorities";
-      if (route.name === "post" && route.id) {
-        var postRef = resolvePost(route.id);
-        if (postRef && postRef.title) {
-          title = postRef.title.length > 42 ? postRef.title.slice(0, 42) + "…" : postRef.title;
-        }
-      }
       if (route.name === "thread" && route.id) {
         var chat = D.chats.find(function (c) {
           return c.id === route.id;
@@ -216,13 +304,8 @@
       return;
     }
 
-    var tabTitles = { chat: "Chat", learn: "Learn", shop: "Shop" };
-    header.className = "min-header";
-    header.innerHTML =
-      '<div class="min-header-inner" style="justify-content:center">' +
-      '<p class="min-header-title">' +
-      esc(tabTitles[route.tab] || "The Minorities") +
-      "</p></div>";
+    header.className = "min-header min-header--hidden";
+    header.innerHTML = "";
   }
 
   function renderTabbar(route) {
@@ -267,12 +350,13 @@
   }
 
   function upgradeBanner() {
+    if (tierRank(getTier()) >= 3) return "";
     return (
       '<div class="min-upgrade-banner" data-nav="#subscribe" role="button" tabindex="0">' +
       '<img src="' +
       A +
       'lock_open.svg" width="28" height="28" alt="">' +
-      "<div><strong>Upgrade for full access</strong><span>Support the vision</span></div>" +
+      "<div><strong>Upgrade for full access</strong><span>Content, chat, classes &amp; more</span></div>" +
       '<span class="min-chevron">›</span></div>'
     );
   }
@@ -308,6 +392,19 @@
         } else {
           html += '<img class="hero" src="' + esc(card.image) + '" alt="">';
         }
+      } else {
+        if (card.locked) {
+          html +=
+            '<div class="min-locked-wrap"><div class="min-card-placeholder min-card-placeholder--locked"><img src="' +
+            A +
+            'logo_site.png" alt=""></div>' +
+            '<div class="min-locked-badge"><span>🔒 Upgrade to unlock</span></div></div>';
+        } else {
+          html +=
+            '<div class="min-card-placeholder"><img src="' +
+            A +
+            'logo_site.png" alt=""></div>';
+        }
       }
       html +=
         '<div class="min-card-body"><h3>' +
@@ -330,24 +427,55 @@
   }
 
   function renderPosts() {
-    var html =
-      '<div class="min-screen">' +
-      '<button type="button" class="min-icon-btn" id="minFilterBtn" aria-label="Filter posts" style="margin-bottom:8px">' +
+    var filtered = D.posts.filter(function (post) {
+      if (postFilter === "community") return post.author !== "The Minorities";
+      if (postFilter === "minorities") return post.author === "The Minorities";
+      return true;
+    });
+
+    var html = '<div class="min-screen min-screen--posts">';
+
+    html +=
+      '<div class="min-posts-toolbar">' +
+      '<button type="button" class="min-icon-btn" id="minFilterBtn" aria-label="Filter posts">' +
       '<img src="' +
       A +
-      'filter.svg" width="28" height="28" alt=""></button>';
+      'filter.svg" width="28" height="28" alt=""></button>' +
+      '<span class="min-filter-label">' +
+      (postFilter === "all"
+        ? "All posts"
+        : postFilter === "community"
+          ? "Community"
+          : "The Minorities") +
+      "</span></div>";
 
-    D.posts.forEach(function (post) {
+    if (!filtered.length) {
       html +=
-        '<article class="min-post min-post--link" data-nav="#post/' +
+        '<div class="min-empty"><p>No posts in this filter yet.</p>' +
+        '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minFilterReset">Show all</button></div>';
+      html += "</div>";
+      return html;
+    }
+
+    filtered.forEach(function (post) {
+      var official = isOfficialAuthor(post.author);
+      html +=
+        '<article class="min-post min-post--link' +
+        (official ? " min-post--official" : "") +
+        '" data-nav="#post/' +
         esc(post.id) +
         '" role="button" tabindex="0">';
       html +=
         '<div class="min-post-header"><img src="' +
         A +
-        'person.svg" alt=""><div><strong>' +
+        (official ? "logo_site.png" : "person.svg") +
+        '" alt="" class="' +
+        (official ? "min-post-avatar--official" : "") +
+        '"><div><div class="min-post-author-row"><strong>' +
         esc(post.author) +
-        "</strong><time>" +
+        "</strong>" +
+        (official ? officialBadge() : "") +
+        "</div><time>" +
         esc(post.date) +
         "</time></div></div>";
       if (post.video) {
@@ -381,7 +509,7 @@
 
   function renderChat() {
     var tier = getTier();
-    var html = '<div class="min-screen">';
+    var html = '<div class="min-screen">' + screenTitle("Chat");
     var vipLocked = tier !== "vip";
 
     html +=
@@ -427,30 +555,43 @@
   }
 
   function renderLearn() {
+    var tier = getTier();
+    var canJoin = tierRank(tier) >= 3;
+
     if (learnInClass) {
       return (
-        '<div class="min-screen min-screen--full">' +
-        '<iframe class="min-class-iframe" title="Live class stream" src="' +
-        esc(D.learn.zoomUrl) +
-        '" allow="camera; microphone; display-capture"></iframe></div>'
+        '<div class="min-screen min-screen--full min-learn-live">' +
+        '<div class="min-learn-live-msg">' +
+        "<h2>Live session</h2>" +
+        "<p>Your class link will appear here when the session starts. Starter and V.I.P. members receive the link 15 minutes before go-live.</p>" +
+        '<button type="button" class="min-btn min-btn--ghost" id="minLeaveClass">Back</button></div></div>'
       );
     }
+
     return (
-      '<div class="min-screen" style="display:flex;align-items:center;min-height:60dvh">' +
-      '<section class="min-class-card" style="width:100%">' +
-      '<p class="eyebrow">Upcoming Live Session</p>' +
+      '<div class="min-screen min-learn-screen">' +
+      screenTitle("Learn") +
+      '<section class="min-class-card">' +
+      '<div class="min-class-icon"><img src="' +
+      A +
+      'graduation_b.svg" width="40" height="40" alt=""></div>' +
+      '<p class="eyebrow">Upcoming live session</p>' +
       "<h2>" +
       esc(D.learn.nextSession) +
       "</h2>" +
-      '<button type="button" class="min-btn min-btn--primary" id="minJoinClass">Join Live Class</button>' +
-      '<p style="margin-top:16px;font-size:0.8125rem;color:var(--min-muted)">Mock session — opens embedded Zoom.</p>' +
+      "<p class=\"min-class-note\">" +
+      esc(D.learn.memberNote) +
+      "</p>" +
+      (canJoin
+        ? '<button type="button" class="min-btn min-btn--primary" id="minJoinClass">Enter waiting room</button>'
+        : '<button type="button" class="min-btn min-btn--primary" data-nav="#subscribe">Upgrade to join classes</button>') +
       "</section></div>"
     );
   }
 
   function renderShop() {
     var html =
-      '<div class="min-screen min-screen--wide"><h2 class="min-page-title">Shop</h2><div class="min-shop-grid">';
+      '<div class="min-screen min-screen--wide">' + screenTitle("Shop") + '<div class="min-shop-grid">';
     D.products.forEach(function (p) {
       html +=
         '<div class="min-product" data-shop-url="' +
@@ -480,19 +621,29 @@
       );
     }
 
-    var html = '<div class="min-screen min-post-detail min-post-detail--full">';
+    var isOfficial = post.author ? isOfficialAuthor(post.author) : post.kind === "content";
+    var html =
+      '<div class="min-screen min-post-detail min-post-detail--full">';
 
     if (post.author) {
       html +=
         '<div class="min-post-detail-author"><img src="' +
         A +
-        'person.svg" alt=""><div><strong>' +
+        (isOfficial ? "logo_site.png" : "person.svg") +
+        '" alt="" class="' +
+        (isOfficial ? "min-post-avatar--official" : "") +
+        '"><div><div class="min-post-author-row"><strong>' +
         esc(post.author) +
-        "</strong><time>" +
+        "</strong>" +
+        (isOfficial ? officialBadge() : "") +
+        "</div><time>" +
         esc(post.date) +
         "</time></div></div>";
+    } else if (isOfficial) {
+      html += '<div class="min-post-detail-author">' + officialBadge() + "</div>";
     }
 
+    html += '<div class="min-post-detail-content">';
     html += "<h1>" + esc(post.title) + "</h1>";
 
     if (post.video) {
@@ -505,7 +656,7 @@
       html += '<p class="body-copy">' + esc(post.body) + "</p>";
     }
 
-    html += "</div>" + renderCommentsSheet(post.comments);
+    html += "</div></div>" + renderCommentsSheet(post.comments);
     return html;
   }
 
@@ -517,18 +668,7 @@
     var html = '<div class="min-screen min-screen--full">';
     html += '<div class="min-messages" id="minMessages">';
     msgs.forEach(function (m) {
-      html +=
-        '<div class="min-msg-row' +
-        (m.mine ? " is-mine" : "") +
-        '">' +
-        (m.mine ? "" : '<img src="' + A + 'person.svg" alt="">') +
-        '<div class="min-bubble ' +
-        (m.mine ? "min-bubble--mine" : "min-bubble--them") +
-        '">' +
-        esc(m.text) +
-        "</div>" +
-        (m.mine ? '<img src="' + A + 'person.svg" alt="">' : "") +
-        "</div>";
+      html += renderMessageRow(m);
     });
     html += "</div>";
     html +=
@@ -540,29 +680,32 @@
   function renderSubscribe() {
     var tier = getTier();
     var html =
-      '<div class="min-screen"><h2 class="min-page-title">Subscription Options</h2>';
+      '<div class="min-screen"><h2 class="min-page-title">Choose your plan</h2>' +
+      '<p class="min-page-sub">Support the movement and unlock member features.</p>';
     D.subscriptions.forEach(function (sub) {
-      var isCurrent = sub.id === "starter" && tier === "member";
+      var isCurrent = sub.id === tier;
       html +=
         '<article class="min-tier-card' +
         (isCurrent ? " is-current" : "") +
+        ' min-tier-card--' +
+        esc(sub.id) +
         '">';
       if (isCurrent) {
         html += '<div class="min-tier-card-header">Current plan</div>';
       }
       html +=
-        '<img src="' +
+        '<div class="min-tier-card-visual"><img src="' +
         A +
-        'girls.png" alt=""><div class="min-tier-card-body"><h3>' +
+        'logo_site.png" alt=""></div><div class="min-tier-card-body"><h3>' +
         esc(sub.name) +
         '</h3><p class="price">US$' +
         sub.price +
-        '<span style="font-size:0.75rem;font-weight:400;color:var(--min-muted)">/month</span></p><p>' +
+        '<span>/month</span></p><p>' +
         esc(sub.perks) +
         '</p><button type="button" class="min-btn min-btn--primary min-btn--block min-tier-select" data-tier="' +
         esc(sub.id) +
         '">' +
-        (isCurrent ? "Current" : "Join") +
+        (isCurrent ? "Current plan" : "Join — US$" + sub.price + "/mo") +
         "</button></div></article>";
     });
     html += "</div>";
@@ -570,32 +713,47 @@
   }
 
   function renderRegister() {
+    var profile = getProfile();
+    var username = profile.username || "member";
     return (
       '<div class="min-screen">' +
-      '<h2 class="min-page-title" style="text-align:left;font-size:1.75rem">Register for<br>The Minorities App</h2>' +
+      '<h2 class="min-page-title min-page-title--left">Your profile</h2>' +
+      '<p class="min-page-sub min-page-sub--left">Set up how you appear in the community.</p>' +
       '<form class="min-form" id="minRegisterForm">' +
       '<div class="min-avatar-upload"><input type="file" id="minAvatarInput" accept="image/*" hidden>' +
       '<img id="minAvatarPreview" src="' +
-      A +
-      'person.svg" alt="Profile"><br>' +
-      '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minAvatarBtn" style="margin-top:12px">Change picture</button></div>' +
-      '<div class="min-field"><label for="minName">Name</label><input id="minName" type="text" placeholder="Your name"></div>' +
-      '<div class="min-field"><label for="minUsername">Username</label><input id="minUsername" type="text" placeholder="Username"></div>' +
-      '<div class="min-field"><label for="minBio">Bio</label><input id="minBio" type="text" placeholder="Short bio"></div>' +
-      '<div class="min-field"><label for="minEmail">Email</label><input id="minEmail" type="email" placeholder="Email"></div>' +
-      '<div class="min-field"><label for="minPassword">Password</label><input id="minPassword" type="password" placeholder="Password"></div>' +
-      '<button type="submit" class="min-btn min-btn--accent min-btn--block">Register</button></form></div>'
+      esc(profile.avatar) +
+      '" alt="Profile"><br>' +
+      '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minAvatarBtn" style="margin-top:12px">Change photo</button></div>' +
+      '<div class="min-field"><label for="minName">Display name</label><input id="minName" type="text" placeholder="Your name" value="' +
+      esc(profile.name === "Member" ? "" : profile.name) +
+      '"></div>' +
+      '<div class="min-field"><label for="minUsername">Username</label><input id="minUsername" type="text" class="min-input--readonly" value="@' +
+      esc(username.replace(/^@/, "")) +
+      '" readonly disabled aria-describedby="minUsernameHint">' +
+      '<p class="min-field-hint" id="minUsernameHint">Usernames are assigned and cannot be changed.</p></div>' +
+      '<div class="min-field"><label for="minBio">Bio</label><textarea id="minBio" rows="4" maxlength="160" placeholder="Short bio">' +
+      esc(profile.bio || "") +
+      '</textarea><p class="min-field-hint min-char-count"><span id="minBioCount">' +
+      (profile.bio || "").length +
+      '</span>/160</p></div>' +
+      '<div class="min-field"><label for="minEmail">Email</label><input id="minEmail" type="email" placeholder="Email" autocomplete="email"></div>' +
+      '<button type="submit" class="min-btn min-btn--accent min-btn--block">Save profile</button></form></div>'
     );
   }
 
   function renderSales() {
+    var videoHtml = D.promoVideo
+      ? postVideoHtml({ video: D.promoVideo, headline: "The Minorities App" })
+      : '<div class="min-video-placeholder">Promo video coming soon</div>';
     return (
       '<div class="min-screen min-sales-hero">' +
       "<h1>At Last…<br>The Minorities App</h1>" +
-      '<div class="min-video-placeholder">Press play to learn more</div>' +
-      '<p style="font-weight:700;text-align:center">BONUS</p>' +
-      '<ul class="min-bonus-list"><li>Get access to content first</li><li>Get discounts on merch</li><li>Member community chat</li><li>Live class access</li></ul>' +
-      '<button type="button" class="min-btn min-btn--accent min-btn--block" id="minSalesCta" style="margin-top:24px">Yes — app + bonuses for $1/month</button></div>'
+      videoHtml +
+      '<p class="min-sales-bonus-label">Member bonuses</p>' +
+      '<ul class="min-bonus-list"><li>Early access to drops &amp; content</li><li>Member pricing on merch</li><li>Community chat &amp; VIP rooms</li><li>Live classes &amp; replays</li></ul>' +
+      '<button type="button" class="min-btn min-btn--accent min-btn--block" id="minSalesCta">Start with Starter — US$10/mo</button>' +
+      '<button type="button" class="min-btn min-btn--ghost min-btn--block" data-nav="#subscribe" style="margin-top:12px">Compare all plans</button></div>'
     );
   }
 
@@ -628,36 +786,47 @@
 
   function renderOverlays() {
     var tier = getTier();
+    var profile = getProfile();
     return (
       '<div class="min-overlay min-overlay--center" id="minFilterOverlay">' +
       '<div class="min-dialog" role="dialog" aria-labelledby="minFilterTitle">' +
       '<h2 id="minFilterTitle">Filter posts</h2>' +
-      '<label><input type="radio" name="minFilter" value="all" checked> All posts</label><br>' +
-      '<label><input type="radio" name="minFilter" value="community"> Community</label><br>' +
-      '<label><input type="radio" name="minFilter" value="minorities"> Minorities</label>' +
+      '<label class="min-radio"><input type="radio" name="minFilter" value="all"' +
+      (postFilter === "all" ? " checked" : "") +
+      '> All posts</label>' +
+      '<label class="min-radio"><input type="radio" name="minFilter" value="community"' +
+      (postFilter === "community" ? " checked" : "") +
+      '> Community</label>' +
+      '<label class="min-radio"><input type="radio" name="minFilter" value="minorities"' +
+      (postFilter === "minorities" ? " checked" : "") +
+      '> The Minorities</label>' +
       '<div class="min-dialog-actions">' +
       '<button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minFilterCancel">Cancel</button>' +
       '<button type="button" class="min-btn min-btn--primary min-btn--sm" id="minFilterDone">Done</button></div></div></div>' +
       '<div class="min-overlay" id="minProfileOverlay">' +
-      '<div class="min-sheet min-profile-menu">' +
-      '<div class="min-sheet-header"><button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minProfileClose">Close</button></div>' +
-      '<img class="avatar" src="' +
-      A +
-      'person.svg" alt="">' +
+      '<div class="min-sheet min-profile-sheet">' +
+      '<button type="button" class="min-profile-close" id="minProfileClose" aria-label="Close profile">×</button>' +
+      '<div class="min-profile-hero">' +
+      '<img class="min-profile-avatar" src="' +
+      esc(profile.avatar) +
+      '" alt="">' +
       "<h3>" +
-      esc(D.profile.name) +
+      esc(profile.name) +
       "</h3>" +
+      '<p class="min-profile-handle">@' +
+      esc((profile.username || "member").replace(/^@/, "")) +
+      "</p>" +
       '<span class="min-tier ' +
       tierClass(tier) +
       '">' +
       esc(tierLabel(tier)) +
-      "</span>" +
-      '<div style="margin-top:24px;text-align:left">' +
-      menuRow("dollar.svg", "Subscriptions", "#subscribe") +
-      menuRow("signature.svg", "Personal info", "#register") +
-      menuRow("stack.svg", "Social media", null) +
-      menuRow("profile.svg", "Log out", null) +
-      "</div></div></div>" +
+      "</span></div>" +
+      '<nav class="min-menu-list" aria-label="Profile settings">' +
+      menuRow("dollar.svg", "Subscriptions", "Manage your plan", "#subscribe") +
+      menuRow("signature.svg", "Personal info", "Name, bio & photo", "#register") +
+      menuRow("stack.svg", "Social media", "Coming soon", null) +
+      menuRow("profile.svg", "Log out", "Sign out of this device", "logout") +
+      "</nav></div></div>" +
       '<div class="min-overlay" id="minCreatePostOverlay">' +
       '<div class="min-sheet">' +
       '<div class="min-sheet-header"><button type="button" class="min-btn min-btn--ghost min-btn--sm" id="minCreateClose">Cancel</button>' +
@@ -685,17 +854,25 @@
     );
   }
 
-  function menuRow(iconFile, label, hash) {
-    var attrs = hash ? ' data-nav="' + hash + '"' : "";
+  function menuRow(iconFile, label, subtitle, hash) {
+    var attrs = "";
+    if (hash === "logout") attrs = ' data-action="logout"';
+    else if (hash) attrs = ' data-nav="' + hash + '"';
+    else attrs = ' data-action="soon"';
+    var sub = subtitle
+      ? '<span class="min-menu-sub">' + esc(subtitle) + "</span>"
+      : "";
     return (
-      '<div class="min-menu-row"' +
+      '<button type="button" class="min-menu-row"' +
       attrs +
-      "><img src=\"" +
+      '><span class="min-menu-icon"><img src="' +
       A +
       iconFile +
-      '" alt=""><span>' +
+      '" alt=""></span><span class="min-menu-text"><span class="min-menu-label">' +
       esc(label) +
-      '</span><span class="chev">›</span></div>'
+      "</span>" +
+      sub +
+      '</span><span class="chev" aria-hidden="true">›</span></button>'
     );
   }
 
@@ -738,6 +915,28 @@
           e.preventDefault();
           el.click();
         }
+      };
+    });
+
+    document.querySelectorAll(".min-menu-row[data-nav]").forEach(function (el) {
+      el.onkeydown = function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          el.click();
+        }
+      };
+    });
+
+    document.querySelectorAll('[data-action="logout"]').forEach(function (el) {
+      el.onclick = function () {
+        closeAllOverlays();
+        showToast("Signed out");
+      };
+    });
+
+    document.querySelectorAll('[data-action="soon"]').forEach(function (el) {
+      el.onclick = function () {
+        showToast("Coming soon");
       };
     });
 
@@ -785,7 +984,16 @@
     };
     var filterDone = $("#minFilterDone");
     if (filterDone) filterDone.onclick = function () {
+      var picked = document.querySelector('input[name="minFilter"]:checked');
+      postFilter = picked ? picked.value : "all";
       closeOverlay("minFilterOverlay");
+      render();
+    };
+
+    var filterReset = $("#minFilterReset");
+    if (filterReset) filterReset.onclick = function () {
+      postFilter = "all";
+      render();
     };
 
     var newChat = $("#minNewChatBtn");
@@ -820,17 +1028,23 @@
       render();
     };
 
+    var leaveClass = $("#minLeaveClass");
+    if (leaveClass) leaveClass.onclick = function () {
+      learnInClass = false;
+      render();
+    };
+
     var salesCta = $("#minSalesCta");
     if (salesCta) salesCta.onclick = function () {
-      window.open(D.stripeUrl, "_blank", "noopener");
+      navigate("#subscribe");
     };
 
     document.querySelectorAll(".min-tier-select").forEach(function (btn) {
       btn.onclick = function () {
         var t = btn.getAttribute("data-tier");
-        if (t === "vip") setTier("vip");
-        else if (t === "starter" || t === "bench") setTier("member");
-        else setTier("free");
+        if (t === getTier()) return;
+        setTier(t);
+        showToast("Plan updated to " + tierLabel(t));
         render();
       };
     });
@@ -839,8 +1053,25 @@
     if (regForm) {
       regForm.onsubmit = function (e) {
         e.preventDefault();
+        var nameEl = $("#minName");
+        var name = nameEl && nameEl.value.trim() ? nameEl.value.trim() : "Member";
+        var data = {
+          name: name,
+          username: ($("#minUsername") && $("#minUsername").value.replace(/^@/, "")) || "member",
+          bio: ($("#minBio") && $("#minBio").value.trim()) || "",
+          avatar: ($("#minAvatarPreview") && $("#minAvatarPreview").src) || A + "person.svg",
+        };
+        saveProfile(data);
+        showToast("Profile saved");
         navigate("#home");
       };
+      var bioEl = $("#minBio");
+      var bioCount = $("#minBioCount");
+      if (bioEl && bioCount) {
+        bioEl.oninput = function () {
+          bioCount.textContent = String(bioEl.value.length);
+        };
+      }
       var avatarBtn = $("#minAvatarBtn");
       var avatarInput = $("#minAvatarInput");
       if (avatarBtn && avatarInput) {
@@ -896,7 +1127,7 @@
         '<img src="' +
         A +
         'person.svg" alt=""><div><p class="min-comment-meta">' +
-        esc(D.profile.name) +
+        renderCommentMeta(getProfile().name, true) +
         '</p><p style="margin:0">' +
         esc(commentInput.value.trim()) +
         "</p></div>";
@@ -930,15 +1161,9 @@
     var input = $("#minChatInput");
     var messages = $("#minMessages");
     if (!input || !messages || !input.value.trim()) return;
-    var row = document.createElement("div");
-    row.className = "min-msg-row is-mine";
-    row.innerHTML =
-      '<div class="min-bubble min-bubble--mine">' +
-      esc(input.value.trim()) +
-      '</div><img src="' +
-      A +
-      'person.svg" alt="">';
-    messages.appendChild(row);
+    var wrap = document.createElement("div");
+    wrap.innerHTML = renderMessageRow({ mine: true, text: input.value.trim() });
+    messages.appendChild(wrap.firstChild);
     input.value = "";
     messages.scrollTop = messages.scrollHeight;
   }
@@ -946,10 +1171,16 @@
   function render() {
     var route = parseRoute();
     var app = $("#minApp");
-    var isLocked = route.name === "thread" || (route.name === "learn" && learnInClass);
+    var isLocked =
+      route.name === "thread" ||
+      (route.name === "learn" && learnInClass);
     if (app) {
       app.classList.toggle("is-sub", route.isSub);
       app.classList.toggle("is-locked", isLocked);
+      app.classList.toggle(
+        "is-headerless",
+        !route.isSub && route.tab !== "home"
+      );
     }
 
     document.querySelectorAll(".min-fab").forEach(function (f) {
