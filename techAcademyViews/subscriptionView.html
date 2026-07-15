@@ -160,14 +160,27 @@
             </div>
         </div>
     </body>
-    <script>
-        function openStripe()
-        {
-            let url = "https://buy.stripe.com/test_8wMeW54DFbs58YodQQ"
-            //window.location.replace(url);
+    <script type="module">
+        import { startCheckout, bindOfferCta, getCtaCopy } from "./scripts/techStripeConfig.js";
 
-            window.open(url, '_blank').focus();
-        }
+        window.openStripe = (offerKey = "guide") => startCheckout(offerKey);
+
+        bindOfferCta(document.getElementById("secretCta"), "secret");
+        bindOfferCta(document.getElementById("guideCta"), "guide");
+        bindOfferCta(document.getElementById("academyCta"), "academy");
+        bindOfferCta(document.getElementById("vipCta"), "vip");
+
+        // Remove inline onclick fallbacks that pointed at a single test link
+        ["guideCta", "academyCta", "vipCta"].forEach((id) => {
+            const el = document.getElementById(id);
+            if (el) el.removeAttribute("onclick");
+        });
+
+        const hint = document.createElement("p");
+        hint.style.cssText = "text-align:center;font-size:13px;color:#666;margin:16px;";
+        const guideCopy = getCtaCopy("guide");
+        hint.textContent = guideCopy.hint || "Choose an access level above.";
+        document.body.appendChild(hint);
     </script>
     <script type="module">
         // Firebase SDK and login code
@@ -251,10 +264,10 @@
 
                 currentDiv.style.display = 'block'
             }else{
-                alert('there was an error SV-228')
+                console.warn('Subscription view: no user document');
             }  
         } catch (error){
-            alert(`there was an error SV-231 ${error}`)
+            console.error('Subscription view load error', error);
             
         }
 

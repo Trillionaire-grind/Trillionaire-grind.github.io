@@ -381,7 +381,7 @@
     <textarea id="nameET" class="note-edit-area"
       style="width: 240px; height: 20px; resize: none; margin-left: auto; margin-right: auto; display: none; margin-top: 8px;"></textarea>
 
-    <p id="funFactTV"></p>
+    <p id="funFactTV" class="meta" style="color: #555;"></p>
     <textarea id="funFactET" class="note-edit-area"
       style="width: 240px; height: 40px; resize: none;  margin-left: auto; margin-right: auto; display: none; margin-top: 16px;"></textarea>
 
@@ -572,7 +572,8 @@
       nameTV.style.display = "none"
 
       funFactET.style.display = "block"
-      funFactET.value = funFactTV.innerText
+      funFactET.value = (funFactTV.innerText || "").replace(/^Fun fact:\s*/i, "").replace(/^not set yet$/i, "")
+      if (funFactET.value === "not set yet") funFactET.value = ""
       funFactTV.style.display = "none"
 
       /*locationET.style.display = "block"
@@ -804,11 +805,13 @@
       let userImg = document.getElementById("userImg")
       let locationTV = document.getElementById("locationTV")
 
-      funFactTV.innerText = funFact
+      funFactTV.innerText = funFact ? `Fun fact: ${funFact}` : "Fun fact: not set yet"
       nameTV.innerText = name
       userImg.src = imageUrl
       if(location != null){
         locationTV.innerText = `lat: ${location.latitude} \n lon: ${location.longitude}`
+      } else {
+        locationTV.innerText = "not set"
       }
       
       renderClubs(group)
@@ -859,27 +862,37 @@
     const interactionListEl = document.getElementById("interaction-list");
 
     function renderInteractions(interactions, editing) {
-      if(interactionsList == null || interactionsList.length < 1) {return}
       interactionListEl.innerHTML = '';
+      if (!Array.isArray(interactions) || interactions.length < 1) {
+        interactionListEl.innerHTML = `<li style="text-align:center; color:#555; list-style:none;">No interactions yet.</li>`;
+        return;
+      }
       interactions.forEach((interaction, index) => {
         const li = document.createElement("li");
         li.className = "interaction-item";
 
+        const interactionDate = interaction.date && typeof interaction.date.toDate === "function"
+          ? interaction.date.toDate()
+          : null;
+        const dateLabel = interactionDate
+          ? `${interactionDate.getFullYear()}-${interactionDate.getMonth() + 1}-${interactionDate.getDate()}`
+          : "Unknown date";
+
         li.innerHTML = `
             <div class="interaction-date">
-              ${editing ? `<span class="delete-interaction" data-id="${interaction.id}" style="cursor:pointer; font-size: 18px; padding-right: 8px;">✕</span>` : ''}
-              ${interaction.date.toDate().getFullYear()}-${interaction.date.toDate().getMonth() + 1}-${interaction.date.toDate().getDay()} — ${interaction.title}
+              ${editing ? `<span class="delete-interaction" data-index="${index}" style="cursor:pointer; font-size: 18px; padding-right: 8px;">✕</span>` : ''}
+              ${dateLabel} — ${interaction.title || "Interaction"}
             </div>
 
             ${editing
             ? `
                   <div>
-                    <textarea data-id="${interaction.date.toMillis()}" class="interactionET" style="width: 100%; height: 40px; resize: none; display: none; margin-top: 16px;">${interaction.notes}</textarea>
+                    <textarea data-id="${interactionDate ? interactionDate.getTime() : index}" class="interactionET" style="width: 100%; height: 40px; resize: none; display: none; margin-top: 16px;">${interaction.notes || ""}</textarea>
                   </div>
                 `
             : `
                   <div class="interaction-edit-tools">
-                    <div class="interaction-summary">${interaction.notes}</div>
+                    <div class="interaction-summary">${interaction.notes || ""}</div>
                   </div>
                 `
           }
@@ -889,14 +902,10 @@
         const deleteBtn = li.querySelector(".delete-interaction");
         if (deleteBtn) {
           deleteBtn.addEventListener("click", (e) => {
-            const idx = parseInt(deleteBtn.dataset.index);
-
+            e.stopPropagation();
+            const idx = parseInt(deleteBtn.dataset.index, 10);
             interactionsList.splice(idx, 1);
-
             renderInteractions(interactionsList, true);
-
-            //e.stopPropagation();
-            //li.remove();
           });
         }
 
@@ -928,7 +937,10 @@
         const value = textarea.value;
 
         for(var i=0; i<interactionsList.length; i++){
-          if(interactionsList[i].date.toMillis() == interactionId){
+          const itemDate = interactionsList[i].date && typeof interactionsList[i].date.toDate === "function"
+            ? interactionsList[i].date.toDate().getTime()
+            : null;
+          if(itemDate == interactionId){
             interactionsList[i].notes = value
           }
         }
@@ -961,7 +973,7 @@
 
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "winFriends.html";
+        window.location.href = "../winFriends.html";
         return;
       }
       else {

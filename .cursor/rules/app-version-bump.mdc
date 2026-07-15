@@ -1,0 +1,23 @@
+---
+description: Bump product version and console.log it on each GitHub Pages / hosting update
+alwaysApply: true
+---
+
+# App version bumps on deploy updates
+
+When making meaningful updates to a product that ships via this repo (GitHub Pages and/or Firebase Hosting), treat it as a release:
+
+1. **Bump** that product's version constant (patch +1 on the last segment, e.g. `0.0.0.5` → `0.0.0.6`).
+2. Ensure the app **`console.log`s** the working version on load (e.g. `[Green Books] working version: v0.0.0.6`).
+3. Keep any visible title / "App version" UI label in sync when the product already shows a version.
+
+## Version file locations (create if missing for that product)
+
+| Product | Version module |
+|---------|----------------|
+| Green Books | `greenViews/scripts/greenVersion.js` (`GREEN_APP_VERSION`) |
+| Liv Lakay | `livViews/scripts/livVersion.js` (`LIV_APP_VERSION`) |
+
+For other apps without a version module yet, add a small `*Version.js` next to their main scripts with the same pattern: exported constant, label helper, and a top-level `console.log` of the label.
+
+Do **not** bump for typo-only edits or docs-only changes. Do bump when user-facing behavior, UI, or config for that app changes and will be published.

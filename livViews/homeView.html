@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <title data-i18n="home.title">Akèy — Liv Lakay</title>
         <link rel="stylesheet" href="assets/styles.css">
+        <script src="scripts/livShellBridge.js"></script>
     </head>
     <body class="liv-body">
         <div class="liv-page">
@@ -60,6 +61,7 @@
         function closeRemoveBookModal() {
             pendingRemoveBookId = null;
             homeRemoveModal.classList.remove("is-open");
+            if (typeof window.livShellModalClose === "function") window.livShellModalClose();
         }
 
         function openRemoveBookModal(bookId, bookTitle) {
@@ -67,6 +69,7 @@
             const safeTitle = String(bookTitle || bookId || "").trim() || bookId;
             homeRemoveModalText.textContent = t("home.removeConfirm").replace("{title}", safeTitle);
             applyLivI18n(homeRemoveModal);
+            if (typeof window.livShellModalOpen === "function") window.livShellModalOpen();
             homeRemoveModal.classList.add("is-open");
         }
 
@@ -187,9 +190,29 @@
             });
         }
 
+        function isLivBookListable(docSnap) {
+            const d = docSnap.data() || {};
+            if (d.draft === true || d.published === false || d.isMock === true) return false;
+            const title = String(d.bookTitle || "").trim();
+            if (!title) return false;
+            const lower = title.toLowerCase();
+            if (
+                lower === "test" ||
+                lower === "mock" ||
+                lower === "sample" ||
+                lower.indexOf("placeholder") >= 0 ||
+                lower.indexOf("coming soon") >= 0
+            ) {
+                return false;
+            }
+            return true;
+        }
+
         async function loadBooks(user) {
             const querySnapshot = await getDocs(collection(db, "books"));
-            const byId = new Map(querySnapshot.docs.map((d) => [d.id, d]));
+            const byId = new Map(
+                querySnapshot.docs.filter(isLivBookListable).map((d) => [d.id, d])
+            );
             let allowedIds = [];
             let hasBookFilter = false;
             if (user && user.uid) {
@@ -204,10 +227,11 @@
             }
             const allowedSet = new Set(allowedIds);
             const pinnedIds = getPinnedBookIds();
+            const listableDocs = [...byId.values()];
             const pinnedDocs = pinnedIds
                 .map((pid) => byId.get(pid))
                 .filter((d) => d && (!hasBookFilter || allowedSet.has(d.id)));
-            const rest = querySnapshot.docs.filter(
+            const rest = listableDocs.filter(
                 (d) => pinnedIds.indexOf(d.id) < 0 && (!hasBookFilter || allowedSet.has(d.id))
             );
 
@@ -241,6 +265,11 @@
             const showEmpty = hasBookFilter && pinnedDocs.length === 0 && rest.length === 0;
             homeEmptyBooks.hidden = !showEmpty;
             if (showEmpty) applyLivI18n(homeEmptyBooks);
+            if (typeof window.livReportShellHeight === "function") {
+                requestAnimationFrame(function () {
+                    window.livReportShellHeight();
+                });
+            }
         }
 
         let userDocUnsub = null;

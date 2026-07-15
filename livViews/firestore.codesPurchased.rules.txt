@@ -50,5 +50,6 @@ Example security rules (merge into firestore.rules)
 
 Local testing (no payment)
 --------------------------
-  • livPass.html on localhost or ?devBypass=1 → "Get free test code" (mintLivDevAccessCode)
+  • livPass.html on localhost only → “Buy access code (test)” / local mint
+  • ?devBypass=1 does NOT enable test buy on production hosts
   • liv.html on localhost → signup with code TEST skips Firestore (UI shortcut only)

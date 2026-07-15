@@ -36,8 +36,12 @@
             </div>
 
             <h2 class="liv-section-heading" data-i18n="book.content">Kontni</h2>
-            <p class="liv-chapter-hint" data-i18n="book.chapterHint">Touche yon chapit pou li. Peze long pou modifye.</p>
+            <p class="liv-chapter-hint" id="livChapterHint" data-i18n="book.chapterHint">Touche yon chapit pou li. Peze long pou modifye.</p>
             <div id="chaptersDiv"></div>
+            <div id="livBookEmptyState" class="liv-chapter-empty" hidden>
+                <p id="livBookEmptyText" data-i18n="book.noChapters">Liv sa a poko gen chapit pou li.</p>
+                <a id="livBookPdfLink" class="liv-btn-primary" href="#" target="_blank" rel="noopener noreferrer" hidden data-i18n="book.readPdf">Louvri PDF la</a>
+            </div>
         </div>
     </body>
 
@@ -164,7 +168,16 @@
 
         async function getBook(id) {
             const chaptersDiv = document.getElementById("chaptersDiv");
+            const emptyState = document.getElementById("livBookEmptyState");
+            const emptyText = document.getElementById("livBookEmptyText");
+            const pdfLink = document.getElementById("livBookPdfLink");
+            const chapterHint = document.getElementById("livChapterHint");
             chaptersDiv.innerHTML = "";
+            if (emptyState) emptyState.hidden = true;
+            if (pdfLink) {
+                pdfLink.hidden = true;
+                pdfLink.removeAttribute("href");
+            }
 
             let bookSnapshot = await getDoc(doc(db, "books", id));
             let coll = "books";
@@ -175,7 +188,12 @@
 
             const chaptersRef = collection(db, coll, id, "chapters");
             const q = query(chaptersRef, orderBy("chapter_number", "asc"));
-            const chaptersSnapshot = await getDocs(q);
+            let chaptersSnapshot;
+            try {
+                chaptersSnapshot = await getDocs(q);
+            } catch {
+                chaptersSnapshot = await getDocs(chaptersRef);
+            }
 
             if (bookSnapshot.exists()) {
                 const d = bookSnapshot.data();
@@ -192,16 +210,30 @@
                 yearTV.textContent = d.bookYear || "—";
                 subjectTV.textContent = d.bookSubject || "—";
 
-                chaptersSnapshot.forEach((docSnap) => {
-                    const cd = docSnap.data();
-                    const label =
-                        cd.chapter_name && String(cd.chapter_name).trim()
-                            ? String(cd.chapter_name).trim()
-                            : docSnap.id;
-                    chaptersDiv.appendChild(
-                        createChapterDiv(bookSnapshot.id, docSnap.id, label)
-                    );
-                });
+                if (chaptersSnapshot.empty) {
+                    if (chapterHint) chapterHint.hidden = true;
+                    if (emptyState) {
+                        emptyState.hidden = false;
+                        applyLivI18n(emptyState);
+                    }
+                    const pdfUrl = String(d.bookPdfUrl || "").trim();
+                    if (pdfUrl && pdfLink) {
+                        pdfLink.href = pdfUrl;
+                        pdfLink.hidden = false;
+                    }
+                } else {
+                    if (chapterHint) chapterHint.hidden = false;
+                    chaptersSnapshot.forEach((docSnap) => {
+                        const cd = docSnap.data();
+                        const label =
+                            cd.chapter_name && String(cd.chapter_name).trim()
+                                ? String(cd.chapter_name).trim()
+                                : docSnap.id;
+                        chaptersDiv.appendChild(
+                            createChapterDiv(bookSnapshot.id, docSnap.id, label)
+                        );
+                    });
+                }
                 refreshMyBooksForCurrentBook();
             } else {
                 bookTitleTV.textContent = t("search.noResults");
@@ -211,6 +243,11 @@
                 bookIV.removeAttribute("src");
                 bookIV.classList.remove("is-loaded");
                 if (bookCoverWrap) bookCoverWrap.classList.remove("is-loading");
+                if (chapterHint) chapterHint.hidden = true;
+                if (emptyState) {
+                    emptyState.hidden = false;
+                    if (emptyText) emptyText.textContent = t("search.noResults");
+                }
                 refreshMyBooksForCurrentBook();
             }
         }

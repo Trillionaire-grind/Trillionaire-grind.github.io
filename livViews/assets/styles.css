@@ -41,6 +41,31 @@ body.liv-body {
   max-width: 100%;
 }
 
+/* Framed in primaryView: no inner scrollbar — outer shell scrolls */
+html.liv-in-shell {
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+}
+
+html.liv-in-shell body.liv-body {
+  min-height: 0;
+  overflow: visible;
+  /* Tab bar lives on the parent shell — only need modest end padding */
+  padding-bottom: max(28px, calc(16px + env(safe-area-inset-bottom, 0px)));
+}
+
+html.liv-in-shell.liv-viewport-lock,
+html.liv-in-shell.liv-viewport-lock body.liv-body {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.liv-in-shell .liv-fab {
+  /* Parent shell owns the admin FAB so it stays above the tab bar while scrolling */
+  display: none !important;
+}
+
 body.liv-body.liv-page-reader {
   overflow: hidden;
   max-height: 100dvh;
@@ -58,23 +83,29 @@ body.liv-body.liv-page-reader {
 }
 
 @media (min-width: 600px) {
-  .liv-page,
-  .profile-page {
+  .liv-page {
     max-width: min(720px, 92vw);
+  }
+  .profile-page {
+    max-width: min(520px, 92vw);
   }
 }
 
 @media (min-width: 900px) {
-  .liv-page,
-  .profile-page {
+  .liv-page {
     max-width: min(960px, 94vw);
+  }
+  .profile-page {
+    max-width: min(520px, 90vw);
   }
 }
 
 @media (min-width: 1200px) {
-  .liv-page,
-  .profile-page {
+  .liv-page {
     max-width: min(1100px, 96vw);
+  }
+  .profile-page {
+    max-width: min(560px, 88vw);
   }
 }
 
@@ -254,8 +285,13 @@ body.liv-body.liv-page-reader {
 
 @media (min-width: 900px) {
   .liv-book-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 260px));
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .liv-book-card-cover img {
+    aspect-ratio: 2 / 3;
   }
 }
 
@@ -378,7 +414,7 @@ body.liv-body.liv-page-reader {
 
 .liv-book-card .liv-book-meta {
   padding: 12px;
-  min-height: 74px;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -399,10 +435,10 @@ body.liv-body.liv-page-reader {
   font-size: 0.8rem;
   color: var(--liv-muted);
   margin: 0;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal;
 }
 
 /* Library */
@@ -770,6 +806,13 @@ body.liv-body.liv-page-reader {
   vertical-align: middle;
 }
 
+@media (min-width: 900px) {
+  .liv-book-cover-wrap img {
+    max-width: 180px;
+    width: min(42%, 180px);
+  }
+}
+
 .liv-book-cover-wrap .liv-book-cover-img {
   opacity: 0;
   transition: opacity 220ms ease;
@@ -853,6 +896,25 @@ body.liv-body.liv-page-reader {
   color: var(--liv-text);
   margin: 0;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.liv-chapter-empty {
+  margin: 8px 0 0;
+  padding: 16px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px dashed #cbd5e1;
+  color: var(--liv-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.liv-chapter-empty .liv-btn-primary {
+  margin-top: 12px;
+  display: inline-flex;
 }
 
 .liv-section-heading {
@@ -1323,6 +1385,73 @@ html.liv-html-full body.liv-page-reader {
 .liv-btn-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.liv-upload-hint {
+  margin: 10px 0 0;
+  font-size: 0.88rem;
+  color: var(--liv-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.liv-upload-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(26, 26, 26, 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.liv-upload-overlay[hidden] {
+  display: none !important;
+}
+
+.liv-upload-card {
+  width: min(92vw, 320px);
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 22px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.liv-upload-spinner {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  border: 3px solid rgba(42, 191, 91, 0.22);
+  border-top-color: var(--liv-green);
+  animation: liv-spin 0.85s linear infinite;
+}
+
+.liv-upload-title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--liv-text);
+}
+
+.liv-upload-detail {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--liv-muted);
+  line-height: 1.45;
+}
+
+body.liv-is-uploading {
+  overflow: hidden;
+}
+
+@keyframes liv-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .liv-page-fields {

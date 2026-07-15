@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
+        <script src="scripts/livShellBridge.js"></script>
         <title data-i18n="profile.title">Profil — Liv Lakay</title>
         <style>
             .profile-heading {
@@ -209,16 +210,8 @@
                     <span data-i18n="profile.menuLanguage">Lang</span>
                     <span class="chev" aria-hidden="true">›</span>
                 </button>
-                <button type="button" class="menu-row" data-action="about">
-                    <span data-i18n="profile.menuAbout">Sou aplikasyon an</span>
-                    <span class="chev" aria-hidden="true">›</span>
-                </button>
                 <a class="menu-row" href="livSupportView.html" target="_top">
                     <span data-i18n="profile.menuSupport">Bay sipò</span>
-                    <span class="chev" aria-hidden="true">›</span>
-                </a>
-                <a class="menu-row" id="livProfileSupportEmail" href="mailto:buildingwithkepler@gmail.com">
-                    <span data-i18n="profile.menuEmailSupport">Imèl sipò</span>
                     <span class="chev" aria-hidden="true">›</span>
                 </a>
             </nav>
@@ -234,14 +227,6 @@
                     <button type="button" class="liv-lang-option" data-lang="es" lang="es">Español (ES)</button>
                     <button type="button" class="liv-lang-option" data-lang="en" lang="en">English (EN)</button>
                 </div>
-            </div>
-        </div>
-
-        <div id="livAboutModal" class="liv-modal" role="dialog" aria-modal="true" aria-labelledby="livAboutModalTitle">
-            <div class="liv-modal-inner">
-                <button type="button" class="liv-modal-close" id="livAboutModalClose" data-i18n-aria="auth.close">&times;</button>
-                <h2 id="livAboutModalTitle" data-i18n="profile.menuAbout">Sou aplikasyon an</h2>
-                <p class="liv-about-body" data-i18n="profile.aboutMission"></p>
             </div>
         </div>
 
@@ -284,14 +269,8 @@
             import { doc, onSnapshot, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
             import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-storage.js";
             import { initLivI18n, setLivLang, getLivLang, applyLivI18n, t } from "./scripts/livI18n.js";
-            import { LIV_SUPPORT_EMAIL, livSupportMailto } from "./scripts/livCheckoutConfig.js";
 
             initLivI18n();
-            const profileSupportEmail = document.getElementById("livProfileSupportEmail");
-            if (profileSupportEmail) {
-                profileSupportEmail.href = livSupportMailto();
-            }
-
             const { app, auth, db } = initLivFirebase();
 
             const profileDisplayName = document.getElementById("profileDisplayName");
@@ -315,6 +294,7 @@
                 const text = document.getElementById("livProfileStatusText");
                 text.textContent = message;
                 applyLivI18n(modal);
+                if (typeof window.livShellModalOpen === "function") window.livShellModalOpen();
                 modal.classList.add("is-open");
             }
 
@@ -326,6 +306,7 @@
 
             function closeStatusModal() {
                 document.getElementById("livProfileStatusModal").classList.remove("is-open");
+                if (typeof window.livShellModalClose === "function") window.livShellModalClose();
             }
 
             function clearProfileUserListener() {
@@ -462,6 +443,7 @@
             function openLangModal() {
                 const m = document.getElementById("livLangModal");
                 m.hidden = false;
+                if (typeof window.livShellModalOpen === "function") window.livShellModalOpen();
                 m.classList.add("is-open");
                 const cur = getLivLang();
                 m.querySelectorAll(".liv-lang-option").forEach(function (btn) {
@@ -473,6 +455,7 @@
                 const m = document.getElementById("livLangModal");
                 m.hidden = true;
                 m.classList.remove("is-open");
+                if (typeof window.livShellModalClose === "function") window.livShellModalClose();
             }
 
             document.getElementById("livLangModalClose").addEventListener("click", closeLangModal);
@@ -492,22 +475,6 @@
 
             document.getElementById("profileMenuLanguage").addEventListener("click", openLangModal);
 
-            function openAboutModal() {
-                const m = document.getElementById("livAboutModal");
-                applyLivI18n(m);
-                m.classList.add("is-open");
-            }
-
-            function closeAboutModal() {
-                document.getElementById("livAboutModal").classList.remove("is-open");
-            }
-
-            document.getElementById("livAboutModalClose").addEventListener("click", closeAboutModal);
-            document.getElementById("livAboutModal").addEventListener("click", function (e) {
-                if (e.target === this) closeAboutModal();
-            });
-
-            document.querySelector('.menu-row[data-action="about"]').addEventListener("click", openAboutModal);
             document.getElementById("livProfileStatusClose").addEventListener("click", closeStatusModal);
             document.getElementById("livProfileStatusOk").addEventListener("click", closeStatusModal);
             document.getElementById("livProfileStatusModal").addEventListener("click", function (e) {
@@ -527,11 +494,13 @@
                 document.getElementById("livProfileEditPhoto").value = "";
                 const m = document.getElementById("livProfileEditModal");
                 applyLivI18n(m);
+                if (typeof window.livShellModalOpen === "function") window.livShellModalOpen();
                 m.classList.add("is-open");
             }
 
             function closeProfileEditModal() {
                 document.getElementById("livProfileEditModal").classList.remove("is-open");
+                if (typeof window.livShellModalClose === "function") window.livShellModalClose();
             }
 
             function setProfileEditSaving(isSaving) {

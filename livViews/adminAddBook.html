@@ -92,7 +92,16 @@
                 </section>
 
                 <button type="submit" class="liv-btn-primary" id="submitBookBtn">Anrejistre liv la</button>
+                <p id="uploadProgressHint" class="liv-upload-hint" hidden aria-live="polite"></p>
             </form>
+        </div>
+
+        <div id="livUploadOverlay" class="liv-upload-overlay" hidden aria-hidden="true">
+            <div class="liv-upload-card" role="status">
+                <div class="liv-upload-spinner" aria-hidden="true"></div>
+                <p id="livUploadTitle" class="liv-upload-title">Ap anrejistre liv la…</p>
+                <p id="livUploadDetail" class="liv-upload-detail">Tanpri rete sou paj sa a.</p>
+            </div>
         </div>
 
         <script type="module">
@@ -327,14 +336,29 @@
             chaptersContainer.appendChild(buildChapterBlock());
 
             async function uploadCover(fileOrBlob, bookId, fileNameHint) {
-                const storage = getStorage();
+                const storage = getStorage(app);
                 const baseName =
                     (fileNameHint || fileOrBlob.name || "cover.jpg")
                         .replace(/[^a-z0-9._-]/gi, "_");
                 const path = `books/${bookId}/${Date.now()}_${baseName}`;
                 const storageRef = ref(storage, path);
-                await uploadBytes(storageRef, fileOrBlob);
+                const contentType =
+                    fileOrBlob.type ||
+                    guessUploadContentType(baseName) ||
+                    "image/jpeg";
+                await uploadBytes(storageRef, fileOrBlob, { contentType });
                 return getDownloadURL(storageRef);
+            }
+
+            function guessUploadContentType(fileName) {
+                const lower = String(fileName || "").toLowerCase();
+                if (lower.endsWith(".png")) return "image/png";
+                if (lower.endsWith(".webp")) return "image/webp";
+                if (lower.endsWith(".gif")) return "image/gif";
+                if (lower.endsWith(".heic") || lower.endsWith(".heif")) return "image/heic";
+                if (lower.endsWith(".pdf")) return "application/pdf";
+                if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+                return "";
             }
 
             async function buildCoverBlobFromPdf(pdfUrl) {
@@ -378,11 +402,15 @@
             });
 
             async function uploadPageImage(file, bookId, chapterId, pageNumber) {
-                const storage = getStorage();
+                const storage = getStorage(app);
                 const safeName = file.name.replace(/[^a-z0-9._-]/gi, "_");
                 const path = `books/${bookId}/chapters/${chapterId}/pages/page${pageNumber}_${Date.now()}_${safeName}`;
                 const storageRef = ref(storage, path);
-                await uploadBytes(storageRef, file);
+                const contentType =
+                    file.type ||
+                    guessUploadContentType(safeName) ||
+                    "image/jpeg";
+                await uploadBytes(storageRef, file, { contentType });
                 return getDownloadURL(storageRef);
             }
 
@@ -486,6 +514,53 @@
                 status.textContent = "Teks OCR netwaye + koreksyon Kreyol aplike. Verifye avan sove.";
             }
 
+            function setUploading(isUploading, detail) {
+                const overlay = document.getElementById("livUploadOverlay");
+                const title = document.getElementById("livUploadTitle");
+                const detailEl = document.getElementById("livUploadDetail");
+                const hint = document.getElementById("uploadProgressHint");
+                const submitBtn = document.getElementById("submitBookBtn");
+
+                setAdminFormDisabled(isUploading);
+                if (submitBtn) {
+                    submitBtn.disabled = isUploading;
+                    submitBtn.textContent = isUploading
+                        ? "Ap anrejistre…"
+                        : "Anrejistre liv la";
+                }
+
+                if (overlay) {
+                    overlay.hidden = !isUploading;
+                    overlay.setAttribute("aria-hidden", isUploading ? "false" : "true");
+                }
+                if (title) {
+                    title.textContent = isUploading
+                        ? "Ap anrejistre liv la…"
+                        : "Ap anrejistre liv la…";
+                }
+                if (detailEl && detail) detailEl.textContent = detail;
+                if (hint) {
+                    if (isUploading && detail) {
+                        hint.hidden = false;
+                        hint.textContent = detail;
+                    } else if (!isUploading) {
+                        hint.hidden = true;
+                        hint.textContent = "";
+                    }
+                }
+                document.body.classList.toggle("liv-is-uploading", isUploading);
+            }
+
+            function setUploadDetail(detail) {
+                const detailEl = document.getElementById("livUploadDetail");
+                const hint = document.getElementById("uploadProgressHint");
+                if (detailEl) detailEl.textContent = detail;
+                if (hint) {
+                    hint.hidden = false;
+                    hint.textContent = detail;
+                }
+            }
+
             form.addEventListener("submit", async function (e) {
                 e.preventDefault();
                 if (localStorage.getItem(ADMIN_KEY) !== "true") {
@@ -514,20 +589,20 @@
                     return;
                 }
 
-                const submitBtn = document.getElementById("submitBookBtn");
-                submitBtn.disabled = true;
+                setUploading(true, "Ap verifye ID liv la…");
 
                 try {
                     const existing = await getDoc(doc(db, "books", bookDocId));
                     if (existing.exists()) {
                         alert("ID liv sa a deja itilize. Chwazi yon lòt ID.");
-                        submitBtn.disabled = false;
                         return;
                     }
 
                     const coverName = coverFile ? coverFile.name : "cover_from_pdf.jpg";
+                    setUploadDetail("Ap telechaje kouvèti a…");
                     const coverUrl = await uploadCover(coverSource, bookDocId, coverName);
 
+                    setUploadDetail("Ap sove enfòmasyon liv la…");
                     const bookPayload = {
                         bookTitle: title,
                         bookAuthor: author,
@@ -540,6 +615,7 @@
                     await setDoc(doc(db, "books", bookDocId), bookPayload);
 
                     const usedChapterIds = new Set();
+                    const totalChapters = blocks.length;
 
                     for (let bi = 0; bi < blocks.length; bi++) {
                         const block = blocks[bi];
@@ -554,6 +630,10 @@
                         if (pageEntries.length === 0) {
                             throw new Error("Prepare paj yo pou chapit: " + chTitle);
                         }
+
+                        setUploadDetail(
+                            `Chapit ${chNum}/${totalChapters}: ${chTitle} — ap sove…`
+                        );
 
                         await setDoc(doc(db, "books", bookDocId, "chapters", chId), {
                             chapter_name: chTitle,
@@ -575,8 +655,15 @@
                                 if (!imageFile) {
                                     throw new Error(`Chwazi imaj pou paj ${p} nan chapit "${chTitle}".`);
                                 }
+                                setUploadDetail(
+                                    `Chapit ${chNum}/${totalChapters}: telechaje paj ${p}…`
+                                );
                                 const imageUrl = await uploadPageImage(imageFile, bookDocId, chId, p);
                                 pagePayload.imageUrl = imageUrl;
+                            } else {
+                                setUploadDetail(
+                                    `Chapit ${chNum}/${totalChapters}: paj ${p}/${pageEntries.length}…`
+                                );
                             }
 
                             await setDoc(
@@ -587,13 +674,15 @@
                         }
                     }
 
+                    setUploadDetail("Fini! Ap louvri bibliyotèk la…");
                     alert("Liv la anrejistre!");
                     window.location.href = getLibraryReturnUrl();
                 } catch (err) {
                     console.error(err);
                     alert("Erè: " + (err.message || err));
                 } finally {
-                    submitBtn.disabled = false;
+                    setUploading(false);
+                    applyAdminGate();
                 }
             });
         </script>

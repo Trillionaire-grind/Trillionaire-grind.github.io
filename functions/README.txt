@@ -74,3 +74,54 @@ Notes
   • Webhook must return 200 quickly; heavy work stays minimal (one Firestore txn).
   • If reveal returns pending, the client retries (webhook slightly delayed).
   • Firestore rules must block client access to stripeCheckoutSessions (see livViews/firestore.accessCodes.rules.txt).
+
+The Minorities — subscription checkout (the-minorities)
+========================================================
+
+Separate Firebase project — NOT naples-sunrise-bay or liv-lakay.
+
+1) Firebase Console project: the-minorities
+   • Enable Authentication → Email/Password
+   • Create Firestore database
+   • Web app config → minoritiesView/scripts/minFirebaseConfig.js
+
+2) Install & deploy (from repo root):
+   cd minoritiesFunctions && npm install
+   firebase deploy -c firebase.minorities.json --project minorities --only firestore:rules,functions
+
+3) Functions (region us-central1, project the-minorities):
+   createMinSubscriptionCheckout  POST + Bearer Firebase ID token → { url }
+   createMuxDirectUpload          POST + Bearer Firebase ID token → { uploadId, uploadUrl }
+   getMuxUploadStatus             POST + Bearer Firebase ID token → { playbackId, ready, ... }
+   muxWebhook                     POST (Mux signed events — optional but recommended)
+   stripeWebhook                  POST (Stripe signed events)
+
+4) Mux (free plan at mux.com — no credit card):
+   Settings → Access Tokens → create token (Mux Token ID + Mux Token Secret)
+   Settings → Webhooks → add endpoint:
+   https://us-central1-the-minorities.cloudfunctions.net/muxWebhook
+   Event: video.asset.ready
+   Copy signing secret.
+
+   firebase functions:secrets:set MUX_TOKEN_ID
+   firebase functions:secrets:set MUX_TOKEN_SECRET
+   firebase functions:secrets:set MUX_WEBHOOK_SECRET
+
+5) Stripe — create 3 monthly Prices (Waterboy is free), set function params:
+   MIN_STRIPE_PRICE_BENCH, MIN_STRIPE_PRICE_STARTER, MIN_STRIPE_PRICE_OWNER, MIN_PUBLIC_URL
+
+   Leave params as CLEAR_REQUIRED until real price_… IDs exist.
+   Also paste Price IDs into minoritiesView/scripts/minStripeConfig.js and set CHECKOUT_LIVE = true.
+
+   Webhook URL:
+   https://us-central1-the-minorities.cloudfunctions.net/stripeWebhook
+   Events: checkout.session.completed, checkout.session.async_payment_succeeded,
+           customer.subscription.updated, customer.subscription.deleted
+
+   Secrets (same names as Liv): STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET
+
+   Full steps: minoritiesFunctions/README.txt
+
+Firestore (minoritiesView/firestore.rules):
+  users/{uid}                  profiles + tier (paid tiers should be webhook-updated when live)
+  stripeCheckoutSessions/{id}  webhook idempotency (client blocked)

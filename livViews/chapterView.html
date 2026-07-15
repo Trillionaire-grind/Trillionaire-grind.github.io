@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ht" class="liv-html-doc">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+        <link rel="stylesheet" href="assets/styles.css">
+        <title>Liv Lakay</title>
+    </head>
+    <body class="liv-body">
+        <div class="liv-page">
+            <a class="liv-admin-back" href="primaryView.html" data-i18n="book.backLibrary">← Rete nan bibliyotèk</a>
+            <div class="liv-chapter-empty" style="margin-top: 24px;">
+                <p data-i18n="book.noChapters">Liv sa a poko gen chapit pou li. Nou ap ajoute kontni a.</p>
+                <p class="liv-search-hint" style="margin-top: 12px;">
+                    Reading opens from the book detail page → chapter → pages. This old holder view is retired.
+                </p>
+                <a class="liv-btn-primary" href="primaryView.html?tab=1" style="margin-top: 14px; display: inline-flex;">Bibliyotèk</a>
+            </div>
+        </div>
+        <script type="module">
+            import { initLivI18n, applyLivI18n } from "./scripts/livI18n.js";
+            initLivI18n();
+            applyLivI18n(document);
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get("id");
+            const chapter = params.get("chapter");
+            if (id && chapter) {
+                window.location.replace(
+                    "./pagesView.html?id=" +
+                        encodeURIComponent(id) +
+                        "&chapter=" +
+                        encodeURIComponent(chapter)
+                );
+            } else if (id) {
+                window.location.replace(
+                    "./individualBookView.html?id=" + encodeURIComponent(id)
+                );
+            }
+        </script>
+    </body>
+</html>

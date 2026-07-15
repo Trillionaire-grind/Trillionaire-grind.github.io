@@ -197,12 +197,13 @@
             </button>
         </div>
     </body> 
-    <script>
-        function openPayment()
-        {
-            let url = `https://buy.stripe.com/test_7sIeW52vxao14I84gk`
-            window.open(url, '_blank').focus()
-        }
+    <script type="module">
+        import { startCheckout, getCtaCopy } from "./scripts/techStripeConfig.js";
+
+        window.openPayment = () => startCheckout("academy");
+        const copy = getCtaCopy("academy");
+        const btn = document.querySelector(".ctaBtn p");
+        if (btn) btn.textContent = copy.buttonText;
     </script>
     <script type="module">
         // Firebase SDK and login code
@@ -210,8 +211,7 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
-        // TODO: Add SDKs for Firebase products that you want to use
+        import { getAuth } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
         // https://firebase.google.com/docs/web/setup#available-libraries
 
         // Your web app's Firebase configuration
@@ -242,7 +242,14 @@
         let joinOfficeBtn = document.getElementById("joinOfficeBtn")
         let locationDiv = document.getElementById("locationDiv")
 
-        const docRef = doc(db, "users", userUID)
+        if (!userUID) {
+            const lessonDiv = document.getElementById("lessonDiv")
+            const copyDiv = document.getElementById("copyDiv")
+            if (lessonDiv) lessonDiv.style.display = 'none'
+            if (copyDiv) copyDiv.style.display = 'block'
+        } else {
+            getAccount(userUID)
+        }
        
         async function getLesson(lesson) {
             const docRef = doc(db, "lessons", lesson);
@@ -260,12 +267,12 @@
                         locationDiv.style.display = 'block'
                     }
                 } else {
-                    alert("No document found with the given ID");
-                  
+                    if (lessonHeadlineTV) lessonHeadlineTV.innerText = "No live class scheduled right now."
+                    if (lessonDateTV) lessonDateTV.innerText = "Check back soon."
                 }
             } catch (error) {
-                console.error("Error fetching document:", error);
-                alert("There was an error fetching the document. EV 233");
+                console.error("Error fetching lesson:", error);
+                if (lessonHeadlineTV) lessonHeadlineTV.innerText = "Unable to load class details."
             }
         }
 
@@ -289,31 +296,29 @@
                         getLesson("current_lesson")
                     }
                 } else {
-                    alert("No document found with the given ID");
-                  
+                    if (copyDiv) copyDiv.style.display = 'block'
                 }
             } catch (error) {
-                console.error("Error fetching document:", error);
-                alert(`There was an error fetching the document. HM-414 ${error}`);
+                console.error("Error fetching account:", error);
+                if (copyDiv) copyDiv.style.display = 'block'
             }
         }
-        
-        //populateScreen()
-
-        getAccount(userUID)
                 
-        joinClassBtn.onclick = () => {
-            openZoom()
+        if (joinClassBtn) {
+            joinClassBtn.onclick = () => {
+                openZoom()
+            }
         }
 
-        joinOfficeBtn.onclick = () => {
-            openZoom()
+        if (joinOfficeBtn) {
+            joinOfficeBtn.onclick = () => {
+                openZoom()
+            }
         }
 
         function openZoom()
         {
             let url = `https://zoom.us/j/95519936799?pwd=IhE04VLgQbhMESe6qBIIBvvryp1itU.1#success`
-            //let e
             window.open(url, '_blank').focus();
         }
       

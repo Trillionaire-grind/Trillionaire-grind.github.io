@@ -3,6 +3,9 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase
 import { getAuth, connectAuthEmulator, signInWithEmailAndPassword, sendPasswordResetEmail, createUserWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js"
 import { doc, setDoc, connectFirestoreEmulator, collection, addDoc , getFirestore,getDoc, getDocs, query, orderBy, startAt, startAfter, limit, where, updateDoc} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
 import { getFunctions, connectFunctionsEmulator } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-functions.js";
+import { greenVersionLabel } from "./greenVersion.js";
+
+document.title = "Green Books App - Register " + greenVersionLabel();
 
 
 // TODO: Add SDKs for Firebase products that you want to use
