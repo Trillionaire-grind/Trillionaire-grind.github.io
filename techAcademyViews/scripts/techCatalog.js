@@ -20,16 +20,16 @@ export const TECH_CATALOG = {
     {
       id: "guide",
       name: "NO B.S. Guide To Tech Mastery For Seniors",
-      price: 297,
-      priceLabel: "$297",
+      price: 997,
+      priceLabel: "$997",
       perks:
         "Everything in Free, plus the full NO B.S. Guide: cell phone basics, scam avoidance, Zoom, A.I. essentials, and the bonus “How To Legally Print Money On The Internet.” Learn on your own terms.",
     },
     {
       id: "vip",
       name: "VIP Experience · Tech Academy Mastermind",
-      price: 14997,
-      priceLabel: "$14,997",
+      price: 97000,
+      priceLabel: "$97,000",
       limited: true,
       perks:
         "Everything in the Guide, plus live classes, workshops, open Q&A, I.T. help desk access, and the VIP Tech Academy Mastermind experience. High-touch support to become truly tech-savvy.",

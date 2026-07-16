@@ -3,8 +3,8 @@
  *
  * Tiers (mirrors Minorities structure; different names/prices/benefits):
  *   free  — Free · The Secret To Tech Mastery — $0 (register only)
- *   guide — NO B.S. Guide To Tech Mastery For Seniors — $297
- *   vip   — VIP Experience · Tech Academy Mastermind — $14,997 (or call)
+ *   guide — NO B.S. Guide To Tech Mastery For Seniors — $997
+ *   vip   — VIP Experience · Tech Academy Mastermind — $97,000 (or call)
  *
  * HOW TO GO LIVE
  * 1. Stripe Dashboard → Live mode → create Payment Links for guide + vip.
@@ -24,8 +24,8 @@ export const CHECKOUT_LIVE = false;
  */
 export const TECH_PAYMENT_LINKS = {
   free: null,
-  guide: null, // LIVE_REQUIRED — $297 NO B.S. Guide
-  vip: null, // LIVE_REQUIRED — VIP Experience (or keep call-only)
+  guide: null, // LIVE_REQUIRED — $997 NO B.S. Guide
+  vip: null, // LIVE_REQUIRED — VIP Experience $97,000 (or keep call-only)
   // legacy keys → map to new tiers
   secret: null,
   academy: null,
@@ -40,12 +40,12 @@ export const TECH_OFFERS = {
   guide: {
     key: "guide",
     label: "NO B.S. Guide To Tech Mastery For Seniors",
-    priceLabel: "$297",
+    priceLabel: "$997",
   },
   vip: {
     key: "vip",
     label: "VIP Experience · Tech Academy Mastermind",
-    priceLabel: "$14,997",
+    priceLabel: "$97,000",
   },
 };
 
@@ -85,7 +85,7 @@ export function getCtaCopy(offerKey) {
   if (isCheckoutReady(key)) {
     return {
       mode: "checkout",
-      buttonText: key === "guide" ? "Get The Guide — $297" : "Join VIP Experience",
+      buttonText: key === "guide" ? "Get The Guide — $997" : "Join VIP Experience",
       hint: null,
     };
   }

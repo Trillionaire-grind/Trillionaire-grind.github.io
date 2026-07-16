@@ -1,5 +1,5 @@
 /** Bump this on each Tech Academy release (GitHub Pages). */
-export const TECH_APP_VERSION = "0.0.0.1";
+export const TECH_APP_VERSION = "0.0.0.2";
 
 export function techVersionLabel() {
   return "v" + TECH_APP_VERSION;
