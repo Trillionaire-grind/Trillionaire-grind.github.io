@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff" id="metaThemeColor">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Beach Delivery — Naples</title>
+  <title>Beach Delivery — Demo</title>
   <script>
     try {
       document.documentElement.setAttribute("data-theme", localStorage.getItem("bd-theme") || "classic");
@@ -90,6 +90,25 @@
     body.modal-open { overflow: hidden; }
 
     .app { width: 100%; min-height: 100dvh; display: flex; flex-direction: column; }
+
+    .demo-banner {
+      flex-shrink: 0;
+      z-index: 200;
+      padding: 8px var(--page-x);
+      background: var(--gray-100);
+      border-bottom: 1px solid var(--gray-200);
+      color: var(--gray-600);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .demo-banner strong {
+      color: var(--black);
+      font-weight: 800;
+    }
 
     /* ── Views ── */
     .view { display: none; flex-direction: column; flex: 1; }
@@ -1135,6 +1154,8 @@
 
 <div class="app">
 
+  <div class="demo-banner" role="status">Demo — <strong>not a live ordering service</strong></div>
+
   <!-- Main header (home only) -->
   <header class="header" id="mainHeader">
     <button class="header-btn hamburger" id="menuBtn" aria-label="Open menu">
@@ -1195,7 +1216,7 @@
   <div class="view" id="viewRegister">
     <div class="page-body">
       <div class="auth-logo">Beach Delivery</div>
-      <p class="auth-sub">Create an account to order coffee & breakfast to your spot on the sand.</p>
+      <p class="auth-sub">Demo app — create an account to try ordering coffee & breakfast to your spot on the sand.</p>
       <form id="registerForm">
         <div class="form-group">
           <label class="form-label" for="regName">Full name</label>

@@ -1,26 +1,20 @@
 /**
  * Secret Attraction funnel config.
  * Canonical path: /secretAttraction.html → downloadPreview.html
- * Offer: free chapter → Regular (Amazon) || Deluxe (Stripe signed copy + bonuses)
+ * Offer: free chapter → Regular (Amazon) || Deluxe/Premium signed copy
  *
  * Stripe Payment Link success URL (keplersiguineau.com):
  *   https://keplersiguineau.com/secretAttractionViews/premiumThankYou.html
  */
-export const SA_APP_VERSION = "0.0.0.4";
-
-export function saVersionLabel() {
-  return "v" + SA_APP_VERSION;
-}
-
 export const AMAZON_URL =
   "https://www.amazon.com/Secret-Attraction-Between-Mentor-Mentee/dp/B0DH2ZJ57H";
 
-/** Deluxe upsell — signed copy + book club guide + author's note. */
-export const DELUXE_STRIPE_URL =
-  "https://buy.stripe.com/3cs3g68mVbUVdY4bJ9";
+/** Stripe Payment Link for signed copy + bonuses. */
+export const PREMIUM_STRIPE_URL =
+  "https://buy.stripe.com/3cI00iaiff3v1RMeTC6Ri0K";
 
-/** @deprecated use DELUXE_STRIPE_URL */
-export const PREMIUM_STRIPE_URL = DELUXE_STRIPE_URL;
+/** Alias used by Deluxe-named upsell UI. */
+export const DELUXE_STRIPE_URL = PREMIUM_STRIPE_URL;
 
 /**
  * Instagram highlight with reader/buyer photos.
@@ -51,5 +45,3 @@ export const TESTIMONIAL_PHOTOS = [
   { src: "secretAttractionViews/assets/buyers/reader-4.jpg", caption: "Another happy reader" },
   { src: "secretAttractionViews/assets/buyers/reader-5.jpg", caption: "Reader photo" },
 ];
-
-console.log("[Secret Attraction] working version:", saVersionLabel());

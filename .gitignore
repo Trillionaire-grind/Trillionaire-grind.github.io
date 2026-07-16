@@ -3,3 +3,6 @@ functions/.env
 functions/*.local
 firebase-debug.log
 firebase-debug.*.log
+minoritiesFunctions/node_modules/
+minoritiesFunctions/.env
+.DS_Store

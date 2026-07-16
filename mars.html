@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="BettrLife Financial Services — how to have a better life by having a better plan. Retirement, tax, and legacy planning in Naples & Fort Myers, FL." />
+  <meta name="theme-color" content="#0B1F3A" />
+  <title>BettrLife Financial | A Better Plan for a Better Life</title>
+  <link rel="icon" href="assets/mars/logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0B1F3A;
+      --navy-deep: #061427;
+      --blue: #1F6BB5;
+      --blue-bright: #3B8FD9;
+      --mist: #EEF4FA;
+      --sand: #F7F5F0;
+      --gold: #C4A35A;
+      --text: #142033;
+      --muted: #5A6B7D;
+      --line: rgba(20, 32, 51, 0.12);
+      --white: #ffffff;
+      --max: 1120px;
+      --sticky-h: 0px;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background: var(--sand);
+      line-height: 1.65;
+      overflow-x: hidden;
+      padding-bottom: var(--sticky-h);
+    }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    .wrap { width: min(var(--max), calc(100% - 2.5rem)); margin-inline: auto; }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes softPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(31, 107, 181, 0.35); }
+      70% { box-shadow: 0 0 0 14px rgba(31, 107, 181, 0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* Nav */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: blur(14px);
+      background: rgba(247, 245, 240, 0.9);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.7rem 0;
+    }
+    .brand img {
+      height: 42px;
+      width: auto;
+      background: var(--navy-deep);
+      border-radius: 8px;
+      padding: 0.3rem 0.5rem;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+    .nav-links a:hover { color: var(--navy); }
+
+    /* Shared CTA */
+    .cta-wrap {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 1.7rem;
+      border-radius: 999px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--blue);
+      color: #fff;
+      animation: softPulse 2.8s ease-out infinite;
+    }
+    .btn-primary:hover {
+      background: var(--blue-bright);
+      transform: translateY(-2px);
+    }
+    .btn-light {
+      background: #fff;
+      color: var(--navy);
+      box-shadow: 0 10px 30px rgba(6, 20, 39, 0.12);
+    }
+    .btn-light:hover { transform: translateY(-2px); }
+    .btn-on-dark {
+      background: #fff;
+      color: var(--navy);
+    }
+    .btn-on-dark:hover { background: #f0f6fc; transform: translateY(-2px); }
+    .cta-block {
+      display: flex;
+      justify-content: center;
+      padding: 1.75rem 0;
+    }
+    .cta-block.tight { padding: 1.25rem 0 0; }
+
+    /* Sticky CTA — appears after hero */
+    .sticky-cta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 60;
+      background: rgba(6, 20, 39, 0.96);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding: 0.75rem 1rem 0.85rem;
+      transform: translateY(110%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.28s ease, opacity 0.28s ease;
+    }
+    .sticky-cta.visible {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .sticky-cta-inner {
+      width: min(520px, 100%);
+      margin: 0 auto;
+      text-align: center;
+    }
+    .sticky-cta .btn {
+      width: min(100%, 360px);
+      padding: 0.9rem 1.25rem;
+      animation: none;
+    }
+    .sticky-contact {
+      margin-top: 0.45rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.35rem 1rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.72);
+      letter-spacing: 0.02em;
+    }
+    .sticky-contact a:hover { color: #fff; }
+
+    /* PAGE 1 — Hero */
+    .page-hero {
+      position: relative;
+      min-height: calc(100svh - 58px);
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 0 2rem;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 55% at 85% 0%, rgba(59, 143, 217, 0.2), transparent 55%),
+        radial-gradient(ellipse 60% 45% at 5% 100%, rgba(196, 163, 90, 0.14), transparent 50%),
+        linear-gradient(165deg, #F4F8FC 0%, #E8F0F8 45%, #F7F5F0 100%);
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 1.15rem;
+      justify-items: center;
+      text-align: center;
+      width: 100%;
+      padding: 0;
+    }
+    .hero-grid > .hero-headline {
+      width: min(92vw, 18ch);
+      padding: 0 1rem;
+    }
+    .hero-headline {
+      max-width: min(20ch, 92vw);
+      width: 100%;
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2.35rem, 7.5vw, 4.35rem);
+      font-weight: 600;
+      line-height: 1.05;
+      color: var(--navy);
+      text-align: center;
+      animation: rise 0.8s ease 0.06s both;
+      letter-spacing: -0.01em;
+    }
+    .video-shell {
+      width: 80vw;
+      max-width: 80vw;
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--navy-deep);
+      box-shadow: 0 20px 50px rgba(6, 20, 39, 0.22);
+      aspect-ratio: 16 / 9;
+      animation: rise 0.85s ease 0.12s both;
+    }
+    .video-shell video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+    }
+    .gospel-stack {
+      display: grid;
+      gap: 0.65rem;
+      max-width: 36rem;
+      width: 100%;
+      animation: rise 0.9s ease 0.18s both;
+    }
+    .gospel {
+      border-left: 2px solid var(--gold);
+      padding-left: 0.9rem;
+      text-align: left;
+    }
+    .gospel strong {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 0.15rem;
+    }
+    .gospel p {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+      font-style: italic;
+      color: var(--muted);
+      line-height: 1.3;
+    }
+    .values-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.45rem 1.1rem;
+      color: var(--navy);
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      animation: rise 0.95s ease 0.22s both;
+    }
+    .values-row span::before {
+      content: "◆";
+      color: var(--gold);
+      margin-right: 0.45rem;
+      font-size: 0.65em;
+    }
+    .hero-cta {
+      animation: rise 1s ease 0.26s both;
+    }
+
+    /* PAGE 2 — Testimonials */
+    .page-testimonials {
+      position: relative;
+      padding: 5rem 0 4rem;
+      background: linear-gradient(180deg, var(--navy-deep), var(--navy) 55%, #123156);
+      color: #fff;
+      overflow: hidden;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.85rem;
+      text-align: center;
+    }
+    .section-title {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .section-lead {
+      max-width: 40rem;
+      margin: 0 auto 2.25rem;
+      color: rgba(255,255,255,0.78);
+      text-align: center;
+    }
+    .testimonial-grid {
+      display: grid;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    @media (min-width: 860px) {
+      .testimonial-grid { grid-template-columns: 1.2fr 0.8fr; }
+    }
+    .quote-block, .client-note {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 2rem;
+      border-radius: 16px;
+    }
+    .quote-block blockquote {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+      font-style: italic;
+      line-height: 1.35;
+      margin-bottom: 1.25rem;
+    }
+    .quote-block cite {
+      display: block;
+      font-style: normal;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.7);
+    }
+    .client-note h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.55rem;
+      margin-bottom: 0.75rem;
+    }
+    .client-note p { color: rgba(255,255,255,0.78); }
+    .disclosure {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.55;
+      max-width: 52rem;
+      margin: 0 auto 0.5rem;
+      text-align: center;
+    }
+
+    /* Content sections */
+    section.content { padding: 4.5rem 0; }
+    .content h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1.9rem, 3.5vw, 2.7rem);
+      font-weight: 600;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    .content .eyebrow {
+      color: var(--blue);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+      text-align: center;
+    }
+    .content .lede {
+      color: var(--muted);
+      max-width: 40rem;
+      margin: 0 auto 2rem;
+      text-align: center;
+    }
+
+    .story { background: var(--white); }
+    .story-layout {
+      display: grid;
+      gap: 2.25rem;
+      align-items: center;
+    }
+    @media (min-width: 900px) {
+      .story-layout { grid-template-columns: 1.05fr 0.95fr; }
+      .story-copy { text-align: left; }
+      .story-copy .eyebrow,
+      .story-copy h2,
+      .story-copy .lede { text-align: left; margin-left: 0; }
+    }
+    .story-photo {
+      border-radius: 18px;
+      overflow: hidden;
+      min-height: 320px;
+      background: #ddd center/cover no-repeat;
+      box-shadow: 0 24px 50px rgba(11, 31, 58, 0.16);
+    }
+    .verse {
+      margin-top: 1.35rem;
+      padding: 1rem 0 0;
+      border-top: 1px solid var(--line);
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+    .verse strong {
+      display: block;
+      font-family: "Outfit", sans-serif;
+      font-style: normal;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.35rem;
+    }
+
+    .offer { background: linear-gradient(180deg, var(--mist), var(--sand)); }
+    .offer-grid {
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media (min-width: 760px) {
+      .offer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1020px) {
+      .offer-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .offer-item {
+      padding: 0.25rem 0 1.25rem;
+      border-top: 1px solid var(--line);
+    }
+    .offer-item h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.45rem;
+      color: var(--navy);
+      margin: 0.9rem 0 0.55rem;
+    }
+    .offer-item p { color: var(--muted); font-size: 0.98rem; }
+
+    .process { background: var(--white); }
+    .steps {
+      display: grid;
+      gap: 1rem;
+      counter-reset: step;
+      margin-bottom: 2.25rem;
+    }
+    @media (min-width: 860px) {
+      .steps { grid-template-columns: repeat(3, 1fr); }
+    }
+    .step {
+      padding: 1.25rem 1rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .step::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      display: block;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      color: var(--blue);
+      font-weight: 700;
+      margin-bottom: 0.55rem;
+    }
+    .step h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.35rem;
+      color: var(--navy);
+      margin-bottom: 0.35rem;
+    }
+    .step p { color: var(--muted); font-size: 0.95rem; }
+    .process-pillars {
+      display: grid;
+      gap: 1.5rem;
+    }
+    @media (min-width: 860px) {
+      .process-pillars { grid-template-columns: repeat(3, 1fr); }
+    }
+    .pillar h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.5rem;
+      color: var(--navy);
+      margin-bottom: 0.5rem;
+    }
+    .pillar p { color: var(--muted); }
+
+    .frs {
+      background: var(--navy);
+      color: #fff;
+    }
+    .frs h2 { color: #fff; }
+    .frs .lede { color: rgba(255,255,255,0.75); }
+    .frs-grid {
+      display: grid;
+      gap: 1.25rem;
+    }
+    @media (min-width: 800px) {
+      .frs-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    .frs-item {
+      padding: 1.35rem 0;
+      border-top: 1px solid rgba(255,255,255,0.14);
+    }
+    .frs-item h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.35rem;
+      margin-bottom: 0.45rem;
+    }
+    .frs-item p { color: rgba(255,255,255,0.72); font-size: 0.96rem; }
+
+    .team { background: var(--sand); }
+    .team-grid {
+      display: grid;
+      gap: 1.75rem;
+    }
+    @media (min-width: 640px) {
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 1020px) {
+      .team-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    .person {
+      text-align: center;
+      padding-bottom: 1.25rem;
+    }
+    .person-photo {
+      width: 148px;
+      height: 148px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      object-fit: cover;
+      background: var(--navy-deep);
+      box-shadow: 0 12px 28px rgba(11, 31, 58, 0.16);
+    }
+    .person h3 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.4rem;
+      color: var(--navy);
+    }
+    .person .role {
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin: 0.25rem 0 0.65rem;
+    }
+    .person p { color: var(--muted); font-size: 0.92rem; text-align: left; }
+
+    .next-step {
+      background:
+        linear-gradient(135deg, rgba(11,31,58,0.88), rgba(31,107,181,0.78)),
+        url("assets/mars/planning.jpg") center/cover no-repeat;
+      color: #fff;
+      padding: 5rem 0;
+      text-align: center;
+    }
+    .next-step h2 {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      margin-bottom: 1rem;
+    }
+    .next-step p {
+      max-width: 36rem;
+      margin: 0 auto 1.5rem;
+      color: rgba(255,255,255,0.82);
+    }
+
+    footer {
+      background: var(--navy-deep);
+      color: rgba(255,255,255,0.7);
+      padding: 3rem 0 2rem;
+      font-size: 0.9rem;
+    }
+    .footer-grid {
+      display: grid;
+      gap: 1.75rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+    @media (min-width: 800px) {
+      .footer-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+        text-align: left;
+      }
+    }
+    footer h4 {
+      color: #fff;
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    footer a:hover { color: #fff; }
+    .legal {
+      border-top: 1px solid rgba(255,255,255,0.12);
+      padding-top: 1.25rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.55;
+      text-align: center;
+    }
+    .legal a { text-decoration: underline; }
+    .version {
+      margin-top: 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    @media (max-width: 780px) {
+      .nav-links { display: none; }
+      .page-hero {
+        min-height: calc(100svh - 56px);
+        padding: 1rem 0 1.35rem;
+        align-items: flex-start;
+      }
+      .hero-grid { gap: 0.75rem; }
+      .hero-headline { font-size: clamp(2.1rem, 9vw, 2.85rem); }
+      .video-shell {
+        width: 80vw;
+        max-width: 80vw;
+        border-radius: 12px;
+      }
+      .gospel p { font-size: 0.98rem; }
+      .btn { padding: 0.9rem 1.35rem; font-size: 0.95rem; }
+      .person p { text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap nav-inner">
+      <a class="brand" href="#top" aria-label="BettrLife Financial Services">
+        <img src="assets/mars/logo.png" alt="BettrLife Financial Services" />
+      </a>
+      <div class="nav-links">
+        <a href="#testimonials">Clients</a>
+        <a href="#story">Our Story</a>
+        <a href="#offer">Services</a>
+        <a href="#frs">FRS</a>
+        <a href="#team">Team</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PAGE 1: headline → video → scripture → CTA -->
+  <header class="page-hero" id="top">
+    <div class="hero-grid">
+      <h1 class="hero-headline">How to have a better life by having a better plan</h1>
+
+      <div class="video-shell" aria-label="About BettrLife video">
+        <video
+          controls
+          playsinline
+          preload="metadata"
+          poster="assets/mars/founders.jpg"
+          src="https://video.wixstatic.com/video/aeccfb_89e6ff6126aa4e5da6e1b68844707620/720p/mp4/file.mp4"
+        >
+          Your browser does not support the video tag.
+        </video>
+      </div>
+
+      <div class="wrap gospel-stack" aria-label="Guiding verses">
+        <div class="gospel">
+          <strong>Luke 16:10</strong>
+          <p>“One who is faithful in a very little is also faithful in much.”</p>
+        </div>
+        <div class="gospel">
+          <strong>Proverbs 13:22</strong>
+          <p>“A good man leaves an inheritance to his children’s children.”</p>
+        </div>
+      </div>
+
+      <div class="wrap values-row">
+        <span>Integrity</span>
+        <span>Stewardship</span>
+        <span>Legacy</span>
+      </div>
+
+      <div class="wrap cta-wrap hero-cta">
+        <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- PAGE 2: Testimonials — directly after first CTA -->
+  <section class="page-testimonials" id="testimonials">
+    <div class="wrap">
+      <p class="section-label">Testimonials</p>
+      <h2 class="section-title">What clients experience with BettrLife</h2>
+      <p class="section-lead">
+        The Desire brothers serve clients who want more than returns — they want purpose.
+        Their ideal clients value honesty, accountability, and relationship. They see wealth as a tool
+        to strengthen families, communities, and legacies that last long after they’re gone.
+      </p>
+
+      <div class="testimonial-grid reveal">
+        <article class="quote-block">
+          <blockquote>
+            “We built this firm on the values we grew up with — honesty, hard work, loyalty, and commitment to doing right by people. When you work with us, you get not just two advisors, but two brothers dedicated to helping you protect and build your financial future.”
+          </blockquote>
+          <cite>Mars &amp; Ralph Desire · Co-Founders, Fiduciary Advisors</cite>
+        </article>
+        <article class="client-note">
+          <h3>Built for families who want clarity</h3>
+          <p>
+            Clients come for a clear retirement income strategy, tax-aware planning, and protection for the people
+            and causes that matter most — a plan that serves their purpose, not the other way around.
+          </p>
+        </article>
+      </div>
+
+      <div class="testimonial-grid reveal" style="margin-top:1.25rem">
+        <article class="quote-block">
+          <blockquote>
+            “Financial planning should serve your purpose, not the other way around.”
+          </blockquote>
+          <cite>BettrLife Financial Services · Core belief</cite>
+        </article>
+        <article class="quote-block">
+          <blockquote>
+            “Real wealth isn’t built on speed — it’s built on structure. Align resources with purpose, protection, people, and peace of mind.”
+          </blockquote>
+          <cite>Mars &amp; Ralph Desire</cite>
+        </article>
+      </div>
+
+      <p class="disclosure">
+        Please Note: Testimonials and client statements associated with BettrLife Financial Services.
+        No compensation was provided for client testimonials. This arrangement creates a material conflict of interest
+        because BettrLife Financial Services has an incentive to engage clients who have had a positive experience
+        with the firm to provide such testimonials. There is no guarantee another individual’s experience will be
+        representative of the individual providing this testimonial and no guarantees of performance or success are offered.
+      </p>
+
+      <div class="cta-block">
+        <a class="btn btn-on-dark" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content story" id="story">
+    <div class="wrap story-layout">
+      <div class="story-copy reveal">
+        <p class="eyebrow">Who is BettrLife Financial?</p>
+        <h2>Our Story</h2>
+        <p class="lede">
+          Mars and Ralph Desire began their journey in the financial world in 2021 with a simple mission —
+          to serve people and learn everything they could about how money truly works. What started as two brothers
+          determined to make a difference quickly grew into a purpose-driven firm helping educators, families, and
+          retirees throughout Florida make wiser decisions about their wealth.
+        </p>
+        <p class="lede" style="margin-bottom:0">
+          The brothers saw firsthand how many families were left unsure about retirement, taxes, and estate planning.
+          They decided to build something different — a firm grounded in faith, stewardship, and education.
+          BettrLife Financial Services was born with the belief that financial planning should serve your purpose,
+          not the other way around.
+        </p>
+        <div class="verse">
+          <strong>Proverbs 13:22</strong>
+          “A good man leaves an inheritance to his children’s children.”
+        </div>
+        <div class="cta-block tight">
+          <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+        </div>
+      </div>
+      <div class="story-photo reveal" style="background-image:url('assets/mars/founders.jpg')" role="img" aria-label="Mars and Ralph Desire"></div>
+    </div>
+  </section>
+
+  <div class="cta-block" style="background:var(--white); padding-top:0">
+    <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+  </div>
+
+  <section class="content offer" id="offer">
+    <div class="wrap">
+      <p class="eyebrow">What We Offer</p>
+      <h2>Clear, personalized guidance for every stage</h2>
+      <p class="lede">
+        We provide clear, personalized guidance designed to help you plan confidently, protect what matters,
+        and build a stronger financial future.
+      </p>
+      <div class="offer-grid">
+        <article class="offer-item reveal">
+          <h3>Wealth Management</h3>
+          <p>Our investment guidance is built around your goals, risk tolerance, and timeline, with strategies designed to support steady growth and long-term stability.</p>
+        </article>
+        <article class="offer-item reveal">
+          <h3>Retirement Blueprint</h3>
+          <p>We create structured income strategies designed to help you turn your savings into reliable income throughout retirement.</p>
+        </article>
+        <article class="offer-item reveal">
+          <h3>Tax Efficiency Strategies</h3>
+          <p>We evaluate when and how Roth conversions may make sense for your situation, helping you manage taxes today while creating potential tax-free income in the future.</p>
+        </article>
+        <article class="offer-item reveal">
+          <h3>Asset Protection</h3>
+          <p>Protecting your wealth is just as important as building it. We help assess potential risks and develop strategies designed to safeguard your family, assets, and long-term financial stability.</p>
+        </article>
+        <article class="offer-item reveal">
+          <h3>Estate Coordination</h3>
+          <p>We help you organize and protect your assets so they are transferred according to your wishes. Through thoughtful coordination with attorneys and tax professionals, we help ensure your legacy supports the people and causes that matter most to you.</p>
+        </article>
+        <article class="offer-item reveal">
+          <h3>Investment Advising</h3>
+          <p>Personalized advisory support aligned with your values, timeline, and the life you want your wealth to fund.</p>
+        </article>
+      </div>
+      <div class="cta-block">
+        <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content process" id="process">
+    <div class="wrap">
+      <p class="eyebrow">Our Process</p>
+      <h2>From discovery to a plan you can live with</h2>
+      <p class="lede">We provide clear, personalized guidance designed to help you plan confidently, protect what matters, and build a stronger financial future.</p>
+
+      <div class="steps">
+        <div class="step reveal">
+          <h3>Discovery</h3>
+          <p>Understand your financial life — goals, concerns, values, and vision for the future.</p>
+        </div>
+        <div class="step reveal">
+          <h3>Vision</h3>
+          <p>Define what success looks like so every recommendation has a destination.</p>
+        </div>
+        <div class="step reveal">
+          <h3>Analysis</h3>
+          <p>Evaluate your financial position with clarity and care.</p>
+        </div>
+        <div class="step reveal">
+          <h3>Strategy</h3>
+          <p>Build your personalized financial plan around what matters most.</p>
+        </div>
+        <div class="step reveal">
+          <h3>Plan Presentation</h3>
+          <p>Bring clarity to the strategy so you understand every option.</p>
+        </div>
+        <div class="step reveal">
+          <h3>Implementation</h3>
+          <p>Monitor and adjust your plan as life and goals evolve.</p>
+        </div>
+      </div>
+
+      <div class="cta-block" style="padding-top:0">
+        <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+
+      <div class="process-pillars">
+        <article class="pillar reveal">
+          <h3>Discover</h3>
+          <p>We start with a conversation. This initial meeting is all about getting to know you — your goals, concerns, values, and vision for the future. We listen first, ask thoughtful questions, and make sure you feel comfortable and understood.</p>
+        </article>
+        <article class="pillar reveal">
+          <h3>Design</h3>
+          <p>Using what we’ve learned, we create a personalized financial strategy tailored to your needs. Every recommendation is explained clearly, so you understand your options and feel confident in the plan we build together.</p>
+        </article>
+        <article class="pillar reveal">
+          <h3>Support</h3>
+          <p>Your plan isn’t static — and neither are we. We help implement your strategy and stay by your side with ongoing guidance, reviews, and adjustments as your life and goals evolve.</p>
+        </article>
+      </div>
+
+      <div class="cta-block">
+        <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content frs" id="frs">
+    <div class="wrap">
+      <p class="eyebrow" style="color:var(--gold)">FRS Services</p>
+      <h2>Florida Retirement System guidance with confidence</h2>
+      <p class="lede">
+        Helping you understand your Florida Retirement System benefits and turn them into a confident retirement strategy.
+        Whether you participate in the Pension Plan or the Investment Plan, knowing how your benefits fit into your overall plan is an important step.
+      </p>
+      <div class="frs-grid">
+        <article class="frs-item reveal">
+          <h3>Pension Plan vs Investment Plan</h3>
+          <p>A side-by-side review of pension income and investment strategies to help understand how each option may support long-term retirement goals.</p>
+        </article>
+        <article class="frs-item reveal">
+          <h3>2nd Election review &amp; timing</h3>
+          <p>An overview of second-election options and how timing decisions may affect future retirement benefits.</p>
+        </article>
+        <article class="frs-item reveal">
+          <h3>DROP vs no-DROP analysis</h3>
+          <p>A comparison of participating in DROP versus a traditional retirement path to evaluate potential long-term outcomes.</p>
+        </article>
+        <article class="frs-item reveal">
+          <h3>Pension estimate verification</h3>
+          <p>A review of pension estimates to help confirm accuracy and better understand projected retirement benefits.</p>
+        </article>
+        <article class="frs-item reveal">
+          <h3>DROP participation strategy</h3>
+          <p>An overview of how participating in DROP may impact retirement timing, benefit accumulation, and overall financial planning.</p>
+        </article>
+        <article class="frs-item reveal">
+          <h3>DROP tax &amp; exit-year income planning</h3>
+          <p>A review of potential tax considerations related to DROP distributions, plus income sources during the transition year into retirement.</p>
+        </article>
+      </div>
+      <div class="cta-block">
+        <a class="btn btn-on-dark" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="content team" id="team">
+    <div class="wrap">
+      <p class="eyebrow">Our Team</p>
+      <h2>The faces behind our success</h2>
+      <p class="lede">
+        Working together, our team provides thoughtful support, clear communication, and personalized guidance at every stage of your financial journey.
+      </p>
+      <div class="team-grid">
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/mars.png" alt="Darrans Mars Desire" />
+          <h3>Darrans “Mars” Desire</h3>
+          <p class="role">President / Founder</p>
+          <p>Mars Desire is a fiduciary financial advisor and Founder of BettrLife Financial. He provides holistic financial planning that aligns retirement, tax strategy, estate planning, investments, and insurance into one clear, coordinated plan.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/ralph.png" alt="Ralph Desire" />
+          <h3>Ralph Desire</h3>
+          <p class="role">Co-Founder / Senior Partner</p>
+          <p>As a fiduciary and Co-Founder, Ralph partners with individuals and families to create clear, personalized financial plans — specializing in retirement planning, tax-efficient strategies, and long-term wealth building.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/tom.jpg" alt="Tom Kowalkoski" />
+          <h3>Tom Kowalkoski</h3>
+          <p class="role">Advisor Advocate · Regal Investment Advisors</p>
+          <p>Tom supports the advisory team with portfolio research, allocation modeling, and investment analysis so each recommendation reflects prudent planning and long-term discipline.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/sandra.jpg" alt="Sandra Wang" />
+          <h3>Sandra Wang</h3>
+          <p class="role">Investment Research</p>
+          <p>Sandra conducts in-depth investment research and portfolio analysis, focusing on risk assessment, asset allocation, and long-term strategy — translating data into insight.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/lee.png" alt="Lee Cole" />
+          <h3>Lee Cole</h3>
+          <p class="role">Lead Advisor Advocate</p>
+          <p>Lee oversees preparation and strategic development of client investment plans, guiding research and portfolio construction with consistency and risk awareness.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/jordan.png" alt="Jordan Fischer" />
+          <h3>Jordan Fischer, CFP®, AIF®</h3>
+          <p class="role">Portfolio Manager</p>
+          <p>Jordan began his finance career in 2016 after graduating from Central Michigan University with a B.S. in Financial Planning. He holds CFP® and AIF® designations and is a CFA Level II Candidate.</p>
+        </article>
+        <article class="person reveal">
+          <img class="person-photo" src="assets/mars/team/riley.png" alt="Riley McCulley" />
+          <h3>Riley McCulley</h3>
+          <p class="role">Lead Paraplanner</p>
+          <p>Riley assists in developing retirement strategies, preparing client reports, and ensuring every plan aligns with the firm’s commitment to financial well-being.</p>
+        </article>
+      </div>
+      <div class="cta-block">
+        <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="next-step" id="next">
+    <div class="wrap reveal">
+      <h2>Ready to take the next step?</h2>
+      <p>
+        Reach out to start a simple, no-pressure conversation about your goals and your financial future.
+        We’re here to listen, answer your questions, and help you move forward with clarity and confidence.
+      </p>
+      <div class="cta-wrap">
+        <a class="btn btn-light" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="cta-block" style="background:var(--sand)">
+    <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+  </div>
+
+  <footer>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <h4>Contact</h4>
+          <p><a href="tel:+12395240740">(239) 524-0740</a></p>
+          <p><a href="mailto:info@bettrlifefinancial.com">info@bettrlifefinancial.com</a></p>
+        </div>
+        <div>
+          <h4>Locations</h4>
+          <p>Naples / Fort Myers<br />Florida</p>
+        </div>
+        <div>
+          <h4>On this page</h4>
+          <p><a href="#testimonials">Clients</a> · <a href="#story">Story</a> · <a href="#offer">Services</a> · <a href="#frs">FRS</a> · <a href="#team">Team</a></p>
+        </div>
+      </div>
+      <div class="cta-block" style="padding-top:0">
+        <a class="btn btn-on-dark" href="tel:+12395240740">Yes, I want a better plan</a>
+      </div>
+      <div class="legal">
+        Advisory services are provided by Regal Investment Advisors, LLC, an SEC Registered Investment Advisor.
+        BettrLife Financial Services operates independently of Regal Investment Advisors. Registration with the SEC
+        does not indicate a specific level of skill or training.
+        <br /><br />
+        <a href="https://regalria.com/disclosures" target="_blank" rel="noopener noreferrer">Regal Disclosures</a>
+        · © 2026 BettrLife Financial
+        <div class="version" id="appVersion">App version</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Sticky CTA: only after scrolling past first page -->
+  <div class="sticky-cta" id="stickyCta" aria-hidden="true">
+    <div class="sticky-cta-inner">
+      <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
+      <div class="sticky-contact">
+        <a href="tel:+12395240740">(239) 524-0740</a>
+        <a href="mailto:info@bettrlifefinancial.com">info@bettrlifefinancial.com</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { marsVersionLabel } from "./marsViews/scripts/marsVersion.js";
+
+    const versionEl = document.getElementById("appVersion");
+    if (versionEl) versionEl.textContent = "App version " + marsVersionLabel();
+
+    const sticky = document.getElementById("stickyCta");
+    const hero = document.getElementById("top");
+
+    function syncSticky() {
+      if (!sticky || !hero) return;
+      const pastHero = window.scrollY > hero.offsetTop + hero.offsetHeight - 40;
+      sticky.classList.toggle("visible", pastHero);
+      sticky.setAttribute("aria-hidden", pastHero ? "false" : "true");
+      document.documentElement.style.setProperty(
+        "--sticky-h",
+        pastHero ? sticky.offsetHeight + "px" : "0px"
+      );
+    }
+    window.addEventListener("scroll", syncSticky, { passive: true });
+    window.addEventListener("resize", syncSticky);
+    syncSticky();
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("in");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.14, rootMargin: "0px 0px -8% 0px" }
+    );
+    document.querySelectorAll(".reveal").forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>

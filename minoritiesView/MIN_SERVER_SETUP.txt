@@ -1,0 +1,157 @@
+The Minorities — server setup (Firebase + Stripe)
+=================================================
+
+Goal: real users, real subscriptions, real content/chat in Firestore.
+Client stays on GitHub Pages; backend lives in Firebase project `the-minorities`.
+
+WHAT SHIPS IN THIS REPO
+-----------------------
+  firebase.minorities.json          Deploy config (rules, storage, functions)
+  firestore.minorities.rules        Users, posts, chat, content, learn sessions
+  storage.minorities.rules          Avatars, post images, admin content/replays
+  functions-minorities/             Cloud Functions (see below)
+  minoritiesView/scripts/
+    minFirebaseConfig.js            Web app config (fill after Firebase project)
+    minApi.js                       Client → Cloud Functions helpers
+
+CLOUD FUNCTIONS (functions-minorities/)
+---------------------------------------
+  minAuthUserCreate           Auth trigger → users/{uid} with tier: free
+  createMinSubscriptionCheckout   POST + Bearer token → Stripe Checkout URL
+  createMinBillingPortal          POST + Bearer token → Stripe Customer Portal
+  syncMinSubscription             POST { sessionId } after checkout redirect
+  minStripeWebhook                Stripe subscription lifecycle → user tier
+  adminSeedMinContent             One-time seed (contentCards, chatRooms, learn)
+
+FIRESTORE COLLECTIONS
+---------------------
+  users/{uid}
+    tier: free | waterboy | bench | starter | vip  (server-written via Stripe)
+    admin: boolean (set manually in Console for CMS access)
+    displayName, username, bio, avatarUrl, email
+    stripeCustomerId, stripeSubscriptionId, subscriptionStatus
+
+  contentCards/{id}     Home feed (admin CRUD; tier-gated when locked)
+  posts/{id}            Community feed
+  posts/{id}/comments/{id}
+  posts/{id}/likes/{uid}
+  chatRooms/{id}
+  chatRooms/{id}/messages/{id}
+  learnSessions/{id}    Live class schedule + zoomUrl (admin only write)
+  stripeCheckoutSessions/{id}   Server only
+  stripeEvents/{id}             Webhook idempotency
+
+TIER ACCESS (enforced in Firestore rules)
+-----------------------------------------
+  free        Public content cards only
+  waterboy    Paid support — no content/chat (Stripe only)
+  bench       Community posts, general chat, member features
+  starter     Bench + exclusive content + learn sessions
+  vip         Starter + VIP chat room
+
+STEP 1 — CREATE FIREBASE PROJECT
+--------------------------------
+  1. https://console.firebase.google.com → Add project → id: the-minorities
+  2. Enable Authentication → Email/Password (Google optional later)
+  3. Create Firestore (production mode — rules deploy from repo)
+  4. Enable Storage
+  5. Project settings → Your apps → Web → copy config into:
+       minoritiesView/scripts/minFirebaseConfig.js
+     Set minFirebaseEnabled = true
+
+STEP 2 — STRIPE PRODUCTS (LIVE OR TEST)
+---------------------------------------
+  Create 4 recurring Products/Prices (monthly):
+    Waterboy  $2/mo   → copy Price ID → MIN_PRICE_WATERBOY
+    Bench     $5/mo   → MIN_PRICE_BENCH
+    Starter  $10/mo   → MIN_PRICE_STARTER
+    V.I.P.   $25/mo   → MIN_PRICE_VIP
+
+  Enable Stripe Customer Portal (Settings → Billing → Customer portal).
+
+STEP 3 — INSTALL & DEPLOY FUNCTIONS
+-----------------------------------
+  cd functions-minorities && npm install && cd ..
+
+  firebase login
+  firebase use the-minorities
+
+  # Secrets
+  firebase functions:secrets:set STRIPE_SECRET_KEY --project the-minorities
+  firebase functions:secrets:set STRIPE_WEBHOOK_SECRET --project the-minorities
+
+  # Set params in Google Cloud Console → Cloud Functions → each function → Environment:
+  #   MIN_PUBLIC_URL=https://keplersiguineau.com
+  #   MIN_PRICE_WATERBOY=price_...
+  #   MIN_PRICE_BENCH=price_...
+  #   MIN_PRICE_STARTER=price_...
+  #   MIN_PRICE_VIP=price_...
+  #   MIN_ADMIN_SEED_KEY=<random string for one-time seed only>
+
+  firebase deploy --config firebase.minorities.json --project the-minorities
+
+STEP 4 — STRIPE WEBHOOK
+-----------------------
+  Stripe Dashboard → Developers → Webhooks → Add endpoint
+
+  URL: https://us-central1-the-minorities.cloudfunctions.net/minStripeWebhook
+
+  Events:
+    checkout.session.completed
+    customer.subscription.created
+    customer.subscription.updated
+    customer.subscription.deleted
+
+  Copy signing secret → STRIPE_WEBHOOK_SECRET for this project.
+
+STEP 5 — SEED DEFAULT CONTENT (once)
+------------------------------------
+  Set MIN_ADMIN_SEED_KEY to a random string, redeploy functions, then:
+
+  curl -X POST \
+    -H "X-Min-Admin-Seed: YOUR_SEED_KEY" \
+    https://us-central1-the-minorities.cloudfunctions.net/adminSeedMinContent
+
+  Clear MIN_ADMIN_SEED_KEY (empty) and redeploy when done.
+
+STEP 6 — PROMOTE ADMIN
+----------------------
+  Firebase Console → Firestore → users/{your-uid} → admin: true
+
+  Admin can: CRUD contentCards, learnSessions, moderate posts/messages.
+
+STEP 7 — CLIENT WIRING (next pass — not in this deploy)
+-------------------------------------------------------
+  minorities.html needs module script that:
+    • Initializes Firebase Auth + Firestore from minFirebaseConfig.js
+    • Replaces minData.js reads with onSnapshot listeners
+    • Register → createUserWithEmailAndPassword + profile update
+    • Subscribe "Join" → minApi.createSubscriptionCheckout(tier, idToken)
+    • Tier from users/{uid}.tier (not localStorage)
+    • Chat/posts/comments → Firestore writes
+
+  Until client is wired, server is ready but app still shows static demo.
+
+SECURITY CHECKLIST
+------------------
+  [ ] MIN_ADMIN_SEED_KEY empty after seeding
+  [ ] firestore.minorities.rules deployed
+  [ ] storage.minorities.rules deployed
+  [ ] minStripeWebhook receiving events (Stripe Dashboard → recent deliveries)
+  [ ] users.tier cannot be self-set (rules block tier/admin/stripe fields on update)
+  [ ] Test: free user cannot read locked contentCards
+  [ ] Test: paid Starter unlocks starter content after webhook
+  [ ] Test: VIP chat denied for bench tier
+
+WHY TIER LIVES ON SERVER
+------------------------
+  Client localStorage tier was demo-only. Production tier is written ONLY by:
+    • minStripeWebhook (subscription events)
+    • syncMinSubscription (checkout redirect fallback)
+  Firestore rules read users/{uid}.tier for all gated content.
+
+DEPLOY COMMANDS (reference)
+---------------------------
+  firebase deploy --config firebase.minorities.json --project the-minorities
+  firebase deploy --only functions --config firebase.minorities.json --project the-minorities
+  firebase deploy --only firestore:rules,storage --config firebase.minorities.json --project the-minorities
