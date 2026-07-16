@@ -1,5 +1,5 @@
 /** Bump on each consulting funnel release. */
-export const CONSULTING_APP_VERSION = "0.0.0.2";
+export const CONSULTING_APP_VERSION = "0.0.0.5";
 
 /** Put this URL on your business card QR code */
 export const CONSULTING_QR_URL = "https://keplersiguineau.com/consulting.html";

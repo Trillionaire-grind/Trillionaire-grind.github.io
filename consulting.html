@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="consultingViews/assets/consulting.css">
 </head>
-<body>
+<body data-consult-no-sticky>
 
   <div class="consult-top-strip" role="banner">
     Local businesses · <strong>We build it for you</strong> · Free call to see if we're a fit
@@ -19,30 +19,43 @@
 
   <main class="consult-wrap">
     <div class="consult-qr-welcome">
-      <span class="consult-local-tag">Scanned my card?</span>
-      <p>
-        <strong>Good to meet you.</strong> I'm Képler — I help local business owners get a website that actually brings calls,
-        or custom software when you've outgrown spreadsheets. Pick what sounds like you below, or book a quick free call.
-      </p>
+      <img
+        class="consult-qr-welcome__photo"
+        src="learnViews/assets/sitting.webp"
+        alt="Képler Siguineau"
+        width="112"
+        height="132"
+      >
+      <div class="consult-qr-welcome__copy">
+        <span class="consult-local-tag">Scanned my card?</span>
+        <p>
+          <strong>Good to meet you.</strong> You deserve a website that helps customers find you, trust you, and call you.
+          If your business needs more than a website, you can also get software built around the way you work.
+        </p>
+        <a class="consult-cta" href="https://calendly.com/buildingwithkepler" data-consult-book>
+          Book your free call
+          <span>Pick a time without leaving this page</span>
+        </a>
+      </div>
     </div>
 
     <header class="consult-hero">
       <p class="consult-eyebrow">What do you need?</p>
-      <h1>Website, Or Something <em>Bigger?</em></h1>
+      <h1>What Would Help <em>Your Business</em> Grow?</h1>
       <p class="consult-lead">
-        Most owners I meet at networking events need one of two things: a solid website customers can find and trust,
-        or a custom tool to run part of the business online. Here's the simple breakdown.
+        You may need a solid website your customers can find and trust, or you may need your own tool to run part of your
+        business online. Choose what sounds most like your situation.
       </p>
       <hr class="consult-rule">
     </header>
 
     <div class="consult-hub-cards">
       <a class="consult-hub-card" href="consultingViews/marketing-websites.html">
-        <span class="consult-hub-card__type">Most common</span>
-        <h2>Websites That Bring Calls</h2>
+        <span class="consult-hub-card__type">Get found online</span>
+        <h2>A Website That Brings You Calls</h2>
         <p>
-          For restaurants, salons, contractors, shops, and service businesses.
-          A clean site on Google, a way to contact you, and online booking or payments if you need them.
+          Give your customers a clean site they can find on Google, a clear way to contact you,
+          and online booking or payments when your business needs them.
         </p>
         <p class="consult-hub-card__from">From $997 · 3 options</p>
         <span class="consult-hub-card__link">See website packages →</span>
@@ -50,10 +63,10 @@
 
       <a class="consult-hub-card" href="consultingViews/custom-software.html">
         <span class="consult-hub-card__type">Bigger projects</span>
-        <h2>Custom Software</h2>
+        <h2>Software Built For Your Business</h2>
         <p>
-          When you need your own system — customer logins, staff tools, order tracking,
-          member areas. Built for how your business actually runs.
+          Get your own system for customer logins, staff tools, order tracking, or member areas —
+          built around how you already run your business.
         </p>
         <p class="consult-hub-card__from">From $12,000+ · we talk first</p>
         <span class="consult-hub-card__link">See custom software →</span>
@@ -63,14 +76,13 @@
     <section class="consult-section">
       <h2>Not sure? That's normal.</h2>
       <p>
-        A lot of owners start with a simple website and grow from there.
-        Book a free call — I'll listen to what you're dealing with and tell you straight if I can help (and what it would cost).
-        No pressure, no tech lecture.
+        You do not need to know the technical answer before we talk. Tell me what is slowing you down and what you want
+        your business to do next. You will get a straight recommendation, including the likely cost. No pressure and no tech lecture.
       </p>
       <div class="consult-cta-wrap">
-        <a class="consult-cta" href="/learnViews/learn.html#speak">
+        <a class="consult-cta" href="https://calendly.com/buildingwithkepler" data-consult-book>
           Book a free call with Képler
-          <span>15 minutes · Pick a time that works for you</span>
+          <span>Pick a time without leaving this page</span>
         </a>
       </div>
     </section>
@@ -89,5 +101,6 @@
   </main>
 
   <script type="module" src="consultingViews/assets/consultingConfig.js"></script>
+  <script type="module" src="consultingViews/assets/consulting.js"></script>
 </body>
 </html>
