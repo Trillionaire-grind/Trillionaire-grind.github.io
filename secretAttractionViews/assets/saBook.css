@@ -218,28 +218,41 @@ body {
   }
 
   .hero--first {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
     gap: 10px;
     margin-top: 10px;
+    padding: 0 12px;
   }
 
-  /* Email capture first; hide book on mobile so form fits first screen */
+  /* Cover left + compact form right on mobile first page */
+  .hero--first .book-cover-wrap {
+    display: block;
+    flex: 0 0 auto;
+    order: 0;
+  }
+
+  .hero--first .book-cover-wrap img {
+    max-width: min(178px, 44vw);
+    width: 178px;
+  }
+
   .hero--first .cta-box {
     order: 1;
-    flex: 1 1 auto;
-    max-width: 100%;
-    width: 100%;
-    padding: 12px 12px 14px;
-  }
-
-  .hero--first .book-cover-wrap {
-    display: none;
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    width: auto;
+    padding: 8px 8px 10px;
+    border-width: 2px;
   }
 
   .cta-box h2,
   .cta-box h3 {
-    font-size: 0.92rem;
-    margin-bottom: 4px;
+    font-size: 0.72rem;
+    margin-bottom: 2px;
+    letter-spacing: 0.02em;
   }
 
   .cta-box .cta-sub {
@@ -247,27 +260,36 @@ body {
   }
 
   .cta-box .cta-note {
-    margin-top: 8px;
-    font-size: 0.72rem;
+    margin-top: 6px;
+    font-size: 0.62rem;
+    line-height: 1.3;
   }
 
   .optin-form {
-    gap: 8px;
+    gap: 6px;
   }
 
   .optin-form input {
-    padding: 11px 12px;
-    font-size: 0.95rem;
+    padding: 8px 9px;
+    font-size: 0.82rem;
   }
 
   .cta-btn {
-    padding: 12px 12px;
-    font-size: 0.9rem;
+    padding: 9px 8px;
+    font-size: 0.72rem;
+    line-height: 1.25;
   }
 
   .cta-btn span {
-    font-size: 0.65rem;
-    margin-top: 3px;
+    font-size: 0.55rem;
+    margin-top: 2px;
+  }
+}
+
+@media (max-width: 379px) {
+  .hero--first .book-cover-wrap img {
+    max-width: min(148px, 40vw);
+    width: 148px;
   }
 }
 
