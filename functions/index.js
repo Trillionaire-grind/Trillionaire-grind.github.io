@@ -162,8 +162,6 @@ stripeWebhookApp.post(
 
     try {
       switch (event.type) {
-        case "checkout.session.completed-paused": // noop — linter guard
-          break;
         case "checkout.session.completed": {
           const session = event.data.object;
           if (session.payment_status === "paid") {

@@ -1,0 +1,24 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Secret Attraction — free-chapter opt-in (saBook.js addDoc → leads)
+    match /leads/{leadId} {
+      allow create: if validSaLead(request.resource.data);
+      allow read, update, delete, list: if false;
+    }
+
+    function validSaLead(data) {
+      return data.keys().hasOnly(['lead'])
+        && data.lead is map
+        && data.lead.keys().hasOnly(['name', 'email'])
+        && data.lead.name is string
+        && data.lead.email is string
+        && data.lead.name.size() > 0
+        && data.lead.name.size() <= 120
+        && data.lead.email.size() > 0
+        && data.lead.email.size() <= 200
+        && data.lead.email.matches('.*@.*\\..*');
+    }
+  }
+}

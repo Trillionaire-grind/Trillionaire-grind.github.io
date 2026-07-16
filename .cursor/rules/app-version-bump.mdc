@@ -17,6 +17,7 @@ When making meaningful updates to a product that ships via this repo (GitHub Pag
 |---------|----------------|
 | Green Books | `greenViews/scripts/greenVersion.js` (`GREEN_APP_VERSION`) |
 | Liv Lakay | `livViews/scripts/livVersion.js` (`LIV_APP_VERSION`) |
+| Secret Attraction | `secretAttractionViews/assets/saConfig.js` (`SA_APP_VERSION`) |
 
 For other apps without a version module yet, add a small `*Version.js` next to their main scripts with the same pattern: exported constant, label helper, and a top-level `console.log` of the label.
 

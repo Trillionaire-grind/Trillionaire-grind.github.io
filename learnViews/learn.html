@@ -30,6 +30,7 @@
                 right: 0;
                 bottom: 0;
                 width: 100%;
+                z-index: 1;
             }
 
             .view-frame {
@@ -65,7 +66,16 @@
                     <a href="#offers" data-page="offers">Offers</a>
                     <a href="#kotfe" data-page="kotfe">Mangé Lakay</a>
                     <a href="#projects" data-page="projects">Projects</a>
-                    <a href="/strangestSecret.html" target="_blank" rel="noopener noreferrer">Strangest Secret</a>
+                    <div class="learn-app-nav__dropdown">
+                        <button type="button" class="learn-app-nav__dropdown-toggle" aria-expanded="false" aria-haspopup="true">
+                            Consulting<span class="learn-app-nav__dropdown-caret" aria-hidden="true"></span>
+                        </button>
+                        <div class="learn-app-nav__dropdown-menu" hidden>
+                            <a href="/consulting.html" class="learn-app-nav__dropdown-hub">Start here</a>
+                            <a href="/consultingViews/marketing-websites.html">Websites</a>
+                            <a href="/consultingViews/custom-software.html">Custom Software</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="learn-app-nav__backdrop" id="learnNavBackdrop" hidden></div>
@@ -105,10 +115,12 @@
 
         <script type="module">
             import { initLearnAnalytics, trackLearnPageView } from "./scripts/learnAnalytics.js";
-            import { wireLearnAppNav } from "./scripts/learnNav.js";
+            import { wireLearnAppNav, wireConsultingDropdown } from "./scripts/learnNav.js";
             initLearnAnalytics();
             trackLearnPageView("/learn", "Képler Siguineau");
-            wireLearnAppNav(document.getElementById("learnAppNav"));
+            const learnNav = document.getElementById("learnAppNav");
+            const navApi = wireLearnAppNav(learnNav);
+            wireConsultingDropdown(learnNav, navApi.closeMenu);
         </script>
         <script>
             const views = {

@@ -6,6 +6,58 @@
 
 export const OFFERS = [
   {
+    id: "consulting-websites",
+    lane: "earn",
+    type: "Productive · Service",
+    title: "Websites for Local Businesses",
+    subtitle: "A site customers can find on Google — and that brings calls. From $997.",
+    leads: [
+      "If people look you up online and can't find a solid website, you're losing business. I build clean, mobile-friendly sites for local owners.",
+    ],
+    split: [
+      {
+        title: "Starter Site — $997",
+        body: "One professional page, contact form or click-to-call — for shops and service businesses that need to get online fast.",
+      },
+      {
+        title: "Growth Site — $5,997",
+        body: "Full website with service pages, inquiry forms, booking or payments — built around what you actually sell.",
+      },
+    ],
+    bullets: [
+      "For restaurants, salons, contractors, shops, and local services",
+      "Free call before you pay — we confirm scope upfront",
+      "Custom app option from $12K+ if you outgrow a website",
+    ],
+    actions: [
+      { label: "See website packages", href: "/consultingViews/marketing-websites.html", external: true, primary: true },
+      { label: "Book a free call", nav: "speak", primary: false },
+    ],
+    note: "Opens the website sales letter",
+    visual: { kind: "icon", src: "assets/banknote_b.svg", alt: "Websites for local businesses" },
+  },
+  {
+    id: "consulting-software",
+    lane: "earn",
+    type: "Productive · Service",
+    title: "Custom Software for Local Businesses",
+    subtitle: "Your own system — customer logins, staff tools, online ordering. From $12,000+.",
+    leads: [
+      "When spreadsheets and generic apps aren't enough, I build web apps tailored to how your business runs — portals, dashboards, member areas.",
+    ],
+    bullets: [
+      "Projects from $12,000+ — quoted after a free call",
+      "Same builder behind Liv Lakay, Green Books, and this site",
+      "I'll tell you honestly if a regular website is enough first",
+    ],
+    actions: [
+      { label: "See custom software offer", href: "/consultingViews/custom-software.html", external: true, primary: true },
+      { label: "Book a free call", nav: "speak", primary: false },
+    ],
+    note: "Bigger builds — scoping call required",
+    visual: { kind: "icon", src: "../techAcademyViews/assets/desk_b.svg", alt: "Custom software" },
+  },
+  {
     id: "funnel",
     lane: "earn",
     type: "Productive · Service",

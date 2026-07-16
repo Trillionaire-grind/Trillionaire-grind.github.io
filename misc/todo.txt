@@ -5,7 +5,7 @@
     4) Change profile picture
     5) Center "go back" btn with arrow up
     6) Add all Tech Academy Offers [v1 wired — live Stripe Payment Links still LIVE_REQUIRED] 
-    7) Add A Secret Attraction Offer 
+    7) Add A Secret Attraction Offer [done — free chapter → Amazon || Deluxe]
     8) Make Visuals for offers 
     9) Change swipe more to learn more arrow facing down
 
@@ -13,6 +13,7 @@
     1) 
 
 3: Liv Lakay
+    0) payment lock — Stripe webhook → codesPurchased only; bypasses localhost-only [code locked; ops checklist in livViews/LIV_PRODUCTION_SECURITY.txt]
     1) show CTA (on mobile cannot see CTA) [done]
     2) make Kreye yon Kont make a dialog that says "test only" [done]
     3) upper right make it change language ht/en [done]
@@ -34,9 +35,8 @@
     2) "Limited spaces each month. Don't wait!" -> "Limited spaces. Don't wait!"
     3) if (access == 0) {showCTA "Yes I want to learn the secret to tech mastery"}
 
-5: Strangest Secret 
-    1) make the btn go to the right app 
-    2) 
+5: Strangest Secret [done]
+    1) make the btn go to the right app [done — keplersiguineau.com canonical; removed strangestSecret_red.html]
 
 6: Win Friends
     1) Keep all the color as red - [done?]
@@ -56,8 +56,10 @@
     15) make X to clear selected user in who query field 
     16) "search interactions" -> "search friends" [done?]
 
-7: A Secret Attraction 
-    1) Figure out what we are selling...the deluxe book+poems+FREE Chocolate ($10 chocolate per order + $2 FF) - 
-    2) do the math 
-    3) create a sales letter 
+7: A Secret Attraction [done — v0.0.0.3]
+    1) Offer locked: free chapter only on sales page → Regular (Amazon) || Deluxe after download
+    2) do the math [parked — chocolate/poems later]
+    3) create a sales letter [done — secretAttraction.html]
     4) go to cafés, book stores, libraries, book signing (not important)
+    5) Legacy pages retired → redirect to canonical funnel
+    6) One CTA on sales page (no early Amazon) + PS CTA [done]

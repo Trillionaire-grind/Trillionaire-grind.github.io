@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.9";
+export const LEARN_APP_VERSION = "0.2.9.12";
 
 export const PAGE_INDEX = {
   home: 0,
@@ -18,13 +18,18 @@ export const NAV_ITEMS = [
   { id: "projects", label: "Projects" },
 ];
 
-export const EXTERNAL_NAV_ITEMS = [
-  {
-    href: "/strangestSecret.html",
-    label: "Strangest Secret",
-    external: true,
-  },
-];
+export const CONSULTING_NAV = {
+  label: "Consulting",
+  hubHref: "/consulting.html",
+  items: [
+    { href: "/consulting.html", label: "Start here" },
+    { href: "/consultingViews/marketing-websites.html", label: "Websites" },
+    { href: "/consultingViews/custom-software.html", label: "Custom Software" },
+  ],
+};
+
+/** @deprecated use CONSULTING_NAV */
+export const EXTERNAL_NAV_ITEMS = [];
 
 export const LEARN_NAV_LOGO_SRC = "../generalAssets/logo_ks.png";
 export const LEARN_NAV_BRAND_LABEL = "Képler Siguineau";
@@ -95,6 +100,110 @@ export function wireLearnAppNav(nav) {
   });
 
   return { closeMenu };
+}
+
+export function wireConsultingDropdown(nav, closeMenu) {
+  const dropdown = nav?.querySelector(".learn-app-nav__dropdown");
+  if (!dropdown) return;
+
+  const toggle = dropdown.querySelector(".learn-app-nav__dropdown-toggle");
+  const menu = dropdown.querySelector(".learn-app-nav__dropdown-menu");
+  if (!toggle || !menu) return;
+
+  let outsideListener = null;
+
+  function positionMenu() {
+    if (window.innerWidth <= MOBILE_NAV_BREAKPOINT) {
+      menu.style.top = "";
+      menu.style.left = "";
+      menu.style.right = "";
+      return;
+    }
+    const rect = toggle.getBoundingClientRect();
+    menu.style.top = `${rect.bottom + 8}px`;
+    menu.style.left = `${Math.max(8, rect.right - 200)}px`;
+    menu.style.right = "auto";
+  }
+
+  function closeDropdown() {
+    dropdown.classList.remove("is-open");
+    toggle.setAttribute("aria-expanded", "false");
+    menu.setAttribute("hidden", "");
+    if (outsideListener) {
+      document.removeEventListener("click", outsideListener, true);
+      outsideListener = null;
+    }
+  }
+
+  function openDropdown() {
+    positionMenu();
+    dropdown.classList.add("is-open");
+    toggle.setAttribute("aria-expanded", "true");
+    menu.removeAttribute("hidden");
+    if (outsideListener) {
+      document.removeEventListener("click", outsideListener, true);
+    }
+    outsideListener = (event) => {
+      if (!dropdown.contains(event.target) && !menu.contains(event.target)) {
+        closeDropdown();
+      }
+    };
+    window.setTimeout(() => {
+      document.addEventListener("click", outsideListener, true);
+    }, 0);
+  }
+
+  toggle.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (dropdown.classList.contains("is-open")) closeDropdown();
+    else openDropdown();
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeDropdown();
+      closeMenu?.();
+    });
+  });
+
+  window.addEventListener("resize", () => {
+    if (dropdown.classList.contains("is-open")) positionMenu();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeDropdown();
+  });
+}
+
+function appendConsultingNav(linksParent, closeMenu) {
+  const dropdown = document.createElement("div");
+  dropdown.className = "learn-app-nav__dropdown";
+
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = "learn-app-nav__dropdown-toggle";
+  toggle.setAttribute("aria-expanded", "false");
+  toggle.setAttribute("aria-haspopup", "true");
+  toggle.innerHTML = `${CONSULTING_NAV.label}<span class="learn-app-nav__dropdown-caret" aria-hidden="true"></span>`;
+
+  const menu = document.createElement("div");
+  menu.className = "learn-app-nav__dropdown-menu";
+  menu.hidden = true;
+
+  CONSULTING_NAV.items.forEach((item, index) => {
+    const a = document.createElement("a");
+    a.href = item.href;
+    a.textContent = item.label;
+    if (index === 0) a.classList.add("learn-app-nav__dropdown-hub");
+    menu.appendChild(a);
+  });
+
+  dropdown.appendChild(toggle);
+  dropdown.appendChild(menu);
+  linksParent.appendChild(dropdown);
+
+  wireConsultingDropdown(linksParent.closest("nav") || document.getElementById("learnAppNav"), closeMenu);
 }
 
 export function initLearnNav(activeId) {
@@ -178,5 +287,6 @@ export function initLearnNav(activeId) {
   nav.appendChild(backdrop);
   document.body.prepend(nav);
   document.body.classList.add("learn-nav-active");
-  wireLearnAppNav(nav);
+  const navApi = wireLearnAppNav(nav);
+  appendConsultingNav(links, navApi.closeMenu);
 }

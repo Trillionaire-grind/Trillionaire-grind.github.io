@@ -52,7 +52,7 @@
     <section class="upsell-step">
       <p class="step-label">Step 2 — Full book</p>
       <h1>Loved The Chapter?<br>Choose How You Want The Full Book</h1>
-      <p class="sub">Regular Amazon price, or a premium signed copy direct from the author with exclusive reader bonuses.</p>
+      <p class="sub">Regular Amazon edition, or the deluxe signed copy with exclusive reader bonuses.</p>
 
       <div class="upsell-options">
         <div class="upsell-option">
@@ -71,16 +71,16 @@
         </div>
 
         <div class="upsell-option upsell-option--featured">
-          <h2>Premium · Signed Copy</h2>
+          <h2>Deluxe · Signed Copy</h2>
           <p class="price">Direct from the author</p>
           <ul>
             <li><strong>Signed physical copy</strong> shipped to your door</li>
-            <li><strong>Bonus #2:</strong> Book club discussion guide</li>
-            <li><strong>Bonus #3:</strong> Author's note — behind the story</li>
+            <li><strong>Bonus:</strong> Book club discussion guide</li>
+            <li><strong>Bonus:</strong> Author's note — behind the story</li>
             <li>Only available through this offer — not on Amazon</li>
           </ul>
           <a href="https://buy.stripe.com/3cs3g68mVbUVdY4bJ9" class="btn btn--premium" id="premiumBtn">
-            Get Premium Signed Copy
+            Get The Deluxe Signed Copy
           </a>
           <p class="fine">After checkout you'll get instant access to your bonuses while your signed book ships.</p>
         </div>
@@ -98,10 +98,11 @@
   </footer>
 
   <script type="module">
-    import { AMAZON_URL, PREMIUM_STRIPE_URL } from "./assets/saConfig.js";
+    import { AMAZON_URL, DELUXE_STRIPE_URL, saVersionLabel } from "./assets/saConfig.js";
 
+    console.log("[Secret Attraction] working version:", saVersionLabel());
     document.getElementById("amazonBtn").href = AMAZON_URL;
-    document.getElementById("premiumBtn").href = PREMIUM_STRIPE_URL;
+    document.getElementById("premiumBtn").href = DELUXE_STRIPE_URL;
 
     document.getElementById("chapterDownload").addEventListener("click", () => {
       if (typeof fbq === "function") fbq("track", "ViewContent", { content_name: "first_chapter" });

@@ -1,0 +1,20 @@
+Business card QR — Consulting
+================================
+
+Point the QR code to:
+
+  https://keplersiguineau.com/consulting.html
+
+That page says "Scanned my card?" and lets them pick:
+  • Websites (most local owners)
+  • Custom Software (bigger projects)
+
+Suggested card copy (short):
+  Képler Siguineau
+  Websites & software for local businesses
+  Scan to see packages · Free call
+
+After networking:
+  They scan → pick their path → book a call on Talk to me (Calendly)
+
+Test on your phone before printing.

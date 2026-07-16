@@ -143,6 +143,8 @@ service cloud.firestore {
     }
 
     // --- Liv Lakay purchased access codes (current) ---
+    // Client cannot create codes — only Stripe webhook / Admin SDK mint.
+    // Redeem may only flip used + stamp redeem fields (single-use).
     match /codesPurchased/{codeId} {
       allow get: if resource.data.used != true &&
         resource.data.active != false;
@@ -152,9 +154,11 @@ service cloud.firestore {
         resource.data.used != true &&
         resource.data.active != false &&
         request.resource.data.used == true &&
-        request.resource.data.redeemedByUid == request.auth.uid;
+        request.resource.data.redeemedByUid == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['used', 'usedAt', 'redeemedByUid', 'redeemedByEmail']);
 
-      allow create, delete: if false;
+      allow create, delete, list: if false;
     }
 
     // --- Liv Lakay access codes (legacy; older passes) ---
@@ -167,9 +171,11 @@ service cloud.firestore {
         resource.data.consumed == false &&
         resource.data.active != false &&
         request.resource.data.consumed == true &&
-        request.resource.data.redeemedByUid == request.auth.uid;
+        request.resource.data.redeemedByUid == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys()
+          .hasOnly(['consumed', 'consumedAt', 'redeemedByUid', 'redeemedByEmail']);
 
-      allow create, delete: if false;
+      allow create, delete, list: if false;
     }
 
     match /stripeCheckoutSessions/{sessionId} {

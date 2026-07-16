@@ -10,9 +10,10 @@ WHAT BLOCKS CHEATING TODAY (when configured)
        • mintLivDevAccessCode (disabled when LIV_DEV_MINT_KEY is empty)
 
   2. Firestore rules (firestore.rules):
-       • allow create, delete: if false  on codesPurchased
+       • allow create, delete, list: if false  on codesPurchased
        • allow get: only if used != true (validate before signup)
        • allow update: only authenticated user marking used=true for themselves
+         (affectedKeys limited to used / usedAt / redeemedByUid / redeemedByEmail)
 
   3. Signup (liv.html):
        • Validates code exists in codesPurchased (or legacy accessCodes)
@@ -35,21 +36,42 @@ DEV / TEST BYPASSES (must NOT work in production)
 
   C) Code TEST at signup
        • Accepted only on localhost / 127.0.0.1
+       • LIV_ALLOW_BYPASS_TEST_CODE = false (repo — no production flag path)
 
   D) mintLivDevAccessCode
        • Leave LIV_DEV_MINT_KEY unset (empty) on liv-lakay production project
        • Function returns 503 dev_mint_not_configured
+       • Client LIV_DEV_MINT_KEY = "" — browser never sends a working key
 
-BEFORE REAL LAUNCH CHECKLIST
-----------------------------
-  [ ] LIV_DEV_MINT_KEY = "" on production Cloud Functions
-  [ ] LIV_ALLOW_BYPASS_TEST_CODE = false in livAccessTestConfig.js
-  [ ] LIV_DEV_MINT_KEY = "" in livAccessTestConfig.js (client never sends key)
-  [ ] Firestore rules deployed to liv-lakay
-  [ ] stripeWebhook deployed and receiving events in Stripe Dashboard
-  [ ] Test: random string fails signup (permission-denied or invalid)
-  [ ] Test: ?devBypass=1 on live site does NOT show “(test)” buy button
-  [ ] Test: paid checkout creates codesPurchased doc; signup consumes it once
+CODE-SIDE LOCK (verified in repo)
+---------------------------------
+  [x] LIV_ALLOW_BYPASS_TEST_CODE = false in livAccessTestConfig.js
+  [x] LIV_DEV_MINT_KEY = "" in livAccessTestConfig.js (client never sends key)
+  [x] isLivDevBypassUiEnabled() = localhost / 127.0.0.1 only
+  [x] Firestore redeem rules tightened (single-use + affectedKeys)
+  [x] Client cannot write codesPurchased / stripeCheckoutSessions
+
+YOU MUST STILL CONFIRM ON liv-lakay (ops)
+-----------------------------------------
+  [x] Firestore rules deployed to liv-lakay (redeem affectedKeys + no list/create)
+  [ ] LIV_DEV_MINT_KEY param empty on production Cloud Functions
+  [ ] Functions redeploy only if checkout/webhook code changed on the server
+        (repo webhook cleanup is optional; client bypasses already local-only)
+  [ ] Stripe Dashboard → Webhooks: endpoint hits stripeWebhook; recent
+        checkout.session.completed deliveries succeed (2xx)
+  [ ] STRIPE_PRICE_ID + STRIPE_SECRET_KEY + STRIPE_WEBHOOK_SECRET set for liv-lakay
+  [ ] LIV_PUBLIC_URL matches the live host buyers use (default keplersiguineau.com)
+
+KILL-TEST CHECKLIST (after deploy)
+----------------------------------
+  1) Live: open /livPass.html?devBypass=1 — NO “(test)” / free mint UI
+  2) Signup with a random garbage code — fails (invalid / permission)
+  3) Signup with TEST — fails on live (only works on localhost)
+  4) One real paid Checkout (or Stripe test mode with real webhook) —
+        codesPurchased/{code} appears; reveal returns that code
+  5) Sign up once with that code — works; same code a second time — fails (used)
+  6) Optional: POST mintLivDevAccessCode with no key — expect 503
+        {"error":"dev_mint_not_configured"}
 
 WHY CLIENT-SIDE CAN NEVER BE TRUSTED
 ------------------------------------

@@ -824,7 +824,12 @@ footer a:hover { color: #fff; }
 }
 
 @media (min-width: 620px) {
-  .offer-tiers { grid-template-columns: 1fr 1fr; }
+  .offer-tiers:has(> :nth-child(2)) {
+    grid-template-columns: 1fr 1fr;
+  }
+  .offer-tiers:not(:has(> :nth-child(2))) {
+    max-width: 420px;
+  }
 }
 
 .offer-tier {
