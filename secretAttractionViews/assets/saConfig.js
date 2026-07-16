@@ -4,7 +4,7 @@ export const AMAZON_URL =
 
 /** Stripe Payment Link for premium signed copy. Set success URL to premiumThankYou.html in Stripe dashboard. */
 export const PREMIUM_STRIPE_URL =
-  "https://buy.stripe.com/3cs3g68mVbUVdY4bJ9";
+  "https://buy.stripe.com/3cI00iaiff3v1RMeTC6Ri0K";
 
 /**
  * Instagram highlight with reader/buyer photos.
