@@ -162,13 +162,15 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 ## Tier 3 — Functional prototype
 
 ### Tech Academy
-**URL:** `/techAcademy.html` · **Money:** Stripe **test** only
+**URL:** `/techAcademy.html` · **Money:** Guide Stripe Payment Link · VIP phone-only
 
 - [x] Education / login shell
-- [ ] Replace test Stripe links with live
+- [x] 3-tier access: Free / Guide $997 / VIP $97,000 (VIP = call only)
+- [ ] Live Stripe Payment Link for Guide ($997) + `CHECKOUT_LIVE`
+- [ ] Post-payment Guide unlock in Firebase (success URL / admin)
 - [ ] Remove debug `alert()`s in auth flows
 - [ ] Mock assets / broken pages fixed
-- [ ] **Not for public sale until above done**
+- [ ] **Not for public Guide sale until Stripe + unlock done**
 
 ---
 
