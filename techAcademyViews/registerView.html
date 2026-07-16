@@ -85,8 +85,8 @@
     </head>
     <body>
         <p class="headline">
-            Register for...<br>
-            The Tech Mastery For Seniors Academy
+            Create your free account<br>
+            <span style="font-size:18px;font-weight:600;">Unlock The Secret To Tech Mastery</span>
         </p>
         <div class="form-container">
             <!--This is to allow the user to create a profile picture with their profile. Since we 
@@ -216,34 +216,34 @@
             return urlParams.get(param);
         }
 
-        let accessLevel = null;
-        // Run this when the page loads
-        window.onload = function() {
-            accessLevel = getQueryParam("accessLevel");
-
-            /*if (accessLevel === "0") {
-                alert(`Access level: ${accessLevel}`);
-            }*/
-
+        /** Free by default. Paid tiers set via Stripe success URL (?tier=guide|vip). */
+        function resolveSignupTier() {
+            const raw = (getQueryParam("tier") || getQueryParam("accessLevel") || "free").toLowerCase();
+            if (raw === "guide" || raw === "1") return "guide";
+            if (raw === "vip" || raw === "2" || raw === "3" || raw === "academy") return "vip";
+            return "free";
         }
+        let signupTier = resolveSignupTier();
 
-
-        function addMember(name, email,id){
-            const usersRef = collection(db, "users")
+        function addMember(name, email, id) {
+            const usersRef = collection(db, "users");
+            const accessLevel = signupTier === "vip" ? 2 : signupTier === "guide" ? 1 : 0;
 
             setDoc(doc(usersRef, id), {
-                name : `${name}`,
-                email : `${email}`,
-                accessLevel : Number(accessLevel ?? 0)
+                app: "tech-academy",
+                name: `${name}`,
+                email: `${email}`,
+                tier: signupTier,
+                subscriptionId: signupTier,
+                accessLevel,
+                subscriptionStatus: signupTier === "free" ? "none" : "active",
+                createdAt: new Date().toISOString(),
             }).then(() => {
-                localStorage.setItem('userUID', id);
-                localStorage.setItem('userEmail', email);
-                alert("Account created successfully. Welcome!")
-                if(Number(accessLevel) == 2){
-                    openScheduleBuilder()
-                }else{
-                    openApp()
-                }
+                localStorage.setItem("userUID", id);
+                localStorage.setItem("userEmail", email);
+                localStorage.setItem("userTier", signupTier);
+                alert("Account created. Welcome — The Secret To Tech Mastery is unlocked.");
+                openApp();
             });
         }
 

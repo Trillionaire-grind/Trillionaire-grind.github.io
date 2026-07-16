@@ -1,18 +1,15 @@
 /**
- * Tech Mastery For Seniors — checkout config (offer ladder).
+ * Tech Mastery For Seniors — checkout config (3-tier membership).
+ *
+ * Tiers (mirrors Minorities structure; different names/prices/benefits):
+ *   free  — Free · The Secret To Tech Mastery — $0 (register only)
+ *   guide — NO B.S. Guide To Tech Mastery For Seniors — $297
+ *   vip   — VIP Experience · Tech Academy Mastermind — $14,997 (or call)
  *
  * HOW TO GO LIVE
- * 1. Stripe Dashboard → Live mode → create Payment Links for each offer below.
- * 2. Paste the live buy.stripe.com URLs into TECH_PAYMENT_LINKS (must NOT contain /test_).
+ * 1. Stripe Dashboard → Live mode → create Payment Links for guide + vip.
+ * 2. Paste live buy.stripe.com URLs into TECH_PAYMENT_LINKS (no /test_).
  * 3. Set CHECKOUT_LIVE = true.
- *
- * Offer ladder (business.txt):
- *   secret  — The Secret To Tech Mastery — $1
- *   guide   — NO B.S. Guide — $297 (or $24/mo)
- *   academy — Tech Mastery For Seniors Academy — $14,997 (or $750/mo)
- *   vip     — VIP Mastermind — $97,000 (or $8K/mo)
- *
- * Do not use buy.stripe.com/test_… links in production CTAs.
  */
 
 export const TECH_BOOK_CALL = "tel:+17863098015";
@@ -22,64 +19,81 @@ export const TECH_BOOK_CALL_DISPLAY = "(786) 309-8015";
 export const CHECKOUT_LIVE = false;
 
 /**
- * Live Payment Link URLs. null = LIVE_REQUIRED (not wired yet).
- * Never paste test-mode Payment Links here.
+ * Live Payment Link URLs. null = not wired yet.
+ * Free has no Stripe link — email registration only.
  */
 export const TECH_PAYMENT_LINKS = {
-  secret: null, // LIVE_REQUIRED — $1 Secret To Tech Mastery
+  free: null,
   guide: null, // LIVE_REQUIRED — $297 NO B.S. Guide
-  academy: null, // LIVE_REQUIRED — Academy
-  vip: null, // LIVE_REQUIRED — VIP (often book-a-call only)
+  vip: null, // LIVE_REQUIRED — VIP Experience (or keep call-only)
+  // legacy keys → map to new tiers
+  secret: null,
+  academy: null,
 };
 
 export const TECH_OFFERS = {
-  secret: {
-    key: "secret",
-    label: "The Secret To Tech Mastery",
-    priceLabel: "$1",
+  free: {
+    key: "free",
+    label: "Free · The Secret To Tech Mastery",
+    priceLabel: "Free",
   },
   guide: {
     key: "guide",
     label: "NO B.S. Guide To Tech Mastery For Seniors",
     priceLabel: "$297",
   },
-  academy: {
-    key: "academy",
-    label: "Tech Mastery For Seniors Academy",
-    priceLabel: "$14,997",
-  },
   vip: {
     key: "vip",
-    label: "Tech Mastery VIP Mastermind",
-    priceLabel: "$97,000",
+    label: "VIP Experience · Tech Academy Mastermind",
+    priceLabel: "$14,997",
   },
 };
 
+/** Normalize legacy offer keys to the 3-tier model */
+export function normalizeOfferKey(offerKey) {
+  if (offerKey === "secret") return "free";
+  if (offerKey === "academy") return "vip";
+  if (offerKey === "free" || offerKey === "guide" || offerKey === "vip") {
+    return offerKey;
+  }
+  return "guide";
+}
+
 export function getPaymentUrl(offerKey) {
-  const url = TECH_PAYMENT_LINKS[offerKey];
+  const key = normalizeOfferKey(offerKey);
+  const url = TECH_PAYMENT_LINKS[key];
   if (!url || typeof url !== "string") return null;
   if (url.includes("/test_")) return null;
   return url;
 }
 
 export function isCheckoutReady(offerKey) {
-  return CHECKOUT_LIVE === true && !!getPaymentUrl(offerKey);
+  const key = normalizeOfferKey(offerKey);
+  if (key === "free") return false;
+  return CHECKOUT_LIVE === true && !!getPaymentUrl(key);
 }
 
-/** CTA copy for buttons / labels when live checkout is missing. */
 export function getCtaCopy(offerKey) {
-  if (isCheckoutReady(offerKey)) {
+  const key = normalizeOfferKey(offerKey);
+  if (key === "free") {
+    return {
+      mode: "register",
+      buttonText: "Create free account",
+      hint: "Free with email — unlock The Secret To Tech Mastery.",
+    };
+  }
+  if (isCheckoutReady(key)) {
     return {
       mode: "checkout",
-      buttonText: "Buy Now",
+      buttonText: key === "guide" ? "Get The Guide — $297" : "Join VIP Experience",
       hint: null,
     };
   }
-  if (offerKey === "academy" || offerKey === "vip") {
+  if (key === "vip") {
     return {
       mode: "call",
       buttonText: `Call to reserve: ${TECH_BOOK_CALL_DISPLAY}`,
-      hint: "Online checkout coming soon — call to reserve your spot.",
+      hint: "VIP Experience — call to reserve your spot.",
     };
   }
   return {
@@ -91,11 +105,17 @@ export function getCtaCopy(offerKey) {
 
 /**
  * Opens live Stripe checkout when configured; otherwise books a call.
- * @returns {"checkout"|"call"}
+ * Free should use registerView — not this helper.
+ * @returns {"checkout"|"call"|"register"}
  */
 export function startCheckout(offerKey = "guide") {
-  const url = getPaymentUrl(offerKey);
-  if (isCheckoutReady(offerKey) && url) {
+  const key = normalizeOfferKey(offerKey);
+  if (key === "free") {
+    window.location.href = "registerView.html?tier=free";
+    return "register";
+  }
+  const url = getPaymentUrl(key);
+  if (isCheckoutReady(key) && url) {
     window.open(url, "_blank", "noopener,noreferrer");
     return "checkout";
   }
@@ -103,16 +123,16 @@ export function startCheckout(offerKey = "guide") {
   return "call";
 }
 
-/** Wire a button/link label + click for an offer. */
 export function bindOfferCta(element, offerKey) {
   if (!element) return;
-  const copy = getCtaCopy(offerKey);
+  const key = normalizeOfferKey(offerKey);
+  const copy = getCtaCopy(key);
   const labelEl = element.querySelector(".mdc-button__label") || element;
   if (labelEl && labelEl.tagName !== "DIV") {
     labelEl.textContent = copy.buttonText;
   }
   element.onclick = (e) => {
     e.preventDefault();
-    startCheckout(offerKey);
+    startCheckout(key);
   };
 }

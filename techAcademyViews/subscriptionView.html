@@ -1,275 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-        <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Tech Mastery For Seniors</title>
-        <link rel="icon" type="image/x-icon" href="assets/icon.ico">
-        <style>
-            /* General reset and basic styles */
-            body {
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-                background-color: #F0F1F3;
-            }
-            footer {
-                position: fixed;
-                bottom: 0;
-                width: 100%;
-                background-color: #f0f0f0;
-                text-align: center;
-                padding: 10px 0;
-            }
-            .fab {
-                position: fixed;
-                bottom: 20px; /* Adjust as needed */
-                right: 50%;
-                background-color: #2ABF5B;
-                color: white;
-                width: 50px;
-                height: 50px;
-                border-radius: 50%;
-                text-align: center;
-                line-height: 50px;
-                font-size: 24px;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                cursor: pointer;
-                transform: translateX(50%);
-            }
-            /* Styling for icons in the bottom navigation bar */
-            footer{
-                background-color: white;
-            }
-            footer nav {
-                display: flex;
-                justify-content: space-around;
-            
-            }
-            footer nav a {
-                text-decoration: none;
-                color: #333;
-            }
-            footer nav a:hover {
-                color: #007bff;
-            }
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choose Your Access — Tech Mastery For Seniors</title>
+  <link rel="icon" type="image/x-icon" href="assets/icon.ico">
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0 0 48px;
+      font-family: Arial, sans-serif;
+      background: #F0F1F3;
+      color: #111;
+    }
+    .wrap { max-width: 520px; margin: 0 auto; padding: 24px 16px; }
+    h1 { font-size: 28px; text-align: center; margin: 0 0 8px; }
+    .sub { text-align: center; color: #555; margin: 0 0 24px; font-size: 14px; }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      margin-bottom: 16px;
+      border: 2px solid #e5e5e5;
+    }
+    .card.is-current { border-color: #000; }
+    .card.is-featured { border-color: #FF0C11; background: #fffafa; }
+    .card img { width: 100%; height: auto; display: block; }
+    .card-body { padding: 14px 16px 16px; }
+    .card h2 { margin: 0 0 6px; font-size: 18px; }
+    .price { font-weight: 800; margin: 0 0 10px; font-size: 16px; }
+    .perks { margin: 0 0 14px; font-size: 14px; line-height: 1.5; color: #333; }
+    .badge {
+      display: inline-block;
+      background: #111;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .mdc-button--raised {
+      width: 100%;
+      background: #000 !important;
+    }
+    .card.is-featured .mdc-button--raised { background: #FF0C11 !important; }
+    .hint { text-align: center; font-size: 13px; color: #666; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Choose Your Access</h1>
+    <p class="sub">Same membership structure as our community apps — different titles, benefits, and prices.</p>
+    <p class="sub" id="currentLabel" style="font-weight:700;color:#111;"></p>
 
-         
-            .card {
-                width: 60%;
-                background-color: #fff;
-                border-radius: 6px;
-                overflow: hidden;
-                max-width: 460px;
-                margin-left: auto;
-                margin-right: auto;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-                border-color: #000;
-            }
-            .card img {
-                width: 100%;
-                height: auto;
-            }
-         
-            @media (max-width: 768px) {
-                .card {
-                    width: 80%;
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div style="text-align: center;">
-            <p style="font-size: 32px; font-weight: bold;">Change Your Access Level</p>
-            
-            <p style="text-align: start;font-size: 16px; font-weight: bold; width: 100%; text-align: center;">Current Level</p>
-            <div id="currentDiv" style="display: none" class="card">
-                <!--<img id="currentImg" src="assets/access/file.png">
-                <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
-                <p id="currentCopyTV" style="text-align: start; margin-left: 8px;">
-                    You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
-                    <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
-                </p>-->
-                <!--<button class="mdc-button mdc-button--raised" style="width: 100%; background-color: black; margin: 8px;" >
-                    <span class="mdc-button__label">Join</span>
-                </button>-->
-            </div>
-        
-           
-            <p style="text-align: start;font-size: 16px; font-weight: bold; width: 100%; text-align: center;">Update Access</p>
-            <div id="secretDiv" class="card" style="margin-top: 24px;">
-                <img id="currentImg" src="assets/access/file.png">
-                <p id="currentHeadlineTV" style="text-align: start; margin-left: 8px;">The SECRET...</p>
-                <p id="currentCopyTV" style="text-align: start; margin-left: 8px;">
-                    You get access to the... <br><strong>"Secret To Tech Mastery"</strong> seminar<br> The first seminar in our...<br> <strong>"NO B.S. Guide To Tech Mastery For Seniors"</strong>
-                    <br>It's the most important seminar in our entire program<br> It's a <strong>$397</strong> offer for only <strong>$1</strong> <br>i'ts all you need to master technology. 
-                </p>
-                <button id="secretCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" >
-                    <span class="mdc-button__label">Buy Now</span>
-                </button>
-            </div>
-            <div id="guideDiv" class="card" style="margin-top: 24px;">
-                <img src="assets/access/guide.png">
-                <p style="text-align: start; margin-left: 8px;">The NO B.S. Guide To Tech Mastery For Seniors</p>
-                <p style="text-align: start; margin-left: 8px;">US $397</p>
-                <p style="text-align: start; margin-left: 8px;">
-                    Learn the basics of technology on your own terms...<br>
-                    "The Secret To Tech Mastery"...<br>
-                    "Master The Basics Of Your Cell Phone..."<br>
-                    "How To Avoid Scams..."<br>
-                    "5 Things You Need TO Know About A.I."<br>
-                    BONUS "How To Legally Print Money On The Internet"<br>
-                    A total <strong>Value of $3,998</strong> for only <strong>$397</strong>
-                </p>
-                <button id="guideCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
-                    <span class="mdc-button__label">Get The Full Guide</span>
-                </button>
-            </div>
-            <div id="academyDiv" class="card" style="margin-top: 24px;">
-                <img src="assets/access/educated.webp">
-                <p style="text-align: start; margin-left: 8px;">Tech Master For Seniors Academy</p>
-                <p style="text-align: start; margin-left: 8px;">US $14,997</p>
-                <p style="text-align: start; margin-left: 8px;">
-                   Get monthly seminars...<br>
-                   Get monthly workshops...<br>
-                   Get weekly open Q&A sessions...<br>
-                   Get access to Tuesday - Friday I.T. Help Desk...<br>
-                   A 12 month program to master technology...a total value of X for only $14,997
-                </p>
-                <button id="academyCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
-                    <span class="mdc-button__label">Join Now</span>
-                </button>
-            </div>
-            <div id="vipDiv" class="card" style="margin-top: 24px;">
-                <img src="assets/access/vip.png">
-                <p style="text-align: start; margin-left: 8px;">Tech Mastery VIP Mastermind</p>
-                <p style="text-align: start; margin-left: 8px;">US $97,000</p>
-                <p style="text-align: start; margin-left: 8px;">
-                    All your classes are in person...<br>
-                    Transportation, food, and lodging included...<br>
-                    Like minded individuals...<br>
-                    Master the basics and learn the advanced skill sets...<br>
-                    Be Better than 99% Of the world in Technology...<br>
-                    Limited to only 11 members for 
-                </p>
-                <button id="vipCta" class="mdc-button mdc-button--raised" style="width: 90%; background-color: black; margin: 8px;" onclick="openStripe()">
-                    <span class="mdc-button__label">Call To Reserve</span>
-                </button>
-            </div>
-        </div>
-    </body>
-    <script type="module">
-        import { startCheckout, bindOfferCta, getCtaCopy } from "./scripts/techStripeConfig.js";
+    <div class="card" id="freeCard">
+      <img src="assets/access/file.png" alt="">
+      <div class="card-body">
+        <span class="badge">Free</span>
+        <h2>The Secret To Tech Mastery</h2>
+        <p class="price">$0</p>
+        <p class="perks">Create a free account with your email. Instant access to The Secret To Tech Mastery — the foundational seminar.</p>
+        <button type="button" class="mdc-button mdc-button--raised" id="freeCta" disabled>
+          <span class="mdc-button__label">Your current plan</span>
+        </button>
+      </div>
+    </div>
 
-        window.openStripe = (offerKey = "guide") => startCheckout(offerKey);
+    <div class="card" id="guideCard">
+      <img src="assets/access/guide.png" alt="">
+      <div class="card-body">
+        <h2>NO B.S. Guide To Tech Mastery For Seniors</h2>
+        <p class="price">$297</p>
+        <p class="perks">
+          Everything in Free, plus the full guide: cell phone basics, scam avoidance, Zoom, A.I. essentials,
+          and the bonus “How To Legally Print Money On The Internet.”
+        </p>
+        <button type="button" class="mdc-button mdc-button--raised" id="guideCta">
+          <span class="mdc-button__label">Get The Guide</span>
+        </button>
+      </div>
+    </div>
 
-        bindOfferCta(document.getElementById("secretCta"), "secret");
-        bindOfferCta(document.getElementById("guideCta"), "guide");
-        bindOfferCta(document.getElementById("academyCta"), "academy");
-        bindOfferCta(document.getElementById("vipCta"), "vip");
+    <div class="card is-featured" id="vipCard">
+      <img src="assets/access/vip.png" alt="">
+      <div class="card-body">
+        <span class="badge" style="background:#FF0C11;">VIP Experience</span>
+        <h2>Tech Academy Mastermind</h2>
+        <p class="price">$14,997</p>
+        <p class="perks">
+          Everything in the Guide, plus live classes, workshops, Q&amp;A, I.T. help desk, and the VIP Tech Academy Mastermind experience.
+        </p>
+        <button type="button" class="mdc-button mdc-button--raised" id="vipCta">
+          <span class="mdc-button__label">Join VIP Experience</span>
+        </button>
+      </div>
+    </div>
 
-        // Remove inline onclick fallbacks that pointed at a single test link
-        ["guideCta", "academyCta", "vipCta"].forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) el.removeAttribute("onclick");
-        });
+    <p class="hint" id="checkoutHint"></p>
+  </div>
 
-        const hint = document.createElement("p");
-        hint.style.cssText = "text-align:center;font-size:13px;color:#666;margin:16px;";
-        const guideCopy = getCtaCopy("guide");
-        hint.textContent = guideCopy.hint || "Choose an access level above.";
-        document.body.appendChild(hint);
-    </script>
-    <script type="module">
-        // Firebase SDK and login code
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, signOut} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-firestore.js";
+    import { startCheckout, bindOfferCta, getCtaCopy } from "./scripts/techStripeConfig.js";
+    import { normalizeUserProfile, tierLabel } from "./scripts/techUserSchema.js";
+    import { techVersionLabel } from "./scripts/techVersion.js";
 
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-            apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
-            authDomain: "tech-mastery-academy.firebaseapp.com",
-            projectId: "tech-mastery-academy",
-            storageBucket: "tech-mastery-academy.firebasestorage.app",
-            messagingSenderId: "205345673412",
-            appId: "1:205345673412:web:d8970165489c414745b991",
-            measurementId: "G-KLKCTD047P"
-        };
+    console.log("[Tech subscribe]", techVersionLabel());
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app)
+    const firebaseConfig = {
+      apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
+      authDomain: "tech-mastery-academy.firebaseapp.com",
+      projectId: "tech-mastery-academy",
+      storageBucket: "tech-mastery-academy.firebasestorage.app",
+      messagingSenderId: "205345673412",
+      appId: "1:205345673412:web:d8970165489c414745b991",
+      measurementId: "G-KLKCTD047P",
+    };
 
-        const db = getFirestore(app);
-        const userUID = localStorage.getItem('userUID');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const userUID = localStorage.getItem("userUID");
 
-        const docRef = doc(db, "users", userUID)
+    bindOfferCta(document.getElementById("guideCta"), "guide");
+    bindOfferCta(document.getElementById("vipCta"), "vip");
 
-        let currentDiv = document.getElementById("currentDiv")
+    const hint = document.getElementById("checkoutHint");
+    const guideCopy = getCtaCopy("guide");
+    if (hint) hint.textContent = guideCopy.hint || "Upgrade anytime — Free stays free.";
 
-        let secretDiv = document.getElementById("secretDiv")
-        let guideDiv = document.getElementById("guideDiv")
-        let academyDiv = document.getElementById("academyDiv")
-        let vipDiv = document.getElementById("vipDiv")
+    document.getElementById("freeCta").onclick = (e) => {
+      e.preventDefault();
+      window.location.href = "registerView.html?tier=free";
+    };
 
-        let secretCta = document.getElementById("secretCta")
-        let guideCta = document.getElementById("guideCta")
-        let academyCta = document.getElementById("academyCta")
-        let vipCta = document.getElementById("vipCta")
+    async function loadCurrent() {
+      if (!userUID) {
+        document.getElementById("currentLabel").textContent = "Not signed in — create a free account to start.";
+        document.getElementById("freeCta").disabled = false;
+        document.getElementById("freeCta").querySelector(".mdc-button__label").textContent = "Create free account";
+        return;
+      }
+      try {
+        const snap = await getDoc(doc(db, "users", userUID));
+        if (!snap.exists()) return;
+        const profile = normalizeUserProfile(snap.data());
+        const tier = profile.tier;
+        document.getElementById("currentLabel").textContent = "Current: " + tierLabel(tier);
 
+        document.getElementById("freeCard").classList.toggle("is-current", tier === "free");
+        document.getElementById("guideCard").classList.toggle("is-current", tier === "guide");
+        document.getElementById("vipCard").classList.toggle("is-current", tier === "vip");
 
-        secretCta.style.display = 'inline'
-        guideCta.style.display = 'inline'
-        academyCta.style.display = 'inline'
-        vipCta.style.display = 'inline'
-    
-        try
-        {
-            const docSnap = await getDoc(docRef)
-            
-            if(docSnap.exists())
-            {
-                
-                const docData = docSnap.data();
-                if(docData.accessLevel == 0){
-                    secretDiv.style.display = 'none'
-                    secretCta.style.display = 'none'
-                    currentDiv.innerHTML = secretDiv.innerHTML;
-                }
-                if(docData.accessLevel == 1){
-                    guideDiv.style.display = 'none'
-                    guideCta.style.display = 'none'
-                    currentDiv.innerHTML = guideDiv.innerHTML;
-                }  
-                if(docData.accessLevel == 2){
-                    academyDiv.style.display = 'none'                   
-                    academyCta.style.display = 'none'
-                    currentDiv.innerHTML = academyDiv.innerHTML;
-
-                }
-                if(docData.accessLevel == 3){
-                    vipDiv.style.display = 'none'
-                    currentDiv.innerHTML = vipDiv.innerHTML;
-                    guideCta.style.display = 'none'
-                }
-
-                currentDiv.style.display = 'block'
-            }else{
-                console.warn('Subscription view: no user document');
-            }  
-        } catch (error){
-            console.error('Subscription view load error', error);
-            
+        if (tier === "free") {
+          document.getElementById("freeCta").disabled = true;
+          document.getElementById("freeCta").querySelector(".mdc-button__label").textContent = "Your current plan";
         }
+        if (tier === "guide") {
+          document.getElementById("guideCard").style.opacity = "0.55";
+          document.getElementById("guideCta").disabled = true;
+          document.getElementById("guideCta").querySelector(".mdc-button__label").textContent = "Your current plan";
+          document.getElementById("freeCard").style.display = "none";
+        }
+        if (tier === "vip") {
+          document.getElementById("vipCard").style.opacity = "0.55";
+          document.getElementById("vipCta").disabled = true;
+          document.getElementById("vipCta").querySelector(".mdc-button__label").textContent = "Your current plan";
+          document.getElementById("freeCard").style.display = "none";
+          document.getElementById("guideCard").style.display = "none";
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
-    </script>
+    loadCurrent();
+    window.startCheckout = startCheckout;
+  </script>
+</body>
 </html>

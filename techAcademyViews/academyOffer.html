@@ -205,14 +205,12 @@
             Online checkout coming soon — call to enroll.
             </p>
             <p style="margin-top: 20px; font-size: 14px; color: #555; line-height: 1.6;">
-            Offer ladder:
-            <a href="secret.html" style="color: #333;">Secret $1</a>
+            Membership levels:
+            <a href="secret.html" style="color: #333;">Free · Secret</a>
             ·
             <a href="nobs.html" style="color: #333;">Guide $297</a>
             ·
-            <a href="academyOffer.html" style="color: #333;">Academy</a>
-            ·
-            <a href="vip.html" style="color: #333;">VIP</a>
+            <a href="vip.html" style="color: #333;">VIP Experience</a>
             </p>
             <p style="margin-top: 15px; font-size: 14px; color: #777;">
             Limited spaces each month. Don't wait!
@@ -660,14 +658,14 @@
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
 
-            const academyCopy = getCtaCopy("academy");
+            const academyCopy = getCtaCopy("vip");
             const academyCtaBtn = document.getElementById("academyCtaBtn");
             const academyCtaHint = document.getElementById("academyCtaHint");
             if (academyCtaBtn) academyCtaBtn.textContent = academyCopy.buttonText;
             if (academyCtaHint && academyCopy.hint) academyCtaHint.textContent = academyCopy.hint;
 
             window.openPayment = function openPayment() {
-                startCheckout("academy");
+                startCheckout("vip");
             };
 
             let logInBtn = document.getElementById("logInBtn")
