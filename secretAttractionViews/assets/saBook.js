@@ -6,6 +6,7 @@ import {
   INSTAGRAM_PROFILE_URL,
   TESTIMONIAL_PHOTOS,
 } from "./saConfig.js";
+import { saVersionLabel } from "./saVersion.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCvdbEnz-WTuJdH4sF3lV3Y-wgOZurHHqM",
@@ -21,8 +22,24 @@ const app = initializeApp(firebaseConfig);
 getAnalytics(app);
 const db = getFirestore(app);
 
+const versionEl = document.getElementById("saVersion");
+if (versionEl) versionEl.textContent = saVersionLabel();
+
+function highlightOptin() {
+  const box = document.getElementById("optin");
+  if (!box) return;
+  box.classList.remove("is-highlighted");
+  void box.offsetWidth;
+  box.classList.add("is-highlighted");
+  const firstInput = box.querySelector('input[name="name"], input[name="email"]');
+  firstInput?.focus({ preventScroll: true });
+  window.setTimeout(() => box.classList.remove("is-highlighted"), 2800);
+}
+
 function scrollToOptin() {
-  document.getElementById("optin")?.scrollIntoView({ behavior: "smooth", block: "center" });
+  const box = document.getElementById("optin");
+  box?.scrollIntoView({ behavior: "smooth", block: "center" });
+  window.setTimeout(highlightOptin, 350);
 }
 
 document.querySelectorAll("[data-scroll-optin]").forEach((el) => {
@@ -31,6 +48,26 @@ document.querySelectorAll("[data-scroll-optin]").forEach((el) => {
     scrollToOptin();
   });
 });
+
+function initStickyCta() {
+  const sticky = document.getElementById("stickyCta");
+  const firstPage = document.getElementById("firstPage");
+  if (!sticky || !firstPage) return;
+
+  function sync() {
+    const pastFirst = window.scrollY > firstPage.offsetTop + firstPage.offsetHeight - 48;
+    sticky.classList.toggle("visible", pastFirst);
+    sticky.setAttribute("aria-hidden", pastFirst ? "false" : "true");
+    document.documentElement.style.setProperty(
+      "--sa-sticky-h",
+      pastFirst ? `${sticky.offsetHeight}px` : "0px"
+    );
+  }
+
+  window.addEventListener("scroll", sync, { passive: true });
+  window.addEventListener("resize", sync);
+  sync();
+}
 
 function initReaderCarousel(slides) {
   const slideEl = document.getElementById("carouselSlide");
@@ -179,6 +216,7 @@ function wireForm(form) {
 }
 
 document.querySelectorAll(".optin-form").forEach(wireForm);
+initStickyCta();
 initTestimonials();
 
 export { AMAZON_URL, scrollToOptin };
