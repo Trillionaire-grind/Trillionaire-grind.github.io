@@ -29,8 +29,8 @@
 </head>
 <body class="upsell-page">
 
-  <div class="top-strip">Step 1 of 2 · <strong>Download your free chapter</strong></div>
-  <header>
+  <div class="top-strip" id="stepStrip">Step 1 of 2 · <strong>Download your free chapter</strong></div>
+  <header class="upsell-header">
     <h1>A Secret Attraction</h1>
     <p>Between Mentor &amp; Mentee</p>
   </header>
@@ -38,7 +38,7 @@
 
   <div class="upsell-wrap">
 
-    <section class="upsell-step">
+    <section class="upsell-step" id="step1">
       <p class="step-label">Step 1 — Free</p>
       <h1>Download Your First Chapter</h1>
       <p class="sub">You're on the VIP reader list. Grab chapter 1 and see if LaShana and Michael pull you in.</p>
@@ -49,7 +49,7 @@
       </a>
     </section>
 
-    <section class="upsell-step">
+    <section class="upsell-step upsell-step--hidden" id="step2" hidden aria-hidden="true">
       <p class="step-label">Step 2 — Full book</p>
       <h1>Loved The Chapter?<br>Choose How You Want The Full Book</h1>
       <p class="sub">Regular Amazon price, or a premium signed copy direct from the author with exclusive reader bonuses.</p>
@@ -99,12 +99,32 @@
 
   <script type="module">
     import { AMAZON_URL, PREMIUM_STRIPE_URL } from "./assets/saConfig.js";
+    import { saVersionLabel } from "./assets/saVersion.js";
+
+    console.log("[Secret Attraction download] working version:", saVersionLabel());
 
     document.getElementById("amazonBtn").href = AMAZON_URL;
     document.getElementById("premiumBtn").href = PREMIUM_STRIPE_URL;
 
+    const stepStrip = document.getElementById("stepStrip");
+    const step2 = document.getElementById("step2");
+
+    function revealStep2() {
+      if (!step2 || !step2.hasAttribute("hidden")) return;
+      step2.hidden = false;
+      step2.setAttribute("aria-hidden", "false");
+      step2.classList.remove("upsell-step--hidden");
+      if (stepStrip) {
+        stepStrip.innerHTML = 'Step 2 of 2 · <strong>Choose your full book</strong>';
+      }
+      window.setTimeout(() => {
+        step2.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 120);
+    }
+
     document.getElementById("chapterDownload").addEventListener("click", () => {
       if (typeof fbq === "function") fbq("track", "ViewContent", { content_name: "first_chapter" });
+      revealStep2();
     });
 
     document.getElementById("premiumBtn").addEventListener("click", () => {
