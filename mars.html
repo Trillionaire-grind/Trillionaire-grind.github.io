@@ -198,40 +198,36 @@
       position: relative;
       z-index: 1;
       display: grid;
-      gap: 1rem;
+      gap: 1.15rem;
       justify-items: center;
       text-align: center;
       width: 100%;
+      padding: 0;
     }
-    .hero-brand-mark {
-      animation: rise 0.7s ease both;
-    }
-    .hero-brand-mark img {
-      height: 52px;
-      width: auto;
-      margin: 0 auto;
-      background: var(--navy-deep);
-      border-radius: 10px;
-      padding: 0.35rem 0.65rem;
+    .hero-grid > .hero-headline {
+      width: min(92vw, 18ch);
+      padding: 0 1rem;
     }
     .hero-headline {
-      max-width: 18ch;
+      max-width: min(20ch, 92vw);
+      width: 100%;
       font-family: "Cormorant Garamond", serif;
-      font-size: clamp(1.85rem, 5.2vw, 3.1rem);
+      font-size: clamp(2.35rem, 7.5vw, 4.35rem);
       font-weight: 600;
-      line-height: 1.12;
+      line-height: 1.05;
       color: var(--navy);
       text-align: center;
       animation: rise 0.8s ease 0.06s both;
+      letter-spacing: -0.01em;
     }
     .video-shell {
-      width: min(720px, 100%);
+      width: 80vw;
+      max-width: 80vw;
       border-radius: 14px;
       overflow: hidden;
       background: var(--navy-deep);
       box-shadow: 0 20px 50px rgba(6, 20, 39, 0.22);
       aspect-ratio: 16 / 9;
-      max-height: min(36vh, 380px);
       animation: rise 0.85s ease 0.12s both;
     }
     .video-shell video {
@@ -631,10 +627,10 @@
         align-items: flex-start;
       }
       .hero-grid { gap: 0.75rem; }
-      .hero-brand-mark img { height: 40px; }
-      .hero-headline { font-size: clamp(1.55rem, 7vw, 2rem); max-width: 16ch; }
+      .hero-headline { font-size: clamp(2.1rem, 9vw, 2.85rem); }
       .video-shell {
-        max-height: 28vh;
+        width: 80vw;
+        max-width: 80vw;
         border-radius: 12px;
       }
       .gospel p { font-size: 0.98rem; }
@@ -661,11 +657,7 @@
 
   <!-- PAGE 1: headline → video → scripture → CTA -->
   <header class="page-hero" id="top">
-    <div class="wrap hero-grid">
-      <div class="hero-brand-mark">
-        <img src="assets/mars/logo.png" alt="BettrLife Financial Services" />
-      </div>
-
+    <div class="hero-grid">
       <h1 class="hero-headline">How to have a better life by having a better plan</h1>
 
       <div class="video-shell" aria-label="About BettrLife video">
@@ -680,7 +672,7 @@
         </video>
       </div>
 
-      <div class="gospel-stack" aria-label="Guiding verses">
+      <div class="wrap gospel-stack" aria-label="Guiding verses">
         <div class="gospel">
           <strong>Luke 16:10</strong>
           <p>“One who is faithful in a very little is also faithful in much.”</p>
@@ -691,23 +683,23 @@
         </div>
       </div>
 
-      <div class="values-row">
+      <div class="wrap values-row">
         <span>Integrity</span>
         <span>Stewardship</span>
         <span>Legacy</span>
       </div>
 
-      <div class="cta-wrap hero-cta">
+      <div class="wrap cta-wrap hero-cta">
         <a class="btn btn-primary" href="tel:+12395240740">Yes, I want a better plan</a>
       </div>
     </div>
   </header>
 
-  <!-- PAGE 2: Testimonials -->
+  <!-- PAGE 2: Testimonials — directly after first CTA -->
   <section class="page-testimonials" id="testimonials">
     <div class="wrap">
-      <p class="section-label">Our Clients</p>
-      <h2 class="section-title">Purpose over returns. Relationship over transactions.</h2>
+      <p class="section-label">Testimonials</p>
+      <h2 class="section-title">What clients experience with BettrLife</h2>
       <p class="section-lead">
         The Desire brothers serve clients who want more than returns — they want purpose.
         Their ideal clients value honesty, accountability, and relationship. They see wealth as a tool
@@ -722,17 +714,32 @@
           <cite>Mars &amp; Ralph Desire · Co-Founders, Fiduciary Advisors</cite>
         </article>
         <article class="client-note">
-          <h3>What clients come for</h3>
+          <h3>Built for families who want clarity</h3>
           <p>
-            Clear retirement income strategy. Tax-aware planning. Protection for the people and causes that matter most.
-            A plan that serves your purpose — not the other way around.
+            Clients come for a clear retirement income strategy, tax-aware planning, and protection for the people
+            and causes that matter most — a plan that serves their purpose, not the other way around.
           </p>
         </article>
       </div>
 
+      <div class="testimonial-grid reveal" style="margin-top:1.25rem">
+        <article class="quote-block">
+          <blockquote>
+            “Financial planning should serve your purpose, not the other way around.”
+          </blockquote>
+          <cite>BettrLife Financial Services · Core belief</cite>
+        </article>
+        <article class="quote-block">
+          <blockquote>
+            “Real wealth isn’t built on speed — it’s built on structure. Align resources with purpose, protection, people, and peace of mind.”
+          </blockquote>
+          <cite>Mars &amp; Ralph Desire</cite>
+        </article>
+      </div>
+
       <p class="disclosure">
-        Please Note: Testimonials were given by current clients of BettrLife Financial Services.
-        No compensation was provided for the testimonials. This arrangement creates a material conflict of interest
+        Please Note: Testimonials and client statements associated with BettrLife Financial Services.
+        No compensation was provided for client testimonials. This arrangement creates a material conflict of interest
         because BettrLife Financial Services has an incentive to engage clients who have had a positive experience
         with the firm to provide such testimonials. There is no guarantee another individual’s experience will be
         representative of the individual providing this testimonial and no guarantees of performance or success are offered.
