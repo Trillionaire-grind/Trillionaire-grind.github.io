@@ -221,6 +221,7 @@
   <div class="search-row">
     <input type="search" id="searchInput" placeholder="Search name, phone, city…" />
   </div>
+  <div class="filters" id="offerRow" style="display:none;"></div>
   <div class="filters" id="filterRow"></div>
 
   <div id="leadList"></div>
@@ -282,6 +283,7 @@
 
     let state = load();
     let activeFilter = "all";
+    let activeOffer = "all";
     let searchTerm = "";
     let openLeadId = null;
 
@@ -372,6 +374,14 @@
         return { added: 0, merged: 0, skipped: dataRows.length };
       }
 
+      // If the sheet has no Offer/List column, let the user tag the whole import
+      // (VIP / Green Books / Finder) so each pipeline gets its own queue.
+      const hasOfferCol = headers.some((h) => OFFER_KEY_RE.test(String(h).trim()));
+      let importTag = "";
+      if (!hasOfferCol) {
+        importTag = (prompt("Tag this list (e.g. VIP, Green Books, Finder). Leave blank to skip.") || "").trim();
+      }
+
       const byDigits = new Map(state.leads.map((l) => [l.digits, l]));
       let added = 0, merged = 0, skipped = 0;
 
@@ -392,6 +402,7 @@
           const v = String(row[c] ?? "").trim();
           if (h && v) meta[h] = v;
         });
+        if (importTag && !offerOfMeta(meta)) meta.Offer = importTag;
 
         const existing = byDigits.get(digits);
         if (existing) {
@@ -414,6 +425,30 @@
       }
       save();
       return { added, merged, skipped };
+    }
+
+    /* ---------- offers / pipelines ---------- */
+
+    const OFFER_KEY_RE = /^(offer|pipeline|list|campaign|tag)$/i;
+
+    function offerOfMeta(meta) {
+      for (const [k, v] of Object.entries(meta || {})) {
+        if (OFFER_KEY_RE.test(k.trim()) && String(v).trim()) return String(v).trim();
+      }
+      return "";
+    }
+
+    function offerOf(lead) {
+      return offerOfMeta(lead.meta);
+    }
+
+    function distinctOffers() {
+      const set = new Set();
+      for (const l of state.leads) {
+        const o = offerOf(l);
+        if (o) set.add(o);
+      }
+      return [...set].sort();
     }
 
     /* ---------- status / stats ---------- */
@@ -467,13 +502,38 @@
       return vals.join(" · ");
     }
 
+    function inActiveOffer(lead) {
+      return activeOffer === "all" || offerOf(lead) === activeOffer;
+    }
+
+    function renderOfferChips() {
+      const row = document.getElementById("offerRow");
+      const offers = distinctOffers();
+      if (!offers.length) { row.style.display = "none"; activeOffer = "all"; return; }
+      if (activeOffer !== "all" && !offers.includes(activeOffer)) activeOffer = "all";
+      row.style.display = "flex";
+      row.innerHTML = "";
+      const options = ["all", ...offers];
+      for (const o of options) {
+        const count = o === "all"
+          ? state.leads.length
+          : state.leads.filter((l) => offerOf(l) === o).length;
+        const chip = document.createElement("button");
+        chip.className = "chip" + (activeOffer === o ? " active" : "");
+        chip.textContent = (o === "all" ? "All offers" : o) + " " + count;
+        chip.onclick = () => { activeOffer = o; render(); };
+        row.appendChild(chip);
+      }
+    }
+
     function renderFilters() {
       const row = document.getElementById("filterRow");
       row.innerHTML = "";
+      const pool = state.leads.filter(inActiveOffer);
       for (const f of FILTERS) {
         const count = f === "all"
-          ? state.leads.length
-          : state.leads.filter((l) => leadStatus(l) === f).length;
+          ? pool.length
+          : pool.filter((l) => leadStatus(l) === f).length;
         const chip = document.createElement("button");
         chip.className = "chip" + (activeFilter === f ? " active" : "");
         chip.textContent = (f === "all" ? "All" : STATUS_LABEL[f]) + " " + count;
@@ -485,6 +545,7 @@
     function visibleLeads() {
       const q = searchTerm.toLowerCase();
       return state.leads.filter((l) => {
+        if (!inActiveOffer(l)) return false;
         if (activeFilter !== "all" && leadStatus(l) !== activeFilter) return false;
         if (!q) return true;
         const hay = (l.name + " " + l.digits + " " + Object.values(l.meta).join(" ")).toLowerCase();
@@ -502,6 +563,7 @@
       document.getElementById("goalLabel").textContent = stats.month + " / " + MONTH_GOAL + " dials this month";
       document.getElementById("leadTotal").textContent = state.leads.length ? state.leads.length + " leads" : "";
 
+      renderOfferChips();
       renderFilters();
 
       const list = document.getElementById("leadList");
@@ -602,14 +664,16 @@
     }
 
     function nextLead(fromId) {
-      // Queue: never-dialed first (import order), then attempted with the oldest last dial.
-      const fresh = state.leads.filter((l) => leadStatus(l) === "new");
-      const retry = state.leads
+      // Queue respects the active offer chip: never-dialed first (import order),
+      // then attempted with the oldest last dial.
+      const pool = state.leads.filter(inActiveOffer);
+      const fresh = pool.filter((l) => leadStatus(l) === "new");
+      const retry = pool
         .filter((l) => leadStatus(l) === "attempted")
         .sort((a, b) => a.history[a.history.length - 1].ts - b.history[b.history.length - 1].ts);
       const queue = [...fresh, ...retry].filter((l) => l.id !== fromId);
       if (!queue.length) {
-        toast("Queue empty — import more leads");
+        toast(activeOffer === "all" ? "Queue empty — import more leads" : "No " + activeOffer + " leads left to dial");
         return;
       }
       openSheet(queue[0].id);
