@@ -18,7 +18,7 @@ export const TECH_BOOK_CALL = "tel:+17863098015";
 export const TECH_BOOK_CALL_DISPLAY = "(786) 309-8015";
 
 /** Flip to true only after the Guide live Payment Link is filled in. */
-export const CHECKOUT_LIVE = false;
+export const CHECKOUT_LIVE = true;
 
 /**
  * Live Payment Link URLs. null = not wired yet.
@@ -27,7 +27,7 @@ export const CHECKOUT_LIVE = false;
  */
 export const TECH_PAYMENT_LINKS = {
   free: null,
-  guide: null, // LIVE_REQUIRED — $997 NO B.S. Guide
+  guide: "https://buy.stripe.com/5kQ14meyv4oR0NI9zi6Ri0L", // LIVE — $997 NO B.S. Guide
   vip: null, // CALL_ONLY — do not add a Stripe URL
   // legacy keys → map to new tiers
   secret: null,

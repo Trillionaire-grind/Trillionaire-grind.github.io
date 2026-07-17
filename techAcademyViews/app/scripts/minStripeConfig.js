@@ -11,10 +11,10 @@
  * 3. Set CHECKOUT_LIVE = true.
  */
 window.MIN_STRIPE = (function () {
-  var CHECKOUT_LIVE = false;
+  var CHECKOUT_LIVE = true;
 
-  /** LIVE_REQUIRED — $997 NO B.S. Guide Payment Link. null = not wired. */
-  var GUIDE_PAYMENT_LINK = null;
+  /** LIVE — $997 NO B.S. Guide Payment Link. */
+  var GUIDE_PAYMENT_LINK = "https://buy.stripe.com/5kQ14meyv4oR0NI9zi6Ri0L";
 
   var BOOK_CALL = "tel:+17863098015";
   var BOOK_CALL_DISPLAY = "(786) 309-8015";
