@@ -242,7 +242,7 @@
             if (freeCtaBtn) {
                 freeCtaBtn.textContent = freeCopy.buttonText;
                 freeCtaBtn.onclick = () => {
-                    window.location.href = "techAcademyViews/registerView.html?tier=free";
+                    window.location.href = "techApp.html#register";
                 };
             }
             if (freeCtaHint && freeCopy.hint) freeCtaHint.textContent = freeCopy.hint;
@@ -262,7 +262,7 @@
             let resetSendBtn = document.getElementById("resetSendBtn")
 
             logInBtn.onclick = () => {
-                myModal.style.display = 'inline'
+                window.location.href = "techApp.html#login";
             }
 
             cancelBtn.onclick = () => {
