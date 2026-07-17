@@ -559,9 +559,37 @@
     return "";
   }
 
+  function getTierRank(id) {
+    if (id === "vip") return 2;
+    if (id === "guide") return 1;
+    return 0;
+  }
+
+  /** Plans higher than the member's current level (what they can still upgrade to). */
+  function upgradeablePlans(fromId) {
+    var rank = getTierRank(fromId || "free");
+    return catalogSubscriptions().filter(function (plan) {
+      return getTierRank(plan.id) > rank;
+    });
+  }
+
+  function nextUpgradePlan(fromId) {
+    var list = upgradeablePlans(fromId);
+    return list.length ? list[0] : null;
+  }
+
   function getSubscribeSelectedId() {
-    if (subscribePreviewId) return subscribePreviewId;
-    var saved = getSavedSubscriptionId();
+    var saved = getSavedSubscriptionId() || "free";
+    var upgrades = upgradeablePlans(saved);
+
+    if (subscribePreviewId) {
+      var previewRank = getTierRank(subscribePreviewId);
+      var savedRank = getTierRank(saved);
+      // Only allow previewing current plan or a real upgrade — never a downgrade.
+      if (previewRank >= savedRank) return subscribePreviewId;
+    }
+
+    if (upgrades.length) return upgrades[0].id;
     if (saved) return saved;
     var subs = catalogSubscriptions();
     return subs[0] ? subs[0].id : "free";
@@ -573,21 +601,26 @@
     if (!plan) return;
 
     var signedIn = window.MIN_AUTH && window.MIN_AUTH.isSignedIn();
-    var savedId = getSavedSubscriptionId();
-    var isSaved = signedIn && savedId === selectedId;
+    var savedId = getSavedSubscriptionId() || (signedIn ? "free" : "");
+    var isUpgradePreview = !signedIn || getTierRank(selectedId) > getTierRank(savedId);
 
     var currentEl = document.getElementById("minSubCurrentPlan");
     if (currentEl) {
-      currentEl.innerHTML = renderCurrentPlanCard(plan, { isSaved: isSaved });
+      if (isUpgradePreview) {
+        currentEl.hidden = false;
+        currentEl.innerHTML = renderCurrentPlanCard(plan, { isSaved: false });
+      } else {
+        currentEl.hidden = true;
+        currentEl.innerHTML = "";
+      }
     }
 
     document.querySelectorAll(".min-tier-card[data-tier]").forEach(function (card) {
       var tier = card.getAttribute("data-tier");
       var isSelected = tier === selectedId;
-      var isSavedPlan = signedIn && tier === savedId;
 
       card.classList.toggle("is-selected", isSelected);
-      card.classList.toggle("is-current", isSelected && isSavedPlan);
+      card.classList.remove("is-current");
       card.setAttribute("aria-pressed", isSelected ? "true" : "false");
 
       var media = card.querySelector(".min-tier-card-media");
@@ -597,7 +630,7 @@
         if (isSelected) {
           var badge = document.createElement("span");
           badge.className = "min-tier-card-badge";
-          badge.textContent = isSavedPlan ? "Your plan" : "Selected";
+          badge.textContent = "Selected";
           media.appendChild(badge);
         }
       }
@@ -605,19 +638,13 @@
       var btn = card.querySelector(".min-tier-select");
       if (btn) {
         var tierPlan = getPlanById(tier);
-        if (isSavedPlan) {
-          btn.disabled = true;
-          btn.setAttribute("aria-disabled", "true");
-          btn.textContent = "Current plan";
-        } else {
-          btn.disabled = false;
-          btn.removeAttribute("aria-disabled");
-          btn.textContent = tierSelectCta(tierPlan, savedId, signedIn);
-        }
+        btn.disabled = false;
+        btn.removeAttribute("aria-disabled");
+        btn.textContent = tierSelectCta(tierPlan, savedId, signedIn);
       }
     });
 
-    if (currentEl) {
+    if (currentEl && isUpgradePreview) {
       currentEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }
@@ -651,11 +678,17 @@
 
   function tierSelectCta(sub, subscriptionId, signedIn) {
     if (signedIn && sub.id === subscriptionId) return "Current plan";
+    if (signedIn && getTierRank(sub.id) < getTierRank(subscriptionId || "free")) {
+      return "Included in your plan";
+    }
     if (sub.id === "free") return signedIn ? "Select free plan" : "Create free account";
     if (sub.id === "vip") {
+      if (signedIn && subscriptionId === "guide") {
+        return "Upgrade to VIP — call " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
+      }
       return "Call to reserve — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
     }
-    if (tierUsesLiveCheckout("guide")) return "Get The Guide — $997";
+    if (tierUsesLiveCheckout("guide")) return "Upgrade to The Guide — $997";
     return "Call to enroll — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
   }
 
@@ -665,11 +698,13 @@
         ? window.MIN_AUTH.getSubscriptionId()
         : "";
     var plans = catalogSubscriptions().slice();
-    plans.sort(function (a, b) {
-      if (subscriptionId && a.id === subscriptionId) return -1;
-      if (subscriptionId && b.id === subscriptionId) return 1;
-      return a.price - b.price;
-    });
+    if (subscriptionId) {
+      plans = upgradeablePlans(subscriptionId);
+    } else {
+      plans.sort(function (a, b) {
+        return a.price - b.price;
+      });
+    }
     return { subscriptionId: subscriptionId, plans: plans };
   }
 
@@ -882,6 +917,19 @@
   }
 
   function upgradeBanner() {
+    if (hasOwnerAccess()) return "";
+
+    if (hasBenchAccess()) {
+      return (
+        '<div class="min-upgrade-banner" data-nav="#subscribe" role="button" tabindex="0">' +
+        '<img src="' +
+        A +
+        'lock_open.svg" width="28" height="28" alt="">' +
+        "<div><strong>Upgrade to VIP Mastermind</strong><span>Live classes, 24/7 support, and the VIP Experience — call to reserve</span></div>" +
+        '<span class="min-chevron">›</span></div>'
+      );
+    }
+
     return (
       '<div class="min-upgrade-banner" data-nav="#subscribe" role="button" tabindex="0">' +
       '<img src="' +
@@ -1140,7 +1188,7 @@
       },
       {
         q: "What are Free, Guide, and VIP?",
-        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support.",
+        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
       },
       {
         q: "How do I buy the NO B.S. Guide?",
@@ -1433,53 +1481,86 @@
 
   function renderSubscribe() {
     var signedIn = window.MIN_AUTH && window.MIN_AUTH.isSignedIn();
-    var savedId = getSavedSubscriptionId();
+    var savedId = getSavedSubscriptionId() || (signedIn ? "free" : "");
     var selectedId = getSubscribeSelectedId();
     var displayedPlan = getPlanById(selectedId);
-    var isSavedSelection = signedIn && savedId === selectedId;
+    var currentPlan = savedId ? getPlanById(savedId) : null;
     var demoMode = isSubscribeDemoMode();
+    var upgrades = signedIn ? upgradeablePlans(savedId) : catalogSubscriptions().slice();
     var html =
       '<div class="min-screen min-screen--subscribe min-screen--wide"><h2 class="min-page-title">Access Levels</h2>';
 
-    if (demoMode) {
+    if (demoMode && (!signedIn || getTierRank(savedId) < 1)) {
       html +=
         '<p class="min-auth-hint min-subscribe-demo" role="status">' +
         "<strong>How to upgrade:</strong> Free is instant with your email. The Guide checks out online when Stripe is live " +
         "(call to enroll until then). The VIP Experience is enrolled by phone only.</p>";
     }
 
-    html +=
-      '<p class="min-auth-hint min-subscribe-hint">Tap any plan to preview it above' +
-      (signedIn
-        ? "."
-        : '. <button type="button" class="min-link-btn" data-nav="#login">Sign in</button> to continue.') +
-      "</p>";
-
-    if (displayedPlan) {
+    if (signedIn && savedId === "guide") {
       html +=
-        '<div id="minSubCurrentPlan">' +
-        renderCurrentPlanCard(displayedPlan, { isSaved: isSavedSelection }) +
-        "</div>";
+        '<p class="min-auth-hint min-subscribe-hint">You already have the <strong>NO B.S. Guide</strong>. ' +
+        "Your only upgrade is the <strong>VIP Experience · Tech Academy Mastermind</strong>.</p>";
+    } else if (signedIn && savedId === "vip") {
+      html +=
+        '<p class="min-auth-hint min-subscribe-hint">You have the highest access level — the VIP Experience. No further upgrades.</p>';
+    } else if (signedIn) {
+      html +=
+        '<p class="min-auth-hint min-subscribe-hint">Choose your next step below. You only see plans above your current level.</p>';
+    } else {
+      html +=
+        '<p class="min-auth-hint min-subscribe-hint">Tap any plan to preview it above. <button type="button" class="min-link-btn" data-nav="#login">Sign in</button> to continue.</p>';
     }
 
-    html += '<p class="min-section-label">All plans</p>';
-    html += '<p class="min-tier-grid-hint">Swipe to compare all plans</p>';
+    if (signedIn && currentPlan) {
+      html +=
+        '<p class="min-section-label">Your plan</p>' +
+        renderCurrentPlanCard(currentPlan, { isSaved: true });
+    }
+
+    if (displayedPlan && (!signedIn || getTierRank(selectedId) > getTierRank(savedId))) {
+      html +=
+        '<p class="min-section-label">' +
+        (signedIn ? "Selected upgrade" : "Selected plan") +
+        "</p>" +
+        '<div id="minSubCurrentPlan">' +
+        renderCurrentPlanCard(displayedPlan, { isSaved: false }) +
+        "</div>";
+    } else {
+      html += '<div id="minSubCurrentPlan" hidden></div>';
+    }
+
+    if (signedIn && !upgrades.length) {
+      html +=
+        '<div class="min-empty" style="margin-top:12px"><p>You are all set.</p>' +
+        '<p class="min-auth-hint">Enjoy your VIP access. Use Support anytime, or tap 24/7 VIP Support at the top to call.</p></div></div>';
+      return html;
+    }
+
+    html +=
+      '<p class="min-section-label">' +
+      (signedIn ? (upgrades.length === 1 ? "Your upgrade" : "Your upgrades") : "All plans") +
+      "</p>";
+    if (!signedIn) {
+      html += '<p class="min-tier-grid-hint">Swipe to compare all plans</p>';
+    } else if (upgrades.length === 1 && upgrades[0].id === "vip") {
+      html +=
+        '<p class="min-tier-grid-hint">Only the VIP Mastermind is left — tap Call to reserve.</p>';
+    }
     html += '<div class="min-tier-grid-wrap"><div class="min-tier-grid" role="list">';
 
-    catalogSubscriptions().forEach(function (sub) {
+    upgrades.forEach(function (sub) {
       var isSelected = sub.id === selectedId;
-      var isSavedPlan = signedIn && sub.id === savedId;
       var cta = tierSelectCta(sub, savedId, signedIn);
       var priceLine =
-        formatPlanPrice(sub.price) + (sub.price ? '<span style="font-size:0.75rem;font-weight:400;color:var(--min-muted)"> one-time</span>' : "");
+        formatPlanPrice(sub.price) +
+        (sub.price ? '<span style="font-size:0.75rem;font-weight:400;color:var(--min-muted)"> one-time</span>' : "");
       var tierImage = sub.image || A + "stack.svg";
-      var paidLocked = false;
       html +=
         '<article class="min-tier-card min-tier-card--pickable min-tier-card--' +
         esc(sub.id) +
         (sub.limited ? " min-tier-card--limited" : "") +
         (isSelected ? " is-selected" : "") +
-        (isSelected && isSavedPlan ? " is-current" : "") +
         '" role="listitem button" tabindex="0" aria-pressed="' +
         (isSelected ? "true" : "false") +
         '" data-tier="' +
@@ -1491,9 +1572,7 @@
         '" alt="' +
         esc(sub.name) +
         ' plan" loading="lazy">' +
-        (isSelected
-          ? '<span class="min-tier-card-badge">' + (isSavedPlan ? "Your plan" : "Selected") + "</span>"
-          : "") +
+        (isSelected ? '<span class="min-tier-card-badge">Selected</span>' : "") +
         "</div>" +
         '<div class="min-tier-card-body"><h3>' +
         esc(sub.name) +
@@ -1501,15 +1580,12 @@
         priceLine +
         "</p>" +
         (sub.limited ? '<p class="min-tier-limited">Limited seats — phone enrollment only</p>' : "") +
-        "" +
         '<p class="min-tier-perks">' +
         esc(sub.perks) +
-        '</p><button type="button" class="min-btn min-btn--primary min-btn--block min-tier-select"' +
-        (isSavedPlan || paidLocked ? ' disabled aria-disabled="true"' : "") +
-        ' data-tier="' +
+        '</p><button type="button" class="min-btn min-btn--primary min-btn--block min-tier-select" data-tier="' +
         esc(sub.id) +
         '">' +
-        esc(isSavedPlan ? "Current plan" : cta) +
+        esc(cta) +
         "</button></div></article>";
     });
     html += "</div></div></div>";
@@ -2236,6 +2312,13 @@
           e.stopPropagation();
           var t = btn.getAttribute("data-tier");
           if (btn.disabled || btn.getAttribute("aria-disabled") === "true") return;
+
+          var savedId = getSavedSubscriptionId() || "free";
+          if (window.MIN_AUTH && window.MIN_AUTH.isSignedIn() && getTierRank(t) <= getTierRank(savedId)) {
+            alert("That plan is already included in your access level.");
+            return;
+          }
+
           subscribePreviewId = t;
           applySubscribeSelection();
 
