@@ -509,24 +509,27 @@
                     const docData = docSnap.data();
                     var memberTV = document.getElementById("memberTV")
                     var nameTV = document.getElementById("nameTV")
-                    if(docData.accessLevel == 0){ memberTV.innerText = 'The Secret To Tech Mastery' }
-                    if(docData.accessLevel == 1){ memberTV.innerText = 'No B.S. Guide To Tech Mastery For Seniors' }
-                    if(docData.accessLevel == 2){ memberTV.innerText = 'Tech Mastery For Seniors Academy'
-                        secondUpgradeDiv.style.display = "none"
-                        upgradeHeadlineTV.innerHTML = `Upgrade for full in-person experience<br>Join The VIP Mastermind`
-                     }
-                    if(docData.accessLevel == 3){ memberTV.innerText = 'Tech Mastery VIP Mastermind' 
-                        upgradeDiv.style.display = "none"
-                        secondUpgradeDiv.style.display = "none"
-                    }
+                    const tier = docData.tier
+                        || (docData.accessLevel >= 2 || docData.accessLevel == 3 ? "vip"
+                            : docData.accessLevel == 1 ? "guide" : "free");
 
-                    if(docData.accessLevel == 0){
+                    if (tier === "free") {
+                        memberTV.innerText = "Free · The Secret To Tech Mastery";
+                        if (upgradeHeadlineTV) {
+                            upgradeHeadlineTV.innerHTML = `Upgrade to the NO B.S. Guide<br><span style="font-weight: normal;">$997 · full Tech Mastery</span>`;
+                        }
                         lockCourses();
-                    }
-
-                    if(docData.accessLevel > 1){
-                        lessonsDiv.style.display = 'inline'
-                        lockedDiv.style.display = "none"
+                    } else if (tier === "guide") {
+                        memberTV.innerText = "NO B.S. Guide To Tech Mastery For Seniors";
+                        if (upgradeHeadlineTV) {
+                            upgradeHeadlineTV.innerHTML = `Upgrade to the VIP Experience<br><span style="font-weight: normal;">Tech Academy Mastermind</span>`;
+                        }
+                    } else {
+                        memberTV.innerText = "VIP Experience · Tech Academy Mastermind";
+                        if (upgradeDiv) upgradeDiv.style.display = "none";
+                        if (secondUpgradeDiv) secondUpgradeDiv.style.display = "none";
+                        if (lessonsDiv) lessonsDiv.style.display = "inline";
+                        if (lockedDiv) lockedDiv.style.display = "none";
                     }
 
 

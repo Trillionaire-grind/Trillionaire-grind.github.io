@@ -175,13 +175,15 @@
                 if (docSnap.exists()) 
                 {
                     const docData = docSnap.data();
-                    if(docData.accessLevel < 2)
-                    {
-                        firstNav.style.display = 'none'
-                        secondNav.style.display = 'flex'
-                    }else{
-                        firstNav.style.display = 'flex'
-                        secondNav.style.display = 'none'
+                    const tier = docData.tier || (docData.accessLevel >= 2 ? "vip" : docData.accessLevel === 1 ? "guide" : "free");
+                    localStorage.setItem("userTier", tier);
+                    // VIP: full nav (Home + Education + Chat). Free/Guide: Home + Education only.
+                    if (tier === "vip" || Number(docData.accessLevel) >= 2) {
+                        firstNav.style.display = "flex";
+                        secondNav.style.display = "none";
+                    } else {
+                        firstNav.style.display = "none";
+                        secondNav.style.display = "flex";
                     }
                 } else {
                     console.warn("No user document found; showing limited nav.");

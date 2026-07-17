@@ -153,34 +153,36 @@
         <!--<button class="ctaBtn" onclick="openPayment()" style="margin-right: auto; display:block; margin-left: auto; cursor:pointer; width: 90%; max-width: 600px; margin-top:16px; border: none; border-radius: 10px; padding: 8px; height: 8vh; font-weight: bold;">
             <p style=" font-size: 16px;text-align: start; margin-top: auto; margin-bottom: auto;">Yes, I want to join the academy call 786-309-8015</p>
         </button>-->
-        <!-- CTA Section — offer ladder; live Stripe via techStripeConfig.js -->
+        <!-- Membership ladder: Free → Guide → VIP (Minorities-style structure) -->
         <div style="padding: 10px 20px;  text-align: center; font-family: Arial, sans-serif;">
             <h2 style="font-size: 18px; margin-bottom: 10px; margin-top: 0px; color: #333;">
             Ready to Master Technology?
             </h2>
             <p style="font-size: 16px; margin-bottom: 16px; color: #555;">
-            Reserve your spot for <br><strong>Tech Mastery For Seniors Academy</strong>.
+            Start free with email — unlock <strong>The Secret To Tech Mastery</strong>.
             </p>
-            <button type="button" id="academyCtaBtn" onclick="openPayment()"
+            <button type="button" id="freeCtaBtn"
             style="display: inline-block; background-color: #FF0C11; color: white; padding: 15px 30px; font-size: 18px; border-radius: 50px; border: none; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
-            Call to reserve: (786) 309-8015
+            Create free account
             </button>
-            <p id="academyCtaHint" style="font-size: 14px; margin-top: 12px; color: #777;">
-            Online checkout coming soon — call to enroll.
+            <p id="freeCtaHint" style="font-size: 14px; margin-top: 12px; color: #777;">
+            Free forever · email registration · instant access to The Secret
             </p>
+            <div style="max-width:520px;margin:24px auto 0;text-align:left;background:#fff;border-radius:12px;padding:16px 18px;box-shadow:0 4px 16px rgba(0,0,0,0.06);">
+              <p style="margin:0 0 10px;font-weight:800;font-size:14px;letter-spacing:0.04em;text-transform:uppercase;color:#111;">Membership levels</p>
+              <p style="margin:0 0 8px;font-size:14px;color:#333;"><strong>Free</strong> — The Secret To Tech Mastery</p>
+              <p style="margin:0 0 8px;font-size:14px;color:#333;"><strong>Guide · $997</strong> — NO B.S. Guide To Tech Mastery For Seniors</p>
+              <p style="margin:0;font-size:14px;color:#333;"><strong>VIP Experience · $97,000</strong> — Tech Academy Mastermind (call to enroll)</p>
+            </div>
             <p style="margin-top: 20px; font-size: 14px; color: #555; line-height: 1.6;">
-            Or start where you are:<br>
-            <a href="techAcademyViews/secret.html" style="color: #333;">Secret $1</a>
+            Learn more:<br>
+            <a href="techAcademyViews/secret.html" style="color: #333;">The Secret (Free)</a>
             &nbsp;·&nbsp;
-            <a href="techAcademyViews/nobs.html" style="color: #333;">Guide $297</a>
+            <a href="techAcademyViews/nobs.html" style="color: #333;">NO B.S. Guide $997</a>
             &nbsp;·&nbsp;
-            <a href="techAcademyViews/academyOffer.html" style="color: #333;">Academy</a>
-            &nbsp;·&nbsp;
-            <a href="techAcademyViews/vip.html" style="color: #333;">VIP</a>
+            <a href="techAcademyViews/vip.html" style="color: #333;">VIP Experience</a>
             </p>
-            <p style="margin-top: 15px; font-size: 14px; color: #777;">
-            Limited spaces each month. Don't wait!
-            </p>
+            <p id="techVersion" style="margin-top: 15px; font-size: 12px; color: #999;"></p>
         </div>
   
 
@@ -215,8 +217,9 @@
             import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
             import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-analytics.js";
             import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail} from "https://www.gstatic.com/firebasejs/11.2.0/firebase-auth.js"
-            import { startCheckout, getCtaCopy } from "./techAcademyViews/scripts/techStripeConfig.js";
+            import { getCtaCopy } from "./techAcademyViews/scripts/techStripeConfig.js";
             import { friendlyAuthError, friendlyResetError, validateEmail } from "./techAcademyViews/scripts/techAuthUi.js";
+            import { techVersionLabel } from "./techAcademyViews/scripts/techVersion.js";
 
             const firebaseConfig = {
                 apiKey: "AIzaSyAw_s-SsnRQp44GoR7_PZjzocHCTaansfY",
@@ -232,15 +235,18 @@
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
 
-            const academyCopy = getCtaCopy("academy");
-            const academyCtaBtn = document.getElementById("academyCtaBtn");
-            const academyCtaHint = document.getElementById("academyCtaHint");
-            if (academyCtaBtn) academyCtaBtn.textContent = academyCopy.buttonText;
-            if (academyCtaHint && academyCopy.hint) academyCtaHint.textContent = academyCopy.hint;
-
-            window.openPayment = function openPayment() {
-                startCheckout("academy");
-            };
+            const freeCopy = getCtaCopy("free");
+            const freeCtaBtn = document.getElementById("freeCtaBtn");
+            const freeCtaHint = document.getElementById("freeCtaHint");
+            const techVersionEl = document.getElementById("techVersion");
+            if (freeCtaBtn) {
+                freeCtaBtn.textContent = freeCopy.buttonText;
+                freeCtaBtn.onclick = () => {
+                    window.location.href = "techApp.html#register";
+                };
+            }
+            if (freeCtaHint && freeCopy.hint) freeCtaHint.textContent = freeCopy.hint;
+            if (techVersionEl) techVersionEl.textContent = techVersionLabel();
 
             let logInBtn = document.getElementById("logInBtn")
             let myModal = document.getElementById("myModal")
@@ -256,7 +262,7 @@
             let resetSendBtn = document.getElementById("resetSendBtn")
 
             logInBtn.onclick = () => {
-                myModal.style.display = 'inline'
+                window.location.href = "techApp.html#login";
             }
 
             cancelBtn.onclick = () => {
