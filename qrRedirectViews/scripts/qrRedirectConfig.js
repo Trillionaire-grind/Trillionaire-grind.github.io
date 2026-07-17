@@ -21,7 +21,7 @@
  */
 
 /** Bump on each redirect / destination change that ships. */
-export const QR_REDIRECT_VERSION = "0.0.0.1";
+export const QR_REDIRECT_VERSION = "0.0.0.2";
 
 export function qrRedirectVersionLabel() {
   return "v" + QR_REDIRECT_VERSION;
@@ -31,12 +31,12 @@ export const QR_REDIRECT_VERSION_LABEL = qrRedirectVersionLabel();
 
 /**
  * LIVE destination — edit this string to retarget every printed card.
- * Current focus: Tech Academy (Guide / free register funnel).
+ * Current focus: Consulting.
  */
-export const QR_REDIRECT_DESTINATION = "/techAcademy.html";
+export const QR_REDIRECT_DESTINATION = "/consulting.html";
 
 /** Short label shown on the brief “taking you…” screen. */
-export const QR_REDIRECT_FOCUS_LABEL = "Tech Academy";
+export const QR_REDIRECT_FOCUS_LABEL = "Consulting";
 
 console.log(
   "[QR Redirect] working version:",

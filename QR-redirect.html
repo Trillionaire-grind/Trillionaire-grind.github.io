@@ -110,7 +110,7 @@
     <div class="spinner" aria-hidden="true"></div>
     <h1 class="brand">Képler Siguineau</h1>
     <p class="msg" id="msg">Taking you to <strong id="focus">…</strong></p>
-    <a class="fallback" id="continue" href="/techAcademy.html">Continue</a>
+    <a class="fallback" id="continue" href="/consulting.html">Continue</a>
     <p class="hint" id="error" hidden>If nothing happens, tap Continue.</p>
   </main>
 
@@ -125,7 +125,7 @@
     const continueEl = document.getElementById("continue");
     const errorEl = document.getElementById("error");
 
-    const dest = (QR_REDIRECT_DESTINATION || "/techAcademy.html").trim();
+    const dest = (QR_REDIRECT_DESTINATION || "/consulting.html").trim();
     const label = (QR_REDIRECT_FOCUS_LABEL || "next step").trim();
 
     focusEl.textContent = label;
