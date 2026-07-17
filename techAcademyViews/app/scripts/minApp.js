@@ -892,16 +892,8 @@
     );
   }
 
-  function metaLine(date, comments) {
-    return (
-      '<p class="min-meta">' +
-      esc(date) +
-      " · " +
-      comments +
-      ' <img src="' +
-      A +
-      'message.svg" width="14" height="11" alt=""></p>'
-    );
+  function metaLine(date) {
+    return '<p class="min-meta">' + esc(date) + "</p>";
   }
 
   function renderHomeFeed() {
@@ -946,7 +938,7 @@
         '<div class="min-card-body"><h3>' +
         esc(card.title) +
         "</h3>" +
-        metaLine(card.date, card.comments) +
+        metaLine(card.date) +
         "</div></article>";
     });
 
@@ -1035,7 +1027,6 @@
       html +=
         '<div class="min-post-actions">' +
         renderPostLikeButton(post.id, getPostLikes(post)) +
-        renderPostCommentButton(post.id, post.comments, false) +
         "</div></article>";
     });
 
@@ -1349,15 +1340,17 @@
       html +=
         '<div class="min-post-detail-actions">' +
         renderPostLikeButton(id, listPost ? getPostLikes(listPost) : getPostLikes({ id: id, likes: 0 })) +
-        renderPostCommentButton(id, Array.isArray(post.comments) ? post.comments.length : 0, true) +
         "</div>";
       if (canDeleteResolvedPost(post)) {
         html +=
           '<button type="button" class="min-btn min-btn--ghost min-btn--block" id="minDeletePostBtn" style="margin-top:16px;color:var(--min-danger)">Delete post</button>';
       }
+      html += "</div>";
+      return html;
     }
 
-    html += "</div>" + renderCommentsSheet(post.comments, openComments);
+    // Course lessons: no comments UI — keep focus on the lesson.
+    html += "</div>";
     return html;
   }
 
@@ -3023,7 +3016,7 @@
 
     var main = $("#minMain");
     if (main) {
-      main.classList.toggle("has-comments-sheet", route.name === "post");
+      main.classList.remove("has-comments-sheet");
       main.innerHTML = renderMain(route);
     }
 
