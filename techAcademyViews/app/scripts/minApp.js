@@ -1280,7 +1280,7 @@
     );
   }
 
-  function renderPostDetail(id, openComments) {
+  function renderPostDetail(id) {
     var post = resolvePost(id);
     if (!post) {
       return (
@@ -1746,7 +1746,7 @@
       case "admin":
         return renderAdmin();
       case "post":
-        return renderPostDetail(route.id, route.openComments);
+        return renderPostDetail(route.id);
       case "thread":
         return renderThread(route.id);
       case "subscribe":
@@ -2197,12 +2197,7 @@
       (appRoot || document.body).appendChild(fab);
     }
 
-    if (route.name === "post" && route.id && lastCommentsFetchId !== route.id && window.MIN_CONTENT) {
-      lastCommentsFetchId = route.id;
-      window.MIN_CONTENT.loadComments(route.id).then(function () {
-        render();
-      });
-    }
+    // Comments UI removed from the course — skip loading comment threads.
 
     var joinClass = $("#minJoinClass");
     if (joinClass)
@@ -2805,9 +2800,7 @@
 
   function syncLiveListeners(route) {
     if (window.MIN_CONTENT) {
-      if (route.name === "post" && route.id && window.MIN_CONTENT.watchComments) {
-        window.MIN_CONTENT.watchComments(route.id);
-      } else if (window.MIN_CONTENT.stopWatchingComments) {
+      if (window.MIN_CONTENT.stopWatchingComments) {
         window.MIN_CONTENT.stopWatchingComments();
       }
     }
