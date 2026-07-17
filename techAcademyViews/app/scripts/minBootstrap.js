@@ -56,11 +56,15 @@ import {
 
 import {
 
+  canAccessRoom,
+
   ensureDefaultChatrooms,
 
   getChatRoom,
 
   getChats,
+
+  getDefaultChatrooms,
 
   getMessages,
 
@@ -358,11 +362,15 @@ window.MIN_MUX = {
 
 window.MIN_CHAT = {
 
+  canAccessRoom,
+
   ensureDefaultChatrooms,
 
   getChatRoom,
 
   getChats,
+
+  getDefaultChatrooms,
 
   getMessages,
 

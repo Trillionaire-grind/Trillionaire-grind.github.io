@@ -242,9 +242,12 @@ export function hasOwnerAccess() {
   return getSubscriptionId() === "vip";
 }
 
-/** Chat & help desk are VIP Experience only. */
+/**
+ * Any signed-in member can open Chat and use the General chatroom.
+ * Guide+ rooms and VIP Mastermind are gated separately (hasBenchAccess / hasOwnerAccess).
+ */
 export function hasChatAccess() {
-  return hasOwnerAccess();
+  return isSignedIn();
 }
 
 /** Guide members and up can comment on lectures. */

@@ -502,6 +502,10 @@
     return window.MIN_AUTH && window.MIN_AUTH.hasChatAccess && window.MIN_AUTH.hasChatAccess();
   }
 
+  function hasBenchAccess() {
+    return window.MIN_AUTH && window.MIN_AUTH.hasBenchAccess && window.MIN_AUTH.hasBenchAccess();
+  }
+
   function hasCommentAccess() {
     return window.MIN_AUTH && window.MIN_AUTH.hasCommentAccess && window.MIN_AUTH.hasCommentAccess();
   }
@@ -512,6 +516,32 @@
 
   function hasOwnerAccess() {
     return window.MIN_AUTH && window.MIN_AUTH.hasOwnerAccess && window.MIN_AUTH.hasOwnerAccess();
+  }
+
+  /** VIP 24/7 concierge line (legacy desk) — reserved for VIP Experience only. */
+  var VIP_HOTLINE_TEL = "tel:+17863098510";
+  var VIP_HOTLINE_DISPLAY = "(786) 309-8510";
+  var SUPPORT_EMAIL = "techmasteryforseniors@gmail.com";
+
+  function canAccessChatRoom(room) {
+    if (window.MIN_CHAT && window.MIN_CHAT.canAccessRoom) {
+      return window.MIN_CHAT.canAccessRoom(room);
+    }
+    if (!room) return false;
+    if (room.vip || room.minTier === "vip") return hasOwnerAccess();
+    if (room.minTier === "guide") return hasBenchAccess();
+    return hasChatAccess();
+  }
+
+  function vipHotlineHtml() {
+    if (!hasOwnerAccess()) return "";
+    return (
+      '<a class="min-vip-hotline" href="' +
+      VIP_HOTLINE_TEL +
+      '">24/7 VIP Support — Tap to call ' +
+      esc(VIP_HOTLINE_DISPLAY) +
+      "</a>"
+    );
   }
 
   function getPlanById(id) {
@@ -695,7 +725,7 @@
     if (name === "sales") name = "register";
     var id = parts[1] || null;
     var openComments = name === "post" && parts[2] === "comments";
-    var mainTabs = ["home", "posts", "chat", "learn", "admin", "shop"];
+    var mainTabs = ["home", "posts", "chat", "learn", "support", "admin", "shop"];
     var isSub = ["post", "thread", "subscribe", "register", "login", "profile"].indexOf(name) >= 0;
     var tab = name === "posts" ? "home" : mainTabs.indexOf(name) >= 0 ? name : "home";
     if (isSub) tab = null;
@@ -725,6 +755,7 @@
     if (name === "message") return A + "message" + suffix + ".svg";
     if (name === "graduation") return A + "graduation" + suffix + ".svg";
     if (name === "basket") return A + "basket" + suffix + ".svg";
+    if (name === "help") return A + "help" + suffix + ".svg";
     if (name === "filter") return A + "filter.svg";
     return A + name + ".svg";
   }
@@ -757,6 +788,7 @@
       }
       header.className = "min-header min-header--sub";
       header.innerHTML =
+        vipHotlineHtml() +
         '<div class="min-header-inner">' +
         '<button type="button" class="min-back-btn" id="minBackBtn" aria-label="Go back">‹</button>' +
         "<p class=\"min-header-title\">" +
@@ -768,6 +800,7 @@
     if (route.tab === "home") {
       header.className = "min-header";
       header.innerHTML =
+        vipHotlineHtml() +
         '<div class="min-header-inner">' +
         '<img class="min-logo" src="' +
         A +
@@ -788,9 +821,16 @@
       return;
     }
 
-    var tabTitles = { chat: "Chat", learn: "Classes", shop: "Shop", admin: "Admin" };
+    var tabTitles = {
+      chat: "Chat",
+      learn: "Classes",
+      support: "Support",
+      shop: "Shop",
+      admin: "Admin",
+    };
     header.className = "min-header";
     header.innerHTML =
+      vipHotlineHtml() +
       '<div class="min-header-inner" style="justify-content:center">' +
       '<p class="min-header-title">' +
       esc(tabTitles[route.tab] || "Tech Academy") +
@@ -808,8 +848,9 @@
     bar.style.display = "";
     var tabs = [
       { id: "home", label: "Home", icon: "house" },
-      { id: "chat", label: "Chat", icon: "message" },
       { id: "learn", label: "Classes", icon: "graduation" },
+      { id: "chat", label: "Chat", icon: "message" },
+      { id: "support", label: "Support", icon: "help" },
     ];
     if (isAdminUser()) {
       tabs.push({ id: "admin", label: "Admin", icon: "filter" });
@@ -846,7 +887,7 @@
       '<img src="' +
       A +
       'lock_open.svg" width="28" height="28" alt="">' +
-      "<div><strong>Upgrade for full access</strong><span>Guide → full curriculum · VIP Experience → live classes & help desk</span></div>" +
+      "<div><strong>Upgrade for full access</strong><span>Guide → lessons &amp; Guide chats · VIP → live classes &amp; 24/7 support</span></div>" +
       '<span class="min-chevron">›</span></div>'
     );
   }
@@ -1007,15 +1048,31 @@
     return text || "No messages yet";
   }
 
+  function renderChatRoomRow(chat) {
+    return (
+      '<div class="min-chat-row" data-nav="#thread/' +
+      esc(chat.id) +
+      '" role="button" tabindex="0">' +
+      '<img src="' +
+      A +
+      'person.svg" alt=""><div><p class="name">' +
+      esc(chat.name) +
+      '</p><p class="preview">' +
+      esc(chatPreviewLabel(chat.preview)) +
+      "</p></div></div>"
+    );
+  }
+
   function renderChat() {
     var html = '<div class="min-screen">';
     var ownerLocked = !hasOwnerAccess();
-    var chatLocked = !hasChatAccess();
+    var guideLocked = !hasBenchAccess();
+    var rooms = chatsList();
+    var chatReady =
+      window.MIN_CHAT && window.MIN_CHAT.isChatReady && window.MIN_CHAT.isChatReady();
 
-    if (chatLocked) {
-      html +=
-        '<p class="min-auth-hint">The VIP Experience unlocks the I.T. help desk and member chat. <button type="button" class="min-link-btn" data-nav="#subscribe">View access levels</button></p>';
-    }
+    html +=
+      '<p class="min-auth-hint" style="margin-bottom:16px">Chat is a place to meet other members. Tap a room to open it. Big buttons. Simple words.</p>';
 
     html +=
       '<div class="min-chat-hero" data-nav="' +
@@ -1027,48 +1084,132 @@
       "<div><h3>VIP<br>Mastermind</h3>" +
       (ownerLocked
         ? '<span class="min-tier min-tier--owner">VIP Experience only</span>'
-        : "") +
+        : '<span class="min-tier min-tier--owner">Open for you</span>') +
       "</div>" +
       '<span class="min-chevron" style="margin-left:auto;font-size:1.75rem">›</span></div>';
 
-    html += '<p class="min-section-label">Chats</p>';
+    html += '<p class="min-section-label">For everyone</p>';
+    var generalRoom =
+      rooms.find(function (c) {
+        return c.id === "general";
+      }) || { id: "general", name: "General Chat", preview: "", minTier: "free", vip: false };
 
-    if (chatLocked) {
+    if (!chatReady && !rooms.length) {
+      html += '<p class="min-auth-hint" style="margin-bottom:12px">Loading chats…</p>';
+    }
+    html += renderChatRoomRow(generalRoom);
+
+    html += '<p class="min-section-label">Guide members &amp; up</p>';
+    if (guideLocked) {
       html +=
-        '<div class="min-group-card min-group-card--locked" data-nav="#subscribe">Help desk & member chat — VIP Experience</div>';
+        '<div class="min-group-card min-group-card--locked" data-nav="#subscribe">' +
+        "These rooms are for people who bought the NO B.S. Guide (or VIP). " +
+        "Tap here to see access levels." +
+        "</div>";
     } else {
-      var memberRooms = chatsList().filter(function (c) {
-        return !c.vip;
+      var guideRooms = rooms.filter(function (c) {
+        if (c.id === "general" || c.vip || c.minTier === "vip") return false;
+        return (c.minTier || "guide") !== "free";
       });
-      var chatReady =
-        window.MIN_CHAT && window.MIN_CHAT.isChatReady && window.MIN_CHAT.isChatReady();
 
-      if (!memberRooms.length) {
+      if (!guideRooms.length) {
+        // Fall back to seeded guide rooms so the list isn't empty before Firestore loads.
+        var defaults =
+          (window.MIN_CHAT && window.MIN_CHAT.getDefaultChatrooms && window.MIN_CHAT.getDefaultChatrooms()) ||
+          [];
+        guideRooms = defaults.filter(function (c) {
+          return c.minTier === "guide";
+        });
+      }
+
+      if (!guideRooms.length) {
         html +=
           '<p class="min-auth-hint" style="margin-bottom:12px">' +
-          (chatReady
-            ? "No chatrooms yet."
-            : "Loading chats…") +
+          (chatReady ? "No Guide rooms yet." : "Loading chats…") +
           "</p>";
       }
 
-      memberRooms.forEach(function (chat) {
-        html +=
-          '<div class="min-chat-row" data-nav="#thread/' +
-          esc(chat.id) +
-          '" role="button" tabindex="0">' +
-          '<img src="' +
-          A +
-          'person.svg" alt=""><div><p class="name">' +
-          esc(chat.name) +
-          '</p><p class="preview">' +
-          esc(chatPreviewLabel(chat.preview)) +
-          "</p></div></div>";
+      guideRooms.forEach(function (chat) {
+        html += renderChatRoomRow(chat);
       });
 
       html +=
-        '<p class="min-auth-hint" style="margin-top:8px">Custom chatrooms coming soon — use the rooms above for now.</p>';
+        '<p class="min-auth-hint" style="margin-top:8px">Only Guide and VIP members can enter these rooms.</p>';
     }
+
+    html += "</div>";
+    return html;
+  }
+
+  function renderSupport() {
+    var faq = [
+      {
+        q: "How do I sign in?",
+        a: "Open the app and tap Sign in. Use the same email and password you used when you registered. If you forgot your password, use “Forgot password” on the Sign in screen.",
+      },
+      {
+        q: "What are Free, Guide, and VIP?",
+        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support.",
+      },
+      {
+        q: "How do I buy the NO B.S. Guide?",
+        a: "Go to Access Level (profile menu or Subscribe). Choose the Guide. Tap the button to pay securely with Stripe. After you pay, your account upgrades to Guide.",
+      },
+      {
+        q: "A page looks blank or a button does nothing.",
+        a: "First try closing the app tab and opening it again. Check your internet. Still stuck? Email us — we will help you step by step.",
+      },
+      {
+        q: "How do I join a live class?",
+        a: "Tap Classes at the bottom. Live classes are for VIP Experience members. If you are VIP, tap Join Live Class. If not, you will see how to upgrade.",
+      },
+      {
+        q: "Where is 24/7 VIP support?",
+        a: "VIP members see a red “24/7 VIP Support” link at the very top of the app. Tap it to call. That line is reserved for VIP only.",
+      },
+    ];
+
+    var html = '<div class="min-screen min-support">';
+    html += "<h2 class=\"min-support-title\">Need help?</h2>";
+    html +=
+      '<p class="min-support-lead">This page is for website and app help. Big buttons. Plain English. We are happy you are here.</p>';
+
+    html +=
+      '<a class="min-support-email" href="mailto:' +
+      SUPPORT_EMAIL +
+      "?subject=" +
+      encodeURIComponent("Tech Academy website help") +
+      '">' +
+      "<strong>Email support</strong>" +
+      "<span>Tap to email us at<br>" +
+      esc(SUPPORT_EMAIL) +
+      "</span></a>";
+
+    if (hasOwnerAccess()) {
+      html +=
+        '<a class="min-support-vip" href="' +
+        VIP_HOTLINE_TEL +
+        '"><strong>24/7 VIP Support</strong><span>Tap to call ' +
+        esc(VIP_HOTLINE_DISPLAY) +
+        " — reserved for you</span></a>";
+    } else {
+      html +=
+        '<div class="min-support-vip min-support-vip--locked" data-nav="#subscribe">' +
+        "<strong>24/7 VIP Support</strong>" +
+        "<span>Reserved for VIP Experience members. Tap to see how to join.</span></div>";
+    }
+
+    html += '<p class="min-section-label">Common questions</p>';
+    faq.forEach(function (item, index) {
+      html +=
+        '<details class="min-faq"' +
+        (index === 0 ? " open" : "") +
+        "><summary>" +
+        esc(item.q) +
+        "</summary><p>" +
+        esc(item.a) +
+        "</p></details>";
+    });
 
     html += "</div>";
     return html;
@@ -1224,16 +1365,28 @@
     var chat = chatsList().find(function (c) {
       return c.id === id;
     });
-
-    if (chat && chat.vip && !hasOwnerAccess()) {
-      return (
-        '<div class="min-screen min-empty"><p>The VIP Mastermind is for VIP Experience members.</p><button type="button" class="min-btn min-btn--primary" data-nav="#subscribe">View VIP Experience</button> <button type="button" class="min-btn min-btn--ghost" data-nav="#chat">Back</button></div>'
-      );
+    if (!chat && window.MIN_CHAT && window.MIN_CHAT.getDefaultChatrooms) {
+      chat = (window.MIN_CHAT.getDefaultChatrooms() || []).find(function (c) {
+        return c.id === id;
+      });
+    }
+    if (!chat) {
+      chat = { id: id, name: "Chat", minTier: id === "general" ? "free" : "guide", vip: id === "vip" };
     }
 
-    if (!hasChatAccess()) {
+    if (!canAccessChatRoom(chat)) {
+      if (chat.vip || chat.minTier === "vip") {
+        return (
+          '<div class="min-screen min-empty"><p>The VIP Mastermind is for VIP Experience members only.</p><button type="button" class="min-btn min-btn--primary" data-nav="#subscribe">View VIP Experience</button> <button type="button" class="min-btn min-btn--ghost" data-nav="#chat">Back</button></div>'
+        );
+      }
+      if ((chat.minTier || "guide") === "guide") {
+        return (
+          '<div class="min-screen min-empty"><p>This chatroom is for people who bought the NO B.S. Guide (or VIP).</p><button type="button" class="min-btn min-btn--primary" data-nav="#subscribe">View access levels</button> <button type="button" class="min-btn min-btn--ghost" data-nav="#chat">Back</button></div>'
+        );
+      }
       return (
-        '<div class="min-screen min-empty"><p>The VIP Experience unlocks chat and the help desk.</p><button type="button" class="min-btn min-btn--primary" data-nav="#subscribe">View access levels</button> <button type="button" class="min-btn min-btn--ghost" data-nav="#chat">Back</button></div>'
+        '<div class="min-screen min-empty"><p>Please sign in to use chat.</p><button type="button" class="min-btn min-btn--primary" data-nav="#login">Sign in</button> <button type="button" class="min-btn min-btn--ghost" data-nav="#chat">Back</button></div>'
       );
     }
 
@@ -1593,6 +1746,8 @@
         return renderChat();
       case "learn":
         return renderLearn();
+      case "support":
+        return renderSupport();
       case "shop":
         return renderShop();
       case "admin":
@@ -1677,12 +1832,14 @@
       '<div class="min-menu-list">' +
       (signedIn
         ? menuRow("dollar.svg", "Access Level", "#subscribe") +
+          menuRow("help.svg", "Support & FAQ", "#support") +
           (isAdminUser() ? menuRow("filter.svg", "Admin", "#admin") : "") +
           menuRow("signature.svg", "Personal info", "#profile") +
           menuRow("message.svg", notificationMenuLabel(), null, "toggle-notify") +
           menuRow("profile.svg", "Log out", null, "logout")
         : menuRow("profile.svg", "Sign in", "#login") +
           menuRow("signature.svg", "Register", "#register") +
+          menuRow("help.svg", "Support & FAQ", "#support") +
           menuRow("dollar.svg", "Access Level", "#subscribe")) +
       "</div></div></div>" +
       '<div class="min-overlay" id="minCreatePostOverlay">' +
@@ -2664,8 +2821,25 @@
 
     if (window.MIN_CHAT) {
       if (route.name === "thread" && route.id) {
-        activeThreadId = route.id;
-        if (window.MIN_CHAT.watchRoom) window.MIN_CHAT.watchRoom(route.id);
+        var roomMeta =
+          chatsList().find(function (c) {
+            return c.id === route.id;
+          }) ||
+          ((window.MIN_CHAT.getDefaultChatrooms && window.MIN_CHAT.getDefaultChatrooms()) || []).find(function (c) {
+            return c.id === route.id;
+          }) ||
+          {
+            id: route.id,
+            minTier: route.id === "general" ? "free" : route.id === "vip" ? "vip" : "guide",
+            vip: route.id === "vip",
+          };
+        if (canAccessChatRoom(roomMeta)) {
+          activeThreadId = route.id;
+          if (window.MIN_CHAT.watchRoom) window.MIN_CHAT.watchRoom(route.id);
+        } else {
+          activeThreadId = null;
+          if (window.MIN_CHAT.stopWatchingRoom) window.MIN_CHAT.stopWatchingRoom();
+        }
       } else {
         activeThreadId = null;
         if (window.MIN_CHAT.stopWatchingRoom) window.MIN_CHAT.stopWatchingRoom();

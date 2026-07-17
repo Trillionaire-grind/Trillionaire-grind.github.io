@@ -89,6 +89,26 @@ img {
   border-bottom: 1px solid var(--min-outline);
 }
 
+.min-vip-hotline {
+  display: block;
+  width: 100%;
+  padding: 10px 14px;
+  background: #d31034;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+  line-height: 1.3;
+}
+
+.min-vip-hotline:active,
+.min-vip-hotline:hover {
+  background: #b00d2c;
+  color: #fff;
+}
+
 .min-header-inner {
   display: flex;
   align-items: center;
@@ -283,9 +303,10 @@ img {
     padding: 8px 20px;
   }
 
-  .min-tab span {
-    font-size: 0.75rem;
-  }
+.min-tab span {
+  font-size: 0.6875rem;
+  line-height: 1.2;
+}
 
   .min-tab img {
     width: 26px;
@@ -711,6 +732,105 @@ img {
   margin: 0;
   font-size: 1.125rem;
   line-height: 1.25;
+}
+
+/* Support & FAQ */
+.min-support-title {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.min-support-lead {
+  margin: 0 0 20px;
+  color: var(--min-muted);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.min-support-email,
+.min-support-vip {
+  display: block;
+  padding: 18px 16px;
+  margin-bottom: 12px;
+  border-radius: var(--min-radius);
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--min-outline);
+  background: var(--min-surface);
+  box-shadow: var(--min-shadow);
+  cursor: pointer;
+}
+
+.min-support-email strong,
+.min-support-vip strong {
+  display: block;
+  font-size: 1.125rem;
+  margin-bottom: 6px;
+}
+
+.min-support-email span,
+.min-support-vip span {
+  display: block;
+  color: var(--min-muted);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.min-support-email {
+  border-color: #0020a0;
+  background: #f3f5fc;
+}
+
+.min-support-vip {
+  border-color: #d31034;
+  background: #fff5f6;
+}
+
+.min-support-vip--locked {
+  opacity: 0.92;
+}
+
+.min-faq {
+  margin: 0 0 10px;
+  padding: 14px 16px;
+  background: var(--min-surface);
+  border: 1px solid var(--min-outline);
+  border-radius: var(--min-radius-sm);
+}
+
+.min-faq summary {
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+  padding-right: 1.5rem;
+  position: relative;
+}
+
+.min-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.min-faq summary::after {
+  content: "+";
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--min-muted);
+}
+
+.min-faq[open] summary::after {
+  content: "–";
+}
+
+.min-faq p {
+  margin: 12px 0 0;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--min-text, #1a1a1a);
 }
 
 .min-group-card {
