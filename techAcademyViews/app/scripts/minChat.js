@@ -15,20 +15,41 @@ import { initMinFirebase } from "./minFirebase.js";
 
 const CHATROOMS_COLLECTION = "chatrooms";
 
+const TIER_RANK = {
+  free: 0,
+  guide: 1,
+  vip: 2,
+};
+
+/**
+ * Default rooms:
+ * - general — every signed-in member
+ * - help-desk / announcements — NO B.S. Guide or higher
+ * - vip — VIP Experience only
+ */
 const DEFAULT_CHATROOMS = [
+  {
+    id: "general",
+    name: "General Chat",
+    minTier: "free",
+    vip: false,
+  },
   {
     id: "help-desk",
     name: "I.T. Help Desk",
+    minTier: "guide",
     vip: false,
   },
   {
     id: "announcements",
     name: "Announcements",
+    minTier: "guide",
     vip: false,
   },
   {
     id: "vip",
     name: "VIP Mastermind",
+    minTier: "vip",
     vip: true,
   },
 ];
@@ -76,13 +97,26 @@ function normalizePreview(preview) {
   return trimmed.length > 80 ? trimmed.slice(0, 77) + "…" : trimmed;
 }
 
+function inferMinTier(roomId, data) {
+  if (data && typeof data.minTier === "string" && TIER_RANK[data.minTier] != null) {
+    return data.minTier;
+  }
+  if (data && data.vip) return "vip";
+  const seeded = DEFAULT_CHATROOMS.find((room) => room.id === roomId);
+  if (seeded) return seeded.minTier;
+  // Custom / unknown rooms require Guide or higher.
+  return "guide";
+}
+
 function normalizeRoom(docSnap) {
   const data = docSnap.data();
+  const minTier = inferMinTier(docSnap.id, data);
   return {
     id: docSnap.id,
     name: data.name || "Chat",
     preview: normalizePreview(data.preview),
-    vip: Boolean(data.vip),
+    vip: Boolean(data.vip) || minTier === "vip",
+    minTier,
     _firestore: true,
   };
 }
@@ -105,13 +139,35 @@ function currentUid() {
   return user ? user.uid : "";
 }
 
+function currentRank() {
+  if (window.MIN_AUTH && window.MIN_AUTH.getSubscriptionRank) {
+    return window.MIN_AUTH.getSubscriptionRank() || 0;
+  }
+  return 0;
+}
+
 function canAccessChatFirestore() {
   if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) {
     return false;
   }
+  return true;
+}
+
+/** True if the signed-in member meets a room's minimum tier (or is admin). */
+export function canAccessRoom(room) {
+  if (!room) return false;
+  if (!(window.MIN_AUTH && window.MIN_AUTH.isSignedIn && window.MIN_AUTH.isSignedIn())) {
+    return false;
+  }
   if (window.MIN_AUTH.isAdmin && window.MIN_AUTH.isAdmin()) return true;
-  if (window.MIN_AUTH.hasChatAccess && window.MIN_AUTH.hasChatAccess()) return true;
-  return false;
+
+  const minTier = room.minTier || inferMinTier(room.id, room);
+  const need = TIER_RANK[minTier] != null ? TIER_RANK[minTier] : TIER_RANK.guide;
+  return currentRank() >= need;
+}
+
+export function getDefaultChatrooms() {
+  return DEFAULT_CHATROOMS.slice();
 }
 
 export function onMinChatChange(fn) {
@@ -142,13 +198,26 @@ export async function ensureDefaultChatrooms() {
 
   await Promise.all(
     DEFAULT_CHATROOMS.map(async (room) => {
+      // Only seed rooms this member can use (avoids free members writing VIP docs).
+      if (!canAccessRoom(room)) return;
+
       const roomRef = doc(db, CHATROOMS_COLLECTION, room.id);
       const roomSnap = await getDoc(roomRef);
-      if (roomSnap.exists()) return;
+      if (roomSnap.exists()) {
+        const existing = roomSnap.data() || {};
+        if (!existing.minTier) {
+          await updateDoc(roomRef, {
+            minTier: room.minTier,
+            vip: Boolean(room.vip),
+          }).catch(() => {});
+        }
+        return;
+      }
 
       await setDoc(roomRef, {
         name: room.name,
         vip: Boolean(room.vip),
+        minTier: room.minTier,
         preview: "",
         lastMessageAt: serverTimestamp(),
         createdAt: serverTimestamp(),
@@ -275,6 +344,7 @@ async function ensureRoom(roomId, previewText) {
   await setDoc(roomRef, {
     name: staticRoom ? staticRoom.name : roomId,
     vip: staticRoom ? Boolean(staticRoom.vip) : false,
+    minTier: staticRoom ? staticRoom.minTier : "guide",
     preview: formatPreview(previewText),
     lastMessageAt: serverTimestamp(),
     createdAt: serverTimestamp(),
@@ -282,22 +352,28 @@ async function ensureRoom(roomId, previewText) {
 }
 
 export async function sendMessage(roomId, text) {
-  if (!db) throw new Error("Chat is not connected yet.");
+  if (!db) throw new Error("Chat is not connected yet. Check your internet and try again.");
 
   const user = window.MIN_AUTH && window.MIN_AUTH.getCurrentUser();
   const profile = window.MIN_AUTH && window.MIN_AUTH.getCurrentProfile();
-  if (!user) throw new Error("Sign in to send messages.");
+  if (!user) throw new Error("Please sign in to send messages.");
 
   const trimmed = String(text || "").trim();
-  if (!trimmed) throw new Error("Write a message first.");
+  if (!trimmed) throw new Error("Type a message first, then tap Send.");
 
-  const room = getChatRoom(roomId);
-  if (room && room.vip) {
-    if (!(window.MIN_AUTH && window.MIN_AUTH.hasOwnerAccess && window.MIN_AUTH.hasOwnerAccess())) {
-      throw new Error("Upgrade to Owner to access the mastermind chat.");
+  const room =
+    getChatRoom(roomId) ||
+    DEFAULT_CHATROOMS.find((entry) => entry.id === roomId) ||
+    { id: roomId, minTier: "guide", vip: false };
+
+  if (!canAccessRoom(room)) {
+    if (room.vip || room.minTier === "vip") {
+      throw new Error("The VIP Mastermind chat is for VIP Experience members only.");
     }
-  } else if (!(window.MIN_AUTH && window.MIN_AUTH.hasChatAccess && window.MIN_AUTH.hasChatAccess())) {
-    throw new Error("Upgrade to Bench Player to access member chat.");
+    if (room.minTier === "guide") {
+      throw new Error("The NO B.S. Guide (or VIP) is needed to use this chatroom.");
+    }
+    throw new Error("You do not have access to this chatroom.");
   }
 
   const authorName =
