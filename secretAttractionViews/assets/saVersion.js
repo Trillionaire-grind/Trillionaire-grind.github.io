@@ -1,4 +1,4 @@
-export const SA_APP_VERSION = "0.0.0.9";
+export const SA_APP_VERSION = "0.0.0.10";
 
 export function saVersionLabel() {
   return "v" + SA_APP_VERSION;
