@@ -392,11 +392,11 @@ img {
 }
 
 .min-content-card img.hero {
-  /* 20% taller than a square cover frame (1 : 1.2) */
+  /* Tall poster frame — closer to Tech Mastery cover cards */
   width: 100%;
   height: auto;
   max-height: none;
-  aspect-ratio: 1 / 1.2;
+  aspect-ratio: 2 / 3;
   object-fit: cover;
   object-position: center top;
   display: block;
@@ -425,7 +425,7 @@ img {
 .min-locked-wrap {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 1 / 1.2;
+  aspect-ratio: 2 / 3;
 }
 
 .min-locked-wrap img {
