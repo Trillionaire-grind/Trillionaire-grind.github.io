@@ -910,6 +910,7 @@
       var dest = locked ? "#subscribe" : "#post/" + card.id;
       html += '<article class="min-content-card" data-nav="' + dest + '">';
       if (card.image) {
+        html += '<div class="min-content-card-media">';
         if (locked) {
           html +=
             '<div class="min-locked-wrap"><img class="hero" src="' +
@@ -921,6 +922,7 @@
         } else {
           html += '<img class="hero" src="' + esc(card.image) + '" alt="">';
         }
+        html += "</div>";
       }
       html +=
         '<div class="min-card-body"><h3>' +

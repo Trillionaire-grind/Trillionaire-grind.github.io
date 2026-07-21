@@ -380,7 +380,6 @@ img {
   cursor: pointer;
   border: 1px solid var(--min-outline);
   transition: box-shadow 0.2s, transform 0.2s;
-  /* Match Tech Academy home-cover card size */
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
@@ -391,16 +390,26 @@ img {
   transform: translateY(-2px);
 }
 
-.min-content-card img.hero {
-  /* Tall poster frame — closer to Tech Mastery cover cards */
+/* Forced tall poster frame — YouTube thumbs are 16:9 and ignore img aspect-ratio alone */
+.min-content-card-media {
   width: 100%;
-  height: auto;
-  max-height: none;
   aspect-ratio: 2 / 3;
-  object-fit: cover;
+  overflow: hidden;
+  background: #111;
+  position: relative;
+  border-bottom: 2px solid var(--min-text);
+}
+
+.min-content-card-media img.hero,
+.min-content-card img.hero {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
   object-position: center top;
   display: block;
-  border-bottom: 2px solid var(--min-text);
+  aspect-ratio: auto;
 }
 
 .min-content-card .min-card-body {
@@ -423,16 +432,16 @@ img {
 }
 
 .min-locked-wrap {
-  position: relative;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  aspect-ratio: 2 / 3;
 }
 
 .min-locked-wrap img {
   filter: blur(8px);
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
   object-position: center top;
   aspect-ratio: auto;
 }
