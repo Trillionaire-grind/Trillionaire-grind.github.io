@@ -376,10 +376,14 @@ img {
   border-radius: var(--min-radius);
   box-shadow: var(--min-shadow);
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   cursor: pointer;
   border: 1px solid var(--min-outline);
   transition: box-shadow 0.2s, transform 0.2s;
+  /* Match Tech Academy home-cover card size */
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .min-content-card:hover {
@@ -388,9 +392,11 @@ img {
 }
 
 .min-content-card img.hero {
+  /* Full uncropped cover — taller cards like Tech Mastery */
   width: 100%;
-  max-height: 280px;
-  object-fit: cover;
+  height: auto;
+  max-height: none;
+  object-fit: unset;
   display: block;
   border-bottom: 2px solid var(--min-text);
 }
