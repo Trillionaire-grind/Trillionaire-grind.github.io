@@ -1187,7 +1187,7 @@
       },
       {
         q: "What are Free, Guide, and VIP?",
-        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
+        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms — enroll by phone. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
       },
       {
         q: "How do I buy the NO B.S. Guide?",
