@@ -3,31 +3,24 @@
  *
  * Tiers (mirrors Minorities structure; different names/prices/benefits):
  *   free  — Free · The Secret To Tech Mastery — $0 (register only)
- *   guide — NO B.S. Guide To Tech Mastery For Seniors — $997 (Stripe Payment Link)
+ *   guide — NO B.S. Guide To Tech Mastery For Seniors — $997 (phone call only)
  *   vip   — VIP Experience · Tech Academy Mastermind — $97,000 (phone call only)
  *
- * HOW TO GO LIVE (Guide only)
- * 1. Stripe Dashboard → Live mode → create a Payment Link for the $997 Guide.
- * 2. Paste the live buy.stripe.com URL into TECH_PAYMENT_LINKS.guide (no /test_).
- * 3. Set CHECKOUT_LIVE = true.
- *
- * VIP never uses Stripe — startCheckout("vip") always opens the phone dialer.
+ * Guide and VIP enroll by dial — no Stripe Payment Links in the app.
  */
 
 export const TECH_BOOK_CALL = "tel:+17863098015";
 export const TECH_BOOK_CALL_DISPLAY = "(786) 309-8015";
 
-/** Flip to true only after the Guide live Payment Link is filled in. */
-export const CHECKOUT_LIVE = true;
+/** Online card checkout is off — Guide and VIP both dial. */
+export const CHECKOUT_LIVE = false;
 
 /**
- * Live Payment Link URLs. null = not wired yet.
- * free — email registration only (no Stripe)
- * vip  — phone call only (never a Payment Link)
+ * Payment Link URLs kept null — paid tiers are call-only.
  */
 export const TECH_PAYMENT_LINKS = {
   free: null,
-  guide: "https://buy.stripe.com/5kQ14meyv4oR0NI9zi6Ri0L", // LIVE — $997 NO B.S. Guide
+  guide: null, // CALL_ONLY — dial to enroll
   vip: null, // CALL_ONLY — do not add a Stripe URL
   // legacy keys → map to new tiers
   secret: null,
@@ -63,19 +56,11 @@ export function normalizeOfferKey(offerKey) {
 }
 
 export function getPaymentUrl(offerKey) {
-  const key = normalizeOfferKey(offerKey);
-  // VIP is strictly phone — never resolve a Stripe URL
-  if (key === "vip" || key === "free") return null;
-  const url = TECH_PAYMENT_LINKS[key];
-  if (!url || typeof url !== "string") return null;
-  if (url.includes("/test_")) return null;
-  return url;
+  return null;
 }
 
 export function isCheckoutReady(offerKey) {
-  const key = normalizeOfferKey(offerKey);
-  if (key === "free" || key === "vip") return false;
-  return CHECKOUT_LIVE === true && !!getPaymentUrl(key);
+  return false;
 }
 
 export function getCtaCopy(offerKey) {
@@ -94,22 +79,15 @@ export function getCtaCopy(offerKey) {
       hint: "VIP Experience ($97,000) — phone enrollment only. No online checkout.",
     };
   }
-  if (isCheckoutReady(key)) {
-    return {
-      mode: "checkout",
-      buttonText: "Get The Guide — $997",
-      hint: null,
-    };
-  }
   return {
-    mode: "soon",
-    buttonText: "Checkout coming soon — book a call",
-    hint: `Guide payment is not live yet. Call ${TECH_BOOK_CALL_DISPLAY} to enroll.`,
+    mode: "call",
+    buttonText: `Call to enroll — ${TECH_BOOK_CALL_DISPLAY}`,
+    hint: `NO B.S. Guide ($997) — call to enroll. No online checkout.`,
   };
 }
 
 /**
- * Free → register. Guide → Stripe when live, else call. VIP → always call.
+ * Free → register. Guide + VIP → always call.
  * @returns {"checkout"|"call"|"register"}
  */
 export function startCheckout(offerKey = "guide") {
@@ -117,15 +95,6 @@ export function startCheckout(offerKey = "guide") {
   if (key === "free") {
     window.location.href = "registerView.html?tier=free";
     return "register";
-  }
-  if (key === "vip") {
-    window.location.href = TECH_BOOK_CALL;
-    return "call";
-  }
-  const url = getPaymentUrl(key);
-  if (isCheckoutReady(key) && url) {
-    window.open(url, "_blank", "noopener,noreferrer");
-    return "checkout";
   }
   window.location.href = TECH_BOOK_CALL;
   return "call";

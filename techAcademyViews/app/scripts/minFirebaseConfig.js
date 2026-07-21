@@ -19,7 +19,8 @@ export function isMinFirebaseConfigured() {
 
 /**
  * Tech Academy has no subscription Cloud Function — the Guide sells via a
- * Stripe Payment Link and VIP is phone-only. Return "" so the CF path is
+ * Guide Stripe was retired — Guide + VIP dial to enroll. VIP is phone-only.
+ * Return "" so the CF checkout path is unused for this app.
  * never used.
  */
 export function getMinCheckoutApiUrl() {

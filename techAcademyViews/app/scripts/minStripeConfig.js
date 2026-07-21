@@ -2,19 +2,17 @@
  * Tech Mastery For Seniors — checkout config (Minorities app bones).
  *
  * free  — email registration, no payment
- * guide — $997 one-time via Stripe Payment Link (paste live URL below)
+ * guide — $997 · PHONE ONLY (dial to enroll)
  * vip   — $97,000 · PHONE ONLY, never Stripe
  *
- * HOW TO GO LIVE (Guide only)
- * 1. Stripe Dashboard → Live mode → Payment Link for the $997 Guide.
- * 2. Paste the live buy.stripe.com URL into GUIDE_PAYMENT_LINK (no /test_).
- * 3. Set CHECKOUT_LIVE = true.
+ * Paid tiers enroll by call — no Stripe Payment Links in the app.
  */
 window.MIN_STRIPE = (function () {
-  var CHECKOUT_LIVE = true;
+  /** Online card checkout is off — Guide and VIP both dial. */
+  var CHECKOUT_LIVE = false;
 
-  /** LIVE — $997 NO B.S. Guide Payment Link. */
-  var GUIDE_PAYMENT_LINK = "https://buy.stripe.com/5kQ14meyv4oR0NI9zi6Ri0L";
+  /** Kept null on purpose — Guide is call-only. */
+  var GUIDE_PAYMENT_LINK = null;
 
   var BOOK_CALL = "tel:+17863098015";
   var BOOK_CALL_DISPLAY = "(786) 309-8015";
@@ -34,26 +32,21 @@ window.MIN_STRIPE = (function () {
     return CHECKOUT_LIVE === true;
   }
 
-  /** Only the Guide can ever be checkout-ready. VIP is strictly phone. */
+  /** No paid tier uses Stripe checkout — always dial. */
   function isTierCheckoutReady(tierId) {
-    if (tierId !== "guide") return false;
-    return isCheckoutLive() && !!getPaymentLink("guide");
+    return false;
   }
 
   function isAnyPaidCheckoutReady() {
-    return isTierCheckoutReady("guide");
+    return false;
   }
 
   function checkoutModeLabel() {
-    return isAnyPaidCheckoutReady() ? "live" : "call";
+    return "call";
   }
 
   /** @returns {"checkout"|"call"|null} action taken for a paid tier */
   function startTierPurchase(tierId) {
-    if (tierId === "guide" && isTierCheckoutReady("guide")) {
-      window.open(getPaymentLink("guide"), "_blank", "noopener,noreferrer");
-      return "checkout";
-    }
     if (tierId === "guide" || tierId === "vip") {
       window.location.href = BOOK_CALL;
       return "call";

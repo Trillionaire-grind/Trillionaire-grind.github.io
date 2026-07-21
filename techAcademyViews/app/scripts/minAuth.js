@@ -507,7 +507,7 @@ export async function selectSubscriptionPlan(tierId) {
   if (!SUBSCRIPTION_IDS.includes(tierId)) throw new Error("Unknown plan.");
   if (tierId !== "free") {
     throw new Error(
-      "The Guide unlocks after Stripe checkout and the VIP Experience is enrolled by phone — call (786) 309-8015.",
+      "The Guide and VIP Experience are enrolled by phone — call (786) 309-8015.",
     );
   }
 

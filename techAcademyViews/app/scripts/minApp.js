@@ -688,7 +688,6 @@
       }
       return "Call to reserve — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
     }
-    if (tierUsesLiveCheckout("guide")) return "Upgrade to The Guide — $997";
     return "Call to enroll — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
   }
 
@@ -1188,11 +1187,11 @@
       },
       {
         q: "What are Free, Guide, and VIP?",
-        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
+        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms — enroll by phone. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
       },
       {
         q: "How do I buy the NO B.S. Guide?",
-        a: "Go to Access Level (profile menu or Subscribe). Choose the Guide. Tap the button to pay securely with Stripe. After you pay, your account upgrades to Guide.",
+        a: "Go to Access Level (profile menu or Subscribe). Choose the Guide. Tap the button to call (786) 309-8015 and enroll. After you enroll, we unlock Guide on your account.",
       },
       {
         q: "A page looks blank or a button does nothing.",
@@ -1490,11 +1489,11 @@
     var html =
       '<div class="min-screen min-screen--subscribe min-screen--wide"><h2 class="min-page-title">Access Levels</h2>';
 
-    if (demoMode && (!signedIn || getTierRank(savedId) < 1)) {
+    if (demoMode && (!signedIn || getTierRank(savedId) < 2)) {
       html +=
         '<p class="min-auth-hint min-subscribe-demo" role="status">' +
-        "<strong>How to upgrade:</strong> Free is instant with your email. The Guide checks out online when Stripe is live " +
-        "(call to enroll until then). The VIP Experience is enrolled by phone only.</p>";
+        "<strong>How to upgrade:</strong> Free is instant with your email. " +
+        "The Guide ($997) and VIP Experience are enrolled by phone — tap Call to dial.</p>";
     }
 
     if (signedIn && savedId === "guide") {
@@ -2322,7 +2321,7 @@
           subscribePreviewId = t;
           applySubscribeSelection();
 
-          // Guide → Stripe Payment Link (or call); VIP → always call.
+          // Guide + VIP → always call (no Stripe in-app).
           if (t === "guide" || t === "vip") {
             if (window.MIN_STRIPE && window.MIN_STRIPE.startTierPurchase) {
               window.MIN_STRIPE.startTierPurchase(t);
