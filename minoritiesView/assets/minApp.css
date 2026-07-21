@@ -390,10 +390,11 @@ img {
   transform: translateY(-2px);
 }
 
-/* Forced tall poster frame — YouTube thumbs are 16:9 and ignore img aspect-ratio alone */
+/* Mid-tall cover frame — taller than 16:9, not full poster */
 .min-content-card-media {
   width: 100%;
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 4 / 5;
+  max-height: min(52vh, 440px);
   overflow: hidden;
   background: #111;
   position: relative;
