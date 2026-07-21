@@ -380,9 +380,23 @@ img {
   cursor: pointer;
   border: 1px solid var(--min-outline);
   transition: box-shadow 0.2s, transform 0.2s;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
+  /* Match upgrade CTA width (full .min-screen column) */
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@media (min-width: 768px) {
+  .min-content-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .min-content-card-media {
+    /* Keep mid height when cards stretch to CTA width on desktop */
+    max-height: min(48vh, 420px);
+  }
 }
 
 .min-content-card:hover {
