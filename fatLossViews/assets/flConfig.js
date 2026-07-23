@@ -20,7 +20,7 @@ export const CHECKOUT_SUCCESS_URL =
 /** 2× money-back guarantee — customer sends logs here. */
 export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
 
-/** Main ebook PDF (relative to fatLossViews/). Add file when ready. */
+/** Main ebook PDF (relative to fatLossViews/). */
 export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
 
 /** Bonus downloads on thank-you page (add files when ready). */
