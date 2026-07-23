@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1047835253811906');
+    fbq('track', 'PageView');
+    fbq('track', 'Purchase');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1" alt=""></noscript>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You — Your Fat Loss System</title>
+  <link rel="stylesheet" href="assets/flBook.css">
+</head>
+<body class="thank-you-page">
+
+  <div class="top-strip"><strong>Thank you</strong> · Your order is confirmed</div>
+  <header>
+    <h1>How to Lose Fat as Fast as Possible</h1>
+    <p>The complete ebook + bonuses</p>
+  </header>
+  <div class="accent-rule"></div>
+
+  <div class="upsell-wrap">
+    <p class="step-label" style="font-family:Arial,sans-serif;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:0 0 8px;">You're in</p>
+    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Download Your Book &amp; Bonuses</h1>
+    <p style="font-size:0.95rem;color:#444;line-height:1.55;margin:0 0 20px;">
+      Everything is below. Start with the main ebook, then grab your worksheets and tracking sheets.
+      For the 2× guarantee, email your Day 1 logs when you're ready.
+    </p>
+
+    <a href="assets/how-to-lose-fat-fast.pdf" class="cta-btn" id="ebookDownload" download style="max-width:340px;margin:0 auto;">
+      Download The Book (PDF)
+      <span>Main ebook · start here</span>
+    </a>
+
+    <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your bonuses</p>
+
+    <div class="bonus-list" id="bonusList">
+      <a href="assets/bonus-timeline-worksheet.pdf" class="cta-btn cta-btn--dark" download>
+        Timeline Worksheet
+        <span>Bonus 1</span>
+      </a>
+      <a href="assets/bonus-weekly-tracking-sheets.pdf" class="cta-btn cta-btn--dark" download>
+        Weekly Tracking Sheets
+        <span>Bonus 2</span>
+      </a>
+      <a href="assets/bonus-workout-logs.pdf" class="cta-btn cta-btn--dark" download>
+        Workout Logs
+        <span>Bonus 3</span>
+      </a>
+      <a href="assets/bonus-body-fat-chart.pdf" class="cta-btn cta-btn--dark" download>
+        Body Fat Chart
+        <span>Bonus 4</span>
+      </a>
+    </div>
+
+    <p style="margin-top:24px;font-size:0.85rem;color:#555;line-height:1.5;">
+      <strong>2× guarantee:</strong> Follow the program 60 days — log food, photo meals, walk steps,
+      do workouts. If you don't lose 10 lbs, email your logs to
+      <a href="mailto:greenbooksapp@gmail.com" id="guaranteeEmail">greenbooksapp@gmail.com</a>
+      for double your money back.
+    </p>
+  </div>
+
+  <footer>
+    <p>© 2026 How to Lose Fat as Fast as Possible · All Rights Reserved</p>
+  </footer>
+
+  <script type="module">
+    import { EBOOK_PDF, BONUS_DOWNLOADS, GUARANTEE_EMAIL } from "./assets/flConfig.js";
+    import { flVersionLabel } from "./assets/flVersion.js";
+
+    console.log("[Fat Loss thank-you] working version:", flVersionLabel());
+
+    document.getElementById("ebookDownload").href = EBOOK_PDF;
+    document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
+    document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
+
+    const bonusList = document.getElementById("bonusList");
+    bonusList.innerHTML = "";
+    BONUS_DOWNLOADS.forEach((bonus, i) => {
+      const a = document.createElement("a");
+      a.href = bonus.href;
+      a.className = "cta-btn cta-btn--dark";
+      a.download = "";
+      a.innerHTML = bonus.label + '<span>Bonus ' + (i + 1) + "</span>";
+      bonusList.appendChild(a);
+    });
+  </script>
+</body>
+</html>

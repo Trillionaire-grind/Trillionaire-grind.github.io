@@ -1,0 +1,38 @@
+/**
+ * Fat Loss ebook funnel config.
+ * Canonical path: /fatLoss.html
+ *
+ * Stripe Payment Link ($29) — set success URL to:
+ *   https://keplersiguineau.com/fatLossViews/thankYou.html
+ */
+export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
+
+export const PRODUCT_PRICE = 29;
+export const PRODUCT_PRICE_LABEL = "$29";
+export const VALUE_STACK_TOTAL = "$95+";
+
+/** Paste live Stripe Payment Link when ready (buy.stripe.com/…). */
+export const STRIPE_PAYMENT_URL = "";
+
+export const CHECKOUT_SUCCESS_URL =
+  "https://keplersiguineau.com/fatLossViews/thankYou.html";
+
+/** 2× money-back guarantee — customer sends logs here. */
+export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
+
+/** Main ebook PDF (relative to fatLossViews/). Add file when ready. */
+export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
+
+/** Bonus downloads on thank-you page (add files when ready). */
+export const BONUS_DOWNLOADS = [
+  { href: "assets/bonus-timeline-worksheet.pdf", label: "Timeline Worksheet" },
+  { href: "assets/bonus-weekly-tracking-sheets.pdf", label: "Weekly Tracking Sheets" },
+  { href: "assets/bonus-workout-logs.pdf", label: "Workout Logs" },
+  { href: "assets/bonus-body-fat-chart.pdf", label: "Body Fat Chart" },
+];
+
+/** Hero / section photos (drop files in assets/photos/). */
+export const PHOTOS = {
+  shirtless: "fatLossViews/assets/photos/shirtless.jpg",
+  jersey: "fatLossViews/assets/photos/jersey.jpg",
+};
