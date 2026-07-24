@@ -12,7 +12,7 @@ export const PRODUCT_PRICE_LABEL = "$29";
 export const KIT_PRICE = 9;
 export const BUNDLE_PRICE = 38;
 export const PRODUCT_PRICE_LABEL_BUNDLE = "$38";
-export const VALUE_STACK_TOTAL = "$95+";
+export const VALUE_STACK_TOTAL = "$147";
 
 /** Book only — $29 */
 export const STRIPE_BOOK_ONLY_URL =
