@@ -1,9 +1,9 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 :root {
-  --accent: #16a34a;
-  --accent-bright: #22c55e;
-  --accent-dark: #15803d;
+  --accent: #E8452C;
+  --accent-bright: #E8452C;
+  --accent-dark: #c93720;
   --black: #000;
   --yellow: #fef08a;
   --white: #fff;
@@ -135,7 +135,7 @@ body {
 
 .cta-box.is-highlighted {
   border-color: var(--accent-bright);
-  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.22), 0 14px 36px rgba(22, 163, 74, 0.18);
+  box-shadow: 0 0 0 4px rgba(232, 69, 44, 0.22), 0 14px 36px rgba(232, 69, 44, 0.18);
   transform: translateY(-2px);
 }
 
@@ -211,7 +211,7 @@ body {
 .stat-callout {
   margin: 20px 0;
   padding: 16px 18px;
-  background: #f0fdf4;
+  background: #FFF3EF;
   border-left: 4px solid var(--accent);
   font-family: Arial, sans-serif;
   font-weight: 800;
