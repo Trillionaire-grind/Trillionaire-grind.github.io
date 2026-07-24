@@ -442,3 +442,137 @@ body.thank-you-page .cta-btn--dark { background: #111; }
   .offer-headline { font-size: 1.25rem; }
   .offer-subheadline { font-size: 0.95rem; }
 }
+
+/* Classic order bump (final CTA) */
+.bump {
+  border: 4px dashed #E8452C;
+  background: #FFF3EF;
+  padding: 20px;
+  margin: 0 0 18px;
+  font-family: Helvetica, Arial, sans-serif;
+  color: #141414;
+  text-align: left;
+}
+.bump label {
+  display: flex;
+  gap: 14px;
+  cursor: pointer;
+  align-items: flex-start;
+}
+.bump input[type="checkbox"] {
+  width: 26px;
+  height: 26px;
+  accent-color: #E8452C;
+  flex: 0 0 26px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+.bump .head {
+  font-weight: 900;
+  font-size: 18px;
+  line-height: 1.2;
+  display: block;
+}
+.bump .head .price { color: #E8452C; }
+.bump p {
+  margin: 8px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.bump .sub {
+  color: #555;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+/* Boy Kibble bump modal */
+#kbOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 20, 20, 0.82);
+  display: none;
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
+#kbOverlay.kbOpen { display: flex; }
+#kbModal {
+  background: #fff;
+  color: #141414;
+  max-width: 460px;
+  width: 100%;
+  padding: 28px 24px 24px;
+  position: relative;
+  border-top: 6px solid #E8452C;
+  font-family: Helvetica, Arial, sans-serif;
+  max-height: 92vh;
+  overflow-y: auto;
+}
+#kbClose {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 26px;
+  line-height: 1;
+  color: #555;
+  cursor: pointer;
+  padding: 4px;
+}
+#kbKicker {
+  color: #E8452C;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 0 8px;
+}
+#kbTitle {
+  font-size: 22px;
+  line-height: 1.15;
+  font-weight: 900;
+  margin: 0 0 12px;
+}
+#kbTitle span { color: #E8452C; }
+#kbModal .kbBody {
+  font-size: 14.5px;
+  line-height: 1.5;
+  margin: 0 0 10px;
+}
+#kbModal .kbSub {
+  color: #555;
+  font-size: 13px;
+}
+#kbYes,
+#kbNo {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 900;
+  padding: 15px 16px;
+  margin-top: 10px;
+}
+#kbYes {
+  background: #E8452C;
+  color: #fff;
+  font-size: 16px;
+}
+#kbYes:hover { background: #c93720; color: #fff; }
+#kbNo {
+  background: #fff;
+  color: #141414;
+  border: 3px solid #141414;
+  font-size: 14px;
+}
+#kbNo:hover { background: #F4F4F4; color: #141414; }
+#kbYes:focus-visible,
+#kbNo:focus-visible,
+#kbClose:focus-visible {
+  outline: 3px solid #E8452C;
+  outline-offset: 2px;
+}
+@media (max-width: 420px) {
+  #kbTitle { font-size: 19px; }
+}
