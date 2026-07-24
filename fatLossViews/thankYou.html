@@ -25,21 +25,22 @@
   <div class="top-strip"><strong>Thank you</strong> · Your order is confirmed</div>
   <header>
     <h1>How to Lose Fat as Fast as Possible</h1>
-    <p>The complete ebook + bonuses</p>
+    <p>Your ebook download</p>
   </header>
   <div class="accent-rule"></div>
 
   <div class="upsell-wrap">
     <p class="step-label" style="font-family:Arial,sans-serif;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:0 0 8px;">You're in</p>
-    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Download Your Book &amp; Bonuses</h1>
+    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Download Your Book</h1>
     <p style="font-size:0.95rem;color:#444;line-height:1.55;margin:0 0 20px;">
-      Everything is below. Start with the main ebook, then grab your worksheets and tracking sheets.
+      The worksheets, tracking sheets, workout logs, and body fat chart are
+      <strong>inside the ebook</strong> — print the pages you need and start Day 1.
       For the 2× guarantee, email your Day 1 logs when you're ready.
     </p>
 
     <a href="assets/how-to-lose-fat-fast.pdf" class="cta-btn" id="ebookDownload" download style="max-width:340px;margin:0 auto;">
       Download The Book (PDF)
-      <span>Main ebook · start here</span>
+      <span>System + worksheets included</span>
     </a>
 
     <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">If you added The Boy Kibble Kit</p>
@@ -48,27 +49,6 @@
       Download The Boy Kibble Kit (PDF)
       <span>Upsell · meal system for all 90 days</span>
     </a>
-
-    <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your bonuses</p>
-
-    <div class="bonus-list" id="bonusList">
-      <a href="assets/bonus-timeline-worksheet.pdf" class="cta-btn cta-btn--dark" download>
-        Timeline Worksheet
-        <span>Bonus 1</span>
-      </a>
-      <a href="assets/bonus-weekly-tracking-sheets.pdf" class="cta-btn cta-btn--dark" download>
-        Weekly Tracking Sheets
-        <span>Bonus 2</span>
-      </a>
-      <a href="assets/bonus-workout-logs.pdf" class="cta-btn cta-btn--dark" download>
-        Workout Logs
-        <span>Bonus 3</span>
-      </a>
-      <a href="assets/bonus-body-fat-chart.pdf" class="cta-btn cta-btn--dark" download>
-        Body Fat Chart
-        <span>Bonus 4</span>
-      </a>
-    </div>
 
     <p style="margin-top:24px;font-size:0.85rem;color:#555;line-height:1.5;">
       <strong>2× guarantee:</strong> Follow the program 90 days — log food, photo meals, walk steps,
@@ -83,7 +63,7 @@
   </footer>
 
   <script type="module">
-    import { EBOOK_PDF, KIT_PDF, BONUS_DOWNLOADS, GUARANTEE_EMAIL } from "./assets/flConfig.js";
+    import { EBOOK_PDF, KIT_PDF, GUARANTEE_EMAIL } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
@@ -92,17 +72,6 @@
     document.getElementById("kitDownload").href = KIT_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
-
-    const bonusList = document.getElementById("bonusList");
-    bonusList.innerHTML = "";
-    BONUS_DOWNLOADS.forEach((bonus, i) => {
-      const a = document.createElement("a");
-      a.href = bonus.href;
-      a.className = "cta-btn cta-btn--dark";
-      a.download = "";
-      a.innerHTML = bonus.label + '<span>Bonus ' + (i + 1) + "</span>";
-      bonusList.appendChild(a);
-    });
   </script>
 </body>
 </html>

@@ -31,19 +31,14 @@ export const CHECKOUT_SUCCESS_URL =
 /** 2× money-back guarantee — customer sends logs here. */
 export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
 
-/** Main ebook PDF (relative to fatLossViews/). */
+/** Main ebook PDF (relative to fatLossViews/). Worksheets / logs / chart are inside this file. */
 export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
 
 /** Boy Kibble Kit upsell PDF (relative to fatLossViews/). */
 export const KIT_PDF = "assets/the-boy-kibble-kit.pdf";
 
-/** Bonus downloads on thank-you page (add files when ready). */
-export const BONUS_DOWNLOADS = [
-  { href: "assets/bonus-timeline-worksheet.pdf", label: "Timeline Worksheet" },
-  { href: "assets/bonus-weekly-tracking-sheets.pdf", label: "Weekly Tracking Sheets" },
-  { href: "assets/bonus-workout-logs.pdf", label: "Workout Logs" },
-  { href: "assets/bonus-body-fat-chart.pdf", label: "Body Fat Chart" },
-];
+/** @deprecated Worksheets ship inside the ebook — kept empty so old thank-you JS stays safe. */
+export const BONUS_DOWNLOADS = [];
 
 /** Hero / section photos (drop files in assets/photos/). */
 export const PHOTOS = {
