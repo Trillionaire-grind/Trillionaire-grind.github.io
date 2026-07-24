@@ -336,9 +336,9 @@ body {
 }
 
 .guarantee-box {
-  background: #FFF3EF;
+  background: transparent;
   color: #222;
-  border: 2px solid #E8452C;
+  border: 2px solid #111;
   border-radius: 10px;
   padding: 22px 20px;
   margin: 8px 0;
