@@ -44,5 +44,4 @@ export const BONUS_DOWNLOADS = [];
 export const PHOTOS = {
   heroSpread: "fatLossViews/assets/photos/product-stack.png",
   shirtless: "fatLossViews/assets/photos/shirtless.jpg",
-  jersey: "fatLossViews/assets/photos/jersey.jpg",
 };
