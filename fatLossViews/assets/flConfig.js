@@ -42,6 +42,7 @@ export const BONUS_DOWNLOADS = [];
 
 /** Hero / section photos (drop files in assets/photos/). */
 export const PHOTOS = {
+  heroSpread: "fatLossViews/assets/photos/product-stack.png",
   shirtless: "fatLossViews/assets/photos/shirtless.jpg",
   jersey: "fatLossViews/assets/photos/jersey.jpg",
 };

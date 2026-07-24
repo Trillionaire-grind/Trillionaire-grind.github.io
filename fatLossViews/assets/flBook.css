@@ -97,6 +97,21 @@ body {
   color: #000;
 }
 
+.hero-product {
+  max-width: 720px;
+  margin: 18px auto 8px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.hero-product img {
+  display: block;
+  width: 100%;
+  max-width: 680px;
+  height: auto;
+  margin: 0 auto;
+}
+
 .hero-buy {
   max-width: 480px;
   margin: 0 auto;
