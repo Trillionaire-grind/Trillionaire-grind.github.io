@@ -2,17 +2,28 @@
  * Fat Loss ebook funnel config.
  * Canonical path: /fatLoss.html
  *
- * Stripe Payment Link ($29) — set success URL to:
+ * Stripe Payment Link success URL (both links):
  *   https://keplersiguineau.com/fatLossViews/thankYou.html
  */
 export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
 
 export const PRODUCT_PRICE = 29;
 export const PRODUCT_PRICE_LABEL = "$29";
+export const KIT_PRICE = 9;
+export const BUNDLE_PRICE = 38;
+export const PRODUCT_PRICE_LABEL_BUNDLE = "$38";
 export const VALUE_STACK_TOTAL = "$95+";
 
-/** Paste live Stripe Payment Link when ready (buy.stripe.com/…). */
-export const STRIPE_PAYMENT_URL = "";
+/** Book only — $29 */
+export const STRIPE_BOOK_ONLY_URL =
+  "https://buy.stripe.com/eVqaEW1LJbRjaoicLu6Ri0M";
+
+/** Book + Boy Kibble Kit — $38 */
+export const STRIPE_BOOK_PLUS_KIT_URL =
+  "https://buy.stripe.com/dRm7sKbmj7B3eEy7ra6Ri0N";
+
+/** @deprecated use STRIPE_BOOK_ONLY_URL */
+export const STRIPE_PAYMENT_URL = STRIPE_BOOK_ONLY_URL;
 
 export const CHECKOUT_SUCCESS_URL =
   "https://keplersiguineau.com/fatLossViews/thankYou.html";
