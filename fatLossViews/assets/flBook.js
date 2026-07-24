@@ -11,6 +11,9 @@ function trackCheckout(value) {
   if (typeof fbq === "function") {
     fbq("track", "InitiateCheckout", { value: value, currency: "USD" });
   }
+  if (typeof gtag === "function") {
+    gtag("event", "begin_checkout", { currency: "USD", value: value });
+  }
 }
 
 function initBumpModal() {
