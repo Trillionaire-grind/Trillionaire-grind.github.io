@@ -34,6 +34,9 @@ export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
 /** Main ebook PDF (relative to fatLossViews/). */
 export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
 
+/** Boy Kibble Kit upsell PDF (relative to fatLossViews/). */
+export const KIT_PDF = "assets/the-boy-kibble-kit.pdf";
+
 /** Bonus downloads on thank-you page (add files when ready). */
 export const BONUS_DOWNLOADS = [
   { href: "assets/bonus-timeline-worksheet.pdf", label: "Timeline Worksheet" },
