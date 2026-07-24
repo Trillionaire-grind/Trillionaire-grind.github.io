@@ -42,6 +42,13 @@
       <span>Main ebook · start here</span>
     </a>
 
+    <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">If you added The Boy Kibble Kit</p>
+
+    <a href="assets/the-boy-kibble-kit.pdf" class="cta-btn" id="kitDownload" download style="max-width:340px;margin:12px auto 0;background:#E8452C;">
+      Download The Boy Kibble Kit (PDF)
+      <span>Upsell · meal system for all 90 days</span>
+    </a>
+
     <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your bonuses</p>
 
     <div class="bonus-list" id="bonusList">
@@ -76,12 +83,13 @@
   </footer>
 
   <script type="module">
-    import { EBOOK_PDF, BONUS_DOWNLOADS, GUARANTEE_EMAIL } from "./assets/flConfig.js";
+    import { EBOOK_PDF, KIT_PDF, BONUS_DOWNLOADS, GUARANTEE_EMAIL } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
     document.getElementById("ebookDownload").href = EBOOK_PDF;
+    document.getElementById("kitDownload").href = KIT_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
 
