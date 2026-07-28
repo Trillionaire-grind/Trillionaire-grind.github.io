@@ -14,6 +14,9 @@ function trackCheckout(value) {
   if (typeof gtag === "function") {
     gtag("event", "begin_checkout", { currency: "USD", value: value });
   }
+  if (typeof rdt === "function") {
+    rdt("track", "AddToCart", { value: value, currency: "USD" });
+  }
 }
 
 function initBumpModal() {
