@@ -17,7 +17,8 @@
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1" alt=""></noscript>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You — Your Fat Loss System</title>
+  <meta name="robots" content="noindex">
+  <title>You're In | How to Lose Fat as Fast as Possible</title>
   <link rel="stylesheet" href="assets/flBook.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MW3X255274"></script>
   <script>
@@ -32,66 +33,214 @@
   !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_jf67hvvk6fyc",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_jf67hvvk6fyc');rdt('track', 'PageVisit');rdt('track', 'Purchase');
   </script>
   <!-- End Reddit Pixel -->
+  <style>
+    :root{
+      --ink:#141414; --accent:#E8452C; --gray:#555; --light:#F4F4F4; --line:#141414;
+    }
+    body.thank-you-page{
+      font-family:Helvetica,Arial,sans-serif;
+      color:var(--ink);
+      background:#fff;
+      line-height:1.55;
+      margin:0;
+    }
+    body.thank-you-page .ty-wrap{max-width:680px;margin:0 auto;padding:0 20px}
+    body.thank-you-page .ty-eyebrow{
+      color:var(--accent);font-weight:bold;font-size:13px;letter-spacing:2px;text-transform:uppercase;
+    }
+    body.thank-you-page .ty-wrap > section h1{
+      font-size:clamp(30px,6vw,44px);line-height:1.08;font-weight:900;letter-spacing:-0.5px;margin:10px 0 14px;
+      font-family:Helvetica,Arial,sans-serif;color:var(--ink);text-align:left;
+    }
+    body.thank-you-page .ty-wrap > section h2{
+      font-size:clamp(21px,4vw,27px);font-weight:900;margin:0 0 12px;
+      font-family:Helvetica,Arial,sans-serif;color:var(--ink);text-align:left;
+    }
+    body.thank-you-page .ty-wrap p{margin-bottom:14px}
+    body.thank-you-page .ty-muted{color:var(--gray)}
+    body.thank-you-page .ty-rule{height:5px;background:var(--line);margin:44px 0}
+    body.thank-you-page .ty-wrap > section{padding:40px 0 8px}
+    body.thank-you-page .ty-btn{
+      display:block;width:100%;text-align:center;background:var(--ink);color:#fff;font-weight:900;font-size:17px;
+      padding:18px 22px;text-decoration:none;border:none;cursor:pointer;margin:10px 0;
+      font-family:Helvetica,Arial,sans-serif;box-sizing:border-box;
+    }
+    body.thank-you-page .ty-btn:hover{background:#000;color:#fff}
+    body.thank-you-page .ty-btn.accent{background:var(--accent)}
+    body.thank-you-page .ty-btn.accent:hover{background:#c93720;color:#fff}
+    body.thank-you-page .ty-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    body.thank-you-page .ty-btn[aria-disabled="true"]{opacity:0.55;cursor:not-allowed}
+    body.thank-you-page .ty-step{display:flex;gap:14px;margin:18px 0;align-items:flex-start}
+    body.thank-you-page .ty-step b.num{
+      flex:0 0 34px;height:34px;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;
+    }
+    body.thank-you-page .ty-step p{margin:0}
+    body.thank-you-page .ty-bet{border:5px solid var(--ink);padding:22px;margin:26px 0}
+    body.thank-you-page .ty-bet .big{font-size:clamp(22px,4.5vw,30px);font-weight:900;line-height:1.15;margin:0}
+    body.thank-you-page .ty-bet .tag{
+      background:var(--accent);color:#fff;display:inline-block;font-weight:900;font-size:12px;letter-spacing:2px;padding:5px 10px;margin-bottom:10px;
+    }
+    body.thank-you-page ul.ty-plain{list-style:none;margin:0 0 16px;padding:0}
+    body.thank-you-page ul.ty-plain li{padding-left:26px;position:relative;margin-bottom:10px}
+    body.thank-you-page ul.ty-plain li::before{
+      content:"";position:absolute;left:0;top:7px;width:12px;height:12px;background:var(--accent);
+    }
+    body.thank-you-page .ty-price{font-size:clamp(24px,5vw,32px);font-weight:900;margin:14px 0 4px}
+    body.thank-you-page .ty-decline{
+      display:block;text-align:center;color:var(--gray);font-size:14px;margin:14px 0 0;text-decoration:underline;cursor:pointer;background:none;border:none;width:100%;font-family:inherit;
+    }
+    body.thank-you-page .ty-footer{padding:34px 0 50px;color:var(--gray);font-size:13px}
+    body.thank-you-page .ty-footer p{margin-bottom:8px}
+    body.thank-you-page .ty-version{font-size:12px;color:#999;margin-top:12px}
+    @media (prefers-reduced-motion: no-preference){
+      body.thank-you-page .ty-wrap > section{animation:tyRise .5s ease both}
+      @keyframes tyRise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    }
+
+    /* Day 1 Review downsell — same language as Boy Kibble bump modal */
+    #dsOverlay{
+      position:fixed;inset:0;background:rgba(20,20,20,0.82);display:none;z-index:9999;
+      align-items:center;justify-content:center;padding:18px;
+    }
+    #dsOverlay.dsOpen{display:flex}
+    #dsModal{
+      background:#fff;color:#141414;max-width:460px;width:100%;padding:28px 24px 24px;position:relative;
+      border-top:6px solid #E8452C;font-family:Helvetica,Arial,sans-serif;max-height:92vh;overflow-y:auto;
+    }
+    #dsClose{
+      position:absolute;top:10px;right:12px;background:none;border:none;font-size:26px;line-height:1;color:#555;cursor:pointer;padding:4px;
+    }
+    #dsKicker{
+      color:#E8452C;font-weight:bold;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:0 0 8px;
+    }
+    #dsTitle{
+      font-size:22px;line-height:1.15;font-weight:900;margin:0 0 12px;
+    }
+    #dsTitle span{color:#E8452C}
+    #dsModal .dsBody{font-size:14.5px;line-height:1.5;margin:0 0 10px}
+    #dsModal .dsSub{color:#555;font-size:13px}
+    #dsYes,#dsNo{
+      display:block;text-align:center;text-decoration:none;font-weight:900;padding:15px 16px;margin-top:10px;
+    }
+    #dsYes{background:#E8452C;color:#fff;font-size:16px}
+    #dsYes:hover{background:#c93720;color:#fff}
+    #dsNo{background:#fff;color:#141414;border:3px solid #141414;font-size:14px}
+    #dsNo:hover{background:#F4F4F4;color:#141414}
+    #dsYes:focus-visible,#dsNo:focus-visible,#dsClose:focus-visible{
+      outline:3px solid #E8452C;outline-offset:2px;
+    }
+    @media (max-width:420px){
+      #dsTitle{font-size:19px}
+    }
+  </style>
 </head>
 <body class="thank-you-page">
 
-  <div class="top-strip"><strong>Thank you</strong> · Your order is confirmed</div>
-  <header>
-    <h1>How to Lose Fat as Fast as Possible</h1>
-    <p>Your ebook download</p>
-  </header>
-  <div class="accent-rule"></div>
+<div class="ty-wrap">
 
-  <div class="upsell-wrap">
-    <p class="step-label" style="font-family:Arial,sans-serif;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:0 0 8px;">You're in</p>
-    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Download Your Book</h1>
-    <p style="font-size:0.95rem;color:#444;line-height:1.55;margin:0 0 20px;">
-      The worksheets, tracking sheets, workout logs, and body fat chart are
-      <strong>inside the ebook</strong> — print the pages you need and start Day 1.
-      For the 2× guarantee, email your Day 1 logs when you're ready.
-    </p>
+  <!-- ============ DELIVERY ============ -->
+  <section>
+    <span class="ty-eyebrow">Order confirmed</span>
+    <h1>You're in.<br>Your book is below.</h1>
+    <p>Payment received. Download your files now and save them somewhere you'll find them, and a receipt is on its way to your email.</p>
 
-    <a href="assets/how-to-lose-fat-fast.pdf" class="cta-btn" id="ebookDownload" download style="max-width:340px;margin:0 auto;">
-      Download The Book (PDF)
-      <span>System + worksheets included</span>
-    </a>
+    <a class="ty-btn" href="assets/how-to-lose-fat-fast.pdf" id="ebookDownload" download>Download the Book (PDF)</a>
+    <a class="ty-btn" href="assets/the-boy-kibble-kit.pdf" id="kitDownload" download hidden>Download the Boy Kibble Kit (PDF)</a>
+    <p class="ty-muted" id="kitHint" style="font-size:13px" hidden>You added The Boy Kibble Kit at checkout — both downloads are yours.</p>
+  </section>
 
-    <div id="kitBlock" hidden>
-      <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your Boy Kibble Kit</p>
+  <!-- ============ THE FIRST MOVE ============ -->
+  <section>
+    <h2>Now make your first move. It takes 10 minutes.</h2>
+    <div class="ty-step"><b class="num">1</b><p>Read the book today. It's short on purpose.</p></div>
+    <div class="ty-step"><b class="num">2</b><p>Run your numbers with the Chapter 2 worksheet.</p></div>
+    <div class="ty-step"><b class="num">3</b><p>Send your Day 1 email. Your 90 days and your guarantee start the moment you hit send.</p></div>
+    <a class="ty-btn" id="day1Email" href="mailto:ksiguineau@gmail.com?subject=Day%201">Send My Day 1 Email</a>
+    <p class="ty-muted" style="font-size:13px">The people who register Day 1 finish. The people who "start Monday" are still saying it next year.</p>
+  </section>
 
-      <a href="assets/the-boy-kibble-kit.pdf" class="cta-btn" id="kitDownload" download style="max-width:340px;margin:12px auto 0;background:#E8452C;">
-        Download The Boy Kibble Kit (PDF)
-        <span>Build your own · meal system for all 90 days</span>
-      </a>
+  <div class="ty-rule"></div>
+
+  <!-- ============ UPSELL: THE 90 DAY CORNER MAN ============ -->
+  <section id="oto">
+    <span class="ty-eyebrow">One time offer, only on this page</span>
+    <h2>You just bet me you'd lose 10 lbs.<br>Want me in your corner while you win it?</h2>
+
+    <p>The book is the plan. Here's the truth about plans: almost nobody fails on knowledge. They fail alone, around week 3, when the scale plays a trick and there's no one to tell them "that's water, hold the line."</p>
+    <p>So for the people who want zero chance of that, I do this:</p>
+
+    <div class="ty-bet">
+      <span class="tag">The 90 Day Corner Man</span>
+      <p class="big">Me, checking your numbers, every week, for all 90 days.</p>
     </div>
 
-    <p style="margin-top:24px;font-size:0.85rem;color:#555;line-height:1.5;">
-      <strong>2× guarantee:</strong> Follow the program 90 days — log food, photo meals, walk steps,
-      do workouts. If you don't lose 10 lbs, email your logs to
-      <a href="mailto:greenbooksapp@gmail.com" id="guaranteeEmail">greenbooksapp@gmail.com</a>
-      for double your money back.
-    </p>
-  </div>
+    <ul class="ty-plain">
+      <li><b>Day 1 review.</b> Send me your Chapter 2 worksheet and I personally verify your deficit, your calorie target, and your protein line before you start. No math anxiety, no wrong settings.</li>
+      <li><b>Your starter Boy Kibble, built by me.</b> Tell me the foods you actually like and I build your first repeatable day to your exact numbers.</li>
+      <li><b>Weekly check ins, all 13 weeks.</b> Every week you send your tracking sheet, and I answer with the call: hold, adjust calories, or add steps. You never guess once for 90 days.</li>
+      <li><b>Stall triage.</b> Scale stuck? Send the sheet, get the fix, keep moving.</li>
+    </ul>
 
-  <footer>
-    <p>© 2026 How to Lose Fat as Fast as Possible · All Rights Reserved</p>
+    <p class="ty-price">$79 <span class="ty-muted" style="font-size:15px;font-weight:normal">one time, for the full 90 days</span></p>
+    <p class="ty-muted" style="font-size:14px">That's about $6 a week to have the guy who wrote the program reading your numbers. One payment, no subscription, no upsell after this.</p>
+
+    <a class="ty-btn accent" id="cornerManBtn" href="#">YES, Be In My Corner for 90 Days</a>
+    <button type="button" class="ty-decline" id="kbDecline">No thanks, I've got the book and I'll run it solo</button>
+  </section>
+
+  <div class="ty-rule" id="done"></div>
+
+  <footer class="ty-footer">
+    <p><b>How to Lose Fat as Fast as Possible</b> by K&eacute;pler Siguineau</p>
+    <p>Questions or files not downloading? Email <a id="supportEmailLink" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a> and it gets fixed.</p>
+    <p class="ty-version" id="flVersion">v0.0.0.19</p>
   </footer>
+
+</div>
+
+<!-- Day 1 Review downsell modal -->
+<div id="dsOverlay" role="presentation">
+  <div id="dsModal" role="dialog" aria-modal="true" aria-labelledby="dsTitle">
+    <button type="button" id="dsClose" aria-label="Close">&times;</button>
+
+    <p id="dsKicker">Wait — one last thing</p>
+    <h3 id="dsTitle">Don't wreck Day 1.<br><span>Get a personal numbers check for $27.</span></h3>
+
+    <p class="dsBody">The 90-day Corner Man isn't for everyone. Fair. But here's the one place a solo runner can quietly blow the whole cycle: setting the numbers wrong on Day 1, then grinding for weeks at a deficit that was never going to work.</p>
+    <p class="dsBody">Send me your Chapter 2 worksheet. I'll personally check your deficit, calorie target, and protein line — one review, one reply — then you run it yourself.</p>
+    <p class="dsBody dsSub">Not 13 weeks of coaching. Just the one check that keeps you from racing in the wrong direction.</p>
+
+    <a id="dsYes" href="#">Yes — check my Day 1 numbers · $27</a>
+    <a id="dsNo" href="#done">No thanks, I'll set them myself</a>
+  </div>
+</div>
 
   <script type="module">
     import {
       EBOOK_PDF,
       KIT_PDF,
-      GUARANTEE_EMAIL,
+      SUPPORT_EMAIL,
+      STRIPE_CORNER_MAN_URL,
+      STRIPE_DAY1_REVIEW_URL,
+      CORNER_MAN_PRICE,
+      DAY1_REVIEW_PRICE,
     } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
-    document.getElementById("ebookDownload").href = EBOOK_PDF;
-    document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
-    document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
+    const versionEl = document.getElementById("flVersion");
+    if (versionEl) versionEl.textContent = flVersionLabel();
 
-    // Book+kit Stripe link must redirect here with ?kit=1
+    document.getElementById("ebookDownload").href = EBOOK_PDF;
+
+    const day1 = document.getElementById("day1Email");
+    day1.href = "mailto:" + SUPPORT_EMAIL + "?subject=" + encodeURIComponent("Day 1");
+
+    const supportLink = document.getElementById("supportEmailLink");
+    supportLink.href = "mailto:" + SUPPORT_EMAIL;
+    supportLink.textContent = SUPPORT_EMAIL;
+
     const params = new URLSearchParams(window.location.search);
     const hasKit =
       params.get("kit") === "1" ||
@@ -99,11 +248,96 @@
       params.get("bundle") === "1";
 
     if (hasKit) {
-      const kitBlock = document.getElementById("kitBlock");
       const kitDownload = document.getElementById("kitDownload");
+      const kitHint = document.getElementById("kitHint");
       kitDownload.href = KIT_PDF;
-      kitBlock.hidden = false;
+      kitDownload.hidden = false;
+      kitHint.hidden = false;
     }
+
+    function trackCheckout(name, value) {
+      if (typeof fbq === "function") {
+        fbq("track", "InitiateCheckout", {
+          content_name: name,
+          value: value,
+          currency: "USD",
+        });
+      }
+      if (typeof gtag === "function") {
+        gtag("event", "begin_checkout", {
+          currency: "USD",
+          value: value,
+          item_name: name,
+        });
+      }
+      if (typeof rdt === "function") {
+        rdt("track", "AddToCart", { value: value, currency: "USD" });
+      }
+    }
+
+    function wireStripe(el, url, name, value) {
+      const href = (url || "").trim();
+      if (!href) {
+        el.setAttribute("aria-disabled", "true");
+        el.addEventListener("click", (e) => {
+          e.preventDefault();
+          alert("Checkout link not set yet — email " + SUPPORT_EMAIL + " and we'll get you sorted.");
+        });
+        return;
+      }
+      el.href = href;
+      el.addEventListener("click", () => trackCheckout(name, value));
+    }
+
+    wireStripe(
+      document.getElementById("cornerManBtn"),
+      STRIPE_CORNER_MAN_URL,
+      "90_day_corner_man",
+      CORNER_MAN_PRICE
+    );
+    wireStripe(
+      document.getElementById("dsYes"),
+      STRIPE_DAY1_REVIEW_URL,
+      "day1_review",
+      DAY1_REVIEW_PRICE
+    );
+
+    const overlay = document.getElementById("dsOverlay");
+    const decline = document.getElementById("kbDecline");
+    const dsClose = document.getElementById("dsClose");
+    const dsNo = document.getElementById("dsNo");
+
+    function openDownsell() {
+      overlay.classList.add("dsOpen");
+      document.body.style.overflow = "hidden";
+      dsClose.focus();
+    }
+
+    function closeDownsell() {
+      overlay.classList.remove("dsOpen");
+      document.body.style.overflow = "";
+    }
+
+    decline.addEventListener("click", (e) => {
+      e.preventDefault();
+      openDownsell();
+    });
+
+    dsClose.addEventListener("click", closeDownsell);
+
+    dsNo.addEventListener("click", (e) => {
+      e.preventDefault();
+      closeDownsell();
+      document.getElementById("done").scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+
+    overlay.addEventListener("click", (e) => {
+      if (e.target === overlay) closeDownsell();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && overlay.classList.contains("dsOpen")) closeDownsell();
+    });
   </script>
 </body>
 </html>
