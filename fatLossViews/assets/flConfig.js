@@ -2,8 +2,13 @@
  * Fat Loss ebook funnel config.
  * Canonical path: /fatLoss.html
  *
- * Stripe Payment Link success URL (both links):
- *   https://keplersiguineau.com/fatLossViews/thankYou.html
+ * Stripe Payment Link → After payment → Redirect customers to:
+ *   Book only ($29):
+ *     https://keplersiguineau.com/fatLossViews/thankYou.html
+ *   Book + Boy Kibble Kit ($38):
+ *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1
+ *
+ * The thank-you page only shows the kit download when ?kit=1 is present.
  */
 export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
 
@@ -25,8 +30,14 @@ export const STRIPE_BOOK_PLUS_KIT_URL =
 /** @deprecated use STRIPE_BOOK_ONLY_URL */
 export const STRIPE_PAYMENT_URL = STRIPE_BOOK_ONLY_URL;
 
+/** Book-only Stripe success redirect (no kit download). */
 export const CHECKOUT_SUCCESS_URL =
   "https://keplersiguineau.com/fatLossViews/thankYou.html";
+
+/** Book + kit Stripe success redirect (shows kit download). */
+export const CHECKOUT_SUCCESS_URL_WITH_KIT =
+  "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1";
+
 
 /** 2× money-back guarantee — customer sends logs here. */
 export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
