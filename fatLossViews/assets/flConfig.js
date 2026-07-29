@@ -42,15 +42,17 @@ export const CHECKOUT_SUCCESS_URL =
 export const CHECKOUT_SUCCESS_URL_WITH_KIT =
   "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1";
 
-/** The 90 Day Corner Man OTO — $79 one-time. Paste Stripe Payment Link. */
+/** The 90 Day Corner Man OTO — $79 one-time. */
 export const CORNER_MAN_PRICE = 79;
 export const CORNER_MAN_PRICE_LABEL = "$79";
-export const STRIPE_CORNER_MAN_URL = "";
+export const STRIPE_CORNER_MAN_URL =
+  "https://buy.stripe.com/4gM3cuaif5sVcwqaDm6Ri0O";
 
-/** Day 1 Review downsell — $27 one-time. Paste Stripe Payment Link. */
+/** Day 1 Review downsell — $27 one-time. */
 export const DAY1_REVIEW_PRICE = 27;
 export const DAY1_REVIEW_PRICE_LABEL = "$27";
-export const STRIPE_DAY1_REVIEW_URL = "";
+export const STRIPE_DAY1_REVIEW_URL =
+  "https://buy.stripe.com/aFaeVc61ZaNfbsm26Q6Ri0P";
 
 /** Support / Day 1 registration / guarantee emails. */
 export const SUPPORT_EMAIL = "ksiguineau@gmail.com";
