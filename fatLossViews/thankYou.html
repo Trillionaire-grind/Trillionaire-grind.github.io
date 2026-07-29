@@ -56,12 +56,14 @@
       <span>System + worksheets included</span>
     </a>
 
-    <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">If you added The Boy Kibble Kit</p>
+    <div id="kitBlock" hidden>
+      <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your Boy Kibble Kit</p>
 
-    <a href="assets/the-boy-kibble-kit.pdf" class="cta-btn" id="kitDownload" download style="max-width:340px;margin:12px auto 0;background:#E8452C;">
-      Download The Boy Kibble Kit (PDF)
-      <span>Build your own · meal system for all 90 days</span>
-    </a>
+      <a href="assets/the-boy-kibble-kit.pdf" class="cta-btn" id="kitDownload" download style="max-width:340px;margin:12px auto 0;background:#E8452C;">
+        Download The Boy Kibble Kit (PDF)
+        <span>Build your own · meal system for all 90 days</span>
+      </a>
+    </div>
 
     <p style="margin-top:24px;font-size:0.85rem;color:#555;line-height:1.5;">
       <strong>2× guarantee:</strong> Follow the program 90 days — log food, photo meals, walk steps,
@@ -76,15 +78,32 @@
   </footer>
 
   <script type="module">
-    import { EBOOK_PDF, KIT_PDF, GUARANTEE_EMAIL } from "./assets/flConfig.js";
+    import {
+      EBOOK_PDF,
+      KIT_PDF,
+      GUARANTEE_EMAIL,
+    } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
     document.getElementById("ebookDownload").href = EBOOK_PDF;
-    document.getElementById("kitDownload").href = KIT_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
+
+    // Book+kit Stripe link must redirect here with ?kit=1
+    const params = new URLSearchParams(window.location.search);
+    const hasKit =
+      params.get("kit") === "1" ||
+      params.get("kit") === "true" ||
+      params.get("bundle") === "1";
+
+    if (hasKit) {
+      const kitBlock = document.getElementById("kitBlock");
+      const kitDownload = document.getElementById("kitDownload");
+      kitDownload.href = KIT_PDF;
+      kitBlock.hidden = false;
+    }
   </script>
 </body>
 </html>
