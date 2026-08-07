@@ -64,6 +64,11 @@ export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
 /** Boy Kibble Kit upsell PDF (relative to fatLossViews/). */
 export const KIT_PDF = "assets/the-boy-kibble-kit.pdf";
 
+/** 90-day three-pillar ledger (calories · steps · workouts). */
+export const LEDGER_URL = "ledger.html";
+export const LEDGER_DAYS = 90;
+export const LEDGER_WORKOUTS_PER_WEEK = 3;
+
 /** @deprecated Worksheets ship inside the ebook — kept empty so old thank-you JS stays safe. */
 export const BONUS_DOWNLOADS = [];
 
