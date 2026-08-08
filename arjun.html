@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Time until Arjun comes back</title>
+  <style>
+    :root {
+      --bg: #070806;
+      --panel: #10140f;
+      --red: #ff2a1f;
+      --red-dim: #9a1812;
+      --amber: #ffb000;
+      --glow: rgba(255, 42, 31, 0.55);
+      --line: #2a3326;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px 16px;
+      background:
+        radial-gradient(ellipse 80% 55% at 50% 35%, #1a120e 0%, transparent 55%),
+        radial-gradient(circle at 50% 120%, #2a0a08 0%, transparent 40%),
+        var(--bg);
+      color: #f2f2f0;
+      font-family: "Courier New", Courier, monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.12) 2px,
+          rgba(0, 0, 0, 0.12) 4px
+        );
+      opacity: 0.35;
+      z-index: 0;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      width: min(920px, 100%);
+      text-align: center;
+    }
+
+    .label {
+      font-size: clamp(14px, 2.6vw, 20px);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #c9c4b8;
+      margin-bottom: 28px;
+      text-shadow: 0 0 12px rgba(255, 176, 0, 0.25);
+    }
+
+    .label span {
+      color: var(--amber);
+    }
+
+    .bomb {
+      border: 3px solid var(--red-dim);
+      background:
+        linear-gradient(180deg, #171c15 0%, var(--panel) 45%, #0b0e0a 100%);
+      box-shadow:
+        0 0 0 1px #000,
+        0 0 40px var(--glow),
+        inset 0 0 60px rgba(255, 42, 31, 0.08);
+      padding: clamp(22px, 4vw, 36px) clamp(14px, 3vw, 28px) clamp(18px, 3vw, 28px);
+      position: relative;
+    }
+
+    .bomb::before,
+    .bomb::after {
+      content: "";
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--red-dim);
+      background: #050605;
+    }
+    .bomb::before { top: 8px; left: 8px; }
+    .bomb::after { top: 8px; right: 8px; }
+
+    .screw-bl,
+    .screw-br {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid var(--red-dim);
+      background: #050605;
+      bottom: 8px;
+    }
+    .screw-bl { left: 8px; }
+    .screw-br { right: 8px; }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      color: var(--red);
+      text-transform: uppercase;
+    }
+
+    .status-row .pulse {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-row .pulse i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 10px var(--red);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    .screen {
+      background: #050806;
+      border: 2px solid #3a201c;
+      box-shadow:
+        inset 0 0 40px rgba(255, 42, 31, 0.15),
+        inset 0 0 80px rgba(0, 0, 0, 0.85);
+      padding: clamp(18px, 4vw, 34px) clamp(10px, 2vw, 18px);
+      position: relative;
+    }
+
+    .screen::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.04),
+        transparent 30%,
+        transparent 70%,
+        rgba(0, 0, 0, 0.25)
+      );
+    }
+
+    .digits {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      align-items: center;
+      gap: clamp(4px, 1.5vw, 12px);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .unit {
+      min-width: 0;
+    }
+
+    .num {
+      font-size: clamp(52px, 16vw, 120px);
+      line-height: 0.9;
+      font-weight: 700;
+      color: var(--red);
+      text-shadow:
+        0 0 8px var(--glow),
+        0 0 24px var(--glow),
+        0 0 48px rgba(255, 42, 31, 0.35);
+      letter-spacing: 0.04em;
+    }
+
+    .unit-label {
+      margin-top: 10px;
+      font-size: clamp(10px, 2.2vw, 13px);
+      letter-spacing: 0.28em;
+      color: var(--amber);
+      opacity: 0.9;
+    }
+
+    .colon {
+      font-size: clamp(40px, 12vw, 90px);
+      color: var(--red-dim);
+      text-shadow: 0 0 12px var(--glow);
+      padding-bottom: 22px;
+      animation: blink 1s steps(1) infinite;
+    }
+
+    .target {
+      margin-top: 18px;
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: #7d8576;
+      text-transform: uppercase;
+    }
+
+    .target b {
+      color: #c9c4b8;
+      font-weight: 700;
+    }
+
+    .done .num,
+    .done .colon {
+      color: #39ff14;
+      text-shadow:
+        0 0 8px rgba(57, 255, 20, 0.6),
+        0 0 28px rgba(57, 255, 20, 0.35);
+    }
+
+    .done .status-row,
+    .done .status-row .pulse i {
+      color: #39ff14;
+      background: #39ff14;
+      box-shadow: 0 0 10px #39ff14;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0.25; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .colon,
+      .status-row .pulse i { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <p class="label">time until <span>Arjun</span> comes back…</p>
+
+    <div class="bomb" id="bomb">
+      <span class="screw-bl" aria-hidden="true"></span>
+      <span class="screw-br" aria-hidden="true"></span>
+
+      <div class="status-row">
+        <span class="pulse"><i></i> Armed</span>
+        <span id="modeLabel">COUNTDOWN</span>
+        <span>EST</span>
+      </div>
+
+      <div class="screen">
+        <div class="digits" aria-live="polite">
+          <div class="unit">
+            <div class="num" id="hours">00</div>
+            <div class="unit-label">HOURS</div>
+          </div>
+          <div class="colon" aria-hidden="true">:</div>
+          <div class="unit">
+            <div class="num" id="minutes">00</div>
+            <div class="unit-label">MINUTES</div>
+          </div>
+          <div class="colon" aria-hidden="true">:</div>
+          <div class="unit">
+            <div class="num" id="seconds">00</div>
+            <div class="unit-label">SECONDS</div>
+          </div>
+        </div>
+      </div>
+
+      <p class="target">Target lock · <b id="targetText">Sunday 8:00 PM EST</b></p>
+    </div>
+  </main>
+
+  <script>
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const targetText = document.getElementById("targetText");
+    const modeLabel = document.getElementById("modeLabel");
+    const bomb = document.getElementById("bomb");
+
+    function pad(n) {
+      return String(n).padStart(2, "0");
+    }
+
+    /** Next Sunday 8:00 PM America/New_York (handles EST/EDT). */
+    function getNextSunday8PmEastern() {
+      const formatter = new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        weekday: "short",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hourCycle: "h23",
+      });
+
+      function partsAt(date) {
+        const map = {};
+        formatter.formatToParts(date).forEach((p) => {
+          if (p.type !== "literal") map[p.type] = p.value;
+        });
+        return map;
+      }
+
+      // Walk forward hour-by-hour from "now" until we hit Sunday 20:00 Eastern.
+      // Start from current instant; search up to 8 days.
+      let t = Date.now();
+      const limit = t + 8 * 24 * 60 * 60 * 1000;
+
+      // First: if we're already past this week's Sunday 8pm, find next week's.
+      // Probe every minute near candidates by constructing from Eastern calendar.
+      // Simpler approach: iterate days 0..7, build Sunday 20:00 Eastern as UTC guess then refine.
+
+      function easternOffsetMs(utcDate) {
+        // Difference between the same wall-clock interpreted as UTC vs as Eastern.
+        const p = partsAt(utcDate);
+        const asUTC = Date.UTC(
+          Number(p.year),
+          Number(p.month) - 1,
+          Number(p.day),
+          Number(p.hour),
+          Number(p.minute),
+          Number(p.second)
+        );
+        return asUTC - utcDate.getTime();
+      }
+
+      function zonedTimeToUtc(year, month, day, hour, minute) {
+        // Initial guess: treat Eastern wall time as UTC, then correct by offset.
+        let guess = Date.UTC(year, month - 1, day, hour, minute, 0);
+        for (let i = 0; i < 3; i++) {
+          const offset = easternOffsetMs(new Date(guess));
+          guess = Date.UTC(year, month - 1, day, hour, minute, 0) - offset;
+        }
+        return guess;
+      }
+
+      const nowParts = partsAt(new Date());
+      let y = Number(nowParts.year);
+      let m = Number(nowParts.month);
+      let d = Number(nowParts.day);
+
+      for (let i = 0; i < 8; i++) {
+        const probe = zonedTimeToUtc(y, m, d, 12, 0);
+        const p = partsAt(new Date(probe));
+        if (p.weekday === "Sun") {
+          const target = zonedTimeToUtc(
+            Number(p.year),
+            Number(p.month),
+            Number(p.day),
+            20,
+            0
+          );
+          if (target > Date.now()) {
+            return {
+              ms: target,
+              label: formatTarget(target),
+            };
+          }
+        }
+        // advance calendar day in Eastern
+        const next = new Date(zonedTimeToUtc(y, m, d, 12, 0) + 24 * 60 * 60 * 1000);
+        const np = partsAt(next);
+        y = Number(np.year);
+        m = Number(np.month);
+        d = Number(np.day);
+      }
+
+      // Fallback: 7 days from now noon Sunday guess
+      return { ms: Date.now() + 7 * 24 * 60 * 60 * 1000, label: "Sunday 8:00 PM EST" };
+    }
+
+    function formatTarget(ms) {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: "America/New_York",
+        weekday: "long",
+        month: "short",
+        day: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        timeZoneName: "short",
+      }).format(new Date(ms));
+    }
+
+    let target = getNextSunday8PmEastern();
+    targetText.textContent = target.label;
+
+    function tick() {
+      let diff = target.ms - Date.now();
+
+      if (diff <= 0) {
+        // Roll to the following Sunday once this one hits.
+        target = getNextSunday8PmEastern();
+        targetText.textContent = target.label;
+        diff = Math.max(0, target.ms - Date.now());
+        bomb.classList.add("done");
+        modeLabel.textContent = "HE'S BACK";
+        setTimeout(() => {
+          bomb.classList.remove("done");
+          modeLabel.textContent = "COUNTDOWN";
+        }, 8000);
+      }
+
+      const totalSec = Math.floor(diff / 1000);
+      const h = Math.floor(totalSec / 3600);
+      const m = Math.floor((totalSec % 3600) / 60);
+      const s = totalSec % 60;
+
+      hoursEl.textContent = pad(h);
+      minutesEl.textContent = pad(m);
+      secondsEl.textContent = pad(s);
+    }
+
+    tick();
+    setInterval(tick, 250);
+  </script>
+</body>
+</html>
