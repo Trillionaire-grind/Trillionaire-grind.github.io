@@ -1,4 +1,5 @@
 import { isLoginFirebaseConfigured } from "./loginFirebaseConfig.js";
+import { resolveDemoMode, reloadWithMode } from "./loginMode.js";
 import { loginVersionLabel } from "./loginVersion.js";
 import {
   getLoginProfile,
@@ -53,10 +54,8 @@ import {
 
 const params = new URLSearchParams(window.location.search);
 const wantsCheckIn = params.get("checkin") === "1" || params.get("from") === "qr";
-const demoMode =
-  params.get("demo") === "1" ||
-  params.get("preview") === "1" ||
-  !isLoginFirebaseConfigured();
+const firebaseReady = isLoginFirebaseConfigured();
+const demoMode = resolveDemoMode(params, firebaseReady);
 
 const authApi = demoMode
   ? {
@@ -87,11 +86,14 @@ const authApi = demoMode
 const els = {
   demoBanner: document.getElementById("demoBanner"),
   demoQuickRow: document.getElementById("demoQuickRow"),
-  demoAsAdminBtn: document.getElementById("demoAsAdminBtn"),
   demoAsGuestBtn: document.getElementById("demoAsGuestBtn"),
   demoResetBtn: document.getElementById("demoResetBtn"),
+  netHeader: document.getElementById("netHeader"),
+  headerProfileBtn: document.getElementById("headerProfileBtn"),
+  headerAvatarImg: document.getElementById("headerAvatarImg"),
+  headerAvatarPh: document.getElementById("headerAvatarPh"),
+  loginTopMeta: document.getElementById("loginTopMeta"),
   setupView: document.getElementById("setupView"),
-  setupDemoBtn: document.getElementById("setupDemoBtn"),
   authView: document.getElementById("authView"),
   appView: document.getElementById("appView"),
   checkinGate: document.getElementById("checkinGate"),
@@ -107,15 +109,14 @@ const els = {
   authMsg: document.getElementById("authMsg"),
   checkinBtn: document.getElementById("checkinBtn"),
   checkinGateMsg: document.getElementById("checkinGateMsg"),
-  appName: document.getElementById("appName"),
-  appBusiness: document.getElementById("appBusiness"),
-  appAvatar: document.getElementById("appAvatar"),
-  openProfileBtn: document.getElementById("openProfileBtn"),
-  directoryBtn: document.getElementById("directoryBtn"),
-  myCheckinsBtn: document.getElementById("myCheckinsBtn"),
-  adminBtn: document.getElementById("adminBtn"),
-  signOutBtn: document.getElementById("signOutBtn"),
-  manualCheckinBtn: document.getElementById("manualCheckinBtn"),
+  footerNav: document.getElementById("footerNav"),
+  footerMembersBtn: document.getElementById("footerMembersBtn"),
+  footerCheckinsBtn: document.getElementById("footerCheckinsBtn"),
+  footerCheckinBtn: document.getElementById("footerCheckinBtn"),
+  footerAdminBtn: document.getElementById("footerAdminBtn"),
+  footerSignOutBtn: document.getElementById("footerSignOutBtn"),
+  modeDemoBtn: document.getElementById("modeDemoBtn"),
+  modeLiveBtn: document.getElementById("modeLiveBtn"),
   memberSearch: document.getElementById("memberSearch"),
   memberGrid: document.getElementById("memberGrid"),
   myCheckinsList: document.getElementById("myCheckinsList"),
@@ -123,6 +124,11 @@ const els = {
   checkinsSection: document.getElementById("checkinsSection"),
   profileForm: document.getElementById("profileForm"),
   profilePhotoInput: document.getElementById("profilePhotoInput"),
+  profileOpenSwitch: document.getElementById("profileOpenSwitch"),
+  profileSheetName: document.getElementById("profileSheetName"),
+  profileSheetBusiness: document.getElementById("profileSheetBusiness"),
+  profileSheetImg: document.getElementById("profileSheetImg"),
+  profileSheetPh: document.getElementById("profileSheetPh"),
   closeProfileModal: document.getElementById("closeProfileModal"),
   profileMsg: document.getElementById("profileMsg"),
   adminBackBtn: document.getElementById("adminBackBtn"),
@@ -139,19 +145,6 @@ let membersCache = [];
 let myCheckinsCache = [];
 let adminMembers = [];
 let adminCheckinsToday = [];
-
-if (els.version) {
-  els.version.textContent = loginVersionLabel() + (demoMode ? " · demo" : "");
-}
-
-if (demoMode) {
-  show(els.demoBanner);
-  show(els.demoQuickRow);
-  if (els.resetBtn) hide(els.resetBtn);
-} else {
-  hide(els.demoBanner);
-  hide(els.demoQuickRow);
-}
 
 function show(el) {
   if (el) el.classList.remove("login-hidden");
@@ -181,20 +174,39 @@ function initials(profile) {
   return parts.slice(0, 2).map((p) => p[0].toUpperCase()).join("");
 }
 
-function renderAvatar(imgEl, profile) {
-  if (!imgEl) return;
+function renderAvatarPair(imgEl, phEl, profile) {
   const url = profile?.photoUrl;
-  if (url) {
+  if (url && imgEl && phEl) {
     imgEl.src = url;
     imgEl.alt = displayName(profile);
-    imgEl.classList.remove("app-avatar--placeholder");
-    imgEl.textContent = "";
-  } else {
+    show(imgEl);
+    hide(phEl);
+  } else if (imgEl && phEl) {
     imgEl.removeAttribute("src");
     imgEl.alt = "";
-    imgEl.classList.add("app-avatar--placeholder");
-    imgEl.textContent = initials(profile);
+    hide(imgEl);
+    phEl.textContent = initials(profile);
+    show(phEl);
   }
+}
+
+function updateModeFooter() {
+  els.modeDemoBtn?.classList.toggle("is-active-demo", demoMode);
+  els.modeDemoBtn?.classList.toggle("is-active", demoMode);
+  els.modeLiveBtn?.classList.toggle("is-active", !demoMode);
+}
+
+if (els.version) {
+  els.version.textContent = loginVersionLabel() + (demoMode ? " · demo" : " · live");
+}
+updateModeFooter();
+
+if (demoMode) {
+  show(els.demoBanner);
+  show(els.demoQuickRow);
+} else {
+  hide(els.demoBanner);
+  hide(els.demoQuickRow);
 }
 
 function showAuthTab(tab) {
@@ -214,6 +226,18 @@ function showAuthTab(tab) {
 els.authTabs.forEach((btn) => {
   btn.addEventListener("click", () => showAuthTab(btn.dataset.authTab));
 });
+
+function setAppTab(tab) {
+  if (tab === "checkins") {
+    hide(els.directorySection);
+    show(els.checkinsSection);
+  } else {
+    show(els.directorySection);
+    hide(els.checkinsSection);
+  }
+  els.footerMembersBtn?.classList.toggle("is-active", tab === "members");
+  els.footerCheckinsBtn?.classList.toggle("is-active", tab === "checkins");
+}
 
 async function recordCheckIn() {
   if (demoMode) {
@@ -269,10 +293,15 @@ async function loadMyCheckins() {
 function renderMemberGrid(filterText) {
   if (!els.memberGrid) return;
   const user = authApi.getUser();
-  const list = membersCache.filter((m) => m.uid !== user?.uid && memberMatchesQuery(m, filterText));
+  const list = membersCache.filter(
+    (m) =>
+      m.uid !== user?.uid &&
+      m.profileOpen !== false &&
+      memberMatchesQuery(m, filterText),
+  );
   els.memberGrid.innerHTML = "";
   if (!list.length) {
-    els.memberGrid.innerHTML = `<p class="login-lead">No members match that search yet.</p>`;
+    els.memberGrid.innerHTML = `<p class="login-lead">No open profiles match that search yet.</p>`;
     return;
   }
   list.forEach((m) => {
@@ -280,7 +309,7 @@ function renderMemberGrid(filterText) {
     card.className = "member-card";
     const img = m.photoUrl
       ? `<img src="${escapeAttr(m.photoUrl)}" alt="">`
-      : `<div class="app-avatar app-avatar--placeholder" style="width:56px;height:56px;font-size:16px;">${escapeHtml(initials(m))}</div>`;
+      : `<div class="net-header__avatar" style="width:56px;height:56px;font-size:16px;margin-bottom:10px;">${escapeHtml(initials(m))}</div>`;
     card.innerHTML = `
       ${img}
       <h3>${escapeHtml(displayName(m))}</h3>
@@ -314,16 +343,17 @@ function fillProfileForm(profile) {
   f.businessName.value = profile.businessName || "";
   f.helpDescription.value = profile.helpDescription || "";
   f.email.value = profile.email || "";
+  if (els.profileOpenSwitch) els.profileOpenSwitch.checked = profile.profileOpen !== false;
 }
 
-function renderAppHeader(profile) {
+function renderAppChrome(profile) {
   if (!profile) return;
-  if (els.appName) els.appName.textContent = displayName(profile);
-  if (els.appBusiness) els.appBusiness.textContent = profile.businessName || "Networking member";
-  renderAvatar(els.appAvatar, profile);
-  if (els.adminBtn) {
-    profile.admin ? show(els.adminBtn) : hide(els.adminBtn);
-  }
+  renderAvatarPair(els.headerAvatarImg, els.headerAvatarPh, profile);
+  renderAvatarPair(els.profileSheetImg, els.profileSheetPh, profile);
+  if (els.profileSheetName) els.profileSheetName.textContent = displayName(profile);
+  if (els.profileSheetBusiness) els.profileSheetBusiness.textContent = profile.businessName || "—";
+  if (profile.admin) show(els.footerAdminBtn);
+  else hide(els.footerAdminBtn);
 }
 
 async function refreshAppData() {
@@ -333,12 +363,26 @@ async function refreshAppData() {
   renderMyCheckins();
 }
 
+function showAppChrome() {
+  show(els.netHeader);
+  show(els.footerNav);
+  hide(els.loginTopMeta);
+}
+
+function hideAppChrome() {
+  hide(els.netHeader);
+  hide(els.footerNav);
+  show(els.loginTopMeta);
+}
+
 function showApp(profile) {
   hide(els.setupView);
   hide(els.authView);
   hide(els.adminView);
   show(els.appView);
-  renderAppHeader(profile);
+  showAppChrome();
+  renderAppChrome(profile);
+  setAppTab("members");
   refreshAppData().catch((err) => console.error(err));
 }
 
@@ -347,6 +391,7 @@ function showAuth() {
   hide(els.appView);
   hide(els.adminView);
   hide(els.checkinGate);
+  hideAppChrome();
   show(els.authView);
   showAuthTab(wantsCheckIn ? "register" : "login");
 }
@@ -356,17 +401,16 @@ function showSetup() {
   hide(els.appView);
   hide(els.adminView);
   hide(els.checkinGate);
+  hideAppChrome();
   show(els.setupView);
 }
 
 async function maybeShowCheckinGate(profile) {
-  if (!wantsCheckIn) {
-    showApp(profile);
-    return;
-  }
   showApp(profile);
-  show(els.checkinGate);
-  setMsg(els.checkinGateMsg, "");
+  if (wantsCheckIn) {
+    show(els.checkinGate);
+    setMsg(els.checkinGateMsg, "");
+  }
 }
 
 async function handleAuthFlow(user, profile) {
@@ -390,7 +434,6 @@ els.checkinBtn?.addEventListener("click", async () => {
     await recordCheckIn();
     hide(els.checkinGate);
     await refreshAppData();
-    setMsg(els.checkinGateMsg, "");
   } catch (err) {
     setMsg(els.checkinGateMsg, err.message || "Check-in failed.", "error");
   } finally {
@@ -398,8 +441,8 @@ els.checkinBtn?.addEventListener("click", async () => {
   }
 });
 
-els.manualCheckinBtn?.addEventListener("click", async () => {
-  els.manualCheckinBtn.disabled = true;
+els.footerCheckinBtn?.addEventListener("click", async () => {
+  els.footerCheckinBtn.disabled = true;
   try {
     await recordCheckIn();
     await refreshAppData();
@@ -407,7 +450,7 @@ els.manualCheckinBtn?.addEventListener("click", async () => {
   } catch (err) {
     alert(err.message || "Check-in failed.");
   } finally {
-    els.manualCheckinBtn.disabled = false;
+    els.footerCheckinBtn.disabled = false;
   }
 });
 
@@ -446,7 +489,11 @@ els.registerForm?.addEventListener("submit", async (e) => {
 });
 
 els.resetBtn?.addEventListener("click", async () => {
-  const email = els.loginForm?.elements?.email?.value || prompt("Enter your email for password reset:");
+  if (demoMode) {
+    setMsg(els.authMsg, "Demo mode — use any registered email.", "ok");
+    return;
+  }
+  const email = els.loginForm?.elements?.email?.value || prompt("Enter your email:");
   if (!email) return;
   try {
     await resetLoginPassword(email);
@@ -456,22 +503,11 @@ els.resetBtn?.addEventListener("click", async () => {
   }
 });
 
-els.signOutBtn?.addEventListener("click", async () => {
+els.footerSignOutBtn?.addEventListener("click", async () => {
   await authApi.logout();
 });
 
-els.demoAsAdminBtn?.addEventListener("click", async () => {
-  setMsg(els.authMsg, "Loading admin demo…");
-  try {
-    await demoQuickLogin("admin");
-    setMsg(els.authMsg, "");
-  } catch (err) {
-    setMsg(els.authMsg, err.message, "error");
-  }
-});
-
 els.demoAsGuestBtn?.addEventListener("click", async () => {
-  setMsg(els.authMsg, "Creating guest demo…");
   try {
     await demoQuickLogin("guest");
     setMsg(els.authMsg, "Guest account ready.", "ok");
@@ -487,17 +523,14 @@ els.demoResetBtn?.addEventListener("click", () => {
   }
 });
 
-els.setupDemoBtn?.addEventListener("click", () => {
-  location.href = "login.html?demo=1";
-});
-
-els.openProfileBtn?.addEventListener("click", () => {
+function openProfile() {
   fillProfileForm(authApi.getProfile());
+  renderAppChrome(authApi.getProfile());
   setMsg(els.profileMsg, "");
   show(els.profileModal);
-});
-els.appAvatar?.addEventListener("click", () => els.openProfileBtn?.click());
+}
 
+els.headerProfileBtn?.addEventListener("click", openProfile);
 els.closeProfileModal?.addEventListener("click", () => hide(els.profileModal));
 els.profileModal?.addEventListener("click", (e) => {
   if (e.target === els.profileModal) hide(els.profileModal);
@@ -515,10 +548,22 @@ els.profileForm?.addEventListener("submit", async (e) => {
       businessName: f.businessName.value,
       helpDescription: f.helpDescription.value,
       email: f.email.value,
+      profileOpen: !!els.profileOpenSwitch?.checked,
     });
-    renderAppHeader(profile);
+    renderAppChrome(profile);
     await refreshAppData();
     setMsg(els.profileMsg, "Profile saved.", "ok");
+  } catch (err) {
+    setMsg(els.profileMsg, err.message, "error");
+  }
+});
+
+els.profileOpenSwitch?.addEventListener("change", async () => {
+  const profile = authApi.getProfile();
+  if (!profile) return;
+  try {
+    await authApi.saveProfile({ profileOpen: !!els.profileOpenSwitch.checked });
+    await refreshAppData();
   } catch (err) {
     setMsg(els.profileMsg, err.message, "error");
   }
@@ -530,7 +575,7 @@ els.profilePhotoInput?.addEventListener("change", async () => {
   setMsg(els.profileMsg, demoMode ? "Saving photo…" : "Uploading photo…");
   try {
     const profile = await authApi.uploadPhoto(file);
-    renderAppHeader(profile);
+    renderAppChrome(profile);
     setMsg(els.profileMsg, "Photo updated.", "ok");
   } catch (err) {
     setMsg(els.profileMsg, err.message, "error");
@@ -539,16 +584,15 @@ els.profilePhotoInput?.addEventListener("change", async () => {
   }
 });
 
-els.directoryBtn?.addEventListener("click", () => {
-  show(els.directorySection);
-  hide(els.checkinsSection);
+els.footerMembersBtn?.addEventListener("click", () => setAppTab("members"));
+els.footerCheckinsBtn?.addEventListener("click", () => setAppTab("checkins"));
+els.memberSearch?.addEventListener("input", () => renderMemberGrid(els.memberSearch.value));
+
+els.modeDemoBtn?.addEventListener("click", () => {
+  if (!demoMode) reloadWithMode("demo");
 });
-els.myCheckinsBtn?.addEventListener("click", () => {
-  hide(els.directorySection);
-  show(els.checkinsSection);
-});
-els.memberSearch?.addEventListener("input", () => {
-  renderMemberGrid(els.memberSearch.value);
+els.modeLiveBtn?.addEventListener("click", () => {
+  if (demoMode) reloadWithMode("live");
 });
 
 async function loadAdminData() {
@@ -556,12 +600,7 @@ async function loadAdminData() {
     const data = await demoLoadAdminData();
     adminMembers = data.members;
     adminCheckinsToday = data.todayCheckins;
-    const neverChecked = data.neverChecked;
-    const checkedUids = new Set(adminCheckinsToday.map((c) => c.uid));
-    if (els.adminStatMembers) els.adminStatMembers.textContent = String(adminMembers.length);
-    if (els.adminStatCheckedToday) els.adminStatCheckedToday.textContent = String(checkedUids.size);
-    if (els.adminStatNever) els.adminStatNever.textContent = String(neverChecked.length);
-    renderAdminTables(adminMembers, adminCheckinsToday, neverChecked);
+    renderAdminStats(adminMembers, adminCheckinsToday, data.neverChecked);
     return;
   }
   const db = getLoginDb();
@@ -579,10 +618,15 @@ async function loadAdminData() {
   adminCheckinsToday = checkinsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
   const checkedUids = new Set(adminCheckinsToday.map((c) => c.uid));
   const neverChecked = adminMembers.filter((m) => !checkedUids.has(m.uid));
-  if (els.adminStatMembers) els.adminStatMembers.textContent = String(adminMembers.length);
+  renderAdminStats(adminMembers, adminCheckinsToday, neverChecked);
+}
+
+function renderAdminStats(members, todayCheckins, neverChecked) {
+  const checkedUids = new Set(todayCheckins.map((c) => c.uid));
+  if (els.adminStatMembers) els.adminStatMembers.textContent = String(members.length);
   if (els.adminStatCheckedToday) els.adminStatCheckedToday.textContent = String(checkedUids.size);
   if (els.adminStatNever) els.adminStatNever.textContent = String(neverChecked.length);
-  renderAdminTables(adminMembers, adminCheckinsToday, neverChecked);
+  renderAdminTables(members, todayCheckins, neverChecked);
 }
 
 function renderAdminTables(members, todayCheckins, neverChecked) {
@@ -594,7 +638,7 @@ function renderAdminTables(members, todayCheckins, neverChecked) {
           <td>${escapeHtml(m.businessName || "")}</td>
           <td>${escapeHtml(m.phone || "")}</td>
           <td>${escapeHtml(m.email || "")}</td>
-          <td>${m.admin ? "Yes" : ""}</td>
+          <td>${m.profileOpen !== false ? "Yes" : "No"}</td>
         </tr>`,
       )
       .join("");
@@ -624,8 +668,9 @@ function renderAdminTables(members, todayCheckins, neverChecked) {
   }
 }
 
-els.adminBtn?.addEventListener("click", async () => {
+els.footerAdminBtn?.addEventListener("click", async () => {
   hide(els.appView);
+  hide(els.netHeader);
   show(els.adminView);
   await loadAdminData();
 });
@@ -633,12 +678,12 @@ els.adminBtn?.addEventListener("click", async () => {
 els.adminBackBtn?.addEventListener("click", () => {
   hide(els.adminView);
   show(els.appView);
+  show(els.netHeader);
 });
 
 els.adminPrintBtn?.addEventListener("click", () => window.print());
-
 els.adminExportBtn?.addEventListener("click", () => {
-  const lines = ["Name,Business,Phone,Email,Checked In Today"];
+  const lines = ["Name,Business,Phone,Email,Profile Open,Checked In Today"];
   const checked = new Set(adminCheckinsToday.map((c) => c.uid));
   adminMembers.forEach((m) => {
     lines.push(
@@ -647,6 +692,7 @@ els.adminExportBtn?.addEventListener("click", () => {
         csvCell(m.businessName),
         csvCell(m.phone),
         csvCell(m.email),
+        m.profileOpen !== false ? "Yes" : "No",
         checked.has(m.uid) ? "Yes" : "No",
       ].join(","),
     );
@@ -682,10 +728,14 @@ function escapeAttr(str) {
 
 async function boot() {
   if (demoMode) {
-    console.log("[Network Login] demo mode — no Firebase required");
+    console.log("[Network Login] demo mode");
     authApi.boot();
     authApi.onChange(handleAuthFlow);
     await authApi.wait();
+    return;
+  }
+  if (!firebaseReady) {
+    showSetup();
     return;
   }
   const ok = await authApi.boot();

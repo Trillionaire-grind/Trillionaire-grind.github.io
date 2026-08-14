@@ -16,6 +16,7 @@ const SEED_MEMBERS = [
     helpDescription: "Small businesses with contracts, leases, and compliance.",
     email: "maria@example.com",
     photoUrl: "",
+    profileOpen: true,
     admin: false,
   },
   {
@@ -27,6 +28,7 @@ const SEED_MEMBERS = [
     helpDescription: "Local brands that need clearer offers and ad creative.",
     email: "james@example.com",
     photoUrl: "",
+    profileOpen: true,
     admin: false,
   },
   {
@@ -38,6 +40,7 @@ const SEED_MEMBERS = [
     helpDescription: "Founders shipping web products and funnels that sell.",
     email: "admin@demo.com",
     photoUrl: "",
+    profileOpen: true,
     admin: true,
   },
 ];
@@ -193,6 +196,7 @@ export async function saveMemberProfile(updates) {
     helpDescription: String(updates.helpDescription ?? existing.helpDescription).trim(),
     email: String(updates.email ?? existing.email).trim(),
     photoUrl: String(updates.photoUrl ?? existing.photoUrl).trim(),
+    profileOpen: updates.profileOpen ?? existing.profileOpen !== false,
     admin: existing.admin,
   });
 

@@ -24,6 +24,253 @@ body.login-app {
   color: var(--ink);
   background: var(--bg);
   line-height: 1.45;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom, 0));
+}
+
+.login-pre {
+  background: #f8fafc;
+  padding: 12px;
+  border-radius: 10px;
+  overflow: auto;
+  font-size: 13px;
+}
+
+/* Sticky header (Minorities-style) */
+.net-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+}
+
+.net-header__inner {
+  max-width: 920px;
+  margin: 0 auto;
+  min-height: 64px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.net-header__title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.net-header__avatar-btn {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.net-header__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #eef1f4;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 15px;
+  border: 2px solid var(--line);
+}
+
+.net-header__avatar--img {
+  object-fit: cover;
+  display: block;
+}
+
+/* Bottom footer */
+.net-footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  background: var(--card);
+  border-top: 1px solid var(--line);
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0));
+  box-shadow: 0 -4px 20px rgba(20, 20, 20, 0.06);
+}
+
+.net-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.net-footer__btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  color: var(--ink);
+}
+
+.net-footer__btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+.net-footer__btn.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+
+.net-footer__mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.net-footer__mode-label {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-right: 4px;
+}
+
+.net-footer__mode-btn {
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.net-footer__mode-btn.is-active {
+  background: #141414;
+  color: #fff;
+  border-color: #141414;
+}
+
+.net-footer__mode-btn.is-active-demo {
+  background: #ffb000;
+  border-color: #ffb000;
+  color: #141414;
+}
+
+.app-search--full {
+  width: 100%;
+  flex: none;
+  display: block;
+  margin-bottom: 14px;
+}
+
+/* Profile sheet */
+.profile-sheet__hero {
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+.profile-sheet__avatar-btn {
+  display: inline-block;
+  cursor: pointer;
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.profile-sheet__avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--line);
+}
+
+.profile-sheet__avatar--ph {
+  display: grid;
+  place-items: center;
+  background: #eef1f4;
+  color: var(--muted);
+  font-weight: 800;
+  font-size: 22px;
+}
+
+.profile-sheet h3 {
+  margin: 0 0 4px;
+  font-size: 1.375rem;
+}
+
+.profile-sheet__biz {
+  margin: 0;
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.net-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #f8fafc;
+  cursor: pointer;
+}
+
+.net-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.net-switch__track {
+  flex: 0 0 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: #c8cfd8;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.net-switch__track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+}
+
+.net-switch input:checked + .net-switch__track {
+  background: var(--accent);
+}
+
+.net-switch input:checked + .net-switch__track::after {
+  transform: translateX(18px);
+}
+
+.net-switch__label {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 button, input, textarea {
