@@ -1,0 +1,9 @@
+{
+  "firestore": {
+    "rules": "loginViews/firestore.rules",
+    "indexes": "firestore.network.indexes.json"
+  },
+  "storage": {
+    "rules": "loginViews/storage.rules"
+  }
+}

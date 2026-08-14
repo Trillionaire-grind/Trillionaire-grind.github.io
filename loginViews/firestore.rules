@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function memberPath(uid) {
+      return /databases/$(database)/documents/networkMembers/$(uid);
+    }
+
+    function memberExists(uid) {
+      return signedIn() && exists(memberPath(uid));
+    }
+
+    function memberData(uid) {
+      return get(memberPath(uid)).data;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && memberExists(request.auth.uid)
+        && memberData(request.auth.uid).admin == true;
+    }
+
+    function validMemberCreate() {
+      return request.resource.data.keys().hasAll([
+        'name', 'phone', 'preferredName', 'businessName', 'helpDescription', 'email', 'photoUrl', 'admin'
+      ])
+      && request.resource.data.name is string
+      && request.resource.data.name.size() > 0
+      && request.resource.data.phone is string
+      && request.resource.data.businessName is string
+      && request.resource.data.businessName.size() > 0
+      && request.resource.data.helpDescription is string
+      && request.resource.data.helpDescription.size() > 0
+      && request.resource.data.email is string
+      && request.resource.data.admin == false;
+    }
+
+    function validMemberSelfUpdate() {
+      return request.resource.data.admin == resource.data.admin
+        && request.resource.data.email == resource.data.email;
+    }
+
+    match /networkMembers/{userId} {
+      allow read: if signedIn();
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && validMemberCreate();
+      allow update: if signedIn()
+        && request.auth.uid == userId
+        && validMemberSelfUpdate();
+      allow delete: if false;
+    }
+
+    match /networkCheckIns/{checkInId} {
+      allow read: if signedIn() && (
+        resource.data.uid == request.auth.uid
+        || isAdmin()
+      );
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.memberName is string
+        && request.resource.data.businessName is string
+        && request.resource.data.dateKey is string
+        && request.resource.data.checkedInAt == request.time;
+      allow update, delete: if false;
+    }
+  }
+}
