@@ -10,50 +10,44 @@
 <body class="login-app">
 
   <div id="demoBanner" class="demo-banner login-hidden">
-    <strong>Demo mode</strong> — UI preview only. Data stays on this device. No Firebase needed.
+    <strong>Demo mode</strong> — preview only. Switch to Live in the footer when Firebase is ready.
   </div>
 
+  <header class="net-header login-hidden" id="netHeader">
+    <div class="net-header__inner">
+      <p class="net-header__title">Networking</p>
+      <button type="button" class="net-header__avatar-btn" id="headerProfileBtn" aria-label="Open profile">
+        <span class="net-header__avatar" id="headerAvatarPh">?</span>
+        <img class="net-header__avatar net-header__avatar--img login-hidden" id="headerAvatarImg" alt="">
+      </button>
+    </div>
+  </header>
+
   <div class="login-shell">
-    <div class="login-top">
+    <div class="login-top login-hidden" id="loginTopMeta">
       <span class="login-brand">Networking Group</span>
-      <span class="login-version" id="loginVersion">v0.0.0.2</span>
+      <span class="login-version" id="loginVersion">v0.0.0.3</span>
     </div>
 
-    <!-- Firebase not configured -->
     <section id="setupView" class="login-card login-hidden">
       <h1>Firebase setup needed</h1>
       <p class="login-lead">
-        Create a Firebase project, enable Email/Password auth, Firestore, and Storage.
-        Paste your web config into <code>loginViews/scripts/loginFirebaseConfig.js</code>,
-        then deploy rules:
+        Switch to <strong>Live</strong> in the footer after you paste your config into
+        <code>loginViews/scripts/loginFirebaseConfig.js</code> and deploy rules:
       </p>
-      <pre style="background:#f8fafc;padding:12px;border-radius:10px;overflow:auto;font-size:13px;">firebase deploy -c firebase.network.json --project YOUR_PROJECT_ID</pre>
-      <p class="login-lead">
-        QR code URL for check-in:
-        <strong>https://keplersiguineau.com/login.html?checkin=1</strong>
-      </p>
-      <p class="login-lead">
-        First admin: after you register, set
-        <code>networkMembers/{your-uid}.admin = true</code> in Firestore.
-      </p>
-      <div class="login-actions">
-        <button type="button" class="login-btn" id="setupDemoBtn">Preview UI (demo mode)</button>
-      </div>
+      <pre class="login-pre">firebase deploy -c firebase.network.json --project YOUR_PROJECT_ID</pre>
+      <p class="login-lead">QR check-in URL: <strong>https://keplersiguineau.com/login.html?checkin=1</strong></p>
+      <p class="login-lead">Admin access: set <code>networkMembers/{uid}.admin = true</code> in Firestore only.</p>
     </section>
 
-    <!-- Auth -->
     <section id="authView" class="login-card login-hidden">
       <h1>Join the room</h1>
-      <p class="login-lead">Sign in or register to check in and keep your profile open for the group.</p>
+      <p class="login-lead">Sign in or register to check in and connect with the group.</p>
 
-      <div id="demoQuickRow" class="login-actions login-hidden" style="margin-bottom:16px;">
-        <button type="button" class="login-btn" id="demoAsAdminBtn">Quick: Admin demo</button>
-        <button type="button" class="login-btn login-btn--ghost" id="demoAsGuestBtn">Quick: New guest</button>
-        <button type="button" class="login-btn login-btn--ghost" id="demoResetBtn">Reset demo</button>
+      <div id="demoQuickRow" class="login-actions login-hidden" style="margin-bottom:12px;">
+        <button type="button" class="login-btn login-btn--ghost" id="demoAsGuestBtn">Try as new guest</button>
+        <button type="button" class="login-btn login-btn--ghost" id="demoResetBtn">Reset demo data</button>
       </div>
-      <p id="demoHint" class="login-lead login-hidden" style="font-size:13px;margin-top:-8px;">
-        Admin login: <code>admin@demo.com</code> / <code>demo123</code>
-      </p>
 
       <div class="login-tabs">
         <button type="button" class="login-tab is-active" data-auth-tab="login">Sign in</button>
@@ -118,32 +112,12 @@
       <p class="login-msg" id="authMsg"></p>
     </section>
 
-    <!-- Main app -->
     <section id="appView" class="login-hidden">
-      <div class="login-card">
-        <div class="app-header">
-          <img id="appAvatar" class="app-avatar app-avatar--placeholder" alt="" width="72" height="72">
-          <div class="app-header__meta">
-            <h2 id="appName">Member</h2>
-            <p id="appBusiness">Networking member</p>
-          </div>
-        </div>
-
-        <div class="app-toolbar">
-          <button type="button" class="login-btn login-btn--ghost" id="openProfileBtn">My profile</button>
-          <button type="button" class="login-btn login-btn--ghost" id="directoryBtn">Keep profile open</button>
-          <button type="button" class="login-btn login-btn--ghost" id="myCheckinsBtn">My check-ins</button>
-          <button type="button" class="login-btn" id="manualCheckinBtn">Check in</button>
-          <button type="button" class="login-btn login-btn--ghost login-hidden" id="adminBtn">Admin</button>
-          <button type="button" class="login-btn login-btn--ghost" id="signOutBtn">Sign out</button>
-        </div>
-      </div>
-
       <section id="directorySection" class="login-card">
         <h2>Members in the room</h2>
-        <p class="login-lead">Search by name or business name.</p>
-        <input type="search" id="memberSearch" class="app-search" placeholder="Search name or business…">
-        <div class="member-grid" id="memberGrid" style="margin-top:14px"></div>
+        <p class="login-lead">People who keep their profile open appear here.</p>
+        <input type="search" id="memberSearch" class="app-search app-search--full" placeholder="Search name or business…">
+        <div class="member-grid" id="memberGrid"></div>
       </section>
 
       <section id="checkinsSection" class="login-card login-hidden">
@@ -152,54 +126,34 @@
       </section>
     </section>
 
-    <!-- Admin -->
     <section id="adminView" class="login-hidden">
       <div class="login-card">
         <div class="app-toolbar">
-          <button type="button" class="login-btn login-btn--ghost" id="adminBackBtn">← Back to app</button>
-          <button type="button" class="login-btn" id="adminPrintBtn">Print report</button>
+          <button type="button" class="login-btn login-btn--ghost" id="adminBackBtn">← Back</button>
+          <button type="button" class="login-btn" id="adminPrintBtn">Print</button>
           <button type="button" class="login-btn login-btn--ghost" id="adminExportBtn">Export CSV</button>
         </div>
-
         <h1>Admin</h1>
-        <p class="login-lead">Registered members and today's check-ins.</p>
-
         <div class="admin-stats">
           <div class="admin-stat"><b id="adminStatMembers">0</b><span>Registered</span></div>
           <div class="admin-stat"><b id="adminStatCheckedToday">0</b><span>Checked in today</span></div>
           <div class="admin-stat"><b id="adminStatNever">0</b><span>Not in today</span></div>
         </div>
       </div>
-
       <div class="login-card">
         <h2>All members</h2>
         <div class="admin-table-wrap">
           <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Business</th>
-                <th>Phone</th>
-                <th>Email</th>
-                <th>Admin</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Name</th><th>Business</th><th>Phone</th><th>Email</th><th>Open</th></tr></thead>
             <tbody id="adminMembersTable"></tbody>
           </table>
         </div>
       </div>
-
       <div class="login-card">
         <h2>Today's attendance</h2>
         <div class="admin-table-wrap">
           <table class="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Business</th>
-                <th>Checked in at</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Name</th><th>Business</th><th>Checked in at</th></tr></thead>
             <tbody id="adminCheckinsTable"></tbody>
           </table>
         </div>
@@ -207,27 +161,50 @@
     </section>
   </div>
 
-  <!-- QR check-in gate (blocking) -->
+  <footer class="net-footer" id="netFooter">
+    <div class="net-footer__nav login-hidden" id="footerNav">
+      <button type="button" class="net-footer__btn" id="footerMembersBtn">Members</button>
+      <button type="button" class="net-footer__btn" id="footerCheckinsBtn">Check-ins</button>
+      <button type="button" class="net-footer__btn net-footer__btn--primary" id="footerCheckinBtn">Check in</button>
+      <button type="button" class="net-footer__btn login-hidden" id="footerAdminBtn">Admin</button>
+      <button type="button" class="net-footer__btn" id="footerSignOutBtn">Sign out</button>
+    </div>
+    <div class="net-footer__mode">
+      <span class="net-footer__mode-label">Mode</span>
+      <button type="button" class="net-footer__mode-btn" id="modeDemoBtn">Demo</button>
+      <button type="button" class="net-footer__mode-btn" id="modeLiveBtn">Live</button>
+    </div>
+  </footer>
+
   <div id="checkinGate" class="checkin-gate login-hidden" role="dialog" aria-modal="true">
     <div class="checkin-gate__panel">
       <h2>Check in to enter</h2>
-      <p>You scanned the room QR. Tap below to check in, then you'll see the group.</p>
+      <p>You scanned the room QR. Tap below to check in.</p>
       <button type="button" class="login-btn" id="checkinBtn" style="width:100%">Check in now</button>
       <p class="login-msg" id="checkinGateMsg"></p>
     </div>
   </div>
 
-  <!-- Profile modal -->
   <div id="profileModal" class="modal login-hidden" role="dialog" aria-modal="true">
-    <div class="modal__panel">
+    <div class="modal__panel profile-sheet">
       <div class="modal__head">
-        <h2>Your profile</h2>
         <button type="button" class="modal__close" id="closeProfileModal" aria-label="Close">&times;</button>
       </div>
 
-      <label class="login-btn login-btn--ghost" style="display:inline-block;margin-bottom:12px;">
-        Change photo
-        <input type="file" id="profilePhotoInput" accept="image/*" hidden>
+      <div class="profile-sheet__hero">
+        <label class="profile-sheet__avatar-btn">
+          <img id="profileSheetImg" class="profile-sheet__avatar login-hidden" alt="">
+          <span id="profileSheetPh" class="profile-sheet__avatar profile-sheet__avatar--ph">?</span>
+          <input type="file" id="profilePhotoInput" accept="image/*" hidden>
+        </label>
+        <h3 id="profileSheetName">Member</h3>
+        <p id="profileSheetBusiness" class="profile-sheet__biz">—</p>
+      </div>
+
+      <label class="net-switch">
+        <input type="checkbox" id="profileOpenSwitch" checked>
+        <span class="net-switch__track"></span>
+        <span class="net-switch__label">Keep profile open in the directory</span>
       </label>
 
       <form id="profileForm">

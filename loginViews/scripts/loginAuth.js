@@ -191,6 +191,7 @@ export async function saveMemberProfile(updates) {
     helpDescription: String(updates.helpDescription ?? existing.helpDescription).trim(),
     email: String(updates.email ?? existing.email).trim(),
     photoUrl: String(updates.photoUrl ?? existing.photoUrl).trim(),
+    profileOpen: updates.profileOpen ?? existing.profileOpen !== false,
     admin: existing.admin,
     updatedAt: serverTimestamp(),
   });

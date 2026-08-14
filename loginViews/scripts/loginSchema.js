@@ -7,6 +7,7 @@ export const DEFAULT_MEMBER_FIELDS = {
   businessName: "",
   helpDescription: "",
   photoUrl: "",
+  profileOpen: true,
   admin: false,
 };
 
@@ -28,6 +29,7 @@ export function normalizeMember(uid, data) {
     helpDescription: String(raw.helpDescription || "").trim(),
     email: String(raw.email || "").trim(),
     photoUrl: String(raw.photoUrl || "").trim(),
+    profileOpen: raw.profileOpen !== false,
     admin: raw.admin === true,
     createdAt: raw.createdAt || null,
     updatedAt: raw.updatedAt || null,

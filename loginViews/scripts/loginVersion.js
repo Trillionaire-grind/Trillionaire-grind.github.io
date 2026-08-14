@@ -1,4 +1,4 @@
-export const LOGIN_APP_VERSION = "0.0.0.2";
+export const LOGIN_APP_VERSION = "0.0.0.3";
 
 export function loginVersionLabel() {
   return "v" + LOGIN_APP_VERSION;
