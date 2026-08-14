@@ -17,6 +17,7 @@
  *   /mars.html
  *   /strangestSecret.html
  *   /greenBooks.html
+ *   /login.html?checkin=1
  *   tel:+17863098015
  */
 

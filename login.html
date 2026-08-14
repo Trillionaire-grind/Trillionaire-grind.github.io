@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Network Check-In</title>
+  <link rel="stylesheet" href="loginViews/assets/login.css">
+</head>
+<body class="login-app">
+
+  <div class="login-shell">
+    <div class="login-top">
+      <span class="login-brand">Networking Group</span>
+      <span class="login-version" id="loginVersion">v0.0.0.1</span>
+    </div>
+
+    <!-- Firebase not configured -->
+    <section id="setupView" class="login-card login-hidden">
+      <h1>Firebase setup needed</h1>
+      <p class="login-lead">
+        Create a Firebase project, enable Email/Password auth, Firestore, and Storage.
+        Paste your web config into <code>loginViews/scripts/loginFirebaseConfig.js</code>,
+        then deploy rules:
+      </p>
+      <pre style="background:#f8fafc;padding:12px;border-radius:10px;overflow:auto;font-size:13px;">firebase deploy -c firebase.network.json --project YOUR_PROJECT_ID</pre>
+      <p class="login-lead">
+        QR code URL for check-in:
+        <strong>https://keplersiguineau.com/login.html?checkin=1</strong>
+      </p>
+      <p class="login-lead">
+        First admin: after you register, set
+        <code>networkMembers/{your-uid}.admin = true</code> in Firestore.
+      </p>
+    </section>
+
+    <!-- Auth -->
+    <section id="authView" class="login-card login-hidden">
+      <h1>Join the room</h1>
+      <p class="login-lead">Sign in or register to check in and keep your profile open for the group.</p>
+
+      <div class="login-tabs">
+        <button type="button" class="login-tab is-active" data-auth-tab="login">Sign in</button>
+        <button type="button" class="login-tab" data-auth-tab="register">Register</button>
+      </div>
+
+      <div id="loginPanel">
+        <form id="loginForm" class="login-grid">
+          <label class="login-field" style="grid-column:1/-1">
+            <span>Email</span>
+            <input type="email" name="email" autocomplete="email" required>
+          </label>
+          <label class="login-field" style="grid-column:1/-1">
+            <span>Password</span>
+            <input type="password" name="password" autocomplete="current-password" required>
+          </label>
+          <div class="login-actions" style="grid-column:1/-1">
+            <button type="submit" class="login-btn">Sign in</button>
+            <button type="button" class="login-btn login-btn--ghost" id="resetPasswordBtn">Reset password</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="registerPanel" class="login-hidden">
+        <form id="registerForm">
+          <div class="login-grid">
+            <label class="login-field">
+              <span>Name</span>
+              <input type="text" name="name" autocomplete="name" required>
+            </label>
+            <label class="login-field">
+              <span>Preferred name</span>
+              <input type="text" name="preferredName" autocomplete="nickname">
+            </label>
+            <label class="login-field">
+              <span>Phone</span>
+              <input type="tel" name="phone" autocomplete="tel" required>
+            </label>
+            <label class="login-field">
+              <span>Business name</span>
+              <input type="text" name="businessName" required>
+            </label>
+            <label class="login-field" style="grid-column:1/-1">
+              <span>Who you help &amp; how</span>
+              <textarea name="helpDescription" required placeholder="Who you serve and how you help them"></textarea>
+            </label>
+            <label class="login-field">
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required>
+            </label>
+            <label class="login-field">
+              <span>Password</span>
+              <input type="password" name="password" autocomplete="new-password" minlength="6" required>
+            </label>
+          </div>
+          <div class="login-actions">
+            <button type="submit" class="login-btn">Create account</button>
+          </div>
+        </form>
+      </div>
+
+      <p class="login-msg" id="authMsg"></p>
+    </section>
+
+    <!-- Main app -->
+    <section id="appView" class="login-hidden">
+      <div class="login-card">
+        <div class="app-header">
+          <img id="appAvatar" class="app-avatar app-avatar--placeholder" alt="" width="72" height="72">
+          <div class="app-header__meta">
+            <h2 id="appName">Member</h2>
+            <p id="appBusiness">Networking member</p>
+          </div>
+        </div>
+
+        <div class="app-toolbar">
+          <button type="button" class="login-btn login-btn--ghost" id="openProfileBtn">My profile</button>
+          <button type="button" class="login-btn login-btn--ghost" id="directoryBtn">Keep profile open</button>
+          <button type="button" class="login-btn login-btn--ghost" id="myCheckinsBtn">My check-ins</button>
+          <button type="button" class="login-btn" id="manualCheckinBtn">Check in</button>
+          <button type="button" class="login-btn login-btn--ghost login-hidden" id="adminBtn">Admin</button>
+          <button type="button" class="login-btn login-btn--ghost" id="signOutBtn">Sign out</button>
+        </div>
+      </div>
+
+      <section id="directorySection" class="login-card">
+        <h2>Members in the room</h2>
+        <p class="login-lead">Search by name or business name.</p>
+        <input type="search" id="memberSearch" class="app-search" placeholder="Search name or business…">
+        <div class="member-grid" id="memberGrid" style="margin-top:14px"></div>
+      </section>
+
+      <section id="checkinsSection" class="login-card login-hidden">
+        <h2>Your check-ins</h2>
+        <ul class="checkin-list" id="myCheckinsList"></ul>
+      </section>
+    </section>
+
+    <!-- Admin -->
+    <section id="adminView" class="login-hidden">
+      <div class="login-card">
+        <div class="app-toolbar">
+          <button type="button" class="login-btn login-btn--ghost" id="adminBackBtn">← Back to app</button>
+          <button type="button" class="login-btn" id="adminPrintBtn">Print report</button>
+          <button type="button" class="login-btn login-btn--ghost" id="adminExportBtn">Export CSV</button>
+        </div>
+
+        <h1>Admin</h1>
+        <p class="login-lead">Registered members and today's check-ins.</p>
+
+        <div class="admin-stats">
+          <div class="admin-stat"><b id="adminStatMembers">0</b><span>Registered</span></div>
+          <div class="admin-stat"><b id="adminStatCheckedToday">0</b><span>Checked in today</span></div>
+          <div class="admin-stat"><b id="adminStatNever">0</b><span>Not in today</span></div>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <h2>All members</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Business</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Admin</th>
+              </tr>
+            </thead>
+            <tbody id="adminMembersTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <h2>Today's attendance</h2>
+        <div class="admin-table-wrap">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Business</th>
+                <th>Checked in at</th>
+              </tr>
+            </thead>
+            <tbody id="adminCheckinsTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- QR check-in gate (blocking) -->
+  <div id="checkinGate" class="checkin-gate login-hidden" role="dialog" aria-modal="true">
+    <div class="checkin-gate__panel">
+      <h2>Check in to enter</h2>
+      <p>You scanned the room QR. Tap below to check in, then you'll see the group.</p>
+      <button type="button" class="login-btn" id="checkinBtn" style="width:100%">Check in now</button>
+      <p class="login-msg" id="checkinGateMsg"></p>
+    </div>
+  </div>
+
+  <!-- Profile modal -->
+  <div id="profileModal" class="modal login-hidden" role="dialog" aria-modal="true">
+    <div class="modal__panel">
+      <div class="modal__head">
+        <h2>Your profile</h2>
+        <button type="button" class="modal__close" id="closeProfileModal" aria-label="Close">&times;</button>
+      </div>
+
+      <label class="login-btn login-btn--ghost" style="display:inline-block;margin-bottom:12px;">
+        Change photo
+        <input type="file" id="profilePhotoInput" accept="image/*" hidden>
+      </label>
+
+      <form id="profileForm">
+        <div class="login-grid">
+          <label class="login-field">
+            <span>Name</span>
+            <input type="text" name="name" required>
+          </label>
+          <label class="login-field">
+            <span>Preferred name</span>
+            <input type="text" name="preferredName">
+          </label>
+          <label class="login-field">
+            <span>Phone</span>
+            <input type="tel" name="phone" required>
+          </label>
+          <label class="login-field">
+            <span>Business name</span>
+            <input type="text" name="businessName" required>
+          </label>
+          <label class="login-field" style="grid-column:1/-1">
+            <span>Who you help &amp; how</span>
+            <textarea name="helpDescription" required></textarea>
+          </label>
+          <label class="login-field" style="grid-column:1/-1">
+            <span>Email</span>
+            <input type="email" name="email" readonly>
+          </label>
+        </div>
+        <div class="login-actions">
+          <button type="submit" class="login-btn">Save profile</button>
+        </div>
+      </form>
+      <p class="login-msg" id="profileMsg"></p>
+    </div>
+  </div>
+
+  <script type="module" src="loginViews/scripts/loginApp.js"></script>
+</body>
+</html>
