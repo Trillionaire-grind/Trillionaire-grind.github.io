@@ -26,7 +26,7 @@
   <div class="login-shell">
     <div class="login-top login-hidden" id="loginTopMeta">
       <span class="login-brand">Networking Group</span>
-      <span class="login-version" id="loginVersion">v0.0.0.3</span>
+      <span class="login-version" id="loginVersion">v0.0.0.4</span>
     </div>
 
     <section id="setupView" class="login-card login-hidden">
@@ -115,9 +115,30 @@
     <section id="appView" class="login-hidden">
       <section id="directorySection" class="login-card">
         <h2>Members in the room</h2>
-        <p class="login-lead">People who keep their profile open appear here.</p>
-        <input type="search" id="memberSearch" class="app-search app-search--full" placeholder="Search name or business…">
-        <div class="member-grid" id="memberGrid"></div>
+
+        <div id="directoryLocked" class="directory-locked login-hidden">
+          <p class="directory-locked__badge">Directory locked</p>
+          <p class="directory-locked__lead">
+            Your profile is closed, so you can't browse the group. This room works both ways —
+            keep your profile open to see everyone else who's open too.
+          </p>
+          <p class="directory-locked__count">
+            You're not getting access to
+            <strong id="directoryMissedCount">0</strong>
+            <span id="directoryMissedLabel">contacts</span> right now.
+          </p>
+          <label class="net-switch net-switch--prominent">
+            <input type="checkbox" id="directoryOpenSwitch">
+            <span class="net-switch__track"></span>
+            <span class="net-switch__label">Keep my profile open in the directory</span>
+          </label>
+        </div>
+
+        <div id="directoryBrowse">
+          <p class="login-lead">People who keep their profile open appear here.</p>
+          <input type="search" id="memberSearch" class="app-search app-search--full" placeholder="Search name or business…">
+          <div class="member-grid" id="memberGrid"></div>
+        </div>
       </section>
 
       <section id="checkinsSection" class="login-card login-hidden">
