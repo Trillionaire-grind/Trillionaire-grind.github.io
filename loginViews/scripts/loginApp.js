@@ -121,6 +121,11 @@ const els = {
   memberGrid: document.getElementById("memberGrid"),
   myCheckinsList: document.getElementById("myCheckinsList"),
   directorySection: document.getElementById("directorySection"),
+  directoryLocked: document.getElementById("directoryLocked"),
+  directoryBrowse: document.getElementById("directoryBrowse"),
+  directoryMissedCount: document.getElementById("directoryMissedCount"),
+  directoryMissedLabel: document.getElementById("directoryMissedLabel"),
+  directoryOpenSwitch: document.getElementById("directoryOpenSwitch"),
   checkinsSection: document.getElementById("checkinsSection"),
   profileForm: document.getElementById("profileForm"),
   profilePhotoInput: document.getElementById("profilePhotoInput"),
@@ -290,8 +295,54 @@ async function loadMyCheckins() {
   return myCheckinsCache;
 }
 
+function countOpenContacts(excludeUid) {
+  return membersCache.filter(
+    (m) => m.uid !== excludeUid && m.profileOpen !== false,
+  ).length;
+}
+
+function syncProfileOpenSwitches(profile) {
+  const open = profile?.profileOpen !== false;
+  if (els.profileOpenSwitch) els.profileOpenSwitch.checked = open;
+  if (els.directoryOpenSwitch) els.directoryOpenSwitch.checked = open;
+}
+
+function renderDirectoryAccess(profile) {
+  if (!profile) return;
+  const open = profile.profileOpen !== false;
+  const missed = countOpenContacts(profile.uid);
+
+  if (els.directoryMissedCount) els.directoryMissedCount.textContent = String(missed);
+  if (els.directoryMissedLabel) {
+    els.directoryMissedLabel.textContent = missed === 1 ? "contact" : "contacts";
+  }
+
+  syncProfileOpenSwitches(profile);
+
+  if (open) {
+    hide(els.directoryLocked);
+    show(els.directoryBrowse);
+  } else {
+    show(els.directoryLocked);
+    hide(els.directoryBrowse);
+  }
+}
+
+async function updateProfileOpen(isOpen) {
+  const profile = await authApi.saveProfile({ profileOpen: isOpen });
+  renderAppChrome(profile);
+  renderDirectoryAccess(profile);
+  if (isOpen) {
+    renderMemberGrid(els.memberSearch?.value || "");
+  }
+  return profile;
+}
+
 function renderMemberGrid(filterText) {
   if (!els.memberGrid) return;
+  const profile = authApi.getProfile();
+  if (profile?.profileOpen === false) return;
+
   const user = authApi.getUser();
   const list = membersCache.filter(
     (m) =>
@@ -343,7 +394,7 @@ function fillProfileForm(profile) {
   f.businessName.value = profile.businessName || "";
   f.helpDescription.value = profile.helpDescription || "";
   f.email.value = profile.email || "";
-  if (els.profileOpenSwitch) els.profileOpenSwitch.checked = profile.profileOpen !== false;
+  syncProfileOpenSwitches(profile);
 }
 
 function renderAppChrome(profile) {
@@ -359,6 +410,8 @@ function renderAppChrome(profile) {
 async function refreshAppData() {
   await loadMembers();
   await loadMyCheckins();
+  const profile = authApi.getProfile();
+  renderDirectoryAccess(profile);
   renderMemberGrid(els.memberSearch?.value || "");
   renderMyCheckins();
 }
@@ -382,6 +435,7 @@ function showApp(profile) {
   show(els.appView);
   showAppChrome();
   renderAppChrome(profile);
+  renderDirectoryAccess(profile);
   setAppTab("members");
   refreshAppData().catch((err) => console.error(err));
 }
@@ -559,13 +613,22 @@ els.profileForm?.addEventListener("submit", async (e) => {
 });
 
 els.profileOpenSwitch?.addEventListener("change", async () => {
-  const profile = authApi.getProfile();
-  if (!profile) return;
   try {
-    await authApi.saveProfile({ profileOpen: !!els.profileOpenSwitch.checked });
-    await refreshAppData();
+    await updateProfileOpen(!!els.profileOpenSwitch.checked);
+    setMsg(els.profileMsg, els.profileOpenSwitch.checked ? "Profile is open." : "Profile closed.", "ok");
   } catch (err) {
     setMsg(els.profileMsg, err.message, "error");
+    syncProfileOpenSwitches(authApi.getProfile());
+  }
+});
+
+els.directoryOpenSwitch?.addEventListener("change", async () => {
+  if (!els.directoryOpenSwitch.checked) return;
+  try {
+    await updateProfileOpen(true);
+  } catch (err) {
+    alert(err.message || "Could not open profile.");
+    syncProfileOpenSwitches(authApi.getProfile());
   }
 });
 
