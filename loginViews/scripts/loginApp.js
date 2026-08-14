@@ -4,15 +4,33 @@ import {
   getLoginProfile,
   getLoginUser,
   initLoginAuth as bootAuth,
-  loginAccount,
-  logoutAccount,
-  onLoginAuthChange,
-  registerAccount,
+  loginAccount as firebaseLogin,
+  logoutAccount as firebaseLogout,
+  onLoginAuthChange as onFirebaseAuthChange,
+  registerAccount as firebaseRegister,
   resetLoginPassword,
-  saveMemberProfile,
-  uploadProfilePhoto,
-  waitForLoginAuthReady,
+  saveMemberProfile as firebaseSaveProfile,
+  uploadProfilePhoto as firebaseUploadPhoto,
+  waitForLoginAuthReady as waitFirebaseAuth,
 } from "./loginAuth.js";
+import {
+  demoLoadAdminData,
+  demoLoadMembers,
+  demoLoadMyCheckins,
+  demoQuickLogin,
+  demoRecordCheckIn,
+  demoResetAll,
+  getLoginProfile as getDemoProfile,
+  getLoginUser as getDemoUser,
+  initLoginDemo,
+  loginAccount as demoLogin,
+  logoutAccount as demoLogout,
+  onLoginAuthChange as onDemoAuthChange,
+  registerAccount as demoRegister,
+  saveMemberProfile as demoSaveProfile,
+  uploadProfilePhoto as demoUploadPhoto,
+  waitForLoginAuthReady as waitDemoAuth,
+} from "./loginDemo.js";
 import { getLoginDb } from "./loginFirebase.js";
 import {
   CHECKINS_COLLECTION,
@@ -35,9 +53,45 @@ import {
 
 const params = new URLSearchParams(window.location.search);
 const wantsCheckIn = params.get("checkin") === "1" || params.get("from") === "qr";
+const demoMode =
+  params.get("demo") === "1" ||
+  params.get("preview") === "1" ||
+  !isLoginFirebaseConfigured();
+
+const authApi = demoMode
+  ? {
+      boot: initLoginDemo,
+      onChange: onDemoAuthChange,
+      wait: waitDemoAuth,
+      getUser: getDemoUser,
+      getProfile: getDemoProfile,
+      login: demoLogin,
+      register: demoRegister,
+      logout: demoLogout,
+      saveProfile: demoSaveProfile,
+      uploadPhoto: demoUploadPhoto,
+    }
+  : {
+      boot: bootAuth,
+      onChange: onFirebaseAuthChange,
+      wait: waitFirebaseAuth,
+      getUser: getLoginUser,
+      getProfile: getLoginProfile,
+      login: firebaseLogin,
+      register: firebaseRegister,
+      logout: firebaseLogout,
+      saveProfile: firebaseSaveProfile,
+      uploadPhoto: firebaseUploadPhoto,
+    };
 
 const els = {
+  demoBanner: document.getElementById("demoBanner"),
+  demoQuickRow: document.getElementById("demoQuickRow"),
+  demoAsAdminBtn: document.getElementById("demoAsAdminBtn"),
+  demoAsGuestBtn: document.getElementById("demoAsGuestBtn"),
+  demoResetBtn: document.getElementById("demoResetBtn"),
   setupView: document.getElementById("setupView"),
+  setupDemoBtn: document.getElementById("setupDemoBtn"),
   authView: document.getElementById("authView"),
   appView: document.getElementById("appView"),
   checkinGate: document.getElementById("checkinGate"),
@@ -86,7 +140,18 @@ let myCheckinsCache = [];
 let adminMembers = [];
 let adminCheckinsToday = [];
 
-if (els.version) els.version.textContent = loginVersionLabel();
+if (els.version) {
+  els.version.textContent = loginVersionLabel() + (demoMode ? " · demo" : "");
+}
+
+if (demoMode) {
+  show(els.demoBanner);
+  show(els.demoQuickRow);
+  if (els.resetBtn) hide(els.resetBtn);
+} else {
+  hide(els.demoBanner);
+  hide(els.demoQuickRow);
+}
 
 function show(el) {
   if (el) el.classList.remove("login-hidden");
@@ -101,6 +166,12 @@ function setMsg(el, text, kind) {
   el.textContent = text || "";
   el.classList.remove("is-error", "is-ok");
   if (kind) el.classList.add(`is-${kind}`);
+}
+
+function checkinMillis(value) {
+  if (!value) return 0;
+  if (typeof value.toMillis === "function") return value.toMillis();
+  return new Date(value).getTime() || 0;
 }
 
 function initials(profile) {
@@ -145,11 +216,14 @@ els.authTabs.forEach((btn) => {
 });
 
 async function recordCheckIn() {
-  const user = getLoginUser();
-  const profile = getLoginProfile();
+  if (demoMode) {
+    await demoRecordCheckIn();
+    return;
+  }
+  const user = authApi.getUser();
+  const profile = authApi.getProfile();
   const db = getLoginDb();
   if (!user || !profile || !db) throw new Error("Sign in to check in.");
-
   const now = new Date();
   await addDoc(collection(db, CHECKINS_COLLECTION), {
     uid: user.uid,
@@ -161,6 +235,10 @@ async function recordCheckIn() {
 }
 
 async function loadMembers() {
+  if (demoMode) {
+    membersCache = await demoLoadMembers();
+    return membersCache;
+  }
   const db = getLoginDb();
   if (!db) return [];
   const snap = await getDocs(collection(db, MEMBERS_COLLECTION));
@@ -171,7 +249,11 @@ async function loadMembers() {
 }
 
 async function loadMyCheckins() {
-  const user = getLoginUser();
+  if (demoMode) {
+    myCheckinsCache = await demoLoadMyCheckins();
+    return myCheckinsCache;
+  }
+  const user = authApi.getUser();
   const db = getLoginDb();
   if (!user || !db) return [];
   const q = query(
@@ -186,7 +268,7 @@ async function loadMyCheckins() {
 
 function renderMemberGrid(filterText) {
   if (!els.memberGrid) return;
-  const user = getLoginUser();
+  const user = authApi.getUser();
   const list = membersCache.filter((m) => m.uid !== user?.uid && memberMatchesQuery(m, filterText));
   els.memberGrid.innerHTML = "";
   if (!list.length) {
@@ -333,7 +415,7 @@ els.loginForm?.addEventListener("submit", async (e) => {
   e.preventDefault();
   setMsg(els.authMsg, "Signing in…");
   try {
-    await loginAccount(
+    await authApi.login(
       els.loginForm.elements.email.value,
       els.loginForm.elements.password.value,
     );
@@ -348,7 +430,7 @@ els.registerForm?.addEventListener("submit", async (e) => {
   setMsg(els.authMsg, "Creating your account…");
   const f = els.registerForm.elements;
   try {
-    await registerAccount({
+    await authApi.register({
       name: f.name.value,
       phone: f.phone.value,
       preferredName: f.preferredName.value,
@@ -375,11 +457,42 @@ els.resetBtn?.addEventListener("click", async () => {
 });
 
 els.signOutBtn?.addEventListener("click", async () => {
-  await logoutAccount();
+  await authApi.logout();
+});
+
+els.demoAsAdminBtn?.addEventListener("click", async () => {
+  setMsg(els.authMsg, "Loading admin demo…");
+  try {
+    await demoQuickLogin("admin");
+    setMsg(els.authMsg, "");
+  } catch (err) {
+    setMsg(els.authMsg, err.message, "error");
+  }
+});
+
+els.demoAsGuestBtn?.addEventListener("click", async () => {
+  setMsg(els.authMsg, "Creating guest demo…");
+  try {
+    await demoQuickLogin("guest");
+    setMsg(els.authMsg, "Guest account ready.", "ok");
+  } catch (err) {
+    setMsg(els.authMsg, err.message, "error");
+  }
+});
+
+els.demoResetBtn?.addEventListener("click", () => {
+  if (confirm("Reset all demo data on this device?")) {
+    demoResetAll();
+    location.reload();
+  }
+});
+
+els.setupDemoBtn?.addEventListener("click", () => {
+  location.href = "login.html?demo=1";
 });
 
 els.openProfileBtn?.addEventListener("click", () => {
-  fillProfileForm(getLoginProfile());
+  fillProfileForm(authApi.getProfile());
   setMsg(els.profileMsg, "");
   show(els.profileModal);
 });
@@ -395,7 +508,7 @@ els.profileForm?.addEventListener("submit", async (e) => {
   setMsg(els.profileMsg, "Saving…");
   const f = els.profileForm.elements;
   try {
-    const profile = await saveMemberProfile({
+    const profile = await authApi.saveProfile({
       name: f.name.value,
       preferredName: f.preferredName.value,
       phone: f.phone.value,
@@ -414,9 +527,9 @@ els.profileForm?.addEventListener("submit", async (e) => {
 els.profilePhotoInput?.addEventListener("change", async () => {
   const file = els.profilePhotoInput.files?.[0];
   if (!file) return;
-  setMsg(els.profileMsg, "Uploading photo…");
+  setMsg(els.profileMsg, demoMode ? "Saving photo…" : "Uploading photo…");
   try {
-    const profile = await uploadProfilePhoto(file);
+    const profile = await authApi.uploadPhoto(file);
     renderAppHeader(profile);
     setMsg(els.profileMsg, "Photo updated.", "ok");
   } catch (err) {
@@ -438,8 +551,19 @@ els.memberSearch?.addEventListener("input", () => {
   renderMemberGrid(els.memberSearch.value);
 });
 
-/* Admin */
 async function loadAdminData() {
+  if (demoMode) {
+    const data = await demoLoadAdminData();
+    adminMembers = data.members;
+    adminCheckinsToday = data.todayCheckins;
+    const neverChecked = data.neverChecked;
+    const checkedUids = new Set(adminCheckinsToday.map((c) => c.uid));
+    if (els.adminStatMembers) els.adminStatMembers.textContent = String(adminMembers.length);
+    if (els.adminStatCheckedToday) els.adminStatCheckedToday.textContent = String(checkedUids.size);
+    if (els.adminStatNever) els.adminStatNever.textContent = String(neverChecked.length);
+    renderAdminTables(adminMembers, adminCheckinsToday, neverChecked);
+    return;
+  }
   const db = getLoginDb();
   if (!db) return;
   const [membersSnap, checkinsSnap] = await Promise.all([
@@ -453,14 +577,11 @@ async function loadAdminData() {
   ]);
   adminMembers = membersSnap.docs.map((d) => normalizeMember(d.id, d.data()));
   adminCheckinsToday = checkinsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-
   const checkedUids = new Set(adminCheckinsToday.map((c) => c.uid));
   const neverChecked = adminMembers.filter((m) => !checkedUids.has(m.uid));
-
   if (els.adminStatMembers) els.adminStatMembers.textContent = String(adminMembers.length);
   if (els.adminStatCheckedToday) els.adminStatCheckedToday.textContent = String(checkedUids.size);
   if (els.adminStatNever) els.adminStatNever.textContent = String(neverChecked.length);
-
   renderAdminTables(adminMembers, adminCheckinsToday, neverChecked);
 }
 
@@ -481,11 +602,7 @@ function renderAdminTables(members, todayCheckins, neverChecked) {
   if (els.adminCheckinsTable) {
     const rows = todayCheckins
       .slice()
-      .sort((a, b) => {
-        const ta = a.checkedInAt?.toMillis?.() || 0;
-        const tb = b.checkedInAt?.toMillis?.() || 0;
-        return tb - ta;
-      })
+      .sort((a, b) => checkinMillis(b.checkedInAt) - checkinMillis(a.checkedInAt))
       .map(
         (c) => `<tr>
           <td>${escapeHtml(c.memberName || "")}</td>
@@ -564,20 +681,23 @@ function escapeAttr(str) {
 }
 
 async function boot() {
-  if (!isLoginFirebaseConfigured()) {
-    showSetup();
+  if (demoMode) {
+    console.log("[Network Login] demo mode — no Firebase required");
+    authApi.boot();
+    authApi.onChange(handleAuthFlow);
+    await authApi.wait();
     return;
   }
-  const ok = await bootAuth();
+  const ok = await authApi.boot();
   if (!ok) {
     showSetup();
     return;
   }
-  onLoginAuthChange(handleAuthFlow);
-  await waitForLoginAuthReady();
+  authApi.onChange(handleAuthFlow);
+  await authApi.wait();
 }
 
 boot().catch((err) => {
   console.error(err);
-  showSetup();
+  if (!demoMode) showSetup();
 });

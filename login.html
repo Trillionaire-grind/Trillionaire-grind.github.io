@@ -9,10 +9,14 @@
 </head>
 <body class="login-app">
 
+  <div id="demoBanner" class="demo-banner login-hidden">
+    <strong>Demo mode</strong> — UI preview only. Data stays on this device. No Firebase needed.
+  </div>
+
   <div class="login-shell">
     <div class="login-top">
       <span class="login-brand">Networking Group</span>
-      <span class="login-version" id="loginVersion">v0.0.0.1</span>
+      <span class="login-version" id="loginVersion">v0.0.0.2</span>
     </div>
 
     <!-- Firebase not configured -->
@@ -32,12 +36,24 @@
         First admin: after you register, set
         <code>networkMembers/{your-uid}.admin = true</code> in Firestore.
       </p>
+      <div class="login-actions">
+        <button type="button" class="login-btn" id="setupDemoBtn">Preview UI (demo mode)</button>
+      </div>
     </section>
 
     <!-- Auth -->
     <section id="authView" class="login-card login-hidden">
       <h1>Join the room</h1>
       <p class="login-lead">Sign in or register to check in and keep your profile open for the group.</p>
+
+      <div id="demoQuickRow" class="login-actions login-hidden" style="margin-bottom:16px;">
+        <button type="button" class="login-btn" id="demoAsAdminBtn">Quick: Admin demo</button>
+        <button type="button" class="login-btn login-btn--ghost" id="demoAsGuestBtn">Quick: New guest</button>
+        <button type="button" class="login-btn login-btn--ghost" id="demoResetBtn">Reset demo</button>
+      </div>
+      <p id="demoHint" class="login-lead login-hidden" style="font-size:13px;margin-top:-8px;">
+        Admin login: <code>admin@demo.com</code> / <code>demo123</code>
+      </p>
 
       <div class="login-tabs">
         <button type="button" class="login-tab is-active" data-auth-tab="login">Sign in</button>

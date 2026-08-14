@@ -57,7 +57,10 @@ export function dateKeyFromDate(date) {
 
 export function formatDateTime(value) {
   if (!value) return "—";
-  const d = value.toDate ? value.toDate() : new Date(value);
+  let d;
+  if (typeof value?.toDate === "function") d = value.toDate();
+  else if (value instanceof Date) d = value;
+  else d = new Date(value);
   if (Number.isNaN(d.getTime())) return "—";
   return d.toLocaleString(undefined, {
     weekday: "short",

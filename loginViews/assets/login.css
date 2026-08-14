@@ -32,6 +32,15 @@ button, input, textarea {
 
 a { color: var(--accent); }
 
+.demo-banner {
+  background: #fff8e6;
+  border-bottom: 2px solid #ffb000;
+  color: #5c4a00;
+  text-align: center;
+  padding: 10px 14px;
+  font-size: 14px;
+}
+
 .login-shell {
   max-width: 920px;
   margin: 0 auto;
