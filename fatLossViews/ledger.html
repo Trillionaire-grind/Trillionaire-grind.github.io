@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>90-Day Fat Loss Ledger</title>
+  <link rel="stylesheet" href="assets/flLedger.css">
+</head>
+<body class="fl-ledger">
+
+  <div class="fl-top"><strong>Private on this device</strong> · Saved in your browser</div>
+
+  <div class="fl-shell">
+    <p class="fl-brand">How to Lose Fat as Fast as Possible</p>
+    <h1>90-Day Ledger</h1>
+    <p class="fl-lead">
+      Track the three pillars every day: calories under target, steps hit, and three workouts a week.
+      This is the log you need for the 2× guarantee — and for weekly check-ins.
+    </p>
+
+    <div class="fl-pillars" aria-label="Three pillars">
+      <div class="fl-pillar"><strong>1. Calories</strong><span>Stay under your daily target</span></div>
+      <div class="fl-pillar"><strong>2. Steps</strong><span>Hit your walking number</span></div>
+      <div class="fl-pillar"><strong>3. Workouts</strong><span>Three simple sessions a week</span></div>
+    </div>
+
+    <section class="fl-card">
+      <h2>Your targets</h2>
+      <p class="fl-meta">From Chapter 2. Change these anytime — they stay on this phone/computer.</p>
+      <div class="fl-grid-2">
+        <div class="fl-field">
+          <label for="startDate">Day 1 date</label>
+          <input type="date" id="startDate">
+        </div>
+        <div class="fl-field">
+          <label for="calorieTarget">Daily calorie target</label>
+          <input type="number" id="calorieTarget" min="800" step="1" inputmode="numeric">
+        </div>
+        <div class="fl-field">
+          <label for="stepTarget">Daily step target</label>
+          <input type="number" id="stepTarget" min="1000" step="100" inputmode="numeric">
+        </div>
+      </div>
+      <div class="fl-actions">
+        <button type="button" class="fl-btn fl-btn--ghost" id="saveSetup">Save targets</button>
+      </div>
+      <p class="fl-status" id="setupStatus"></p>
+    </section>
+
+    <section class="fl-card">
+      <h2>Log a day</h2>
+      <p class="fl-meta">
+        <span><b id="dayLabel">Day 1 of 90</b></span>
+        <span>Workouts goal: <b>3 / week</b></span>
+      </p>
+
+      <div class="fl-field">
+        <label for="entryDate">Date</label>
+        <input type="date" id="entryDate">
+      </div>
+
+      <div class="fl-grid-2">
+        <div class="fl-field">
+          <label for="calories">Calories eaten</label>
+          <input type="number" id="calories" min="0" step="1" inputmode="numeric" placeholder="e.g. 1850">
+        </div>
+        <div class="fl-field">
+          <label for="steps">Steps</label>
+          <input type="number" id="steps" min="0" step="1" inputmode="numeric" placeholder="e.g. 10200">
+        </div>
+      </div>
+
+      <label class="fl-check">
+        <input type="checkbox" id="workout">
+        <span>Workout done today</span>
+      </label>
+
+      <div class="fl-field">
+        <label for="workoutNote">Workout note (optional)</label>
+        <input type="text" id="workoutNote" placeholder="e.g. full body A, 35 min">
+      </div>
+
+      <div class="fl-grid-2">
+        <div class="fl-field">
+          <label for="weight">Weight (optional)</label>
+          <input type="number" id="weight" min="0" step="0.1" inputmode="decimal" placeholder="lbs">
+        </div>
+        <div class="fl-field" style="display:flex;align-items:flex-end;">
+          <label class="fl-check" style="margin:0 0 12px;">
+            <input type="checkbox" id="mealsLogged">
+            <span>Meals photographed / logged</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="fl-field">
+        <label for="notes">Notes</label>
+        <textarea id="notes" placeholder="Hunger, sleep, stall, whatever matters"></textarea>
+      </div>
+
+      <div class="fl-actions">
+        <button type="button" class="fl-btn fl-btn--accent" id="saveDay">Save day</button>
+        <button type="button" class="fl-btn fl-btn--ghost" id="clearDay">Clear day</button>
+        <button type="button" class="fl-btn fl-btn--ghost" id="exportWeek">Copy this week</button>
+        <button type="button" class="fl-btn fl-btn--ghost" id="emailWeek">Email week</button>
+      </div>
+      <p class="fl-status" id="dayStatus"></p>
+    </section>
+
+    <section class="fl-card">
+      <h2>Progress</h2>
+      <div class="fl-stats">
+        <div class="fl-stat"><b id="statLogged">0</b><span>Days logged</span></div>
+        <div class="fl-stat"><b id="statFull">0</b><span>Full pillar days</span></div>
+        <div class="fl-stat"><b id="statWorkouts">0/3</b><span>Workouts this week</span></div>
+      </div>
+      <p class="fl-meta" id="weekCopy" style="margin-bottom:14px;"></p>
+      <div class="fl-day-grid" id="dayGrid" aria-label="90 day map"></div>
+      <div class="fl-legend">
+        <span><i></i> Empty</span>
+        <span><i class="lg-partial"></i> Partial</span>
+        <span><i class="lg-full"></i> All 3 pillars</span>
+      </div>
+    </section>
+
+    <section class="fl-card">
+      <h2>Recent days</h2>
+      <ul class="fl-history" id="history"></ul>
+    </section>
+
+    <footer class="fl-footer">
+      <p>Data stays in this browser only. Clearing site data erases the ledger — use <b>Copy this week</b> or <b>Email week</b> before switching phones.</p>
+      <p>Questions? <a id="supportEmail" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a></p>
+      <p class="ver" id="flVersion">v0.0.0.21</p>
+    </footer>
+  </div>
+
+  <script type="module" src="assets/flLedger.js"></script>
+</body>
+</html>
