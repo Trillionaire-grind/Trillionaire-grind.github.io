@@ -336,6 +336,65 @@ body.fl-ledger {
 
 .fl-footer .ver { color: #999; font-size: 12px; margin-top: 8px; }
 
+.fl-meal-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.fl-meal-input {
+  width: 100%;
+  border: 2px solid var(--ink);
+  padding: 12px;
+  font: inherit;
+  font-size: 16px;
+  background: #fff;
+}
+
+.fl-meal-list {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+
+.fl-meal-list li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+.fl-meal-list li:last-child { border-bottom: none; }
+
+.fl-meal-list .meal-title { font-weight: 700; }
+.fl-meal-list .meal-meta { color: var(--gray); font-size: 13px; margin-top: 2px; }
+
+.fl-meal-list button {
+  border: 2px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.fl-meal-totals {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+  padding: 12px;
+  background: #fff3ef;
+  border: 2px solid var(--accent);
+  font-size: 14px;
+}
+
+.fl-meal-totals b { font-size: 18px; }
+
 @media (max-width: 560px) {
   .fl-grid-2 { grid-template-columns: 1fr; }
   .fl-pillars { grid-template-columns: 1fr; }
