@@ -1,8 +1,7 @@
 /** Auto-generated from how-to-lose-fat-fast.pdf — run scripts/buildBookPages.py to rebuild */
 export const FL_BOOK_PAGES = [
   {
-    "pageType": "image",
-    "imageUrl": "assets/book/page-1-1.jpg",
+    "pageType": "text",
     "text": "THE 90 DAY PROGRAM\nHOW TO LOSE FAT\nAS FAST AS POSSIBLE\nTrack your calories. Walk your steps. Lift three days.\nLose 10 pounds in 90 days or get DOUBLE your money back.\nBy Képler Siguineau",
     "title": "How to Lose Fat as Fast as Possible",
     "id": "page1"
@@ -38,24 +37,24 @@ export const FL_BOOK_PAGES = [
     "id": "page6"
   },
   {
-    "pageType": "image",
-    "imageUrl": "assets/book/page-6-1.jpg",
+    "pageType": "text",
     "text": "This photo exists now. For 24 years, none did.",
     "title": "Chapter 1",
+    "imageUrl": "assets/book/page-6-1.jpg",
     "id": "page7"
   },
   {
-    "pageType": "image",
-    "imageUrl": "assets/book/page-7-1.jpg",
+    "pageType": "text",
     "text": "Same week. In clothes you can't tell anything. That's the skinny fat trap, and it cuts both ways.",
     "title": "Chapter 1",
+    "imageUrl": "assets/book/page-7-1.jpg",
     "id": "page8"
   },
   {
-    "pageType": "image",
-    "imageUrl": "assets/book/page-7-2.jpg",
+    "pageType": "text",
     "text": "Shirtless — the result of tracking.",
     "title": "Chapter 1",
+    "imageUrl": "assets/book/page-7-2.jpg",
     "id": "page9"
   },
   {
@@ -65,10 +64,10 @@ export const FL_BOOK_PAGES = [
     "id": "page10"
   },
   {
-    "pageType": "image",
-    "imageUrl": "assets/book/page-8-1.jpg",
+    "pageType": "text",
     "text": "These pants fit a much bigger man once.",
     "title": "Chapter 1",
+    "imageUrl": "assets/book/page-8-1.jpg",
     "id": "page11"
   },
   {

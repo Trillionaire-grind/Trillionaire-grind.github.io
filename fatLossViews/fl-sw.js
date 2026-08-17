@@ -1,4 +1,4 @@
-const CACHE = "fl-app-v0.0.0.27";
+const CACHE = "fl-app-v0.0.0.28";
 
 const ASSETS = [
   "./app.html",
@@ -20,7 +20,6 @@ const ASSETS = [
   "./assets/flVersion.js",
   "./assets/how-to-lose-fat-fast.pdf",
   "./assets/photos/product-stack.png",
-  "./assets/book/page-1-1.jpg",
   "./assets/book/page-6-1.jpg",
   "./assets/book/page-7-1.jpg",
   "./assets/book/page-7-2.jpg",

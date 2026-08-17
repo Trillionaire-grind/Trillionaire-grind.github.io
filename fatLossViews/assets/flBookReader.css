@@ -66,26 +66,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.fl-reader-image {
+.fl-reader-inline-image {
   display: block;
   width: 100%;
-  max-height: min(52vh, 420px);
+  max-height: min(40vh, 320px);
   object-fit: contain;
-  margin: 0 auto 10px;
+  margin: 0 auto 12px;
   flex-shrink: 0;
-}
-
-.fl-reader-image-caption {
-  margin: 0;
-  flex: 1 1 0;
-  min-height: 0;
-  overflow-y: auto;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 0.98rem;
-  line-height: 1.55;
-  color: var(--gray);
-  white-space: pre-wrap;
-  -webkit-overflow-scrolling: touch;
+  border-radius: 4px;
 }
 
 .fl-reader-arrow {

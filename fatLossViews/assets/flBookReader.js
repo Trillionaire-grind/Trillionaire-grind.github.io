@@ -11,7 +11,6 @@ const els = {
   title: null,
   text: null,
   image: null,
-  caption: null,
   counter: null,
   prev: null,
   next: null,
@@ -24,7 +23,6 @@ export function initBookReader() {
   els.title = document.getElementById("bookSectionTitle");
   els.text = document.getElementById("bookPageText");
   els.image = document.getElementById("bookPageImage");
-  els.caption = document.getElementById("bookImageCaption");
   els.counter = document.getElementById("bookPageCounter");
   els.prev = document.getElementById("bookPrev");
   els.next = document.getElementById("bookNext");
@@ -90,25 +88,18 @@ function showPage(position) {
   if (els.counter) els.counter.textContent = `Page ${position + 1} of ${pages.length}`;
 
   const textValue = typeof page.text === "string" ? page.text : "";
-  const imageUrl = typeof page.imageUrl === "string" ? page.imageUrl : "";
-  const isImage = page.pageType === "image" && imageUrl;
+  const imageUrl = typeof page.imageUrl === "string" ? page.imageUrl.trim() : "";
 
-  if (isImage) {
+  els.text.hidden = false;
+  els.text.textContent = textValue;
+
+  if (imageUrl && els.image) {
     els.image.src = imageUrl;
-    els.image.alt = page.title || "Book photo";
+    els.image.alt = page.title || "Book illustration";
     els.image.hidden = false;
-    els.text.hidden = true;
-    els.text.textContent = "";
-    const caption = textValue.trim();
-    els.caption.hidden = !caption;
-    els.caption.textContent = caption;
-  } else {
+  } else if (els.image) {
     els.image.hidden = true;
     els.image.removeAttribute("src");
-    els.text.hidden = false;
-    els.caption.hidden = true;
-    els.caption.textContent = "";
-    els.text.textContent = textValue;
   }
 
   setArrows(position > 0, position < pages.length - 1);
