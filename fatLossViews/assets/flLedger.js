@@ -1,7 +1,7 @@
 import { GUARANTEE_EMAIL } from "./flConfig.js";
 import { pushLedgerToCloud } from "./flAuth.js";
 import { flVersionLabel } from "./flVersion.js";
-import { parseMealInput, sumMeals } from "./flMealParser.js";
+import { createManualMeal, parseMealInput, sumMeals } from "./flMealParser.js";
 import {
   downloadBackupFile,
   getLedgerState,
@@ -181,6 +181,11 @@ export function initLedger() {
     mealTotalCal: document.getElementById("mealTotalCal"),
     mealTotalProtein: document.getElementById("mealTotalProtein"),
     protein: document.getElementById("protein"),
+    manualMealName: document.getElementById("manualMealName"),
+    manualMealCal: document.getElementById("manualMealCal"),
+    manualMealProtein: document.getElementById("manualMealProtein"),
+    addManualMeal: document.getElementById("addManualMeal"),
+    manualMealStatus: document.getElementById("manualMealStatus"),
   };
 
   let state = getLedgerState();
@@ -224,6 +229,13 @@ export function initLedger() {
       els.mealParseStatus.textContent = "";
       els.mealParseStatus.classList.remove("is-ok");
     }
+    if (els.manualMealName) els.manualMealName.value = "";
+    if (els.manualMealCal) els.manualMealCal.value = "";
+    if (els.manualMealProtein) els.manualMealProtein.value = "";
+    if (els.manualMealStatus) {
+      els.manualMealStatus.textContent = "";
+      els.manualMealStatus.classList.remove("is-ok");
+    }
     els.dayStatus.textContent = "";
     els.dayStatus.classList.remove("is-ok");
     renderMeals();
@@ -253,9 +265,16 @@ export function initLedger() {
     els.mealList.innerHTML = "";
     draftMeals.forEach((meal) => {
       const li = document.createElement("li");
+      const isManual = meal.source === "manual";
+      const title = isManual
+        ? meal.foodName
+        : `${meal.amountLabel} ${meal.foodName}`.trim();
+      const tag = isManual
+        ? `<span class="fl-meal-tag fl-meal-tag--manual">Manual</span>`
+        : `<span class="fl-meal-tag">Boy Kibble</span>`;
       li.innerHTML = `
         <div>
-          <div class="meal-title">${meal.amountLabel} ${meal.foodName}</div>
+          <div class="meal-title">${title}${tag}</div>
           <div class="meal-meta">${meal.calories} cal · ${meal.protein}g protein</div>
         </div>
       `;
@@ -307,20 +326,47 @@ export function initLedger() {
     if (!parsed.ok) {
       if (els.mealParseStatus) {
         els.mealParseStatus.textContent = parsed.error;
-        els.mealParseStatus.classList.remove("is-ok");
+        els.mealParseStatus.classList.toggle("is-ok", !!parsed.notKibble);
       }
       return;
     }
-    draftMeals = [...draftMeals, parsed.meal];
-    const iso = els.entryDate.value || selectedDate || todayISO();
-    writeDayFromDraft(iso);
+    appendMeal(parsed.meal);
     if (els.mealInput) els.mealInput.value = "";
     if (els.mealParseStatus) {
       els.mealParseStatus.textContent = `Added: ${parsed.meal.calories} cal · ${parsed.meal.protein}g protein`;
       els.mealParseStatus.classList.add("is-ok");
     }
+  }
+
+  function appendMeal(meal) {
+    draftMeals = [...draftMeals, meal];
+    const iso = els.entryDate.value || selectedDate || todayISO();
+    writeDayFromDraft(iso);
     renderMeals();
     renderHistory();
+  }
+
+  function addManualMealFromForm() {
+    const parsed = createManualMeal(
+      els.manualMealName?.value,
+      els.manualMealCal?.value,
+      els.manualMealProtein?.value,
+    );
+    if (!parsed.ok) {
+      if (els.manualMealStatus) {
+        els.manualMealStatus.textContent = parsed.error;
+        els.manualMealStatus.classList.remove("is-ok");
+      }
+      return;
+    }
+    appendMeal(parsed.meal);
+    if (els.manualMealName) els.manualMealName.value = "";
+    if (els.manualMealCal) els.manualMealCal.value = "";
+    if (els.manualMealProtein) els.manualMealProtein.value = "";
+    if (els.manualMealStatus) {
+      els.manualMealStatus.textContent = `Added: ${parsed.meal.calories} cal · ${parsed.meal.protein}g protein`;
+      els.manualMealStatus.classList.add("is-ok");
+    }
   }
 
   function removeMeal(mealId) {
@@ -453,6 +499,7 @@ export function initLedger() {
       addMealFromInput();
     }
   });
+  els.addManualMeal?.addEventListener("click", addManualMealFromForm);
 
   els.saveDay.addEventListener("click", () => {
     const iso = els.entryDate.value || todayISO();
