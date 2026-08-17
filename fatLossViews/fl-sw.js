@@ -1,12 +1,16 @@
-const CACHE = "fl-app-v0.0.0.22";
+const CACHE = "fl-app-v0.0.0.23";
 
 const ASSETS = [
   "./app.html",
   "./manifest.webmanifest",
   "./assets/flApp.css",
   "./assets/flApp.js",
+  "./assets/flAuth.js",
+  "./assets/flFirebase.js",
+  "./assets/flFirebaseConfig.js",
   "./assets/flLedger.css",
   "./assets/flLedger.js",
+  "./assets/flLedgerStore.js",
   "./assets/flConfig.js",
   "./assets/flVersion.js",
   "./assets/how-to-lose-fat-fast.pdf",
