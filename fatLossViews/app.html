@@ -81,14 +81,15 @@
 
       <div class="fl-book-reader" id="flBookReader" tabindex="0" aria-label="Book reader">
         <header class="fl-reader-header">
-          <h2 class="fl-reader-title">How to Lose Fat as Fast as Possible</h2>
+          <h2 class="fl-reader-title" id="bookSectionTitle">How to Lose Fat as Fast as Possible</h2>
         </header>
 
         <div class="fl-reader-stage">
           <button type="button" id="bookPrev" class="fl-reader-arrow fl-reader-arrow-left" aria-label="Previous page">&#9664;</button>
           <article class="fl-book-surface">
-            <canvas id="bookCanvas" aria-label="Book page"></canvas>
-            <p id="bookLoading" class="fl-reader-loading">Loading book…</p>
+            <img id="bookPageImage" class="fl-reader-image" alt="" hidden>
+            <p id="bookPageText" class="fl-reader-text"></p>
+            <p id="bookImageCaption" class="fl-reader-image-caption" hidden></p>
           </article>
           <button type="button" id="bookNext" class="fl-reader-arrow fl-reader-arrow-right" aria-label="Next page">&#9654;</button>
         </div>

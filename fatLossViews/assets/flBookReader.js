@@ -1,43 +1,47 @@
-import { EBOOK_PDF } from "./flConfig.js";
+import { FL_BOOK_PAGES, FL_BOOK_PAGE_COUNT } from "./flBookPages.js";
 import { flVersionLabel } from "./flVersion.js";
 
 const STORAGE_KEY = "fl-book-page-v1";
-const PDFJS_VERSION = "4.10.38";
-const PDFJS_BASE = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build`;
 
-let pdfDoc = null;
-let pageNum = 1;
-let pageCount = 0;
-let rendering = false;
+let pagePosition = 0;
+let pages = FL_BOOK_PAGES;
 
 const els = {
-  canvas: null,
-  loading: null,
+  root: null,
+  title: null,
+  text: null,
+  image: null,
+  caption: null,
   counter: null,
   prev: null,
   next: null,
-  surface: null,
 };
 
-export async function initBookReader() {
-  const root = document.getElementById("flBookReader");
-  if (!root) return;
+export function initBookReader() {
+  els.root = document.getElementById("flBookReader");
+  if (!els.root || !FL_BOOK_PAGE_COUNT) return;
 
-  els.canvas = document.getElementById("bookCanvas");
-  els.loading = document.getElementById("bookLoading");
+  els.title = document.getElementById("bookSectionTitle");
+  els.text = document.getElementById("bookPageText");
+  els.image = document.getElementById("bookPageImage");
+  els.caption = document.getElementById("bookImageCaption");
   els.counter = document.getElementById("bookPageCounter");
   els.prev = document.getElementById("bookPrev");
   els.next = document.getElementById("bookNext");
-  els.surface = document.querySelector(".fl-book-surface");
 
-  if (!els.canvas || !els.prev || !els.next) return;
+  if (!els.text || !els.prev || !els.next) return;
 
   console.log("[Fat Loss book reader] working version:", flVersionLabel());
+
+  pages = FL_BOOK_PAGES;
+  const saved = Number(localStorage.getItem(STORAGE_KEY));
+  pagePosition =
+    Number.isFinite(saved) && saved >= 0 && saved < pages.length ? saved : 0;
 
   els.prev.addEventListener("click", () => goPrev());
   els.next.addEventListener("click", () => goNext());
 
-  root.addEventListener(
+  els.root.addEventListener(
     "keydown",
     (e) => {
       if (e.key === "ArrowLeft") goPrev();
@@ -47,14 +51,14 @@ export async function initBookReader() {
   );
 
   let touchStartX = 0;
-  root.addEventListener(
+  els.root.addEventListener(
     "touchstart",
     (e) => {
       touchStartX = e.changedTouches[0]?.clientX || 0;
     },
     { passive: true },
   );
-  root.addEventListener(
+  els.root.addEventListener(
     "touchend",
     (e) => {
       const dx = (e.changedTouches[0]?.clientX || 0) - touchStartX;
@@ -65,33 +69,7 @@ export async function initBookReader() {
     { passive: true },
   );
 
-  setLoading(true, "Loading book…");
-
-  try {
-    const pdfjsLib = await import(`${PDFJS_BASE}/pdf.mjs`);
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `${PDFJS_BASE}/pdf.worker.mjs`;
-
-    const task = pdfjsLib.getDocument(EBOOK_PDF);
-    pdfDoc = await task.promise;
-    pageCount = pdfDoc.numPages;
-
-    const saved = Number(localStorage.getItem(STORAGE_KEY));
-    pageNum = Number.isFinite(saved) && saved >= 1 && saved <= pageCount ? saved : 1;
-
-    await renderPage(pageNum);
-  } catch (err) {
-    console.error("[Fat Loss book reader]", err);
-    setLoading(true, "Could not load the book. Use Save PDF offline below.");
-    setArrows(false, false);
-  }
-}
-
-function setLoading(show, message) {
-  if (els.loading) {
-    els.loading.hidden = !show;
-    if (message) els.loading.textContent = message;
-  }
-  if (els.canvas) els.canvas.hidden = show;
+  showPage(pagePosition);
 }
 
 function setArrows(canPrev, canNext) {
@@ -99,61 +77,53 @@ function setArrows(canPrev, canNext) {
   els.next.disabled = !canNext;
   els.prev.classList.toggle("fl-reader-arrow--off", !canPrev);
   els.next.classList.toggle("fl-reader-arrow--off", !canNext);
-  els.prev.setAttribute("aria-disabled", canPrev ? "false" : "true");
-  els.next.setAttribute("aria-disabled", canNext ? "false" : "true");
 }
 
-function updateCounter() {
-  if (els.counter) {
-    els.counter.textContent = `Page ${pageNum} of ${pageCount}`;
+function showPage(position) {
+  const page = pages[position];
+  if (!page) return;
+
+  pagePosition = position;
+  localStorage.setItem(STORAGE_KEY, String(pagePosition));
+
+  if (els.title) els.title.textContent = page.title || "How to Lose Fat as Fast as Possible";
+  if (els.counter) els.counter.textContent = `Page ${position + 1} of ${pages.length}`;
+
+  const textValue = typeof page.text === "string" ? page.text : "";
+  const imageUrl = typeof page.imageUrl === "string" ? page.imageUrl : "";
+  const isImage = page.pageType === "image" && imageUrl;
+
+  if (isImage) {
+    els.image.src = imageUrl;
+    els.image.alt = page.title || "Book photo";
+    els.image.hidden = false;
+    els.text.hidden = true;
+    els.text.textContent = "";
+    const caption = textValue.trim();
+    els.caption.hidden = !caption;
+    els.caption.textContent = caption;
+  } else {
+    els.image.hidden = true;
+    els.image.removeAttribute("src");
+    els.text.hidden = false;
+    els.caption.hidden = true;
+    els.caption.textContent = "";
+    els.text.textContent = textValue;
   }
-}
 
-async function renderPage(num) {
-  if (!pdfDoc || rendering) return;
-  rendering = true;
-  setLoading(true, "Loading page…");
-
-  try {
-    const page = await pdfDoc.getPage(num);
-    const canvas = els.canvas;
-    const ctx = canvas.getContext("2d");
-
-    const surfaceWidth = els.surface?.clientWidth || window.innerWidth - 140;
-    const viewport = page.getViewport({ scale: 1 });
-    const scale = Math.min(2, Math.max(0.5, (surfaceWidth - 24) / viewport.width));
-    const scaled = page.getViewport({ scale });
-
-    canvas.width = Math.floor(scaled.width);
-    canvas.height = Math.floor(scaled.height);
-    canvas.style.width = `${Math.floor(scaled.width)}px`;
-    canvas.style.height = `${Math.floor(scaled.height)}px`;
-
-    await page.render({ canvasContext: ctx, viewport: scaled }).promise;
-
-    pageNum = num;
-    localStorage.setItem(STORAGE_KEY, String(pageNum));
-    updateCounter();
-    setArrows(pageNum > 1, pageNum < pageCount);
-    setLoading(false);
-  } catch (err) {
-    console.error("[Fat Loss book reader] render", err);
-    setLoading(true, "Could not render this page.");
-  } finally {
-    rendering = false;
-  }
+  setArrows(position > 0, position < pages.length - 1);
 }
 
 function goPrev() {
-  if (pageNum <= 1) return;
-  renderPage(pageNum - 1);
+  if (pagePosition <= 0) return;
+  showPage(pagePosition - 1);
 }
 
 function goNext() {
-  if (pageNum >= pageCount) return;
-  renderPage(pageNum + 1);
+  if (pagePosition >= pages.length - 1) return;
+  showPage(pagePosition + 1);
 }
 
 export function refreshBookReaderLayout() {
-  if (pdfDoc && pageNum) renderPage(pageNum);
+  if (pages.length) showPage(pagePosition);
 }

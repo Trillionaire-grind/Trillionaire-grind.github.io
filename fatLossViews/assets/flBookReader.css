@@ -46,26 +46,46 @@
   background: #fff;
   border: 3px solid var(--ink);
   display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  overflow: auto;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 1.1rem 1rem;
+}
+
+.fl-reader-text {
+  margin: 0;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  text-align: left;
+  color: var(--ink);
+  white-space: pre-wrap;
   -webkit-overflow-scrolling: touch;
-  padding: 10px 8px;
 }
 
-.fl-book-surface canvas {
+.fl-reader-image {
   display: block;
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  max-height: min(52vh, 420px);
+  object-fit: contain;
+  margin: 0 auto 10px;
+  flex-shrink: 0;
 }
 
-.fl-reader-loading {
-  margin: auto;
-  padding: 24px 12px;
-  text-align: center;
+.fl-reader-image-caption {
+  margin: 0;
+  flex: 1 1 0;
+  min-height: 0;
+  overflow-y: auto;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.98rem;
+  line-height: 1.55;
   color: var(--gray);
-  font-size: 14px;
-  line-height: 1.5;
+  white-space: pre-wrap;
+  -webkit-overflow-scrolling: touch;
 }
 
 .fl-reader-arrow {
@@ -125,5 +145,9 @@
     width: 44px;
     min-width: 44px;
     font-size: 1rem;
+  }
+
+  .fl-reader-text {
+    font-size: 0.98rem;
   }
 }
