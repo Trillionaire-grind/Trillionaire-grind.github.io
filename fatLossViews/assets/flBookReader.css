@@ -1,0 +1,129 @@
+.fl-panel-book {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--header-h));
+  max-height: calc(100vh - var(--header-h));
+  overflow: hidden;
+}
+
+.fl-book-reader {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px 10px 16px;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.fl-reader-header {
+  flex-shrink: 0;
+  margin-bottom: 10px;
+}
+
+.fl-reader-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 900;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.fl-reader-stage {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.fl-book-surface {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  background: #fff;
+  border: 3px solid var(--ink);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 10px 8px;
+}
+
+.fl-book-surface canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.fl-reader-loading {
+  margin: auto;
+  padding: 24px 12px;
+  text-align: center;
+  color: var(--gray);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fl-reader-arrow {
+  width: 52px;
+  min-width: 52px;
+  height: 100%;
+  min-height: 0;
+  border: 3px solid var(--ink);
+  border-radius: 0;
+  background: #fff;
+  color: var(--ink);
+  font-size: 1.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 4px;
+}
+
+.fl-reader-arrow:hover:not(:disabled) {
+  background: #fff3ef;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.fl-reader-arrow--off {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.fl-reader-arrow:disabled {
+  cursor: default;
+}
+
+.fl-reader-footer {
+  flex-shrink: 0;
+  text-align: center;
+  margin-top: 10px;
+}
+
+.fl-page-counter {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gray);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 560px) {
+  .fl-reader-stage {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+  }
+
+  .fl-reader-arrow {
+    width: 44px;
+    min-width: 44px;
+    font-size: 1rem;
+  }
+}

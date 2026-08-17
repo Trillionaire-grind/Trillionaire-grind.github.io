@@ -1,4 +1,5 @@
 import { EBOOK_PDF, GUARANTEE_EMAIL, KIT_PDF } from "./flConfig.js";
+import { initBookReader, refreshBookReaderLayout } from "./flBookReader.js";
 import {
   authErrorMessage,
   deleteAccount,
@@ -27,9 +28,7 @@ const installBanner = document.getElementById("installBanner");
 const installBtn = document.getElementById("installBtn");
 const dismissInstall = document.getElementById("dismissInstall");
 const versionEl = document.getElementById("flAppVersion");
-const bookFrame = document.getElementById("bookFrame");
 const bookPdfLink = document.getElementById("bookPdfLink");
-const bookOpenLink = document.getElementById("bookOpenLink");
 const authGate = document.getElementById("authGate");
 const appShell = document.getElementById("appShell");
 const authForm = document.getElementById("authForm");
@@ -52,15 +51,9 @@ let deferredInstall = null;
 let authMode = "signin";
 
 if (versionEl) versionEl.textContent = flVersionLabel();
-if (bookFrame) bookFrame.src = EBOOK_PDF;
 if (bookPdfLink) {
   bookPdfLink.href = EBOOK_PDF;
   bookPdfLink.setAttribute("download", "");
-}
-if (bookOpenLink) {
-  bookOpenLink.href = EBOOK_PDF;
-  bookOpenLink.target = "_blank";
-  bookOpenLink.rel = "noopener";
 }
 
 function setTab(name) {
@@ -73,6 +66,7 @@ function setTab(name) {
   panels.book.hidden = tab !== "book";
   panels.ledger.hidden = tab !== "ledger";
   location.hash = tab;
+  if (tab === "book") refreshBookReaderLayout();
 }
 
 tabs.forEach((btn) => {
@@ -242,10 +236,15 @@ if ("serviceWorker" in navigator) {
   }
 })();
 
+window.addEventListener("resize", () => {
+  refreshBookReaderLayout();
+});
+
 (async () => {
   setAuthMode("signin");
   await initFlAuth();
   initLedger();
+  initBookReader();
   onFlAuthChange(showApp);
   const { user } = await waitForFlAuthReady();
   showApp(user, isCloudSyncEnabled());
