@@ -1,62 +1,69 @@
-import { FL_BOOK_PAGES, FL_BOOK_PAGE_COUNT } from "./flBookPages.js";
+import { FL_BOOK, FL_BOOK_PAGE_COUNT } from "./flBookPages.js";
 import { flVersionLabel } from "./flVersion.js";
 
-const STORAGE_KEY = "fl-book-page-v1";
+const STORAGE_KEY = "fl-book-pos-v2";
 
-let pagePosition = 0;
-let pages = FL_BOOK_PAGES;
+const chapters = FL_BOOK.chapters || [];
 
-const els = {
-  root: null,
-  title: null,
-  text: null,
-  image: null,
-  counter: null,
-  prev: null,
-  next: null,
-};
+let chapterIndex = 0;
+let pageIndex = 0;
+
+const els = {};
 
 export function initBookReader() {
-  els.root = document.getElementById("flBookReader");
-  if (!els.root || !FL_BOOK_PAGE_COUNT) return;
+  els.root = document.getElementById("panel-book");
+  if (!els.root || !chapters.length) return;
 
-  els.title = document.getElementById("bookSectionTitle");
-  els.text = document.getElementById("bookPageText");
-  els.image = document.getElementById("bookPageImage");
+  els.contents = document.getElementById("bookContents");
+  els.reader = document.getElementById("flBookReader");
+  els.cover = document.getElementById("bookCover");
+  els.title = document.getElementById("bookTitle");
+  els.author = document.getElementById("bookAuthor");
+  els.chapterCount = document.getElementById("bookChapterCount");
+  els.pageTotal = document.getElementById("bookPageTotal");
+  els.chapterList = document.getElementById("bookChapters");
+  els.resume = document.getElementById("bookResume");
+  els.back = document.getElementById("bookBack");
+  els.sectionTitle = document.getElementById("bookSectionTitle");
+  els.surface = document.getElementById("bookSurface");
   els.counter = document.getElementById("bookPageCounter");
   els.prev = document.getElementById("bookPrev");
   els.next = document.getElementById("bookNext");
 
-  if (!els.text || !els.prev || !els.next) return;
+  if (!els.contents || !els.reader || !els.surface) return;
 
   console.log("[Fat Loss book reader] working version:", flVersionLabel());
 
-  pages = FL_BOOK_PAGES;
-  const saved = Number(localStorage.getItem(STORAGE_KEY));
-  pagePosition =
-    Number.isFinite(saved) && saved >= 0 && saved < pages.length ? saved : 0;
+  renderContents();
+  restorePosition();
 
-  els.prev.addEventListener("click", () => goPrev());
-  els.next.addEventListener("click", () => goNext());
+  els.resume.addEventListener("click", () => openChapter(chapterIndex, pageIndex));
+  els.back.addEventListener("click", showContents);
+  els.prev.addEventListener("click", goPrev);
+  els.next.addEventListener("click", goNext);
 
-  els.root.addEventListener(
+  els.reader.addEventListener(
     "keydown",
     (e) => {
       if (e.key === "ArrowLeft") goPrev();
       if (e.key === "ArrowRight") goNext();
+      if (e.key === "Escape") showContents();
     },
     true,
   );
 
+  window.addEventListener("resize", sizeReadingPanel);
+  window.addEventListener("orientationchange", sizeReadingPanel);
+
   let touchStartX = 0;
-  els.root.addEventListener(
+  els.reader.addEventListener(
     "touchstart",
     (e) => {
       touchStartX = e.changedTouches[0]?.clientX || 0;
     },
     { passive: true },
   );
-  els.root.addEventListener(
+  els.reader.addEventListener(
     "touchend",
     (e) => {
       const dx = (e.changedTouches[0]?.clientX || 0) - touchStartX;
@@ -66,55 +73,171 @@ export function initBookReader() {
     },
     { passive: true },
   );
-
-  showPage(pagePosition);
 }
 
-function setArrows(canPrev, canNext) {
-  els.prev.disabled = !canPrev;
-  els.next.disabled = !canNext;
-  els.prev.classList.toggle("fl-reader-arrow--off", !canPrev);
-  els.next.classList.toggle("fl-reader-arrow--off", !canNext);
+function renderContents() {
+  if (els.cover && FL_BOOK.cover) {
+    els.cover.src = FL_BOOK.cover;
+    els.cover.alt = `${FL_BOOK.title} cover`;
+    els.cover.addEventListener("load", () => els.cover.classList.add("is-loaded"), {
+      once: true,
+    });
+  }
+  if (els.title) els.title.textContent = FL_BOOK.title || "";
+  if (els.author) els.author.textContent = FL_BOOK.author || "—";
+  if (els.chapterCount) els.chapterCount.textContent = String(chapters.length);
+  if (els.pageTotal) els.pageTotal.textContent = String(FL_BOOK_PAGE_COUNT);
+
+  els.chapterList.innerHTML = "";
+  chapters.forEach((chapter, index) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "fl-chapter-item";
+    const count = chapter.pages.length;
+    item.innerHTML =
+      `<span class="fl-chapter-name"></span>` +
+      `<span class="fl-chapter-pages">${count} ${count === 1 ? "page" : "pages"}</span>`;
+    item.querySelector(".fl-chapter-name").textContent = chapter.title;
+    item.addEventListener("click", () => openChapter(index, 0));
+    els.chapterList.appendChild(item);
+  });
 }
 
-function showPage(position) {
-  const page = pages[position];
+function restorePosition() {
+  let saved = null;
+  try {
+    saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+  } catch {
+    saved = null;
+  }
+  if (!saved || !chapters[saved.chapter]) return;
+
+  chapterIndex = saved.chapter;
+  pageIndex = Math.min(saved.page || 0, chapters[chapterIndex].pages.length - 1);
+  syncResume();
+}
+
+function syncResume() {
+  if (!els.resume) return;
+  const started = localStorage.getItem(STORAGE_KEY) !== null;
+  els.resume.hidden = !started;
+  if (started) {
+    els.resume.textContent = `Continue — ${chapters[chapterIndex].title}, page ${pageIndex + 1}`;
+  }
+}
+
+function savePosition() {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ chapter: chapterIndex, page: pageIndex }),
+  );
+}
+
+function showContents() {
+  els.reader.hidden = true;
+  els.contents.hidden = false;
+  els.root.classList.remove("is-reading");
+  els.root.style.removeProperty("--fl-book-panel-h");
+  syncResume();
+}
+
+function sizeReadingPanel() {
+  if (!els.root || !els.root.classList.contains("is-reading")) return;
+  const top = els.root.getBoundingClientRect().top;
+  const available = Math.max(320, window.innerHeight - top);
+  els.root.style.setProperty("--fl-book-panel-h", `${available}px`);
+}
+
+function openChapter(index, page) {
+  const chapter = chapters[index];
+  if (!chapter) return;
+
+  chapterIndex = index;
+  pageIndex = Math.min(Math.max(page, 0), chapter.pages.length - 1);
+
+  els.contents.hidden = true;
+  els.reader.hidden = false;
+  els.root.classList.add("is-reading");
+  window.scrollTo(0, 0);
+  sizeReadingPanel();
+  els.reader.focus({ preventScroll: true });
+
+  showPage();
+}
+
+function showPage() {
+  const chapter = chapters[chapterIndex];
+  const page = chapter.pages[pageIndex];
   if (!page) return;
 
-  pagePosition = position;
-  localStorage.setItem(STORAGE_KEY, String(pagePosition));
+  savePosition();
 
-  if (els.title) els.title.textContent = page.title || "How to Lose Fat as Fast as Possible";
-  if (els.counter) els.counter.textContent = `Page ${position + 1} of ${pages.length}`;
+  els.sectionTitle.textContent = chapter.title;
+  els.counter.textContent = `Page ${pageIndex + 1} of ${chapter.pages.length}`;
+  els.surface.scrollTop = 0;
+  els.surface.innerHTML = "";
 
-  const textValue = typeof page.text === "string" ? page.text : "";
-  const imageUrl = typeof page.imageUrl === "string" ? page.imageUrl.trim() : "";
-
-  els.text.hidden = false;
-  els.text.textContent = textValue;
-
-  if (imageUrl && els.image) {
-    els.image.src = imageUrl;
-    els.image.alt = page.title || "Book illustration";
-    els.image.hidden = false;
-  } else if (els.image) {
-    els.image.hidden = true;
-    els.image.removeAttribute("src");
+  const images = page.images || [];
+  if (images.length) {
+    const figure = document.createElement("div");
+    figure.className =
+      images.length > 1 ? "fl-reader-photos fl-reader-photos--pair" : "fl-reader-photos";
+    images.forEach((src) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = chapter.title;
+      img.loading = "lazy";
+      figure.appendChild(img);
+    });
+    els.surface.appendChild(figure);
   }
 
-  setArrows(position > 0, position < pages.length - 1);
+  (page.blocks || []).forEach((block) => {
+    const tag = block.t === "h" ? "h3" : "p";
+    const node = document.createElement(tag);
+    node.className = `fl-block fl-block-${block.t}`;
+    node.textContent = block.x;
+    els.surface.appendChild(node);
+  });
+
+  const firstPage = pageIndex === 0;
+  const lastPage = pageIndex === chapter.pages.length - 1;
+  setArrow(els.prev, !firstPage || chapterIndex > 0, firstPage && chapterIndex > 0);
+  setArrow(
+    els.next,
+    !lastPage || chapterIndex < chapters.length - 1,
+    lastPage && chapterIndex < chapters.length - 1,
+  );
+}
+
+function setArrow(btn, enabled, isChapterJump) {
+  btn.disabled = !enabled;
+  btn.classList.toggle("fl-reader-arrow--off", !enabled);
+  btn.classList.toggle("fl-reader-arrow--chapter", Boolean(enabled && isChapterJump));
 }
 
 function goPrev() {
-  if (pagePosition <= 0) return;
-  showPage(pagePosition - 1);
+  if (pageIndex > 0) {
+    pageIndex -= 1;
+    showPage();
+    return;
+  }
+  if (chapterIndex > 0) {
+    const prev = chapters[chapterIndex - 1];
+    openChapter(chapterIndex - 1, prev.pages.length - 1);
+  }
 }
 
 function goNext() {
-  if (pagePosition >= pages.length - 1) return;
-  showPage(pagePosition + 1);
+  const chapter = chapters[chapterIndex];
+  if (pageIndex < chapter.pages.length - 1) {
+    pageIndex += 1;
+    showPage();
+    return;
+  }
+  if (chapterIndex < chapters.length - 1) openChapter(chapterIndex + 1, 0);
 }
 
 export function refreshBookReaderLayout() {
-  if (pages.length) showPage(pagePosition);
+  if (els.reader && !els.reader.hidden) showPage();
 }

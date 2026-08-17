@@ -75,21 +75,46 @@
 
   <main class="fl-app-main">
     <section class="fl-panel fl-panel-book" id="panel-book" role="tabpanel" aria-label="Book">
-      <div class="fl-book-toolbar">
-        <a href="#" id="bookPdfLink">Save PDF offline</a>
+      <div class="fl-book-contents" id="bookContents">
+        <div class="fl-book-cover-wrap">
+          <img id="bookCover" class="fl-book-cover-img" alt="">
+        </div>
+
+        <h1 class="fl-book-title" id="bookTitle"></h1>
+
+        <div class="fl-meta-grid" aria-label="Book details">
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Author</p>
+            <p class="fl-meta-value" id="bookAuthor"></p>
+          </div>
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Chapters</p>
+            <p class="fl-meta-value" id="bookChapterCount"></p>
+          </div>
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Pages</p>
+            <p class="fl-meta-value" id="bookPageTotal"></p>
+          </div>
+        </div>
+
+        <button type="button" class="fl-book-resume" id="bookResume" hidden></button>
+
+        <h2 class="fl-section-heading">Contents</h2>
+        <p class="fl-chapter-hint">Tap a chapter to read it. Your place is saved.</p>
+        <div id="bookChapters"></div>
+
+        <p class="fl-book-offline"><a href="#" id="bookPdfLink">Save PDF offline</a></p>
       </div>
 
-      <div class="fl-book-reader" id="flBookReader" tabindex="0" aria-label="Book reader">
+      <div class="fl-book-reader" id="flBookReader" tabindex="0" aria-label="Book reader" hidden>
         <header class="fl-reader-header">
-          <h2 class="fl-reader-title" id="bookSectionTitle">How to Lose Fat as Fast as Possible</h2>
+          <button type="button" id="bookBack" class="fl-reader-back">&#8592; Contents</button>
+          <h2 class="fl-reader-title" id="bookSectionTitle"></h2>
         </header>
 
         <div class="fl-reader-stage">
           <button type="button" id="bookPrev" class="fl-reader-arrow fl-reader-arrow-left" aria-label="Previous page">&#9664;</button>
-          <article class="fl-book-surface">
-            <img id="bookPageImage" class="fl-reader-inline-image" alt="" hidden>
-            <p id="bookPageText" class="fl-reader-text"></p>
-          </article>
+          <article class="fl-book-surface" id="bookSurface"></article>
           <button type="button" id="bookNext" class="fl-reader-arrow fl-reader-arrow-right" aria-label="Next page">&#9654;</button>
         </div>
 

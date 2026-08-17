@@ -151,6 +151,8 @@ html, body.fl-app {
   color: #fff;
 }
 
+.fl-book-toolbar[hidden] { display: none; }
+
 .fl-book-frame {
   display: none;
 }
