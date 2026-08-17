@@ -1,6 +1,7 @@
 import { GUARANTEE_EMAIL } from "./flConfig.js";
 import { pushLedgerToCloud } from "./flAuth.js";
 import { flVersionLabel } from "./flVersion.js";
+import { parseMealInput, sumMeals } from "./flMealParser.js";
 import {
   downloadBackupFile,
   getLedgerState,
@@ -41,12 +42,31 @@ function isoForDayNumber(state, n) {
 function emptyDay() {
   return {
     calories: "",
+    protein: "",
     steps: "",
     workout: false,
     workoutNote: "",
     weight: "",
+    meals: [],
     mealsLogged: false,
     notes: "",
+  };
+}
+
+function normalizeEntry(entry) {
+  const base = entry || emptyDay();
+  return {
+    ...emptyDay(),
+    ...base,
+    meals: Array.isArray(base.meals) ? base.meals : [],
+  };
+}
+
+function totalsFromMeals(meals) {
+  const sum = sumMeals(meals);
+  return {
+    calories: sum.count ? sum.calories : "",
+    protein: sum.count ? sum.protein : "",
   };
 }
 
@@ -153,10 +173,19 @@ export function initLedger() {
     importFile: document.getElementById("importFile"),
     backupStatus: document.getElementById("backupStatus"),
     supportEmail: document.getElementById("supportEmail"),
+    mealInput: document.getElementById("mealInput"),
+    addMeal: document.getElementById("addMeal"),
+    mealParseStatus: document.getElementById("mealParseStatus"),
+    mealList: document.getElementById("mealList"),
+    mealTotals: document.getElementById("mealTotals"),
+    mealTotalCal: document.getElementById("mealTotalCal"),
+    mealTotalProtein: document.getElementById("mealTotalProtein"),
+    protein: document.getElementById("protein"),
   };
 
   let state = getLedgerState();
   let selectedDate = todayISO();
+  let draftMeals = [];
 
   if (els.version) els.version.textContent = flVersionLabel();
   if (els.supportEmail) {
@@ -172,7 +201,8 @@ export function initLedger() {
 
   function fillEntry(iso) {
     selectedDate = iso;
-    const entry = state.days[iso] || emptyDay();
+    const entry = normalizeEntry(state.days[iso]);
+    draftMeals = [...entry.meals];
     const n = dayNumber(state, iso);
     els.entryDate.value = iso;
     if (n >= 1 && n <= TOTAL_DAYS) {
@@ -182,16 +212,123 @@ export function initLedger() {
     } else {
       els.dayLabel.textContent = `After Day ${TOTAL_DAYS}`;
     }
-    els.calories.value = entry.calories === "" || entry.calories == null ? "" : entry.calories;
+    syncMealTotalsToFields(entry);
     els.steps.value = entry.steps === "" || entry.steps == null ? "" : entry.steps;
     els.workout.checked = !!entry.workout;
     els.workoutNote.value = entry.workoutNote || "";
     els.weight.value = entry.weight === "" || entry.weight == null ? "" : entry.weight;
-    els.mealsLogged.checked = !!entry.mealsLogged;
+    els.mealsLogged.checked = !!entry.mealsLogged || draftMeals.length > 0;
     els.notes.value = entry.notes || "";
+    if (els.mealInput) els.mealInput.value = "";
+    if (els.mealParseStatus) {
+      els.mealParseStatus.textContent = "";
+      els.mealParseStatus.classList.remove("is-ok");
+    }
     els.dayStatus.textContent = "";
     els.dayStatus.classList.remove("is-ok");
+    renderMeals();
     renderGrid();
+  }
+
+  function syncMealTotalsToFields(entry) {
+    const mealTotals = totalsFromMeals(draftMeals.length ? draftMeals : entry.meals);
+    const calories =
+      mealTotals.calories !== ""
+        ? mealTotals.calories
+        : entry.calories === "" || entry.calories == null
+          ? ""
+          : entry.calories;
+    const protein =
+      mealTotals.protein !== ""
+        ? mealTotals.protein
+        : entry.protein === "" || entry.protein == null
+          ? ""
+          : entry.protein;
+    els.calories.value = calories;
+    if (els.protein) els.protein.value = protein;
+  }
+
+  function renderMeals() {
+    if (!els.mealList) return;
+    els.mealList.innerHTML = "";
+    draftMeals.forEach((meal) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <div>
+          <div class="meal-title">${meal.amountLabel} ${meal.foodName}</div>
+          <div class="meal-meta">${meal.calories} cal · ${meal.protein}g protein</div>
+        </div>
+      `;
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "Remove";
+      remove.addEventListener("click", () => removeMeal(meal.id));
+      li.appendChild(remove);
+      els.mealList.appendChild(li);
+    });
+
+    const totals = sumMeals(draftMeals);
+    if (els.mealTotals) els.mealTotals.hidden = totals.count === 0;
+    if (els.mealTotalCal) els.mealTotalCal.textContent = String(totals.calories);
+    if (els.mealTotalProtein) els.mealTotalProtein.textContent = String(totals.protein);
+    syncMealTotalsToFields(normalizeEntry(state.days[selectedDate]));
+  }
+
+  function writeDayFromDraft(iso) {
+    const totals = totalsFromMeals(draftMeals);
+    const entry = normalizeEntry(state.days[iso]);
+    const nextEntry = {
+      ...entry,
+      meals: draftMeals,
+      calories: totals.calories !== "" ? totals.calories : entry.calories,
+      protein: totals.protein !== "" ? totals.protein : entry.protein,
+      mealsLogged: draftMeals.length > 0 || entry.mealsLogged,
+      steps: els.steps.value === "" ? "" : Number(els.steps.value),
+      workout: !!els.workout.checked,
+      workoutNote: els.workoutNote.value.trim(),
+      weight: els.weight.value === "" ? "" : Number(els.weight.value),
+      notes: els.notes.value.trim(),
+    };
+    state = updateLedgerState({
+      ...state,
+      days: { ...state.days, [iso]: nextEntry },
+    });
+    persist(state);
+    return nextEntry;
+  }
+
+  function addMealFromInput() {
+    const raw = els.mealInput?.value?.trim();
+    if (!raw) {
+      if (els.mealParseStatus) els.mealParseStatus.textContent = "Enter a meal with grams.";
+      return;
+    }
+    const parsed = parseMealInput(raw);
+    if (!parsed.ok) {
+      if (els.mealParseStatus) {
+        els.mealParseStatus.textContent = parsed.error;
+        els.mealParseStatus.classList.remove("is-ok");
+      }
+      return;
+    }
+    draftMeals = [...draftMeals, parsed.meal];
+    const iso = els.entryDate.value || selectedDate || todayISO();
+    writeDayFromDraft(iso);
+    if (els.mealInput) els.mealInput.value = "";
+    if (els.mealParseStatus) {
+      els.mealParseStatus.textContent = `Added: ${parsed.meal.calories} cal · ${parsed.meal.protein}g protein`;
+      els.mealParseStatus.classList.add("is-ok");
+    }
+    renderMeals();
+    renderHistory();
+  }
+
+  function removeMeal(mealId) {
+    draftMeals = draftMeals.filter((m) => m.id !== mealId);
+    const iso = els.entryDate.value || selectedDate || todayISO();
+    writeDayFromDraft(iso);
+    renderMeals();
+    renderHistory();
   }
 
   function renderStats() {
@@ -309,15 +446,36 @@ export function initLedger() {
     if (els.entryDate.value) fillEntry(els.entryDate.value);
   });
 
+  els.addMeal?.addEventListener("click", addMealFromInput);
+  els.mealInput?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addMealFromInput();
+    }
+  });
+
   els.saveDay.addEventListener("click", () => {
     const iso = els.entryDate.value || todayISO();
+    const mealTotals = totalsFromMeals(draftMeals);
     const entry = {
-      calories: els.calories.value === "" ? "" : Number(els.calories.value),
+      calories:
+        mealTotals.calories !== ""
+          ? mealTotals.calories
+          : els.calories.value === ""
+            ? ""
+            : Number(els.calories.value),
+      protein:
+        mealTotals.protein !== ""
+          ? mealTotals.protein
+          : els.protein?.value === ""
+            ? ""
+            : Number(els.protein.value),
       steps: els.steps.value === "" ? "" : Number(els.steps.value),
       workout: !!els.workout.checked,
       workoutNote: els.workoutNote.value.trim(),
       weight: els.weight.value === "" ? "" : Number(els.weight.value),
-      mealsLogged: !!els.mealsLogged.checked,
+      meals: draftMeals,
+      mealsLogged: !!els.mealsLogged.checked || draftMeals.length > 0,
       notes: els.notes.value.trim(),
     };
     state = updateLedgerState({
@@ -364,6 +522,7 @@ export function initLedger() {
       const hits = pillarHits(state, entry);
       lines.push(
         `Day ${n} (${iso}): cal ${entry.calories === "" ? "—" : entry.calories}` +
+          ` · protein ${entry.protein === "" || entry.protein == null ? "—" : entry.protein + "g"}` +
           ` · steps ${entry.steps === "" ? "—" : entry.steps}` +
           ` · workout ${entry.workout ? "YES" : "no"}` +
           ` · weight ${entry.weight === "" ? "—" : entry.weight}` +
@@ -371,6 +530,11 @@ export function initLedger() {
           ` · pillars ${hits.count}/3`
       );
       if (entry.workoutNote) lines.push(`  workout note: ${entry.workoutNote}`);
+      if (Array.isArray(entry.meals) && entry.meals.length) {
+        entry.meals.forEach((meal) => {
+          lines.push(`  meal: ${meal.amountLabel} ${meal.foodName} — ${meal.calories} cal · ${meal.protein}g protein`);
+        });
+      }
       if (entry.notes) lines.push(`  notes: ${entry.notes}`);
     }
     return lines.join("\n");

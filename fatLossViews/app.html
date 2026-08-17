@@ -120,6 +120,21 @@
         </section>
 
         <section class="fl-card">
+          <h2>Log meals</h2>
+          <p class="fl-meta">Type what you weighed — e.g. <b>400g cooked chicken breast</b> or <b>90g rice dry</b>. Calories and protein fill in automatically.</p>
+          <div class="fl-meal-row">
+            <input type="text" id="mealInput" class="fl-meal-input" placeholder="400g cooked chicken breast" autocomplete="off">
+            <button type="button" class="fl-btn fl-btn--accent" id="addMeal">Add</button>
+          </div>
+          <p class="fl-status" id="mealParseStatus"></p>
+          <ul class="fl-meal-list" id="mealList" aria-label="Meals today"></ul>
+          <div class="fl-meal-totals" id="mealTotals" hidden>
+            <span><b id="mealTotalCal">0</b> cal</span>
+            <span><b id="mealTotalProtein">0</b> g protein</span>
+          </div>
+        </section>
+
+        <section class="fl-card">
           <h2>Log a day</h2>
           <p class="fl-meta">
             <span><b id="dayLabel">Day 1 of 90</b></span>
@@ -134,12 +149,17 @@
           <div class="fl-grid-2">
             <div class="fl-field">
               <label for="calories">Calories eaten</label>
-              <input type="number" id="calories" min="0" step="1" inputmode="numeric" placeholder="e.g. 1850">
+              <input type="number" id="calories" min="0" step="1" inputmode="numeric" placeholder="Auto from meals">
             </div>
             <div class="fl-field">
-              <label for="steps">Steps</label>
-              <input type="number" id="steps" min="0" step="1" inputmode="numeric" placeholder="e.g. 10200">
+              <label for="protein">Protein (g)</label>
+              <input type="number" id="protein" min="0" step="0.1" inputmode="decimal" placeholder="Auto from meals">
             </div>
+          </div>
+
+          <div class="fl-field">
+            <label for="steps">Steps</label>
+            <input type="number" id="steps" min="0" step="1" inputmode="numeric" placeholder="e.g. 10200">
           </div>
 
           <label class="fl-check">
