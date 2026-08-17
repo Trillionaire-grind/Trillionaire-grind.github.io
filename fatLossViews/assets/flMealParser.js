@@ -80,7 +80,8 @@ function buildMealFromAmount(amount, unit, foodText, raw) {
   if (!food) {
     return {
       ok: false,
-      error: `Couldn't match "${query}". Try chicken breast, rice dry, eggs, etc.`,
+      notKibble: true,
+      error: "Not in the Boy Kibble menu — enter calories and protein manually below.",
     };
   }
 
@@ -113,12 +114,37 @@ function buildMealFromAmount(amount, unit, foodText, raw) {
     meal: {
       id: crypto.randomUUID(),
       input: raw,
+      source: "kibble",
       foodId: food.id,
       foodName: food.name,
       amountLabel: displayAmount,
       grams: Math.round(grams),
       calories,
       protein,
+    },
+  };
+}
+
+/** Manual entry for foods outside the Boy Kibble menus. */
+export function createManualMeal(label, calories, protein) {
+  const name = String(label || "").trim();
+  const cal = Number(calories);
+  const pro = Number(protein);
+  if (!name) return { ok: false, error: "Enter what you ate." };
+  if (!Number.isFinite(cal) || cal < 0) return { ok: false, error: "Enter valid calories." };
+  if (!Number.isFinite(pro) || pro < 0) return { ok: false, error: "Enter valid protein (g)." };
+  return {
+    ok: true,
+    meal: {
+      id: crypto.randomUUID(),
+      input: name,
+      source: "manual",
+      foodId: null,
+      foodName: name,
+      amountLabel: "",
+      grams: 0,
+      calories: Math.round(cal),
+      protein: round1(pro),
     },
   };
 }

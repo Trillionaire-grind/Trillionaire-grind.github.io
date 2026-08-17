@@ -1,8 +1,8 @@
 /**
- * Boy Kibble ingredient menus — calories and protein per standard unit.
+ * Boy Kibble ingredient menus only — auto math works for these foods.
  * Per 100g unless `perUnit` is set (eggs, slices, scoops, pieces).
  */
-export const FOODS = [
+export const BOY_KIBBLE_FOODS = [
   {
     id: "chicken-breast-raw",
     name: "Chicken breast (raw)",
@@ -227,16 +227,21 @@ export const FOODS = [
   },
 ];
 
+/** @deprecated use BOY_KIBBLE_FOODS */
+export const FOODS = BOY_KIBBLE_FOODS;
+
+/** Minimum match score (0–100) before auto-calculating from Boy Kibble menus. */
+export const BOY_KIBBLE_MIN_SCORE = 55;
+
 export function searchFoods(query) {
   const q = normalizeFoodQuery(query);
   if (!q) return [];
-  const scored = FOODS.map((food) => ({
+  return BOY_KIBBLE_FOODS.map((food) => ({
     food,
     score: scoreFoodMatch(q, food),
   }))
-    .filter((row) => row.score > 0)
+    .filter((row) => row.score >= BOY_KIBBLE_MIN_SCORE)
     .sort((a, b) => b.score - a.score);
-  return scored.map((row) => row.food);
 }
 
 export function findBestFood(query, hints = {}) {
@@ -245,25 +250,28 @@ export function findBestFood(query, hints = {}) {
 
   const prefer = hints.prefer;
   if (prefer) {
-    const preferred = matches.find((f) => f.prefer === prefer);
-    if (preferred) return preferred;
+    const preferred = matches.find((row) => row.food.prefer === prefer);
+    if (preferred) return preferred.food;
   }
 
-  const rawish = /(raw|dry|drained|uncooked)\b/.test(normalizeFoodQuery(query));
-  const cookedish = /(cooked|grilled|baked|steamed|boiled|roasted)\b/.test(
-    normalizeFoodQuery(query),
-  );
+  const q = normalizeFoodQuery(query);
+  const cookedish = /(cooked|grilled|baked|steamed|boiled|roasted)\b/.test(q);
+  const rawish = /(raw|dry|drained|uncooked)\b/.test(q);
 
   if (cookedish) {
-    const cooked = matches.find((f) => f.prefer === "cooked");
-    if (cooked) return cooked;
+    const cooked = matches.find((row) => row.food.prefer === "cooked");
+    if (cooked) return cooked.food;
   }
-  if (rawish || /dry\b/.test(normalizeFoodQuery(query))) {
-    const raw = matches.find((f) => f.prefer === "raw" || f.prefer === "dry");
-    if (raw) return raw;
+  if (rawish || /\bdry\b/.test(q)) {
+    const raw = matches.find((row) => row.food.prefer === "raw" || row.food.prefer === "dry");
+    if (raw) return raw.food;
   }
 
-  return matches[0];
+  return matches[0].food;
+}
+
+export function isBoyKibbleFood(query) {
+  return searchFoods(query).length > 0;
 }
 
 function normalizeFoodQuery(text) {

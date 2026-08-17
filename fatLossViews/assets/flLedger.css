@@ -395,6 +395,30 @@ body.fl-ledger {
 
 .fl-meal-totals b { font-size: 18px; }
 
+.fl-subhead {
+  font-size: 16px;
+  font-weight: 900;
+  margin: 20px 0 8px;
+}
+
+.fl-meal-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  margin-left: 6px;
+  border: 1px solid var(--line);
+  color: var(--gray);
+  vertical-align: middle;
+}
+
+.fl-meal-tag--manual {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
 @media (max-width: 560px) {
   .fl-grid-2 { grid-template-columns: 1fr; }
   .fl-pillars { grid-template-columns: 1fr; }
