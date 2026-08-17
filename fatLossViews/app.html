@@ -11,6 +11,7 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/photos/product-stack.png">
   <link rel="stylesheet" href="assets/flApp.css">
+  <link rel="stylesheet" href="assets/flBookReader.css">
   <link rel="stylesheet" href="assets/flLedger.css">
 </head>
 <body class="fl-app">
@@ -73,12 +74,29 @@
   </div>
 
   <main class="fl-app-main">
-    <section class="fl-panel" id="panel-book" role="tabpanel" aria-label="Book">
+    <section class="fl-panel fl-panel-book" id="panel-book" role="tabpanel" aria-label="Book">
       <div class="fl-book-toolbar">
-        <a href="#" id="bookPdfLink">Save book offline</a>
-        <a href="#" id="bookOpenLink">Open full screen</a>
+        <a href="#" id="bookPdfLink">Save PDF offline</a>
       </div>
-      <iframe class="fl-book-frame" id="bookFrame" title="How to Lose Fat ebook"></iframe>
+
+      <div class="fl-book-reader" id="flBookReader" tabindex="0" aria-label="Book reader">
+        <header class="fl-reader-header">
+          <h2 class="fl-reader-title">How to Lose Fat as Fast as Possible</h2>
+        </header>
+
+        <div class="fl-reader-stage">
+          <button type="button" id="bookPrev" class="fl-reader-arrow fl-reader-arrow-left" aria-label="Previous page">&#9664;</button>
+          <article class="fl-book-surface">
+            <canvas id="bookCanvas" aria-label="Book page"></canvas>
+            <p id="bookLoading" class="fl-reader-loading">Loading book…</p>
+          </article>
+          <button type="button" id="bookNext" class="fl-reader-arrow fl-reader-arrow-right" aria-label="Next page">&#9654;</button>
+        </div>
+
+        <footer class="fl-reader-footer">
+          <p id="bookPageCounter" class="fl-page-counter"></p>
+        </footer>
+      </div>
     </section>
 
     <section class="fl-panel fl-panel-ledger" id="panel-ledger" role="tabpanel" aria-label="Ledger" hidden>

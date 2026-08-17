@@ -152,11 +152,7 @@ html, body.fl-app {
 }
 
 .fl-book-frame {
-  display: block;
-  width: 100%;
-  height: calc(100vh - var(--header-h) - 52px);
-  border: none;
-  background: #ddd;
+  display: none;
 }
 
 .fl-panel-ledger {
