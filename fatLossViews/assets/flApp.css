@@ -185,3 +185,95 @@ html, body.fl-app {
 @media (display-mode: standalone) {
   .fl-install { display: none !important; }
 }
+
+.fl-auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  background: rgba(20, 20, 20, 0.92);
+}
+
+.fl-auth-gate.is-hidden {
+  display: none;
+}
+
+.fl-auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border: 3px solid var(--ink);
+  padding: 24px 20px;
+}
+
+.fl-auth-card h2 {
+  margin: 0 0 8px;
+  font-size: 28px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.fl-auth-lead {
+  margin: 0 0 18px;
+  color: var(--gray);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.fl-auth-form .fl-auth-submit {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.fl-auth-links {
+  margin: 16px 0 0;
+  font-size: 13px;
+  text-align: center;
+}
+
+.fl-auth-links a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.fl-account-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px 10px;
+  font-size: 12px;
+}
+
+.fl-account-bar.is-hidden {
+  display: none;
+}
+
+.fl-account-bar > span {
+  flex: 1;
+  min-width: 120px;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fl-account-btn {
+  padding: 8px 10px !important;
+  font-size: 11px !important;
+}
+
+.fl-account-btn--danger {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+#appShell.is-locked {
+  visibility: hidden;
+  height: 0;
+  overflow: hidden;
+}

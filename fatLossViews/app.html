@@ -15,11 +15,43 @@
 </head>
 <body class="fl-app">
 
+  <div class="fl-auth-gate is-hidden" id="authGate">
+    <div class="fl-auth-card">
+      <p class="fl-brand">How to Lose Fat as Fast as Possible</p>
+      <h2 id="authModeLabel">Sign in</h2>
+      <p class="fl-auth-lead">Create an account so your ledger follows you across phones. Meal photos still stay in your camera roll.</p>
+      <form id="authForm" class="fl-auth-form">
+        <div class="fl-field">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" autocomplete="email" required>
+        </div>
+        <div class="fl-field">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" autocomplete="current-password" minlength="6" required>
+        </div>
+        <button type="submit" class="fl-btn fl-btn--accent fl-auth-submit" id="authSubmit">Sign in</button>
+        <p class="fl-status" id="authStatus"></p>
+      </form>
+      <p class="fl-auth-links">
+        <a href="#" id="authToggle">New here? Create account</a>
+        ·
+        <a href="#" id="authReset">Forgot password</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="appShell">
   <header class="fl-app-header">
-    <div class="fl-app-top"><strong>Private on this device</strong> · Book + ledger saved locally</div>
+    <div class="fl-app-top" id="topStrip"><strong>Private on this device</strong> · Book + ledger saved locally</div>
     <div class="fl-app-bar">
       <h1 class="fl-app-title">How to Lose Fat</h1>
-      <span class="fl-app-ver" id="flAppVersion">v0.0.0.22</span>
+      <span class="fl-app-ver" id="flAppVersion">v0.0.0.23</span>
+    </div>
+    <div class="fl-account-bar is-hidden" id="accountBar">
+      <span id="accountEmail">account</span>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
     </div>
     <nav class="fl-tabs" role="tablist" aria-label="App sections">
       <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">Book</button>
@@ -164,18 +196,37 @@
         </section>
 
         <section class="fl-card">
+          <h2>Backup &amp; restore</h2>
+          <p class="fl-meta" id="localModeNote" hidden>
+            Cloud login is not configured yet — your ledger saves on this device only.
+            <strong>Download a backup weekly</strong> so you never lose your progress.
+          </p>
+          <p class="fl-meta">
+            Download a JSON backup anytime. Restore it on a new phone or after clearing browser data.
+            Meal photos are not included — they stay in your camera roll.
+          </p>
+          <div class="fl-actions">
+            <button type="button" class="fl-btn fl-btn--accent" id="exportBackup">Download full backup</button>
+            <button type="button" class="fl-btn fl-btn--ghost" id="importBackup">Restore from backup</button>
+            <input type="file" id="importFile" accept="application/json,.json" hidden>
+          </div>
+          <p class="fl-status" id="backupStatus"></p>
+        </section>
+
+        <section class="fl-card">
           <h2>Recent days</h2>
           <ul class="fl-history" id="history"></ul>
         </section>
 
         <footer class="fl-footer">
-          <p>Data stays in this browser only. Clearing site data erases the ledger — use <b>Copy this week</b> or <b>Email week</b> before switching phones.</p>
+          <p>Signed in? Your ledger syncs to your account. Either way, <b>download a backup</b> before switching phones or deleting the app.</p>
           <p>Questions? <a id="supportEmail" href="mailto:greenbooksapp@gmail.com">greenbooksapp@gmail.com</a></p>
-          <p class="ver" id="flVersion">v0.0.0.22</p>
+          <p class="ver" id="flVersion">v0.0.0.23</p>
         </footer>
       </div>
     </section>
   </main>
+  </div>
 
   <script type="module" src="assets/flApp.js"></script>
 </body>

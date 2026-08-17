@@ -1,17 +1,18 @@
 import { GUARANTEE_EMAIL } from "./flConfig.js";
+import { pushLedgerToCloud } from "./flAuth.js";
 import { flVersionLabel } from "./flVersion.js";
+import {
+  downloadBackupFile,
+  getLedgerState,
+  readBackupFile,
+  replaceLedgerState,
+  subscribeLedger,
+  todayISO,
+  updateLedgerState,
+} from "./flLedgerStore.js";
 
-const STORAGE_KEY = "fl-ledger-v1";
 const TOTAL_DAYS = 90;
 const WORKOUTS_PER_WEEK = 3;
-
-function todayISO() {
-  const d = new Date();
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
-}
 
 function parseISO(iso) {
   const [y, m, d] = iso.split("-").map(Number);
@@ -25,34 +26,6 @@ function addDays(iso, n) {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
-}
-
-function defaultState() {
-  return {
-    startDate: todayISO(),
-    calorieTarget: 2000,
-    stepTarget: 10000,
-    days: {},
-  };
-}
-
-function loadState() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return defaultState();
-    const parsed = JSON.parse(raw);
-    return {
-      ...defaultState(),
-      ...parsed,
-      days: parsed.days && typeof parsed.days === "object" ? parsed.days : {},
-    };
-  } catch {
-    return defaultState();
-  }
-}
-
-function saveState(state) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
 
 function dayNumber(state, iso) {
@@ -137,7 +110,12 @@ function summarize(state) {
   return { daysLogged, fullDays, weekWorkouts, weekFull, week };
 }
 
-function initLedger() {
+function persist(state) {
+  replaceLedgerState(state);
+  pushLedgerToCloud().catch((err) => console.warn("[Fat Loss ledger] cloud sync", err));
+}
+
+export function initLedger() {
   const dayGrid = document.getElementById("dayGrid");
   if (!dayGrid) return;
 
@@ -170,10 +148,14 @@ function initLedger() {
     history: document.getElementById("history"),
     exportWeek: document.getElementById("exportWeek"),
     emailWeek: document.getElementById("emailWeek"),
+    exportBackup: document.getElementById("exportBackup"),
+    importBackup: document.getElementById("importBackup"),
+    importFile: document.getElementById("importFile"),
+    backupStatus: document.getElementById("backupStatus"),
     supportEmail: document.getElementById("supportEmail"),
   };
 
-  let state = loadState();
+  let state = getLedgerState();
   let selectedDate = todayISO();
 
   if (els.version) els.version.textContent = flVersionLabel();
@@ -306,15 +288,21 @@ function initLedger() {
     renderHistory();
   }
 
-  els.saveSetup.addEventListener("click", () => {
-    const startDate = els.startDate.value || todayISO();
-    state.startDate = startDate;
-    state.calorieTarget = Math.max(800, Number(els.calorieTarget.value) || 2000);
-    state.stepTarget = Math.max(1000, Number(els.stepTarget.value) || 10000);
-    saveState(state);
-    els.setupStatus.textContent = "Targets saved on this device.";
-    els.setupStatus.classList.add("is-ok");
+  subscribeLedger((next) => {
+    state = next;
     renderAll();
+  });
+
+  els.saveSetup.addEventListener("click", () => {
+    state = updateLedgerState({
+      ...state,
+      startDate: els.startDate.value || todayISO(),
+      calorieTarget: Math.max(800, Number(els.calorieTarget.value) || 2000),
+      stepTarget: Math.max(1000, Number(els.stepTarget.value) || 10000),
+    });
+    persist(state);
+    els.setupStatus.textContent = "Targets saved.";
+    els.setupStatus.classList.add("is-ok");
   });
 
   els.entryDate.addEventListener("change", () => {
@@ -332,8 +320,11 @@ function initLedger() {
       mealsLogged: !!els.mealsLogged.checked,
       notes: els.notes.value.trim(),
     };
-    state.days[iso] = entry;
-    saveState(state);
+    state = updateLedgerState({
+      ...state,
+      days: { ...state.days, [iso]: entry },
+    });
+    persist(state);
     selectedDate = iso;
     const hits = pillarHits(state, entry);
     els.dayStatus.textContent =
@@ -341,19 +332,16 @@ function initLedger() {
         ? "Saved. All three pillars hit for this day."
         : `Saved. ${hits.count} of 3 pillars hit for this day.`;
     els.dayStatus.classList.add("is-ok");
-    renderStats();
-    renderGrid();
-    renderHistory();
   });
 
   els.clearDay.addEventListener("click", () => {
     const iso = els.entryDate.value || selectedDate;
-    delete state.days[iso];
-    saveState(state);
+    const days = { ...state.days };
+    delete days[iso];
+    state = updateLedgerState({ ...state, days });
+    persist(state);
     fillEntry(iso);
     els.dayStatus.textContent = "Day cleared.";
-    renderStats();
-    renderHistory();
   });
 
   function weekExportText() {
@@ -406,10 +394,48 @@ function initLedger() {
     window.location.href = `mailto:${GUARANTEE_EMAIL}?subject=${subject}&body=${body}`;
   });
 
+  els.exportBackup?.addEventListener("click", () => {
+    downloadBackupFile(state);
+    if (els.backupStatus) {
+      els.backupStatus.textContent = "Backup downloaded. Keep this file somewhere safe.";
+      els.backupStatus.classList.add("is-ok");
+    }
+  });
+
+  els.importBackup?.addEventListener("click", () => {
+    els.importFile?.click();
+  });
+
+  els.importFile?.addEventListener("change", async () => {
+    const file = els.importFile.files?.[0];
+    if (!file) return;
+    try {
+      const ledger = await readBackupFile(file);
+      if (
+        !window.confirm(
+          "Restore this backup? It will replace your current ledger on this device (and sync to your account if signed in)."
+        )
+      ) {
+        return;
+      }
+      state = replaceLedgerState(ledger);
+      persist(state);
+      if (els.backupStatus) {
+        els.backupStatus.textContent = "Backup restored.";
+        els.backupStatus.classList.add("is-ok");
+      }
+    } catch (err) {
+      if (els.backupStatus) {
+        els.backupStatus.textContent = err.message || "Could not read backup file.";
+        els.backupStatus.classList.remove("is-ok");
+      }
+    } finally {
+      els.importFile.value = "";
+    }
+  });
+
   const n = dayNumber(state, todayISO());
   if (n >= 1 && n <= TOTAL_DAYS) selectedDate = todayISO();
   else selectedDate = state.startDate;
   renderAll();
 }
-
-initLedger();
