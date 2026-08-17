@@ -17,7 +17,7 @@
   <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1" alt=""></noscript>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thank You — Your Fat Loss System</title>
+  <title>Thank You — Your Fat Loss App</title>
   <link rel="stylesheet" href="assets/flBook.css">
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-MW3X255274"></script>
   <script>
@@ -38,30 +38,35 @@
   <div class="top-strip"><strong>Thank you</strong> · Your order is confirmed</div>
   <header>
     <h1>How to Lose Fat as Fast as Possible</h1>
-    <p>Your ebook download</p>
+    <p>Your app is ready</p>
   </header>
   <div class="accent-rule"></div>
 
   <div class="upsell-wrap">
     <p class="step-label" style="font-family:Arial,sans-serif;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:0 0 8px;">You're in</p>
-    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Download Your Book</h1>
+    <h1 style="font-family:Arial,sans-serif;font-size:1.5rem;margin:0 0 12px;">Open Your App</h1>
     <p style="font-size:0.95rem;color:#444;line-height:1.55;margin:0 0 20px;">
-      The worksheets, tracking sheets, workout logs, and body fat chart are
-      <strong>inside the ebook</strong> — print the pages you need and start Day 1.
-      For the 2× guarantee, email your Day 1 logs when you're ready.
+      Your purchase includes the <strong>full book</strong> and the <strong>90-day ledger</strong> in one app.
+      Read Chapter 2, set your targets in the Ledger tab, and start Day 1.
+      Everything stays private on your device — meal photos stay in your camera roll.
     </p>
 
-    <a href="assets/how-to-lose-fat-fast.pdf" class="cta-btn" id="ebookDownload" download style="max-width:340px;margin:0 auto;">
-      Download The Book (PDF)
-      <span>System + worksheets included</span>
+    <a href="app.html" class="cta-btn" id="appLink" style="max-width:340px;margin:0 auto;">
+      Open Fat Loss App
+      <span>Book + 90-day ledger · Add to Home Screen</span>
     </a>
+
+    <p style="margin-top:16px;font-size:0.85rem;color:#555;line-height:1.5;text-align:center;">
+      <strong>Install tip:</strong> On iPhone, tap Share → <em>Add to Home Screen</em>.
+      On Android, tap Install when prompted, or use the browser menu.
+    </p>
 
     <div id="kitBlock" hidden>
       <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your Boy Kibble Kit</p>
 
       <a href="assets/the-boy-kibble-kit.pdf" class="cta-btn" id="kitDownload" download style="max-width:340px;margin:12px auto 0;background:#E8452C;">
         Download The Boy Kibble Kit (PDF)
-        <span>Build your own · meal system for all 90 days</span>
+        <span>Also available inside the app when you bought the bundle</span>
       </a>
     </div>
 
@@ -71,6 +76,10 @@
       <a href="mailto:greenbooksapp@gmail.com" id="guaranteeEmail">greenbooksapp@gmail.com</a>
       for double your money back.
     </p>
+
+    <p style="margin-top:12px;font-size:0.82rem;color:#777;line-height:1.5;text-align:center;">
+      Need the book as a file? <a href="assets/how-to-lose-fat-fast.pdf" id="bookPdfFallback" download>Save PDF offline</a>
+    </p>
   </div>
 
   <footer>
@@ -79,6 +88,7 @@
 
   <script type="module">
     import {
+      APP_URL,
       EBOOK_PDF,
       KIT_PDF,
       GUARANTEE_EMAIL,
@@ -87,11 +97,11 @@
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
-    document.getElementById("ebookDownload").href = EBOOK_PDF;
+    document.getElementById("appLink").href = APP_URL;
+    document.getElementById("bookPdfFallback").href = EBOOK_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
 
-    // Book+kit Stripe link must redirect here with ?kit=1
     const params = new URLSearchParams(window.location.search);
     const hasKit =
       params.get("kit") === "1" ||
@@ -103,6 +113,7 @@
       const kitDownload = document.getElementById("kitDownload");
       kitDownload.href = KIT_PDF;
       kitBlock.hidden = false;
+      document.getElementById("appLink").href = APP_URL + "?kit=1";
     }
   </script>
 </body>

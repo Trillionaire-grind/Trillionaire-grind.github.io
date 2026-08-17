@@ -1,6 +1,7 @@
 /**
- * Fat Loss ebook funnel config.
- * Canonical path: /fatLoss.html
+ * Fat Loss funnel config.
+ * Sales: /fatLoss.html
+ * Product app (book + ledger): /fatLossViews/app.html
  *
  * Stripe Payment Link → After payment → Redirect customers to:
  *   Book only ($29):
@@ -8,7 +9,7 @@
  *   Book + Boy Kibble Kit ($38):
  *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1
  *
- * The thank-you page only shows the kit download when ?kit=1 is present.
+ * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
  */
 export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
 
@@ -38,15 +39,27 @@ export const CHECKOUT_SUCCESS_URL =
 export const CHECKOUT_SUCCESS_URL_WITH_KIT =
   "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1";
 
+/** Customer-facing app — book reader + 90-day ledger (installable PWA). */
+export const APP_URL = "app.html";
+export const APP_ABSOLUTE_URL =
+  "https://keplersiguineau.com/fatLossViews/app.html";
 
 /** 2× money-back guarantee — customer sends logs here. */
 export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
 
-/** Main ebook PDF (relative to fatLossViews/). Worksheets / logs / chart are inside this file. */
+/** @deprecated use GUARANTEE_EMAIL */
+export const SUPPORT_EMAIL = GUARANTEE_EMAIL;
+
+/** Main ebook PDF (relative to fatLossViews/). */
 export const EBOOK_PDF = "assets/how-to-lose-fat-fast.pdf";
 
 /** Boy Kibble Kit upsell PDF (relative to fatLossViews/). */
 export const KIT_PDF = "assets/the-boy-kibble-kit.pdf";
+
+/** Ledger lives inside the app. */
+export const LEDGER_URL = "app.html#ledger";
+export const LEDGER_DAYS = 90;
+export const LEDGER_WORKOUTS_PER_WEEK = 3;
 
 /** @deprecated Worksheets ship inside the ebook — kept empty so old thank-you JS stays safe. */
 export const BONUS_DOWNLOADS = [];
