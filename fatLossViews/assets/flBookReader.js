@@ -1,60 +1,69 @@
-import { EBOOK_PDF } from "./flConfig.js";
+import { FL_BOOK, FL_BOOK_PAGE_COUNT } from "./flBookPages.js";
 import { flVersionLabel } from "./flVersion.js";
 
-const STORAGE_KEY = "fl-book-page-v1";
-const PDFJS_VERSION = "4.10.38";
-const PDFJS_BASE = `https://cdn.jsdelivr.net/npm/pdfjs-dist@${PDFJS_VERSION}/build`;
+const STORAGE_KEY = "fl-book-pos-v2";
 
-let pdfDoc = null;
-let pageNum = 1;
-let pageCount = 0;
-let rendering = false;
+const chapters = FL_BOOK.chapters || [];
 
-const els = {
-  canvas: null,
-  loading: null,
-  counter: null,
-  prev: null,
-  next: null,
-  surface: null,
-};
+let chapterIndex = 0;
+let pageIndex = 0;
 
-export async function initBookReader() {
-  const root = document.getElementById("flBookReader");
-  if (!root) return;
+const els = {};
 
-  els.canvas = document.getElementById("bookCanvas");
-  els.loading = document.getElementById("bookLoading");
+export function initBookReader() {
+  els.root = document.getElementById("panel-book");
+  if (!els.root || !chapters.length) return;
+
+  els.contents = document.getElementById("bookContents");
+  els.reader = document.getElementById("flBookReader");
+  els.cover = document.getElementById("bookCover");
+  els.title = document.getElementById("bookTitle");
+  els.author = document.getElementById("bookAuthor");
+  els.chapterCount = document.getElementById("bookChapterCount");
+  els.pageTotal = document.getElementById("bookPageTotal");
+  els.chapterList = document.getElementById("bookChapters");
+  els.resume = document.getElementById("bookResume");
+  els.back = document.getElementById("bookBack");
+  els.sectionTitle = document.getElementById("bookSectionTitle");
+  els.surface = document.getElementById("bookSurface");
   els.counter = document.getElementById("bookPageCounter");
   els.prev = document.getElementById("bookPrev");
   els.next = document.getElementById("bookNext");
-  els.surface = document.querySelector(".fl-book-surface");
 
-  if (!els.canvas || !els.prev || !els.next) return;
+  if (!els.contents || !els.reader || !els.surface) return;
 
   console.log("[Fat Loss book reader] working version:", flVersionLabel());
 
-  els.prev.addEventListener("click", () => goPrev());
-  els.next.addEventListener("click", () => goNext());
+  renderContents();
+  restorePosition();
 
-  root.addEventListener(
+  els.resume.addEventListener("click", () => openChapter(chapterIndex, pageIndex));
+  els.back.addEventListener("click", showContents);
+  els.prev.addEventListener("click", goPrev);
+  els.next.addEventListener("click", goNext);
+
+  els.reader.addEventListener(
     "keydown",
     (e) => {
       if (e.key === "ArrowLeft") goPrev();
       if (e.key === "ArrowRight") goNext();
+      if (e.key === "Escape") showContents();
     },
     true,
   );
 
+  window.addEventListener("resize", sizeReadingPanel);
+  window.addEventListener("orientationchange", sizeReadingPanel);
+
   let touchStartX = 0;
-  root.addEventListener(
+  els.reader.addEventListener(
     "touchstart",
     (e) => {
       touchStartX = e.changedTouches[0]?.clientX || 0;
     },
     { passive: true },
   );
-  root.addEventListener(
+  els.reader.addEventListener(
     "touchend",
     (e) => {
       const dx = (e.changedTouches[0]?.clientX || 0) - touchStartX;
@@ -64,96 +73,171 @@ export async function initBookReader() {
     },
     { passive: true },
   );
+}
 
-  setLoading(true, "Loading book…");
+function renderContents() {
+  if (els.cover && FL_BOOK.cover) {
+    els.cover.src = FL_BOOK.cover;
+    els.cover.alt = `${FL_BOOK.title} cover`;
+    els.cover.addEventListener("load", () => els.cover.classList.add("is-loaded"), {
+      once: true,
+    });
+  }
+  if (els.title) els.title.textContent = FL_BOOK.title || "";
+  if (els.author) els.author.textContent = FL_BOOK.author || "—";
+  if (els.chapterCount) els.chapterCount.textContent = String(chapters.length);
+  if (els.pageTotal) els.pageTotal.textContent = String(FL_BOOK_PAGE_COUNT);
 
+  els.chapterList.innerHTML = "";
+  chapters.forEach((chapter, index) => {
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "fl-chapter-item";
+    const count = chapter.pages.length;
+    item.innerHTML =
+      `<span class="fl-chapter-name"></span>` +
+      `<span class="fl-chapter-pages">${count} ${count === 1 ? "page" : "pages"}</span>`;
+    item.querySelector(".fl-chapter-name").textContent = chapter.title;
+    item.addEventListener("click", () => openChapter(index, 0));
+    els.chapterList.appendChild(item);
+  });
+}
+
+function restorePosition() {
+  let saved = null;
   try {
-    const pdfjsLib = await import(`${PDFJS_BASE}/pdf.mjs`);
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `${PDFJS_BASE}/pdf.worker.mjs`;
+    saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+  } catch {
+    saved = null;
+  }
+  if (!saved || !chapters[saved.chapter]) return;
 
-    const task = pdfjsLib.getDocument(EBOOK_PDF);
-    pdfDoc = await task.promise;
-    pageCount = pdfDoc.numPages;
+  chapterIndex = saved.chapter;
+  pageIndex = Math.min(saved.page || 0, chapters[chapterIndex].pages.length - 1);
+  syncResume();
+}
 
-    const saved = Number(localStorage.getItem(STORAGE_KEY));
-    pageNum = Number.isFinite(saved) && saved >= 1 && saved <= pageCount ? saved : 1;
-
-    await renderPage(pageNum);
-  } catch (err) {
-    console.error("[Fat Loss book reader]", err);
-    setLoading(true, "Could not load the book. Use Save PDF offline below.");
-    setArrows(false, false);
+function syncResume() {
+  if (!els.resume) return;
+  const started = localStorage.getItem(STORAGE_KEY) !== null;
+  els.resume.hidden = !started;
+  if (started) {
+    els.resume.textContent = `Continue — ${chapters[chapterIndex].title}, page ${pageIndex + 1}`;
   }
 }
 
-function setLoading(show, message) {
-  if (els.loading) {
-    els.loading.hidden = !show;
-    if (message) els.loading.textContent = message;
-  }
-  if (els.canvas) els.canvas.hidden = show;
+function savePosition() {
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({ chapter: chapterIndex, page: pageIndex }),
+  );
 }
 
-function setArrows(canPrev, canNext) {
-  els.prev.disabled = !canPrev;
-  els.next.disabled = !canNext;
-  els.prev.classList.toggle("fl-reader-arrow--off", !canPrev);
-  els.next.classList.toggle("fl-reader-arrow--off", !canNext);
-  els.prev.setAttribute("aria-disabled", canPrev ? "false" : "true");
-  els.next.setAttribute("aria-disabled", canNext ? "false" : "true");
+function showContents() {
+  els.reader.hidden = true;
+  els.contents.hidden = false;
+  els.root.classList.remove("is-reading");
+  els.root.style.removeProperty("--fl-book-panel-h");
+  syncResume();
 }
 
-function updateCounter() {
-  if (els.counter) {
-    els.counter.textContent = `Page ${pageNum} of ${pageCount}`;
-  }
+function sizeReadingPanel() {
+  if (!els.root || !els.root.classList.contains("is-reading")) return;
+  const top = els.root.getBoundingClientRect().top;
+  const available = Math.max(320, window.innerHeight - top);
+  els.root.style.setProperty("--fl-book-panel-h", `${available}px`);
 }
 
-async function renderPage(num) {
-  if (!pdfDoc || rendering) return;
-  rendering = true;
-  setLoading(true, "Loading page…");
+function openChapter(index, page) {
+  const chapter = chapters[index];
+  if (!chapter) return;
 
-  try {
-    const page = await pdfDoc.getPage(num);
-    const canvas = els.canvas;
-    const ctx = canvas.getContext("2d");
+  chapterIndex = index;
+  pageIndex = Math.min(Math.max(page, 0), chapter.pages.length - 1);
 
-    const surfaceWidth = els.surface?.clientWidth || window.innerWidth - 140;
-    const viewport = page.getViewport({ scale: 1 });
-    const scale = Math.min(2, Math.max(0.5, (surfaceWidth - 24) / viewport.width));
-    const scaled = page.getViewport({ scale });
+  els.contents.hidden = true;
+  els.reader.hidden = false;
+  els.root.classList.add("is-reading");
+  window.scrollTo(0, 0);
+  sizeReadingPanel();
+  els.reader.focus({ preventScroll: true });
 
-    canvas.width = Math.floor(scaled.width);
-    canvas.height = Math.floor(scaled.height);
-    canvas.style.width = `${Math.floor(scaled.width)}px`;
-    canvas.style.height = `${Math.floor(scaled.height)}px`;
+  showPage();
+}
 
-    await page.render({ canvasContext: ctx, viewport: scaled }).promise;
+function showPage() {
+  const chapter = chapters[chapterIndex];
+  const page = chapter.pages[pageIndex];
+  if (!page) return;
 
-    pageNum = num;
-    localStorage.setItem(STORAGE_KEY, String(pageNum));
-    updateCounter();
-    setArrows(pageNum > 1, pageNum < pageCount);
-    setLoading(false);
-  } catch (err) {
-    console.error("[Fat Loss book reader] render", err);
-    setLoading(true, "Could not render this page.");
-  } finally {
-    rendering = false;
+  savePosition();
+
+  els.sectionTitle.textContent = chapter.title;
+  els.counter.textContent = `Page ${pageIndex + 1} of ${chapter.pages.length}`;
+  els.surface.scrollTop = 0;
+  els.surface.innerHTML = "";
+
+  const images = page.images || [];
+  if (images.length) {
+    const figure = document.createElement("div");
+    figure.className =
+      images.length > 1 ? "fl-reader-photos fl-reader-photos--pair" : "fl-reader-photos";
+    images.forEach((src) => {
+      const img = document.createElement("img");
+      img.src = src;
+      img.alt = chapter.title;
+      img.loading = "lazy";
+      figure.appendChild(img);
+    });
+    els.surface.appendChild(figure);
   }
+
+  (page.blocks || []).forEach((block) => {
+    const tag = block.t === "h" ? "h3" : "p";
+    const node = document.createElement(tag);
+    node.className = `fl-block fl-block-${block.t}`;
+    node.textContent = block.x;
+    els.surface.appendChild(node);
+  });
+
+  const firstPage = pageIndex === 0;
+  const lastPage = pageIndex === chapter.pages.length - 1;
+  setArrow(els.prev, !firstPage || chapterIndex > 0, firstPage && chapterIndex > 0);
+  setArrow(
+    els.next,
+    !lastPage || chapterIndex < chapters.length - 1,
+    lastPage && chapterIndex < chapters.length - 1,
+  );
+}
+
+function setArrow(btn, enabled, isChapterJump) {
+  btn.disabled = !enabled;
+  btn.classList.toggle("fl-reader-arrow--off", !enabled);
+  btn.classList.toggle("fl-reader-arrow--chapter", Boolean(enabled && isChapterJump));
 }
 
 function goPrev() {
-  if (pageNum <= 1) return;
-  renderPage(pageNum - 1);
+  if (pageIndex > 0) {
+    pageIndex -= 1;
+    showPage();
+    return;
+  }
+  if (chapterIndex > 0) {
+    const prev = chapters[chapterIndex - 1];
+    openChapter(chapterIndex - 1, prev.pages.length - 1);
+  }
 }
 
 function goNext() {
-  if (pageNum >= pageCount) return;
-  renderPage(pageNum + 1);
+  const chapter = chapters[chapterIndex];
+  if (pageIndex < chapter.pages.length - 1) {
+    pageIndex += 1;
+    showPage();
+    return;
+  }
+  if (chapterIndex < chapters.length - 1) openChapter(chapterIndex + 1, 0);
 }
 
 export function refreshBookReaderLayout() {
-  if (pdfDoc && pageNum) renderPage(pageNum);
+  if (els.reader && !els.reader.hidden) showPage();
 }

@@ -1,4 +1,4 @@
-const CACHE = "fl-app-v0.0.0.26";
+const CACHE = "fl-app-v0.0.0.29";
 
 const ASSETS = [
   "./app.html",
@@ -6,6 +6,7 @@ const ASSETS = [
   "./assets/flApp.css",
   "./assets/flBookReader.css",
   "./assets/flBookReader.js",
+  "./assets/flBookPages.js",
   "./assets/flApp.js",
   "./assets/flAuth.js",
   "./assets/flFirebase.js",
@@ -19,6 +20,11 @@ const ASSETS = [
   "./assets/flVersion.js",
   "./assets/how-to-lose-fat-fast.pdf",
   "./assets/photos/product-stack.png",
+  "./assets/book/cover.jpg",
+  "./assets/book/photo-6-1.jpg",
+  "./assets/book/photo-7-1.jpg",
+  "./assets/book/photo-7-2.jpg",
+  "./assets/book/photo-8-1.jpg",
 ];
 
 self.addEventListener("install", (event) => {

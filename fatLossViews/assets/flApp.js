@@ -56,6 +56,22 @@ if (bookPdfLink) {
   bookPdfLink.setAttribute("download", "");
 }
 
+// The fixed header wraps differently per device, so measure it instead of
+// guessing; the book reader sizes its page surface off this value.
+function syncHeaderHeight() {
+  const header = document.querySelector(".fl-app-header");
+  if (!header) return;
+  document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+}
+
+syncHeaderHeight();
+window.addEventListener("resize", syncHeaderHeight);
+window.addEventListener("orientationchange", syncHeaderHeight);
+if (window.ResizeObserver) {
+  const header = document.querySelector(".fl-app-header");
+  if (header) new ResizeObserver(syncHeaderHeight).observe(header);
+}
+
 function setTab(name) {
   const tab = name === "ledger" ? "ledger" : "book";
   tabs.forEach((btn) => {
