@@ -5,4 +5,5 @@ firebase-debug.log
 firebase-debug.*.log
 minoritiesFunctions/node_modules/
 minoritiesFunctions/.env
+scripts/node_modules/
 .DS_Store
