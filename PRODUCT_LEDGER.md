@@ -161,6 +161,18 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 
 ## Tier 3 — Functional prototype
 
+### Roxanne
+**URL:** `/roxanne.html` · **Money:** None
+
+- [x] Selfie capture + photo upload, all on-device
+- [x] Automatic face fit (MediaPipe face detector) with manual drag / size / tilt fallback
+- [x] 11 mock hairstyles × 14 hair colors, recolored live
+- [x] Save the look as a PNG
+- [ ] Photoreal hair (current styles are stylized overlays, not wig photography)
+- [ ] Overlay can't hide long existing hair — best on frontal photos with hair back
+
+---
+
 ### Tech Academy
 **URL:** `/techAcademy.html` · **Money:** Guide Stripe Payment Link · VIP phone-only
 
