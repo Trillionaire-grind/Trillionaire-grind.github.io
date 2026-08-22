@@ -161,8 +161,8 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 
 ## Tier 3 — Functional prototype
 
-### Roxanne
-**URL:** `/roxanne.html` · **Money:** None
+### Roxanne AI
+**URL:** `/roxanneAI.html` (old `/roxanne.html` redirects) · **Money:** None
 
 - [x] Selfie capture + photo upload, all on-device
 - [x] Automatic face fit (MediaPipe face detector) with manual drag / size / tilt fallback

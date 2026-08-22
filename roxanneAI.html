@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#b0225a">
+  <meta name="description" content="Try on hairstyles and hair colors on your own photo.">
+  <title>Roxanne AI — Pick Your New Look</title>
+  <link rel="stylesheet" href="roxanneAIViews/assets/roxanneAI.css">
+</head>
+<body class="rx">
+
+  <div class="rx-shell">
+
+    <header class="rx-header">
+      <p class="rx-brand">Roxanne AI</p>
+      <h1 class="rx-headline">Pick Your New Look</h1>
+      <p class="rx-sub">Take a selfie or upload a photo, then try on hairstyles and colors.</p>
+    </header>
+
+    <main>
+      <!-- Start -->
+      <section id="startView" aria-label="Add your photo">
+        <div class="rx-start-card">
+          <svg class="rx-start-art" id="startArt" viewBox="0 0 200 220" aria-hidden="true"></svg>
+
+          <button type="button" class="rx-btn rx-btn--primary" id="selfieBtn">Take a selfie</button>
+          <button type="button" class="rx-btn rx-btn--ghost" id="uploadBtn">Upload a photo</button>
+          <input type="file" id="fileInput" accept="image/*" hidden>
+
+          <p class="rx-note">
+            Face the camera straight on for the best fit. Your photo stays on your
+            device — nothing is uploaded.
+          </p>
+        </div>
+      </section>
+
+      <!-- Camera -->
+      <section id="cameraView" aria-label="Camera" hidden>
+        <div class="rx-camera-frame">
+          <video id="cameraFeed" autoplay playsinline muted></video>
+        </div>
+        <div class="rx-camera-actions">
+          <button type="button" class="rx-btn rx-btn--ghost" id="cancelCameraBtn">Cancel</button>
+          <button type="button" class="rx-btn rx-btn--primary" id="shutterBtn">Capture</button>
+        </div>
+        <p class="rx-alert" id="cameraError" hidden>
+          We couldn't open the camera. Check permissions, or upload a photo instead.
+        </p>
+      </section>
+
+      <!-- Studio -->
+      <section id="studioView" aria-label="Your new look" hidden>
+        <div class="rx-stage" id="stage">
+          <img id="photo" alt="Your photo with the selected hairstyle">
+          <svg id="hairLayer" aria-hidden="true"></svg>
+          <p class="rx-fit-status" id="fitStatus" hidden></p>
+        </div>
+
+        <div class="rx-section">
+          <div class="rx-section-head">
+            <h2 class="rx-section-title">Hairstyle</h2>
+            <p class="rx-section-value" id="styleName"></p>
+          </div>
+          <div class="rx-styles" id="styleList" role="group" aria-label="Hairstyles"></div>
+        </div>
+
+        <div class="rx-section">
+          <div class="rx-section-head">
+            <h2 class="rx-section-title">Hair color</h2>
+            <p class="rx-section-value" id="colorName"></p>
+          </div>
+          <div class="rx-colors" id="colorList" role="group" aria-label="Hair colors"></div>
+        </div>
+
+        <details class="rx-adjust">
+          <summary>Adjust the fit</summary>
+          <label class="rx-slider">Size
+            <input type="range" id="sizeRange" min="0.6" max="1.7" step="0.01" value="1">
+          </label>
+          <label class="rx-slider">Up / down
+            <input type="range" id="liftRange" min="-0.6" max="0.6" step="0.005" value="0">
+          </label>
+          <label class="rx-slider">Left / right
+            <input type="range" id="slideRange" min="-0.6" max="0.6" step="0.005" value="0">
+          </label>
+          <label class="rx-slider">Tilt
+            <input type="range" id="rotateRange" min="-35" max="35" step="0.5" value="0">
+          </label>
+          <button type="button" class="rx-btn rx-btn--ghost" id="resetFitBtn">Reset fit</button>
+        </details>
+
+        <div class="rx-actions">
+          <button type="button" class="rx-btn rx-btn--ghost" id="retakeBtn">New photo</button>
+          <button type="button" class="rx-btn rx-btn--primary" id="saveBtn">Save look</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="rx-footer">
+      <p>Roxanne AI · <span id="appVersion"></span></p>
+    </footer>
+
+  </div>
+
+  <script type="module" src="roxanneAIViews/scripts/roxanneAIApp.js"></script>
+</body>
+</html>
