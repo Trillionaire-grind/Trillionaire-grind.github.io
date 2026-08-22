@@ -30,6 +30,8 @@ const dom = {
   shutter: el("shutterBtn"),
   cancelCamera: el("cancelCameraBtn"),
   cameraError: el("cameraError"),
+  cameraErrorText: el("cameraErrorText"),
+  cameraFallback: el("cameraFallbackBtn"),
   stage: el("stage"),
   photo: el("photo"),
   hairLayer: el("hairLayer"),
@@ -65,6 +67,7 @@ function showView(name) {
   dom.start.hidden = name !== "start";
   dom.camera.hidden = name !== "camera";
   dom.studio.hidden = name !== "studio";
+  if (name !== "start") dom.cameraError.hidden = true;
 }
 
 /* ---------- pickers ---------- */
@@ -248,14 +251,47 @@ function handleFile(file) {
 
 /* ---------- camera ---------- */
 
+const CAMERA_MESSAGES = {
+  NotAllowedError:
+    "Camera access is blocked for this site. Allow it in your browser settings, or use your camera app instead.",
+  SecurityError:
+    "Camera access is blocked for this site. Allow it in your browser settings, or use your camera app instead.",
+  NotFoundError: "No camera found on this device. Use your camera app or upload a photo.",
+  NotReadableError:
+    "Another app is using the camera. Close it and try again, or use your camera app.",
+};
+
+/** In-page preview needs both the API and a secure origin (https or localhost). */
+function canPreviewCamera() {
+  return Boolean(window.isSecureContext && navigator.mediaDevices?.getUserMedia);
+}
+
+/** Hand off to the phone's own camera through the file input. */
+function openCameraApp() {
+  dom.fileInput.setAttribute("capture", "user");
+  dom.fileInput.click();
+}
+
+function showCameraError(err) {
+  dom.cameraErrorText.textContent =
+    CAMERA_MESSAGES[err?.name] ||
+    "We couldn't open the camera here. Use your camera app or upload a photo.";
+  dom.cameraError.hidden = false;
+}
+
 async function openCamera() {
   dom.cameraError.hidden = true;
 
-  if (!navigator.mediaDevices?.getUserMedia) {
-    dom.fileInput.setAttribute("capture", "user");
-    dom.fileInput.click();
+  // No in-page preview available, so go straight to the camera app. This has to
+  // happen in the same tick as the tap: a file input opened after an await has
+  // lost its user activation and browsers will ignore the click.
+  if (!canPreviewCamera()) {
+    openCameraApp();
     return;
   }
+
+  dom.selfieBtn.disabled = true;
+  dom.selfieBtn.textContent = "Opening camera…";
 
   try {
     cameraStream = await navigator.mediaDevices.getUserMedia({
@@ -264,14 +300,18 @@ async function openCamera() {
     });
     dom.cameraFeed.srcObject = cameraStream;
     showView("camera");
+    await dom.cameraFeed.play().catch(() => {});
   } catch (err) {
-    console.warn("[Roxanne AI] camera unavailable:", err.message);
-    dom.cameraError.hidden = false;
-    dom.fileInput.setAttribute("capture", "user");
+    console.warn("[Roxanne AI] camera unavailable:", err.name, err.message);
+    showCameraError(err);
+  } finally {
+    dom.selfieBtn.disabled = false;
+    dom.selfieBtn.textContent = "Take a selfie";
   }
 }
 
 function stopCamera() {
+  dom.shutter.disabled = true;
   if (!cameraStream) return;
   cameraStream.getTracks().forEach((track) => track.stop());
   cameraStream = null;
@@ -459,9 +499,15 @@ function init() {
   bindDrag();
 
   dom.selfieBtn.addEventListener("click", openCamera);
+  dom.cameraFallback.addEventListener("click", openCameraApp);
   dom.uploadBtn.addEventListener("click", () => {
     dom.fileInput.removeAttribute("capture");
     dom.fileInput.click();
+  });
+
+  // Only allow a capture once the stream is actually producing frames.
+  dom.cameraFeed.addEventListener("loadedmetadata", () => {
+    dom.shutter.disabled = !dom.cameraFeed.videoWidth;
   });
   dom.fileInput.addEventListener("change", (e) => {
     handleFile(e.target.files[0]);

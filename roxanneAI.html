@@ -28,6 +28,13 @@
           <button type="button" class="rx-btn rx-btn--ghost" id="uploadBtn">Upload a photo</button>
           <input type="file" id="fileInput" accept="image/*" hidden>
 
+          <div class="rx-alert" id="cameraError" hidden>
+            <p id="cameraErrorText"></p>
+            <button type="button" class="rx-btn rx-btn--ghost" id="cameraFallbackBtn">
+              Use your camera app
+            </button>
+          </div>
+
           <p class="rx-note">
             Face the camera straight on for the best fit. Your photo stays on your
             device — nothing is uploaded.
@@ -42,11 +49,8 @@
         </div>
         <div class="rx-camera-actions">
           <button type="button" class="rx-btn rx-btn--ghost" id="cancelCameraBtn">Cancel</button>
-          <button type="button" class="rx-btn rx-btn--primary" id="shutterBtn">Capture</button>
+          <button type="button" class="rx-btn rx-btn--primary" id="shutterBtn" disabled>Capture</button>
         </div>
-        <p class="rx-alert" id="cameraError" hidden>
-          We couldn't open the camera. Check permissions, or upload a photo instead.
-        </p>
       </section>
 
       <!-- Studio -->
