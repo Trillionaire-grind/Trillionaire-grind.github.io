@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Roxanne — Pick Your New Look</title>
+<title>Style AI — Pick Your New Look</title>
 <style>
   :root{
     --bg1:#fdf1ec; --bg2:#efe6fb;
@@ -161,14 +161,14 @@
     <button class="btn-secondary" id="retakeBtn">Start Over</button>
   </div>
 
-  <footer class="app-footer"><span id="appVersion"></span></footer>
+  <footer class="app-footer">Style AI · <span id="appVersion"></span></footer>
 </div>
 
 <div class="modal-backdrop hidden" id="keyModal">
   <div class="modal">
     <h3>Add your Gemini API key</h3>
     <p>
-      Roxanne uses Google's Gemini image model to generate a realistic preview of your new hairstyle.
+      Style AI uses Google's Gemini image model to generate a realistic preview of your new hairstyle.
       Your key is stored only in this browser (localStorage) and sent directly to Google's API — never to any other server.
     </p>
     <p>Don't have one? Get a free key at
@@ -223,7 +223,7 @@
 
   let stream = null;
   const GEMINI_MODEL = 'gemini-3.1-flash-image';
-  const KEY_STORAGE = 'roxanne_gemini_api_key';
+  const KEY_STORAGE = 'styleai_gemini_api_key';
 
   // ---------- element refs ----------
   const captureSection = document.getElementById('captureSection');

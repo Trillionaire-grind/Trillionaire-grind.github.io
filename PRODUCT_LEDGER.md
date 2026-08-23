@@ -170,7 +170,7 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 - [x] Download the generated look
 - [ ] Needs each visitor to paste their own Gemini API key — no shared/hosted key
 - [ ] Key lives in `localStorage` and goes directly to Google; fine for personal use, revisit before public promotion
-- [ ] Naming overlaps Roxanne AI (both are "Pick Your New Look") — decide which one ships
+- [x] Branded Style AI, so it no longer collides with Roxanne AI (the SVG-overlay try-on)
 
 ---
 
