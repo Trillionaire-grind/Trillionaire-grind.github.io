@@ -1,5 +1,5 @@
 /**
- * Mock hairstyle library for Roxanne.
+ * Mock hairstyle library for Roxanne AI.
  *
  * Every style is drawn in a 200x220 space built around a reference head:
  * the face is an oval at cx 100, cy 118, rx 50, ry 64 (crown y=54, chin y=182).

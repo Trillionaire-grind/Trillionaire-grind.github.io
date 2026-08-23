@@ -163,11 +163,22 @@ body.rx {
 }
 
 .rx-alert {
-  margin: 12px 0 0;
-  padding: 12px 14px;
+  margin: 4px 0 0;
+  padding: 14px;
   border-radius: 12px;
   background: var(--accent-soft);
   color: #8d1b48;
+  font-size: 14px;
+  text-align: left;
+}
+
+.rx-alert p {
+  margin: 0 0 12px;
+  line-height: 1.45;
+}
+
+.rx-alert .rx-btn {
+  padding: 12px 16px;
   font-size: 14px;
 }
 
