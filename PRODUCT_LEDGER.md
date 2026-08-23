@@ -161,6 +161,19 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 
 ## Tier 3 — Functional prototype
 
+### Style AI
+**URL:** `/styleAI.html` · **Money:** None
+
+- [x] Selfie capture + photo upload, resized client-side before sending
+- [x] 7 hairstyles × 12 colors turned into a Gemini image-edit prompt
+- [x] Gemini Interactions API (`gemini-3.1-flash-image`) called straight from the browser
+- [x] Download the generated look
+- [ ] Needs each visitor to paste their own Gemini API key — no shared/hosted key
+- [ ] Key lives in `localStorage` and goes directly to Google; fine for personal use, revisit before public promotion
+- [x] Branded Style AI, so it no longer collides with Roxanne AI (the SVG-overlay try-on)
+
+---
+
 ### Roxanne AI
 **URL:** `/roxanneAI.html` (old `/roxanne.html` redirects) · **Money:** None
 
