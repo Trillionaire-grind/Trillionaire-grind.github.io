@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Roxanne — Pick Your New Look</title>
+<style>
+  :root{
+    --bg1:#fdf1ec; --bg2:#efe6fb;
+    --ink:#2c2430; --muted:#7a6f80;
+    --accent:#c9739a; --accent-dark:#a6567c;
+    --card:#ffffff; --line:#ece3ee;
+    --err:#b3261e; --err-bg:#fbeaea;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+    background:linear-gradient(160deg,var(--bg1),var(--bg2));
+    color:var(--ink);
+    display:flex; justify-content:center; padding:32px 16px 64px;
+  }
+  .app{width:100%; max-width:520px;}
+  header{text-align:center; margin-bottom:22px;}
+  header h1{
+    font-size:2.1rem; margin:0 0 6px; letter-spacing:-0.02em; font-weight:800;
+    background:linear-gradient(90deg,var(--accent-dark),var(--accent));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  header p{margin:0; color:var(--muted); font-size:0.95rem;}
+
+  .card{
+    background:var(--card); border-radius:22px; padding:22px;
+    box-shadow:0 12px 32px rgba(120,80,110,0.14);
+    margin-bottom:18px;
+  }
+
+  .capture-buttons{display:flex; gap:10px; flex-wrap:wrap; justify-content:center;}
+  button{
+    font:inherit; cursor:pointer; border:none; border-radius:999px;
+    padding:12px 20px; font-weight:600; font-size:0.95rem;
+    transition:transform .12s ease, box-shadow .12s ease, opacity .12s ease;
+  }
+  button:active{transform:scale(0.97);}
+  .btn-primary{background:var(--accent); color:#fff; box-shadow:0 6px 16px rgba(201,115,154,0.4);}
+  .btn-primary:hover{background:var(--accent-dark);}
+  .btn-secondary{background:#f4eef7; color:var(--ink);}
+  .btn-secondary:hover{background:#ece0f0;}
+  .btn-ghost{background:transparent; color:var(--muted); text-decoration:underline; padding:8px 6px;}
+  button:disabled{opacity:0.45; cursor:not-allowed;}
+
+  video{width:100%; border-radius:16px; margin-top:16px; background:#000; display:block;}
+  .photo-frame{position:relative; display:flex; justify-content:center;}
+  .photo-frame img{width:100%; max-width:400px; border-radius:16px; display:block; background:#eee;}
+  .loading-overlay{
+    position:absolute; inset:0; max-width:400px; margin:0 auto;
+    background:rgba(255,255,255,0.82); border-radius:16px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+  }
+  .spinner{
+    width:34px; height:34px; border-radius:50%;
+    border:4px solid #f0dbe6; border-top-color:var(--accent);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .loading-overlay p{margin:0; font-size:0.85rem; color:var(--muted); font-weight:600;}
+
+  #statusBadge{text-align:center; font-size:0.82rem; color:var(--muted); margin-top:10px; min-height:1.2em;}
+  #errorBox{
+    display:none; margin-top:12px; padding:10px 14px; border-radius:12px;
+    background:var(--err-bg); color:var(--err); font-size:0.85rem;
+  }
+
+  h2.section-title{font-size:0.95rem; margin:0 0 12px; font-weight:700; color:var(--ink);}
+
+  .style-gallery{display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; -webkit-overflow-scrolling:touch;}
+  .style-chip{
+    flex:0 0 auto; background:#faf7fb; border:2px solid transparent;
+    border-radius:999px; padding:9px 16px; cursor:pointer; font-size:0.85rem; font-weight:600;
+    white-space:nowrap; color:var(--ink);
+  }
+  .style-chip.selected{border-color:var(--accent); background:#fdf1f6; color:var(--accent-dark);}
+
+  .color-palette{display:flex; gap:10px; flex-wrap:wrap;}
+  .swatch{
+    width:34px; height:34px; border-radius:50%; cursor:pointer; border:3px solid #fff;
+    box-shadow:0 0 0 1.5px var(--line);
+  }
+  .swatch.selected{box-shadow:0 0 0 2.5px var(--accent);}
+
+  .action-row{display:flex; gap:10px; justify-content:center; margin-top:20px; flex-wrap:wrap;}
+
+  .hidden{display:none !important;}
+  .file-input{display:none;}
+
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(30,20,30,0.45);
+    display:flex; align-items:center; justify-content:center; padding:16px; z-index:10;
+  }
+  .modal{background:#fff; border-radius:18px; padding:24px; max-width:400px; width:100%;}
+  .modal h3{margin:0 0 8px; font-size:1.1rem;}
+  .modal p{font-size:0.85rem; color:var(--muted); line-height:1.5;}
+  .modal a{color:var(--accent-dark);}
+  .modal input[type=password]{
+    width:100%; padding:10px 12px; border-radius:10px; border:1.5px solid var(--line);
+    font-size:0.9rem; margin:10px 0; font:inherit;
+  }
+  .modal .action-row{margin-top:14px;}
+
+  .app-footer{text-align:center; margin-top:26px; font-size:0.75rem; color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Pick Your New Look</h1>
+    <p>Upload a selfie, pick a hairstyle &amp; color, and let AI show you wearing it.</p>
+  </header>
+
+  <section id="captureSection" class="card">
+    <div class="capture-buttons">
+      <button class="btn-primary" id="selfieBtn">📷 Take a Selfie</button>
+      <button class="btn-secondary" id="uploadBtn">🖼️ Upload Photo</button>
+      <input class="file-input" type="file" id="fileInput" accept="image/*">
+    </div>
+    <video id="video" playsinline autoplay class="hidden"></video>
+    <div class="capture-buttons" id="snapRow" style="margin-top:12px; display:none;">
+      <button class="btn-primary" id="snapBtn">Capture</button>
+      <button class="btn-ghost" id="cancelSelfieBtn">Cancel</button>
+    </div>
+  </section>
+
+  <section id="editorSection" class="card hidden">
+    <div class="photo-frame">
+      <img id="photoImg" alt="Your photo">
+      <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingText">Creating your new look…</p>
+      </div>
+    </div>
+    <div id="statusBadge"></div>
+    <div id="errorBox"></div>
+  </section>
+
+  <section id="styleSection" class="card hidden">
+    <h2 class="section-title">Choose a hairstyle</h2>
+    <div class="style-gallery" id="styleGallery"></div>
+  </section>
+
+  <section id="colorSection" class="card hidden">
+    <h2 class="section-title">Choose a color</h2>
+    <div class="color-palette" id="colorPalette"></div>
+  </section>
+
+  <div class="action-row hidden" id="generateRow">
+    <button class="btn-primary" id="generateBtn">✨ Generate My Look</button>
+  </div>
+
+  <div class="action-row hidden" id="resultRow">
+    <button class="btn-primary" id="downloadBtn">Download Look</button>
+    <button class="btn-secondary" id="retakeBtn">Start Over</button>
+  </div>
+
+  <footer class="app-footer"><span id="appVersion"></span></footer>
+</div>
+
+<div class="modal-backdrop hidden" id="keyModal">
+  <div class="modal">
+    <h3>Add your Gemini API key</h3>
+    <p>
+      Roxanne uses Google's Gemini image model to generate a realistic preview of your new hairstyle.
+      Your key is stored only in this browser (localStorage) and sent directly to Google's API — never to any other server.
+    </p>
+    <p>Don't have one? Get a free key at
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
+    </p>
+    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key">
+    <div class="action-row">
+      <button class="btn-primary" id="saveKeyBtn">Save & Continue</button>
+      <button class="btn-ghost" id="cancelKeyBtn">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="styleAIViews/scripts/styleAIVersion.js"></script>
+
+<script>
+(function(){
+  "use strict";
+
+  const STYLE_LIST = [
+    { key:'pixie',        name:'Pixie Cut',     desc:'a short textured pixie cut, cropped close at the sides and back with slightly longer tousled layers on top' },
+    { key:'bob',          name:'Classic Bob',   desc:'a classic chin-length bob with a clean blunt cut and a soft inward curl at the ends' },
+    { key:'longStraight', name:'Long Straight', desc:'long, sleek, straight hair that falls past the shoulders with a natural center part' },
+    { key:'longWavy',     name:'Long Wavy',     desc:'long wavy hair with loose, natural-looking beach waves flowing past the shoulders' },
+    { key:'curlyAfro',    name:'Curly Afro',    desc:'a voluminous natural curly afro with well-defined coils and an even, rounded shape' },
+    { key:'buzz',         name:'Buzz Cut',      desc:'a short, even buzz cut clipped close to the scalp' },
+    { key:'topKnot',      name:'Top Knot',      desc:'hair pulled back into a neat top knot bun with the sides shorter and tapered' },
+  ];
+  const STYLE_MAP = Object.fromEntries(STYLE_LIST.map(s=>[s.key,s]));
+
+  const COLORS = [
+    {name:'Jet Black',    hex:'#1b1712', desc:'deep jet black'},
+    {name:'Dark Brown',   hex:'#3b2415', desc:'deep dark brown'},
+    {name:'Chestnut',     hex:'#6b3f22', desc:'warm chestnut brown'},
+    {name:'Auburn',       hex:'#8a3e21', desc:'warm auburn red-brown'},
+    {name:'Honey Blonde', hex:'#c99a4c', desc:'warm honey blonde'},
+    {name:'Platinum',     hex:'#e8dfc8', desc:'icy platinum blonde'},
+    {name:'Silver Gray',  hex:'#b9b9b9', desc:'silvery gray'},
+    {name:'Fire Red',     hex:'#a5301f', desc:'vibrant copper-red'},
+    {name:'Rose Pink',    hex:'#e39aa9', desc:'pastel rose pink'},
+    {name:'Electric Blue',hex:'#2a6fdb', desc:'vivid electric blue'},
+    {name:'Emerald',      hex:'#1f8a5f', desc:'rich emerald green'},
+    {name:'Violet',       hex:'#7a4fb5', desc:'soft violet purple'},
+  ];
+
+  const state = {
+    baseImage:null,       // {base64, mimeType, dataUrl}
+    style:'bob',
+    color:COLORS[1],
+    generating:false,
+  };
+
+  let stream = null;
+  const GEMINI_MODEL = 'gemini-3.1-flash-image';
+  const KEY_STORAGE = 'roxanne_gemini_api_key';
+
+  // ---------- element refs ----------
+  const captureSection = document.getElementById('captureSection');
+  const editorSection = document.getElementById('editorSection');
+  const styleSection = document.getElementById('styleSection');
+  const colorSection = document.getElementById('colorSection');
+  const generateRow = document.getElementById('generateRow');
+  const resultRow = document.getElementById('resultRow');
+  const video = document.getElementById('video');
+  const snapRow = document.getElementById('snapRow');
+  const photoImg = document.getElementById('photoImg');
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const loadingText = document.getElementById('loadingText');
+  const statusBadge = document.getElementById('statusBadge');
+  const errorBox = document.getElementById('errorBox');
+  const keyModal = document.getElementById('keyModal');
+  const apiKeyInput = document.getElementById('apiKeyInput');
+
+  function showError(msg){
+    errorBox.textContent = msg;
+    errorBox.style.display = 'block';
+  }
+  function clearError(){
+    errorBox.style.display = 'none';
+    errorBox.textContent = '';
+  }
+
+  // ---------- image resize helper ----------
+  function resizeImage(img, maxDim){
+    const scale = Math.min(1, maxDim / Math.max(img.naturalWidth, img.naturalHeight));
+    const w = Math.round(img.naturalWidth * scale);
+    const h = Math.round(img.naturalHeight * scale);
+    const c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    c.getContext('2d').drawImage(img, 0, 0, w, h);
+    const dataUrl = c.toDataURL('image/jpeg', 0.9);
+    return { base64: dataUrl.split(',')[1], mimeType:'image/jpeg', dataUrl };
+  }
+
+  function loadImageFromSrc(src){
+    const img = new Image();
+    img.onload = ()=>{
+      const resized = resizeImage(img, 1024);
+      state.baseImage = resized;
+      photoImg.src = resized.dataUrl;
+      showEditor();
+      clearError();
+      statusBadge.textContent = '';
+    };
+    img.src = src;
+  }
+
+  function showEditor(){
+    captureSection.classList.add('hidden');
+    editorSection.classList.remove('hidden');
+    styleSection.classList.remove('hidden');
+    colorSection.classList.remove('hidden');
+    generateRow.classList.remove('hidden');
+    resultRow.classList.add('hidden');
+  }
+
+  // ---------- capture flow ----------
+  document.getElementById('uploadBtn').addEventListener('click', ()=>{
+    document.getElementById('fileInput').click();
+  });
+  document.getElementById('fileInput').addEventListener('change', (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = ()=> loadImageFromSrc(reader.result);
+    reader.readAsDataURL(file);
+  });
+
+  document.getElementById('selfieBtn').addEventListener('click', async ()=>{
+    try{
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:'user' } });
+      video.srcObject = stream;
+      video.classList.remove('hidden');
+      snapRow.style.display = 'flex';
+    }catch(err){
+      alert("Couldn't access your camera. Try uploading a photo instead.");
+    }
+  });
+
+  document.getElementById('cancelSelfieBtn').addEventListener('click', stopSelfie);
+
+  function stopSelfie(){
+    if (stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
+    video.classList.add('hidden');
+    snapRow.style.display = 'none';
+  }
+
+  document.getElementById('snapBtn').addEventListener('click', ()=>{
+    const tmp = document.createElement('canvas');
+    tmp.width = video.videoWidth;
+    tmp.height = video.videoHeight;
+    tmp.getContext('2d').drawImage(video,0,0);
+    const dataUrl = tmp.toDataURL('image/png');
+    stopSelfie();
+    loadImageFromSrc(dataUrl);
+  });
+
+  // ---------- style / color pickers ----------
+  function renderStyleGallery(){
+    const wrap = document.getElementById('styleGallery');
+    wrap.innerHTML = '';
+    STYLE_LIST.forEach(s=>{
+      const chip = document.createElement('div');
+      chip.className = 'style-chip' + (s.key===state.style ? ' selected':'');
+      chip.textContent = s.name;
+      chip.addEventListener('click', ()=>{
+        state.style = s.key;
+        renderStyleGallery();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function renderColorPalette(){
+    const wrap = document.getElementById('colorPalette');
+    wrap.innerHTML = '';
+    COLORS.forEach(c=>{
+      const sw = document.createElement('div');
+      sw.className = 'swatch' + (c.hex===state.color.hex ? ' selected':'');
+      sw.style.background = c.hex;
+      sw.title = c.name;
+      sw.addEventListener('click', ()=>{
+        state.color = c;
+        renderColorPalette();
+      });
+      wrap.appendChild(sw);
+    });
+  }
+  renderStyleGallery();
+  renderColorPalette();
+
+  // ---------- API key modal ----------
+  function getApiKey(){ return localStorage.getItem(KEY_STORAGE) || ''; }
+  function setApiKey(k){ localStorage.setItem(KEY_STORAGE, k); }
+
+  function askForApiKey(){
+    return new Promise(resolve=>{
+      apiKeyInput.value = getApiKey();
+      keyModal.classList.remove('hidden');
+      apiKeyInput.focus();
+
+      function cleanup(){
+        keyModal.classList.add('hidden');
+        saveBtn.removeEventListener('click', onSave);
+        cancelBtn.removeEventListener('click', onCancel);
+      }
+      function onSave(){
+        const val = apiKeyInput.value.trim();
+        if (!val) return;
+        setApiKey(val);
+        cleanup();
+        resolve(val);
+      }
+      function onCancel(){
+        cleanup();
+        resolve(null);
+      }
+      const saveBtn = document.getElementById('saveKeyBtn');
+      const cancelBtn = document.getElementById('cancelKeyBtn');
+      saveBtn.addEventListener('click', onSave);
+      cancelBtn.addEventListener('click', onCancel);
+    });
+  }
+
+  // ---------- Gemini image edit call ----------
+  function findImageData(obj){
+    if (!obj || typeof obj !== 'object') return null;
+    const mt = obj.mime_type || obj.mimeType;
+    if (typeof obj.data === 'string' && obj.data.length > 200 && mt && String(mt).startsWith('image/')) {
+      return { data: obj.data, mimeType: mt };
+    }
+    for (const k in obj){
+      const v = obj[k];
+      if (v && typeof v === 'object'){
+        const found = findImageData(v);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  async function generateLook(apiKey){
+    const style = STYLE_MAP[state.style];
+    const color = state.color;
+    const prompt = `Edit this photo so the person's hairstyle becomes ${style.desc}, colored ${color.desc}. `
+      + `Keep the person's face, identity, skin tone, facial expression, pose, clothing, and background exactly the same — change only the hair. `
+      + `Make the new hair look photorealistic, with natural texture and lighting that matches the rest of the photo.`;
+
+    const resp = await fetch('https://generativelanguage.googleapis.com/v1beta/interactions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey,
+      },
+      body: JSON.stringify({
+        model: GEMINI_MODEL,
+        input: [
+          { type: 'text', text: prompt },
+          { type: 'image', mime_type: state.baseImage.mimeType, data: state.baseImage.base64 },
+        ],
+        response_format: { type: 'image', mime_type: 'image/jpeg' },
+      }),
+    });
+
+    const json = await resp.json().catch(()=>({}));
+    if (!resp.ok) {
+      const msg = (json && json.error && json.error.message) || `Request failed (HTTP ${resp.status})`;
+      throw new Error(msg);
+    }
+    const found = findImageData(json);
+    if (!found) {
+      throw new Error('The API responded but no image was found in the result. Raw response: ' + JSON.stringify(json).slice(0,400));
+    }
+    return `data:${found.mimeType};base64,${found.data}`;
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', async ()=>{
+    if (state.generating) return;
+    clearError();
+
+    let apiKey = getApiKey();
+    if (!apiKey) {
+      apiKey = await askForApiKey();
+      if (!apiKey) return;
+    }
+
+    state.generating = true;
+    loadingOverlay.classList.remove('hidden');
+    loadingText.textContent = 'Creating your new look… (this can take ~10–20s)';
+    document.getElementById('generateBtn').disabled = true;
+    statusBadge.textContent = '';
+
+    try{
+      const resultUrl = await generateLook(apiKey);
+      photoImg.src = resultUrl;
+      resultRow.classList.remove('hidden');
+      statusBadge.textContent = 'Here\'s your new look ✓ — pick another style/color and generate again anytime.';
+    }catch(err){
+      let msg = err.message || String(err);
+      if (/API key not valid|API_KEY_INVALID|401|403/i.test(msg)) {
+        msg += ' — your key may be invalid or missing image-generation access.';
+        localStorage.removeItem(KEY_STORAGE);
+      }
+      showError(msg);
+    }finally{
+      state.generating = false;
+      loadingOverlay.classList.add('hidden');
+      document.getElementById('generateBtn').disabled = false;
+    }
+  });
+
+  // ---------- other actions ----------
+  document.getElementById('downloadBtn').addEventListener('click', ()=>{
+    const link = document.createElement('a');
+    link.download = 'my-new-look.jpg';
+    link.href = photoImg.src;
+    link.click();
+  });
+
+  document.getElementById('retakeBtn').addEventListener('click', ()=>{
+    stopSelfie();
+    state.baseImage = null;
+    photoImg.src = '';
+    captureSection.classList.remove('hidden');
+    editorSection.classList.add('hidden');
+    styleSection.classList.add('hidden');
+    colorSection.classList.add('hidden');
+    generateRow.classList.add('hidden');
+    resultRow.classList.add('hidden');
+    clearError();
+    statusBadge.textContent = '';
+    document.getElementById('fileInput').value='';
+  });
+
+})();
+</script>
+</body>
+</html>
