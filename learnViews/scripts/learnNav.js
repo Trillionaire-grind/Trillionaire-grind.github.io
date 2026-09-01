@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.15";
+export const LEARN_APP_VERSION = "0.2.9.16";
 
 console.log(`[Képler Siguineau] working version: v${LEARN_APP_VERSION}`);
 
@@ -7,8 +7,8 @@ export const PAGE_INDEX = {
   kotfe: 1,
   notes: 2,
   projects: 3,
-  speak: 4,
-  offers: 5,
+  offers: 4,
+  speak: 5,
 };
 
 export const NAV_ITEMS = [
@@ -16,8 +16,8 @@ export const NAV_ITEMS = [
   { id: "kotfe", label: "Mangé Lakay" },
   { id: "notes", label: "Notes" },
   { id: "projects", label: "Projects" },
-  { id: "speak", label: "Talk to me" },
   { id: "offers", label: "Offers" },
+  { id: "speak", label: "Talk to me" },
 ];
 
 export const CONSULTING_NAV = {
