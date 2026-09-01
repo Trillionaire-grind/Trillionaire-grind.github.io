@@ -166,7 +166,7 @@
     container.appendChild(bodyWrap);
 
     if (entry?.title) {
-      document.title = `${entry.title} — Képler Siguineau`;
+      document.title = `${entry.title} · Képler Siguineau`;
     }
 
     wrapYoutubeIframes(bodyWrap);

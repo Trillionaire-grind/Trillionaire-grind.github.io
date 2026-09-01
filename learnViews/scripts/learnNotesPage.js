@@ -181,7 +181,7 @@ async function promptDeleteNote(note) {
   if (!isAdmin) return;
   const isStatic = note.source === "static";
   const msg = isStatic
-    ? 'Hide this built-in note from your library? (The file stays on the site — use Undo to restore.)'
+    ? 'Hide this built-in note from your library? (The file stays on the site. Use Undo to restore.)'
     : "Delete this note?";
   if (!confirm(msg)) return;
 
@@ -467,7 +467,7 @@ function onAdminChanged(event) {
     submitBtn.textContent = event.detail?.demoMode
       ? editingNoteId
         ? "Save changes (demo)"
-        : "Save note (demo — this browser only)"
+        : "Save note (demo, this browser only)"
       : editingNoteId
         ? "Save changes"
         : "Publish note";
@@ -533,5 +533,5 @@ setTimeout(() => {
 
 if (isLearnDemoMode()) {
   const submitBtn = document.getElementById("addNoteSubmitBtn");
-  if (submitBtn) submitBtn.textContent = "Save note (demo — this browser only)";
+  if (submitBtn) submitBtn.textContent = "Save note (demo, this browser only)";
 }

@@ -127,7 +127,7 @@ export function renderOffersPage(root) {
 
   root.innerHTML = `
     <p class="offers-intro">
-      This site is mostly about <strong>education</strong> — notes on apps, business, and cities. Offers are different:
+      This site is mostly about <strong>education</strong>: notes on apps, business, and cities. Offers are different:
       some help you <strong>earn</strong>, others are purely for <strong>enjoyment</strong>. Use the tabs below to focus on one lane.
     </p>
 
@@ -139,7 +139,7 @@ export function renderOffersPage(root) {
     ${renderSection("fun")}
 
     <nav class="offers-links" aria-label="Related pages">
-      <a href="learn.html#notes" data-offers-nav="notes">Free education — notes</a>
+      <a href="learn.html#notes" data-offers-nav="notes">Free education: notes</a>
       <a href="learn.html#speak" data-offers-nav="speak">Talk to me</a>
       <a href="learn.html#kotfe" data-offers-nav="kotfe">Mangé Lakay project</a>
     </nav>`;

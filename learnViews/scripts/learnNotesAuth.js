@@ -155,7 +155,7 @@ function initDemoAuth() {
   if (setupNotice) {
     setupNotice.hidden = false;
     setupNotice.textContent =
-      "Demo mode — notes save in this browser only. Connect Firebase later for real publishing.";
+      "Demo mode. Notes save in this browser only. Connect Firebase later for real publishing.";
   }
   if (demoLoginBtn) demoLoginBtn.hidden = false;
   if (loginForm) loginForm.hidden = true;
