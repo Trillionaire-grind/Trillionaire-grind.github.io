@@ -48,7 +48,7 @@ export function initProjectsShelf(root) {
         <p class="shelf-modal-more" id="shelfModalMore"></p>
         <h3>Tech stack</h3>
         <ul class="shelf-stack" id="shelfModalStack"></ul>
-        <button type="button" class="shelf-modal-open" id="shelfModalOpen">Open project</button>
+        <button type="button" class="shelf-modal-cta" id="shelfModalOpen">Open project</button>
       </div>
     </div>`;
 
@@ -63,7 +63,7 @@ export function initProjectsShelf(root) {
   function closeModal() {
     modal.classList.remove("is-open");
     modal.setAttribute("aria-hidden", "true");
-    document.body.classList.remove("shelf-modal-open");
+    document.body.classList.remove("is-shelf-modal-open");
     lastTrigger?.focus();
   }
 
@@ -80,7 +80,7 @@ export function initProjectsShelf(root) {
     };
     modal.classList.add("is-open");
     modal.setAttribute("aria-hidden", "false");
-    document.body.classList.add("shelf-modal-open");
+    document.body.classList.add("is-shelf-modal-open");
     modal.querySelector(".shelf-modal-close")?.focus();
   }
 
