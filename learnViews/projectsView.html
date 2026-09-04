@@ -4,26 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Projects</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/learnNav.css">
+  <link rel="stylesheet" href="assets/projectsShelf.css">
   <style>
-    html, body {
+    body {
       margin: 0;
-      height: 100%;
-      background: #f0f2f5;
-    }
-
-    iframe {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: none;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #F0F1F3;
+      color: #1a1a1a;
     }
   </style>
 </head>
 <body>
-  <iframe src="../pages.html" title="My Projects"></iframe>
+  <div class="shelf-page" id="projectsShelf"></div>
   <script type="module">
     import { initLearnNav } from "./scripts/learnNav.js";
+    import { initProjectsShelf } from "./scripts/projectsShelfPage.js";
+
     initLearnNav("projects");
+    initProjectsShelf(document.getElementById("projectsShelf"));
   </script>
 </body>
 </html>
