@@ -199,6 +199,17 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 
 ---
 
+### Princes
+**URL:** `/princesLanding.html` · **Money:** $1 ticket (testing mode). Stripe Checkout next.
+
+- [x] VSL sales page, $1 account modal, testing-mode footer
+- [x] App shell: Home, Learn (classes + courses), Calendar, Chat, Admin
+- [x] Roles: leader, staff, owner
+- [ ] Firebase project + Auth/Firestore live
+- [ ] Stripe Checkout session tied to Firebase uid + webhook entitlement
+- [ ] Household chat rooms
+- [ ] Real VSL video
+
 ### The Minorities
 **URL:** `/minorities.html` · **Money:** Test Stripe stub (live Checkout planned)
 

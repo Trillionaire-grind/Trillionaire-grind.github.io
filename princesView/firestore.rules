@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/princesUsers/$(request.auth.uid)).data;
+    }
+
+    function isStaff() {
+      return signedIn() && userDoc().teamRole in ['staff', 'owner'];
+    }
+
+    match /princesUsers/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow create: if signedIn() && request.auth.uid == userId;
+      allow update: if signedIn() && (request.auth.uid == userId || isStaff());
+    }
+
+    match /princesPosts/{postId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && userDoc().teamRole in ['leader', 'staff', 'owner'];
+      allow update, delete: if signedIn() && (
+        resource.data.authorId == request.auth.uid || isStaff()
+      );
+    }
+
+    match /princesEvents/{eventId} {
+      allow read: if signedIn();
+      allow write: if isStaff();
+    }
+  }
+}

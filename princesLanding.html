@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Princes · Your first kingdom</title>
+  <meta name="description" content="To all aspiring princes. Your body is your first kingdom. Enter for $1.">
+  <link rel="icon" type="image/png" href="princesView/assets/logos/princes-logo-crown.png">
+  <meta name="theme-color" content="#0B1220">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.1">
+</head>
+<body class="pr-sales-body">
+  <header class="pr-sales-header">
+    <a class="pr-brand" href="princesLanding.html">
+      <img data-pr-logo src="princesView/assets/logos/princes-logo-crown.png" alt="">
+      <span data-pr-brand>Princes</span>
+    </a>
+    <button type="button" class="pr-login" id="prOpenLogin">Log in</button>
+  </header>
+  <div class="pr-gold-line"></div>
+
+  <main class="pr-sales">
+    <p class="pr-kicker">To all aspiring princes</p>
+    <h1>Your body is your first kingdom</h1>
+    <p class="pr-lede">
+      If you do not like the man in the mirror, change him first. A weak leader trains a weak court.
+      Your kingdom does not want a weak king. Get to 10% body fat. Learn how to lose fat as fast as humanly possible.
+    </p>
+
+    <div class="pr-vsl-label">Watch this first</div>
+    <div class="pr-vsl" role="region" aria-label="Video sales letter">
+      VSL goes here. Publishing soon.
+    </div>
+
+    <button type="button" class="pr-cta" id="prCta">
+      Enter for $1
+      <small>The fat course. Then the path into the court.</small>
+    </button>
+
+    <section class="pr-panel" id="prTestPanel" hidden>
+      <h2>Name, logo, and middle offers</h2>
+      <p>Tap a name or logo to preview it on this page. Only visible in testing mode.</p>
+      <p><strong>Working pick:</strong> Princes. Crown mark. $1 Squire. $14.97 The Household. $1M Prince's Court.</p>
+      <h3>Names</h3>
+      <div class="pr-name-grid" id="prNameChoices"></div>
+      <h3>Logos</h3>
+      <div class="pr-logo-grid" id="prLogoChoices"></div>
+      <h3>Offers between $14.97 and Prince's Court</h3>
+      <div class="pr-offer-grid" id="prMidOffers"></div>
+    </section>
+  </main>
+
+  <div class="pr-test-foot">
+    <button type="button" id="prTestModeBtn">Testing mode</button>
+  </div>
+
+  <div class="pr-modal" id="prAccountModal" aria-hidden="true">
+    <div class="pr-modal-backdrop"></div>
+    <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prAccountTitle">
+      <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <h2 id="prAccountTitle">Create your account</h2>
+      <p>Name, age, gender, email, password. Then you pay $1 and the course opens.</p>
+      <form id="prAccountForm">
+        <div class="pr-row">
+          <label class="pr-field"><span>First name</span><input name="firstName" required></label>
+          <label class="pr-field"><span>Last name</span><input name="lastName" required></label>
+        </div>
+        <div class="pr-row">
+          <label class="pr-field"><span>Age</span><input name="age" type="number" min="18" max="99" required></label>
+          <label class="pr-field">
+            <span>Gender</span>
+            <select name="gender" required>
+              <option value="">Select</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+        </div>
+        <label class="pr-field"><span>Email</span><input name="email" type="email" required></label>
+        <label class="pr-field"><span>Password</span><input name="password" type="password" minlength="6" required></label>
+        <p class="pr-error" id="prAccountError"></p>
+        <button type="submit" class="pr-submit">Create your account</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="pr-modal" id="prLoginModal" aria-hidden="true">
+    <div class="pr-modal-backdrop"></div>
+    <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prLoginTitle">
+      <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <h2 id="prLoginTitle">Log in</h2>
+      <form id="prLoginForm">
+        <label class="pr-field"><span>Email</span><input name="email" type="email" required></label>
+        <label class="pr-field"><span>Password</span><input name="password" type="password" required></label>
+        <p class="pr-error" id="prLoginError"></p>
+        <button type="submit" class="pr-submit">Enter</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="princesView/scripts/princesVersion.js"></script>
+  <script src="princesView/scripts/princesCatalog.js"></script>
+  <script src="princesView/scripts/princesStore.js"></script>
+  <script src="princesView/scripts/princesAuth.js"></script>
+  <script src="princesView/scripts/princesLanding.js"></script>
+</body>
+</html>
