@@ -205,6 +205,7 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 - [x] VSL sales page, $1 account modal, testing-mode footer
 - [x] App shell: Home, Learn (classes + courses), Calendar, Chat, Admin
 - [x] Roles: leader, staff, owner
+- [x] Army rank stack: Recruit, Private, Specialist, Sergeant, Colonel, Prince's Court
 - [ ] Firebase project + Auth/Firestore live
 - [ ] Stripe Checkout session tied to Firebase uid + webhook entitlement
 - [ ] Household chat rooms

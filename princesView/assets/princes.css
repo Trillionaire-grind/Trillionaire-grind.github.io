@@ -203,6 +203,9 @@ button, input, select, textarea { font: inherit; }
 
 .pr-choice.is-on { border-color: var(--pr-gold); }
 .pr-choice strong, .pr-offer strong { display: block; }
+.pr-offer span { display: block; margin-top: 4px; opacity: 0.88; }
+.pr-panel ul, .pr-letter ul { padding-left: 1.15rem; }
+.pr-panel li, .pr-letter li { margin: 0 0 8px; }
 
 .pr-logo-grid button {
   padding: 0;

@@ -72,12 +72,12 @@
   }
 
   function lockedCard(title) {
-    return '<p class="pr-empty">' + esc(title) + ' The Household opens this. $14.97 a month.</p><button type="button" class="pr-submit" data-go="upgrade">See The Household</button>';
+    return '<p class="pr-empty">' + esc(title) + " Private opens this. $14.97 a month.</p><button type=\"button\" class=\"pr-submit\" data-go=\"upgrade\">See the ranks</button>";
   }
 
   function renderHome() {
-    if (!AUTH.hasTier("household")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + lockedCard("Posts are for The Household.");
+    if (!AUTH.hasTier("private")) {
+      mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + lockedCard("Posts are for Private and above.");
       return;
     }
     var posts = STORE.getPosts();
@@ -142,7 +142,7 @@
     var courses = CATALOG.courses.map(function (course) {
       var locked = !AUTH.hasTier(course.access);
       return '<article class="pr-course' + (locked ? " pr-locked" : "") + '" data-go="' + (locked ? "upgrade" : "course/" + course.id) + '">' +
-        (locked ? '<div class="pr-lock-badge">Household</div>' : "") +
+        (locked ? '<div class="pr-lock-badge">Private</div>' : "") +
         '<img src="' + esc(course.image) + '" alt="">' +
         '<div class="pr-course-body"><h3>' + esc(course.title) + "</h3><p>" + esc(course.meta) + "</p></div></article>";
     }).join("");
@@ -289,29 +289,42 @@
     mainEl.innerHTML =
       '<article class="pr-course-read"><p class="pr-kicker" style="color:#111">Course</p>' +
       "<h1>How to lose fat as fast as humanly possible</h1>" +
-      "<p>Your body is your first kingdom. Every man here is aiming at 10% body fat. This is the first course. The Household is the next room.</p>" +
+      "<p>Your body is your first kingdom. Every man here is aiming at 10% body fat. This is the first course. Private is the next room.</p>" +
       "<p>Open the fat-loss system. Use the ledger. Come back for class.</p>" +
       '<a class="pr-upgrade" href="/fatLoss.html" target="_blank" rel="noopener noreferrer">Open the fat-loss book and ledger</a>' +
-      '<button type="button" class="pr-upgrade" data-go="upgrade" style="border:none;width:100%;cursor:pointer">Read the Household letter</button>' +
+      '<button type="button" class="pr-upgrade" data-go="upgrade" style="border:none;width:100%;cursor:pointer">See the ranks</button>' +
       "</article>";
   }
 
   function renderUpgrade() {
+    var cards = CATALOG.tiers.filter(function (tier) { return tier.id !== "ticket"; }).map(function (tier) {
+      return '<article class="pr-offer" style="margin-bottom:12px"><strong>' + esc(tier.name) + " · " + esc(tier.label) + "</strong><span>" + esc(tier.perks) + "</span>" +
+        (STORE.isTestMode()
+          ? '<button type="button" class="pr-submit" style="margin-top:10px" data-buy="' + esc(tier.id) + '">Enter ' + esc(tier.name) + " (testing)</button>"
+          : "") +
+        "</article>";
+    }).join("");
+    var manual = CATALOG.ranksManual;
     mainEl.innerHTML =
-      '<article class="pr-letter"><p class="pr-kicker" style="color:#111">The next room</p>' +
-      "<h1>The Household · $14.97 a month</h1>" +
-      "<p>The $1 ticket got you the first course. The Household is where aspiring princes meet: live classes, the calendar, posts, and chat.</p>" +
-      "<p>Squires stay with the fat course. Household members walk the rest of the court.</p>" +
-      "<p>Prince's Court sits above this. One million a year. Princes talking to princes. That room is not this page.</p>" +
-      '<button type="button" class="pr-submit" id="prBuyHousehold">Enter The Household</button></article>';
-    document.getElementById("prBuyHousehold").onclick = function () {
-      if (STORE.isTestMode()) {
-        AUTH.grantTier("household");
-        go("home");
-        return;
-      }
-      alert("Live Stripe for The Household is not wired yet. Turn on testing mode on the sales page to preview access.");
-    };
+      '<article class="pr-letter"><p class="pr-kicker" style="color:#111">Ranks</p>' +
+      "<h1>From Recruit to Prince's Court</h1>" +
+      "<p>The $1 ticket made you a Recruit. The rooms above that use Army titles. The product is still Princes. The top table is still Prince's Court.</p>" +
+      "<p>Colonel is the last room before that table. A month-long call with the Princes. Two ways through: take a seat that already exists, like a minister of X, or raise your own command.</p>" +
+      cards +
+      "<h2>How an army is stacked</h2><p>" + esc(manual.intro) + "</p>" +
+      manual.layers.map(function (layer) {
+        return "<p><strong>" + esc(layer.name) + ".</strong> " + esc(layer.ranks) + " " + esc(layer.job) + "</p>";
+      }).join("") +
+      "<h2>Seats</h2><ul>" + manual.seats.map(function (line) { return "<li>" + esc(line) + "</li>"; }).join("") + "</ul>" +
+      "<h2>Read these</h2><ul>" + manual.reading.map(function (book) {
+        return "<li><strong>" + esc(book.title) + "</strong>. " + esc(book.note) + "</li>";
+      }).join("") + "</ul></article>";
+    mainEl.querySelectorAll("[data-buy]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        AUTH.grantTier(btn.dataset.buy);
+        go(btn.dataset.buy === "court" ? "chat" : "home");
+      });
+    });
   }
 
   function renderPay() {
@@ -331,15 +344,23 @@
   }
 
   function renderChat() {
-    if (!AUTH.hasTier("household")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Chat</h1>' + lockedCard("Chat is for The Household.");
+    if (!AUTH.hasTier("private")) {
+      mainEl.innerHTML = '<h1 class="pr-section-title">Chat</h1>' + lockedCard("Chat is for Private and above.");
       return;
     }
     if (AUTH.hasTier("court")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Prince\'s Court</h1><p>Private mastermind. This room is for princes only.</p>';
+      mainEl.innerHTML = '<h1 class="pr-section-title">Prince\'s Court</h1><p>The small table. Princes talking to princes. Seats are few.</p>';
       return;
     }
-    mainEl.innerHTML = '<h1 class="pr-section-title">Household chat</h1><p class="pr-empty">Member chat lands here next, same rooms pattern as The Minorities.</p>';
+    if (AUTH.hasTier("colonel")) {
+      mainEl.innerHTML = '<h1 class="pr-section-title">Colonel</h1><p>Month-long call with the Princes and the other Colonels. Two paths: take a named seat, like a minister of war or law, or raise your own court.</p>';
+      return;
+    }
+    if (AUTH.hasTier("sergeant")) {
+      mainEl.innerHTML = '<h1 class="pr-section-title">Squad chat</h1><p>You plus 8. Open a group. Hold each other to the number.</p>';
+      return;
+    }
+    mainEl.innerHTML = '<h1 class="pr-section-title">Unit chat</h1><p class="pr-empty">Member chat lands here next, same rooms pattern as The Minorities.</p>';
   }
 
   function renderAdmin() {

@@ -49,10 +49,10 @@
 
     var logos = document.getElementById("prLogoChoices");
     var files = [
-      "princesView/assets/logos/princes-logo-crown.png",
-      "princesView/assets/logos/princes-logo-p.png",
-      "princesView/assets/logos/princes-logo-lion.png",
+      "princesView/assets/logos/princes-logo-shield.png",
       "princesView/assets/logos/princes-logo-ten.png",
+      "princesView/assets/logos/princes-logo-lion.png",
+      "princesView/assets/logos/princes-logo-p.png",
     ];
     logos.innerHTML = files.map(function (src) {
       var active = STORE.getLogo() === src ? " is-on" : "";
@@ -60,9 +60,23 @@
     }).join("");
 
     var offers = document.getElementById("prMidOffers");
-    offers.innerHTML = CATALOG.midOffers.map(function (item) {
-      return '<div class="pr-offer"><strong>' + item.name + " · $" + item.price.toLocaleString() + " / " + item.cadence + "</strong><span>" + item.idea + "</span></div>";
+    offers.innerHTML = CATALOG.tiers.map(function (item) {
+      return '<div class="pr-offer"><strong>' + item.name + " · " + item.label + "</strong><span>" + item.perks + "</span></div>";
     }).join("");
+
+    var manual = CATALOG.ranksManual;
+    var manualEl = document.getElementById("prRankManual");
+    manualEl.innerHTML =
+      "<p>" + manual.intro + "</p>" +
+      manual.layers.map(function (layer) {
+        return '<div class="pr-offer"><strong>' + layer.name + "</strong><span>" + layer.ranks + "</span><span>" + layer.job + "</span></div>";
+      }).join("") +
+      "<h3>Seats and ministers</h3>" +
+      "<ul>" + manual.seats.map(function (line) { return "<li>" + line + "</li>"; }).join("") + "</ul>" +
+      "<h3>Read these</h3>" +
+      "<ul>" + manual.reading.map(function (book) {
+        return "<li><strong>" + book.title + "</strong>. " + book.note + "</li>";
+      }).join("") + "</ul>";
 
     names.querySelectorAll("[data-name]").forEach(function (btn) {
       btn.addEventListener("click", function () {

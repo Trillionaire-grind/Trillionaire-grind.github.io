@@ -113,7 +113,9 @@
   }
 
   function getLogo() {
-    return localStorage.getItem(KEY_LOGO) || global.PRINCES_CATALOG.workingLogo;
+    var saved = localStorage.getItem(KEY_LOGO);
+    if (!saved || saved.indexOf("crown") !== -1) return global.PRINCES_CATALOG.workingLogo;
+    return saved;
   }
 
   function setLogo(src) {

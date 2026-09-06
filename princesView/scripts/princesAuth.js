@@ -1,13 +1,15 @@
 (function (global) {
   var STORE = global.PRINCES_STORE;
-  var TIER_RANK = { none: 0, ticket: 1, household: 2, knight: 3, baron: 4, lord: 5, duke: 6, crown: 7, court: 8 };
+  var TIER_RANK = { none: 0, ticket: 1, household: 2, private: 2, specialist: 3, sergeant: 4, colonel: 5, court: 6 };
 
   function currentUser() {
     return STORE.getSession();
   }
 
   function tierOf(user) {
-    return (user && user.tier) || "none";
+    var tier = (user && user.tier) || "none";
+    if (tier === "household") return "private";
+    return tier;
   }
 
   function hasTier(minTier) {
