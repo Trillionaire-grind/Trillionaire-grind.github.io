@@ -10,6 +10,7 @@
   var accountError = document.getElementById("prAccountError");
   var loginError = document.getElementById("prLoginError");
   var testBtn = document.getElementById("prTestModeBtn");
+  var fixBtn = document.getElementById("prFixModeBtn");
   var ageSelect = document.getElementById("prAgeSelect");
 
   function openModal(el) {
@@ -59,8 +60,13 @@
   });
 
   testBtn.addEventListener("click", function () {
-    AUTH.enterDemo();
-    window.location.href = "princes.html#learn";
+    AUTH.enterTest();
+    window.location.href = "princes.html#home";
+  });
+
+  fixBtn.addEventListener("click", function () {
+    AUTH.enterFix();
+    window.location.href = "princes.html#home";
   });
 
   accountForm.addEventListener("submit", function (event) {

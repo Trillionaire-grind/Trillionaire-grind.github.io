@@ -35,22 +35,29 @@
     return roleOf(currentUser()) === "owner";
   }
 
+  function adminToolsOn() {
+    return isStaff() && STORE.isAdminOn();
+  }
+
   function canCreatePost() {
-    return isLeader();
+    return isLeader() && (STORE.getAppMode() !== "fix" || STORE.isAdminOn());
   }
 
   function canEditOwnPost(post) {
     var user = currentUser();
     if (!user || !post) return false;
+    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     return post.authorId === user.id && isLeader();
   }
 
   function canDeletePost(post) {
+    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     if (isStaff()) return true;
     return canEditOwnPost(post);
   }
 
   function canEditCalendar() {
+    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     return isStaff();
   }
 
@@ -97,11 +104,32 @@
   }
 
   function enterDemo() {
-    STORE.setTestMode(true);
-    STORE.seedDemo();
-    var demo = STORE.findUserByEmail("marcus@princes.demo");
-    STORE.setSession(demo);
-    return demo;
+    return enterFix();
+  }
+
+  function enterTest() {
+    var unit = STORE.seedUnit();
+    STORE.setAppMode("test");
+    STORE.setAdminOn(false);
+    STORE.setSession(unit.recruit);
+    return unit.recruit;
+  }
+
+  function enterFix() {
+    var unit = STORE.seedUnit();
+    STORE.setAppMode("fix");
+    STORE.setAdminOn(false);
+    STORE.setSession(unit.owner);
+    return unit.owner;
+  }
+
+  function setOwnRole(teamRole) {
+    var user = currentUser();
+    if (!user) throw new Error("No session.");
+    user.teamRole = teamRole;
+    STORE.upsertUser(user);
+    STORE.setSession(user);
+    return user;
   }
 
   function grantTier(tierId) {
@@ -135,6 +163,10 @@
     canEditOwnPost: canEditOwnPost,
     canDeletePost: canDeletePost,
     canEditCalendar: canEditCalendar,
+    adminToolsOn: adminToolsOn,
+    enterTest: enterTest,
+    enterFix: enterFix,
+    setOwnRole: setOwnRole,
     register: register,
     login: login,
     logout: logout,

@@ -201,6 +201,24 @@ button, input, select, textarea { font: inherit; }
 
 .pr-cta small { font-weight: 600; opacity: 0.8; }
 
+.pr-vsl-ask {
+  font-family: var(--pr-display);
+  font-size: clamp(1.2rem, 4vw, 1.7rem) !important;
+  line-height: 1.2;
+  margin: 4px 0 8px !important;
+  color: var(--pr-cream);
+}
+
+.pr-dollar {
+  max-width: 34rem;
+  margin: 12px auto 0;
+  color: #b8b0a0;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.pr-test-foot span { color: #8a8478; }
+
 .pr-test-foot {
   position: fixed;
   left: 0;
@@ -445,12 +463,50 @@ button, input, select, textarea { font: inherit; }
   background: none;
   color: var(--pr-muted);
   font-weight: 700;
-  font-size: 12px;
-  padding: 8px 10px;
+  font-size: 11px;
+  padding: 6px 8px;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
+.pr-tab-icon { width: 22px; height: 22px; }
 .pr-tabbar button.is-on { color: var(--pr-navy); }
+
+.pr-head-tools { display: flex; align-items: center; gap: 8px; }
+.pr-role-btn { border: none; cursor: pointer; font: inherit; }
+
+.pr-social { display: flex; gap: 8px; margin-top: 10px; }
+.pr-like {
+  border: 1px solid var(--pr-line);
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-weight: 700;
+  cursor: pointer;
+  background: #f3f1ea;
+  color: #8a8478;
+}
+.pr-like--prior {
+  background: #e4e2dc;
+  color: #6b665c;
+  filter: grayscale(1);
+}
+.pr-like--now {
+  background: var(--pr-gold);
+  color: #111;
+  filter: none;
+}
+.pr-like--none { background: #fff; color: #111; }
+
+.pr-comments { margin-top: 10px; background: #f7f4ee; border-radius: 10px; padding: 10px; }
+.pr-comment { margin: 0 0 8px; font-size: 14px; }
+.pr-comment-form { display: flex; gap: 8px; }
+.pr-comment-form input { flex: 1; border: 1px solid var(--pr-line); border-radius: 8px; padding: 8px; }
+.pr-comment-form button { border: none; background: var(--pr-navy); color: #fff; border-radius: 8px; padding: 8px 10px; font-weight: 700; cursor: pointer; }
+.pr-post-img { width: 100%; border-radius: 10px; margin: 8px 0; }
+.pr-lock-ph { min-height: 120px; background: #d7d0c2; }
 
 .pr-subtabs {
   display: flex;

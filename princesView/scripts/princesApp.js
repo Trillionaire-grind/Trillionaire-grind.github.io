@@ -44,31 +44,59 @@
     return user;
   }
 
+  function icon(name) {
+    var paths = {
+      home: '<path d="M4 11.5 12 4l8 7.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-8.5z"/>',
+      learn: '<path d="M3 8.5 12 4l9 4.5-9 4.5L3 8.5zm0 4.5 9 4.5 9-4.5M3 17l9 4.5L21 17"/>',
+      chat: '<path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/>',
+      admin: '<path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6l-8-4zm-1 13-3.2-3.2 1.4-1.4L11 12.2l4.8-4.8 1.4 1.4L11 15z"/>',
+    };
+    return '<svg class="pr-tab-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">' + (paths[name] || "") + "</svg>";
+  }
+
   function renderHeader() {
     var user = AUTH.currentUser();
     var role = user ? user.teamRole : "member";
-    var badge = "";
-    if (user && user.demo) badge += '<span class="pr-badge">Demo</span>';
-    if (role === "owner") badge += '<span class="pr-badge pr-badge--owner">Owner</span>';
-    else if (role === "staff") badge += '<span class="pr-badge pr-badge--staff">Staff</span>';
-    else if (role === "leader") badge += '<span class="pr-badge pr-badge--leader">Leader</span>';
+    var mode = STORE.getAppMode();
+    var modeLabel = mode === "fix" ? "Fix" : mode === "test" ? "Testing" : "";
+    var roleBtn = "";
+    if (mode === "fix") {
+      roleBtn = '<button type="button" class="pr-badge pr-badge--' + esc(role) + ' pr-role-btn" id="prRoleBtn">' + esc(role) + "</button>";
+    }
     headerEl.innerHTML =
-      '<a class="pr-brand" href="#learn"><img src="' + esc(STORE.getLogo()) + '" alt=""><span>' + esc(STORE.getBrandName()) + "</span></a>" +
-      '<div style="display:flex;align-items:center;gap:8px">' + badge +
-      '<button type="button" class="pr-login" data-go="profile">You</button></div>';
+      '<a class="pr-brand" href="#home"><img src="' + esc(STORE.getLogo()) + '" alt=""><span>' + esc(STORE.getBrandName()) + "</span></a>" +
+      '<div class="pr-head-tools">' +
+      (modeLabel ? '<span class="pr-badge">' + modeLabel + "</span>" : "") +
+      roleBtn +
+      "</div>";
+  }
+
+  function bindHeader() {
+    var roleBtn = document.getElementById("prRoleBtn");
+    if (!roleBtn) return;
+    roleBtn.addEventListener("click", function () {
+      var next = prompt("Role: member, leader, staff, or owner", AUTH.currentUser().teamRole);
+      if (!next) return;
+      next = next.trim().toLowerCase();
+      if (["member", "leader", "staff", "owner"].indexOf(next) === -1) return;
+      AUTH.setOwnRole(next);
+      render();
+    });
   }
 
   function renderTabs() {
     var current = route().split("/")[0];
     var tabs = [
-      { id: "home", label: "Home" },
-      { id: "learn", label: "Learn" },
-      { id: "chat", label: "Chat" },
+      { id: "home", label: "Home", icon: "home" },
+      { id: "learn", label: "Learn", icon: "learn" },
+      { id: "chat", label: "Chat", icon: "chat" },
     ];
-    if (AUTH.isStaff()) tabs.push({ id: "admin", label: "Admin" });
+    if (AUTH.isStaff() && STORE.getAppMode() === "fix") {
+      tabs.push({ id: "admin", label: "Admin", icon: "admin" });
+    }
     tabEl.innerHTML = tabs.map(function (tab) {
       var on = current === tab.id || (tab.id === "learn" && (current === "course" || current === "upgrade"));
-      return '<button type="button" data-go="' + tab.id + '"' + (on ? ' class="is-on"' : "") + ">" + tab.label + "</button>";
+      return '<button type="button" data-go="' + tab.id + '"' + (on ? ' class="is-on"' : "") + ">" + icon(tab.icon) + "<span>" + tab.label + "</span></button>";
     }).join("");
   }
 
@@ -77,20 +105,38 @@
   }
 
   function renderHome() {
-    if (!AUTH.hasTier("private")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + lockedCard("Posts are for Private and above.");
-      return;
-    }
+    var user = AUTH.currentUser();
     var posts = STORE.getPosts();
     var compose = AUTH.canCreatePost()
       ? '<form id="prNewPost" class="pr-letter" style="margin-bottom:16px"><h3>New post</h3><label class="pr-field"><span>Title</span><input name="title" required></label><label class="pr-field"><span>Body</span><textarea name="body" rows="3" required></textarea></label><button class="pr-submit" type="submit">Publish</button></form>'
       : "";
     mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + compose + posts.map(function (post) {
+      var access = post.access || "private";
+      var locked = !AUTH.hasTier(access);
+      if (locked) {
+        return '<article class="pr-course pr-locked" data-go="upgrade">' +
+          (post.image ? '<img src="' + esc(post.image) + '" alt="">' : '<div class="pr-lock-ph"></div>') +
+          '<div class="pr-lock-badge">🔒 ' + esc(access) + "</div>" +
+          '<div class="pr-course-body"><h3>' + esc(post.title) + "</h3><p>Upgrade to open this.</p></div></article>";
+      }
+      var like = STORE.likeState(post.id, user.id);
+      var comments = STORE.commentsFor(post.id);
       var actions = "";
       if (AUTH.canEditOwnPost(post)) actions += '<button type="button" class="pr-tiny" data-edit="' + esc(post.id) + '">Edit</button>';
       if (AUTH.canDeletePost(post)) actions += '<button type="button" class="pr-tiny" data-del="' + esc(post.id) + '">Remove</button>';
-      return '<article class="pr-post"><header><strong>' + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
+      return '<article class="pr-post" id="post-' + esc(post.id) + '"><header><strong>' + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
+        (post.image ? '<img class="pr-post-img" src="' + esc(post.image) + '" alt="">' : "") +
         "<h3>" + esc(post.title) + "</h3><p>" + esc(post.body) + "</p>" +
+        '<div class="pr-social">' +
+        '<button type="button" class="pr-like pr-like--' + like.kind + '" data-like="' + esc(post.id) + '">Like · ' + STORE.likeCount(post.id) + "</button>" +
+        '<button type="button" class="pr-tiny" data-open-comments="' + esc(post.id) + '">Comments · ' + comments.length + "</button>" +
+        "</div>" +
+        '<div class="pr-comments" id="comments-' + esc(post.id) + '" hidden>' +
+        comments.map(function (item) {
+          return '<p class="pr-comment"><strong>' + esc(item.author) + "</strong> " + esc(item.body) + "</p>";
+        }).join("") +
+        '<form class="pr-comment-form" data-comment="' + esc(post.id) + '"><input name="body" placeholder="Add a comment" required><button type="submit">Send</button></form>' +
+        "</div>" +
         (actions ? '<div class="pr-actions">' + actions + "</div>" : "") +
         "</article>";
     }).join("");
@@ -99,7 +145,6 @@
     if (form) {
       form.addEventListener("submit", function (event) {
         event.preventDefault();
-        var user = AUTH.currentUser();
         var data = new FormData(form);
         var postsNow = STORE.getPosts();
         postsNow.unshift({
@@ -109,16 +154,42 @@
           role: user.teamRole,
           title: data.get("title"),
           body: data.get("body"),
+          access: "private",
           createdAt: STORE.nowIso(),
         });
         STORE.savePosts(postsNow);
         render();
       });
     }
+    mainEl.querySelectorAll("[data-like]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        STORE.addLike(btn.dataset.like, user.id);
+        render();
+      });
+    });
+    mainEl.querySelectorAll("[data-open-comments]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var box = document.getElementById("comments-" + btn.dataset.openComments);
+        if (box) box.hidden = !box.hidden;
+      });
+    });
+    mainEl.querySelectorAll("[data-comment]").forEach(function (formEl) {
+      formEl.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var data = new FormData(formEl);
+        STORE.addComment(formEl.dataset.comment, {
+          id: STORE.uid(),
+          author: user.displayName,
+          authorId: user.id,
+          body: data.get("body"),
+          createdAt: STORE.nowIso(),
+        });
+        render();
+      });
+    });
     mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        var postsNow = STORE.getPosts().filter(function (post) { return post.id !== btn.dataset.del; });
-        STORE.savePosts(postsNow);
+        STORE.savePosts(STORE.getPosts().filter(function (post) { return post.id !== btn.dataset.del; }));
         render();
       });
     });
@@ -365,33 +436,87 @@
   }
 
   function renderAdmin() {
-    if (!AUTH.isStaff()) {
-      mainEl.innerHTML = '<p class="pr-empty">Staff only.</p>';
+    if (!AUTH.isStaff() || STORE.getAppMode() !== "fix") {
+      mainEl.innerHTML = '<p class="pr-empty">Fix the app to use admin tools.</p>';
+      return;
+    }
+    if (!STORE.isAdminOn()) {
+      mainEl.innerHTML =
+        '<article class="pr-letter"><h1>Admin mode is off</h1>' +
+        "<p>Tools stay locked until you turn admin mode on. That keeps Testing clean and Fix explicit.</p>" +
+        '<button type="button" class="pr-submit" id="prAdminOn">Enter admin mode</button></article>';
+      document.getElementById("prAdminOn").onclick = function () {
+        STORE.setAdminOn(true);
+        render();
+      };
       return;
     }
     var users = STORE.getUsers();
+    var addForm = AUTH.isOwner()
+      ? '<form id="prAddPerson" class="pr-letter" style="margin-bottom:16px"><h3>Add a person</h3>' +
+        '<label class="pr-field"><span>Name</span><input name="name" required></label>' +
+        '<label class="pr-field"><span>Email</span><input name="email" type="email" required></label>' +
+        '<label class="pr-field"><span>Role</span><select name="teamRole"><option value="member">Member</option><option value="leader">Leader</option><option value="staff">Staff</option></select></label>' +
+        '<button class="pr-submit" type="submit">Add to the unit</button></form>'
+      : "";
     mainEl.innerHTML =
       '<h1 class="pr-section-title">Admin</h1>' +
-      "<p>Staff can remove posts and edit the calendar. Owner has the same doors, with an Owner badge. Leader can publish and edit or remove their own posts.</p>" +
-      users.map(function (user) {
-        return '<article class="pr-post"><strong>' + esc(user.displayName) + "</strong> · " + esc(user.email) +
-          "<p>Tier: " + esc(user.tier) + " · Role: " + esc(user.teamRole) + "</p>" +
+      '<p><button type="button" class="pr-tiny" id="prAdminOff">Turn admin mode off</button></p>' +
+      addForm +
+      users.map(function (item) {
+        var staffTools = "";
+        if (AUTH.isOwner() && item.teamRole === "staff") {
+          staffTools += '<button type="button" class="pr-tiny" data-drop="' + esc(item.id) + '">Remove staff</button>';
+        }
+        return '<article class="pr-post"><strong>' + esc(item.displayName) + "</strong> · " + esc(item.email) +
+          "<p>Tier: " + esc(item.tier) + " · Role: " + esc(item.teamRole) + "</p>" +
           '<div class="pr-actions">' +
-          '<button type="button" class="pr-tiny" data-role="' + esc(user.id) + ':leader">Leader</button>' +
-          '<button type="button" class="pr-tiny" data-role="' + esc(user.id) + ':staff">Staff</button>' +
-          '<button type="button" class="pr-tiny" data-role="' + esc(user.id) + ':owner">Owner</button>' +
-          '<button type="button" class="pr-tiny" data-role="' + esc(user.id) + ':member">Member</button>' +
+          '<button type="button" class="pr-tiny" data-role="' + esc(item.id) + ':leader">Leader</button>' +
+          '<button type="button" class="pr-tiny" data-role="' + esc(item.id) + ':staff">Add staff</button>' +
+          '<button type="button" class="pr-tiny" data-role="' + esc(item.id) + ':member">Member</button>' +
+          staffTools +
           "</div></article>";
-      }).join("") || '<p class="pr-empty">No members yet.</p>';
+      }).join("");
+    document.getElementById("prAdminOff").onclick = function () {
+      STORE.setAdminOn(false);
+      render();
+    };
+    var add = document.getElementById("prAddPerson");
+    if (add) {
+      add.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var data = new FormData(add);
+        try {
+          STORE.addPerson({
+            name: data.get("name"),
+            email: data.get("email"),
+            teamRole: data.get("teamRole"),
+            tier: "private",
+          });
+          render();
+        } catch (err) {
+          alert(err.message || "Could not add that person.");
+        }
+      });
+    }
     mainEl.querySelectorAll("[data-role]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var parts = btn.dataset.role.split(":");
         AUTH.setRole(parts[0], parts[1]);
         if (AUTH.currentUser() && AUTH.currentUser().id === parts[0]) {
-          var me = STORE.getUsers().find(function (item) { return item.id === parts[0]; });
-          STORE.setSession(me);
+          STORE.setSession(STORE.getUsers().find(function (item) { return item.id === parts[0]; }));
         }
         render();
+      });
+    });
+    mainEl.querySelectorAll("[data-drop]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        try {
+          STORE.removePerson(btn.dataset.drop);
+          render();
+        } catch (err) {
+          alert(err.message || "Could not remove.");
+        }
       });
     });
   }
@@ -414,6 +539,7 @@
     if (!requireUser()) return;
     var path = route();
     renderHeader();
+    bindHeader();
     renderTabs();
     if (path === "home") renderHome();
     else if (path.indexOf("course/") === 0) renderCourse(path.split("/")[1]);
