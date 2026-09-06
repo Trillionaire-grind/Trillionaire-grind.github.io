@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Princes · Your first kingdom</title>
-  <meta name="description" content="To all aspiring princes. Your body is your first kingdom. Enter for $1.">
+  <title>Princes · Yes, I want to fix it</title>
+  <meta name="description" content="To all aspiring princes. Hate the fat on a skinny frame. Enter for $1.">
   <link rel="icon" type="image/png" href="princesView/assets/logos/princes-logo-shield.png">
   <meta name="theme-color" content="#0B1220">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.2">
+  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.3">
 </head>
 <body class="pr-sales-body">
   <header class="pr-sales-header">
     <a class="pr-brand" href="princesLanding.html">
-      <img data-pr-logo src="princesView/assets/logos/princes-logo-shield.png" alt="">
+      <img data-pr-logo src="princesView/assets/logos/princes-logo-shield.png" alt="Princes">
       <span data-pr-brand>Princes</span>
     </a>
     <button type="button" class="pr-login" id="prOpenLogin">Log in</button>
@@ -23,36 +23,50 @@
   <div class="pr-gold-line"></div>
 
   <main class="pr-sales">
-    <p class="pr-kicker">To all aspiring princes</p>
-    <h1>Your body is your first kingdom</h1>
-    <p class="pr-lede">
-      If you do not like the man in the mirror, change him first. A weak leader trains a weak court.
-      Your kingdom does not want a weak king. Get to 10% body fat. Learn how to lose fat as fast as humanly possible.
-    </p>
+    <section class="pr-hero" id="prHero">
+      <p class="pr-kicker">To all aspiring princes</p>
+      <h1>You already know what you look like with the shirt off</h1>
+      <ol class="pr-yes">
+        <li>You hate how fat you are, even though people call you skinny.</li>
+        <li>You tug at your shirt before you walk into a room.</li>
+        <li>You wear sweaters to hide the gut.</li>
+        <li>You skip pools and beaches so nobody sees the truth.</li>
+        <li>You want to go shirtless and get the female attention that follows a man who looks like he trains.</li>
+      </ol>
 
-    <div class="pr-vsl-label">Watch this first</div>
-    <div class="pr-vsl" role="region" aria-label="Video sales letter">
-      VSL goes here. Publishing soon.
-    </div>
+      <div class="pr-vsl-label">Watch this first</div>
+      <div class="pr-vsl" role="region" aria-label="Video sales letter">
+        VSL goes here. Five minutes. Publishing soon.
+      </div>
 
-    <button type="button" class="pr-cta" id="prCta">
-      Enter for $1
-      <small>The fat course. Then the path into the court.</small>
-    </button>
-
-    <section class="pr-panel" id="prTestPanel" hidden>
-      <h2>Ranks, logo, and field manual</h2>
-      <p>Product name stays Princes. Tap a logo to preview it. Only visible in testing mode.</p>
-      <p><strong>Working pick:</strong> shield mark. Lion, kingdom, and 10 in one crest.</p>
-      <h3>Names</h3>
-      <div class="pr-name-grid" id="prNameChoices"></div>
-      <h3>Logos</h3>
-      <div class="pr-logo-grid" id="prLogoChoices"></div>
-      <h3>Rank stack</h3>
-      <div class="pr-offer-grid" id="prMidOffers"></div>
-      <h3>How an army is stacked</h3>
-      <div id="prRankManual"></div>
+      <button type="button" class="pr-cta" data-open-account>
+        Yes, I want to fix it
+      </button>
     </section>
+
+    <article class="pr-letter-sales">
+      <h2>The letter</h2>
+      <p>If you nodded five times up there, stay. This is for the skinny-fat man who looks fine in a hoodie and falls apart when the shirt comes off.</p>
+      <p>You are not huge. People still call you skinny. You still pinch fat on your stomach. You still hate the mirror at night. That split is the whole problem. Soft where a prince should be hard.</p>
+      <p>You tug the shirt down when you sit. You buy the bigger sweater. You have a story ready for why you will not get in the water. Pools. Beaches. Any place the body has to stand on its own.</p>
+      <p>You want the other picture. Shirt off. Chest clean. Waist tight. Women looking at you like you already won. That is female validation with no speech attached. The body talks first.</p>
+
+      <button type="button" class="pr-cta" data-open-account>Yes, I want to fix it</button>
+
+      <h2>What you are actually avoiding</h2>
+      <p>You are not avoiding exercise. You are avoiding being seen. The sweater is armor. The skipped beach is armor. The tug on the shirt is armor. Armor on a prince is a confession. You do not believe the body is ready for the room.</p>
+      <p>Every man in this court starts at 10% body fat. Not as a hobby. As the first law. If the body is soft, the rest of the climb is theater.</p>
+      <p>This course is how to lose fat as fast as humanly possible. Stupid fast. The kind of speed that makes the sweater pointless in weeks, not years.</p>
+
+      <button type="button" class="pr-cta" data-open-account>Yes, I want to fix it</button>
+
+      <h2>The $1 door</h2>
+      <p>You create an account. You pay one dollar. The course opens. That dollar is the first order you give yourself. Recruits who will not spend a dollar will not spend the sweat.</p>
+      <p>After the course, the unit is waiting. Private. Specialist. Sergeant. Colonel. Prince's Court. You do not need those rooms tonight. You need the fat gone. You need the shirt off without a story.</p>
+      <p>If the five lines above are your life, you already decided. The button is only the date you stopped hiding.</p>
+
+      <button type="button" class="pr-cta" data-open-account>Yes, I want to fix it</button>
+    </article>
   </main>
 
   <div class="pr-test-foot">
@@ -63,15 +77,19 @@
     <div class="pr-modal-backdrop"></div>
     <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prAccountTitle">
       <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <div class="pr-steps" aria-label="Registration steps">
+        <div class="pr-step is-on"><span>1</span> Create account</div>
+        <div class="pr-step"><span>2</span> Payment</div>
+      </div>
       <h2 id="prAccountTitle">Create your account</h2>
-      <p>Name, age, gender, email, password. Then you pay $1 and the course opens.</p>
+      <p class="pr-sell">One name. One age. Then a dollar. The course opens and the sweater starts to lose.</p>
       <form id="prAccountForm">
+        <label class="pr-field"><span>Name</span><input name="name" required autocomplete="name"></label>
         <div class="pr-row">
-          <label class="pr-field"><span>First name</span><input name="firstName" required></label>
-          <label class="pr-field"><span>Last name</span><input name="lastName" required></label>
-        </div>
-        <div class="pr-row">
-          <label class="pr-field"><span>Age</span><input name="age" type="number" min="18" max="99" required></label>
+          <label class="pr-field">
+            <span>Age</span>
+            <select name="age" required id="prAgeSelect"></select>
+          </label>
           <label class="pr-field">
             <span>Gender</span>
             <select name="gender" required>
@@ -82,10 +100,10 @@
             </select>
           </label>
         </div>
-        <label class="pr-field"><span>Email</span><input name="email" type="email" required></label>
-        <label class="pr-field"><span>Password</span><input name="password" type="password" minlength="6" required></label>
+        <label class="pr-field"><span>Email</span><input name="email" type="email" required autocomplete="email"></label>
+        <label class="pr-field"><span>Password</span><input name="password" type="password" minlength="6" required autocomplete="new-password"></label>
         <p class="pr-error" id="prAccountError"></p>
-        <button type="submit" class="pr-submit">Create your account</button>
+        <button type="submit" class="pr-submit pr-submit--big">Create your account</button>
       </form>
     </div>
   </div>

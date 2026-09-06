@@ -48,9 +48,10 @@
     var user = AUTH.currentUser();
     var role = user ? user.teamRole : "member";
     var badge = "";
-    if (role === "owner") badge = '<span class="pr-badge pr-badge--owner">Owner</span>';
-    else if (role === "staff") badge = '<span class="pr-badge pr-badge--staff">Staff</span>';
-    else if (role === "leader") badge = '<span class="pr-badge pr-badge--leader">Leader</span>';
+    if (user && user.demo) badge += '<span class="pr-badge">Demo</span>';
+    if (role === "owner") badge += '<span class="pr-badge pr-badge--owner">Owner</span>';
+    else if (role === "staff") badge += '<span class="pr-badge pr-badge--staff">Staff</span>';
+    else if (role === "leader") badge += '<span class="pr-badge pr-badge--leader">Leader</span>';
     headerEl.innerHTML =
       '<a class="pr-brand" href="#learn"><img src="' + esc(STORE.getLogo()) + '" alt=""><span>' + esc(STORE.getBrandName()) + "</span></a>" +
       '<div style="display:flex;align-items:center;gap:8px">' + badge +
@@ -289,7 +290,7 @@
     mainEl.innerHTML =
       '<article class="pr-course-read"><p class="pr-kicker" style="color:#111">Course</p>' +
       "<h1>How to lose fat as fast as humanly possible</h1>" +
-      "<p>Your body is your first kingdom. Every man here is aiming at 10% body fat. This is the first course. Private is the next room.</p>" +
+      "<p>Every man here is aiming at 10% body fat. This is the first course. Private is the next room.</p>" +
       "<p>Open the fat-loss system. Use the ledger. Come back for class.</p>" +
       '<a class="pr-upgrade" href="/fatLoss.html" target="_blank" rel="noopener noreferrer">Open the fat-loss book and ledger</a>' +
       '<button type="button" class="pr-upgrade" data-go="upgrade" style="border:none;width:100%;cursor:pointer">See the ranks</button>' +

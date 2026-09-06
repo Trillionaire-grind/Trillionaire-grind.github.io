@@ -62,12 +62,13 @@
     var email = String(fields.email || "").trim().toLowerCase();
     if (!email || !fields.password) throw new Error("Email and password are required.");
     if (STORE.findUserByEmail(email)) throw new Error("That email already has an account.");
+    var name = String(fields.name || fields.firstName || "").trim();
     var user = {
       id: STORE.uid(),
       app: "princes",
-      firstName: String(fields.firstName || "").trim(),
-      lastName: String(fields.lastName || "").trim(),
-      displayName: [fields.firstName, fields.lastName].filter(Boolean).join(" ") || "Prince",
+      firstName: name,
+      lastName: "",
+      displayName: name || "Prince",
       age: Number(fields.age) || null,
       gender: fields.gender || "",
       email: email,
@@ -93,6 +94,14 @@
 
   function logout() {
     STORE.setSession(null);
+  }
+
+  function enterDemo() {
+    STORE.setTestMode(true);
+    STORE.seedDemo();
+    var demo = STORE.findUserByEmail("marcus@princes.demo");
+    STORE.setSession(demo);
+    return demo;
   }
 
   function grantTier(tierId) {
@@ -131,6 +140,7 @@
     logout: logout,
     grantTier: grantTier,
     setRole: setRole,
+    enterDemo: enterDemo,
     TIER_RANK: TIER_RANK,
   };
 })(window);

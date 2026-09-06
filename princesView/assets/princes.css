@@ -37,7 +37,7 @@ button, input, select, textarea { font: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 10px 16px;
   background: #000;
 }
 
@@ -50,10 +50,11 @@ button, input, select, textarea { font: inherit; }
 }
 
 .pr-brand img {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 8px;
   object-fit: cover;
+  background: #0b1220;
 }
 
 .pr-brand span {
@@ -77,8 +78,17 @@ button, input, select, textarea { font: inherit; }
 .pr-sales {
   width: min(760px, 92%);
   margin: 0 auto;
-  padding: 28px 0 80px;
+  padding: 12px 0 80px;
   text-align: center;
+}
+
+.pr-hero {
+  min-height: calc(100dvh - 86px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-bottom: 24px;
 }
 
 .pr-kicker {
@@ -87,24 +97,47 @@ button, input, select, textarea { font: inherit; }
   color: #111;
   font-weight: 700;
   letter-spacing: 0.04em;
-  padding: 6px 14px;
+  padding: 5px 12px;
   border-radius: 999px;
-  margin: 0 0 16px;
+  margin: 0 0 10px;
+  font-size: 13px;
 }
 
-.pr-sales h1 {
+.pr-sales h1,
+.pr-hero h1 {
   font-family: var(--pr-display);
-  font-size: clamp(2rem, 6vw, 3.4rem);
-  line-height: 1.1;
-  margin: 0 0 12px;
+  font-size: clamp(1.55rem, 4.6vw, 2.4rem);
+  line-height: 1.12;
+  margin: 0 0 10px;
   font-weight: 600;
 }
 
-.pr-lede {
-  color: #d7d0c2;
-  font-size: 1.05rem;
+.pr-yes {
+  list-style: none;
+  margin: 0 auto 12px;
+  padding: 0;
   max-width: 36rem;
-  margin: 0 auto 22px;
+  text-align: left;
+}
+
+.pr-yes li {
+  position: relative;
+  padding: 5px 0 5px 28px;
+  color: #d7d0c2;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.pr-yes li::before {
+  content: "Yes";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--pr-gold);
 }
 
 .pr-vsl-label {
@@ -113,19 +146,23 @@ button, input, select, textarea { font: inherit; }
   font-weight: 700;
   width: 100%;
   border-radius: 12px 12px 0 0;
-  padding: 12px;
+  padding: 8px;
+  font-size: 14px;
 }
 
 .pr-vsl {
   background: #1a2233;
-  min-height: 42vh;
+  width: 100%;
+  min-height: 0;
+  height: min(32vh, 260px);
+  flex: 1 1 auto;
   border-radius: 0 0 12px 12px;
   border-bottom: 8px solid #000;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #9aa3b2;
-  margin-bottom: 28px;
+  margin-bottom: 14px;
 }
 
 .pr-cta {
@@ -137,11 +174,30 @@ button, input, select, textarea { font: inherit; }
   color: #111;
   border: none;
   border-radius: 999px;
-  padding: 16px 28px;
+  padding: 14px 26px;
   font-weight: 800;
   cursor: pointer;
   text-decoration: none;
+  font-size: 1.05rem;
 }
+
+.pr-letter-sales {
+  text-align: left;
+  color: #d7d0c2;
+  padding: 28px 0 40px;
+  border-top: 1px solid rgba(201, 162, 39, 0.2);
+  margin-top: 8px;
+}
+
+.pr-letter-sales h2 {
+  font-family: var(--pr-display);
+  color: var(--pr-cream);
+  font-size: 1.8rem;
+  margin: 22px 0 10px;
+}
+
+.pr-letter-sales p { margin: 0 0 12px; font-size: 1.02rem; }
+.pr-letter-sales .pr-cta { display: flex; width: min(360px, 100%); margin: 18px auto; }
 
 .pr-cta small { font-weight: 600; opacity: 0.8; }
 
@@ -246,18 +302,65 @@ button, input, select, textarea { font: inherit; }
 
 .pr-modal-close {
   position: absolute;
-  top: 8px;
-  right: 10px;
-  width: 36px;
-  height: 36px;
+  top: 6px;
+  right: 8px;
+  width: 48px;
+  height: 48px;
   border: none;
   background: transparent;
-  font-size: 24px;
+  color: #111;
+  font-family: var(--pr-display);
+  font-size: 42px;
+  line-height: 1;
+  font-weight: 700;
   cursor: pointer;
 }
 
-.pr-modal h2 { margin: 0 28px 8px 0; font-family: var(--pr-display); }
+.pr-steps {
+  display: flex;
+  gap: 10px;
+  margin: 8px 28px 16px 0;
+}
+
+.pr-step {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #8a8478;
+}
+
+.pr-step span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid #cfc8ba;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.pr-step.is-on { color: #111; }
+.pr-step.is-on span {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+
+.pr-modal h2 { margin: 0 40px 8px 0; font-family: var(--pr-display); font-size: 1.7rem; }
 .pr-modal p { margin: 0 0 14px; color: #5c6370; }
+.pr-sell { font-size: 15px; color: #3d4450; }
+
+.pr-submit--big {
+  padding: 16px 14px;
+  font-size: 1.15rem;
+  border-radius: 14px;
+}
 
 .pr-field { display: flex; flex-direction: column; gap: 4px; margin-bottom: 10px; }
 .pr-field span { font-size: 12px; font-weight: 700; }
@@ -544,4 +647,11 @@ button, input, select, textarea { font: inherit; }
 @media (max-width: 720px) {
   .pr-logo-grid { grid-template-columns: 1fr 1fr; }
   .pr-cal-day { min-height: 54px; }
+}
+
+@media (max-height: 780px) {
+  .pr-hero h1 { font-size: 1.35rem; }
+  .pr-yes li { font-size: 13px; padding: 3px 0 3px 26px; }
+  .pr-vsl { height: min(24vh, 190px); }
+  .pr-cta { padding: 12px 20px; }
 }

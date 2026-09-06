@@ -6,9 +6,9 @@ window.PRINCES_CATALOG = {
     { id: "princes", name: "Princes", note: "Product name. Locked." },
   ],
   headlines: [
-    "Your body is your first kingdom",
-    "Build the king before the kingdom",
-    "A weak body cannot hold a throne",
+    "You already know what you look like with the shirt off",
+    "Fix the prince in the mirror first",
+    "A soft body cannot hold a command",
     "10% body fat is the first law",
     "Fix the man in the mirror first",
   ],
@@ -123,7 +123,7 @@ window.PRINCES_CATALOG = {
     {
       id: "body",
       title: "How to lose fat as fast as humanly possible",
-      meta: "Your first kingdom",
+      meta: "Your first command",
       topic: "body",
       access: "ticket",
       image: "princesView/assets/courses/body.png",
@@ -169,8 +169,8 @@ window.PRINCES_CATALOG = {
       id: "p1",
       author: "Képler",
       role: "owner",
-      title: "Your body is your first kingdom",
-      body: "If you do not like the man in the mirror, change him first. A weak commander trains a weak unit. Get to 10% body fat.",
+      title: "Fix the prince in the mirror first",
+      body: "If you do not like the man in the mirror, change him first. A weak prince trains a weak unit. Get to 10% body fat.",
       topic: "body",
     },
     {

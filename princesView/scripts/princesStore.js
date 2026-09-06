@@ -113,9 +113,58 @@
   }
 
   function getLogo() {
-    var saved = localStorage.getItem(KEY_LOGO);
-    if (!saved || saved.indexOf("crown") !== -1) return global.PRINCES_CATALOG.workingLogo;
-    return saved;
+    return global.PRINCES_CATALOG.workingLogo;
+  }
+
+  function seedDemo() {
+    var demo = {
+      id: "demo_marcus",
+      app: "princes",
+      firstName: "Marcus",
+      lastName: "Vale",
+      displayName: "Marcus Vale",
+      age: 22,
+      gender: "male",
+      email: "marcus@princes.demo",
+      pass: "demo",
+      tier: "colonel",
+      teamRole: "owner",
+      demo: true,
+      createdAt: nowIso(),
+    };
+    var squad = [
+      { id: "demo_cole", displayName: "Cole Hart", email: "cole@princes.demo", tier: "sergeant", teamRole: "leader", age: 24 },
+      { id: "demo_diaz", displayName: "Diaz Reed", email: "diaz@princes.demo", tier: "specialist", teamRole: "member", age: 22 },
+      { id: "demo_hale", displayName: "Hale Orth", email: "hale@princes.demo", tier: "private", teamRole: "member", age: 21 },
+      { id: "demo_kim", displayName: "Kim Sato", email: "kim@princes.demo", tier: "sergeant", teamRole: "leader", age: 27 },
+      { id: "demo_ross", displayName: "Ross Quinn", email: "ross@princes.demo", tier: "specialist", teamRole: "member", age: 23 },
+      { id: "demo_wade", displayName: "Wade Pell", email: "wade@princes.demo", tier: "private", teamRole: "member", age: 22 },
+      { id: "demo_nash", displayName: "Nash Iver", email: "nash@princes.demo", tier: "colonel", teamRole: "staff", age: 29 },
+      { id: "demo_beck", displayName: "Beck Lang", email: "beck@princes.demo", tier: "specialist", teamRole: "member", age: 25 },
+    ];
+    var users = [demo].concat(squad.map(function (item) {
+      return Object.assign({
+        app: "princes",
+        firstName: item.displayName.split(" ")[0],
+        lastName: item.displayName.split(" ")[1] || "",
+        pass: "demo",
+        demo: true,
+        gender: "male",
+        createdAt: nowIso(),
+      }, item);
+    }));
+    write(KEY_USERS, users);
+
+    write(KEY_POSTS, [
+      { id: "d1", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "Shirt off Friday", body: "Waist is 31. Shirt comes off at the pool this weekend. No sweater. No story.", topic: "body", createdAt: nowIso() },
+      { id: "d2", author: "Cole Hart", authorId: "demo_cole", role: "leader", title: "Squad check", body: "Eight men posted numbers. Two missed. They hear about it on the call.", topic: "mindset", createdAt: nowIso() },
+      { id: "d3", author: "Diaz Reed", authorId: "demo_diaz", role: "member", title: "Stopped tugging the shirt", body: "Three weeks in. The gut is leaving. I tucked the shirt in today.", topic: "body", createdAt: nowIso() },
+      { id: "d4", author: "Nash Iver", authorId: "demo_nash", role: "staff", title: "Colonel call is live", body: "Month-long room with the Princes. Two paths: take a seat or raise your own command.", topic: "business", createdAt: nowIso() },
+    ]);
+
+    write(KEY_EVENTS, (global.PRINCES_CATALOG.events || []).slice());
+    setSession(demo);
+    return demo;
   }
 
   function setLogo(src) {
@@ -140,6 +189,7 @@
     setBrandName: setBrandName,
     getLogo: getLogo,
     setLogo: setLogo,
+    seedDemo: seedDemo,
     KEY_TEST: KEY_TEST,
   };
 })(window);
