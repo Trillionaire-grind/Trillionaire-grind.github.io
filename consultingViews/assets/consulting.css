@@ -60,15 +60,23 @@ a {
   min-height: min(620px, calc(100vh - 110px));
 }
 
-.consult-qr-welcome__photo {
+.consult-qr-welcome__photo-wrap {
+  overflow: hidden;
+  border-radius: 16px;
   width: 100%;
   height: min(520px, calc(100vh - 170px));
   min-height: 400px;
-  object-fit: cover;
-  object-position: center 62%;
-  border-radius: 16px;
-  display: block;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14);
+}
+
+.consult-qr-welcome__photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 82%;
+  transform: scale(1.28);
+  transform-origin: center 82%;
+  display: block;
 }
 
 .consult-qr-welcome__copy {
@@ -611,7 +619,7 @@ body.consult-modal-open {
     min-height: auto;
   }
 
-  .consult-qr-welcome__photo {
+  .consult-qr-welcome__photo-wrap {
     width: 100%;
     height: 420px;
     min-height: 0;
@@ -626,7 +634,7 @@ body.consult-modal-open {
     padding: 14px 14px 22px;
   }
 
-  .consult-qr-welcome__photo {
+  .consult-qr-welcome__photo-wrap {
     width: 100%;
     height: min(58vh, 520px);
     min-height: 360px;
