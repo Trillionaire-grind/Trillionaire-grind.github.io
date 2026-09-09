@@ -219,16 +219,15 @@ export const OFFERS = [
     title: "Free quote call",
     subtitle: "Websites from $997. Software from $12,000+. Book a time to get a number.",
     leads: [
-      "If you want a site or a system built, pick a time. We will talk scope and price. A short question can go to email for free.",
+      "If you want a site or a system built, pick a time. We will talk scope and price.",
     ],
     bullets: [
       "15 to 30 minutes, your timezone",
       "For owners ready to pay for a website or custom software",
-      "Small questions: email free. Builds: book the call",
+      "You leave with a clear quote",
     ],
     actions: [
       { label: "Book a quote call", nav: "speak", primary: true },
-      { label: "Email a small question", href: "/consultingViews/help.html", external: true, primary: false },
     ],
     visual: { kind: "photo", src: "assets/sitting.webp", alt: "Képler Siguineau" },
   },
