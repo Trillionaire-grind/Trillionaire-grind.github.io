@@ -10,7 +10,10 @@ const STORAGE = {
   audioPos: "iconsAudioPosition",
   playbackSpeed: "iconsPlaybackSpeed",
   lecture: "iconsLecture",
+  unlocked: "iconsUnlocked",
 };
+
+const PASSKEY = "Icons";
 
 const CHALLENGE_DAYS = 30;
 const LISTEN_THRESHOLD = 0.9;
@@ -57,6 +60,10 @@ const challengeTagline = document.getElementById("icChallengeTagline");
 const cardBack = document.getElementById("icCardBack");
 const modalIntro = document.getElementById("icModalIntro");
 const versionEl = document.getElementById("icVersion");
+const gate = document.getElementById("icGate");
+const gateForm = document.getElementById("icGateForm");
+const passkeyInput = document.getElementById("icPasskey");
+const gateError = document.getElementById("icGateError");
 
 function lectureFromQuery() {
   const id = new URLSearchParams(window.location.search).get("lecture");
@@ -669,5 +676,40 @@ function initGoal() {
 
 if (versionEl) versionEl.textContent = iconsVersionLabel();
 
-initAudio();
-initGoal();
+function isUnlocked() {
+  return localStorage.getItem(STORAGE.unlocked) === "1";
+}
+
+function showApp() {
+  document.body.classList.remove("ic-locked");
+  document.body.classList.add("ic-unlocked");
+  if (gate) gate.hidden = true;
+  initAudio();
+  initGoal();
+}
+
+function initGate() {
+  if (isUnlocked()) {
+    showApp();
+    return;
+  }
+
+  document.body.classList.add("ic-locked");
+  document.body.classList.remove("ic-unlocked");
+  passkeyInput?.focus();
+
+  gateForm?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const value = (passkeyInput?.value || "").trim();
+    if (value === PASSKEY) {
+      localStorage.setItem(STORAGE.unlocked, "1");
+      if (gateError) gateError.hidden = true;
+      showApp();
+      return;
+    }
+    if (gateError) gateError.hidden = false;
+    passkeyInput?.select();
+  });
+}
+
+initGate();

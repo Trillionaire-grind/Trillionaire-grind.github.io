@@ -1,7 +1,7 @@
 {
-  "name": "Icons",
+  "name": "Icons Affirmations",
   "short_name": "Icons",
-  "description": "A 30-day goal card. Choose a lecture and listen daily.",
+  "description": "Icons Affirmations: a 30-day goal card. Choose a lecture and listen daily.",
   "start_url": "/icons.html",
   "scope": "/",
   "display": "standalone",
