@@ -1,5 +1,5 @@
 /**
- * Local app catalog — subscription tiers and display defaults.
+ * Local app catalog: subscription tiers and display defaults.
  * User-generated content (posts, cards, shop, learn) lives in Firestore.
  * Stripe Price IDs / live checkout live in minStripeConfig.js (not here).
  */
@@ -27,7 +27,7 @@ window.MIN_CATALOG = {
       image:
         "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEi5FUxKYUWw7jX6E5L4gZRrbjp88hiK-9_g4o0NHoxcE-Gq_DRYAiWVT4me3bdhykIg9yoQ2-_uUYk9_jBgICGM1qFX7sbz6FoxN7xLLw2s9v5kafTd5JNNOXjlNU_0rJVnPmFhW7UJ6GQ/s1600/bench.jpg",
       perks:
-        "$1/month — member chat, comment on posts, and community participation. Content library still locked.",
+        "$1/month: member chat, comment on posts, and community participation. Content library still locked.",
     },
     {
       id: "starter",

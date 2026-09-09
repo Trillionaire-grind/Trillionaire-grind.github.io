@@ -1,5 +1,5 @@
 /**
- * Tech Mastery For Seniors — membership catalog (Minorities-style).
+ * Tech Mastery For Seniors: membership catalog (Minorities-style).
  * Guide Stripe Payment Link lives in techStripeConfig.js. VIP is phone-only.
  */
 export const TECH_CATALOG = {
@@ -15,7 +15,7 @@ export const TECH_CATALOG = {
       price: 0,
       priceLabel: "Free",
       perks:
-        "Create a free account with your email. Instant access to The Secret To Tech Mastery — the foundational seminar that teaches how to master technology.",
+        "Create a free account with your email. Instant access to The Secret To Tech Mastery: the foundational seminar that teaches how to master technology.",
     },
     {
       id: "guide",
@@ -32,7 +32,7 @@ export const TECH_CATALOG = {
       priceLabel: "$97,000",
       limited: true,
       perks:
-        "Everything in the Guide, plus live classes, workshops, open Q&A, I.T. help desk access, and the VIP Tech Academy Mastermind experience. Enroll by phone only — no online checkout.",
+        "Everything in the Guide, plus live classes, workshops, open Q&A, I.T. help desk access, and the VIP Tech Academy Mastermind experience. Enroll by phone only: no online checkout.",
     },
   ],
 };

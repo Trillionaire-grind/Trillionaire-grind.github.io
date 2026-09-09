@@ -17,7 +17,7 @@ export function isMinFirebaseConfigured() {
   );
 }
 
-/** Subscription checkout Cloud Function — derived from projectId */
+/** Subscription checkout Cloud Function: derived from projectId */
 export function getMinCheckoutApiUrl() {
   if (!minFirebaseConfig.projectId) return "";
   return `https://us-central1-${minFirebaseConfig.projectId}.cloudfunctions.net/createMinSubscriptionCheckout`;
@@ -28,7 +28,7 @@ function functionsBaseUrl() {
   return `https://us-central1-${minFirebaseConfig.projectId}.cloudfunctions.net`;
 }
 
-/** Mux direct upload — requires MUX_TOKEN_ID + MUX_TOKEN_SECRET on Cloud Functions */
+/** Mux direct upload: requires MUX_TOKEN_ID + MUX_TOKEN_SECRET on Cloud Functions */
 export function getMuxUploadApiUrl() {
   const base = functionsBaseUrl();
   return base ? `${base}/createMuxDirectUpload` : "";
@@ -44,7 +44,7 @@ export function isMinMuxConfigured() {
 }
 
 /**
- * Web Push VAPID key — Firebase Console → Project settings → Cloud Messaging
+ * Web Push VAPID key: Firebase Console → Project settings → Cloud Messaging
  * → Web Push certificates → Key pair → copy public key.
  */
 export const minFcmVapidKey =

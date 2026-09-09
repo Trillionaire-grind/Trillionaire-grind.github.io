@@ -1,4 +1,4 @@
-/* The Minorities — shared design system */
+/* The Minorities: shared design system */
 :root {
   --min-primary: #af2d0b;
   --min-primary-soft: #fff4f1;
@@ -217,7 +217,7 @@ img {
   border-radius: 2px;
 }
 
-/* Main — sole scroll container */
+/* Main: sole scroll container */
 .min-main {
   flex: 1;
   min-height: 0;
@@ -404,7 +404,7 @@ img {
   transform: translateY(-2px);
 }
 
-/* Mid-tall cover frame — taller than 16:9, not full poster */
+/* Mid-tall cover frame: taller than 16:9, not full poster */
 .min-content-card-media {
   width: 100%;
   aspect-ratio: 4 / 5;

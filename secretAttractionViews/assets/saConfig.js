@@ -23,11 +23,11 @@ export const DELUXE_STRIPE_URL = PREMIUM_STRIPE_URL;
  */
 export const INSTAGRAM_HANDLE = "buildwithkepler";
 
-/** Profile — works best when visitors aren't signed in (highlights show as circles). */
+/** Profile: works best when visitors aren't signed in (highlights show as circles). */
 export const INSTAGRAM_PROFILE_URL =
   "https://www.instagram.com/buildwithkepler/";
 
-/** Direct highlight link — often requires Instagram sign-in. */
+/** Direct highlight link: often requires Instagram sign-in. */
 export const INSTAGRAM_HIGHLIGHT_URL =
   "https://www.instagram.com/stories/highlights/18061154864358319/";
 

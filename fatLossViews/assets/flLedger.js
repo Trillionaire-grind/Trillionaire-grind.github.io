@@ -386,7 +386,7 @@ export function initLedger() {
     els.history.innerHTML = "";
     if (!rows.length) {
       const li = document.createElement("li");
-      li.innerHTML = `<span class="day-label">—</span><span>No days logged yet. Save today to start.</span>`;
+      li.innerHTML = `<span class="day-label">-</span><span>No days logged yet. Save today to start.</span>`;
       els.history.appendChild(li);
       return;
     }
@@ -507,7 +507,7 @@ export function initLedger() {
     const week = weekBounds(state, today) || weekBounds(state, state.startDate);
     if (!week) return "No week in range.";
     const lines = [
-      `Fat Loss Ledger — Week ${week.weekIndex}`,
+      `Fat Loss Ledger: Week ${week.weekIndex}`,
       `Start date: ${state.startDate}`,
       `Targets: ${state.calorieTarget} cal · ${state.stepTarget} steps · ${WORKOUTS_PER_WEEK} workouts/week`,
       "",
@@ -516,23 +516,23 @@ export function initLedger() {
       const iso = isoForDayNumber(state, n);
       const entry = state.days[iso];
       if (!entry) {
-        lines.push(`Day ${n} (${iso}): —`);
+        lines.push(`Day ${n} (${iso}): -`);
         continue;
       }
       const hits = pillarHits(state, entry);
       lines.push(
-        `Day ${n} (${iso}): cal ${entry.calories === "" ? "—" : entry.calories}` +
-          ` · protein ${entry.protein === "" || entry.protein == null ? "—" : entry.protein + "g"}` +
-          ` · steps ${entry.steps === "" ? "—" : entry.steps}` +
+        `Day ${n} (${iso}): cal ${entry.calories === "" ? "-" : entry.calories}` +
+          ` · protein ${entry.protein === "" || entry.protein == null ? "-" : entry.protein + "g"}` +
+          ` · steps ${entry.steps === "" ? "-" : entry.steps}` +
           ` · workout ${entry.workout ? "YES" : "no"}` +
-          ` · weight ${entry.weight === "" ? "—" : entry.weight}` +
+          ` · weight ${entry.weight === "" ? "-" : entry.weight}` +
           ` · meals logged ${entry.mealsLogged ? "YES" : "no"}` +
           ` · pillars ${hits.count}/3`
       );
       if (entry.workoutNote) lines.push(`  workout note: ${entry.workoutNote}`);
       if (Array.isArray(entry.meals) && entry.meals.length) {
         entry.meals.forEach((meal) => {
-          lines.push(`  meal: ${meal.amountLabel} ${meal.foodName} — ${meal.calories} cal · ${meal.protein}g protein`);
+          lines.push(`  meal: ${meal.amountLabel} ${meal.foodName}: ${meal.calories} cal · ${meal.protein}g protein`);
         });
       }
       if (entry.notes) lines.push(`  notes: ${entry.notes}`);

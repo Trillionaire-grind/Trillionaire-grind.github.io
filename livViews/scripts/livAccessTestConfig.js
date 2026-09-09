@@ -1,15 +1,15 @@
 /**
- * Dev bypass for livPass.html — LOCALHOST ONLY in production builds.
+ * Dev bypass for livPass.html: LOCALHOST ONLY in production builds.
  *
  * localhost / 127.0.0.1:
  *   • “Buy access code (test)” simulates post-payment UI
  *   • sessionStorage codes + TEST accepted at signup
  *
- * Production (keplersiguineau.com): all bypasses OFF — real codes only from
+ * Production (keplersiguineau.com): all bypasses OFF: real codes only from
  * codesPurchased (Stripe webhook) or manual Admin SDK mint.
  *
  * Optional: mintLivDevAccessCode when LIV_DEV_MINT_URL + LIV_DEV_MINT_KEY set
- * on a dev/staging Firebase project only — never on liv-lakay production.
+ * on a dev/staging Firebase project only: never on liv-lakay production.
  */
 export const LIV_ALLOW_BYPASS_TEST_CODE = false;
 export const LIV_BYPASS_TEST_CODE_ID = "TEST";
@@ -20,7 +20,7 @@ export const LIV_DEV_MINT_KEY = "";
 const LIV_DEV_ISSUED_CODES_KEY = "livDevIssuedCodes";
 const DEV_CODE_CHARSET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-/** True only on local dev servers — not on live GitHub Pages. */
+/** True only on local dev servers: not on live GitHub Pages. */
 export function isLivDevBypassUiEnabled() {
   try {
     const h = window.location.hostname;

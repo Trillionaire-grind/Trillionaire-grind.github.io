@@ -1,7 +1,7 @@
 /**
  * Theme catalog + Stripe Payment Link URLs for The Strangest Secret.
  *
- * STRIPE SETUP (Payment Links — no backend required)
+ * STRIPE SETUP (Payment Links: no backend required)
  * ───────────────────────────────────────────────────
  * 1. Stripe Dashboard → Product catalog → Add product (one per theme + one bundle).
  * 2. For each product → Create payment link (e.g. $0.99).

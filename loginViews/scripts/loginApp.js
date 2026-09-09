@@ -364,7 +364,7 @@ function renderMemberGrid(filterText) {
     card.innerHTML = `
       ${img}
       <h3>${escapeHtml(displayName(m))}</h3>
-      <p class="biz">${escapeHtml(m.businessName || "—")}</p>
+      <p class="biz">${escapeHtml(m.businessName || "-")}</p>
       <p class="help">${escapeHtml(m.helpDescription || "")}</p>
     `;
     els.memberGrid.appendChild(card);
@@ -402,7 +402,7 @@ function renderAppChrome(profile) {
   renderAvatarPair(els.headerAvatarImg, els.headerAvatarPh, profile);
   renderAvatarPair(els.profileSheetImg, els.profileSheetPh, profile);
   if (els.profileSheetName) els.profileSheetName.textContent = displayName(profile);
-  if (els.profileSheetBusiness) els.profileSheetBusiness.textContent = profile.businessName || "—";
+  if (els.profileSheetBusiness) els.profileSheetBusiness.textContent = profile.businessName || "-";
   if (profile.admin) show(els.footerAdminBtn);
   else hide(els.footerAdminBtn);
 }
@@ -536,7 +536,7 @@ els.registerForm?.addEventListener("submit", async (e) => {
       email: f.email.value,
       password: f.password.value,
     });
-    setMsg(els.authMsg, "Welcome — you're in.", "ok");
+    setMsg(els.authMsg, "Welcome: you're in.", "ok");
   } catch (err) {
     setMsg(els.authMsg, err.message, "error");
   }
@@ -544,7 +544,7 @@ els.registerForm?.addEventListener("submit", async (e) => {
 
 els.resetBtn?.addEventListener("click", async () => {
   if (demoMode) {
-    setMsg(els.authMsg, "Demo mode — use any registered email.", "ok");
+    setMsg(els.authMsg, "Demo mode: use any registered email.", "ok");
     return;
   }
   const email = els.loginForm?.elements?.email?.value || prompt("Enter your email:");

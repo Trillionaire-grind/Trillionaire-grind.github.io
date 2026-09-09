@@ -84,7 +84,7 @@ function renderContents() {
     });
   }
   if (els.title) els.title.textContent = FL_BOOK.title || "";
-  if (els.author) els.author.textContent = FL_BOOK.author || "—";
+  if (els.author) els.author.textContent = FL_BOOK.author || "-";
   if (els.chapterCount) els.chapterCount.textContent = String(chapters.length);
   if (els.pageTotal) els.pageTotal.textContent = String(FL_BOOK_PAGE_COUNT);
 
@@ -122,7 +122,7 @@ function syncResume() {
   const started = localStorage.getItem(STORAGE_KEY) !== null;
   els.resume.hidden = !started;
   if (started) {
-    els.resume.textContent = `Continue — ${chapters[chapterIndex].title}, page ${pageIndex + 1}`;
+    els.resume.textContent = `Continue: ${chapters[chapterIndex].title}, page ${pageIndex + 1}`;
   }
 }
 

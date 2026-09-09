@@ -1,5 +1,5 @@
 /**
- * Beach Delivery — Firebase Auth + Firestore service layer.
+ * Beach Delivery: Firebase Auth + Firestore service layer.
  * Exposes window.BDFirebase. Falls back gracefully when firebase-config.js is not set up.
  */
 (function () {
@@ -67,11 +67,11 @@
 
   async function init() {
     if (typeof firebase === "undefined") {
-      console.warn("[BDFirebase] Firebase SDK not loaded — using local storage fallback.");
+      console.warn("[BDFirebase] Firebase SDK not loaded: using local storage fallback.");
       return false;
     }
     if (isPlaceholderConfig()) {
-      console.warn("[BDFirebase] firebase-config.js not configured — using local storage fallback.");
+      console.warn("[BDFirebase] firebase-config.js not configured: using local storage fallback.");
       return false;
     }
 

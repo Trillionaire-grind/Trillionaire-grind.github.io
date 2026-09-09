@@ -204,7 +204,7 @@ accountBackup?.addEventListener("click", () => {
 
 deleteAccountBtn?.addEventListener("click", async () => {
   const ok = window.confirm(
-    "Delete your account? Download a backup first — this removes cloud access. Your local data stays until you clear browser data."
+    "Delete your account? Download a backup first: this removes cloud access. Your local data stays until you clear browser data."
   );
   if (!ok) return;
   try {

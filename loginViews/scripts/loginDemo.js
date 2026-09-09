@@ -134,7 +134,7 @@ export async function loginAccount(email, password) {
   const memberEntry = Object.entries(store.members).find(
     ([, m]) => String(m.email || "").trim().toLowerCase() === trimmedEmail,
   );
-  if (!memberEntry) throw new Error("No demo account for that email — register first.");
+  if (!memberEntry) throw new Error("No demo account for that email: register first.");
 
   const [memberUid] = memberEntry;
   const saved = store.passwords?.[trimmedEmail];
@@ -221,7 +221,7 @@ export async function uploadProfilePhoto(file) {
 }
 
 export async function resetLoginPassword() {
-  throw new Error("Demo mode — password reset is not wired yet.");
+  throw new Error("Demo mode: password reset is not wired yet.");
 }
 
 export async function logoutAccount() {

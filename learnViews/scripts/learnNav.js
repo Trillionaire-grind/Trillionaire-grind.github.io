@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.19";
+export const LEARN_APP_VERSION = "0.2.9.20";
 
 console.log(`[Képler Siguineau] working version: v${LEARN_APP_VERSION}`);
 
@@ -25,6 +25,7 @@ export const CONSULTING_NAV = {
   hubHref: "/consulting.html",
   items: [
     { href: "/consulting.html", label: "Start here" },
+    { href: "/consultingViews/help.html", label: "Ask anything" },
     { href: "/consultingViews/marketing-websites.html", label: "Websites" },
     { href: "/consultingViews/custom-software.html", label: "Custom Software" },
   ],

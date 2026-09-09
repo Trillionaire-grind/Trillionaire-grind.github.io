@@ -38,12 +38,12 @@ const DEFAULT_CHATROOMS = [
   },
 ];
 
-/** Legacy seed copy — hide so list rows don't flash fake previews. */
+/** Legacy seed copy: hide so list rows don't flash fake previews. */
 const LEGACY_PREVIEW_COPY = new Set([
-  "Community lounge — no messages yet",
-  "Drops and news — no messages yet",
-  "Episode chat — no messages yet",
-  "Owner members only — no messages yet",
+  "Community lounge: no messages yet",
+  "Drops and news: no messages yet",
+  "Episode chat: no messages yet",
+  "Owner members only: no messages yet",
   "No messages yet",
 ]);
 

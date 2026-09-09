@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        <title>Ajoute yon liv — Liv (admin)</title>
+        <title>Ajoute yon liv: Liv (admin)</title>
         <link rel="stylesheet" href="assets/styles.css">
     </head>
     <body class="liv-body">
@@ -25,7 +25,7 @@
                 <section class="liv-admin-section">
                     <h2>Enfòmasyon sou liv la</h2>
                     <div class="liv-admin-field">
-                        <label for="bookDocId">ID liv la (inik, san espas — pou baz done a)</label>
+                        <label for="bookDocId">ID liv la (inik, san espas: pou baz done a)</label>
                         <input type="text" id="bookDocId" name="bookDocId" required pattern="[-a-zA-Z0-9_]+" maxlength="120" placeholder="egzanp: matenatik_5e" autocomplete="off">
                         <p class="hint">Let, nimewo, tire (-) ak soulign (_) sèlman.</p>
                     </div>
@@ -40,7 +40,7 @@
                     <div class="liv-admin-field">
                         <label for="bookIsbn">ISBN (opsyonèl)</label>
                         <input type="text" id="bookIsbn" name="bookIsbn" maxlength="32" placeholder="egzanp: 9781234567890" inputmode="numeric" autocomplete="off">
-                        <p class="hint">ISBN-10 oswa ISBN-13, si liv la genyen. Kòd lokal oswa lòt nimewo — mete yo nan rechèch kòm &quot;ID liv&quot; si w sere yo nan tit/ID.</p>
+                        <p class="hint">ISBN-10 oswa ISBN-13, si liv la genyen. Kòd lokal oswa lòt nimewo: mete yo nan rechèch kòm &quot;ID liv&quot; si w sere yo nan tit/ID.</p>
                     </div>
                     <div class="liv-admin-field">
                         <label for="subjectDD">Sijè</label>
@@ -632,7 +632,7 @@
                         }
 
                         setUploadDetail(
-                            `Chapit ${chNum}/${totalChapters}: ${chTitle} — ap sove…`
+                            `Chapit ${chNum}/${totalChapters}: ${chTitle}: ap sove…`
                         );
 
                         await setDoc(doc(db, "books", bookDocId, "chapters", chId), {

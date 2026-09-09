@@ -1,5 +1,5 @@
 /**
- * Boy Kibble ingredient menus — calories and protein per standard unit.
+ * Boy Kibble ingredient menus: calories and protein per standard unit.
  * Per 100g unless `perUnit` is set (eggs, slices, scoops, pieces).
  */
 export const FOODS = [

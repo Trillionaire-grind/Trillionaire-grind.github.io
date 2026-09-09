@@ -1,5 +1,5 @@
 /**
- * GA4 for The Strangest Secret — page views + theme-store funnel events.
+ * GA4 for The Strangest Secret: page views + theme-store funnel events.
  * Set window.SS_GA_MEASUREMENT_ID to override (default: naples-sunrise-bay web stream).
  */
 (function (global) {

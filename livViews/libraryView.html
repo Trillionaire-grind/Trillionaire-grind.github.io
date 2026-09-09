@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        <title data-i18n="library.title">Bibliyotèk — Liv Lakay</title>
+        <title data-i18n="library.title">Bibliyotèk: Liv Lakay</title>
         <link rel="stylesheet" href="assets/styles.css">
         <script src="scripts/livShellBridge.js"></script>
     </head>
@@ -283,7 +283,7 @@
             const grouped = new Map();
             docs.forEach(function (docSnap) {
                 const y = String((docSnap.data().bookYear || "")).trim();
-                const key = y || "—";
+                const key = y || "-";
                 if (!grouped.has(key)) grouped.set(key, []);
                 grouped.get(key).push(docSnap);
             });

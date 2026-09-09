@@ -20,11 +20,11 @@ export const BUNDLE_PRICE = 38;
 export const PRODUCT_PRICE_LABEL_BUNDLE = "$38";
 export const VALUE_STACK_TOTAL = "$147";
 
-/** Book only — $29 */
+/** Book only: $29 */
 export const STRIPE_BOOK_ONLY_URL =
   "https://buy.stripe.com/eVqaEW1LJbRjaoicLu6Ri0M";
 
-/** Book + Boy Kibble Kit — $38 */
+/** Book + Boy Kibble Kit: $38 */
 export const STRIPE_BOOK_PLUS_KIT_URL =
   "https://buy.stripe.com/dRm7sKbmj7B3eEy7ra6Ri0N";
 
@@ -39,12 +39,12 @@ export const CHECKOUT_SUCCESS_URL =
 export const CHECKOUT_SUCCESS_URL_WITH_KIT =
   "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1";
 
-/** Customer-facing app — book reader + 90-day ledger (installable PWA). */
+/** Customer-facing app: book reader + 90-day ledger (installable PWA). */
 export const APP_URL = "app.html";
 export const APP_ABSOLUTE_URL =
   "https://keplersiguineau.com/fatLossViews/app.html";
 
-/** 2× money-back guarantee — customer sends logs here. */
+/** 2× money-back guarantee: customer sends logs here. */
 export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
 
 /** @deprecated use GUARANTEE_EMAIL */
@@ -61,7 +61,7 @@ export const LEDGER_URL = "app.html#ledger";
 export const LEDGER_DAYS = 90;
 export const LEDGER_WORKOUTS_PER_WEEK = 3;
 
-/** @deprecated Worksheets ship inside the ebook — kept empty so old thank-you JS stays safe. */
+/** @deprecated Worksheets ship inside the ebook: kept empty so old thank-you JS stays safe. */
 export const BONUS_DOWNLOADS = [];
 
 /** Hero / section photos (drop files in assets/photos/). */

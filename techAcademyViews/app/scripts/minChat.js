@@ -23,9 +23,9 @@ const TIER_RANK = {
 
 /**
  * Default rooms:
- * - general — every signed-in member
- * - help-desk / announcements — NO B.S. Guide or higher
- * - vip — VIP Experience only
+ * - general: every signed-in member
+ * - help-desk / announcements: NO B.S. Guide or higher
+ * - vip: VIP Experience only
  */
 const DEFAULT_CHATROOMS = [
   {
@@ -54,12 +54,12 @@ const DEFAULT_CHATROOMS = [
   },
 ];
 
-/** Legacy seed copy — hide so list rows don't flash fake previews. */
+/** Legacy seed copy: hide so list rows don't flash fake previews. */
 const LEGACY_PREVIEW_COPY = new Set([
-  "Community lounge — no messages yet",
-  "Drops and news — no messages yet",
-  "Episode chat — no messages yet",
-  "Owner members only — no messages yet",
+  "Community lounge: no messages yet",
+  "Drops and news: no messages yet",
+  "Episode chat: no messages yet",
+  "Owner members only: no messages yet",
   "No messages yet",
 ]);
 

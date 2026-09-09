@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your speech — TM Experience</title>
+    <title>Your speech: TM Experience</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -228,14 +228,14 @@
 
         function updateDocumentTitle(title) {
             const safeTitle = String(title || "Your speech").trim() || "Your speech";
-            document.title = `${safeTitle} — TM Experience`;
+            document.title = `${safeTitle}: TM Experience`;
         }
 
         function renderSpeechMeta({ title, path, date }) {
             updateDocumentTitle(title);
             speechDate.textContent = date || "Date TBD";
             speechProjectTitle.textContent = title;
-            speechPath.textContent = path || "—";
+            speechPath.textContent = path || "-";
         }
 
         function stopFeedbackListener() {

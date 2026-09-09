@@ -106,7 +106,7 @@
     }
     return {
       title: "Shop",
-      body: "University collection — live now",
+      body: "University collection: live now",
       cta: "Shop the collection ›",
       image: A + "shop/uni_hd.webp",
       linkTab: "shop",
@@ -485,7 +485,7 @@
       "" +
       "</p>";
     if (plan.limited) {
-      html += '<p class="min-tier-limited min-sub-current-limited">Limited seats — phone enrollment only</p>';
+      html += '<p class="min-tier-limited min-sub-current-limited">Limited seats: phone enrollment only</p>';
     }
     if (highlights.length) {
       html += '<ul class="min-sub-current-features">';
@@ -518,7 +518,7 @@
     return window.MIN_AUTH && window.MIN_AUTH.hasOwnerAccess && window.MIN_AUTH.hasOwnerAccess();
   }
 
-  /** VIP 24/7 concierge line (legacy desk) — reserved for VIP Experience only. */
+  /** VIP 24/7 concierge line (legacy desk): reserved for VIP Experience only. */
   var VIP_HOTLINE_TEL = "tel:+17863098510";
   var VIP_HOTLINE_DISPLAY = "(786) 309-8510";
   var SUPPORT_EMAIL = "techmasteryforseniors@gmail.com";
@@ -538,7 +538,7 @@
     return (
       '<a class="min-vip-hotline" href="' +
       VIP_HOTLINE_TEL +
-      '">24/7 VIP Support — Tap to call ' +
+      '">24/7 VIP Support: Tap to call ' +
       esc(VIP_HOTLINE_DISPLAY) +
       "</a>"
     );
@@ -585,7 +585,7 @@
     if (subscribePreviewId) {
       var previewRank = getTierRank(subscribePreviewId);
       var savedRank = getTierRank(saved);
-      // Only allow previewing current plan or a real upgrade — never a downgrade.
+      // Only allow previewing current plan or a real upgrade: never a downgrade.
       if (previewRank >= savedRank) return subscribePreviewId;
     }
 
@@ -684,11 +684,11 @@
     if (sub.id === "free") return signedIn ? "Select free plan" : "Create free account";
     if (sub.id === "vip") {
       if (signedIn && subscriptionId === "guide") {
-        return "Upgrade to VIP — call " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
+        return "Upgrade to VIP: call " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
       }
-      return "Call to reserve — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
+      return "Call to reserve: " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
     }
-    return "Call to enroll — " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
+    return "Call to enroll: " + (window.MIN_STRIPE ? window.MIN_STRIPE.BOOK_CALL_DISPLAY : "(786) 309-8015");
   }
 
   function subscriptionPlansForDisplay() {
@@ -924,7 +924,7 @@
         '<img src="' +
         A +
         'lock_open.svg" width="28" height="28" alt="">' +
-        "<div><strong>Upgrade to VIP Mastermind</strong><span>Live classes, 24/7 support, and the VIP Experience — call to reserve</span></div>" +
+        "<div><strong>Upgrade to VIP Mastermind</strong><span>Live classes, 24/7 support, and the VIP Experience: call to reserve</span></div>" +
         '<span class="min-chevron">›</span></div>'
       );
     }
@@ -1187,7 +1187,7 @@
       },
       {
         q: "What are Free, Guide, and VIP?",
-        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms — enroll by phone. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
+        a: "Free lets you join and use General Chat. The NO B.S. Guide ($997) unlocks the full lessons and Guide chat rooms: enroll by phone. VIP Experience is phone enrollment only and includes live classes plus 24/7 VIP support. When you open Access Levels, you only see upgrades above the plan you already have.",
       },
       {
         q: "How do I buy the NO B.S. Guide?",
@@ -1195,7 +1195,7 @@
       },
       {
         q: "A page looks blank or a button does nothing.",
-        a: "First try closing the app tab and opening it again. Check your internet. Still stuck? Email us — we will help you step by step.",
+        a: "First try closing the app tab and opening it again. Check your internet. Still stuck? Email us: we will help you step by step.",
       },
       {
         q: "How do I join a live class?",
@@ -1229,7 +1229,7 @@
         VIP_HOTLINE_TEL +
         '"><strong>24/7 VIP Support</strong><span>Tap to call ' +
         esc(VIP_HOTLINE_DISPLAY) +
-        " — reserved for you</span></a>";
+        ": reserved for you</span></a>";
     } else {
       html +=
         '<div class="min-support-vip min-support-vip--locked" data-nav="#subscribe">' +
@@ -1276,7 +1276,7 @@
       (hasTrainingAccess() ? "Join Live Class" : "Upgrade to join (VIP Experience)") +
       "</button>" +
       '<p style="margin-top:16px;font-size:0.8125rem;color:var(--min-muted)">' +
-      esc(learn.previewNote || "VIP Experience members join live — everyone else sees the schedule only.") +
+      esc(learn.previewNote || "VIP Experience members join live: everyone else sees the schedule only.") +
       "</p>" +
       "</section></div>"
     );
@@ -1396,7 +1396,7 @@
       return html;
     }
 
-    // Course lessons: no comments UI — keep focus on the lesson.
+    // Course lessons: no comments UI: keep focus on the lesson.
     html += "</div>";
     return html;
   }
@@ -1493,7 +1493,7 @@
       html +=
         '<p class="min-auth-hint min-subscribe-demo" role="status">' +
         "<strong>How to upgrade:</strong> Free is instant with your email. " +
-        "The Guide ($997) and VIP Experience are enrolled by phone — tap Call to dial.</p>";
+        "The Guide ($997) and VIP Experience are enrolled by phone: tap Call to dial.</p>";
     }
 
     if (signedIn && savedId === "guide") {
@@ -1502,7 +1502,7 @@
         "Your only upgrade is the <strong>VIP Experience · Tech Academy Mastermind</strong>.</p>";
     } else if (signedIn && savedId === "vip") {
       html +=
-        '<p class="min-auth-hint min-subscribe-hint">You have the highest access level — the VIP Experience. No further upgrades.</p>';
+        '<p class="min-auth-hint min-subscribe-hint">You have the highest access level: the VIP Experience. No further upgrades.</p>';
     } else if (signedIn) {
       html +=
         '<p class="min-auth-hint min-subscribe-hint">Choose your next step below. You only see plans above your current level.</p>';
@@ -1544,7 +1544,7 @@
       html += '<p class="min-tier-grid-hint">Swipe to compare all plans</p>';
     } else if (upgrades.length === 1 && upgrades[0].id === "vip") {
       html +=
-        '<p class="min-tier-grid-hint">Only the VIP Mastermind is left — tap Call to reserve.</p>';
+        '<p class="min-tier-grid-hint">Only the VIP Mastermind is left: tap Call to reserve.</p>';
     }
     html += '<div class="min-tier-grid-wrap"><div class="min-tier-grid" role="list">';
 
@@ -1578,7 +1578,7 @@
         '</h3><p class="price">' +
         priceLine +
         "</p>" +
-        (sub.limited ? '<p class="min-tier-limited">Limited seats — phone enrollment only</p>' : "") +
+        (sub.limited ? '<p class="min-tier-limited">Limited seats: phone enrollment only</p>' : "") +
         '<p class="min-tier-perks">' +
         esc(sub.perks) +
         '</p><button type="button" class="min-btn min-btn--primary min-btn--block min-tier-select" data-tier="' +
@@ -1692,14 +1692,14 @@
     html +=
       '<section class="min-admin-section">' +
       "<h3>Assign team role</h3>" +
-      '<p class="min-admin-hint">Paste a user UID from Firebase Console → Authentication. Roles control moderation — separate from paid subscriptions.</p>' +
+      '<p class="min-admin-hint">Paste a user UID from Firebase Console → Authentication. Roles control moderation: separate from paid subscriptions.</p>' +
       '<form class="min-form" id="minAdminRoleForm">' +
       '<div class="min-field"><label for="minAdminRoleUid">User UID</label><input id="minAdminRoleUid" type="text" placeholder="Firebase Auth UID"></div>' +
       '<div class="min-field"><label for="minAdminRoleSelect">Team role</label><select id="minAdminRoleSelect">' +
-      '<option value="member">Member — student</option>' +
-      '<option value="creator">Creator — instructor</option>' +
-      '<option value="moderator">Moderator — delete posts, moderate</option>' +
-      '<option value="admin">Admin — full access</option>' +
+      '<option value="member">Member: student</option>' +
+      '<option value="creator">Creator: instructor</option>' +
+      '<option value="moderator">Moderator: delete posts, moderate</option>' +
+      '<option value="admin">Admin: full access</option>' +
       "</select></div>" +
       '<button type="submit" class="min-btn min-btn--accent min-btn--block" id="minAdminRoleSubmit">Save role</button>' +
       "</form></section>";
@@ -2272,7 +2272,7 @@
       (appRoot || document.body).appendChild(fab);
     }
 
-    // Comments UI removed from the course — skip loading comment threads.
+    // Comments UI removed from the course: skip loading comment threads.
 
     var joinClass = $("#minJoinClass");
     if (joinClass)
@@ -3102,8 +3102,8 @@
     syncLiveListeners(route);
     document.title =
       route.isSub && route.name === "thread"
-        ? "Chat — Tech Academy"
-        : "Tech Academy — Tech Mastery For Seniors";
+        ? "Chat: Tech Academy"
+        : "Tech Academy: Tech Mastery For Seniors";
   }
 
   if (document.readyState === "loading") {

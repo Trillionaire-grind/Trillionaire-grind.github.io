@@ -1,17 +1,17 @@
 /**
- * Tech Mastery For Seniors — checkout config (Minorities app bones).
+ * Tech Mastery For Seniors: checkout config (Minorities app bones).
  *
- * free  — email registration, no payment
- * guide — $997 · PHONE ONLY (dial to enroll)
- * vip   — $97,000 · PHONE ONLY, never Stripe
+ * free : email registration, no payment
+ * guide: $997 · PHONE ONLY (dial to enroll)
+ * vip  : $97,000 · PHONE ONLY, never Stripe
  *
- * Paid tiers enroll by call — no Stripe Payment Links in the app.
+ * Paid tiers enroll by call: no Stripe Payment Links in the app.
  */
 window.MIN_STRIPE = (function () {
-  /** Online card checkout is off — Guide and VIP both dial. */
+  /** Online card checkout is off: Guide and VIP both dial. */
   var CHECKOUT_LIVE = false;
 
-  /** Kept null on purpose — Guide is call-only. */
+  /** Kept null on purpose: Guide is call-only. */
   var GUIDE_PAYMENT_LINK = null;
 
   var BOOK_CALL = "tel:+17863098015";
@@ -32,7 +32,7 @@ window.MIN_STRIPE = (function () {
     return CHECKOUT_LIVE === true;
   }
 
-  /** No paid tier uses Stripe checkout — always dial. */
+  /** No paid tier uses Stripe checkout: always dial. */
   function isTierCheckoutReady(tierId) {
     return false;
   }

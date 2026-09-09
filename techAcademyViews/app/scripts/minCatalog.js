@@ -1,5 +1,5 @@
 /**
- * Tech Mastery For Seniors — access catalog (Minorities app bones).
+ * Tech Mastery For Seniors: access catalog (Minorities app bones).
  * Same design pattern as the Minorities subscriptions; tech offer
  * names, prices, and assets. Payment wiring lives in minStripeConfig.js.
  */
@@ -17,7 +17,7 @@ window.MIN_CATALOG = {
       price: 0,
       image: "techAcademyViews/assets/access/file.png",
       perks:
-        "Free forever with your email. Instant access to The Secret To Tech Mastery — the foundational lesson that makes every device fearless.",
+        "Free forever with your email. Instant access to The Secret To Tech Mastery: the foundational lesson that makes every device fearless.",
     },
     {
       id: "guide",

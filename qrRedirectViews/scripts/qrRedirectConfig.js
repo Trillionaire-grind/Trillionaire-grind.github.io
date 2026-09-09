@@ -1,5 +1,5 @@
 /**
- * Business-card QR redirect — change focus here only.
+ * Business-card QR redirect: change focus here only.
  *
  * Print this URL on cards (never change the printed URL):
  *   https://keplersiguineau.com/QR-redirect.html
@@ -22,7 +22,7 @@
  */
 
 /** Bump on each redirect / destination change that ships. */
-export const QR_REDIRECT_VERSION = "0.0.0.2";
+export const QR_REDIRECT_VERSION = "0.0.0.3";
 
 export function qrRedirectVersionLabel() {
   return "v" + QR_REDIRECT_VERSION;
@@ -31,7 +31,7 @@ export function qrRedirectVersionLabel() {
 export const QR_REDIRECT_VERSION_LABEL = qrRedirectVersionLabel();
 
 /**
- * LIVE destination — edit this string to retarget every printed card.
+ * LIVE destination: edit this string to retarget every printed card.
  * Current focus: Consulting.
  */
 export const QR_REDIRECT_DESTINATION = "/consulting.html";
