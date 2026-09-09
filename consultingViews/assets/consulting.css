@@ -422,7 +422,7 @@ a {
   margin: 0 auto 8px;
 }
 
-/* Hub — two offer cards */
+/* Hub: two offer cards */
 .consult-hub-cards {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -641,4 +641,42 @@ body.consult-modal-open {
     height: 100%;
     border-radius: 0;
   }
+}
+
+.consult-letter-link {
+  text-align: center;
+  margin: 8px 0 0;
+  font-size: 15px;
+}
+
+.consult-vsl {
+  background: #111318;
+  color: #fff;
+  border-radius: var(--ks-radius);
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 32px 20px;
+  margin: 0 0 28px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.consult-letter {
+  max-width: 42rem;
+  margin: 0 auto;
+}
+
+.consult-letter h2 {
+  font-size: 1.35rem;
+  margin: 28px 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.consult-letter p {
+  margin: 0 0 14px;
+  font-size: 16px;
 }
