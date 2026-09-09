@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-ss-theme="gold">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="description" content="Icons: a 30-day goal card. Choose The Strangest Secret, As a Man Thinketh, or Acres of Diamonds. Listen daily.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Icons">
+  <link rel="manifest" href="iconsView/manifest.webmanifest">
+  <link rel="apple-touch-icon" href="iconsView/assets/icon-192.png">
+  <link rel="shortcut icon" type="image/x-icon" href="iconsView/assets/gold_key.webp">
+  <title>Icons</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="strangestSecretViews/assets/ssApp.css?v=22">
+  <link rel="stylesheet" href="iconsView/assets/iconsApp.css?v=1">
+</head>
+<body>
+  <div class="ss-sr-only" id="icFlipLive" aria-live="polite"></div>
+
+  <header class="ss-header">
+    <div class="ss-header__inner">
+      <div class="ss-header__brand">
+        <div class="ss-header__logo-wrap" aria-hidden="true">
+          <svg class="ss-header__ring" viewBox="0 0 36 36" id="icHeaderRing">
+            <circle class="ss-header__ring-track" cx="18" cy="18" r="16" fill="none" stroke-width="2"/>
+            <circle class="ss-header__ring-fill" cx="18" cy="18" r="16" fill="none" stroke-width="2"
+              stroke-dasharray="100.53" stroke-dashoffset="100.53" transform="rotate(-90 18 18)"/>
+          </svg>
+          <img class="ss-header__logo" src="iconsView/assets/gold_key.webp" alt="" width="28" height="28">
+        </div>
+        <div class="ss-header__copy">
+          <h1 class="ss-header__title">Icons</h1>
+          <p class="ss-header__sub" id="icHeaderSub">Earl Nightingale · 30 Day Challenge</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="ss-main">
+    <p class="ss-section-label">Choose a lecture</p>
+    <section class="ic-lectures" aria-label="Lectures">
+      <div class="ic-lectures__list" id="icLectureList" role="listbox" aria-label="Lecture list"></div>
+    </section>
+
+    <p class="ss-section-label">Your goal card</p>
+
+    <div class="ss-card-scene">
+      <div class="ss-card-flipper" id="icCardFlipper">
+        <article class="ss-card-face ss-card-front">
+          <div class="ss-card-blossoms" aria-hidden="true"></div>
+          <span class="ss-card-flip-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          </span>
+          <div class="ss-card-front__top">
+            <span class="ss-card-front__label">My clearly defined goal</span>
+            <button type="button" class="ss-edit-btn" id="icEditBtn">Edit</button>
+          </div>
+          <p class="ss-goal-text ss-goal-placeholder" id="icGoalTV">Tap edit to write your goal</p>
+        </article>
+        <article class="ss-card-face ss-card-back" id="icCardBack"></article>
+      </div>
+    </div>
+
+    <p class="ss-flip-hint">
+      <button type="button" id="icFlipHintBtn">Flip card</button><span id="icFlipHintSuffix"> to read Matthew 7:7-8</span>
+    </p>
+
+    <section class="ss-progress" aria-label="Challenge progress">
+      <div class="ss-complete" id="icComplete" hidden>
+        <p>30 days complete. You finished the test. Keep thinking about your goal every day.</p>
+      </div>
+      <div class="ss-progress__row">
+        <p class="ss-progress__day" id="icDayLabel">Set your goal to begin <span>Day 1</span></p>
+        <span class="ss-progress__listened" id="icProgressListened" hidden>0 of 30 listened</span>
+        <span class="ss-progress__remaining" id="icProgressRemaining">30 days left</span>
+      </div>
+      <div class="ss-progress__bar" aria-hidden="true">
+        <div class="ss-progress__fill" id="icProgressFill"></div>
+      </div>
+      <p class="ss-listen-hint" id="icListenHint" hidden>Press play below. Listen to at least 90% of today's recording (30+ seconds of playback).</p>
+      <button type="button" class="ss-mark-btn" id="icMarkBtn" hidden>I listened today</button>
+      <button type="button" class="ss-restart-btn" id="icRestartBtn" hidden>Restart 30 days</button>
+    </section>
+
+    <section class="ss-challenge" aria-labelledby="icChallengeTitle">
+      <div class="ss-challenge__head">
+        <h2 id="icChallengeTitle">The 30 Day Challenge</h2>
+        <p id="icChallengeTagline">Become what you think about</p>
+      </div>
+      <ol class="ss-steps" id="icStepsFirst"></ol>
+      <div class="ss-steps-more" id="icStepsMore" hidden>
+        <ol class="ss-steps ss-steps--continued" id="icStepsMoreList" start="3"></ol>
+      </div>
+      <button type="button" class="ss-steps-toggle" id="icStepsToggle" aria-expanded="false" aria-controls="icStepsMore">
+        Show steps 3-8
+      </button>
+    </section>
+  </main>
+
+  <footer class="ss-player">
+    <div class="ss-player__inner">
+      <p class="ss-player__label" id="icPlayerLabel">Listen · The Strangest Secret</p>
+      <audio id="icAudio" src="strangestSecretViews/audio.mp3" preload="metadata"></audio>
+      <div class="ss-transport">
+        <button type="button" class="ss-play-btn" id="icPlayBtn" aria-label="Play">
+          <svg class="ss-icon-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+          <svg class="ss-icon-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="ss-timeline">
+          <span class="ss-time" id="icCurTime">0:00</span>
+          <input type="range" class="ss-seeker" id="icSeeker" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+          <span class="ss-time ss-time--end" id="icDurTime">0:00</span>
+        </div>
+        <div class="ss-speed-wrap">
+          <label class="ss-speed__label" for="icSpeed">Speed</label>
+          <select class="ss-speed" id="icSpeed" aria-label="Playback speed">
+            <option value="0.75">0.75×</option>
+            <option value="1" selected>1×</option>
+            <option value="1.25">1.25×</option>
+            <option value="1.5">1.5×</option>
+            <option value="2">2×</option>
+            <option value="2.25">2.25×</option>
+            <option value="2.5">2.5×</option>
+            <option value="3">3×</option>
+          </select>
+        </div>
+      </div>
+      <p class="ss-player__offline" id="icAudioOffline" hidden>Connect once to load the recording. After that it plays from this page.</p>
+      <div class="ss-player__foot">
+        <p class="ss-player__credit" id="icPlayerCredit">Recording: Earl Nightingale · The Strangest Secret</p>
+        <div class="ss-player__meta">
+          <a class="ss-support-link" href="mailto:buildingwithkepler@gmail.com?subject=Icons%20support">Support</a>
+          <span class="ss-version" id="icVersion">v0.0.0.1</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div class="ss-modal" id="icEditModal" role="dialog" aria-modal="true" aria-labelledby="ic-modal-title">
+    <div class="ss-modal__card">
+      <h3 id="ic-modal-title">Set your clearly defined goal</h3>
+      <p class="ss-modal__intro" id="icModalIntro">One goal on a card. Listen daily for 30 days. Write what you want more than anything else, stated clearly.</p>
+      <textarea class="ss-modal__input ss-modal__textarea" id="icEditInput" rows="3" placeholder="e.g. Earn $10,000/month from my business" autocomplete="off"></textarea>
+      <p class="ss-modal__privacy">Your goal stays on this device only.</p>
+      <div class="ss-modal__actions">
+        <button type="button" class="ss-btn ss-btn--ghost" id="icCancelBtn">Cancel</button>
+        <button type="button" class="ss-btn ss-btn--gold" id="icSaveBtn">Save goal</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="iconsView/scripts/iconsApp.js"></script>
+</body>
+</html>
