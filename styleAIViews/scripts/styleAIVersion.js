@@ -1,5 +1,5 @@
 /** Bump this on each Style AI release (GitHub Pages). */
-export const STYLE_AI_APP_VERSION = "0.0.0.2";
+export const STYLE_AI_APP_VERSION = "0.0.0.3";
 
 export function styleAIVersionLabel() {
   return "v" + STYLE_AI_APP_VERSION;

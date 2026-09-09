@@ -106,7 +106,7 @@
     }
     return {
       title: "Shop",
-      body: "University collection — live now",
+      body: "University collection: live now",
       cta: "Shop the collection ›",
       image: A + "shop/uni_hd.webp",
       linkTab: "shop",
@@ -650,7 +650,7 @@
       else if (sub.id === "owner") targetRank = 3;
       if (targetRank > currentRank) return "Upgrade to " + sub.name;
       if (targetRank < currentRank) return "Switch to " + sub.name;
-      return "Checkout — " + sub.name;
+      return "Checkout: " + sub.name;
     }
     if (isSubscribeDemoMode()) return "Preview " + sub.name + " (demo)";
     return "Checkout coming soon";
@@ -1058,7 +1058,7 @@
 
     if (chatLocked) {
       html +=
-        '<div class="min-group-card min-group-card--locked" data-nav="#subscribe">Member chat — Bench Player+</div>';
+        '<div class="min-group-card min-group-card--locked" data-nav="#subscribe">Member chat: Bench Player+</div>';
     } else {
       var memberRooms = chatsList().filter(function (c) {
         return !c.vip;
@@ -1090,7 +1090,7 @@
       });
 
       html +=
-        '<p class="min-auth-hint" style="margin-top:8px">Custom chatrooms coming soon — use the rooms above for now.</p>';
+        '<p class="min-auth-hint" style="margin-top:8px">Custom chatrooms coming soon: use the rooms above for now.</p>';
     }
 
     html += "</div>";
@@ -1120,7 +1120,7 @@
       (hasTrainingAccess() ? "Join Live Class" : "Upgrade to join (Starter+)") +
       "</button>" +
       '<p style="margin-top:16px;font-size:0.8125rem;color:var(--min-muted)">' +
-      esc(learn.previewNote || "Members get the full session — free accounts see schedule only.") +
+      esc(learn.previewNote || "Members get the full session: free accounts see schedule only.") +
       "</p>" +
       "</section></div>"
     );
@@ -1318,7 +1318,7 @@
       html +=
         '<p class="min-auth-hint min-subscribe-demo" role="status">' +
         "<strong>Demo / preview.</strong> Plan selection saves to your profile for walkthroughs. " +
-        "Paid Stripe checkout is not live yet — no card will be charged.</p>";
+        "Paid Stripe checkout is not live yet: no card will be charged.</p>";
     }
 
     html +=
@@ -1377,7 +1377,7 @@
         "</p>" +
         (sub.limited ? '<p class="min-tier-limited">Limited to 20 members</p>' : "") +
         (demoMode && sub.price > 0
-          ? '<p class="min-tier-limited">Demo preview — not billed</p>'
+          ? '<p class="min-tier-limited">Demo preview: not billed</p>'
           : "") +
         '<p class="min-tier-perks">' +
         esc(sub.perks) +
@@ -1495,14 +1495,14 @@
     html +=
       '<section class="min-admin-section">' +
       "<h3>Assign team role</h3>" +
-      '<p class="min-admin-hint">Paste a user UID from Firebase Console → Authentication. Roles control moderation — separate from paid subscriptions.</p>' +
+      '<p class="min-admin-hint">Paste a user UID from Firebase Console → Authentication. Roles control moderation: separate from paid subscriptions.</p>' +
       '<form class="min-form" id="minAdminRoleForm">' +
       '<div class="min-field"><label for="minAdminRoleUid">User UID</label><input id="minAdminRoleUid" type="text" placeholder="Firebase Auth UID"></div>' +
       '<div class="min-field"><label for="minAdminRoleSelect">Team role</label><select id="minAdminRoleSelect">' +
-      '<option value="member">Member — regular fan</option>' +
-      '<option value="creator">Creator — Jason/Jay, crew</option>' +
-      '<option value="moderator">Moderator — delete posts, moderate</option>' +
-      '<option value="admin">Admin — full access (Zeb/Jay)</option>' +
+      '<option value="member">Member: regular fan</option>' +
+      '<option value="creator">Creator: Jason/Jay, crew</option>' +
+      '<option value="moderator">Moderator: delete posts, moderate</option>' +
+      '<option value="admin">Admin: full access (Zeb/Jay)</option>' +
       "</select></div>" +
       '<button type="submit" class="min-btn min-btn--accent min-btn--block" id="minAdminRoleSubmit">Save role</button>' +
       "</form></section>";
@@ -2877,7 +2877,7 @@
     syncLiveListeners(route);
     document.title =
       route.isSub && route.name === "thread"
-        ? "Chat — The Minorities"
+        ? "Chat: The Minorities"
         : "The Minorities";
   }
 

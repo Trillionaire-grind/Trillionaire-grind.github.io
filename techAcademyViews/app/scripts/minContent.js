@@ -57,7 +57,7 @@ const DEFAULT_LEARN = {
 
 const DEFAULT_PROMO = {
   title: "VIP Experience",
-  body: "Tech Academy Mastermind — live classes, workshops & help desk",
+  body: "Tech Academy Mastermind: live classes, workshops & help desk",
   cta: "See access levels ›",
   image: "techAcademyViews/assets/access/vip.png",
   linkTab: "subscribe",

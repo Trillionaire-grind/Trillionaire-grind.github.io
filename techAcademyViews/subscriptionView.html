@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Choose Your Access — Tech Mastery For Seniors</title>
+  <title>Choose Your Access: Tech Mastery For Seniors</title>
   <link rel="icon" type="image/x-icon" href="assets/icon.ico">
   <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
   <style>
@@ -55,7 +55,7 @@
 <body>
   <div class="wrap">
     <h1>Choose Your Access</h1>
-    <p class="sub">Same membership structure as our community apps — different titles, benefits, and prices.</p>
+    <p class="sub">Same membership structure as our community apps: different titles, benefits, and prices.</p>
     <p class="sub" id="currentLabel" style="font-weight:700;color:#111;"></p>
 
     <div class="card" id="freeCard">
@@ -64,7 +64,7 @@
         <span class="badge">Free</span>
         <h2>The Secret To Tech Mastery</h2>
         <p class="price">$0</p>
-        <p class="perks">Create a free account with your email. Instant access to The Secret To Tech Mastery — the foundational seminar.</p>
+        <p class="perks">Create a free account with your email. Instant access to The Secret To Tech Mastery: the foundational seminar.</p>
         <button type="button" class="mdc-button mdc-button--raised" id="freeCta" disabled>
           <span class="mdc-button__label">Your current plan</span>
         </button>
@@ -94,7 +94,7 @@
         <p class="price">$97,000</p>
         <p class="perks">
           Everything in the Guide, plus live classes, workshops, Q&amp;A, I.T. help desk, and the VIP Tech Academy Mastermind experience.
-          Phone enrollment only — call to reserve.
+          Phone enrollment only: call to reserve.
         </p>
         <button type="button" class="mdc-button mdc-button--raised" id="vipCta">
           <span class="mdc-button__label">Call to reserve</span>
@@ -133,7 +133,7 @@
 
     const hint = document.getElementById("checkoutHint");
     const guideCopy = getCtaCopy("guide");
-    if (hint) hint.textContent = guideCopy.hint || "Upgrade anytime — Free stays free.";
+    if (hint) hint.textContent = guideCopy.hint || "Upgrade anytime: Free stays free.";
 
     document.getElementById("freeCta").onclick = (e) => {
       e.preventDefault();
@@ -142,7 +142,7 @@
 
     async function loadCurrent() {
       if (!userUID) {
-        document.getElementById("currentLabel").textContent = "Not signed in — create a free account to start.";
+        document.getElementById("currentLabel").textContent = "Not signed in: create a free account to start.";
         document.getElementById("freeCta").disabled = false;
         document.getElementById("freeCta").querySelector(".mdc-button__label").textContent = "Create free account";
         return;

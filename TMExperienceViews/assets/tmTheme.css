@@ -1340,7 +1340,7 @@ html:has(.tm-tool-sheet-body) {
   text-decoration: underline;
 }
 
-/* Speeches tab — fit in iframe viewport (no page scroll; tab bar is outside iframe) */
+/* Speeches tab: fit in iframe viewport (no page scroll; tab bar is outside iframe) */
 html:has(.tm-speeches-body) {
   height: 100%;
 }
@@ -2048,7 +2048,7 @@ html:has(.tm-speeches-body) {
   cursor: pointer;
 }
 
-/* Admin — uses meeting agenda card styles */
+/* Admin: uses meeting agenda card styles */
 .tm-admin-body {
   padding-bottom: 88px;
 }

@@ -58,7 +58,7 @@ export async function createBillingPortal(idToken, options) {
   );
 }
 
-/** After redirect ?min=sub_ok&session_id=… — confirm tier synced. */
+/** After redirect ?min=sub_ok&session_id=…: confirm tier synced. */
 export async function syncSubscriptionAfterCheckout(sessionId) {
   if (!isMinServerLive()) throw new Error("min_server_not_enabled");
   return postJson("/syncMinSubscription", { sessionId });

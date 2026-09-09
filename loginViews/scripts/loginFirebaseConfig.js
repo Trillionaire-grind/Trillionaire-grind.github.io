@@ -1,5 +1,5 @@
 /**
- * Firebase web config — paste values from Firebase Console.
+ * Firebase web config: paste values from Firebase Console.
  * See loginFirebaseConfig.example.js for setup steps.
  */
 export const loginFirebaseConfig = {

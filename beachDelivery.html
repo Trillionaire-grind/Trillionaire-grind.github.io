@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#ffffff" id="metaThemeColor">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Beach Delivery — Demo</title>
+  <title>Beach Delivery: Demo</title>
   <script>
     try {
       document.documentElement.setAttribute("data-theme", localStorage.getItem("bd-theme") || "classic");
@@ -1154,7 +1154,7 @@
 
 <div class="app">
 
-  <div class="demo-banner" role="status">Demo — <strong>not a live ordering service</strong></div>
+  <div class="demo-banner" role="status">Demo: <strong>not a live ordering service</strong></div>
 
   <!-- Main header (home only) -->
   <header class="header" id="mainHeader">
@@ -1216,7 +1216,7 @@
   <div class="view" id="viewRegister">
     <div class="page-body">
       <div class="auth-logo">Beach Delivery</div>
-      <p class="auth-sub">Demo app — create an account to try ordering coffee & breakfast to your spot on the sand.</p>
+      <p class="auth-sub">Demo app: create an account to try ordering coffee & breakfast to your spot on the sand.</p>
       <form id="registerForm">
         <div class="form-group">
           <label class="form-label" for="regName">Full name</label>
@@ -1340,7 +1340,7 @@
         <button type="button" class="wallet-btn test-pay-btn" id="testPayBtn" disabled>
           Test payment · <span id="testPayTotal">$0.00</span>
         </button>
-        <p class="test-pay-note">Skips real payment — places a live order on the restaurant admin board for testing.</p>
+        <p class="test-pay-note">Skips real payment: places a live order on the restaurant admin board for testing.</p>
         <div class="pay-divider"><span>or pay with wallet / card</span></div>
         <div class="wallet-buttons">
           <button type="button" class="wallet-btn apple-pay-btn" id="applePayBtn" disabled>
@@ -1384,7 +1384,7 @@
     <div class="page-body tight-top">
       <div class="tracking-order-id" id="trackingOrderId"></div>
       <div class="tracking-status" id="trackingStatusBlock">
-        <div class="tracking-eta" id="trackingEta">—</div>
+        <div class="tracking-eta" id="trackingEta">: </div>
         <div class="tracking-label" id="trackingLabel">Estimated arrival</div>
       </div>
       <div class="timeline" id="trackingTimeline"></div>
@@ -1425,7 +1425,7 @@
     <div class="page-body tight-top">
       <div class="help-item">
         <div class="help-q">Where do you deliver?</div>
-        <div class="help-a">We deliver to 24 public beach access points in Olde Naples — from 7th Ave N and North Lake Drive south to 33rd Ave S, including Central Ave and Broad Ave S.</div>
+        <div class="help-a">We deliver to 24 public beach access points in Olde Naples: from 7th Ave N and North Lake Drive south to 33rd Ave S, including Central Ave and Broad Ave S.</div>
       </div>
       <div class="help-item">
         <div class="help-q">How do I find the closest access?</div>
@@ -1695,7 +1695,7 @@
   }
 
   async function onOrdersListenError(err) {
-    console.warn("Live order sync failed — loading orders directly.", err?.message || err);
+    console.warn("Live order sync failed: loading orders directly.", err?.message || err);
     await refreshOrdersFromFirebase();
   }
 
@@ -1852,7 +1852,7 @@
 
     if (!order) {
       $("#trackingOrderId").textContent = "";
-      $("#trackingEta").textContent = "—";
+      $("#trackingEta").textContent = "-";
       $("#trackingLabel").textContent = "No active order";
       block.classList.remove("cancelled");
       timeline.innerHTML = '<div class="empty-state"><p>Place an order to track delivery here</p></div>';
@@ -1910,7 +1910,7 @@
     if (pendingHint) {
       pendingHint.textContent = active.length
         ? `${active.length} order${active.length === 1 ? "" : "s"} waiting in queue`
-        : "No orders in queue yet — place one from checkout with Test payment";
+        : "No orders in queue yet: place one from checkout with Test payment";
     }
 
     if (!adminAuthed) {
@@ -1937,7 +1937,7 @@
     $("#adminOrderMeta").textContent = `${active.length} active · ${orders.length} total`;
     $("#adminActiveOrders").innerHTML = active.length
       ? active.map(o => adminOrderCardHtml(o, true)).join("")
-      : '<div class="empty-state"><p>No active orders — new ones appear here instantly</p></div>';
+      : '<div class="empty-state"><p>No active orders: new ones appear here instantly</p></div>';
     $("#adminCompletedOrders").innerHTML = completed.length
       ? completed.slice(0, 10).map(o => adminOrderCardHtml(o, false)).join("")
       : '<div class="empty-state"><p>No completed orders yet</p></div>';
@@ -2589,7 +2589,7 @@
       return order;
     } catch (err) {
       console.error("completeOrder failed:", err);
-      showToast(err.message || "Could not place order — try again");
+      showToast(err.message || "Could not place order: try again");
       return null;
     }
   }
@@ -3069,12 +3069,12 @@
 
   $("#bypassRegisterBtn").addEventListener("click", () => {
     if (useFirebase) {
-      showToast("Create a real account — Firebase auth is enabled");
+      showToast("Create a real account: Firebase auth is enabled");
       return;
     }
     setUser({ name: "Test User", email: "test@beachdelivery.com", phone: "(555) 000-0000" });
     preferredDropoffId = currentAccessId;
-    showToast("Bypassed — logged in as Test User");
+    showToast("Bypassed: logged in as Test User");
     navigate("home");
   });
 

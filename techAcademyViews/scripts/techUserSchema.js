@@ -1,7 +1,7 @@
 /**
- * Firestore user document schema — users/{uid}
+ * Firestore user document schema: users/{uid}
  *
- * Subscription (billing / content access) — Minorities-style tiers
+ * Subscription (billing / content access): Minorities-style tiers
  *   subscriptionId: free | guide | vip
  *   tier: free | guide | vip
  *   accessLevel: 0 | 1 | 2  (legacy numeric; mirrors tier)

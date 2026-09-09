@@ -18,8 +18,8 @@ export function isMinFirebaseConfigured() {
 }
 
 /**
- * Tech Academy has no subscription Cloud Function — the Guide sells via a
- * Guide Stripe was retired — Guide + VIP dial to enroll. VIP is phone-only.
+ * Tech Academy has no subscription Cloud Function: the Guide sells via a
+ * Guide Stripe was retired: Guide + VIP dial to enroll. VIP is phone-only.
  * Return "" so the CF checkout path is unused for this app.
  * never used.
  */
@@ -40,7 +40,7 @@ export function isMinMuxConfigured() {
   return false;
 }
 
-/** No Web Push VAPID key yet — push stays disabled (in-app alerts only). */
+/** No Web Push VAPID key yet: push stays disabled (in-app alerts only). */
 export const minFcmVapidKey = "";
 
 export function isMinFcmConfigured() {

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Talk the Mangé Lakay essay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/learnNav.css">
+  <style>
+    :root {
+      --cta: #FF0C36;
+      --bg: #F0F1F3;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --muted: #5c6370;
+      --radius: 16px;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .kotfe-talk-page {
+      width: min(720px, 92%);
+      margin: 0 auto;
+      padding: 24px 0 64px;
+    }
+
+    .kotfe-talk-page h1 {
+      margin: 0 0 8px;
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+    }
+
+    .kotfe-talk-page .kotfe-talk-kicker {
+      margin: 0 0 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #005315;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .kotfe-talk-lead,
+    .kotfe-talk-hint,
+    .kotfe-talk-status {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .kotfe-talk-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin: 18px 0 10px;
+    }
+
+    .kotfe-talk-lang {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .kotfe-talk-lang select {
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #fff;
+    }
+
+    .btn-donate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+      background: var(--cta);
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+
+    .kotfe-talk-ghost {
+      font: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .kotfe-talk-text {
+      width: 100%;
+      margin-top: 8px;
+      padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      font: inherit;
+      font-size: 16px;
+      line-height: 1.65;
+      resize: vertical;
+      min-height: 320px;
+    }
+
+    .kotfe-talk-back {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0020A0;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="kotfe-talk-page">
+    <p class="kotfe-talk-kicker">Mangé Lakay · VSL + essay</p>
+    <h1>Talk the letter. We write the essay.</h1>
+    <div id="kotfeTalkRoot"></div>
+    <a class="kotfe-talk-back" href="learn.html#kotfe">Open the public Mangé Lakay page</a>
+  </div>
+  <script type="module">
+    import { initLearnNav } from "./scripts/learnNav.js";
+    import { initKotfeTalkEssay } from "./scripts/kotfeTalkEssay.js";
+
+    initLearnNav("kotfe");
+    initKotfeTalkEssay(document.getElementById("kotfeTalkRoot"));
+  </script>
+</body>
+</html>

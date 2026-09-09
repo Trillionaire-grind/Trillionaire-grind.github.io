@@ -1,6 +1,6 @@
 /**
  * One-time Firestore seed payloads (migrated from legacy minData.js).
- * Seeded by admin when collections are empty — see seedDefaultFirestoreContent().
+ * Seeded by admin when collections are empty: see seedDefaultFirestoreContent().
  */
 
 export const SEED_CONTENT_CARDS = [
@@ -11,7 +11,7 @@ export const SEED_CONTENT_CARDS = [
     image: "https://img.youtube.com/vi/mJUstR8oEcs/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=mJUstR8oEcs",
     body:
-      "FREE PREVIEW — Night out in Sacramento with the crew. Same street-energy vlogs from @thezombiez8. Members get longer cuts, raw B-roll, and drops before YouTube.",
+      "FREE PREVIEW: Night out in Sacramento with the crew. Same street-energy vlogs from @thezombiez8. Members get longer cuts, raw B-roll, and drops before YouTube.",
     access: "free",
     locked: false,
     sortOrder: 40,
@@ -23,7 +23,7 @@ export const SEED_CONTENT_CARDS = [
     image: "https://img.youtube.com/vi/iwyXu1GZOVM/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=iwyXu1GZOVM",
     body:
-      "FREE PREVIEW — Classic Ask A Minority format. Full drunk edition + unreleased questions are member-only.",
+      "FREE PREVIEW: Classic Ask A Minority format. Full drunk edition + unreleased questions are member-only.",
     access: "free",
     locked: false,
     sortOrder: 30,
@@ -34,7 +34,7 @@ export const SEED_CONTENT_CARDS = [
     author: "The Minorities",
     image: "https://img.youtube.com/vi/_7pseqd0Q-o/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=_7pseqd0Q-o",
-    body: "MEMBERS ONLY (Starter) — Love Mansion finale. Part of the ~90% library unlocked at Starter.",
+    body: "MEMBERS ONLY (Starter): Love Mansion finale. Part of the ~90% library unlocked at Starter.",
     access: "starter",
     locked: true,
     sortOrder: 20,
@@ -46,7 +46,7 @@ export const SEED_CONTENT_CARDS = [
     image: "https://img.youtube.com/vi/v2zZOhZaQrk/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=v2zZOhZaQrk",
     body:
-      "OWNER ONLY — Top-tier uncut episode. Owner members get 100% of the library plus mastermind access.",
+      "OWNER ONLY: Top-tier uncut episode. Owner members get 100% of the library plus mastermind access.",
     access: "owner",
     locked: true,
     sortOrder: 10,
@@ -58,7 +58,7 @@ export const SEED_CONTENT_CARDS = [
     image: "https://img.youtube.com/vi/SqPjHwz6huc/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=SqPjHwz6huc",
     body:
-      "FREE PREVIEW — Guy Code energy from @thezombiez8. Members unlock How To Escape The Friendzone + Dating In Miami uncut.",
+      "FREE PREVIEW: Guy Code energy from @thezombiez8. Members unlock How To Escape The Friendzone + Dating In Miami uncut.",
     access: "free",
     locked: false,
     sortOrder: 35,
@@ -70,7 +70,7 @@ export const SEED_CONTENT_CARDS = [
     image: "https://img.youtube.com/vi/mJUstR8oEcs/hqdefault.jpg",
     video: "https://www.youtube.com/watch?v=mJUstR8oEcs",
     body:
-      "BENCH+ — Classic street bit energy. Longer cut + B-roll in the member library.",
+      "BENCH+: Classic street bit energy. Longer cut + B-roll in the member library.",
     access: "bench",
     locked: true,
     sortOrder: 25,
@@ -82,7 +82,7 @@ export const SEED_POSTS = [
     id: "welcome-back",
     headline: "We're on our own platform now",
     body:
-      "Main channel's gone — you know the story. Full library, member chat, and drops live here now. Free teasers from @thezombiez8 and the archive; members get the episodes platforms keep removing. Register free.",
+      "Main channel's gone: you know the story. Full library, member chat, and drops live here now. Free teasers from @thezombiez8 and the archive; members get the episodes platforms keep removing. Register free.",
     authorName: "The Minorities",
     authorUsername: "minorities",
     authorType: "team",
@@ -91,7 +91,7 @@ export const SEED_POSTS = [
   },
   {
     id: "house-rules",
-    headline: "House rules — keep it real",
+    headline: "House rules: keep it real",
     body:
       "1) Respect the crew and each other. 2) No spam in chat. 3) What's said in member rooms stays in member rooms. 4) Merch questions → Shop tab. Break the vibe and you're out. Simple.",
     authorName: "The Minorities",
@@ -102,7 +102,7 @@ export const SEED_POSTS = [
   },
   {
     id: "city-poll",
-    body: "Sacramento or Miami for the next street vlog? Drop your pick in the comments — same energy as Midnight Club and Petition to Kiss You.",
+    body: "Sacramento or Miami for the next street vlog? Drop your pick in the comments: same energy as Midnight Club and Petition to Kiss You.",
     authorName: "The Minorities",
     authorUsername: "minorities",
     authorType: "team",
@@ -111,7 +111,7 @@ export const SEED_POSTS = [
   },
   {
     id: "jay-week-ahead",
-    headline: "Jay — this week's shoot list",
+    headline: "Jay: this week's shoot list",
     body:
       "Locking three setups: night run downtown, Ask A Minority table, and a merch pack-out for the University drop. Members get the raw cuts first. Free side still gets the YouTube teaser.",
     authorName: "Jason/Jay",
@@ -122,7 +122,7 @@ export const SEED_POSTS = [
   },
   {
     id: "zed-ask-minority",
-    headline: "Zed — Ask A Minority is back in rotation",
+    headline: "Zed: Ask A Minority is back in rotation",
     body:
       "Drunk Edition stays free as a preview. The unreleased questions + longer cut live in the member library. If you've got a question for the next one, drop it here before Friday.",
     authorName: "Zed",
@@ -133,8 +133,8 @@ export const SEED_POSTS = [
   },
   {
     id: "hoodie-bts",
-    headline: "University hoodie — behind the pack-out",
-    body: "Restock is live. Free preview here — members already got early access codes in chat.",
+    headline: "University hoodie: behind the pack-out",
+    body: "Restock is live. Free preview here: members already got early access codes in chat.",
     image: "minoritiesView/assets/shop/uni_hd.webp",
     authorName: "The Minorities",
     authorUsername: "minorities",
@@ -146,7 +146,7 @@ export const SEED_POSTS = [
     id: "easy-line-drop",
     headline: "EASY line is stocked",
     body:
-      "Cream tee, black hoodie, shorts, sweats, sunset puffer, hat — all live in Shop. Members heard first in chat. Tap Shop if you're grabbing a fit before the next vlog.",
+      "Cream tee, black hoodie, shorts, sweats, sunset puffer, hat: all live in Shop. Members heard first in chat. Tap Shop if you're grabbing a fit before the next vlog.",
     image: "minoritiesView/assets/shop/hoodie_bl.webp",
     authorName: "The Minorities",
     authorUsername: "minorities",
@@ -156,9 +156,9 @@ export const SEED_POSTS = [
   },
   {
     id: "training-tuesday",
-    headline: "Live training — Tuesday 7:00 PM EST",
+    headline: "Live training: Tuesday 7:00 PM EST",
     body:
-      "Starter+ joins the Zoom. Topic drops in chat the morning of. Waterboy can see the schedule; Starter and Owner get the live room + replay. Be on time — we start with Q&A.",
+      "Starter+ joins the Zoom. Topic drops in chat the morning of. Waterboy can see the schedule; Starter and Owner get the live room + replay. Be on time: we start with Q&A.",
     authorName: "The Minorities",
     authorUsername: "minorities",
     authorType: "team",
@@ -179,7 +179,7 @@ export const SEED_POSTS = [
   },
   {
     id: "vlog-teaser",
-    headline: "GUY CODE — full episodes for members",
+    headline: "GUY CODE: full episodes for members",
     body: "Free preview on YouTube (@thezombiez8). Member cut: How To Escape The Friendzone + Dating In Miami uncut.",
     video: "https://www.youtube.com/watch?v=SqPjHwz6huc",
     authorName: "Jason/Jay",
@@ -193,7 +193,7 @@ export const SEED_POSTS = [
     id: "why-this-app",
     headline: "Why we built this app",
     body:
-      "Channels get taken down. Algorithms bury the work. This app is ours — library, chat, classes, merch — so the community isn't renting space on someone else's platform. Free to join. Real drops for members.",
+      "Channels get taken down. Algorithms bury the work. This app is ours: library, chat, classes, merch: so the community isn't renting space on someone else's platform. Free to join. Real drops for members.",
     authorName: "The Minorities",
     authorUsername: "minorities",
     authorType: "team",
@@ -306,7 +306,7 @@ export const SEED_PRODUCTS = [
 
 export const SEED_APP_CONFIG = {
   learn: {
-    nextSession: "Tuesday 7:00 PM EST — topic TBA",
+    nextSession: "Tuesday 7:00 PM EST: topic TBA",
     previewNote:
       "Starter+ joins live group training. Waterboy sees schedule only. Replays for Starter & Owner.",
     zoomUrl:
@@ -315,7 +315,7 @@ export const SEED_APP_CONFIG = {
   promo: {
     title: "Sale",
     body: 'Get your new "University" Hoodie',
-    cta: "Yes — shop the University collection ›",
+    cta: "Yes: shop the University collection ›",
     image: "minoritiesView/assets/shop/uni_hd.webp",
     linkTab: "shop",
   },

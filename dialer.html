@@ -216,7 +216,7 @@
     <button class="btn small" id="clearBtn">Clear all</button>
     <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" />
   </div>
-  <p class="privacy">Leads are stored only in this browser (localStorage) — nothing is uploaded anywhere.</p>
+  <p class="privacy">Leads are stored only in this browser (localStorage): nothing is uploaded anywhere.</p>
 
   <div class="search-row">
     <input type="search" id="searchInput" placeholder="Search name, phone, city…" />
@@ -228,7 +228,7 @@
   <div class="empty" id="emptyState">
     No leads yet.<br />
     Tap <b>Import Excel / CSV</b> and pick your list.<br />
-    It needs a name column and a phone column — everything else comes along as notes.
+    It needs a name column and a phone column: everything else comes along as notes.
   </div>
 
   <div class="overlay" id="overlay"></div>
@@ -624,7 +624,7 @@
       for (const h of [...lead.history].reverse().slice(0, 12)) {
         const d = new Date(h.ts);
         const div = document.createElement("div");
-        div.textContent = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")} — ${OUTCOME_LABEL[h.outcome] || h.outcome}`;
+        div.textContent = `${d.getMonth() + 1}/${d.getDate()} ${d.getHours()}:${String(d.getMinutes()).padStart(2, "0")}: ${OUTCOME_LABEL[h.outcome] || h.outcome}`;
         hist.appendChild(div);
       }
 
@@ -659,7 +659,7 @@
       }
       saveNotes();
       save();
-      toast(OUTCOME_LABEL[outcome] + " — logged");
+      toast(OUTCOME_LABEL[outcome] + ": logged");
       render();
     }
 
@@ -673,7 +673,7 @@
         .sort((a, b) => a.history[a.history.length - 1].ts - b.history[b.history.length - 1].ts);
       const queue = [...fresh, ...retry].filter((l) => l.id !== fromId);
       if (!queue.length) {
-        toast(activeOffer === "all" ? "Queue empty — import more leads" : "No " + activeOffer + " leads left to dial");
+        toast(activeOffer === "all" ? "Queue empty: import more leads" : "No " + activeOffer + " leads left to dial");
         return;
       }
       openSheet(queue[0].id);

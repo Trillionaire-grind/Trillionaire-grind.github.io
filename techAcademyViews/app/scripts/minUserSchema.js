@@ -1,5 +1,5 @@
 /**
- * Firestore user document schema — users/{uid} (tech-mastery-academy)
+ * Firestore user document schema: users/{uid} (tech-mastery-academy)
  *
  * Subscription (billing / content access)
  *   subscriptionId: free | guide | vip
@@ -10,7 +10,7 @@
  *   accessLevel: 0 | 1 | 2 | 3  → free | guide | vip | vip
  *   name → used as displayName fallback
  *
- * Team (moderation / ops — separate from subscription)
+ * Team (moderation / ops: separate from subscription)
  *   teamRole: member | creator | moderator | admin
  *   admin: boolean (true when teamRole === "admin")
  */
@@ -77,7 +77,7 @@ export function normalizeUserProfile(data) {
     if (ACCESS_TIERS.includes(data.tier)) {
       subscriptionId = data.tier;
     } else if (data.accessLevel !== undefined && data.accessLevel !== null) {
-      // Legacy Tech Academy user — map numeric accessLevel
+      // Legacy Tech Academy user: map numeric accessLevel
       subscriptionId = tierFromAccessLevel(data.accessLevel);
     } else if (SUBSCRIPTION_TO_TIER[subscriptionId]) {
       subscriptionId = SUBSCRIPTION_TO_TIER[subscriptionId];

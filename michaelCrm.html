@@ -689,7 +689,7 @@
         list.forEach(item => {
             const option = document.createElement('option');
             option.value = item.id;
-            option.textContent = targetType === 'company' ? item.name : item.name + ' — ' + (item.company || 'No company');
+            option.textContent = targetType === 'company' ? item.name : item.name + ': ' + (item.company || 'No company');
             select.appendChild(option);
         });
     }
@@ -867,8 +867,8 @@
                 <tr>
                     <td>${escapeHtml(person.name)}</td>
                     <td><a class="table-link" href="mailto:${escapeAttr(person.email)}">${escapeHtml(person.email)}</a></td>
-                    <td>${escapeHtml(person.phone || '—')}</td>
-                    <td>${escapeHtml(person.company || '—')}</td>
+                    <td>${escapeHtml(person.phone || '-')}</td>
+                    <td>${escapeHtml(person.company || '-')}</td>
                     <td>${tagHtml ? `<div class="tag-group">${tagHtml}</div>` : '<span class="dim">No tags</span>'}</td>
                     <td>${productHtml || '<span class="dim">No products</span>'}</td>
                     <td><button class="button outline" type="button" onclick="showDetail('person','${person.id}')">Notes (${notesCount})</button></td>
@@ -901,8 +901,8 @@
             return `
                 <tr>
                     <td>${escapeHtml(company.name)}</td>
-                    <td>${escapeHtml(company.category || '—')}</td>
-                    <td>${escapeHtml(company.products.join(', ') || '—')}</td>
+                    <td>${escapeHtml(company.category || '-')}</td>
+                    <td>${escapeHtml(company.products.join(', ') || '-')}</td>
                     <td><button class="button outline" type="button" onclick="showDetail('company','${company.id}')">Notes (${notesCount})</button></td>
                 </tr>
             `;
@@ -1075,7 +1075,7 @@
         const hasQuery = Boolean(searchInput?.value.trim());
         countEl.textContent = hasQuery
             ? `${visibleCount} of ${totalCount} shown`
-            : `${totalCount} available — type to search`;
+            : `${totalCount} available: type to search`;
     }
 
     function syncReportFilterOptions() {
