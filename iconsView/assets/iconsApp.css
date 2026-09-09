@@ -1,0 +1,210 @@
+:root {
+  --ss-player-h: 168px;
+}
+
+.ss-mark-btn[hidden],
+.ss-restart-btn[hidden],
+.ss-listen-hint[hidden],
+.ss-complete[hidden],
+.ss-player__offline[hidden] {
+  display: none !important;
+}
+
+.ss-header__inner {
+  justify-content: flex-start;
+}
+
+.ss-header__title span {
+  display: block;
+  font-size: 0.82em;
+  letter-spacing: 0.14em;
+}
+
+.ic-header-logo {
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  object-fit: cover;
+  background: #000;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-gold) 40%, transparent);
+}
+
+body.ic-locked .ss-header,
+body.ic-locked .ss-main,
+body.ic-locked .ss-player,
+body.ic-locked .ss-modal {
+  display: none !important;
+}
+
+body.ic-unlocked .ic-gate {
+  display: none !important;
+}
+
+.ic-gate {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px calc(32px + env(safe-area-inset-bottom, 0px));
+  background: #050505;
+}
+
+.ic-gate__card {
+  width: min(360px, 100%);
+  text-align: center;
+}
+
+.ic-gate__logo {
+  display: block;
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 22px;
+  border-radius: 6px;
+  background: #000;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-gold) 38%, transparent), 0 12px 40px rgba(0, 0, 0, 0.45);
+}
+
+.ic-gate__title {
+  margin: 0 0 8px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(28px, 7vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ss-text);
+}
+
+.ic-gate__lead {
+  margin: 0 0 22px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ss-muted);
+}
+
+.ic-gate__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.ic-gate__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ss-gold);
+}
+
+.ic-gate__input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--ss-border);
+  border-radius: 10px;
+  background: var(--ss-surface);
+  color: var(--ss-text);
+  font-size: 16px;
+  font-family: inherit;
+}
+
+.ic-gate__input:focus {
+  outline: none;
+  border-color: var(--ss-gold);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ss-gold) 22%, transparent);
+}
+
+.ic-gate__error {
+  margin: 0;
+  font-size: 13px;
+  color: #e8b4b4;
+}
+
+.ic-gate__btn {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.ic-lectures {
+  margin: 0 0 22px;
+}
+
+.ic-lectures__list {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 2px 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.ic-lecture {
+  flex: 1 0 min(42%, 148px);
+  min-width: 140px;
+  max-width: 220px;
+  text-align: left;
+  padding: 12px 12px 14px;
+  border: 1px solid var(--ss-border);
+  border-radius: 12px;
+  background: var(--ss-surface);
+  color: var(--ss-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.ic-lecture:hover {
+  border-color: var(--ss-gold-dim);
+}
+
+.ic-lecture.is-active {
+  border-color: var(--ss-gold);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-gold) 28%, transparent);
+}
+
+.ic-lecture__speaker {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ss-gold);
+  margin: 0 0 4px;
+}
+
+.ic-lecture__title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 6px;
+  line-height: 1.25;
+}
+
+.ic-lecture__meta {
+  display: block;
+  font-size: 11px;
+  color: var(--ss-muted);
+  line-height: 1.35;
+}
+
+.ic-card-back__quote {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.ss-card-back__vnum:empty {
+  display: none;
+}
+
+@media (min-width: 520px) {
+  .ic-lectures__list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  .ic-lecture {
+    max-width: none;
+    flex: none;
+    min-width: 0;
+  }
+}
