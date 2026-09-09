@@ -58,7 +58,14 @@ const cardBack = document.getElementById("icCardBack");
 const modalIntro = document.getElementById("icModalIntro");
 const versionEl = document.getElementById("icVersion");
 
-let currentLectureId = localStorage.getItem(STORAGE.lecture) || ICONS_LECTURES[0].id;
+function lectureFromQuery() {
+  const id = new URLSearchParams(window.location.search).get("lecture");
+  if (id && ICONS_LECTURES.some((lecture) => lecture.id === id)) return id;
+  return "";
+}
+
+let currentLectureId =
+  lectureFromQuery() || localStorage.getItem(STORAGE.lecture) || ICONS_LECTURES[0].id;
 let modalFocusReturn = null;
 let lastPosSave = 0;
 let positionRestored = false;
@@ -658,10 +665,6 @@ function initGoal() {
 
   applyLecture();
   renderGoal();
-
-  if (!localStorage.getItem(STORAGE.goal)?.trim()) {
-    openModal();
-  }
 }
 
 if (versionEl) versionEl.textContent = iconsVersionLabel();

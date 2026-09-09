@@ -2,6 +2,14 @@
   --ss-player-h: 168px;
 }
 
+.ss-mark-btn[hidden],
+.ss-restart-btn[hidden],
+.ss-listen-hint[hidden],
+.ss-complete[hidden],
+.ss-player__offline[hidden] {
+  display: none !important;
+}
+
 .ss-header__inner {
   justify-content: flex-start;
 }
