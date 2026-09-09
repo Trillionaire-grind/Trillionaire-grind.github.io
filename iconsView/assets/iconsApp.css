@@ -26,6 +26,7 @@
   border-radius: 3px;
   object-fit: cover;
   background: #000;
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-gold) 40%, transparent);
 }
 
 body.ic-locked .ss-header,
@@ -59,7 +60,7 @@ body.ic-unlocked .ic-gate {
   margin: 0 auto 22px;
   border-radius: 6px;
   background: #000;
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ss-gold) 38%, transparent), 0 12px 40px rgba(0, 0, 0, 0.45);
 }
 
 .ic-gate__title {
