@@ -632,8 +632,14 @@ body.consult-modal-open {
 
   .consult-qr-welcome__photo-wrap {
     width: 100%;
-    height: 420px;
+    height: 160px;
     min-height: 0;
+  }
+
+  .consult-qr-welcome__photo {
+    object-position: center 50%;
+    transform: scale(1.85);
+    transform-origin: center 50%;
   }
 }
 
@@ -642,13 +648,30 @@ body.consult-modal-open {
     grid-template-columns: 1fr;
     justify-items: center;
     text-align: center;
-    padding: 14px 14px 22px;
+    padding: 12px 12px 16px;
+    gap: 10px;
   }
 
   .consult-qr-welcome__photo-wrap {
-    width: 100%;
-    height: min(58vh, 520px);
-    min-height: 360px;
+    width: min(72vw, 240px);
+    height: 108px;
+    min-height: 0;
+    border-radius: 12px;
+  }
+
+  .consult-qr-welcome__photo {
+    object-position: center 50%;
+    transform: scale(2.05);
+    transform-origin: center 50%;
+  }
+
+  .consult-qr-welcome p {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .consult-qr-welcome__actions {
+    margin-top: 12px;
   }
 
   .consult-qr-welcome__copy,
