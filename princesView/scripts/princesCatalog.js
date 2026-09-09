@@ -167,7 +167,7 @@ window.PRINCES_CATALOG = {
   seedPosts: [
     {
       id: "p1",
-      author: "Képler",
+      author: "Siguineau",
       role: "owner",
       title: "Fix the prince in the mirror first",
       body: "If you do not like the man in the mirror, change him first. A weak prince trains a weak unit. Get to 10% body fat.",
