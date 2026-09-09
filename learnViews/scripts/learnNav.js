@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.17";
+export const LEARN_APP_VERSION = "0.2.9.18";
 
 console.log(`[Képler Siguineau] working version: v${LEARN_APP_VERSION}`);
 
@@ -15,7 +15,7 @@ export const NAV_ITEMS = [
   { id: "home", label: "Home" },
   { id: "kotfe", label: "Mangé Lakay" },
   { id: "notes", label: "Notes" },
-  { id: "projects", label: "Projects" },
+  { id: "projects", label: "Products" },
   { id: "offers", label: "Offers" },
   { id: "speak", label: "Talk to me" },
 ];

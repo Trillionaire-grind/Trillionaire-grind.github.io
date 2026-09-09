@@ -136,13 +136,7 @@ export function renderOffersPage(root) {
     </div>
 
     ${renderSection("earn")}
-    ${renderSection("fun")}
-
-    <nav class="offers-links" aria-label="Related pages">
-      <a href="learn.html#notes" data-offers-nav="notes">Free education: notes</a>
-      <a href="learn.html#speak" data-offers-nav="speak">Talk to me</a>
-      <a href="learn.html#kotfe" data-offers-nav="kotfe">Mangé Lakay project</a>
-    </nav>`;
+    ${renderSection("fun")}`;
 }
 
 export function wireOffersPage(root, { goToPage }) {

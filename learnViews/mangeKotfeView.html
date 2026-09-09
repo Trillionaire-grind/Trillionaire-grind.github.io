@@ -127,7 +127,6 @@
     }
 
     .kotfe-tier--flagship {
-      grid-column: 1 / -1;
       border-color: rgba(218, 161, 35, 0.35);
       background: rgba(218, 161, 35, 0.06);
     }
@@ -540,39 +539,6 @@
       margin-bottom: 16px;
     }
 
-    .kotfe-ask-block {
-      margin-top: 40px;
-      padding-top: 8px;
-      border-top: 2px solid rgba(255, 12, 54, 0.15);
-    }
-
-    .kotfe-ask-block > p.kotfe-lead {
-      font-size: 1.1rem;
-      text-align: center;
-      margin-bottom: 24px;
-    }
-
-    .kotfe-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px 24px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(0, 0, 0, 0.06);
-    }
-
-    .kotfe-links a {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--blue);
-      text-decoration: none;
-    }
-
-    .kotfe-links a:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-
     .kotfe-sticky {
       position: fixed;
       left: 0;
@@ -611,10 +577,6 @@
     }
 
     @media (max-width: 768px) {
-      .kotfe-tiers {
-        grid-template-columns: 1fr;
-      }
-
       .kotfe-proof-grid {
         grid-template-columns: 1fr;
       }
@@ -838,21 +800,6 @@
       <p class="kotfe-callout kotfe-callout--gold">This is <strong>not</strong> an investment offering. Donations do not buy equity or promised returns. You are supporting a project you believe in, and we report back honestly. See <a href="#reports" style="color: var(--blue);">quarterly reports</a> above.</p>
       <p>We cannot guarantee results. We can give transparent accounting of what your money made possible.</p>
     </section>
-
-    <div class="kotfe-ask-block">
-      <div class="kotfe-cta-block">
-        <p>Ready to support Mangé Lakay?</p>
-        <a class="btn-donate" href="#donate" style="text-decoration: none;">Back to video &amp; donate</a>
-      </div>
-    </div>
-
-    <nav class="kotfe-links" aria-label="Related pages">
-      <a href="#donate">Video &amp; donate</a>
-      <a href="#reports">Quarterly reports</a>
-      <a href="learn.html#speak" data-kotfe-nav="speak">Talk to me about the project</a>
-      <a href="learn.html#notes" data-kotfe-nav="notes">Read city &amp; business notes</a>
-      <a href="learn.html#home" data-kotfe-nav="home">Back to home</a>
-    </nav>
   </div>
 
   <div class="kotfe-sticky">
@@ -860,7 +807,7 @@
   </div>
 
   <script type="module">
-    import { initLearnNav, goToPage } from "./scripts/learnNav.js";
+    import { initLearnNav } from "./scripts/learnNav.js";
     import { KOTFE_REPORTS } from "./scripts/kotfeReportsCatalog.js";
     import { KOTFE_DONATE } from "./scripts/kotfeDonateConfig.js";
 
@@ -941,13 +888,6 @@
 
     document.querySelectorAll('[data-donate="any"]').forEach((el) => {
       el.addEventListener("click", openKotfeAnyAmount);
-    });
-
-    document.querySelectorAll("[data-kotfe-nav]").forEach((el) => {
-      el.addEventListener("click", (event) => {
-        event.preventDefault();
-        goToPage(el.dataset.kotfeNav);
-      });
     });
 
     const reportList = document.getElementById("kotfeReportList");
