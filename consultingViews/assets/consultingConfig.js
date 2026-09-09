@@ -1,5 +1,5 @@
 /** Bump on each consulting funnel release. */
-export const CONSULTING_APP_VERSION = "0.0.0.9";
+export const CONSULTING_APP_VERSION = "0.0.0.10";
 
 /** Put this URL on your business card QR code */
 export const CONSULTING_QR_URL = "https://keplersiguineau.com/consulting.html";
@@ -15,15 +15,7 @@ export const CONSULTING_HUB_URL = "/consulting.html";
 export const HELP_URL = "/consultingViews/help.html";
 export const MARKETING_WEBSITES_URL = "/consultingViews/marketing-websites.html";
 export const CUSTOM_SOFTWARE_URL = "/consultingViews/custom-software.html";
-
-/** Sit-with-you help: Google, AI agents, a wallpaper, or the next unicorn. */
-export const HELP_TIER = {
-  name: "Ask me anything",
-  price: "$97",
-  priceNote: "starting rate",
-  range: "$97 to $xB",
-  tagline: "Whatever question you have. I am the person you call when you forget, get stuck, or need it done.",
-};
+export const SUPPORT_EMAIL = "buildingwithkepler@gmail.com";
 
 export const WEBSITE_TIERS = [
   {
