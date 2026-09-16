@@ -1,5 +1,13 @@
-:root {
+:root,
+html[data-ss-theme="gold"] {
   --ss-player-h: 188px;
+}
+
+@media (max-width: 519px) {
+  :root,
+  html[data-ss-theme="gold"] {
+    --ss-player-h: 204px;
+  }
 }
 
 .ss-mark-btn[hidden],
