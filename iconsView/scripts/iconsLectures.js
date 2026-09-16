@@ -60,7 +60,7 @@ export const ICONS_LECTURES = [
     title: "25-min biblical walking affirmations (reset your identity & mind)",
     speaker: "Identity Walk",
     tagline: "Speak who God says you are",
-    durationLabel: "About 26 min",
+    durationLabel: "About 25 min",
     audioSrc: "audios/25_minutes.mp3",
     credit: "Recording · 25-min biblical walking affirmations",
     playerLabel: "Listen · 25-min biblical walking affirmations (reset your identity & mind)",
