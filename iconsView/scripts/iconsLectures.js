@@ -1,10 +1,6 @@
 /**
- * Icons lectures: Nightingale's 30-day method plus two public-domain talks.
- * Action plans are written from each lecture's argument, not copied across talks.
- *
- * New recordings are LibriVox public-domain readings:
- * James Allen, As a Man Thinketh (Mark Cawley)
- * Russell Conwell, Acres of Diamonds, Version 2, Part 1 (Phil Chenevert)
+ * Icons lectures: Nightingale's 30-day method plus the two Icons recordings.
+ * Action plans are written from each lecture after processing the audio.
  */
 export const ICONS_LECTURES = [
   {
@@ -50,83 +46,89 @@ export const ICONS_LECTURES = [
     ],
   },
   {
-    id: "allen",
-    title: "As a Man Thinketh",
-    speaker: "James Allen",
-    tagline: "You become what you think",
-    durationLabel: "About 54 min",
-    audioSrc: "iconsView/audio/as-a-man-thinketh.mp3",
-    credit: "Reading: Mark Cawley · James Allen, As a Man Thinketh · LibriVox public domain",
-    playerLabel: "Listen · As a Man Thinketh",
-    flipHint: " to read Allen's law of thought",
-    flipLive: "Now showing James Allen on thought and character.",
+    id: "twentyfive",
+    title: "25 Minutes",
+    speaker: "Identity Walk",
+    tagline: "Speak who God says you are",
+    durationLabel: "About 26 min",
+    audioSrc: "audios/25_minutes.mp3",
+    credit: "Recording · 25 Minutes",
+    playerLabel: "Listen · 25 Minutes",
+    flipHint: " to read the identity charge",
+    flipLive: "Now showing the identity declarations from 25 Minutes.",
     modalIntro:
-      "James Allen's law: a man is literally what he thinks. Write one clearly defined goal. Listen to this lecture daily for 30 days.",
+      "This walk resets identity. Write one clearly defined goal. Walk or sit still, receive the declarations, then speak them for 30 days.",
     completeText:
-      "30 days complete. You finished Allen's test. Keep the thought you chose, and let character catch up to it.",
-    challengeTitle: "The 30 Day Thought Test",
+      "30 days complete. You finished the identity walk. Keep agreeing with who God says you are.",
+    challengeTitle: "The 30 Day Identity Walk",
     back: {
-      ref: "Proverbs 23:7 · James Allen",
+      ref: "25 Minutes · Identity",
       verses: [
         {
           num: "",
-          text: "For as he thinketh in his heart, so is he.",
+          text: "I am who God says I am. I am the beloved. That is my primary identity.",
         },
         {
           num: "",
-          text: "A man is literally what he thinks, his character being the complete sum of all his thoughts.",
+          text: "I am chosen, called, equipped, and loved before I perform.",
         },
       ],
     },
     steps: [
-      "Write the thought you will hold: you become what you think. Put that sentence on your card and look at it several times a day.",
-      "Treat circumstances as a mirror of thought, not a jail. Circumstance reveals the man. It does not make him.",
-      "Drop the thought that makes you sick or small. The body is the servant of the mind. Health follows clean thinking the way disease follows sour thinking.",
-      "Fix one purpose and refuse to drift. A man without a central purpose falls to worries, fears, and self-pity.",
-      "Strengthen weak thoughts the way you train a weak body. Daily practice of right thinking builds a strong mind.",
-      "Cherish the vision and the ideal. Out of them your world is built. Stay true to the picture you carry.",
-      "Practice serenity. Calm mind, calm life. Tempestuous thoughts make a tempestuous life.",
-      "Listen to this lecture daily for 30 days until right thought becomes habit. Use the player below each day.",
+      "Walk if you can, or sit in stillness. First receive the declarations spoken over you. Then speak them out loud and agree with them.",
+      "Begin with gratitude. Today is a gift. You are alive, covered, and loved. Choose gratitude over anxiety and trust over fear.",
+      "Take your identity from God, not from failure, fear, or anyone else's opinion. You are the beloved. Walk like a child of the Most High.",
+      "Honor your body as the temple of the Holy Spirit. Every stride is worship. You are being renewed. Partner with your body: move it well, rest it well.",
+      "Stop chasing abundance. Goodness is already in motion toward you. Live as a conduit: what flows to you is meant to flow through you.",
+      "Lay down the need to control every outcome. Peace does not depend on circumstances. Every battle is the Lord's. You are seated and at rest.",
+      "Remember you were made for purpose. Your story, gifts, and pain were not wasted. Be a river of living water to the people in your path.",
+      "Come back tomorrow. Repetition is how identity is rewritten. Use the player below each day until these words become how you walk.",
     ],
   },
   {
-    id: "conwell",
-    title: "Acres of Diamonds",
-    speaker: "Russell Conwell",
-    tagline: "Dig where you stand",
-    durationLabel: "About 51 min",
-    audioSrc: "iconsView/audio/acres-of-diamonds.mp3",
-    credit: "Reading: Phil Chenevert · Russell Conwell, Acres of Diamonds · LibriVox public domain",
-    playerLabel: "Listen · Acres of Diamonds",
-    flipHint: " to read Conwell's charge",
-    flipLive: "Now showing Russell Conwell on acres of diamonds.",
+    id: "abundant",
+    title: "Abundant Wealth Mindset",
+    speaker: "Creation Session",
+    tagline: "Call the desire as already here",
+    durationLabel: "About 14 min",
+    audioSrc: "audios/Abundant%20Wealth%20Mindset.mp3",
+    credit: "Recording · Abundant Wealth Mindset",
+    playerLabel: "Listen · Abundant Wealth Mindset",
+    flipHint: " to read Mark 11:24",
+    flipLive: "Now showing Mark chapter 11, verse 24.",
     modalIntro:
-      "Russell Conwell's charge: your fortune is where you already stand. Write one clearly defined goal at home. Listen to this lecture daily for 30 days.",
+      "This session creates one desire in the present. Sit alone in a quiet room. Write that one thing clearly. Listen daily for 30 days.",
     completeText:
-      "30 days complete. You finished Conwell's test. Keep digging in the ground you already own.",
-    challengeTitle: "The 30 Day Dig",
+      "30 days complete. You finished the creation sessions. Keep calling the desire as already here, then take the next step God shows you.",
+    challengeTitle: "The 30 Day Creation Session",
     back: {
-      ref: "Russell Conwell · Acres of Diamonds",
+      ref: "Mark 11:24 · Romans 4:17",
       verses: [
         {
           num: "",
-          text: "Your diamonds are not in far distant mountains or in yonder seas. They are in your own backyard, if you will dig for them.",
+          text: "Therefore I tell you, whatever you ask in prayer, believe that you have received it, and it will be yours.",
+        },
+        {
+          num: "",
+          text: "God calls into existence the things that do not exist. Do the same with the desire He put in your heart.",
         },
       ],
     },
     steps: [
-      "Write the fortune you will find at home, not far away. Your acres of diamonds are where you stand.",
-      "Study the people you already serve. Know what they need before you hunt a new town.",
-      "Dig where you stand: this town, this skill, this shop. Opportunity is under your feet.",
-      "Get rich by being useful and honest. Wealth that serves others is a duty, not a stain.",
-      "See the diamond in the ordinary customer. The mine is often the neighbor you already know.",
-      "Do not sell the farm to hunt elsewhere. Ali Hafed walked over acres of diamonds and never saw them.",
-      "If you wander, come back and start the 30 days again from where you are.",
-      "Listen to this lecture daily for 30 days. Keep digging in your own ground. Use the player below each day.",
+      "Sit alone in a quiet room. Do not drive. Give this voice your full attention.",
+      "Choose one specific desire for this session: one thing, amount, item, or relationship. You can run the process again later. This time, hold only one.",
+      "Ignore what the five senses report. There is an invisible realm. Place the desire in your imagination as already real.",
+      "Assume the feeling of the desire fulfilled. Say I am strong when you feel weak. Say I am wealthy when you feel poor. Keep your attention there.",
+      "Receive God's light from above, down your spine, and out from your heart. You are the light of the world. Radiate it.",
+      "Believe it is already done in this moment. Do not hunt for proof. Then release the desire from your mind and let God accomplish it.",
+      "Ask: what is the next thing I need to do. Follow that guidance, even a small step. Isaiah 30:21: this is the path, walk in it.",
+      "Listen to this recording often. Keep the words: that which I seek is seeking me. I am ready, receptive, and grateful.",
     ],
   },
 ];
 
 export function getIconsLecture(id) {
-  return ICONS_LECTURES.find((lecture) => lecture.id === id) || ICONS_LECTURES[0];
+  const aliases = { allen: "twentyfive", conwell: "abundant" };
+  const resolved = aliases[id] || id;
+  return ICONS_LECTURES.find((lecture) => lecture.id === resolved) || ICONS_LECTURES[0];
 }
