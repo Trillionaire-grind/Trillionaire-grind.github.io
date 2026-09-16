@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="strangestSecretViews/assets/ssApp.css?v=22">
-  <link rel="stylesheet" href="iconsView/assets/iconsApp.css?v=5">
+  <link rel="stylesheet" href="iconsView/assets/iconsApp.css?v=6">
 </head>
 <body class="ic-locked">
   <div class="ic-gate" id="icGate">
@@ -61,7 +61,7 @@
       <div class="ic-lectures__list" id="icLectureList" role="listbox" aria-label="Lecture list"></div>
     </section>
 
-    <p class="ss-section-label">Your goal card</p>
+    <p class="ss-section-label" id="icCardSectionLabel">Your goal card</p>
 
     <div class="ss-card-scene">
       <div class="ss-card-flipper" id="icCardFlipper">
@@ -71,7 +71,7 @@
             <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           </span>
           <div class="ss-card-front__top">
-            <span class="ss-card-front__label">My clearly defined goal</span>
+            <span class="ss-card-front__label" id="icCardFrontLabel">My clearly defined goal</span>
             <button type="button" class="ss-edit-btn" id="icEditBtn">Edit</button>
           </div>
           <p class="ss-goal-text ss-goal-placeholder" id="icGoalTV">Tap edit to write your goal</p>
@@ -149,7 +149,7 @@
         <p class="ss-player__credit" id="icPlayerCredit">Recording: Earl Nightingale · The Strangest Secret</p>
         <div class="ss-player__meta">
           <a class="ss-support-link" href="mailto:buildingwithkepler@gmail.com?subject=Icons%20Affirmations%20support">Support</a>
-          <span class="ss-version" id="icVersion">v0.0.0.5</span>
+          <span class="ss-version" id="icVersion">v0.0.0.6</span>
         </div>
       </div>
     </div>
@@ -160,7 +160,7 @@
       <h3 id="ic-modal-title">Set your clearly defined goal</h3>
       <p class="ss-modal__intro" id="icModalIntro">One goal on a card. Listen daily for 30 days. Write what you want more than anything else, stated clearly.</p>
       <textarea class="ss-modal__input ss-modal__textarea" id="icEditInput" rows="3" placeholder="e.g. Earn $10,000/month from my business" autocomplete="off"></textarea>
-      <p class="ss-modal__privacy">Your goal stays on this device only.</p>
+      <p class="ss-modal__privacy" id="icModalPrivacy">Your words stay on this device only.</p>
       <div class="ss-modal__actions">
         <button type="button" class="ss-btn ss-btn--ghost" id="icCancelBtn">Cancel</button>
         <button type="button" class="ss-btn ss-btn--gold" id="icSaveBtn">Save goal</button>

@@ -59,6 +59,10 @@ const challengeTitle = document.getElementById("icChallengeTitle");
 const challengeTagline = document.getElementById("icChallengeTagline");
 const cardBack = document.getElementById("icCardBack");
 const modalIntro = document.getElementById("icModalIntro");
+const cardFrontLabel = document.getElementById("icCardFrontLabel");
+const cardSectionLabel = document.getElementById("icCardSectionLabel");
+const modalTitle = document.getElementById("ic-modal-title");
+const modalPrivacy = document.getElementById("icModalPrivacy");
 const versionEl = document.getElementById("icVersion");
 const gate = document.getElementById("icGate");
 const gateForm = document.getElementById("icGateForm");
@@ -81,6 +85,30 @@ let playbackDayLoaded = 0;
 
 function getLecture() {
   return getIconsLecture(currentLectureId);
+}
+
+function migrateLegacyGoal() {
+  const legacy = localStorage.getItem(STORAGE.goal);
+  if (!legacy?.trim()) return;
+  const nightingaleKey = `${STORAGE.goal}_nightingale`;
+  if (!localStorage.getItem(nightingaleKey)?.trim()) {
+    localStorage.setItem(nightingaleKey, legacy);
+  }
+}
+
+function goalStorageKey(lectureId = currentLectureId) {
+  const lecture = getIconsLecture(lectureId);
+  return `${STORAGE.goal}_${lecture.id}`;
+}
+
+function readLectureGoal(lectureId = currentLectureId) {
+  migrateLegacyGoal();
+  return localStorage.getItem(goalStorageKey(lectureId)) || "";
+}
+
+function writeLectureGoal(value, lectureId = currentLectureId) {
+  migrateLegacyGoal();
+  localStorage.setItem(goalStorageKey(lectureId), value);
 }
 
 function formatTime(t) {
@@ -220,7 +248,7 @@ function updateProgressUI(listenSource) {
   }
 
   if (!day) {
-    dayLabel.innerHTML = 'Set your goal to begin <span>Day 1</span>';
+    dayLabel.innerHTML = `${lecture.beginDayLead} <span>Day 1</span>`;
     progressFill.style.width = "0%";
     if (progressListened) {
       progressListened.hidden = true;
@@ -273,7 +301,7 @@ function updateProgressUI(listenSource) {
 
 function restartChallenge() {
   const ok = window.confirm(
-    "Start the 30 days over? Your goal and lecture stay on this device. Listening progress resets."
+    "Start the 30 days over? Your cards and lecture stay on this device. Listening progress resets."
   );
   if (!ok) return;
 
@@ -290,13 +318,14 @@ function restartChallenge() {
 }
 
 function renderGoal() {
-  const goal = localStorage.getItem(STORAGE.goal) || "";
+  const lecture = getLecture();
+  const goal = readLectureGoal();
   if (goal.trim()) {
     goalTV.textContent = goal;
     goalTV.classList.remove("ss-goal-placeholder");
     ensureChallengeStart();
   } else {
-    goalTV.textContent = "Tap edit to write your goal";
+    goalTV.textContent = lecture.emptyHint;
     goalTV.classList.add("ss-goal-placeholder");
   }
   updateProgressUI();
@@ -328,8 +357,10 @@ function onModalKeydown(e) {
 }
 
 function openModal() {
+  const lecture = getLecture();
   modalFocusReturn = document.activeElement;
-  editInput.value = localStorage.getItem(STORAGE.goal) || "";
+  editInput.value = readLectureGoal();
+  if (editInput) editInput.placeholder = lecture.cardPlaceholder;
   modal.classList.add("is-open");
   editInput.focus();
 }
@@ -344,8 +375,8 @@ function closeModal() {
 function saveGoal() {
   const value = editInput.value.trim();
   if (!value) return;
-  const hadGoal = Boolean(localStorage.getItem(STORAGE.goal)?.trim());
-  localStorage.setItem(STORAGE.goal, value);
+  const hadGoal = Boolean(readLectureGoal().trim());
+  writeLectureGoal(value);
   if (!hadGoal) ensureChallengeStart();
   closeModal();
   renderGoal();
@@ -355,15 +386,15 @@ function updateFlipHint() {
   const lecture = getLecture();
   const flipped = cardFlipper.classList.contains("is-flipped");
   flipHintBtn.textContent = "Flip card";
-  flipHintSuffix.textContent = flipped ? " to show my goal" : lecture.flipHint;
+  flipHintSuffix.textContent = flipped ? lecture.flipBackHint : lecture.flipHint;
   cardFlipper.setAttribute(
     "aria-label",
     flipped
-      ? `Goal card showing ${lecture.back.ref}. Tap to flip.`
-      : "Goal card showing your goal. Tap to flip."
+      ? `Card showing ${lecture.back.ref}. Tap to flip.`
+      : lecture.cardAriaFront
   );
   if (flipLive) {
-    flipLive.textContent = flipped ? lecture.flipLive : "Now showing your clearly defined goal.";
+    flipLive.textContent = flipped ? lecture.flipLive : lecture.flipFrontLive;
   }
 }
 
@@ -528,13 +559,19 @@ function applyLecture({ resetAudio = false } = {}) {
   if (playerCredit) playerCredit.textContent = lecture.credit;
   if (challengeTitle) challengeTitle.textContent = lecture.challengeTitle;
   if (challengeTagline) challengeTagline.textContent = lecture.tagline;
+  if (cardSectionLabel) cardSectionLabel.textContent = lecture.cardSection;
+  if (cardFrontLabel) cardFrontLabel.textContent = lecture.cardLabel;
+  if (modalTitle) modalTitle.textContent = lecture.modalTitle;
   if (modalIntro) modalIntro.textContent = lecture.modalIntro;
+  if (saveBtn) saveBtn.textContent = lecture.saveLabel;
+  if (editInput) editInput.placeholder = lecture.cardPlaceholder;
+  if (modalPrivacy) modalPrivacy.textContent = "Your words stay on this device only.";
 
   renderLecturePicker();
   renderSteps(lecture);
   renderCardBack(lecture);
+  renderGoal();
   updateFlipHint();
-  updateProgressUI();
 
   if (!audio) return;
 
