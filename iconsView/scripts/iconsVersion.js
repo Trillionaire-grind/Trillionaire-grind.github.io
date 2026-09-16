@@ -1,4 +1,4 @@
-export const ICONS_APP_VERSION = "0.0.0.6";
+export const ICONS_APP_VERSION = "0.0.0.7";
 
 export function iconsVersionLabel() {
   return "v" + ICONS_APP_VERSION;
