@@ -1,5 +1,13 @@
-:root {
-  --ss-player-h: 168px;
+:root,
+html[data-ss-theme="gold"] {
+  --ss-player-h: 188px;
+}
+
+@media (max-width: 519px) {
+  :root,
+  html[data-ss-theme="gold"] {
+    --ss-player-h: 204px;
+  }
 }
 
 .ss-mark-btn[hidden],
@@ -136,9 +144,9 @@ body.ic-unlocked .ic-gate {
 }
 
 .ic-lecture {
-  flex: 1 0 min(42%, 148px);
-  min-width: 140px;
-  max-width: 220px;
+  flex: 1 0 min(46%, 168px);
+  min-width: 160px;
+  max-width: 280px;
   text-align: left;
   padding: 12px 12px 14px;
   border: 1px solid var(--ss-border);
@@ -171,10 +179,17 @@ body.ic-unlocked .ic-gate {
 
 .ic-lecture__title {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   margin: 0 0 6px;
-  line-height: 1.25;
+  line-height: 1.3;
+}
+
+.ss-player__label {
+  text-transform: none;
+  letter-spacing: 0.03em;
+  white-space: normal;
+  line-height: 1.35;
 }
 
 .ic-lecture__meta {
@@ -188,6 +203,18 @@ body.ic-unlocked .ic-gate {
   margin: 0;
   font-size: 14px;
   line-height: 1.55;
+}
+
+.ss-card-front__top {
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ss-card-front__label {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.35;
+  white-space: normal;
 }
 
 .ss-card-back__vnum:empty {
