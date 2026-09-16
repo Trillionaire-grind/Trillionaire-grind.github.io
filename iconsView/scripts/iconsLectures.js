@@ -47,22 +47,22 @@ export const ICONS_LECTURES = [
   },
   {
     id: "twentyfive",
-    title: "25 Minutes",
+    title: "25-min biblical walking affirmations (reset your identity & mind)",
     speaker: "Identity Walk",
     tagline: "Speak who God says you are",
     durationLabel: "About 26 min",
     audioSrc: "audios/25_minutes.mp3",
-    credit: "Recording · 25 Minutes",
-    playerLabel: "Listen · 25 Minutes",
+    credit: "Recording · 25-min biblical walking affirmations",
+    playerLabel: "Listen · 25-min biblical walking affirmations (reset your identity & mind)",
     flipHint: " to read the identity charge",
-    flipLive: "Now showing the identity declarations from 25 Minutes.",
+    flipLive: "Now showing the identity declarations from 25-min biblical walking affirmations.",
     modalIntro:
       "This walk resets identity. Write one clearly defined goal. Walk or sit still, receive the declarations, then speak them for 30 days.",
     completeText:
       "30 days complete. You finished the identity walk. Keep agreeing with who God says you are.",
     challengeTitle: "The 30 Day Identity Walk",
     back: {
-      ref: "25 Minutes · Identity",
+      ref: "25-min biblical walking affirmations",
       verses: [
         {
           num: "",
