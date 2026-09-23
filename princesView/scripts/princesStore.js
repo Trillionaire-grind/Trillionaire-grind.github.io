@@ -73,14 +73,43 @@
     }) || null;
   }
 
-  function getPosts() {
-    var posts = read(KEY_POSTS, null);
-    if (posts) return posts;
-    posts = (global.PRINCES_CATALOG.seedPosts || []).map(function (post) {
+  function seedCatalogPosts() {
+    return (global.PRINCES_CATALOG.seedPosts || []).map(function (post) {
       return Object.assign({ createdAt: nowIso(), authorId: "seed" }, post);
+    });
+  }
+
+  function ensureLawPost(posts) {
+    var hasLaw = posts.some(function (post) {
+      return post.id === "p3" || post.id === "d8" || /10%\s*law/i.test(post.title || "");
+    });
+    if (hasLaw) return posts;
+    posts.unshift({
+      id: "p3",
+      author: "Siguineau",
+      authorId: "seed",
+      role: "owner",
+      title: "The 10% law",
+      body: "Every man in this court starts at 10% body fat. That is the first law.",
+      topic: "body",
+      access: "ticket",
+      createdAt: nowIso(),
     });
     write(KEY_POSTS, posts);
     return posts;
+  }
+
+  function getPosts() {
+    var posts = read(KEY_POSTS, null);
+    if (!posts) {
+      posts = seedCatalogPosts();
+      write(KEY_POSTS, posts);
+    }
+    return ensureLawPost(posts);
+  }
+
+  function getPost(id) {
+    return getPosts().find(function (post) { return post.id === id; }) || null;
   }
 
   function savePosts(posts) {
@@ -289,11 +318,16 @@
       { id: "d5", author: "Cole Hart", authorId: "demo_cole", role: "leader", title: "Squad check", body: "Eight men posted numbers. Two missed. They hear about it on the call.", topic: "mindset", access: "sergeant", createdAt: nowIso() },
       { id: "d6", author: "Nash Iver", authorId: "demo_nash", role: "staff", title: "Colonel call is live", body: "Month-long room with the Princes. Two paths: take a seat or raise your own command.", topic: "business", access: "colonel", createdAt: nowIso() },
       { id: "d7", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "Prince's Court notes", body: "The small table. Seats are few. This post stays locked until you are on the court.", topic: "city", access: "court", createdAt: nowIso() },
+      { id: "d8", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "The 10% law", body: "Every man in this court starts at 10% body fat. That is the first law.", topic: "body", access: "ticket", createdAt: nowIso() },
     ]);
 
     write(KEY_COMMENTS, {
       d1: [{ id: "c1", author: "Cole Hart", authorId: "demo_cole", body: "Paid it. Course is open.", createdAt: nowIso() }],
       d2: [{ id: "c2", author: "Diaz Reed", authorId: "demo_diaz", body: "I am in. No sweater this week.", createdAt: nowIso() }],
+      d8: [
+        { id: "c8a", author: "Cole Hart", authorId: "demo_cole", body: "This is the first law. Waist check is Tuesday.", createdAt: nowIso() },
+        { id: "c8b", author: "Hale Orth", authorId: "demo_hale", body: "I am still above it. The course is open. I start today.", createdAt: nowIso() },
+      ],
     });
     write(KEY_LIKES, {
       d1: { demo_cole: { count: 2, session: "prior-seed" }, demo_diaz: { count: 1, session: "prior-seed" } },
@@ -320,6 +354,7 @@
     findUserByEmail: findUserByEmail,
     getUsers: getUsers,
     getPosts: getPosts,
+    getPost: getPost,
     savePosts: savePosts,
     getEvents: getEvents,
     saveEvents: saveEvents,

@@ -39,25 +39,32 @@
     return isStaff() && STORE.isAdminOn();
   }
 
+  function testingSession() {
+    var mode = STORE.getAppMode();
+    return mode === "test" || mode === "fix";
+  }
+
   function canCreatePost() {
-    return isLeader() && (STORE.getAppMode() !== "fix" || STORE.isAdminOn());
+    if (!isLeader()) return false;
+    if (testingSession()) return true;
+    return STORE.getAppMode() !== "fix" || STORE.isAdminOn();
   }
 
   function canEditOwnPost(post) {
     var user = currentUser();
     if (!user || !post) return false;
-    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
+    if (!testingSession() && STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     return post.authorId === user.id && isLeader();
   }
 
   function canDeletePost(post) {
-    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
+    if (!testingSession() && STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     if (isStaff()) return true;
     return canEditOwnPost(post);
   }
 
   function canEditCalendar() {
-    if (STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
+    if (!testingSession() && STORE.getAppMode() === "fix" && !STORE.isAdminOn()) return false;
     return isStaff();
   }
 
@@ -132,6 +139,36 @@
     return user;
   }
 
+  function applyTestRank(tierId) {
+    var user = currentUser();
+    if (!user) throw new Error("No session.");
+    user.tier = tierId;
+    STORE.upsertUser(user);
+    STORE.setSession(user);
+    return user;
+  }
+
+  function applyTestAdmin(role) {
+    var user = currentUser();
+    if (!user) throw new Error("No session.");
+    var next = String(role || "member").toLowerCase();
+    if (["member", "leader", "staff", "owner"].indexOf(next) === -1) {
+      throw new Error("Unknown admin role.");
+    }
+    user.teamRole = next;
+    STORE.upsertUser(user);
+    STORE.setSession(user);
+    STORE.setAdminOn(next === "staff" || next === "owner");
+    return user;
+  }
+
+  function applyTestView(view) {
+    if (view === "admin" || view === "owner" || view === "staff" || view === "leader" || view === "member") {
+      return applyTestAdmin(view === "admin" ? "owner" : view);
+    }
+    return applyTestRank(view);
+  }
+
   function grantTier(tierId) {
     var user = currentUser();
     if (!user) throw new Error("Create an account first.");
@@ -170,6 +207,9 @@
     register: register,
     login: login,
     logout: logout,
+    applyTestRank: applyTestRank,
+    applyTestAdmin: applyTestAdmin,
+    applyTestView: applyTestView,
     grantTier: grantTier,
     setRole: setRole,
     enterDemo: enterDemo,
