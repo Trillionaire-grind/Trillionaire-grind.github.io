@@ -132,6 +132,25 @@
     return user;
   }
 
+  function applyTestView(view) {
+    var user = currentUser();
+    if (!user) throw new Error("No session.");
+    if (view === "admin") {
+      user.teamRole = "owner";
+      user.tier = "court";
+      STORE.upsertUser(user);
+      STORE.setSession(user);
+      STORE.setAdminOn(true);
+      return user;
+    }
+    user.tier = view;
+    user.teamRole = "member";
+    STORE.upsertUser(user);
+    STORE.setSession(user);
+    STORE.setAdminOn(false);
+    return user;
+  }
+
   function grantTier(tierId) {
     var user = currentUser();
     if (!user) throw new Error("Create an account first.");
@@ -170,6 +189,7 @@
     register: register,
     login: login,
     logout: logout,
+    applyTestView: applyTestView,
     grantTier: grantTier,
     setRole: setRole,
     enterDemo: enterDemo,

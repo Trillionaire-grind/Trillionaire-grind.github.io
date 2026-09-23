@@ -35,6 +35,18 @@
     return (CATALOG.topics[topic] && CATALOG.topics[topic].label) || topic;
   }
 
+  var FAT_LOSS_APP = (CATALOG && CATALOG.fatLossApp) || "fatLossViews/app.html";
+
+  var TEST_VIEWS = [
+    { id: "ticket", label: "Recruit" },
+    { id: "private", label: "Private" },
+    { id: "specialist", label: "Specialist" },
+    { id: "sergeant", label: "Sergeant" },
+    { id: "colonel", label: "Colonel" },
+    { id: "court", label: "Prince's Court" },
+    { id: "admin", label: "Administrator" },
+  ];
+
   function requireUser() {
     var user = AUTH.currentUser();
     if (!user) {
@@ -42,6 +54,46 @@
       return null;
     }
     return user;
+  }
+
+  function openFatLossApp() {
+    window.location.href = FAT_LOSS_APP;
+  }
+
+  function tierName(tierId) {
+    var tier = (CATALOG.tiers || []).find(function (item) { return item.id === tierId; });
+    return tier ? tier.name : (tierId || "Recruit");
+  }
+
+  function articleFromHeadline(title, fallback) {
+    var key = String(title || "").trim().toLowerCase();
+    var articles = {
+      "the 10% law": "Every man in this court starts at 10% body fat. That is the first law. Soft where a prince should be hard is how a unit dies in public.\n\nYou already know the number. The scale talks. The waist talks. The shirt talks when you sit down. 10% is the line where the sweater becomes optional.\n\nThis is not a hobby cut. This is the door. Finish the fat course. Hit the number. Then the rest of the climb can start.\n\nPost your waist. Come to class. The law does not move for mood.",
+      "fix the prince in the mirror first": "If you do not like the man in the mirror, change him first. A weak prince trains a weak unit.\n\nThe room will copy the body you walk in with. Get to 10% body fat. Take the shirt test in private. Then take it in public.\n\nThe course is open. The ledger is waiting. Start today.",
+      "private is open": "Recruits who finish the fat course can step into Private. Classes, posts, and chat start there.\n\nPrivate is the unit. You show up. You post the number. You sit in class.\n\nThe $1 ticket opened the course. Private opens the men.",
+      "the $1 law": "Pay the dollar. Open the fat course. That is the first order a recruit gives himself.\n\nThe dollar is not for us. It is for you. A man who will not invest one dollar will not invest the sweat.\n\nTake the ticket. Start the course. Come back with a number.",
+      "shirt off friday": "Waist is posted. Shirt comes off at the pool this weekend. No sweater. No story.\n\nIf the number is not there yet, stay on the course and take the next Friday. The date is a promise, not a costume.",
+      "stopped tugging the shirt": "Three weeks in. The gut is leaving. The shirt stays tucked.\n\nThat tug was a tell. When it stops, the room reads you differently. Keep the protein. Keep the walk. Keep the law.",
+      "specialist tape: protein week": "Every course is open at Specialist. This tape is the protein week recap.\n\nHit the grams. Sleep. Walk. The specialist room is for men who already keep a number.",
+      "squad check": "Eight men posted numbers. Two missed. They hear about it on the call.\n\nA squad of nine holds the line. Sergeant is the room where other men become your job.",
+      "colonel call is live": "Month-long room with the Princes. Two paths: take a seat or raise your own command.\n\nColonel is the last rank before the table. Show up with a clean waist and a real offer.",
+      "prince's court notes": "The small table. Seats are few. This post stays locked until you are on the court.\n\nA chair opens when a man leaves. You do not add a tenth seat. You take the one that is empty.",
+    };
+    if (articles[key]) return articles[key];
+    var lead = fallback || title;
+    return String(title || "Post") + ".\n\n" + String(lead) + "\n\nRead it again. Then do the work today. The unit will see the result, not the speech.";
+  }
+
+  function postTeaser(post) {
+    var text = String(post.body || articleFromHeadline(post.title, "")).replace(/\s+/g, " ").trim();
+    if (text.length <= 140) return text;
+    return text.slice(0, 137) + "...";
+  }
+
+  function postParagraphs(text) {
+    return String(text || "").split(/\n\n+/).map(function (part) {
+      return "<p>" + esc(part.replace(/\n/g, " ")) + "</p>";
+    }).join("");
   }
 
   function icon(name) {
@@ -54,33 +106,53 @@
     return '<svg class="pr-tab-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">' + (paths[name] || "") + "</svg>";
   }
 
+  function currentTestViewId() {
+    var user = AUTH.currentUser();
+    if (STORE.isAdminOn() && AUTH.isStaff()) return "admin";
+    return (user && user.tier) || "ticket";
+  }
+
   function renderHeader() {
     var user = AUTH.currentUser();
-    var role = user ? user.teamRole : "member";
     var mode = STORE.getAppMode();
     var modeLabel = mode === "fix" ? "Fix" : mode === "test" ? "Testing" : "";
-    var roleBtn = "";
-    if (mode === "fix") {
-      roleBtn = '<button type="button" class="pr-badge pr-badge--' + esc(role) + ' pr-role-btn" id="prRoleBtn">' + esc(role) + "</button>";
+    var chip = "";
+    if (modeLabel) {
+      var viewId = currentTestViewId();
+      var view = TEST_VIEWS.find(function (item) { return item.id === viewId; });
+      var viewName = view ? view.label : tierName(user && user.tier);
+      chip =
+        '<div class="pr-test-wrap">' +
+        '<button type="button" class="pr-badge pr-test-chip" id="prTestChip" aria-expanded="false" aria-haspopup="true">' +
+        esc(modeLabel) + " · " + esc(viewName) + "</button>" +
+        '<div class="pr-test-menu" id="prTestMenu" hidden>' +
+        '<p class="pr-test-menu__label">View the app as</p>' +
+        TEST_VIEWS.map(function (item) {
+          return '<button type="button" class="pr-test-menu__item' + (item.id === viewId ? " is-on" : "") + '" data-test-view="' + esc(item.id) + '">' + esc(item.label) + "</button>";
+        }).join("") +
+        "</div></div>";
     }
     headerEl.innerHTML =
       '<a class="pr-brand" href="#home"><img src="' + esc(STORE.getLogo()) + '" alt=""><span>' + esc(STORE.getBrandName()) + "</span></a>" +
-      '<div class="pr-head-tools">' +
-      (modeLabel ? '<span class="pr-badge">' + modeLabel + "</span>" : "") +
-      roleBtn +
-      "</div>";
+      '<div class="pr-head-tools">' + chip + "</div>";
   }
 
   function bindHeader() {
-    var roleBtn = document.getElementById("prRoleBtn");
-    if (!roleBtn) return;
-    roleBtn.addEventListener("click", function () {
-      var next = prompt("Role: member, leader, staff, or owner", AUTH.currentUser().teamRole);
-      if (!next) return;
-      next = next.trim().toLowerCase();
-      if (["member", "leader", "staff", "owner"].indexOf(next) === -1) return;
-      AUTH.setOwnRole(next);
-      render();
+    var chip = document.getElementById("prTestChip");
+    var menu = document.getElementById("prTestMenu");
+    if (!chip || !menu) return;
+    chip.addEventListener("click", function (event) {
+      event.stopPropagation();
+      var open = menu.hidden;
+      menu.hidden = !open;
+      chip.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    menu.querySelectorAll("[data-test-view]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        AUTH.applyTestView(btn.dataset.testView);
+        render();
+      });
     });
   }
 
@@ -91,11 +163,11 @@
       { id: "learn", label: "Learn", icon: "learn" },
       { id: "chat", label: "Chat", icon: "chat" },
     ];
-    if (AUTH.isStaff() && STORE.getAppMode() === "fix") {
+    if (AUTH.isStaff() && (STORE.getAppMode() === "fix" || STORE.isAdminOn())) {
       tabs.push({ id: "admin", label: "Admin", icon: "admin" });
     }
     tabEl.innerHTML = tabs.map(function (tab) {
-      var on = current === tab.id || (tab.id === "learn" && (current === "course" || current === "upgrade"));
+      var on = current === tab.id || (tab.id === "home" && current === "post") || (tab.id === "learn" && (current === "course" || current === "upgrade"));
       return '<button type="button" data-go="' + tab.id + '"' + (on ? ' class="is-on"' : "") + ">" + icon(tab.icon) + "<span>" + tab.label + "</span></button>";
     }).join("");
   }
@@ -124,18 +196,12 @@
       var actions = "";
       if (AUTH.canEditOwnPost(post)) actions += '<button type="button" class="pr-tiny" data-edit="' + esc(post.id) + '">Edit</button>';
       if (AUTH.canDeletePost(post)) actions += '<button type="button" class="pr-tiny" data-del="' + esc(post.id) + '">Remove</button>';
-      return '<article class="pr-post" id="post-' + esc(post.id) + '"><header><strong>' + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
+      return '<article class="pr-post pr-post--link" data-go="post/' + esc(post.id) + '" id="post-' + esc(post.id) + '"><header><strong>' + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
         (post.image ? '<img class="pr-post-img" src="' + esc(post.image) + '" alt="">' : "") +
-        "<h3>" + esc(post.title) + "</h3><p>" + esc(post.body) + "</p>" +
+        "<h3>" + esc(post.title) + "</h3><p>" + esc(postTeaser(post)) + "</p>" +
         '<div class="pr-social">' +
         '<button type="button" class="pr-like pr-like--' + like.kind + '" data-like="' + esc(post.id) + '">Like · ' + STORE.likeCount(post.id) + "</button>" +
-        '<button type="button" class="pr-tiny" data-open-comments="' + esc(post.id) + '">Comments · ' + comments.length + "</button>" +
-        "</div>" +
-        '<div class="pr-comments" id="comments-' + esc(post.id) + '" hidden>' +
-        comments.map(function (item) {
-          return '<p class="pr-comment"><strong>' + esc(item.author) + "</strong> " + esc(item.body) + "</p>";
-        }).join("") +
-        '<form class="pr-comment-form" data-comment="' + esc(post.id) + '"><input name="body" placeholder="Add a comment" required><button type="submit">Send</button></form>' +
+        '<button type="button" class="pr-tiny" data-go="post/' + esc(post.id) + '">Comments · ' + comments.length + "</button>" +
         "</div>" +
         (actions ? '<div class="pr-actions">' + actions + "</div>" : "") +
         "</article>";
@@ -162,17 +228,36 @@
       });
     }
     mainEl.querySelectorAll("[data-like]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
         STORE.addLike(btn.dataset.like, user.id);
         render();
       });
     });
-    mainEl.querySelectorAll("[data-open-comments]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        var box = document.getElementById("comments-" + btn.dataset.openComments);
-        if (box) box.hidden = !box.hidden;
+    mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        STORE.savePosts(STORE.getPosts().filter(function (post) { return post.id !== btn.dataset.del; }));
+        render();
       });
     });
+    mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        var postsNow = STORE.getPosts();
+        var post = postsNow.find(function (item) { return item.id === btn.dataset.edit; });
+        if (!post) return;
+        var next = prompt("Edit the post", post.body);
+        if (next == null) return;
+        post.body = next;
+        STORE.savePosts(postsNow);
+        render();
+      });
+    });
+  }
+
+  function bindCommentForm(user) {
     mainEl.querySelectorAll("[data-comment]").forEach(function (formEl) {
       formEl.addEventListener("submit", function (event) {
         event.preventDefault();
@@ -187,20 +272,69 @@
         render();
       });
     });
+  }
+
+  function renderPost(id) {
+    var user = AUTH.currentUser();
+    var post = STORE.getPost(id);
+    if (!post) {
+      mainEl.innerHTML = '<p class="pr-empty">That post is gone.</p><button type="button" class="pr-submit" data-go="home">Back to Home</button>';
+      return;
+    }
+    var access = post.access || "private";
+    if (!AUTH.hasTier(access)) {
+      mainEl.innerHTML = lockedCard("Upgrade to open this post.");
+      return;
+    }
+    var like = STORE.likeState(post.id, user.id);
+    var comments = STORE.commentsFor(post.id);
+    var article = articleFromHeadline(post.title, post.body);
+    var actions = "";
+    if (AUTH.canEditOwnPost(post)) actions += '<button type="button" class="pr-tiny" data-edit="' + esc(post.id) + '">Edit</button>';
+    if (AUTH.canDeletePost(post)) actions += '<button type="button" class="pr-tiny" data-del="' + esc(post.id) + '">Remove</button>';
+    mainEl.innerHTML =
+      '<article class="pr-post pr-post-page">' +
+      '<button type="button" class="pr-tiny" data-go="home">Back to Home</button>' +
+      "<header><strong>" + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
+      (post.image ? '<img class="pr-post-img" src="' + esc(post.image) + '" alt="">' : "") +
+      "<h1>" + esc(post.title) + "</h1>" +
+      postParagraphs(article) +
+      '<div class="pr-social">' +
+      '<button type="button" class="pr-like pr-like--' + like.kind + '" data-like="' + esc(post.id) + '">Like · ' + STORE.likeCount(post.id) + "</button>" +
+      "<span class=\"pr-tiny\">Comments · " + comments.length + "</span>" +
+      "</div>" +
+      '<div class="pr-comments">' +
+      (comments.length
+        ? comments.map(function (item) {
+          return '<p class="pr-comment"><strong>' + esc(item.author) + "</strong> " + esc(item.body) + "</p>";
+        }).join("")
+        : '<p class="pr-empty">No comments yet. Be the first.</p>') +
+      '<form class="pr-comment-form" data-comment="' + esc(post.id) + '"><input name="body" placeholder="Add a comment" required><button type="submit">Send</button></form>' +
+      "</div>" +
+      (actions ? '<div class="pr-actions">' + actions + "</div>" : "") +
+      "</article>";
+
+    mainEl.querySelectorAll("[data-like]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        STORE.addLike(btn.dataset.like, user.id);
+        render();
+      });
+    });
+    bindCommentForm(user);
     mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
       btn.addEventListener("click", function () {
-        STORE.savePosts(STORE.getPosts().filter(function (post) { return post.id !== btn.dataset.del; }));
-        render();
+        STORE.savePosts(STORE.getPosts().filter(function (item) { return item.id !== btn.dataset.del; }));
+        go("home");
       });
     });
     mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var postsNow = STORE.getPosts();
-        var post = postsNow.find(function (item) { return item.id === btn.dataset.edit; });
-        if (!post) return;
-        var next = prompt("Edit the post", post.body);
+        var item = postsNow.find(function (row) { return row.id === btn.dataset.edit; });
+        if (!item) return;
+        var next = prompt("Edit the post", item.body);
         if (next == null) return;
-        post.body = next;
+        item.body = next;
         STORE.savePosts(postsNow);
         render();
       });
@@ -213,7 +347,7 @@
     }).join("");
     var courses = CATALOG.courses.map(function (course) {
       var locked = !AUTH.hasTier(course.access);
-      return '<article class="pr-course' + (locked ? " pr-locked" : "") + '" data-go="' + (locked ? "upgrade" : "course/" + course.id) + '">' +
+      return '<article class="pr-course' + (locked ? " pr-locked" : "") + '" ' + (locked ? 'data-go="upgrade"' : 'data-open-url="' + esc(course.href || FAT_LOSS_APP) + '"') + '>' +
         (locked ? '<div class="pr-lock-badge">Private</div>' : "") +
         '<img src="' + esc(course.image) + '" alt="">' +
         '<div class="pr-course-body"><h3>' + esc(course.title) + "</h3><p>" + esc(course.meta) + "</p></div></article>";
@@ -358,14 +492,7 @@
       mainEl.innerHTML = lockedCard("Pay $1 to open this course.");
       return;
     }
-    mainEl.innerHTML =
-      '<article class="pr-course-read"><p class="pr-kicker" style="color:#111">Course</p>' +
-      "<h1>How to lose fat as fast as humanly possible</h1>" +
-      "<p>Every man here is aiming at 10% body fat. This is the first course. Private is the next room.</p>" +
-      "<p>Open the fat-loss system. Use the ledger. Come back for class.</p>" +
-      '<a class="pr-upgrade" href="/fatLoss.html" target="_blank" rel="noopener noreferrer">Open the fat-loss book and ledger</a>' +
-      '<button type="button" class="pr-upgrade" data-go="upgrade" style="border:none;width:100%;cursor:pointer">See the ranks</button>' +
-      "</article>";
+    openFatLossApp();
   }
 
   function renderUpgrade() {
@@ -410,7 +537,7 @@
     if (btn) {
       btn.onclick = function () {
         AUTH.grantTier("ticket");
-        go("course/body");
+        openFatLossApp();
       };
     }
   }
@@ -436,8 +563,8 @@
   }
 
   function renderAdmin() {
-    if (!AUTH.isStaff() || STORE.getAppMode() !== "fix") {
-      mainEl.innerHTML = '<p class="pr-empty">Fix the app to use admin tools.</p>';
+    if (!AUTH.isStaff() || !(STORE.getAppMode() === "fix" || STORE.isAdminOn())) {
+      mainEl.innerHTML = '<p class="pr-empty">Turn on Administrator in the Testing chip to use admin tools.</p>';
       return;
     }
     if (!STORE.isAdminOn()) {
@@ -542,6 +669,7 @@
     bindHeader();
     renderTabs();
     if (path === "home") renderHome();
+    else if (path.indexOf("post/") === 0) renderPost(path.split("/")[1]);
     else if (path.indexOf("course/") === 0) renderCourse(path.split("/")[1]);
     else if (path === "upgrade") renderUpgrade();
     else if (path === "pay") renderPay();
@@ -552,6 +680,18 @@
   }
 
   document.addEventListener("click", function (event) {
+    var menu = document.getElementById("prTestMenu");
+    var chip = document.getElementById("prTestChip");
+    if (menu && chip && !menu.hidden && !event.target.closest(".pr-test-wrap")) {
+      menu.hidden = true;
+      chip.setAttribute("aria-expanded", "false");
+    }
+    var openUrl = event.target.closest("[data-open-url]");
+    if (openUrl) {
+      event.preventDefault();
+      window.location.href = openUrl.getAttribute("data-open-url");
+      return;
+    }
     var goTo = event.target.closest("[data-go]");
     if (!goTo) return;
     event.preventDefault();

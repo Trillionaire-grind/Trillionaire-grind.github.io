@@ -10,6 +10,7 @@ window.PRINCES_CATALOG = {
     "Fix the prince in the mirror first",
     "A soft body cannot hold a command",
     "10% body fat is the first law",
+    "The 10% law",
     "Fix the man in the mirror first",
   ],
   tiers: [
@@ -127,7 +128,7 @@ window.PRINCES_CATALOG = {
       topic: "body",
       access: "ticket",
       image: "princesView/assets/courses/body.png",
-      href: "#course/body",
+      href: "fatLossViews/app.html",
     },
   ],
   classes: [
@@ -181,5 +182,15 @@ window.PRINCES_CATALOG = {
       body: "Recruits who finish the fat course can step into Private. Classes, posts, and chat start there.",
       topic: "mindset",
     },
+    {
+      id: "p3",
+      author: "Siguineau",
+      role: "owner",
+      title: "The 10% law",
+      body: "Every man in this court starts at 10% body fat. That is the first law.",
+      topic: "body",
+      access: "ticket",
+    },
   ],
+  fatLossApp: "fatLossViews/app.html",
 };
