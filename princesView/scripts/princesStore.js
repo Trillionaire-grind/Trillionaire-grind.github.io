@@ -10,6 +10,8 @@
   var KEY_COMMENTS = "princes.comments";
   var KEY_BRAND = "princes.brandName";
   var KEY_LOGO = "princes.logo";
+  var KEY_LOCKIN = "princes.lockIn";
+  var KEY_VSL = "princes.vslRevealed";
 
   function read(key, fallback) {
     try {
@@ -244,6 +246,30 @@
     saveUsers(getUsers().filter(function (item) { return item.id !== userId; }));
   }
 
+  function getLockIn() {
+    return read(KEY_LOCKIN, null);
+  }
+
+  function setLockIn(fields) {
+    var row = {
+      weight: Number(fields.weight),
+      bodyFat: Number(fields.bodyFat),
+      goal: String(fields.goal || "").trim(),
+      lockedAt: nowIso(),
+    };
+    write(KEY_LOCKIN, row);
+    return row;
+  }
+
+  function isVslRevealed() {
+    return localStorage.getItem(KEY_VSL) === "1";
+  }
+
+  function setVslRevealed(on) {
+    if (on) localStorage.setItem(KEY_VSL, "1");
+    else localStorage.removeItem(KEY_VSL);
+  }
+
   function getBrandName() {
     return localStorage.getItem(KEY_BRAND) || global.PRINCES_CATALOG.brand;
   }
@@ -372,6 +398,10 @@
     addPerson: addPerson,
     removePerson: removePerson,
     seedUnit: seedUnit,
+    getLockIn: getLockIn,
+    setLockIn: setLockIn,
+    isVslRevealed: isVslRevealed,
+    setVslRevealed: setVslRevealed,
     getBrandName: getBrandName,
     setBrandName: setBrandName,
     getLogo: getLogo,
