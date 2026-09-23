@@ -489,9 +489,30 @@ button, input, select, textarea { font: inherit; }
 .pr-test-wrap { position: relative; }
 
 .pr-test-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
   border: none;
   cursor: pointer;
   font: inherit;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.25;
+  padding: 6px 10px;
+  border-radius: 12px;
+}
+
+.pr-test-chip__mode {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.pr-test-chip__row {
+  font-size: 10px;
+  font-weight: 700;
 }
 
 .pr-test-menu {
@@ -514,6 +535,12 @@ button, input, select, textarea { font: inherit; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--pr-muted);
+}
+
+.pr-test-menu__label--next {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--pr-line);
 }
 
 .pr-test-menu__item {

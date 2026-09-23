@@ -37,14 +37,20 @@
 
   var FAT_LOSS_APP = (CATALOG && CATALOG.fatLossApp) || "fatLossViews/app.html";
 
-  var TEST_VIEWS = [
+  var TEST_RANKS = [
     { id: "ticket", label: "Recruit" },
     { id: "private", label: "Private" },
     { id: "specialist", label: "Specialist" },
     { id: "sergeant", label: "Sergeant" },
     { id: "colonel", label: "Colonel" },
     { id: "court", label: "Prince's Court" },
-    { id: "admin", label: "Administrator" },
+  ];
+
+  var TEST_ADMINS = [
+    { id: "member", label: "Off" },
+    { id: "leader", label: "Leader" },
+    { id: "staff", label: "Staff" },
+    { id: "owner", label: "Owner" },
   ];
 
   function requireUser() {
@@ -106,10 +112,9 @@
     return '<svg class="pr-tab-icon" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">' + (paths[name] || "") + "</svg>";
   }
 
-  function currentTestViewId() {
-    var user = AUTH.currentUser();
-    if (STORE.isAdminOn() && AUTH.isStaff()) return "admin";
-    return (user && user.tier) || "ticket";
+  function adminRoleLabel(role) {
+    var row = TEST_ADMINS.find(function (item) { return item.id === role; });
+    return row ? row.label : "Off";
   }
 
   function renderHeader() {
@@ -118,17 +123,23 @@
     var modeLabel = mode === "fix" ? "Fix" : mode === "test" ? "Testing" : "";
     var chip = "";
     if (modeLabel) {
-      var viewId = currentTestViewId();
-      var view = TEST_VIEWS.find(function (item) { return item.id === viewId; });
-      var viewName = view ? view.label : tierName(user && user.tier);
+      var rankId = (user && user.tier) || "ticket";
+      var adminId = (user && user.teamRole) || "member";
       chip =
         '<div class="pr-test-wrap">' +
         '<button type="button" class="pr-badge pr-test-chip" id="prTestChip" aria-expanded="false" aria-haspopup="true">' +
-        esc(modeLabel) + " · " + esc(viewName) + "</button>" +
+        '<span class="pr-test-chip__mode">' + esc(modeLabel) + "</span>" +
+        '<span class="pr-test-chip__row">Rank: ' + esc(tierName(rankId)) + "</span>" +
+        '<span class="pr-test-chip__row">Admin: ' + esc(adminRoleLabel(adminId)) + "</span>" +
+        "</button>" +
         '<div class="pr-test-menu" id="prTestMenu" hidden>' +
-        '<p class="pr-test-menu__label">View the app as</p>' +
-        TEST_VIEWS.map(function (item) {
-          return '<button type="button" class="pr-test-menu__item' + (item.id === viewId ? " is-on" : "") + '" data-test-view="' + esc(item.id) + '">' + esc(item.label) + "</button>";
+        '<p class="pr-test-menu__label">Rank</p>' +
+        TEST_RANKS.map(function (item) {
+          return '<button type="button" class="pr-test-menu__item' + (item.id === rankId ? " is-on" : "") + '" data-test-rank="' + esc(item.id) + '">' + esc(item.label) + "</button>";
+        }).join("") +
+        '<p class="pr-test-menu__label pr-test-menu__label--next">Admin</p>' +
+        TEST_ADMINS.map(function (item) {
+          return '<button type="button" class="pr-test-menu__item' + (item.id === adminId ? " is-on" : "") + '" data-test-admin="' + esc(item.id) + '">' + esc(item.label) + "</button>";
         }).join("") +
         "</div></div>";
     }
@@ -147,10 +158,21 @@
       menu.hidden = !open;
       chip.setAttribute("aria-expanded", open ? "true" : "false");
     });
-    menu.querySelectorAll("[data-test-view]").forEach(function (btn) {
+    menu.querySelectorAll("[data-test-rank]").forEach(function (btn) {
       btn.addEventListener("click", function (event) {
         event.stopPropagation();
-        AUTH.applyTestView(btn.dataset.testView);
+        AUTH.applyTestRank(btn.dataset.testRank);
+        render();
+      });
+    });
+    menu.querySelectorAll("[data-test-admin]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        AUTH.applyTestAdmin(btn.dataset.testAdmin);
+        if (!AUTH.isStaff() && route().split("/")[0] === "admin") {
+          go("home");
+          return;
+        }
         render();
       });
     });
