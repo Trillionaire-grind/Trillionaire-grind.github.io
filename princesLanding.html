@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.7">
+  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.8">
 </head>
 <body class="pr-sales-body">
   <header class="pr-sales-header">
@@ -33,11 +33,37 @@
         <li>Do you want to go shirtless and get the female attention that follows a man who looks like he trains?</li>
       </ol>
       <p class="pr-vsl-follow">Did you answer yes to all the questions? Do you want to finally fix it?</p>
-      <div class="pr-vsl" role="region" aria-label="Video sales letter">
+
+      <form class="pr-lockin" id="prLockInForm">
+        <p class="pr-lockin__kicker">90-day lock-in</p>
+        <p class="pr-lockin__lead">Commit before you watch. Current weight. Estimated body fat. The goal. Then 90 days.</p>
+        <div class="pr-row">
+          <label class="pr-field">
+            <span>Current weight (lbs)</span>
+            <input name="weight" type="number" inputmode="decimal" min="80" max="500" step="0.1" required placeholder="188">
+          </label>
+          <label class="pr-field">
+            <span>Estimated body fat (%)</span>
+            <input name="bodyFat" type="number" inputmode="decimal" min="3" max="60" step="0.1" required placeholder="22">
+          </label>
+        </div>
+        <label class="pr-field">
+          <span>Goal</span>
+          <input name="goal" type="text" required maxlength="140" placeholder="10% body fat. Shirt off at the pool.">
+        </label>
+        <p class="pr-error pr-lockin__error" id="prLockInError"></p>
+        <button type="submit" class="pr-cta pr-lockin__btn">I'm locking in for 90 days</button>
+      </form>
+
+      <button type="button" class="pr-cta" id="prRevealSecret" hidden>
+        Reveal the secret
+      </button>
+
+      <div class="pr-vsl" id="prVsl" hidden role="region" aria-label="Video sales letter">
         VSL goes here. Five minutes. Publishing soon.
       </div>
 
-      <button type="button" class="pr-cta" data-open-account>
+      <button type="button" class="pr-cta" id="prHeroCta" data-open-account hidden>
         Yes, I want to fix it
       </button>
       <p class="pr-dollar">The dollar is not for us. It is for you. A man who will not invest one dollar will not invest the sweat. We spend more than a dollar to put this page in front of you. We could raise the ticket to cover the ad. For now it stays one dollar. Pay it. Learn to invest in yourself.</p>
