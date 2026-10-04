@@ -90,6 +90,7 @@
       tier: "none",
       teamRole: "member",
       createdAt: STORE.nowIso(),
+      lockIn: STORE.getLockIn() || null,
     };
     if (STORE.isTestMode() && !STORE.getUsers().some(function (item) { return item.teamRole === "owner"; })) {
       user.teamRole = "owner";

@@ -99,6 +99,78 @@
     }
   });
 
+  var lockForm = document.getElementById("prLockInForm");
+  var lockError = document.getElementById("prLockInError");
+  var revealBtn = document.getElementById("prRevealSecret");
+  var vslEl = document.getElementById("prVsl");
+  var heroCta = document.getElementById("prHeroCta");
+
+  function showLockStage() {
+    if (lockForm) lockForm.hidden = false;
+    if (revealBtn) revealBtn.hidden = true;
+    if (vslEl) vslEl.hidden = true;
+    if (heroCta) heroCta.hidden = true;
+  }
+
+  function showRevealStage() {
+    if (lockForm) lockForm.hidden = true;
+    if (revealBtn) revealBtn.hidden = false;
+    if (vslEl) vslEl.hidden = true;
+    if (heroCta) heroCta.hidden = true;
+  }
+
+  function showSecretStage() {
+    if (lockForm) lockForm.hidden = true;
+    if (revealBtn) revealBtn.hidden = true;
+    if (vslEl) vslEl.hidden = false;
+    if (heroCta) heroCta.hidden = false;
+  }
+
+  function restoreLockIn() {
+    var lockIn = STORE.getLockIn();
+    if (lockIn && STORE.isVslRevealed()) {
+      showSecretStage();
+      return;
+    }
+    if (lockIn) {
+      showRevealStage();
+      return;
+    }
+    showLockStage();
+  }
+
+  if (lockForm) {
+    lockForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      if (lockError) lockError.textContent = "";
+      var data = new FormData(lockForm);
+      var weight = Number(data.get("weight"));
+      var bodyFat = Number(data.get("bodyFat"));
+      var goal = String(data.get("goal") || "").trim();
+      if (!weight || !bodyFat || !goal) {
+        if (lockError) lockError.textContent = "Enter your weight, body fat, and goal.";
+        return;
+      }
+      STORE.setLockIn({ weight: weight, bodyFat: bodyFat, goal: goal });
+      STORE.setVslRevealed(false);
+      showRevealStage();
+      revealBtn?.focus();
+    });
+  }
+
+  if (revealBtn) {
+    revealBtn.addEventListener("click", function () {
+      if (!STORE.getLockIn()) {
+        showLockStage();
+        return;
+      }
+      STORE.setVslRevealed(true);
+      showSecretStage();
+      vslEl?.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
+  }
+
   fillAges();
   syncBrand();
+  restoreLockIn();
 })();
