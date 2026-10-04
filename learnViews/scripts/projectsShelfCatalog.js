@@ -54,6 +54,15 @@ export const PROJECTS = [
     stack: ["HTML", "CSS", "JavaScript", "Gemini image API"],
   },
   {
+    id: "dog-detector",
+    name: "Dog Detector",
+    lane: "product",
+    blurb: "Photograph a dog. The app names the breed.",
+    href: "/dogDetector.html",
+    more: "Dog Detector takes a camera shot or upload, then asks Gemini to name the breed and how sure it is. The visitor pastes their own Gemini key in the browser. For a client, this is a vision product that reads a photo and returns a breed. For a student, it is a front end that sends a picture to a vision model from the browser.",
+    stack: ["HTML", "CSS", "JavaScript", "Gemini vision API"],
+  },
+  {
     id: "roxanne-ai",
     name: "Roxanne AI",
     lane: "product",
