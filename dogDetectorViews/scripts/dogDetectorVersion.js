@@ -1,5 +1,5 @@
 /** Bump this on each Dog Detector release (GitHub Pages). */
-export const DOG_DETECTOR_APP_VERSION = "0.0.0.1";
+export const DOG_DETECTOR_APP_VERSION = "0.0.0.2";
 
 export function dogDetectorVersionLabel() {
   return "v" + DOG_DETECTOR_APP_VERSION;

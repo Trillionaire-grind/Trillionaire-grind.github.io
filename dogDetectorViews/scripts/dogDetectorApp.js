@@ -1,5 +1,26 @@
-const GEMINI_MODEL = "gemini-2.0-flash";
+const GEMINI_MODEL = "gemini-3.8-flash";
 const KEY_STORAGE = "dogdetector_gemini_api_key";
+const BREED_SCHEMA = {
+  type: "object",
+  properties: {
+    found: { type: "boolean" },
+    breed: { type: "string" },
+    confidence: { type: "integer" },
+    note: { type: "string" },
+    alternatives: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          breed: { type: "string" },
+          confidence: { type: "integer" },
+        },
+        required: ["breed"],
+      },
+    },
+  },
+  required: ["found", "breed", "confidence", "note"],
+};
 
 const state = {
   baseImage: null,
@@ -164,37 +185,55 @@ function parseModelJson(text) {
   return JSON.parse(body.slice(start, end + 1));
 }
 
+function extractInteractionText(json) {
+  if (typeof json?.output_text === "string" && json.output_text.trim()) {
+    return json.output_text;
+  }
+  const chunks = [];
+  const steps = Array.isArray(json?.steps) ? json.steps : [];
+  for (const step of steps) {
+    if (step?.type !== "model_output") continue;
+    const content = Array.isArray(step.content) ? step.content : [];
+    for (const part of content) {
+      if (part?.type === "text" && part.text) chunks.push(part.text);
+    }
+  }
+  const outputs = Array.isArray(json?.outputs) ? json.outputs : [];
+  for (const part of outputs) {
+    if (part?.type === "text" && part.text) chunks.push(part.text);
+  }
+  return chunks.join("\n");
+}
+
 async function detectBreed(apiKey) {
   const prompt =
     "Look at this photo. If a dog is clearly in the picture, name the most likely breed. " +
-    "If no dog is in the picture, say so. Reply with JSON only, no extra words: " +
-    '{"found":true,"breed":"Golden Retriever","confidence":86,"note":"short reason","alternatives":[{"breed":"Labrador Retriever","confidence":9}]} ' +
+    "If no dog is in the picture, say so. " +
     "Use found=false, breed=\"\", confidence=0 when there is no dog. Keep note to one short sentence.";
 
-  const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${encodeURIComponent(apiKey)}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            role: "user",
-            parts: [
-              { text: prompt },
-              {
-                inlineData: {
-                  mimeType: state.baseImage.mimeType,
-                  data: state.baseImage.base64,
-                },
-              },
-            ],
-          },
-        ],
-        generationConfig: { temperature: 0.2 },
-      }),
-    }
-  );
+  const resp = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey,
+    },
+    body: JSON.stringify({
+      model: GEMINI_MODEL,
+      input: [
+        { type: "text", text: prompt },
+        {
+          type: "image",
+          mime_type: state.baseImage.mimeType,
+          data: state.baseImage.base64,
+        },
+      ],
+      response_format: {
+        type: "text",
+        mime_type: "application/json",
+        schema: BREED_SCHEMA,
+      },
+    }),
+  });
 
   const json = await resp.json().catch(() => ({}));
   if (!resp.ok) {
@@ -202,7 +241,7 @@ async function detectBreed(apiKey) {
     throw new Error(msg);
   }
 
-  const text = json?.candidates?.[0]?.content?.parts?.map((part) => part.text || "").join("\n") || "";
+  const text = extractInteractionText(json);
   return parseModelJson(text);
 }
 
