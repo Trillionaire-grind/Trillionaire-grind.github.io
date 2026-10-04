@@ -1,4 +1,4 @@
-export const LEARN_APP_VERSION = "0.2.9.24";
+export const LEARN_APP_VERSION = "0.2.9.25";
 
 console.log(`[Képler Siguineau] working version: v${LEARN_APP_VERSION}`);
 
