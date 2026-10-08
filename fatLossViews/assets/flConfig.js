@@ -52,7 +52,7 @@ export const COACHING_ABSOLUTE_URL =
 export const COACHING_IG_URL = "https://instagram.com/buildwithsiguineau";
 
 /** 2× money-back guarantee: customer sends logs here. */
-export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
+export const GUARANTEE_EMAIL = "ksiguineau@gmail.com";
 
 /** @deprecated use GUARANTEE_EMAIL */
 export const SUPPORT_EMAIL = GUARANTEE_EMAIL;
