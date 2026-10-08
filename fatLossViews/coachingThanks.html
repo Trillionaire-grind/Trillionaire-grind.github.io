@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1047835253811906');
+    fbq('track', 'PageView');
+    fbq('track', 'Purchase');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1047835253811906&ev=PageView&noscript=1" alt=""></noscript>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're in: Fat Loss Coaching</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#0F1113">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/flCoaching.css">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MW3X255274"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag("js", new Date());
+    gtag("config", "G-MW3X255274");
+    gtag("event", "purchase", { currency: "USD" });
+  </script>
+  <script>
+  !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_jf67hvvk6fyc",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_jf67hvvk6fyc');rdt('track', 'PageVisit');rdt('track', 'Purchase');
+  </script>
+</head>
+<body>
+  <header class="flc-nav">
+    <div class="flc-brand">Fat Loss Maxxing</div>
+  </header>
+
+  <main class="flc-thanks">
+    <div class="flc-kicker">Payment confirmed</div>
+    <h1 class="flc-display" id="thanksTitle">You're in. I will text you within 24 hours.</h1>
+    <p id="thanksLead">Your coaching plan is paid. Watch for a text from me to lock your Friday call and send your meal plan within 48 hours.</p>
+    <p id="thanksPlan"></p>
+    <p>Questions: <a id="thanksEmail" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a></p>
+    <a class="flc-btn flc-btn--accent flc-btn--lg" href="app.html">Open the Fat Loss app</a>
+    <p class="flc-note">Use the ledger to log food, steps, and workouts while we get your plan ready.</p>
+  </main>
+
+  <footer class="flc-foot">
+    <p>© 2026 Fat Loss Maxxing · <span id="flcVersion"></span></p>
+  </footer>
+
+  <script type="module">
+    import { GUARANTEE_EMAIL } from "./assets/flConfig.js";
+    import { flVersionLabel } from "./assets/flVersion.js";
+
+    console.log("[Fat Loss coaching thanks] working version:", flVersionLabel());
+    const versionEl = document.getElementById("flcVersion");
+    if (versionEl) versionEl.textContent = flVersionLabel();
+
+    document.getElementById("thanksEmail").href = "mailto:" + GUARANTEE_EMAIL;
+    document.getElementById("thanksEmail").textContent = GUARANTEE_EMAIL;
+
+    const plans = {
+      weekly: "Weekly coaching: $50 each week, 13-week minimum.",
+      "3mo": "3 month coaching: $600 paid up front.",
+      "6mo": "6 month coaching: $1,100 paid up front.",
+      "12mo": "12 month coaching: $2,000 paid up front.",
+    };
+    const key = new URLSearchParams(location.search).get("plan") || "";
+    const line = plans[key];
+    const planEl = document.getElementById("thanksPlan");
+    if (line) planEl.textContent = line;
+  </script>
+</body>
+</html>

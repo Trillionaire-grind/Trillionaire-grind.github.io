@@ -11,6 +11,12 @@
  *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1
  *
  * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
+ *
+ * Coaching Stripe Payment Links → After payment → Redirect customers to:
+ *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly
+ *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo
+ *   6 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=6mo
+ *   12 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=12mo
  */
 export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
 
@@ -50,6 +56,24 @@ export const COACHING_URL = "../fatLossCoaching.html";
 export const COACHING_ABSOLUTE_URL =
   "https://keplersiguineau.com/fatLossCoaching.html";
 export const COACHING_IG_URL = "https://instagram.com/buildwithsiguineau";
+
+/** Stripe Payment Links: set After payment → this page in the Stripe dashboard. */
+export const COACHING_THANKS_URL =
+  "https://keplersiguineau.com/fatLossViews/coachingThanks.html";
+export const STRIPE_COACHING_WEEKLY_URL =
+  "https://buy.stripe.com/cNi7sKeyvdZrfICaDm6Ri0Q";
+export const STRIPE_COACHING_3MO_URL =
+  "https://buy.stripe.com/fZu00i7635sVgMGeTC6Ri0S";
+export const STRIPE_COACHING_6MO_URL =
+  "https://buy.stripe.com/7sY9ASeyv1cFcwq4eY6Ri0T";
+export const STRIPE_COACHING_12MO_URL =
+  "https://buy.stripe.com/bJecN41LJg7z7c68ve6Ri0R";
+export const STRIPE_COACHING_PLANS = {
+  weekly: STRIPE_COACHING_WEEKLY_URL,
+  "3mo": STRIPE_COACHING_3MO_URL,
+  "6mo": STRIPE_COACHING_6MO_URL,
+  "12mo": STRIPE_COACHING_12MO_URL,
+};
 
 /** 2× money-back guarantee: customer sends logs here. */
 export const GUARANTEE_EMAIL = "ksiguineau@gmail.com";
