@@ -154,9 +154,11 @@ html, body.fl-app {
   color: #d8d6d0;
 }
 
-.fl-coach-upgrade .fl-btn {
+.fl-coach-upgrade a.fl-btn,
+.fl-coach-upgrade a.fl-btn:hover {
   display: inline-flex;
   text-decoration: none;
+  color: #fff;
 }
 
 .fl-book-toolbar {
