@@ -1,4 +1,4 @@
-import { GUARANTEE_EMAIL, COACHING_IG_URL } from "./flConfig.js";
+import { GUARANTEE_EMAIL, COACHING_IG_URL, STRIPE_COACHING_PLANS } from "./flConfig.js";
 import { flVersionLabel } from "./flVersion.js";
 
 console.log("[Fat Loss coaching] working version:", flVersionLabel());
@@ -16,6 +16,10 @@ const planField = document.getElementById("plan");
 const statusEl = document.getElementById("applyStatus");
 
 document.querySelectorAll("[data-plan]").forEach((btn) => {
+  const stripeKey = btn.getAttribute("data-stripe");
+  if (stripeKey && STRIPE_COACHING_PLANS[stripeKey]) {
+    btn.href = STRIPE_COACHING_PLANS[stripeKey];
+  }
   btn.addEventListener("click", () => {
     if (planField) planField.value = btn.getAttribute("data-plan") || "";
   });

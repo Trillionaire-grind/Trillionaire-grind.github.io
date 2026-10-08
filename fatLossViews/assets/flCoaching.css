@@ -508,6 +508,26 @@ footer.flc-foot {
 
 footer.flc-foot p { margin: 0; }
 
+.flc-thanks {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.flc-thanks h1 {
+  margin: 0;
+  font-size: clamp(36px, 6vw, 56px);
+  line-height: 1.05;
+}
+
+.flc-thanks p { margin: 0; color: var(--flc-muted); }
+
+.flc-thanks .flc-btn { align-self: center; }
+
 @media (max-width: 720px) {
   .flc-hero { padding-top: 28px; }
   .flc-photo { max-width: none; width: 100%; }
