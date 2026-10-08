@@ -1,4 +1,4 @@
-import { EBOOK_PDF, GUARANTEE_EMAIL, KIT_PDF } from "./flConfig.js";
+import { COACHING_ABSOLUTE_URL, EBOOK_PDF, GUARANTEE_EMAIL, KIT_PDF } from "./flConfig.js";
 import { initBookReader, refreshBookReaderLayout } from "./flBookReader.js";
 import {
   authErrorMessage,
@@ -55,6 +55,8 @@ if (bookPdfLink) {
   bookPdfLink.href = EBOOK_PDF;
   bookPdfLink.setAttribute("download", "");
 }
+const coachLink = document.getElementById("coachLink");
+if (coachLink) coachLink.href = COACHING_ABSOLUTE_URL;
 
 // The fixed header wraps differently per device, so measure it instead of
 // guessing; the book reader sizes its page surface off this value.

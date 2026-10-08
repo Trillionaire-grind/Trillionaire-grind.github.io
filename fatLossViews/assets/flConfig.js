@@ -1,6 +1,7 @@
 /**
  * Fat Loss funnel config.
  * Sales: /fatLoss.html
+ * Coaching: /fatLossCoaching.html
  * Product app (book + ledger): /fatLossViews/app.html
  *
  * Stripe Payment Link → After payment → Redirect customers to:
@@ -44,8 +45,14 @@ export const APP_URL = "app.html";
 export const APP_ABSOLUTE_URL =
   "https://keplersiguineau.com/fatLossViews/app.html";
 
+/** Coaching offer for book buyers who want you to run the system. */
+export const COACHING_URL = "../fatLossCoaching.html";
+export const COACHING_ABSOLUTE_URL =
+  "https://keplersiguineau.com/fatLossCoaching.html";
+export const COACHING_IG_URL = "https://instagram.com/buildwithsiguineau";
+
 /** 2× money-back guarantee: customer sends logs here. */
-export const GUARANTEE_EMAIL = "greenbooksapp@gmail.com";
+export const GUARANTEE_EMAIL = "ksiguineau@gmail.com";
 
 /** @deprecated use GUARANTEE_EMAIL */
 export const SUPPORT_EMAIL = GUARANTEE_EMAIL;

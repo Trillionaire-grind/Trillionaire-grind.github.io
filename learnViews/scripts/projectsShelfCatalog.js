@@ -45,6 +45,15 @@ export const PROJECTS = [
     stack: ["HTML", "CSS", "JavaScript", "Firebase Auth", "Firestore"],
   },
   {
+    id: "fat-loss-coaching",
+    name: "Fat Loss Coaching",
+    lane: "product",
+    blurb: "A meal plan, weekly check-ins, and a Friday group call.",
+    href: "/fatLossCoaching.html",
+    more: "Fat Loss Coaching is the done-with-you offer next to the $29 book. Apply, get on a 15-minute call, then get a custom meal plan, training, weekly check-ins, and a Friday group call. Same 2X guarantee. For a client, this is a coaching sales page with an apply form. For a student, it is a landing page with plans, FAQ, and a lead form.",
+    stack: ["HTML", "CSS", "JavaScript"],
+  },
+  {
     id: "style-ai",
     name: "Style AI",
     lane: "product",

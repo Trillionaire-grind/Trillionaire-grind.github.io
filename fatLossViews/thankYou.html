@@ -62,6 +62,18 @@
       On Android, tap Install when prompted, or use the browser menu.
     </p>
 
+    <div class="coach-upgrade">
+      <h2>Want me to run the system for you?</h2>
+      <p>
+        The book gives you the system. Coaching gives you me: a meal plan built around your food,
+        weekly check-ins, and a Friday group call. Same 2X guarantee.
+      </p>
+      <a href="../fatLossCoaching.html" class="cta-btn" id="coachLink">
+        Apply for coaching
+        <span>Meal plan · weekly check-ins · Friday group call</span>
+      </a>
+    </div>
+
     <div id="kitBlock" hidden>
       <p style="font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;color:#888;margin:24px 0 8px;">Your Boy Kibble Kit</p>
 
@@ -74,7 +86,7 @@
     <p style="margin-top:24px;font-size:0.85rem;color:#555;line-height:1.5;">
       <strong>2× guarantee:</strong> Follow the program 90 days: log food, photo meals, walk steps,
       do workouts. If you don't lose 10 lbs, email your logs to
-      <a href="mailto:greenbooksapp@gmail.com" id="guaranteeEmail">greenbooksapp@gmail.com</a>
+      <a href="mailto:ksiguineau@gmail.com" id="guaranteeEmail">ksiguineau@gmail.com</a>
       for double your money back.
     </p>
 
@@ -93,12 +105,14 @@
       EBOOK_PDF,
       KIT_PDF,
       GUARANTEE_EMAIL,
+      COACHING_ABSOLUTE_URL,
     } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
     document.getElementById("appLink").href = APP_URL;
+    document.getElementById("coachLink").href = COACHING_ABSOLUTE_URL;
     document.getElementById("bookPdfFallback").href = EBOOK_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;

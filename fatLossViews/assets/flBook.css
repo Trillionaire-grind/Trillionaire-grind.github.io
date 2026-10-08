@@ -509,6 +509,32 @@ body.thank-you-page .bonus-list {
 }
 body.thank-you-page .cta-btn--dark { background: #111; }
 
+body.thank-you-page .coach-upgrade {
+  margin: 28px auto 0;
+  padding: 22px 18px 24px;
+  background: #141414;
+  color: #f2f0ea;
+  text-align: center;
+}
+
+body.thank-you-page .coach-upgrade h2 {
+  font-family: Arial, sans-serif;
+  font-size: 1.25rem;
+  margin: 0 0 10px;
+}
+
+body.thank-you-page .coach-upgrade p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #d8d6d0;
+  margin: 0 0 16px;
+}
+
+body.thank-you-page .coach-upgrade .cta-btn {
+  max-width: 340px;
+  margin: 0 auto;
+}
+
 @media (min-width: 680px) {
   .first-page {
     justify-content: center;
