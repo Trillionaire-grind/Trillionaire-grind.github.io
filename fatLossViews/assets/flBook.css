@@ -535,6 +535,52 @@ body.thank-you-page .coach-upgrade .cta-btn {
   margin: 0 auto;
 }
 
+body.thank-you-page .call-form {
+  display: grid;
+  gap: 8px;
+  text-align: left;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+body.thank-you-page .call-form label {
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #f2f0ea;
+}
+
+body.thank-you-page .call-form input,
+body.thank-you-page .call-form select,
+body.thank-you-page .call-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 2px solid #f2f0ea;
+  border-radius: 6px;
+  font: inherit;
+  background: #fff;
+  color: #111;
+}
+
+body.thank-you-page .call-form textarea { min-height: 72px; resize: vertical; }
+
+body.thank-you-page .call-form .cta-btn {
+  width: 100%;
+  max-width: none;
+  margin-top: 8px;
+}
+
+body.thank-you-page .call-form-status {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #c8f04a;
+}
+
 @media (min-width: 680px) {
   .first-page {
     justify-content: center;

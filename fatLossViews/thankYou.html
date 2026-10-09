@@ -66,12 +66,38 @@
       <h2>Want me to run the system for you?</h2>
       <p>
         The book gives you the system. Coaching gives you me: a meal plan built around your food,
-        weekly check-ins, and a Friday group call. Same 2X guarantee.
+        weekly check-ins, and a Friday group call. Same 2X guarantee. Book a call and I will text you within 24 hours.
       </p>
-      <a href="../fatLossCoaching.html" class="cta-btn" id="coachLink">
-        Apply for coaching
-        <span>Meal plan · weekly check-ins · Friday group call</span>
-      </a>
+      <form class="call-form" id="callForm">
+        <input type="hidden" name="source" value="book thank-you">
+        <label for="callName">Name</label>
+        <input id="callName" name="name" type="text" autocomplete="name" required>
+        <label for="callEmail">Email</label>
+        <input id="callEmail" name="email" type="email" autocomplete="email" required>
+        <label for="callPhone">Phone</label>
+        <input id="callPhone" name="phone" type="tel" autocomplete="tel" required>
+        <label for="callWeight">Current weight</label>
+        <input id="callWeight" name="weight" type="text" inputmode="decimal">
+        <label for="callGoal">Goal</label>
+        <input id="callGoal" name="goal" type="text" placeholder="Lose 10 lbs in 90 days">
+        <label for="callDays">Days I can train each week</label>
+        <input id="callDays" name="days" type="text" placeholder="3">
+        <label for="callPlan">Plan</label>
+        <select id="callPlan" name="plan">
+          <option value="">Not sure yet</option>
+          <option value="Weekly $50">Weekly $50</option>
+          <option value="3 months $600">3 months $600</option>
+          <option value="6 months $1,100">6 months $1,100</option>
+          <option value="12 months $2,000">12 months $2,000</option>
+        </select>
+        <label for="callNotes">Anything else</label>
+        <textarea id="callNotes" name="notes"></textarea>
+        <button class="cta-btn" type="submit">
+          Book a call
+          <span>Meal plan · weekly check-ins · Friday group call</span>
+        </button>
+        <p class="call-form-status" data-call-status></p>
+      </form>
     </div>
 
     <div id="kitBlock" hidden>
@@ -105,14 +131,14 @@
       EBOOK_PDF,
       KIT_PDF,
       GUARANTEE_EMAIL,
-      COACHING_ABSOLUTE_URL,
     } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
+    import { bindCallForm } from "./assets/flCallForm.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
     document.getElementById("appLink").href = APP_URL;
-    document.getElementById("coachLink").href = COACHING_ABSOLUTE_URL;
+    bindCallForm(document.getElementById("callForm"));
     document.getElementById("bookPdfFallback").href = EBOOK_PDF;
     document.getElementById("guaranteeEmail").href = "mailto:" + GUARANTEE_EMAIL;
     document.getElementById("guaranteeEmail").textContent = GUARANTEE_EMAIL;
