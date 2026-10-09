@@ -46,18 +46,26 @@
     <h1 class="flc-display" id="thanksTitle">You're in. I will text you within 24 hours.</h1>
     <p id="thanksLead">Your coaching plan is paid. Watch for a text from me to lock your Friday call and send your meal plan within 48 hours.</p>
     <p id="thanksPlan"></p>
-    <p>Optional: send your stats so I can build your meal plan faster. Skip this if you want to wait for the text.</p>
-    <form class="flc-thanks-form" id="thanksStats">
-      <label for="thanksPhone">Phone</label>
-      <input id="thanksPhone" name="phone" type="tel" autocomplete="tel" required>
-      <label for="thanksWeight">Current weight</label>
-      <input id="thanksWeight" name="weight" type="text" inputmode="decimal">
-      <label for="thanksGoal">Goal</label>
-      <input id="thanksGoal" name="goal" type="text" placeholder="Lose 10 lbs in 90 days">
-      <label for="thanksDays">Days I can train each week</label>
-      <input id="thanksDays" name="days" type="text" placeholder="3">
-      <button class="flc-btn flc-btn--accent" type="submit">Send my stats</button>
-      <p class="flc-form-status" id="thanksStatus"></p>
+    <p>Book a kickoff call. Send your details so I can build your meal plan faster.</p>
+    <form class="flc-thanks-form" id="callForm">
+      <input type="hidden" name="source" id="callSource" value="coaching thank-you">
+      <input type="hidden" name="plan" id="callPlan" value="">
+      <label for="callName">Name</label>
+      <input id="callName" name="name" type="text" autocomplete="name" required>
+      <label for="callEmail">Email</label>
+      <input id="callEmail" name="email" type="email" autocomplete="email" required>
+      <label for="callPhone">Phone</label>
+      <input id="callPhone" name="phone" type="tel" autocomplete="tel" required>
+      <label for="callWeight">Current weight</label>
+      <input id="callWeight" name="weight" type="text" inputmode="decimal">
+      <label for="callGoal">Goal</label>
+      <input id="callGoal" name="goal" type="text" placeholder="Lose 10 lbs in 90 days">
+      <label for="callDays">Days I can train each week</label>
+      <input id="callDays" name="days" type="text" placeholder="3">
+      <label for="callNotes">Anything else</label>
+      <textarea id="callNotes" name="notes"></textarea>
+      <button class="flc-btn flc-btn--accent" type="submit">Book a call</button>
+      <p class="flc-form-status" data-call-status></p>
     </form>
     <p>Questions: <a id="thanksEmail" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a></p>
     <a class="flc-btn flc-btn--accent flc-btn--lg" id="thanksIg" href="https://instagram.com/buildwithsiguineau" target="_blank" rel="noopener">DM me LEAN on Instagram</a>
@@ -70,6 +78,7 @@
   <script type="module">
     import { COACHING_IG_URL, GUARANTEE_EMAIL } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
+    import { bindCallForm } from "./assets/flCallForm.js";
 
     console.log("[Fat Loss coaching thanks] working version:", flVersionLabel());
     const versionEl = document.getElementById("flcVersion");
@@ -90,40 +99,10 @@
     const line = plans[key];
     const planEl = document.getElementById("thanksPlan");
     if (line) planEl.textContent = line;
+    const planField = document.getElementById("callPlan");
+    if (planField) planField.value = line || key;
 
-    const statsForm = document.getElementById("thanksStats");
-    const statsStatus = document.getElementById("thanksStatus");
-    statsForm?.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const data = new FormData(statsForm);
-      const phone = String(data.get("phone") || "").trim();
-      const weight = String(data.get("weight") || "").trim();
-      const goal = String(data.get("goal") || "").trim();
-      const days = String(data.get("days") || "").trim();
-      if (!phone) {
-        if (statsStatus) statsStatus.textContent = "Phone is required so I can text you.";
-        return;
-      }
-      const body = [
-        "Fat Loss Coaching stats after payment",
-        "",
-        "Plan: " + (line || key || "n/a"),
-        "Phone: " + phone,
-        "Current weight: " + (weight || "n/a"),
-        "Goal: " + (goal || "n/a"),
-        "Days I can train: " + (days || "n/a"),
-      ].join("\n");
-      window.location.href =
-        "mailto:" +
-        encodeURIComponent(GUARANTEE_EMAIL) +
-        "?subject=" +
-        encodeURIComponent("Coaching stats after payment") +
-        "&body=" +
-        encodeURIComponent(body);
-      if (statsStatus) {
-        statsStatus.textContent = "Your email app should open. I will text you within 24 hours.";
-      }
-    });
+    bindCallForm(document.getElementById("callForm"));
   </script>
 </body>
 </html>

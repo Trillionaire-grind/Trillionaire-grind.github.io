@@ -12,8 +12,8 @@
  *
  * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
  *
- * Coaching: plan cards go straight to Stripe. The apply form is optional
- * for people who want a call first. After payment, coachingThanks can collect stats.
+ * Coaching: plan cards go straight to Stripe. The book-a-call form lives on
+ * thank-you pages (book buyers and paid coaching clients).
  * Coaching Stripe Payment Links → After payment → Redirect customers to:
  *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly
  *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo

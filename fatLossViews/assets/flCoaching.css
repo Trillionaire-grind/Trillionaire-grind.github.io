@@ -572,7 +572,9 @@ footer.flc-foot p { margin: 0; }
   text-transform: uppercase;
 }
 
-.flc-thanks-form input {
+.flc-thanks-form input,
+.flc-thanks-form select,
+.flc-thanks-form textarea {
   width: 100%;
   padding: 12px 14px;
   border-radius: 6px;
@@ -580,6 +582,11 @@ footer.flc-foot p { margin: 0; }
   font: inherit;
   background: #fff;
   color: #0f1113;
+}
+
+.flc-thanks-form textarea {
+  min-height: 72px;
+  resize: vertical;
 }
 
 .flc-thanks-form .flc-btn { width: 100%; }
