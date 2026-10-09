@@ -1,0 +1,116 @@
+================================================================================
+EMAIL PACK — The Minorities App Screenshots
+================================================================================
+Screenshots folder:
+  /opt/cursor/artifacts/minorities-outreach/
+
+BEST ATTACHMENTS (send these 5):
+  01-landing-mobile.png          — Landing / “join the movement”
+  03-home-content-mobile.png     — Home library (Midnight Club card)
+  04-posts-feed-mobile.png       — Team posts feed (Jay + Zed)
+  07-shop-mobile.png             — Merch shop (University + EASY)
+  09-home-desktop.png            — Desktop Home (cards match CTA width)
+
+OPTIONAL:
+  06-access-levels-mobile.png    — Subscription tiers (Waterboy → Owner)
+  10-access-levels-desktop.png   — Desktop tiers
+  05-chat-mobile.png             — Chat tab
+  08-classes-mobile.png          — Live classes tab
+
+Demo link (private — send only if they ask):
+  https://keplersiguineau.com/minorities.html
+  Landing: https://keplersiguineau.com/minoritiesLanding.html
+
+Accounts for them to try (if you want to share):
+  zeb@minorities.com  /  MinoritiesZeb2026!
+  jay@minorities.com  /  MinoritiesJay2026!
+
+
+--------------------------------------------------------------------------------
+SUBJECT LINES (pick one)
+--------------------------------------------------------------------------------
+A) Built you something — screenshots of The Minorities app
+B) Your content, your app — not another IG page
+C) Quick look: Home, Posts, Shop, Members for The Minorities
+
+
+--------------------------------------------------------------------------------
+EMAIL COPY — short (recommended)
+--------------------------------------------------------------------------------
+
+Hey Jay & Zed,
+
+Quick one — I built a working app for The Minorities so the community
+isn’t stuck on platforms that keep taking the channel down.
+
+Attached are a few screenshots:
+
+1) Landing — “join the movement” + free register
+2) Home — your content library (Midnight Club, Ask A Minority, etc.)
+3) Posts — team feed (Jay / Zed / The Minorities)
+4) Shop — University + EASY merch, live links
+5) Desktop Home — same app, full width
+
+What it does in one line:
+Fans register free → watch teasers → upgrade for chat, training, and
+the cuts platforms remove → buy merch without leaving the app.
+
+If you want, I can hop on a 15-min screen share and walk you through it
+on my phone — or send a private demo link.
+
+No pressure either way.
+
+— Kepler
+  (786) 309-8015
+
+
+--------------------------------------------------------------------------------
+EMAIL COPY — slightly longer
+--------------------------------------------------------------------------------
+
+Hey Jay, Zed, and The Minorities team,
+
+You’ve already built the brand — street vlogs, Ask A Minority, Love
+Mansion, merch drops. The problem isn’t content. It’s ownership.
+
+I put together a real member app so The Minorities can live in one place:
+
+• Home — content library with free previews + member unlocks
+• Posts — official team updates (Jay / Zed / The Minorities)
+• Chat — member rooms
+• Classes — live training schedule
+• Shop — University + EASY collection, click to buy
+
+Screenshots attached so you can see it without downloading anything.
+
+This isn’t a Figma mock. It’s running. Fans can register, scroll the
+library, hit Shop, and see the access levels.
+
+Next step if you’re curious: 15 minutes on a call and I’ll screen-share
+the phone walkthrough. If it feels right, we put it on *your* domain
+so it looks like The Minorities — not my sandbox.
+
+Down to talk this week?
+
+— Kepler Siguineau
+  (786) 309-8015
+  https://keplersiguineau.com
+
+
+--------------------------------------------------------------------------------
+CAPTIONS (if you text/iMessage the images instead)
+--------------------------------------------------------------------------------
+01 Landing:  “Fans land here → Register free”
+03 Home:     “Your library. Free teasers. Members unlock the rest.”
+04 Posts:    “Official team posts — Jay, Zed, The Minorities”
+07 Shop:     “Merch inside the app — University + EASY”
+09 Desktop:  “Same app on desktop — cards match the upgrade CTA”
+
+
+--------------------------------------------------------------------------------
+NOTE
+--------------------------------------------------------------------------------
+Access Levels screenshot still says Stripe checkout isn’t live yet —
+fine for a prototype demo. Don’t lead with that image unless they ask
+about money tiers. Lead with Home / Posts / Shop.
+================================================================================
