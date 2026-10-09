@@ -12,6 +12,7 @@
  *
  * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
  *
+ * Coaching checkout is sent after the 15-minute call (not on the public apply form).
  * Coaching Stripe Payment Links → After payment → Redirect customers to:
  *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly
  *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo
@@ -99,4 +100,5 @@ export const BONUS_DOWNLOADS = [];
 export const PHOTOS = {
   heroSpread: "fatLossViews/assets/photos/product-stack.png",
   shirtless: "fatLossViews/assets/photos/shirtless.jpg",
+  coachingPhysique: "fatLossViews/assets/photos/coaching-physique.jpg",
 };
