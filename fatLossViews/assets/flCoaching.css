@@ -509,6 +509,12 @@ header.flc-nav {
 
 .flc-form .flc-btn { width: 100%; min-height: 56px; font-size: 18px; padding: 18px 32px; }
 
+.flc-form .flc-form-hint {
+  margin: -4px 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 .flc-form-status {
   margin: 0;
   font-size: 15px;

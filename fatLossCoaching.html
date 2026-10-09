@@ -119,13 +119,13 @@
         </div>
         <div class="flc-step">
           <div class="flc-num">02</div>
-          <h3>Get on a call</h3>
-          <p>A 15-minute call to map out your timeline, pick your plan, and see if we are a fit.</p>
+          <h3>Pay if you picked a plan</h3>
+          <p>Checkout opens right after you apply. Leave the plan blank if you want help choosing on the call.</p>
         </div>
         <div class="flc-step">
           <div class="flc-num">03</div>
-          <h3>Sign and pay</h3>
-          <p>You get your coaching agreement to sign and a secure payment link.</p>
+          <h3>Get on a call</h3>
+          <p>I text you within 24 hours for a 15-minute kickoff and to lock your start date.</p>
         </div>
         <div class="flc-step">
           <div class="flc-num">04</div>
@@ -142,20 +142,20 @@
   <section class="flc-section" style="padding-bottom:40px">
     <div>
       <h2 class="flc-display">Pick your plan</h2>
-      <p class="flc-plans-lead" style="margin-top:12px">Every plan has a 3-month minimum, because that is how long real change takes. Every plan includes the 2X guarantee. Apply for the plan you want. I send the payment link after the call.</p>
+      <p class="flc-plans-lead" style="margin-top:12px">Every plan has a 3-month minimum, because that is how long real change takes. Every plan includes the 2X guarantee. Select a plan, apply, and pay on the form. Leave the plan blank if you want to choose on the call.</p>
     </div>
     <div class="flc-plans">
       <article class="flc-plan">
         <div class="flc-plan-label">Weekly</div>
         <div class="flc-price"><strong>$50</strong><span>/ week</span></div>
         <p>Billed weekly. 13-week minimum, then week to week.</p>
-        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="Weekly $50">Apply</a>
+        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="Weekly $50">Apply and pay</a>
       </article>
       <article class="flc-plan">
         <div class="flc-plan-label">3 months</div>
         <div class="flc-price"><strong>$600</strong></div>
         <p>Paid up front. About $46 a week. Save $50.</p>
-        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="3 months $600">Apply</a>
+        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="3 months $600">Apply and pay</a>
       </article>
       <article class="flc-plan is-featured">
         <div class="flc-plan-top">
@@ -164,7 +164,7 @@
         </div>
         <div class="flc-price"><strong>$1,100</strong></div>
         <p>Paid up front. About $42 a week. Save $200.</p>
-        <a class="flc-btn flc-btn--dark" href="#apply" data-plan="6 months $1,100">Apply</a>
+        <a class="flc-btn flc-btn--dark" href="#apply" data-plan="6 months $1,100">Apply and pay</a>
       </article>
       <article class="flc-plan">
         <div class="flc-plan-top">
@@ -173,7 +173,7 @@
         </div>
         <div class="flc-price"><strong>$2,000</strong></div>
         <p>Paid up front. About $38 a week. Save $600.</p>
-        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="12 months $2,000">Apply</a>
+        <a class="flc-btn flc-btn--cream" href="#apply" data-plan="12 months $2,000">Apply and pay</a>
       </article>
     </div>
   </section>
@@ -251,7 +251,7 @@
     </div>
     <div class="flc-q">
       <h3>How do I pay?</h3>
-      <p>After the 15-minute call, I send a secure payment link. Weekly bills every week. 3, 6, and 12 month plans are paid up front and do not auto-renew.</p>
+      <p>Pick a plan on the form and Stripe checkout opens after you apply. Weekly bills every week. 3, 6, and 12 month plans are paid up front and do not auto-renew. Leave the plan blank if you want to choose on the call.</p>
     </div>
     <div class="flc-q">
       <h3>Can I cancel?</h3>
@@ -265,7 +265,7 @@
   <section class="flc-apply" id="apply">
     <div class="flc-apply-inner">
       <h2 class="flc-display">90 days from now, you could lose the excess body fat.</h2>
-      <p>Apply now. I will text you within 24 hours to book your call.</p>
+      <p>Apply now. Choose a plan to pay on this page. I will text you within 24 hours either way.</p>
       <form class="flc-form" id="applyForm">
         <label for="name">Name</label>
         <input id="name" name="name" type="text" autocomplete="name" required>
@@ -287,9 +287,10 @@
           <option value="6 months $1,100">6 months $1,100</option>
           <option value="12 months $2,000">12 months $2,000</option>
         </select>
+        <p class="flc-form-hint">A selected plan opens checkout after you apply.</p>
         <label for="notes">Anything else</label>
         <textarea id="notes" name="notes"></textarea>
-        <button class="flc-btn flc-btn--dark" type="submit">Apply for coaching</button>
+        <button class="flc-btn flc-btn--dark" id="applySubmit" type="submit">Apply for coaching</button>
         <p class="flc-form-status" id="applyStatus"></p>
       </form>
       <p class="flc-ig">Or DM LEAN to <a id="flcIg" href="https://instagram.com/buildwithsiguineau" target="_blank" rel="noopener">@buildwithsiguineau</a></p>
