@@ -12,6 +12,8 @@
  *
  * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
  *
+ * Coaching: plan cards go straight to Stripe. The apply form is optional
+ * for people who want a call first. After payment, coachingThanks can collect stats.
  * Coaching Stripe Payment Links → After payment → Redirect customers to:
  *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly
  *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo
@@ -75,6 +77,14 @@ export const STRIPE_COACHING_PLANS = {
   "12mo": STRIPE_COACHING_12MO_URL,
 };
 
+/** Apply-form plan labels → STRIPE_COACHING_PLANS keys. */
+export const STRIPE_COACHING_PLAN_LABELS = {
+  "Weekly $50": "weekly",
+  "3 months $600": "3mo",
+  "6 months $1,100": "6mo",
+  "12 months $2,000": "12mo",
+};
+
 /** 2× money-back guarantee: customer sends logs here. */
 export const GUARANTEE_EMAIL = "ksiguineau@gmail.com";
 
@@ -99,4 +109,5 @@ export const BONUS_DOWNLOADS = [];
 export const PHOTOS = {
   heroSpread: "fatLossViews/assets/photos/product-stack.png",
   shirtless: "fatLossViews/assets/photos/shirtless.jpg",
+  coachingPhysique: "fatLossViews/assets/photos/coaching-physique.jpg",
 };

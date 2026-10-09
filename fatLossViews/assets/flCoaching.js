@@ -11,19 +11,15 @@ if (ig) {
   ig.href = COACHING_IG_URL;
 }
 
-const form = document.getElementById("applyForm");
-const planField = document.getElementById("plan");
-const statusEl = document.getElementById("applyStatus");
-
-document.querySelectorAll("[data-plan]").forEach((btn) => {
-  const stripeKey = btn.getAttribute("data-stripe");
-  if (stripeKey && STRIPE_COACHING_PLANS[stripeKey]) {
-    btn.href = STRIPE_COACHING_PLANS[stripeKey];
+document.querySelectorAll("[data-stripe]").forEach((btn) => {
+  const key = btn.getAttribute("data-stripe");
+  if (key && STRIPE_COACHING_PLANS[key]) {
+    btn.href = STRIPE_COACHING_PLANS[key];
   }
-  btn.addEventListener("click", () => {
-    if (planField) planField.value = btn.getAttribute("data-plan") || "";
-  });
 });
+
+const form = document.getElementById("applyForm");
+const statusEl = document.getElementById("applyStatus");
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -43,7 +39,7 @@ form?.addEventListener("submit", (event) => {
   }
 
   const body = [
-    "Fat Loss Coaching application",
+    "Fat Loss Coaching call request",
     "",
     "Name: " + name,
     "Email: " + email,
@@ -55,15 +51,14 @@ form?.addEventListener("submit", (event) => {
     "Notes: " + (notes || "n/a"),
   ].join("\n");
 
-  const mailto =
+  window.location.href =
     "mailto:" +
     encodeURIComponent(GUARANTEE_EMAIL) +
     "?subject=" +
-    encodeURIComponent("Coaching application: " + name) +
+    encodeURIComponent("Coaching call request: " + name) +
     "&body=" +
     encodeURIComponent(body);
 
-  window.location.href = mailto;
   if (statusEl) {
     statusEl.textContent = "Your email app should open. I will text you within 24 hours to book the call.";
   }

@@ -46,6 +46,19 @@
     <h1 class="flc-display" id="thanksTitle">You're in. I will text you within 24 hours.</h1>
     <p id="thanksLead">Your coaching plan is paid. Watch for a text from me to lock your Friday call and send your meal plan within 48 hours.</p>
     <p id="thanksPlan"></p>
+    <p>Optional: send your stats so I can build your meal plan faster. Skip this if you want to wait for the text.</p>
+    <form class="flc-thanks-form" id="thanksStats">
+      <label for="thanksPhone">Phone</label>
+      <input id="thanksPhone" name="phone" type="tel" autocomplete="tel" required>
+      <label for="thanksWeight">Current weight</label>
+      <input id="thanksWeight" name="weight" type="text" inputmode="decimal">
+      <label for="thanksGoal">Goal</label>
+      <input id="thanksGoal" name="goal" type="text" placeholder="Lose 10 lbs in 90 days">
+      <label for="thanksDays">Days I can train each week</label>
+      <input id="thanksDays" name="days" type="text" placeholder="3">
+      <button class="flc-btn flc-btn--accent" type="submit">Send my stats</button>
+      <p class="flc-form-status" id="thanksStatus"></p>
+    </form>
     <p>Questions: <a id="thanksEmail" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a></p>
     <a class="flc-btn flc-btn--accent flc-btn--lg" id="thanksIg" href="https://instagram.com/buildwithsiguineau" target="_blank" rel="noopener">DM me LEAN on Instagram</a>
   </main>
@@ -77,6 +90,40 @@
     const line = plans[key];
     const planEl = document.getElementById("thanksPlan");
     if (line) planEl.textContent = line;
+
+    const statsForm = document.getElementById("thanksStats");
+    const statsStatus = document.getElementById("thanksStatus");
+    statsForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(statsForm);
+      const phone = String(data.get("phone") || "").trim();
+      const weight = String(data.get("weight") || "").trim();
+      const goal = String(data.get("goal") || "").trim();
+      const days = String(data.get("days") || "").trim();
+      if (!phone) {
+        if (statsStatus) statsStatus.textContent = "Phone is required so I can text you.";
+        return;
+      }
+      const body = [
+        "Fat Loss Coaching stats after payment",
+        "",
+        "Plan: " + (line || key || "n/a"),
+        "Phone: " + phone,
+        "Current weight: " + (weight || "n/a"),
+        "Goal: " + (goal || "n/a"),
+        "Days I can train: " + (days || "n/a"),
+      ].join("\n");
+      window.location.href =
+        "mailto:" +
+        encodeURIComponent(GUARANTEE_EMAIL) +
+        "?subject=" +
+        encodeURIComponent("Coaching stats after payment") +
+        "&body=" +
+        encodeURIComponent(body);
+      if (statsStatus) {
+        statsStatus.textContent = "Your email app should open. I will text you within 24 hours.";
+      }
+    });
   </script>
 </body>
 </html>
