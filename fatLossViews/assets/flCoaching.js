@@ -1,9 +1,4 @@
-import {
-  GUARANTEE_EMAIL,
-  COACHING_IG_URL,
-  STRIPE_COACHING_PLANS,
-  STRIPE_COACHING_PLAN_LABELS,
-} from "./flConfig.js";
+import { GUARANTEE_EMAIL, COACHING_IG_URL, STRIPE_COACHING_PLANS } from "./flConfig.js";
 import { flVersionLabel } from "./flVersion.js";
 
 console.log("[Fat Loss coaching] working version:", flVersionLabel());
@@ -16,42 +11,15 @@ if (ig) {
   ig.href = COACHING_IG_URL;
 }
 
-const form = document.getElementById("applyForm");
-const planField = document.getElementById("plan");
-const submitBtn = document.getElementById("applySubmit");
-const statusEl = document.getElementById("applyStatus");
-
-function checkoutUrlForPlan(plan, email) {
-  const key = STRIPE_COACHING_PLAN_LABELS[plan];
-  const base = key && STRIPE_COACHING_PLANS[key];
-  if (!base) return "";
-  try {
-    const url = new URL(base);
-    if (email) url.searchParams.set("prefilled_email", email);
-    return url.toString();
-  } catch {
-    return base;
+document.querySelectorAll("[data-stripe]").forEach((btn) => {
+  const key = btn.getAttribute("data-stripe");
+  if (key && STRIPE_COACHING_PLANS[key]) {
+    btn.href = STRIPE_COACHING_PLANS[key];
   }
-}
-
-function syncSubmitLabel() {
-  if (!submitBtn) return;
-  const plan = planField?.value || "";
-  submitBtn.textContent = STRIPE_COACHING_PLAN_LABELS[plan]
-    ? "Apply and pay"
-    : "Apply for coaching";
-}
-
-planField?.addEventListener("change", syncSubmitLabel);
-
-document.querySelectorAll("[data-plan]").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    if (planField) planField.value = btn.getAttribute("data-plan") || "";
-    syncSubmitLabel();
-  });
 });
 
-syncSubmitLabel();
+const form = document.getElementById("applyForm");
+const statusEl = document.getElementById("applyStatus");
 
 form?.addEventListener("submit", (event) => {
   event.preventDefault();
@@ -71,7 +39,7 @@ form?.addEventListener("submit", (event) => {
   }
 
   const body = [
-    "Fat Loss Coaching application",
+    "Fat Loss Coaching call request",
     "",
     "Name: " + name,
     "Email: " + email,
@@ -83,34 +51,15 @@ form?.addEventListener("submit", (event) => {
     "Notes: " + (notes || "n/a"),
   ].join("\n");
 
-  const mailto =
+  window.location.href =
     "mailto:" +
     encodeURIComponent(GUARANTEE_EMAIL) +
     "?subject=" +
-    encodeURIComponent("Coaching application: " + name) +
+    encodeURIComponent("Coaching call request: " + name) +
     "&body=" +
     encodeURIComponent(body);
 
-  const checkoutUrl = checkoutUrlForPlan(plan, email);
-
   if (statusEl) {
-    statusEl.textContent = checkoutUrl
-      ? "Your application is opening in email. Checkout loads next."
-      : "Your email app should open. I will text you within 24 hours to book the call.";
+    statusEl.textContent = "Your email app should open. I will text you within 24 hours to book the call.";
   }
-
-  if (checkoutUrl) {
-    const mailLink = document.createElement("a");
-    mailLink.href = mailto;
-    mailLink.style.display = "none";
-    document.body.appendChild(mailLink);
-    mailLink.click();
-    mailLink.remove();
-    window.setTimeout(() => {
-      window.location.assign(checkoutUrl);
-    }, 500);
-    return;
-  }
-
-  window.location.href = mailto;
 });

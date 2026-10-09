@@ -558,6 +558,41 @@ footer.flc-foot p { margin: 0; }
 
 .flc-thanks .flc-btn { align-self: center; }
 
+.flc-thanks-form {
+  width: 100%;
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+
+.flc-thanks-form label {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.flc-thanks-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 6px;
+  border: 2px solid var(--flc-line);
+  font: inherit;
+  background: #fff;
+  color: #0f1113;
+}
+
+.flc-thanks-form .flc-btn { width: 100%; }
+
+.flc-plans-lead a {
+  color: var(--flc-accent);
+  font-weight: 800;
+}
+
+.flc-apply .flc-section-cta {
+  justify-content: center;
+}
+
 @media (max-width: 720px) {
   .flc-hero { padding-top: 28px; }
   .flc-hero--solo { padding-bottom: 40px; }
