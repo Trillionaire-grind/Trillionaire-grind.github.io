@@ -118,15 +118,11 @@ header.flc-nav {
 }
 
 .flc-hero--solo {
-  max-width: 760px;
   padding-bottom: 56px;
 }
 
 .flc-hero--solo .flc-hero-copy {
-  flex: 1 1 auto;
-}
-
-.flc-hero--solo p {
+  flex: 1 1 520px;
   max-width: 640px;
 }
 
