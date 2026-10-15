@@ -2,10 +2,12 @@
  * Send India visitors from /fatLoss.html to /fatLoss-in.html.
  * Instant check: Asia/Kolkata timezone.
  * Backup: IP country when timezone is not set to India.
- * Override: ?geo=in or ?geo=us
+ * Override: ?geo=in or ?geo=us (used by the US / India switch)
  */
 (function () {
   var STORAGE_KEY = "flGeo";
+  var isIndiaPage = /fatLoss-in\.html$/i.test(location.pathname);
+  var isUsPage = /\/fatLoss\.html$/i.test(location.pathname);
 
   function queryGeo() {
     try {
@@ -13,12 +15,6 @@
     } catch (e) {
       return null;
     }
-  }
-
-  function goIndia() {
-    if (/fatLoss-in\.html$/i.test(location.pathname)) return;
-    var dest = "fatLoss-in.html" + (location.search || "") + (location.hash || "");
-    location.replace(dest);
   }
 
   function remember(value) {
@@ -35,6 +31,22 @@
     }
   }
 
+  function withGeo(path, geo) {
+    var url = new URL(path, location.href);
+    url.searchParams.set("geo", geo);
+    return url.pathname + url.search + (location.hash || "");
+  }
+
+  function goIndia() {
+    if (isIndiaPage) return;
+    location.replace(withGeo("fatLoss-in.html", "in"));
+  }
+
+  function goUS() {
+    if (isUsPage) return;
+    location.replace(withGeo("fatLoss.html", "us"));
+  }
+
   function timezoneIsIndia() {
     try {
       var tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
@@ -47,11 +59,17 @@
   var forced = queryGeo();
   if (forced === "us") {
     remember("us");
+    goUS();
     return;
   }
   if (forced === "in") {
     remember("in");
     goIndia();
+    return;
+  }
+
+  if (isIndiaPage) {
+    remember("in");
     return;
   }
 

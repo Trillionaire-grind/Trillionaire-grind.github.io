@@ -59,8 +59,12 @@ h1{font-size:clamp(46px,11vw,78px)}
 h2{font-size:clamp(36px,8vw,54px)}
 h3{font-size:20px;margin:0 0 6px}
 p{margin:0 0 16px}
-.topbar{background:var(--ink);color:#fff;font-size:15px;text-align:center;padding:10px 16px}
+.topbar{background:var(--ink);color:#fff;font-size:15px;text-align:center;padding:10px 16px 8px}
 .topbar strong{color:#FFD7D4}
+.region{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px;font-size:12px;font-weight:600}
+.region a{color:rgba(255,255,255,.7);text-decoration:none}
+.region a:hover,.region a:focus-visible{color:#fff}
+.region a.on{color:#fff}
 .hero{padding-top:40px;position:relative}
 .lede{font-size:20px;color:var(--ink-soft);max-width:34ch}
 .product{display:block;width:100%;max-width:520px;margin:24px auto;height:auto}
@@ -122,14 +126,21 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 </head>
 <body>
 
-<div class="topbar"><strong>2× money back guarantee.</strong> Lose 10 lbs in 90 days or I pay you double.</div>
+<div class="topbar">
+<strong>2× money back guarantee.</strong> Lose 10 lbs in 90 days or you get paid double.
+<div class="region" aria-label="Country">
+<a class="on" href="fatLoss.html?geo=us" aria-current="page">US</a>
+<span aria-hidden="true">·</span>
+<a href="fatLoss-in.html?geo=in">India</a>
+</div>
+</div>
 
 <main>
 <section class="hero">
 <div class="wrap">
 <div class="stamp" aria-hidden="true"><b>2×</b><span>MONEY BACK</span></div>
 <h1>How to Lose 10 Lbs of Fat as Fast as Biologically Possible</h1>
-<p class="lede">Follow the program for 90 days. Lose 10 pounds, or I pay you back double what you paid. In writing.</p>
+<p class="lede">Follow the program for 90 days. Lose 10 pounds, or you get paid back double what you paid. In writing.</p>
 <img class="product" src="fatLossViews/assets/photos/product-stack.png" alt="How to Lose Fat as Fast as Possible: the book and 90 day program pages" width="1040" height="780">
 <div class="price"><s>$147 value</s><span class="now">$29</span></div>
 <button class="cta" type="button" data-checkout>Yes, I'm losing 10 lbs in 90 days<small>Instant app access · Book + ledger · 2× guarantee</small></button>
@@ -141,9 +152,9 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <h2>You've been hiding it for years</h2>
 <p>You dodge cameras. You wear layers in the heat. You make an excuse to skip the pool, then go home and promise yourself you'll start Monday.</p>
 <p>If you're skinny fat, it's worse. A regular fat guy keeps his shirt on and everyone understands. A skinny fat guy keeps his shirt on and nobody does. So you hide, every single day.</p>
-<p>I know because I hid for 28 years. There are no before pictures of me. None exist.</p>
+<p>You have been doing this long enough that the before pictures barely exist. You made sure of it.</p>
 <div class="photo"><img src="fatLossViews/assets/photos/shirtless.jpg" alt="Current shirtless mirror photo" width="840" height="1050"></div>
-<p class="caption">Now, at 28, this is me. You're next.</p>
+<p class="caption">This is the other side of hiding. You're next.</p>
 </div>
 </section>
 
@@ -152,7 +163,7 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <h2>You're not lazy. You're working blind.</h2>
 <p>You've probably tried already. Workouts, "eating clean," high protein. You drop a few pounds and they come right back.</p>
 <p>That's the skinny fat trap. Some days you feel too skinny and eat more to build muscle. Then you catch your stomach in the mirror, feel too fat, and cut back down. Up and down for years, chasing two goals and reaching neither.</p>
-<p>I spent 4 years in that trap. 30 pounds lost, and people still called me soft. It was never willpower. It was guessing.</p>
+<p>You can lose 30 pounds and still get called soft. That was never willpower. You were guessing.</p>
 </div>
 </section>
 
@@ -161,9 +172,9 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <h2>One sentence changes the math</h2>
 <p class="quote">"If you ain't tracking, you slacking."</p>
 <p>Once you track your calories and steps, the numbers stop lying to you. One chocolate chip cookie takes 10,000 steps to burn off. A pack of 12 is 120,000 steps. You can't out walk a cookie habit, and no workout on earth out trains a bad diet.</p>
-<p>When I stopped guessing and started counting, this happened:</p>
-<div class="result">The 10 pounds that once took me <em>2 years</em> came off in <em>90 days.</em></div>
-<p>Same body. Same genetics. Same cookies calling. The only difference was tracking, and it's the only difference you need.</p>
+<p>The second you stop guessing and start counting, the math flips:</p>
+<div class="result">The 10 pounds that stall you for years can come off in <em>90 days.</em></div>
+<p>Same body. Same genetics. Same cookies calling. The only difference is tracking, and it's the only difference you need.</p>
 <button class="cta cta-gap" type="button" data-checkout>Yes, I'm losing 10 lbs in 90 days<small>$29 · Instant app access · 2× guarantee</small></button>
 </div>
 </section>
@@ -183,7 +194,7 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 
 <section>
 <div class="wrap">
-<h2>Lose 10 lbs in 90 days or I pay you double</h2>
+<h2>Lose 10 lbs in 90 days or you get paid double</h2>
 <div class="guarantee">
 <h3>The 2× money back guarantee</h3>
 <p>Here's the deal, plainly. You follow the program for 90 days: log your food, photograph your meals, walk your steps, do the workouts. If you do that and don't lose at least 10 pounds, you email your logs and get <strong>double</strong> your money back.</p>
@@ -198,7 +209,7 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <div class="wrap">
 <h2>Your prime is running right now</h2>
 <p>Your 20s are the years your body burns fat best, builds muscle easiest, and recovers fastest. They're also the years of beaches, pools, and photos you'll look back on forever.</p>
-<p>Don't spend them under a sweater. I did, and those years don't come back. Yours are still running.</p>
+<p>Don't spend them under a sweater. Those years don't come back. Yours are still running.</p>
 <button class="cta" type="button" data-checkout>Yes, I'm losing 10 lbs in 90 days<small>Start tonight · Send your Day 1 email</small></button>
 </div>
 </section>
