@@ -1,7 +1,6 @@
 /**
  * Fat Loss funnel config.
- * Sales: /fatLoss.html (US you-letter). India visitors are sent to
- *   /fatLoss-in.html via fatLossViews/assets/flGeo.js (?geo=us to stay)
+ * Sales: /fatLoss.html (US you-letter, $29 / 10 lbs)
  * India sales: /fatLoss-in.html (₹299 / ₹99 kit copy; checkout uses the USD
  *   Stripe links below until INR UPI Payment Links exist)
  * Coaching: /fatLossCoaching.html
