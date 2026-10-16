@@ -45,6 +45,15 @@ export const PROJECTS = [
     stack: ["HTML", "CSS", "JavaScript", "Firebase Auth", "Firestore"],
   },
   {
+    id: "fat-loss-in",
+    name: "Fat Loss India",
+    lane: "product",
+    blurb: "Lose 4.5 kg in 90 days. ₹299, pay with UPI.",
+    href: "/fatLoss-in.html",
+    more: "The India landing for How to Lose Fat as Fast as Possible: 4.5 kg in 90 days, a 2× UPI money-back guarantee, dal chawal, and an India Boy Kibble kit. Same book and ledger app as the US page, priced in rupees.",
+    stack: ["HTML", "CSS", "JavaScript", "Stripe Payment Links"],
+  },
+  {
     id: "fat-loss-coaching",
     name: "Fat Loss Coaching",
     lane: "product",

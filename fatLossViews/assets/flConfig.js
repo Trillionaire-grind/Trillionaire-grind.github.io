@@ -1,6 +1,8 @@
 /**
  * Fat Loss funnel config.
- * Sales: /fatLoss.html
+ * Sales: /fatLoss.html (US you-letter, $29 / 10 lbs)
+ * India sales: /fatLoss-in.html (₹299 / ₹99 kit copy; checkout uses the USD
+ *   Stripe links below until INR UPI Payment Links exist)
  * Coaching: /fatLossCoaching.html
  * Product app (book + ledger): /fatLossViews/app.html
  *
