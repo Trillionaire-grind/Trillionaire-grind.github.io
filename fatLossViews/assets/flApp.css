@@ -165,9 +165,9 @@ html, body.fl-app {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 10px 12px;
-  background: #fff;
-  border-bottom: 2px solid var(--line);
+  padding: 8px 12px 10px;
+  background: #fff8f6;
+  border-top: 2px solid var(--line);
 }
 
 .fl-book-toolbar a {
@@ -320,6 +320,7 @@ html, body.fl-app {
   color: var(--ink);
 }
 
-.fl-auth-links a[hidden] {
-  display: none;
+.fl-auth-links a[hidden],
+.fl-account-bar [hidden] {
+  display: none !important;
 }
