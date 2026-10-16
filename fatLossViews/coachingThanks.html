@@ -30,7 +30,6 @@
     function gtag(){ dataLayer.push(arguments); }
     gtag("js", new Date());
     gtag("config", "G-MW3X255274");
-    gtag("event", "purchase", { currency: "USD" });
   </script>
   <script>
   !function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js?pixel_id=a2_jf67hvvk6fyc",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_jf67hvvk6fyc');rdt('track', 'PageVisit');rdt('track', 'Purchase');
@@ -70,6 +69,7 @@
   <script type="module">
     import { COACHING_IG_URL, GUARANTEE_EMAIL } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
+    import { fireGaPurchaseOnce } from "./assets/flGaPurchase.js";
 
     console.log("[Fat Loss coaching thanks] working version:", flVersionLabel());
     const versionEl = document.getElementById("flcVersion");
@@ -86,10 +86,16 @@
       "6mo": "6 month coaching: $1,100 paid up front.",
       "12mo": "12 month coaching: $2,000 paid up front.",
     };
+    const planValues = { weekly: 50, "3mo": 600, "6mo": 1100, "12mo": 2000 };
     const key = new URLSearchParams(location.search).get("plan") || "";
     const line = plans[key];
     const planEl = document.getElementById("thanksPlan");
     if (line) planEl.textContent = line;
+
+    fireGaPurchaseOnce({
+      currency: "USD",
+      value: planValues[key],
+    });
 
     const statsForm = document.getElementById("thanksStats");
     const statsStatus = document.getElementById("thanksStatus");

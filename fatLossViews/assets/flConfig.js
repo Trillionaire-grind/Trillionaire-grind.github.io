@@ -6,21 +6,22 @@
  * Coaching: /fatLossCoaching.html
  * Product app (book + ledger): /fatLossViews/app.html
  *
- * Stripe Payment Link → After payment → Redirect customers to:
+ * Stripe Payment Link → After payment → Redirect customers to
+ * (append session_id={CHECKOUT_SESSION_ID} so GA purchase can fire once):
  *   Book only ($29):
- *     https://keplersiguineau.com/fatLossViews/thankYou.html
+ *     https://keplersiguineau.com/fatLossViews/thankYou.html?session_id={CHECKOUT_SESSION_ID}
  *   Book + Boy Kibble Kit ($38):
- *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1
+ *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1&session_id={CHECKOUT_SESSION_ID}
  *
  * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
  *
  * Coaching: plan cards go straight to Stripe. The apply form is optional
  * for people who want a call first. After payment, coachingThanks can collect stats.
  * Coaching Stripe Payment Links → After payment → Redirect customers to:
- *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly
- *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo
- *   6 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=6mo
- *   12 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=12mo
+ *   Weekly:  https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=weekly&session_id={CHECKOUT_SESSION_ID}
+ *   3 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=3mo&session_id={CHECKOUT_SESSION_ID}
+ *   6 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=6mo&session_id={CHECKOUT_SESSION_ID}
+ *   12 months: https://keplersiguineau.com/fatLossViews/coachingThanks.html?plan=12mo&session_id={CHECKOUT_SESSION_ID}
  */
 export const PRODUCT_NAME = "How to Lose Fat as Fast as Possible";
 
@@ -44,11 +45,11 @@ export const STRIPE_PAYMENT_URL = STRIPE_BOOK_ONLY_URL;
 
 /** Book-only Stripe success redirect (no kit download). */
 export const CHECKOUT_SUCCESS_URL =
-  "https://keplersiguineau.com/fatLossViews/thankYou.html";
+  "https://keplersiguineau.com/fatLossViews/thankYou.html?session_id={CHECKOUT_SESSION_ID}";
 
 /** Book + kit Stripe success redirect (shows kit download). */
 export const CHECKOUT_SUCCESS_URL_WITH_KIT =
-  "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1";
+  "https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1&session_id={CHECKOUT_SESSION_ID}";
 
 /** Customer-facing app: book reader + 90-day ledger (installable PWA). */
 export const APP_URL = "app.html";
