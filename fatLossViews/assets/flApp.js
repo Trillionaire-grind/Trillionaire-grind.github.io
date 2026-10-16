@@ -15,6 +15,12 @@ import {
 import { flVersionLabel } from "./flVersion.js";
 import { downloadBackupFile, getLedgerState } from "./flLedgerStore.js";
 import { initLedger } from "./flLedger.js";
+import {
+  capturePurchaseFromUrl,
+  getSignupWindow,
+  hasKibbleKit,
+  hasLocalPaidAccess,
+} from "./flPurchase.js";
 
 console.log("[Fat Loss app] working version:", flVersionLabel());
 
@@ -39,13 +45,21 @@ const authToggle = document.getElementById("authToggle");
 const authReset = document.getElementById("authReset");
 const authStatus = document.getElementById("authStatus");
 const authModeLabel = document.getElementById("authModeLabel");
+const authLead = document.getElementById("authLead");
+const authSkip = document.getElementById("authSkip");
 const localModeNote = document.getElementById("localModeNote");
 const accountBar = document.getElementById("accountBar");
 const accountEmail = document.getElementById("accountEmail");
 const signOutBtn = document.getElementById("signOutBtn");
 const accountBackup = document.getElementById("accountBackup");
 const deleteAccountBtn = document.getElementById("deleteAccountBtn");
+const signupBar = document.getElementById("signupBar");
+const signupBarCopy = document.getElementById("signupBarCopy");
+const openSignupBtn = document.getElementById("openSignupBtn");
+const openSigninBtn = document.getElementById("openSigninBtn");
 const topStrip = document.getElementById("topStrip");
+const kitBar = document.getElementById("kitBar");
+const kitLink = document.getElementById("kitLink");
 
 let deferredInstall = null;
 let authMode = "signin";
@@ -99,19 +113,72 @@ function readHashTab() {
 
 window.addEventListener("hashchange", readHashTab);
 
+function syncKitBar() {
+  if (!kitBar || !kitLink) return;
+  if (hasKibbleKit()) {
+    kitLink.href = KIT_PDF;
+    kitLink.setAttribute("download", "");
+    kitBar.hidden = false;
+  } else {
+    kitBar.hidden = true;
+  }
+}
+
+function syncAuthCopy() {
+  const signup = getSignupWindow();
+  const paidLocal = hasLocalPaidAccess();
+  if (authLead) {
+    if (authMode === "signup") {
+      authLead.textContent = signup.ok
+        ? `You have ${signup.daysLeft} day${signup.daysLeft === 1 ? "" : "s"} left to create this account. Kibble kit stays on the account if you bought it. Meal photos stay on this phone. Weight is typed in by hand.`
+        : signup.reason;
+    } else if (paidLocal) {
+      authLead.textContent =
+        "Sign in on any device. Your ledger and kibble kit follow the account. Meal photos stay on each phone.";
+    } else {
+      authLead.textContent =
+        "Sign in if you already created an account after buying. New accounts open for 30 days after you pay, from your thank-you page.";
+    }
+  }
+  if (authToggle) {
+    const allowSignup = signup.ok;
+    authToggle.hidden = !allowSignup;
+    if (allowSignup) {
+      authToggle.textContent =
+        authMode === "signup" ? "Already have an account? Sign in" : "New here? Create account";
+    }
+  }
+  if (authSkip) {
+    authSkip.hidden = !paidLocal;
+  }
+  if (openSignupBtn) openSignupBtn.hidden = !signup.ok;
+}
+
+function openAuthGate(mode) {
+  setAuthMode(mode);
+  authGate?.classList.remove("is-hidden");
+}
+
 function showApp(user, cloudEnabled) {
+  capturePurchaseFromUrl(window.location.search);
   const signedIn = !!user;
   const localOnly = !cloudEnabled;
+  const paidLocal = hasLocalPaidAccess();
+  const signup = getSignupWindow();
+
+  syncKitBar();
+  syncAuthCopy();
 
   if (localOnly) {
     authGate?.classList.add("is-hidden");
     appShell?.classList.remove("is-locked");
     if (topStrip) {
       topStrip.innerHTML =
-        "<strong>Local mode</strong> · Export backups often · Cloud login activates when Firebase is configured";
+        "<strong>This phone</strong> · Book + ledger saved here · Create an account after you pay to take them with you";
     }
     if (localModeNote) localModeNote.hidden = false;
     accountBar?.classList.add("is-hidden");
+    if (signupBar) signupBar.classList.add("is-hidden");
     readHashTab();
     return;
   }
@@ -121,40 +188,102 @@ function showApp(user, cloudEnabled) {
   if (signedIn) {
     authGate?.classList.add("is-hidden");
     appShell?.classList.remove("is-locked");
+    const kitNote = hasKibbleKit() ? " · Kibble kit saved on this account" : "";
     if (topStrip) {
       topStrip.innerHTML =
-        "<strong>Signed in</strong> · Ledger syncs to your account · Export backups anytime";
+        `<strong>Signed in</strong> · Ledger syncs to your account${kitNote} · Photos stay on this phone`;
     }
     if (accountBar) {
       accountBar.classList.remove("is-hidden");
       if (accountEmail) accountEmail.textContent = user.email || "Account";
     }
+    if (signupBar) signupBar.classList.add("is-hidden");
     readHashTab();
-  } else {
-    authGate?.classList.remove("is-hidden");
-    appShell?.classList.add("is-locked");
-    accountBar?.classList.add("is-hidden");
+    return;
   }
+
+  accountBar?.classList.add("is-hidden");
+
+  if (paidLocal) {
+    authGate?.classList.add("is-hidden");
+    appShell?.classList.remove("is-locked");
+    if (signup.ok) {
+      if (topStrip) {
+        topStrip.innerHTML = `<strong>Paid on this phone</strong> · ${signup.daysLeft} day${signup.daysLeft === 1 ? "" : "s"} left to create an account`;
+      }
+      if (signupBar) {
+        signupBar.classList.remove("is-hidden");
+        if (signupBarCopy) {
+          signupBarCopy.textContent = `Create an account in the next ${signup.daysLeft} day${signup.daysLeft === 1 ? "" : "s"} so your ledger${hasKibbleKit() ? " and kibble kit" : ""} follow you to a new phone.`;
+        }
+      }
+    } else {
+      if (topStrip) {
+        topStrip.innerHTML =
+          "<strong>This phone</strong> · Account signup window has ended · Sign in if you already made one";
+      }
+      if (signupBar) {
+        signupBar.classList.remove("is-hidden");
+        if (signupBarCopy) {
+          signupBarCopy.textContent =
+            "The 30-day window to create an account has ended. Sign in if you already made one.";
+        }
+      }
+    }
+    readHashTab();
+    return;
+  }
+
+  openAuthGate("signin");
+  appShell?.classList.add("is-locked");
+  if (signupBar) signupBar.classList.add("is-hidden");
 }
 
 function setAuthMode(mode) {
-  authMode = mode === "signup" ? "signup" : "signin";
+  const signup = getSignupWindow();
+  authMode = mode === "signup" && signup.ok ? "signup" : "signin";
   if (authModeLabel) {
     authModeLabel.textContent = authMode === "signup" ? "Create account" : "Sign in";
   }
   if (authSubmit) {
     authSubmit.textContent = authMode === "signup" ? "Create account" : "Sign in";
   }
-  if (authToggle) {
-    authToggle.textContent =
-      authMode === "signup" ? "Already have an account? Sign in" : "New here? Create account";
+  if (authPassword) {
+    authPassword.setAttribute(
+      "autocomplete",
+      authMode === "signup" ? "new-password" : "current-password",
+    );
   }
   if (authStatus) authStatus.textContent = "";
+  syncAuthCopy();
 }
 
 authToggle?.addEventListener("click", (e) => {
   e.preventDefault();
-  setAuthMode(authMode === "signup" ? "signin" : "signup");
+  if (authMode === "signup") {
+    setAuthMode("signin");
+    return;
+  }
+  if (!getSignupWindow().ok) {
+    setAuthMode("signin");
+    if (authStatus) authStatus.textContent = getSignupWindow().reason;
+    return;
+  }
+  setAuthMode("signup");
+});
+
+openSignupBtn?.addEventListener("click", () => {
+  openAuthGate("signup");
+});
+
+openSigninBtn?.addEventListener("click", () => {
+  openAuthGate("signin");
+});
+
+authSkip?.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (!hasLocalPaidAccess()) return;
+  authGate?.classList.add("is-hidden");
 });
 
 authReset?.addEventListener("click", async (e) => {
@@ -239,20 +368,8 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./fl-sw.js").catch(() => {});
 }
 
-(() => {
-  const params = new URLSearchParams(window.location.search);
-  const hasKit =
-    params.get("kit") === "1" ||
-    params.get("kit") === "true" ||
-    params.get("bundle") === "1";
-  const kitBar = document.getElementById("kitBar");
-  const kitLink = document.getElementById("kitLink");
-  if (hasKit && kitBar && kitLink) {
-    kitLink.href = KIT_PDF;
-    kitLink.setAttribute("download", "");
-    kitBar.hidden = false;
-  }
-})();
+capturePurchaseFromUrl(window.location.search);
+syncKitBar();
 
 window.addEventListener("resize", () => {
   refreshBookReaderLayout();

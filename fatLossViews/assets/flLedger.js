@@ -286,7 +286,7 @@ export function initLedger() {
       steps: els.steps.value === "" ? "" : Number(els.steps.value),
       workout: !!els.workout.checked,
       workoutNote: els.workoutNote.value.trim(),
-      weight: els.weight.value === "" ? "" : Number(els.weight.value),
+      weight: (els.weight?.value || "").trim(),
       notes: els.notes.value.trim(),
     };
     state = updateLedgerState({
@@ -473,7 +473,7 @@ export function initLedger() {
       steps: els.steps.value === "" ? "" : Number(els.steps.value),
       workout: !!els.workout.checked,
       workoutNote: els.workoutNote.value.trim(),
-      weight: els.weight.value === "" ? "" : Number(els.weight.value),
+      weight: (els.weight?.value || "").trim(),
       meals: draftMeals,
       mealsLogged: !!els.mealsLogged.checked || draftMeals.length > 0,
       notes: els.notes.value.trim(),

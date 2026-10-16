@@ -222,6 +222,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // --- Fat Loss app (book + 90-day ledger) ---
+    match /fatLossUsers/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
     match /users/{userId} {
       // Single-club app: members read club profiles; admins can list everyone for role picker
       allow read: if signedIn() && (

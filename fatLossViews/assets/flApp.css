@@ -308,3 +308,18 @@ html, body.fl-app {
   height: 0;
   overflow: hidden;
 }
+
+.fl-auth-form .fl-field input[type="email"],
+.fl-auth-form .fl-field input[type="password"] {
+  width: 100%;
+  border: 2px solid var(--ink);
+  padding: 11px 12px;
+  font: inherit;
+  font-size: 16px;
+  background: #fff;
+  color: var(--ink);
+}
+
+.fl-auth-links a[hidden] {
+  display: none;
+}
