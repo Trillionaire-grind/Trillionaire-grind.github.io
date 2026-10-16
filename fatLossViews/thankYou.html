@@ -25,7 +25,6 @@
     function gtag(){ dataLayer.push(arguments); }
     gtag("js", new Date());
     gtag("config", "G-MW3X255274");
-    gtag("event", "purchase", { currency: "USD" });
   </script>
   <!-- Reddit Pixel -->
   <script>
@@ -108,6 +107,7 @@
       COACHING_ABSOLUTE_URL,
     } from "./assets/flConfig.js";
     import { flVersionLabel } from "./assets/flVersion.js";
+    import { fireGaPurchaseOnce } from "./assets/flGaPurchase.js";
 
     console.log("[Fat Loss thank-you] working version:", flVersionLabel());
 
@@ -122,6 +122,11 @@
       params.get("kit") === "1" ||
       params.get("kit") === "true" ||
       params.get("bundle") === "1";
+
+    fireGaPurchaseOnce({
+      currency: "USD",
+      value: hasKit ? 38 : 29,
+    });
 
     if (hasKit) {
       const kitBlock = document.getElementById("kitBlock");
