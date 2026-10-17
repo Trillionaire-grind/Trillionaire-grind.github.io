@@ -181,14 +181,22 @@ export async function signUp(email, password) {
     throw err;
   }
   const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-  await syncLedgerForUser(cred.user, { isNew: true });
+  try {
+    await syncLedgerForUser(cred.user, { isNew: true });
+  } catch (err) {
+    console.error("[Fat Loss auth] ledger sync failed", err);
+  }
   return cred.user;
 }
 
 export async function signIn(email, password) {
   if (!auth) throw new Error("Account sync is not configured yet.");
   const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-  await syncLedgerForUser(cred.user);
+  try {
+    await syncLedgerForUser(cred.user);
+  } catch (err) {
+    console.error("[Fat Loss auth] ledger sync failed", err);
+  }
   return cred.user;
 }
 
