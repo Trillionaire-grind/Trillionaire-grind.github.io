@@ -72,20 +72,28 @@ if (bookPdfLink) {
 const coachLink = document.getElementById("coachLink");
 if (coachLink) coachLink.href = COACHING_ABSOLUTE_URL;
 
-// The fixed header wraps differently per device, so measure it instead of
-// guessing; the book reader sizes its page surface off this value.
-function syncHeaderHeight() {
+// The fixed chrome wraps differently per device, so measure it instead of
+// guessing; the book reader sizes its page surface off these values.
+function syncChromeHeights() {
   const header = document.querySelector(".fl-app-header");
-  if (!header) return;
-  document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+  const nav = document.querySelector(".fl-app-nav");
+  if (header) {
+    document.documentElement.style.setProperty("--header-h", `${header.offsetHeight}px`);
+  }
+  if (nav) {
+    document.documentElement.style.setProperty("--nav-h", `${nav.offsetHeight}px`);
+  }
+  refreshBookReaderLayout();
 }
 
-syncHeaderHeight();
-window.addEventListener("resize", syncHeaderHeight);
-window.addEventListener("orientationchange", syncHeaderHeight);
+syncChromeHeights();
+window.addEventListener("resize", syncChromeHeights);
+window.addEventListener("orientationchange", syncChromeHeights);
 if (window.ResizeObserver) {
   const header = document.querySelector(".fl-app-header");
-  if (header) new ResizeObserver(syncHeaderHeight).observe(header);
+  const nav = document.querySelector(".fl-app-nav");
+  if (header) new ResizeObserver(syncChromeHeights).observe(header);
+  if (nav) new ResizeObserver(syncChromeHeights).observe(nav);
 }
 
 function setTab(name) {

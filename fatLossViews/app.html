@@ -48,30 +48,11 @@
   <header class="fl-app-header">
     <div class="fl-app-top" id="topStrip"><strong>Private on this device</strong> · Book + ledger saved locally</div>
     <div class="fl-app-bar">
-      <h1 class="fl-app-title">How to Lose Fat</h1>
-      <span class="fl-app-ver" id="flAppVersion">v0.0.0.23</span>
-    </div>
-    <div class="fl-account-bar is-hidden" id="accountBar">
-      <span id="accountEmail">account</span>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
-    </div>
-    <div class="fl-account-bar is-hidden" id="signupBar">
-      <span id="signupBarCopy">Create an account within 30 days of buying so this follows you to a new phone.</span>
-      <button type="button" class="fl-btn fl-btn--accent fl-account-btn" id="openSignupBtn">Create account</button>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="openSigninBtn">Sign in</button>
-    </div>
-    <nav class="fl-tabs" role="tablist" aria-label="App sections">
-      <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">Book</button>
-      <button type="button" class="fl-tab" data-tab="ledger" role="tab" aria-selected="false">Ledger</button>
-    </nav>
-    <div class="fl-book-toolbar" id="kitBar" hidden>
-      <span style="font-size:13px;font-weight:700;align-self:center;">Your Boy Kibble Kit:</span>
-      <a href="#" id="kitLink">Download kit PDF</a>
+      <h1 class="fl-app-title">How to Lose Fat App</h1>
     </div>
   </header>
 
+  <main class="fl-app-main">
   <div class="fl-install" id="installBanner">
     <p><strong>Install the app</strong>: Add to Home Screen for one-tap access to your book and ledger.</p>
     <div style="display:flex;gap:8px;flex-shrink:0;">
@@ -80,7 +61,6 @@
     </div>
   </div>
 
-  <main class="fl-app-main">
     <section class="fl-panel fl-panel-book" id="panel-book" role="tabpanel" aria-label="Book">
       <aside class="fl-coach-upgrade" id="coachUpgrade">
         <h2>Want me to run the system for you?</h2>
@@ -302,6 +282,29 @@
       </div>
     </section>
   </main>
+
+  <nav class="fl-app-nav" aria-label="App">
+    <div class="fl-account-bar is-hidden" id="accountBar">
+      <span id="accountEmail">account</span>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
+    </div>
+    <div class="fl-account-bar is-hidden" id="signupBar">
+      <span id="signupBarCopy">Create an account within 30 days of buying so this follows you to a new phone.</span>
+      <button type="button" class="fl-btn fl-btn--accent fl-account-btn" id="openSignupBtn">Create account</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="openSigninBtn">Sign in</button>
+    </div>
+    <div class="fl-book-toolbar" id="kitBar" hidden>
+      <span style="font-size:13px;font-weight:700;align-self:center;">Your Boy Kibble Kit:</span>
+      <a href="#" id="kitLink">Download kit PDF</a>
+    </div>
+    <div class="fl-tabs" role="tablist" aria-label="App sections">
+      <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">Book</button>
+      <button type="button" class="fl-tab" data-tab="ledger" role="tab" aria-selected="false">Ledger</button>
+    </div>
+    <p class="fl-app-ver" id="flAppVersion">v0.0.0.45</p>
+  </nav>
   </div>
 
   <script type="module" src="assets/flApp.js"></script>

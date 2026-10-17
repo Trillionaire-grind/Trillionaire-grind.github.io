@@ -5,7 +5,8 @@
   --line: #e8e8e8;
   --bg: #fafafa;
   --tab-h: 56px;
-  --header-h: 92px;
+  --header-h: 72px;
+  --nav-h: 88px;
 }
 
 * { box-sizing: border-box; }
@@ -43,21 +44,36 @@ html, body.fl-app {
 .fl-app-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 10px;
-  padding: 10px 14px 0;
+  padding: 12px 14px;
 }
 
 .fl-app-title {
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
   margin: 0;
+  text-align: center;
+}
+
+.fl-app-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background: #fff;
+  border-top: 3px solid var(--ink);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 .fl-app-ver {
+  margin: 0;
+  padding: 4px 14px 8px;
   font-size: 11px;
   color: var(--gray);
+  text-align: center;
   white-space: nowrap;
 }
 
@@ -65,12 +81,11 @@ html, body.fl-app {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0;
-  margin: 10px 0 0;
+  margin: 0;
 }
 
 .fl-tab {
   border: none;
-  border-top: 3px solid var(--ink);
   border-right: 3px solid var(--ink);
   background: #fff;
   color: var(--gray);
@@ -79,7 +94,7 @@ html, body.fl-app {
   font-weight: 900;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 12px 8px;
+  padding: 14px 8px;
   cursor: pointer;
 }
 
@@ -119,11 +134,13 @@ html, body.fl-app {
 
 .fl-app-main {
   padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px));
   min-height: 100%;
 }
 
 .fl-panel {
-  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100vh - var(--header-h) - var(--nav-h));
+  min-height: calc(100dvh - var(--header-h) - var(--nav-h));
 }
 
 .fl-panel[hidden] { display: none !important; }
@@ -165,9 +182,9 @@ html, body.fl-app {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  padding: 8px 12px 10px;
+  padding: 8px 12px;
   background: #fff8f6;
-  border-top: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
 }
 
 .fl-book-toolbar a {
@@ -197,16 +214,6 @@ html, body.fl-app {
 }
 
 @media (max-width: 560px) {
-  :root {
-    --header-h: 108px;
-  }
-
-  .fl-app-bar {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-  }
-
   .fl-install {
     flex-direction: column;
     align-items: stretch;
@@ -276,8 +283,9 @@ html, body.fl-app {
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
-  padding: 0 14px 10px;
+  padding: 8px 14px;
   font-size: 12px;
+  border-bottom: 2px solid var(--line);
 }
 
 .fl-account-bar.is-hidden {
