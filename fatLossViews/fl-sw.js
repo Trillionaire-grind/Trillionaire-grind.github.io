@@ -1,4 +1,4 @@
-const CACHE = "fl-app-v0.0.0.46";
+const CACHE = "fl-app-v0.0.0.47";
 
 const ASSETS = [
   "./app.html",
