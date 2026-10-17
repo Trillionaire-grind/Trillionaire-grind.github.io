@@ -13,7 +13,8 @@
  *   Book + Boy Kibble Kit ($38):
  *     https://keplersiguineau.com/fatLossViews/thankYou.html?kit=1&session_id={CHECKOUT_SESSION_ID}
  *
- * Thank-you sends buyers to the app. Kit PDF also available when ?kit=1.
+ * Thank-you stamps a 30-day create-account pass in localStorage, then
+ * sends buyers to the app. Kit PDF follows the account as kibbleKit: true.
  *
  * Coaching: plan cards go straight to Stripe. The apply form is optional
  * for people who want a call first. After payment, coachingThanks can collect stats.

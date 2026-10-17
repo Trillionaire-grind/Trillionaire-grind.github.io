@@ -1,17 +1,17 @@
 .fl-panel-book {
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - var(--header-h));
-  min-height: calc(100dvh - var(--header-h));
+  min-height: calc(100vh - var(--header-h) - var(--nav-h));
+  min-height: calc(100dvh - var(--header-h) - var(--nav-h));
   overflow: hidden;
 }
 
-/* Reading mode fills exactly the space left under the header and any banners,
+/* Reading mode fills the space between the header and the bottom nav,
    which JS measures into --fl-book-panel-h. */
 .fl-panel-book.is-reading {
   min-height: 0;
-  height: var(--fl-book-panel-h, calc(100dvh - var(--header-h)));
-  max-height: var(--fl-book-panel-h, calc(100dvh - var(--header-h)));
+  height: var(--fl-book-panel-h, calc(100dvh - var(--header-h) - var(--nav-h)));
+  max-height: var(--fl-book-panel-h, calc(100dvh - var(--header-h) - var(--nav-h)));
 }
 
 /* Contents: cover, details, chapter list */

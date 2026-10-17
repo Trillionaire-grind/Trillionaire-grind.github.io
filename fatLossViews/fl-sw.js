@@ -1,4 +1,4 @@
-const CACHE = "fl-app-v0.0.0.29";
+const CACHE = "fl-app-v0.0.0.47";
 
 const ASSETS = [
   "./app.html",
@@ -11,6 +11,7 @@ const ASSETS = [
   "./assets/flAuth.js",
   "./assets/flFirebase.js",
   "./assets/flFirebaseConfig.js",
+  "./assets/flPurchase.js",
   "./assets/flFoodDb.js",
   "./assets/flMealParser.js",
   "./assets/flLedger.css",

@@ -144,7 +144,9 @@ function showContents() {
 function sizeReadingPanel() {
   if (!els.root || !els.root.classList.contains("is-reading")) return;
   const top = els.root.getBoundingClientRect().top;
-  const available = Math.max(320, window.innerHeight - top);
+  const nav = document.querySelector(".fl-app-nav");
+  const navH = nav ? nav.getBoundingClientRect().height : 0;
+  const available = Math.max(320, window.innerHeight - top - navH);
   els.root.style.setProperty("--fl-book-panel-h", `${available}px`);
 }
 

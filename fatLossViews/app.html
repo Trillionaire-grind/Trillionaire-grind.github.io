@@ -10,6 +10,7 @@
   <title>Fat Loss App: Book + 90-Day Ledger</title>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="assets/photos/product-stack.png">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,500,0,0">
   <link rel="stylesheet" href="assets/flApp.css">
   <link rel="stylesheet" href="assets/flBookReader.css">
   <link rel="stylesheet" href="assets/flLedger.css">
@@ -20,7 +21,7 @@
     <div class="fl-auth-card">
       <p class="fl-brand">How to Lose Fat as Fast as Possible</p>
       <h2 id="authModeLabel">Sign in</h2>
-      <p class="fl-auth-lead">Create an account so your ledger follows you across phones. Meal photos still stay in your camera roll.</p>
+      <p class="fl-auth-lead" id="authLead">Sign in if you already created an account after buying. New accounts open for 30 days after you pay, from your thank-you page.</p>
       <form id="authForm" class="fl-auth-form">
         <div class="fl-field">
           <label for="authEmail">Email</label>
@@ -38,6 +39,9 @@
         ·
         <a href="#" id="authReset">Forgot password</a>
       </p>
+      <p class="fl-auth-links">
+        <a href="#" id="authSkip" hidden>Keep using this phone without an account</a>
+      </p>
     </div>
   </div>
 
@@ -45,21 +49,11 @@
   <header class="fl-app-header">
     <div class="fl-app-top" id="topStrip"><strong>Private on this device</strong> · Book + ledger saved locally</div>
     <div class="fl-app-bar">
-      <h1 class="fl-app-title">How to Lose Fat</h1>
-      <span class="fl-app-ver" id="flAppVersion">v0.0.0.23</span>
+      <h1 class="fl-app-title">How to Lose Fat App</h1>
     </div>
-    <div class="fl-account-bar is-hidden" id="accountBar">
-      <span id="accountEmail">account</span>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
-      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
-    </div>
-    <nav class="fl-tabs" role="tablist" aria-label="App sections">
-      <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">Book</button>
-      <button type="button" class="fl-tab" data-tab="ledger" role="tab" aria-selected="false">Ledger</button>
-    </nav>
   </header>
 
+  <main class="fl-app-main">
   <div class="fl-install" id="installBanner">
     <p><strong>Install the app</strong>: Add to Home Screen for one-tap access to your book and ledger.</p>
     <div style="display:flex;gap:8px;flex-shrink:0;">
@@ -68,12 +62,6 @@
     </div>
   </div>
 
-  <div class="fl-book-toolbar" id="kitBar" hidden>
-    <span style="font-size:13px;font-weight:700;align-self:center;">Your Boy Kibble Kit:</span>
-    <a href="#" id="kitLink">Download kit PDF</a>
-  </div>
-
-  <main class="fl-app-main">
     <section class="fl-panel fl-panel-book" id="panel-book" role="tabpanel" aria-label="Book">
       <aside class="fl-coach-upgrade" id="coachUpgrade">
         <h2>Want me to run the system for you?</h2>
@@ -135,7 +123,8 @@
         <h1>Ledger</h1>
         <p class="fl-lead">
           Track the three pillars every day: calories under target, steps hit, and three workouts a week.
-          Meal photos stay in your camera roll: check the box when you've logged them.
+          Photograph meals with your camera. Those photos stay on this phone. They do not upload with your account.
+          Weight is typed in by hand.
         </p>
 
         <div class="fl-pillars" aria-label="Three pillars">
@@ -169,7 +158,7 @@
 
         <section class="fl-card">
           <h2>Log meals</h2>
-          <p class="fl-meta">Type what you weighed: e.g. <b>400g cooked chicken breast</b> or <b>90g rice dry</b>. Calories and protein fill in automatically.</p>
+          <p class="fl-meta">Type what you weighed: e.g. <b>400g cooked chicken breast</b> or <b>90g rice dry</b>. Calories and protein fill in automatically. Snap a photo on this phone. The picture stays here.</p>
           <div class="fl-meal-row">
             <input type="text" id="mealInput" class="fl-meal-input" placeholder="400g cooked chicken breast" autocomplete="off">
             <button type="button" class="fl-btn fl-btn--accent" id="addMeal">Add</button>
@@ -222,8 +211,8 @@
 
           <div class="fl-grid-2">
             <div class="fl-field">
-              <label for="weight">Weight (optional)</label>
-              <input type="number" id="weight" min="0" step="0.1" inputmode="decimal" placeholder="lbs">
+              <label for="weight">Morning weight (type it)</label>
+              <input type="text" id="weight" inputmode="decimal" placeholder="e.g. 182 lbs" autocomplete="off">
             </div>
             <div class="fl-field" style="display:flex;align-items:flex-end;">
               <label class="fl-check" style="margin:0 0 12px;">
@@ -271,7 +260,7 @@
           </p>
           <p class="fl-meta">
             Download a JSON backup anytime. Restore it on a new phone or after clearing browser data.
-            Meal photos are not included: they stay in your camera roll.
+            Meal photos are not included. They stay on this phone. Weight and meals sync as the text you typed.
           </p>
           <div class="fl-actions">
             <button type="button" class="fl-btn fl-btn--accent" id="exportBackup">Download full backup</button>
@@ -294,6 +283,35 @@
       </div>
     </section>
   </main>
+
+  <nav class="fl-app-nav" aria-label="App">
+    <div class="fl-account-bar is-hidden" id="accountBar">
+      <span id="accountEmail">account</span>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
+    </div>
+    <div class="fl-account-bar is-hidden" id="signupBar">
+      <span id="signupBarCopy">Create an account within 30 days of buying so this follows you to a new phone.</span>
+      <button type="button" class="fl-btn fl-btn--accent fl-account-btn" id="openSignupBtn">Create account</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="openSigninBtn">Sign in</button>
+    </div>
+    <div class="fl-book-toolbar" id="kitBar" hidden>
+      <span style="font-size:13px;font-weight:700;align-self:center;">Your Boy Kibble Kit:</span>
+      <a href="#" id="kitLink">Download kit PDF</a>
+    </div>
+    <div class="fl-tabs" role="tablist" aria-label="App sections">
+      <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">
+        <span class="material-symbols-outlined" aria-hidden="true">menu_book</span>
+        <span>Book</span>
+      </button>
+      <button type="button" class="fl-tab" data-tab="ledger" role="tab" aria-selected="false">
+        <span class="material-symbols-outlined" aria-hidden="true">notes</span>
+        <span>Ledger</span>
+      </button>
+    </div>
+    <p class="fl-app-ver" id="flAppVersion">v0.0.0.46</p>
+  </nav>
   </div>
 
   <script type="module" src="assets/flApp.js"></script>

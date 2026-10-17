@@ -15,9 +15,15 @@ import {
 import { getFlAuthReady, getFlDb, isFlFirebaseConfigured } from "./flFirebase.js";
 import {
   getLedgerState,
+  ledgerForCloud,
   mergeLedgerStates,
   replaceLedgerState,
 } from "./flLedgerStore.js";
+import {
+  applyCloudPurchase,
+  getLocalPurchase,
+  getSignupWindow,
+} from "./flPurchase.js";
 
 export const USERS_COLLECTION = "fatLossUsers";
 
@@ -51,36 +57,55 @@ function authErrorMessage(error) {
     return "Email or password is incorrect.";
   }
   if (code === "auth/too-many-requests") return "Too many attempts. Wait a minute and try again.";
+  if (code === "fl/signup-window") return error?.message || "The 30-day window to create an account has ended.";
   return error?.message || "Something went wrong. Try again.";
 }
 
-export async function loadCloudLedger(uid) {
+export async function loadCloudProfile(uid) {
   if (!db) return null;
   const snap = await getDoc(doc(db, USERS_COLLECTION, uid));
   if (!snap.exists()) return null;
-  const data = snap.data();
-  return data?.ledger || null;
+  return snap.data() || null;
 }
 
-export async function saveCloudLedger(uid, state, email) {
+export async function loadCloudLedger(uid) {
+  const profile = await loadCloudProfile(uid);
+  return profile?.ledger || null;
+}
+
+function purchaseFieldsForCloud(isNew) {
+  const purchase = getLocalPurchase() || {};
+  const fields = {
+    paid: true,
+    paidAt: purchase.paidAt || null,
+    stripeSessionId: purchase.sessionId || null,
+  };
+  if (purchase.kibbleKit) fields.kibbleKit = true;
+  if (isNew) fields.accountCreatedAt = serverTimestamp();
+  return fields;
+}
+
+export async function saveCloudLedger(uid, state, email, options = {}) {
   if (!db) return;
   await setDoc(
     doc(db, USERS_COLLECTION, uid),
     {
       email: email || null,
-      ledger: state,
+      ledger: ledgerForCloud(state),
       ledgerUpdatedAt: serverTimestamp(),
+      ...purchaseFieldsForCloud(Boolean(options.isNew)),
     },
     { merge: true },
   );
 }
 
-async function syncLedgerForUser(user) {
+async function syncLedgerForUser(user, options = {}) {
   const local = getLedgerState();
-  const cloud = await loadCloudLedger(user.uid);
-  const merged = mergeLedgerStates(local, cloud);
+  const profile = await loadCloudProfile(user.uid);
+  applyCloudPurchase(profile);
+  const merged = mergeLedgerStates(local, profile?.ledger);
   replaceLedgerState(merged);
-  await saveCloudLedger(user.uid, merged, user.email);
+  await saveCloudLedger(user.uid, merged, user.email, options);
 }
 
 export async function pushLedgerToCloud() {
@@ -149,15 +174,29 @@ export function isCloudSyncEnabled() {
 
 export async function signUp(email, password) {
   if (!auth) throw new Error("Account sync is not configured yet.");
+  const signup = getSignupWindow();
+  if (!signup.ok) {
+    const err = new Error(signup.reason);
+    err.code = "fl/signup-window";
+    throw err;
+  }
   const cred = await createUserWithEmailAndPassword(auth, email.trim(), password);
-  await syncLedgerForUser(cred.user);
+  try {
+    await syncLedgerForUser(cred.user, { isNew: true });
+  } catch (err) {
+    console.error("[Fat Loss auth] ledger sync failed", err);
+  }
   return cred.user;
 }
 
 export async function signIn(email, password) {
   if (!auth) throw new Error("Account sync is not configured yet.");
   const cred = await signInWithEmailAndPassword(auth, email.trim(), password);
-  await syncLedgerForUser(cred.user);
+  try {
+    await syncLedgerForUser(cred.user);
+  } catch (err) {
+    console.error("[Fat Loss auth] ledger sync failed", err);
+  }
   return cred.user;
 }
 

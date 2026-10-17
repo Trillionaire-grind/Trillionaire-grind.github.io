@@ -133,6 +133,8 @@ body.fl-ledger {
 .fl-field input[type="number"],
 .fl-field input[type="date"],
 .fl-field input[type="text"],
+.fl-field input[type="email"],
+.fl-field input[type="password"],
 .fl-field textarea {
   width: 100%;
   border: 2px solid var(--ink);
@@ -170,6 +172,10 @@ body.fl-ledger {
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 4px;
+}
+
+.fl-btn[hidden] {
+  display: none !important;
 }
 
 .fl-btn {

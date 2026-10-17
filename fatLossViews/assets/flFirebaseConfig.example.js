@@ -3,8 +3,11 @@
  * 1. Create a Firebase project for Fat Loss (or reuse an existing one).
  * 2. Enable Authentication → Email/Password.
  * 3. Create Firestore database.
- * 4. Deploy rules: firebase deploy -c firebase.fatloss.json --project YOUR_PROJECT_ID
+ * 4. Deploy rules: firebase deploy --only firestore:rules
+ *    (fatLossUsers lives in firestore.rules on naples-sunrise-bay)
  * 5. Copy web app config into flFirebaseConfig.js
+ * 6. Enable Authentication → Email/Password
+ * Meal photos stay on the phone. Ledger + kibbleKit sync on the user doc.
  */
 export const flFirebaseConfig = {
   apiKey: "AIza...",

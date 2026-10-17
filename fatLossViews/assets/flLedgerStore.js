@@ -19,14 +19,41 @@ export function defaultState() {
   };
 }
 
+function stripPhotoFields(obj) {
+  if (!obj || typeof obj !== "object") return obj;
+  const { photo, photos, image, images, photoData, photoUrl, ...rest } = obj;
+  return rest;
+}
+
+function dayForCloud(entry) {
+  const clean = stripPhotoFields(entry || {});
+  return {
+    ...clean,
+    weight: clean.weight == null || clean.weight === "" ? "" : String(clean.weight),
+    meals: Array.isArray(clean.meals)
+      ? clean.meals.map((meal) => stripPhotoFields(meal))
+      : [],
+  };
+}
+
 export function normalizeState(raw) {
   if (!raw || typeof raw !== "object") return defaultState();
+  const daysIn = raw.days && typeof raw.days === "object" ? raw.days : {};
+  const days = {};
+  Object.keys(daysIn).forEach((iso) => {
+    days[iso] = dayForCloud(daysIn[iso]);
+  });
   return {
     ...defaultState(),
     ...raw,
-    days: raw.days && typeof raw.days === "object" ? raw.days : {},
+    days,
     updatedAt: raw.updatedAt || new Date().toISOString(),
   };
+}
+
+/** Cloud copy: weight as typed text, meals as text, no photos. */
+export function ledgerForCloud(state) {
+  return normalizeState(state);
 }
 
 export function loadLocalState() {
