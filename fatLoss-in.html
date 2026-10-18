@@ -54,13 +54,13 @@ body{
 .wrap{max-width:680px;margin:0 auto;padding:0 20px}
 section{padding:56px 0;border-bottom:2px solid var(--ink)}
 h1,h2{font-family:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;font-weight:900;line-height:.98;margin:0 0 20px;letter-spacing:.005em}
-h1{font-size:clamp(40px,10vw,78px)}
+h1{font-size:clamp(28px,8vw,52px)}
 h2{font-size:clamp(36px,8vw,54px)}
 h3{font-size:20px;margin:0 0 6px}
 p{margin:0 0 16px}
 .topbar{background:var(--ink);color:#fff;font-size:15px;text-align:center;padding:10px 16px}
 .topbar strong{color:#FFD7D4}
-.hero{padding-top:40px;position:relative}
+.hero{padding-top:24px;padding-bottom:32px;position:relative}
 .lede{font-size:20px;color:var(--ink-soft);max-width:34ch}
 .product{display:block;width:100%;max-width:520px;margin:24px auto;height:auto}
 .stamp{
@@ -71,7 +71,11 @@ p{margin:0 0 16px}
 }
 .stamp b{font-size:40px}
 .stamp span{font-size:14px;letter-spacing:.06em}
-@media (max-width:520px){.stamp{display:none}}
+@media (max-width:520px){
+  .stamp{display:none}
+  .hero{padding-top:16px;padding-bottom:24px}
+  h1{margin-bottom:12px}
+}
 .price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:8px 0 20px}
 .price s{color:var(--ink-soft);font-size:22px}
 .price .now{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:900;font-size:64px;line-height:1}
@@ -85,6 +89,7 @@ p{margin:0 0 16px}
 .cta:focus-visible,.btn:focus-visible,.close:focus-visible{outline:3px solid var(--stamp);outline-offset:3px}
 .cta-gap{margin-top:28px}
 .photo{border:2px dashed var(--ink-soft);border-radius:10px;aspect-ratio:4/5;max-width:420px;margin:24px auto 8px;overflow:hidden;padding:0;background:var(--card)}
+.photo--hero{max-width:220px;aspect-ratio:3/4;margin:12px auto 8px}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 .caption{text-align:center;color:var(--ink-soft);font-size:15px}
 .hook{font-weight:700;font-size:20px;margin:8px 0 20px}
@@ -128,10 +133,11 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <section class="hero">
 <div class="wrap">
 <div class="stamp" aria-hidden="true"><b>2×</b><span>MONEY BACK</span></div>
-<h1>How to Lose 4.5 Kg of Fat as Fast as Biologically Possible</h1>
-<p class="lede">Follow the program for 90 days. Lose 4.5 kg, or I pay you back double what you paid. In writing.</p>
-<div class="photo"><img src="fatLossViews/assets/photos/shirtless.jpg?v=44" alt="Shirtless physique after the 90 day fat loss program" width="1200" height="1500"></div>
+<h1>Do you want access to the program to lose the fat?</h1>
+<div class="photo photo--hero"><img src="fatLossViews/assets/photos/shirtless.jpg?v=45" alt="Shirtless physique after the 90 day fat loss program" width="1200" height="1500"></div>
 <p class="caption">Skinny fat for 28 years. This is me now.</p>
+<button class="cta" type="button" data-checkout>Yes, I want access<small>₹299 · Instant app · 2× guarantee</small></button>
+<p class="lede" style="margin-top:28px">Follow the program for 90 days. Lose 4.5 kg, or I pay you back double what you paid. In writing.</p>
 <p class="hook">Here's exactly how I did it, and how you can too.</p>
 <img class="product" src="fatLossViews/assets/photos/product-stack.png" alt="How to Lose Fat as Fast as Possible: the book and 90 day program pages" width="1040" height="780">
 <div class="price"><s>₹2,595 value</s><span class="now">₹299</span></div>
