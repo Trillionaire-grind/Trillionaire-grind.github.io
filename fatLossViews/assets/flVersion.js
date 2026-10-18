@@ -1,4 +1,4 @@
-export const FL_APP_VERSION = "0.0.0.44";
+export const FL_APP_VERSION = "0.0.0.45";
 
 export function flVersionLabel() {
   return "v" + FL_APP_VERSION;
