@@ -54,7 +54,7 @@ body{
 .wrap{max-width:680px;margin:0 auto;padding:0 20px}
 section{padding:56px 0;border-bottom:2px solid var(--ink)}
 h1,h2{font-family:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;font-weight:900;line-height:.98;margin:0 0 20px;letter-spacing:.005em}
-h1{font-size:clamp(46px,11vw,78px)}
+h1{font-size:clamp(40px,10vw,78px)}
 h2{font-size:clamp(36px,8vw,54px)}
 h3{font-size:20px;margin:0 0 6px}
 p{margin:0 0 16px}
@@ -71,7 +71,7 @@ p{margin:0 0 16px}
 }
 .stamp b{font-size:40px}
 .stamp span{font-size:14px;letter-spacing:.06em}
-@media (max-width:520px){.stamp{position:static;margin:0 0 20px auto;width:96px;height:96px}.stamp b{font-size:32px}}
+@media (max-width:520px){.stamp{display:none}}
 .price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin:8px 0 20px}
 .price s{color:var(--ink-soft);font-size:22px}
 .price .now{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:900;font-size:64px;line-height:1}
@@ -87,6 +87,7 @@ p{margin:0 0 16px}
 .photo{border:2px dashed var(--ink-soft);border-radius:10px;aspect-ratio:4/5;max-width:420px;margin:24px auto 8px;overflow:hidden;padding:0;background:var(--card)}
 .photo img{width:100%;height:100%;object-fit:cover;display:block}
 .caption{text-align:center;color:var(--ink-soft);font-size:15px}
+.hook{font-weight:700;font-size:20px;margin:8px 0 20px}
 .quote{font-family:"Big Shoulders Display",Impact,sans-serif;font-weight:900;font-size:clamp(34px,8vw,48px);line-height:1;color:var(--pen);margin:8px 0 24px}
 .result{background:var(--ink);color:#fff;border-radius:10px;padding:22px;font-weight:700;font-size:21px;margin:20px 0}
 .result em{font-style:normal;color:#FFD7D4}
@@ -107,7 +108,7 @@ p{margin:0 0 16px}
 .pay-note{text-align:center;color:var(--ink-soft);font-size:15px;margin-top:14px}
 .ps{padding-bottom:120px}
 footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 120px}
-.sticky{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(246,247,243,.96);border-top:2px solid var(--ink);z-index:5}
+.sticky{display:none;position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(246,247,243,.96);border-top:2px solid var(--ink);z-index:5}
 .sticky .cta{max-width:640px;margin:0 auto;font-size:18px;padding:14px}
 .modal{position:fixed;inset:0;background:rgba(22,33,58,.6);display:none;align-items:flex-end;justify-content:center;z-index:10;padding:16px}
 .modal.open{display:flex}
@@ -129,6 +130,9 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <div class="stamp" aria-hidden="true"><b>2×</b><span>MONEY BACK</span></div>
 <h1>How to Lose 10 Lbs of Fat as Fast as Biologically Possible</h1>
 <p class="lede">Follow the program for 90 days. Lose 10 pounds, or you get paid back double what you paid. In writing.</p>
+<div class="photo"><img src="fatLossViews/assets/photos/shirtless.jpg?v=44" alt="Shirtless physique after the 90 day fat loss program" width="1200" height="1500"></div>
+<p class="caption">Skinny fat for 28 years. This is me now.</p>
+<p class="hook">Here's exactly how I did it, and how you can too.</p>
 <img class="product" src="fatLossViews/assets/photos/product-stack.png" alt="How to Lose Fat as Fast as Possible: the book and 90 day program pages" width="1040" height="780">
 <div class="price"><s>$147 value</s><span class="now">$29</span></div>
 <button class="cta" type="button" data-checkout>Yes, I'm losing 10 lbs in 90 days<small>Instant app access · Book + ledger · 2× guarantee</small></button>
@@ -141,8 +145,6 @@ footer{text-align:center;font-size:13px;color:var(--ink-soft);padding:24px 20px 
 <p>You dodge cameras. You wear layers in the heat. You make an excuse to skip the pool, then go home and promise yourself you'll start Monday.</p>
 <p>If you're skinny fat, it's worse. A regular fat guy keeps his shirt on and everyone understands. A skinny fat guy keeps his shirt on and nobody does. So you hide, every single day.</p>
 <p>You have been doing this long enough that the before pictures barely exist. You made sure of it.</p>
-<div class="photo"><img src="fatLossViews/assets/photos/shirtless.jpg?v=42" alt="Current shirtless mirror photo" width="1200" height="1500"></div>
-<p class="caption">This is the other side of hiding. You're next.</p>
 </div>
 </section>
 
@@ -294,6 +296,12 @@ document.querySelectorAll("[data-checkout]").forEach((b) => b.addEventListener("
 modal.querySelector("[data-close]").addEventListener("click", closeModal);
 modal.addEventListener("click", (e) => { if (e.target === modal) closeModal(); });
 modal.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+const bar = document.querySelector(".sticky");
+bar.style.display = "none";
+window.addEventListener("scroll", () => {
+  bar.style.display = window.scrollY > 900 ? "block" : "none";
+});
 </script>
 </body>
 </html>
