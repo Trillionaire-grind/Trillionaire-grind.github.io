@@ -1,4 +1,4 @@
-const CACHE = "fl-app-v0.0.0.29";
+const CACHE = "fl-app-v0.0.0.46";
 
 const ASSETS = [
   "./app.html",
@@ -17,6 +17,7 @@ const ASSETS = [
   "./assets/flLedger.js",
   "./assets/flLedgerStore.js",
   "./assets/flConfig.js",
+  "./assets/flClarity.js",
   "./assets/flVersion.js",
   "./assets/how-to-lose-fat-fast.pdf",
   "./assets/photos/product-stack.png",
