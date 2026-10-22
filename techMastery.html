@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" type="image/x-icon" href="techAcademyViews/assets/desk.png">
+<link rel="icon" type="image/x-icon" href="techAcademyViews/assets/icon.ico">
+<title>How Your Residents Can Master Technology — Tech Mastery For Seniors</title>
+<meta name="description" content="A one-hour technology presentation for residents of senior living communities in Naples and Southwest Florida. Nothing is sold to residents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16243B;
+    --black:#000;
+    --paper:#F3F3F3;
+    --card:#FFFFFF;
+    --mark:#FF0C11;
+    --yellow:#FFEB3B;
+    --slate:#56667A;
+    --rule:#D8DEE4;
+    --tint:#E8EDF3;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Source Sans 3","Segoe UI",Helvetica,Arial,sans-serif;
+    font-size:19px;
+    line-height:1.6;
+  }
+  .wrap{max-width:46rem;margin:0 auto;padding:0 1.5rem;}
+  h1,h2,h3{font-family:Bitter,Georgia,"Times New Roman",serif;line-height:1.2;margin:0;}
+  h1{font-size:2.3rem;font-weight:700;letter-spacing:-.01em;}
+  h2{font-size:1.5rem;font-weight:600;margin-bottom:1rem;}
+  h3{font-size:1.1rem;font-weight:600;}
+  p{margin:0 0 1rem;max-width:68ch;}
+  a{color:var(--ink);}
+
+  /* Tech Academy top navigation */
+  .ta-nav{background:var(--black);color:#fff;}
+  .ta-nav .wrap{display:flex;align-items:center;gap:.75rem;padding-top:.85rem;padding-bottom:.85rem;}
+  .ta-brand{display:flex;align-items:center;gap:.6rem;font-family:Bitter,Georgia,serif;font-weight:700;font-size:1.15rem;color:#fff;text-decoration:none;}
+  .ta-brand img{width:26px;height:26px;display:block;}
+  .ta-login{margin-left:auto;background:#fff;color:#000;text-decoration:none;font-weight:600;font-size:.9rem;padding:.5rem .9rem;border-radius:5px;}
+  .ta-login:hover{background:var(--mark);color:#fff;}
+
+  /* Tech Academy red rule under the nav */
+  .line{height:4px;background:var(--mark);}
+
+  header{padding:3rem 0 2.5rem;}
+  .kicker{font-family:Bitter,Georgia,serif;font-weight:600;font-size:1rem;letter-spacing:.02em;color:var(--slate);margin:0 0 1rem;}
+  .tagline{display:inline-block;background:var(--yellow);color:var(--ink);font-weight:600;font-size:.95rem;padding:.35rem 1rem;border-radius:4px;margin:0 0 1.25rem;letter-spacing:.02em;}
+  .lede{font-size:1.2rem;color:var(--slate);margin-top:1.25rem;}
+
+  figure.proof{margin:2.5rem 0 0;}
+  figure.proof img{width:100%;height:auto;display:block;border-radius:4px;border:1px solid var(--rule);border-bottom:8px solid var(--black);background:var(--tint);}
+  figure.proof figcaption{margin-top:.7rem;color:var(--slate);font-size:.98rem;}
+
+  /* The one bold element: the calendar slot */
+  .slot{
+    background:var(--card);
+    border:2px solid var(--black);
+    border-radius:4px;
+    margin:2.5rem 0 1rem;
+    overflow:hidden;
+  }
+  .slot-mark{background:var(--mark);color:#fff;font-weight:600;font-size:.95rem;letter-spacing:.02em;padding:.55rem 1.6rem;}
+  .slot-body{padding:1.6rem 1.6rem 1.8rem;}
+  .slot-title{font-family:Bitter,Georgia,serif;font-size:1.6rem;font-weight:700;margin:0 0 .3rem;}
+  .slot-sub{color:var(--slate);margin:0 0 1.3rem;}
+  .facts{list-style:none;margin:0 0 1.6rem;padding:0;}
+  .facts li{padding:.55rem 0;border-top:1px solid var(--rule);display:flex;gap:1rem;}
+  .facts li:last-child{border-bottom:1px solid var(--rule);}
+  .facts b{font-weight:600;min-width:9.5rem;flex-shrink:0;}
+  .actions{display:flex;flex-wrap:wrap;gap:.75rem;}
+  .btn{
+    display:inline-block;background:var(--mark);color:#fff;text-decoration:none;
+    font-weight:600;font-size:1.05rem;padding:.85rem 1.6rem;border-radius:50px;
+    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  }
+  .btn:hover{background:var(--black);color:#fff;}
+  .slot-mail{margin:.9rem 0 0;color:var(--slate);font-size:.98rem;}
+  .btn:focus-visible,a:focus-visible{outline:3px solid var(--mark);outline-offset:3px;}
+
+  section{padding:2.5rem 0;border-top:1px solid var(--rule);}
+  .reasons h3{margin-bottom:.25rem;}
+  .reasons div{margin-bottom:1.75rem;}
+  .reasons div:last-child{margin-bottom:0;}
+
+  .learn{list-style:none;margin:0;padding:0;counter-reset:n;}
+  .learn li{position:relative;padding-left:3rem;margin-bottom:1.6rem;counter-increment:n;}
+  .learn li:last-child{margin-bottom:0;}
+  .learn li::before{
+    content:counter(n);
+    position:absolute;left:0;top:.05rem;
+    width:2rem;height:2rem;border-radius:50%;
+    background:var(--mark);color:#fff;
+    font-family:Bitter,Georgia,serif;font-weight:600;font-size:1rem;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .learn p{margin:.2rem 0 0;color:var(--slate);}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:2rem;}
+  .split ul{margin:.5rem 0 0;padding-left:1.1rem;}
+  .split li{margin-bottom:.5rem;}
+
+  .steps{list-style:none;margin:0;padding:0;}
+  .steps li{border-left:3px solid var(--mark);padding:.1rem 0 .1rem 1.25rem;margin-bottom:1.4rem;}
+  .steps li:last-child{margin-bottom:0;}
+
+  .close{background:var(--black);color:#fff;margin-top:2.5rem;padding:3rem 0;border-top:4px solid var(--mark);}
+  .close h2{color:#fff;}
+  .close p{color:#C9D4E2;}
+  .close .mail{font-family:Bitter,Georgia,serif;font-size:1.5rem;font-weight:700;color:var(--yellow);text-decoration:underline;text-underline-offset:4px;display:inline-block;margin:.5rem 0 1rem;word-break:break-word;}
+  .close .btn{background:var(--mark);color:#fff;}
+  .close .btn:hover{background:#fff;color:var(--black);}
+
+  footer{padding:2rem 0 3rem;font-size:.95rem;color:var(--slate);}
+  footer p{margin:0;}
+
+  @media (max-width:640px){
+    body{font-size:18px;}
+    h1{font-size:1.85rem;}
+    .slot-title{font-size:1.35rem;}
+    .split{grid-template-columns:1fr;gap:1.5rem;}
+    .facts li{flex-direction:column;gap:.1rem;}
+    .facts b{min-width:0;}
+  }
+  @media print{
+    body{background:#fff;font-size:12pt;}
+    .ta-nav,.ta-login,.close .btn,.actions{display:none;}
+    .close{background:#fff;color:#000;border-top:2px solid #000;}
+    .close h2,.close p,.close .mail{color:#000;}
+    section{page-break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="ta-nav">
+  <div class="wrap">
+    <a class="ta-brand" href="techAcademy.html">
+      <img src="techAcademyViews/assets/desk.png" alt="">
+      Tech Mastery For Seniors
+    </a>
+    <a class="ta-login" href="techAcademy.html">Log In</a>
+  </div>
+</nav>
+<div class="line"></div>
+
+<header>
+  <div class="wrap">
+    <p class="kicker">A Siguineau presentation</p>
+    <span class="tagline">Resident programming · Naples &amp; Southwest Florida</span>
+    <h1>How Your Residents Can Master Technology</h1>
+    <p class="lede">Most technology presentations lose the room in the first five minutes. This one is paced for your residents, taught in plain English, and built around the four things they actually want: their phone, their safety, their grandchildren, and a straight answer about artificial intelligence.</p>
+
+    <figure class="proof">
+      <img src="techMasteryViews/assets/seascape.jpg" alt="Siguineau teaching a technology class to residents in Naples, Florida">
+      <figcaption>Teaching a technology class for residents at Seascape, here in Naples.</figcaption>
+    </figure>
+
+    <div class="slot">
+      <div class="slot-mark">Add it to your activities calendar</div>
+      <div class="slot-body">
+        <p class="slot-title">How To Master Any Technology</p>
+        <p class="slot-sub">A presentation for the residents of your community.</p>
+        <ul class="facts">
+          <li><b>Length</b><span>One hour, including questions</span></li>
+          <li><b>Selling</b><span>Nothing is sold to residents during the presentation.</span></li>
+          <li><b>Group size</b><span>Works for 10 residents or 100</span></li>
+          <li><b>Who it is for</b><span>Every comfort level, including residents who have never used a smartphone</span></li>
+        </ul>
+        <div class="actions">
+          <a class="btn" href="mailto:techmasteryforseniors@gmail.com?subject=Resident%20technology%20presentation">Email to check a date</a>
+        </div>
+        <p class="slot-mail">techmasteryforseniors@gmail.com</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="reasons">
+  <div class="wrap">
+    <h2>Why directors put this on the calendar</h2>
+
+    <div>
+      <h3>It answers the question families keep asking you.</h3>
+      <p>Scam calls, scam texts, and fake pop-up warnings target your residents every week, and families worry about it out loud. Residents leave this hour with four specific warning signs they can use the same afternoon.</p>
+    </div>
+
+    <div>
+      <h3>It is a hard slot to fill well.</h3>
+      <p>Technology sessions usually fail because the presenter moves at their own speed and the room quietly gives up. Nothing here is rushed, and no resident is made to feel behind.</p>
+    </div>
+
+    <div>
+      <h3>Families hear about it.</h3>
+      <p>A resident who can start a video call without help calls home more often. That shows up in your family feedback and in your tours.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What your residents learn</h2>
+    <ol class="learn">
+      <li>
+        <h3>Why they cannot break it</h3>
+        <p>The belief that stops most people from ever trying, and the simple routine that fixes the majority of problems before they call their children.</p>
+      </li>
+      <li>
+        <h3>Their phone, set up properly</h3>
+        <p>Larger text, louder ringer, silencing unknown callers, and sending a photo to a grandchild without it failing.</p>
+      </li>
+      <li>
+        <h3>How to spot a scam in ten seconds</h3>
+        <p>The four warning signs behind every scam call, text, and pop-up, including the grandchild emergency call and the fake refund.</p>
+      </li>
+      <li>
+        <h3>How to join a video call</h3>
+        <p>Zoom, FaceTime, and the doctor's telehealth link all work the same way once you have seen it once.</p>
+      </li>
+      <li>
+        <h3>What artificial intelligence actually is</h3>
+        <p>A plain explanation, what it is useful for, what it gets wrong, and the one AI scam every resident and family should know about.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>What it takes to host</h2>
+    <div class="split">
+      <div>
+        <h3>You provide</h3>
+        <ul>
+          <li>A room with chairs</li>
+          <li>A screen or television if you have one</li>
+          <li>A line on your monthly calendar</li>
+        </ul>
+      </div>
+      <div>
+        <h3>I bring</h3>
+        <ul>
+          <li>Printed handouts for every resident</li>
+          <li>My own laptop and adapters</li>
+          <li>A version of the talk that works with no screen at all</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>About the presenter</h2>
+    <p>Siguineau is a Naples-based speaker and author who teaches technology to people who were never taught it. He has taught this material to residents at Seascape here in town, and he is an active member of Naples Sunrise Bay Toastmasters, where he holds a club leadership role.</p>
+    <p>He speaks the way he was taught to speak: slowly, with one idea at a time, and with no assumption about what the room already knows.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>How booking works</h2>
+    <ol class="steps">
+      <li><h3>Email two or three dates that work</h3><p>Tell me roughly how many residents you expect and whether you have a screen.</p></li>
+      <li><h3>I send you a flyer and a short description</h3><p>Sized for your monthly activities calendar and your resident newsletter, ready to drop in.</p></li>
+      <li><h3>I arrive thirty minutes early</h3><p>Enough time to set up, test the room, and meet a few residents before we start.</p></li>
+    </ol>
+  </div>
+</section>
+
+<div class="close">
+  <div class="wrap">
+    <h2>Check a date</h2>
+    <p>Most communities book two to six weeks out. Open dates go quickly in season.</p>
+    <a class="mail" href="mailto:techmasteryforseniors@gmail.com?subject=Resident%20technology%20presentation">techmasteryforseniors@gmail.com</a>
+    <p><a class="btn" href="mailto:techmasteryforseniors@gmail.com?subject=Resident%20technology%20presentation">Email to check a date</a></p>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>Siguineau, Naples, Florida. Presentations available throughout Collier and Lee County.</p>
+    <p>techmasteryforseniors@gmail.com</p>
+  </div>
+</footer>
+
+<script type="module" src="techMasteryViews/scripts/techMasteryVersion.js"></script>
+
+</body>
+</html>
