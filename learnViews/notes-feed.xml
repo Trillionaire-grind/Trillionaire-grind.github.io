@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Képler Siguineau — Notes</title>
+    <title>Képler Siguineau: Notes</title>
     <link>https://keplersiguineau.com/learnViews/learn.html</link>
     <description>Apps, business, and city notes</description>
     <language>en-us</language>
     <item>
       <title>How To Build An App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/fannyApp.html</link>
-      <description>The full walkthrough — planning, UI, Firebase, and shipping a real app from scratch.</description>
+      <description>The full walkthrough: planning, UI, Firebase, and shipping a real app from scratch.</description>
       <pubDate>Sat, 23 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/fannyApp.html</guid>
     </item>
     <item>
       <title>How to Create a Basic Web App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/webApp.html</link>
-      <description>Build a message-board app with HTML, CSS, JavaScript, and Node.js — no database required.</description>
+      <description>Build a message-board app with HTML, CSS, JavaScript, and Node.js. No database required.</description>
       <pubDate>Mon, 02 Oct 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/webApp.html</guid>
     </item>
     <item>
       <title>How to Build a Haitian App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/haitianApp.html</link>
-      <description>Share Haitian culture through code — a proverbs app with Creole and English translations.</description>
+      <description>Share Haitian culture through code: a proverbs app with Creole and English translations.</description>
       <pubDate>Tue, 03 Oct 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/haitianApp.html</guid>
     </item>
@@ -36,7 +36,7 @@
     <item>
       <title>How To Build A Coffee App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/coffeeApp.html</link>
-      <description>Design a coffee-shop ordering flow — menu, cart, and checkout.</description>
+      <description>Design a coffee-shop ordering flow: menu, cart, and checkout.</description>
       <pubDate>Mon, 25 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/coffeeApp.html</guid>
     </item>
@@ -50,7 +50,7 @@
     <item>
       <title>How To Build A Fish App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/fishApp.html</link>
-      <description>Log catches, species, and locations — a field journal in app form.</description>
+      <description>Log catches, species, and locations. A field journal in app form.</description>
       <pubDate>Wed, 27 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/fishApp.html</guid>
     </item>
@@ -64,7 +64,7 @@
     <item>
       <title>How To Build A Notes App</title>
       <link>https://keplersiguineau.com/learnViews/content/apps/ai/notesApp.html</link>
-      <description>Capture ideas fast — notes, tags, and search without over-engineering.</description>
+      <description>Capture ideas fast: notes, tags, and search without over-engineering.</description>
       <pubDate>Fri, 29 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/apps/ai/notesApp.html</guid>
     </item>
@@ -85,7 +85,7 @@
     <item>
       <title>How To Sell Door To Door</title>
       <link>https://keplersiguineau.com/learnViews/content/business/ai/doorSales.html</link>
-      <description>From your first knock to closing the deal — resilience, scripts, and follow-up.</description>
+      <description>From your first knock to closing the deal: resilience, scripts, and follow-up.</description>
       <pubDate>Tue, 03 Oct 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/ai/doorSales.html</guid>
     </item>
@@ -99,7 +99,7 @@
     <item>
       <title>Why You Should Invest in Berkshire Hathaway</title>
       <link>https://keplersiguineau.com/learnViews/content/business/ai/berkInvest.html</link>
-      <description>Berkshire Hathaway isn’t a typical company—it’s a collection of businesses hand-picked by Warren Buffett and his team over decades.</description>
+      <description>Berkshire Hathaway isn’t a typical company. It’s a collection of businesses hand-picked by Warren Buffett and his team over decades.</description>
       <pubDate>Mon, 25 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/ai/berkInvest.html</guid>
     </item>
@@ -127,14 +127,14 @@
     <item>
       <title>How to Have a Winning Mindset in Sales</title>
       <link>https://keplersiguineau.com/learnViews/content/business/ai/salesMindset.html</link>
-      <description>Sales success doesn’t start with scripts or products—it starts in your mind...</description>
+      <description>Sales success doesn’t start with scripts or products. It starts in your mind...</description>
       <pubDate>Fri, 29 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/ai/salesMindset.html</guid>
     </item>
     <item>
       <title>The Biggest Sales Secrets</title>
       <link>https://keplersiguineau.com/learnViews/content/business/ai/salesTips.html</link>
-      <description>Sales is not about pushing a product—it’s about solving problems, building trust, and creating long-term relationships...</description>
+      <description>Sales is not about pushing a product. It’s about solving problems, building trust, and creating long-term relationships...</description>
       <pubDate>Sat, 30 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/business/ai/salesTips.html</guid>
     </item>
@@ -162,14 +162,14 @@
     <item>
       <title>How To Use Your River Effectively</title>
       <link>https://keplersiguineau.com/learnViews/content/city/ai/cityRiver.html</link>
-      <description>Rivers as living infrastructure — recreation, ecology, access, and flood resilience.</description>
+      <description>Rivers as living infrastructure: recreation, ecology, access, and flood resilience.</description>
       <pubDate>Sun, 01 Oct 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/ai/cityRiver.html</guid>
     </item>
     <item>
       <title>How To Profit From Your Seacoast</title>
       <link>https://keplersiguineau.com/learnViews/content/city/ai/profitSeacoast.html</link>
-      <description>Your coastline is more than just a scenic boundary—it’s an economic engine...</description>
+      <description>Your coastline is more than just a scenic boundary. It’s an economic engine...</description>
       <pubDate>Sun, 24 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/ai/profitSeacoast.html</guid>
     </item>
@@ -183,7 +183,7 @@
     <item>
       <title>The Pros and Cons Of Diversity In A City</title>
       <link>https://keplersiguineau.com/learnViews/content/city/ai/cityDiversity.html</link>
-      <description>Diversity—across culture, language, age, income, and ability—shapes how a city feels, grows, and solves problems...</description>
+      <description>Diversity across culture, language, age, income, and ability shapes how a city feels, grows, and solves problems...</description>
       <pubDate>Tue, 26 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/ai/cityDiversity.html</guid>
     </item>
@@ -204,7 +204,7 @@
     <item>
       <title>How To Build Roads In A Mountainous Zone</title>
       <link>https://keplersiguineau.com/learnViews/content/city/ai/mountainRoads.html</link>
-      <description>Mountain roads unlock remote communities, tourism, emergency access, and trade—but they’re among the most complex pieces of infrastructure to design and build...</description>
+      <description>Mountain roads unlock remote communities, tourism, emergency access, and trade. They are also among the most complex pieces of infrastructure to design and build...</description>
       <pubDate>Fri, 29 Sep 2023 00:00:00 GMT</pubDate>
       <guid isPermaLink="true">https://keplersiguineau.com/learnViews/content/city/ai/mountainRoads.html</guid>
     </item>

@@ -99,7 +99,7 @@ export async function saveAgendaDoc(db, assignments, { uid, isLive, clubId = TM_
   await Promise.all(writes);
 }
 
-/** Fast live toggle — updates isLive only on agenda docs that already exist. */
+/** Fast live toggle: updates isLive only on agenda docs that already exist. */
 export async function patchAgendaLiveStatus(db, isLive, { clubId = TM_CLUB_ID, meetingDate = null } = {}) {
   const live = Boolean(isLive);
   const patch = { isLive: live };

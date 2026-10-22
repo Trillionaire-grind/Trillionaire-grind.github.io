@@ -63,7 +63,7 @@ function money(n) {
 }
 
 function calcStats(trips) {
-  if (!trips.length) return { mpg: "—", ppg: "—" };
+  if (!trips.length) return { mpg: ": ", ppg: ": " };
 
   const sorted = trips.slice().sort((a, b) => Number(a.mileage) - Number(b.mileage));
   const latest = sorted[sorted.length - 1];
@@ -79,8 +79,8 @@ function calcStats(trips) {
   }
 
   return {
-    mpg: mpg != null ? mpg.toFixed(1) : "—",
-    ppg: ppg != null ? ppg.toFixed(2) : "—",
+    mpg: mpg != null ? mpg.toFixed(1) : ": ",
+    ppg: ppg != null ? ppg.toFixed(2) : ": ",
   };
 }
 
@@ -134,7 +134,7 @@ function renderTrips() {
   const list = $("#gasTripList");
   const stats = calcStats(state.trips);
   $("#gasStatMpg").textContent = stats.mpg;
-  $("#gasStatPpg").textContent = stats.ppg === "—" ? "—" : "$" + stats.ppg;
+  $("#gasStatPpg").textContent = stats.ppg === ": " ? "-" : "$" + stats.ppg;
 
   if (!state.trips.length) {
     list.innerHTML = '<div class="gas-empty"><p>No fill-ups yet.</p><p>Tap + to log your first trip.</p></div>';
@@ -149,7 +149,7 @@ function renderTrips() {
 
   list.innerHTML = sorted
     .map(function (trip) {
-      const ppg = trip.gallons > 0 ? money(Number(trip.cost) / Number(trip.gallons)) : "—";
+      const ppg = trip.gallons > 0 ? money(Number(trip.cost) / Number(trip.gallons)) : ": ";
       return (
         '<article class="gas-trip">' +
         '<div class="gas-trip__top"><p class="gas-trip__station">' +

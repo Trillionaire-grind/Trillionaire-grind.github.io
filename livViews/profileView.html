@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
         <script src="scripts/livShellBridge.js"></script>
-        <title data-i18n="profile.title">Profil — Liv Lakay</title>
+        <title data-i18n="profile.title">Profil: Liv Lakay</title>
         <style>
             .profile-heading {
                 font-size: 1.35rem;
@@ -367,8 +367,8 @@
                 adminSettingsSection.hidden = true;
                 if (user) {
                     const baseDisp = user.displayName || (user.email ? user.email.split("@")[0] : "");
-                    profileDisplayName.textContent = baseDisp || "—";
-                    profileEmail.textContent = user.email || "—";
+                    profileDisplayName.textContent = baseDisp || "-";
+                    profileEmail.textContent = user.email || "-";
                     updateAvatar(baseDisp, user.email, user.photoURL || "");
                     profileSignOutBtn.hidden = false;
                     profileEditBtn.hidden = false;
@@ -381,10 +381,10 @@
                             const fromDocName = String(data.fullName || "").trim();
                             const fromDocPhoto = String(data.photoURL || "").trim();
                             const authPhoto = auth.currentUser?.photoURL || "";
-                            const resolvedName = fromDocName || auth.currentUser?.displayName || (auth.currentUser?.email ? auth.currentUser.email.split("@")[0] : "") || "—";
+                            const resolvedName = fromDocName || auth.currentUser?.displayName || (auth.currentUser?.email ? auth.currentUser.email.split("@")[0] : "") || "-";
                             const resolvedPhoto = fromDocPhoto || authPhoto || "";
                             profileDisplayName.textContent = resolvedName;
-                            profileEmail.textContent = auth.currentUser?.email || user.email || "—";
+                            profileEmail.textContent = auth.currentUser?.email || user.email || "-";
                             updateAvatar(resolvedName, auth.currentUser?.email || user.email, resolvedPhoto);
 
                             const isAdmin =

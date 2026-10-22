@@ -15,7 +15,7 @@ img {
   height: auto;
 }
 
-/* —— Liv Lakay shared theme (home, library, profile) —— */
+/* : :  Liv Lakay shared theme (home, library, profile) : :  */
 :root {
   --liv-green: #2abf5b;
   --liv-green-dark: #239a4b;
@@ -41,7 +41,7 @@ body.liv-body {
   max-width: 100%;
 }
 
-/* Framed in primaryView: no inner scrollbar — outer shell scrolls */
+/* Framed in primaryView: no inner scrollbar: outer shell scrolls */
 html.liv-in-shell {
   height: auto;
   min-height: 0;
@@ -51,7 +51,7 @@ html.liv-in-shell {
 html.liv-in-shell body.liv-body {
   min-height: 0;
   overflow: visible;
-  /* Tab bar lives on the parent shell — only need modest end padding */
+  /* Tab bar lives on the parent shell: only need modest end padding */
   padding-bottom: max(28px, calc(16px + env(safe-area-inset-bottom, 0px)));
 }
 
@@ -1012,7 +1012,7 @@ html.liv-html-full body.liv-page-reader {
   color: var(--liv-muted);
 }
 
-/* One row: nav | text | nav — same row height everywhere; text scrolls inside */
+/* One row: nav | text | nav: same row height everywhere; text scrolls inside */
 .liv-reader-stage {
   flex: 1 1 0;
   min-height: 0;
@@ -1208,7 +1208,7 @@ html.liv-html-full body.liv-page-reader {
   transform: translateX(24px);
 }
 
-/* Library: add-book FAB (inside iframe — sit above Liv bottom tab bar overlay) */
+/* Library: add-book FAB (inside iframe: sit above Liv bottom tab bar overlay) */
 .liv-fab {
   position: fixed;
   bottom: calc(112px + env(safe-area-inset-bottom, 0px));

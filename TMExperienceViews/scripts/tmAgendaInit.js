@@ -46,7 +46,7 @@ function setMeetingTimeRange(rows) {
   const last = rows[rows.length - 1].querySelector("td")?.textContent.trim();
   if (!first || !last) return;
 
-  metaEl.textContent = `${formatAgendaTime(first)} – ${formatAgendaTime(last)}`;
+  metaEl.textContent = `${formatAgendaTime(first)} - ${formatAgendaTime(last)}`;
 }
 
 export function initAgendaCards(tableSelector = ".tm-agenda-table") {

@@ -189,7 +189,7 @@
         <!--<button class="ctaBtn" onclick="openPayment()" style="margin-right: auto; display:block; margin-left: auto; cursor:pointer; width: 90%; max-width: 600px; margin-top:16px; border: none; border-radius: 10px; padding: 8px; height: 8vh; font-weight: bold;">
             <p style=" font-size: 16px;text-align: start; margin-top: auto; margin-bottom: auto;">Yes, I want to join the academy call 786-309-8015</p>
         </button>-->
-        <!-- CTA Section — academy offer; live Stripe via techStripeConfig.js -->
+        <!-- CTA Section: academy offer; live Stripe via techStripeConfig.js -->
         <div style="padding: 30px 20px;  text-align: center; font-family: Arial, sans-serif;">
             <h2 style="font-size: 24px; margin-bottom: 10px; margin-top: 0px; color: #333;">
             Ready to Master Technology?
@@ -202,17 +202,15 @@
             Call to reserve: (786) 309-8015
             </button>
             <p id="academyCtaHint" style="margin-top: 15px; font-size: 14px; color: #777;">
-            Online checkout coming soon — call to enroll.
+            Online checkout coming soon: call to enroll.
             </p>
             <p style="margin-top: 20px; font-size: 14px; color: #555; line-height: 1.6;">
-            Offer ladder:
-            <a href="secret.html" style="color: #333;">Secret $1</a>
+            Membership levels:
+            <a href="secret.html" style="color: #333;">Free · Secret</a>
             ·
-            <a href="nobs.html" style="color: #333;">Guide $297</a>
+            <a href="nobs.html" style="color: #333;">Guide $997</a>
             ·
-            <a href="academyOffer.html" style="color: #333;">Academy</a>
-            ·
-            <a href="vip.html" style="color: #333;">VIP</a>
+            <a href="vip.html" style="color: #333;">VIP Experience</a>
             </p>
             <p style="margin-top: 15px; font-size: 14px; color: #777;">
             Limited spaces each month. Don't wait!
@@ -660,14 +658,14 @@
             const analytics = getAnalytics(app);
             const auth = getAuth(app)
 
-            const academyCopy = getCtaCopy("academy");
+            const academyCopy = getCtaCopy("vip");
             const academyCtaBtn = document.getElementById("academyCtaBtn");
             const academyCtaHint = document.getElementById("academyCtaHint");
             if (academyCtaBtn) academyCtaBtn.textContent = academyCopy.buttonText;
             if (academyCtaHint && academyCopy.hint) academyCtaHint.textContent = academyCopy.hint;
 
             window.openPayment = function openPayment() {
-                startCheckout("academy");
+                startCheckout("vip");
             };
 
             let logInBtn = document.getElementById("logInBtn")

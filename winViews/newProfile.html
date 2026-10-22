@@ -881,7 +881,7 @@
         li.innerHTML = `
             <div class="interaction-date">
               ${editing ? `<span class="delete-interaction" data-index="${index}" style="cursor:pointer; font-size: 18px; padding-right: 8px;">✕</span>` : ''}
-              ${dateLabel} — ${interaction.title || "Interaction"}
+              ${dateLabel}: ${interaction.title || "Interaction"}
             </div>
 
             ${editing
@@ -1074,7 +1074,7 @@
           const subColRef = collection(db, `users/${userId}/friends/${friendId}/${subName}`);
           const docsSnap = await getDocs(subColRef);
           for (const d of docsSnap.docs) {
-            // delete nested docs — if they themselves have subcollections, you'll need to repeat this pattern
+            // delete nested docs: if they themselves have subcollections, you'll need to repeat this pattern
             await deleteDoc(d.ref);
           }
         }

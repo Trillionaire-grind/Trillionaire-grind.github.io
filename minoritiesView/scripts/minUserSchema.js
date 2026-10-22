@@ -1,5 +1,5 @@
 /**
- * Firestore user document schema — users/{uid}
+ * Firestore user document schema: users/{uid}
  *
  * Identity
  *   app: "minorities"
@@ -11,11 +11,11 @@
  *   subscriptionStatus: none | active | canceled | past_due | trialing
  *   stripeCustomerId?, stripeSubscriptionId?, subscriptionRenewsAt?
  *
- * Team (moderation / brand / ops — separate from subscription)
+ * Team (moderation / brand / ops: separate from subscription)
  *   teamRole: member | creator | moderator | admin
  *   admin: boolean (true when teamRole === "admin"; used in security rules)
  *
- * Post documents (posts/{id}) — author classification
+ * Post documents (posts/{id}): author classification
  *   authorType: team | community
  *   authorTeamRole: team role at time of post (optional)
  *

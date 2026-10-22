@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dog Detector: Name the Breed</title>
+  <meta name="description" content="Take a photo of a dog. Dog Detector names the breed.">
+  <meta name="theme-color" content="#c9739a">
+  <link rel="stylesheet" href="dogDetectorViews/assets/dogDetector.css?v=0.0.0.1">
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>Dog Detector</h1>
+    <p>Take a photo of a dog. The app names the breed.</p>
+  </header>
+
+  <section id="captureSection" class="card">
+    <div class="capture-buttons">
+      <button class="btn-primary" id="cameraBtn" type="button">📷 Take a Photo</button>
+      <button class="btn-secondary" id="uploadBtn" type="button">🖼️ Upload Photo</button>
+      <input class="file-input" type="file" id="fileInput" accept="image/*">
+    </div>
+    <video id="video" playsinline autoplay muted class="hidden"></video>
+    <div class="capture-buttons" id="snapRow" style="margin-top:12px; display:none;">
+      <button class="btn-primary" id="snapBtn" type="button">Capture</button>
+      <button class="btn-ghost" id="cancelCameraBtn" type="button">Cancel</button>
+    </div>
+  </section>
+
+  <section id="editorSection" class="card hidden">
+    <div class="photo-frame">
+      <img id="photoImg" alt="Your dog photo">
+      <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p id="loadingText">Reading the breed…</p>
+      </div>
+    </div>
+    <div id="statusBadge"></div>
+    <div id="errorBox"></div>
+  </section>
+
+  <section id="resultSection" class="card hidden">
+    <h2 class="section-title">Breed</h2>
+    <div class="breed-card" id="breedCard"></div>
+  </section>
+
+  <div class="action-row hidden" id="detectRow">
+    <button class="btn-primary" id="detectBtn" type="button">Detect the breed</button>
+    <button class="btn-secondary" id="cancelDetectBtn" type="button">Start Over</button>
+  </div>
+
+  <div class="action-row hidden" id="resultRow">
+    <button class="btn-primary" id="detectAgainBtn" type="button">Detect again</button>
+    <button class="btn-secondary" id="retakeBtn" type="button">Start Over</button>
+  </div>
+
+  <footer class="app-footer">Dog Detector · <span id="appVersion"></span></footer>
+</div>
+
+<div class="modal-backdrop hidden" id="keyModal">
+  <div class="modal">
+    <h3>Add your Gemini API key</h3>
+    <p>
+      Dog Detector uses Google's Gemini model to name the breed from your photo.
+      Your key stays in this browser and goes only to Google's API.
+    </p>
+    <p>Need a key? Get a free one at
+      <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a>.
+    </p>
+    <input type="password" id="apiKeyInput" placeholder="Paste your Gemini API key">
+    <div class="action-row">
+      <button class="btn-primary" id="saveKeyBtn" type="button">Save &amp; Continue</button>
+      <button class="btn-ghost" id="cancelKeyBtn" type="button">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="dogDetectorViews/scripts/dogDetectorVersion.js"></script>
+<script type="module" src="dogDetectorViews/scripts/dogDetectorApp.js"></script>
+</body>
+</html>

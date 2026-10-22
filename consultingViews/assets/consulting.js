@@ -10,12 +10,12 @@ function buildBookingModal() {
     <div class="consult-modal__backdrop" data-consult-close></div>
     <section class="consult-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="consultModalTitle">
       <div class="consult-modal__header">
-        <h2 id="consultModalTitle">Pick a time to talk with Képler</h2>
+        <h2 id="consultModalTitle">Pick a time to talk with Siguineau</h2>
         <button class="consult-modal__close" type="button" aria-label="Close booking calendar" data-consult-close>&times;</button>
       </div>
       <iframe
         class="consult-modal__frame"
-        title="Book a call with Képler"
+        title="Book a call with Siguineau"
         data-src="${CALENDLY_URL}"
         loading="lazy"
       ></iframe>

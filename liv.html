@@ -414,7 +414,7 @@
                 <div class="liv-admin-field">
                     <label for="livSignupGrade" data-i18n="auth.grade">Klas</label>
                     <select id="livSignupGrade" required>
-                        <option value="" data-i18n="auth.gradePlaceholder">—</option>
+                        <option value="" data-i18n="auth.gradePlaceholder">: </option>
                         <option>1e</option>
                         <option>2èm</option>
                         <option>3èm</option>
@@ -549,7 +549,7 @@
 
             const APP_PATH = "livViews/primaryView.html";
             const MAX_PROFILE_BYTES = 5 * 1024 * 1024;
-            /** One document per pass: id = normalized code (A–Z0–9). Issued when a user buys a pass; consumed once at signup. */
+            /** One document per pass: id = normalized code (A-Z0-9). Issued when a user buys a pass; consumed once at signup. */
             const CODES_PURCHASED_COLL = LIV_CODES_PURCHASED_COLL;
             const ACCESS_CODES_LEGACY_COLL = LIV_ACCESS_CODES_LEGACY_COLL;
 

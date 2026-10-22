@@ -1,0 +1,19 @@
+{
+  "name": "Fat Loss — Book + Ledger",
+  "short_name": "Fat Loss",
+  "description": "90-day fat loss program with ebook and daily ledger. Private on your device.",
+  "start_url": "./app.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fafafa",
+  "theme_color": "#141414",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "assets/photos/product-stack.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

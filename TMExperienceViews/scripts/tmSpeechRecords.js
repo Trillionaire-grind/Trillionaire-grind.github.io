@@ -125,7 +125,7 @@ export async function enrichFeedbackAuthorNames(db, entries, { doc, getDoc }) {
 
 /**
  * Firestore paths to read feedback from for a speech (document id = meeting date).
- * Legacy: feedback was sometimes saved under today's date instead of the meeting date —
+ * Legacy: feedback was sometimes saved under today's date instead of the meeting date : 
  * only merge that for the current agenda meeting, not every past speech.
  */
 export function getFeedbackSpeechIds(speechId, agendaMeetingDate = "") {

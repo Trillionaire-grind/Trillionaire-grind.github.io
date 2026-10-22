@@ -264,7 +264,7 @@ async function getTransactions()
 
 function populateData(name, courses){
     const nameEl = document.getElementById("studentNameTV")
-    if (nameEl) nameEl.textContent = name || "—"
+    if (nameEl) nameEl.textContent = name || "-"
 
     const initialEl = document.getElementById("profileAvatarInitial")
     if (initialEl) {
@@ -274,12 +274,12 @@ function populateData(name, courses){
 
     const emailEl = document.getElementById("profileEmailTV")
     if (emailEl) {
-        emailEl.textContent = auth.currentUser?.email || "—"
+        emailEl.textContent = auth.currentUser?.email || "-"
     }
 
     const schoolEl = document.getElementById("profileSchoolTV")
     if (schoolEl) {
-        schoolEl.textContent = studentSchool || "—"
+        schoolEl.textContent = studentSchool || "-"
     }
 
     for (let i = 0; i < courses.length; i++) {

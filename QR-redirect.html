@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Redirecting…</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --muted: #5c5c5c;
+      --bg0: #f7f4ef;
+      --bg1: #e8e2d8;
+      --accent: #d31034;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Segoe UI", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(211, 16, 52, 0.12), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 100% 100%, rgba(0, 32, 160, 0.08), transparent 50%),
+        linear-gradient(165deg, var(--bg0), var(--bg1));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.25rem;
+    }
+
+    .wrap {
+      width: min(22rem, 100%);
+      text-align: center;
+    }
+
+    .brand {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .msg {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+
+    .msg strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .spinner {
+      width: 1.75rem;
+      height: 1.75rem;
+      margin: 0 auto 1.25rem;
+      border: 2.5px solid rgba(26, 26, 26, 0.12);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .fallback {
+      display: inline-block;
+      padding: 0.7rem 1.15rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+
+    .fallback:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 3px;
+    }
+
+    .hint {
+      margin: 1rem 0 0;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .hint[hidden] {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="app">
+    <div class="spinner" aria-hidden="true"></div>
+    <h1 class="brand">Képler Siguineau</h1>
+    <p class="msg" id="msg">Taking you to <strong id="focus">…</strong></p>
+    <a class="fallback" id="continue" href="/consulting.html">Continue</a>
+    <p class="hint" id="error" hidden>If nothing happens, tap Continue.</p>
+  </main>
+
+  <script type="module">
+    import {
+      QR_REDIRECT_DESTINATION,
+      QR_REDIRECT_FOCUS_LABEL,
+      QR_REDIRECT_VERSION_LABEL,
+    } from "./qrRedirectViews/scripts/qrRedirectConfig.js";
+
+    const focusEl = document.getElementById("focus");
+    const continueEl = document.getElementById("continue");
+    const errorEl = document.getElementById("error");
+
+    const dest = (QR_REDIRECT_DESTINATION || "/consulting.html").trim();
+    const label = (QR_REDIRECT_FOCUS_LABEL || "next step").trim();
+
+    focusEl.textContent = label;
+    continueEl.href = dest;
+    document.title = "Redirecting to " + label + "…";
+
+    try {
+      window.location.replace(dest);
+    } catch (err) {
+      errorEl.hidden = false;
+      console.error("[QR Redirect]", QR_REDIRECT_VERSION_LABEL, err);
+    }
+
+    // If replace is blocked or slow, surface the manual path.
+    window.setTimeout(function () {
+      errorEl.hidden = false;
+    }, 1800);
+  </script>
+</body>
+</html>

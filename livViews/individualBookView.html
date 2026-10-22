@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
         <link rel="stylesheet" href="assets/styles.css">
-        <title data-i18n="book.detailTitle">Liv — Detay liv</title>
+        <title data-i18n="book.detailTitle">Liv: Detay liv</title>
     </head>
     <body class="liv-body">
         <div class="liv-page">
@@ -198,7 +198,7 @@
             if (bookSnapshot.exists()) {
                 const d = bookSnapshot.data();
                 bookTitleTV.textContent = d.bookTitle || "";
-                authorTV.textContent = d.bookAuthor || "—";
+                authorTV.textContent = d.bookAuthor || "-";
                 if (d.bookImg) {
                     bookIV.src = d.bookImg;
                     bindDetailCoverLoadState();
@@ -207,8 +207,8 @@
                     bookIV.classList.remove("is-loaded");
                     if (bookCoverWrap) bookCoverWrap.classList.remove("is-loading");
                 }
-                yearTV.textContent = d.bookYear || "—";
-                subjectTV.textContent = d.bookSubject || "—";
+                yearTV.textContent = d.bookYear || "-";
+                subjectTV.textContent = d.bookSubject || "-";
 
                 if (chaptersSnapshot.empty) {
                     if (chapterHint) chapterHint.hidden = true;
@@ -237,9 +237,9 @@
                 refreshMyBooksForCurrentBook();
             } else {
                 bookTitleTV.textContent = t("search.noResults");
-                authorTV.textContent = "—";
-                yearTV.textContent = "—";
-                subjectTV.textContent = "—";
+                authorTV.textContent = "-";
+                yearTV.textContent = "-";
+                subjectTV.textContent = "-";
                 bookIV.removeAttribute("src");
                 bookIV.classList.remove("is-loaded");
                 if (bookCoverWrap) bookCoverWrap.classList.remove("is-loading");

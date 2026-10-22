@@ -1,5 +1,5 @@
 /**
- * The Minorities — Stripe subscription checkout config.
+ * The Minorities: Stripe subscription checkout config.
  *
  * HOW TO GO LIVE
  * 1. Stripe Dashboard → create monthly Prices for Bench / Starter / Owner.
@@ -9,7 +9,7 @@
  *    minoritiesFunctions/README.txt), deploy createMinSubscriptionCheckout
  *    + stripeWebhook, then flip CHECKOUT_LIVE to true.
  *
- * Waterboy is free — no Stripe Price. Client saves it via selectSubscriptionPlan.
+ * Waterboy is free: no Stripe Price. Client saves it via selectSubscriptionPlan.
  *
  * Do not paste buy.stripe.com/test_… Payment Links here.
  */
@@ -19,13 +19,13 @@ window.MIN_STRIPE = (function () {
 
   /**
    * Stripe Price IDs by subscription tier id.
-   * CLEAR_REQUIRED = not configured — CF returns tier_not_configured.
+   * CLEAR_REQUIRED = not configured: CF returns tier_not_configured.
    */
   var MIN_STRIPE_PRICE_IDS = {
-    // waterboy: free — no price
-    bench: "CLEAR_REQUIRED", // LIVE_REQUIRED — $1/mo Bench Player
-    starter: "CLEAR_REQUIRED", // LIVE_REQUIRED — $14.99/mo Starter
-    owner: "CLEAR_REQUIRED", // LIVE_REQUIRED — $2497/mo Owner
+    // waterboy: free: no price
+    bench: "CLEAR_REQUIRED", // LIVE_REQUIRED: $1/mo Bench Player
+    starter: "CLEAR_REQUIRED", // LIVE_REQUIRED: $14.99/mo Starter
+    owner: "CLEAR_REQUIRED", // LIVE_REQUIRED: $2497/mo Owner
   };
 
   function isPlaceholder(value) {

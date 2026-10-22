@@ -1,0 +1,13 @@
+---
+description: No em dashes and no word "but" in copy
+alwaysApply: true
+---
+
+# Copy style
+
+User-facing copy must not use:
+
+1. **Em dashes** (`—`) or **en dashes** (`–`). Use a period, comma, colon, or rewrite the sentence. Regular hyphens in compound words (talk-to-me, 15-minute) are fine.
+2. **The word "but"** in any capitalization. Split into two sentences or rephrase. Do not swap in a synonym that keeps the same contrast-hinge habit if a cleaner rewrite exists.
+
+This applies to UI labels, marketing copy, notes, offers, titles, alt text, RSS, and chat replies about this repo. Developer comments can follow the same rule when easy.

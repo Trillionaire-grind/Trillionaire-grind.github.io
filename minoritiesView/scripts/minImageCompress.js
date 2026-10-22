@@ -1,4 +1,4 @@
-/** Profile avatar limits — keep max bytes in sync with minoritiesView/storage.rules */
+/** Profile avatar limits: keep max bytes in sync with minoritiesView/storage.rules */
 export const PROFILE_AVATAR_MAX_BYTES = 1024 * 1024;
 export const PROFILE_AVATAR_MAX_DIMENSION = 512;
 

@@ -39,7 +39,7 @@ const LEGACY_THEMES = {
 };
 
 const CHALLENGE_DAYS = 30;
-const SS_APP_VERSION = "0.0.0.4";
+const SS_APP_VERSION = "0.0.0.5";
 const LISTEN_THRESHOLD = 0.9;
 const PLAYBACK_MIN_SECONDS = 30;
 const RING_CIRC = 100.53;
@@ -257,13 +257,13 @@ function updateProgressUI(listenSource) {
 
   const marked = isTodayMarked();
   if (marked) {
-    markBtn.textContent = listenSource === "listen" ? "✓ Listened today — well done" : "✓ I listened today";
+    markBtn.textContent = listenSource === "listen" ? "✓ Listened today: well done" : "✓ I listened today";
     listenHint.hidden = true;
   } else {
     markBtn.textContent = "I listened today";
     listenHint.hidden = false;
     listenHint.textContent =
-      "Press play below — listen to at least 90% of today's recording (30+ seconds of playback).";
+      "Press play below: listen to at least 90% of today's recording (30+ seconds of playback).";
     listenHint.classList.remove("is-ready");
   }
 
@@ -273,7 +273,7 @@ function updateProgressUI(listenSource) {
 
 function restartChallenge() {
   const ok = window.confirm(
-    "Start the 30 days over? Your goal and theme stay on this device — listening progress resets."
+    "Start the 30 days over? Your goal and theme stay on this device: listening progress resets."
   );
   if (!ok) return;
 
@@ -354,11 +354,11 @@ function saveGoal() {
 function updateFlipHint() {
   const flipped = cardFlipper.classList.contains("is-flipped");
   flipHintBtn.textContent = "Flip card";
-  flipHintSuffix.textContent = flipped ? " to show my goal" : " to read Matthew 7:7–8";
+  flipHintSuffix.textContent = flipped ? " to show my goal" : " to read Matthew 7:7-8";
   cardFlipper.setAttribute(
     "aria-label",
     flipped
-      ? "Goal card showing Matthew 7:7–8. Tap to flip."
+      ? "Goal card showing Matthew 7:7-8. Tap to flip."
       : "Goal card showing your goal. Tap to flip."
   );
   if (flipLive) {
@@ -377,7 +377,7 @@ function toggleStepsMore() {
   const open = stepsMore.hidden;
   stepsMore.hidden = !open;
   stepsToggle.setAttribute("aria-expanded", open ? "true" : "false");
-  stepsToggle.textContent = open ? "Hide steps 3–8" : "Show steps 3–8";
+  stepsToggle.textContent = open ? "Hide steps 3-8" : "Show steps 3-8";
 }
 
 function checkListenProgress() {
@@ -388,7 +388,7 @@ function checkListenProgress() {
     markTodayComplete("listen");
   } else if (ratio >= 0.05 && listenHint && !listenHint.hidden) {
     const need = Math.max(0, PLAYBACK_MIN_SECONDS - Math.floor(played));
-    listenHint.textContent = `Keep listening… ${Math.round(ratio * 100)}% — ${need}s more playback needed`;
+    listenHint.textContent = `Keep listening… ${Math.round(ratio * 100)}%: ${need}s more playback needed`;
     listenHint.classList.add("is-ready");
   }
 }
@@ -689,7 +689,7 @@ function previewTheme(id) {
 
   const banner = ensurePreviewBanner();
   const name = getThemeCatalog().themes[themeId]?.name || themeId;
-  banner.textContent = `Previewing ${name} — reverting in ${seconds}s`;
+  banner.textContent = `Previewing ${name}: reverting in ${seconds}s`;
   banner.hidden = false;
   document.body.classList.add("ss-theme-previewing");
 
@@ -771,7 +771,7 @@ function renderThemeStore() {
     <p>${(bundle.includes || []).map((id) => catalog.themes[id]?.name || id).join(" · ")}</p>
     ${
       bundleOwned
-        ? `<span class="ss-theme-item__status">Bundle owned — all premium themes unlocked</span>`
+        ? `<span class="ss-theme-item__status">Bundle owned: all premium themes unlocked</span>`
         : `<button type="button" class="ss-btn ss-btn--gold" data-buy-bundle ${bundleReady ? "" : "disabled"}>
             ${bundleReady ? `Unlock bundle · ${bundle.priceLabel || ""}` : "Bundle link pending"}
           </button>`
@@ -971,7 +971,7 @@ function initPwa() {
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    showInstallBanner("Install for quick daily access — works offline after your first visit.");
+    showInstallBanner("Install for quick daily access: works offline after your first visit.");
   });
 
   if (isIosSafari()) {

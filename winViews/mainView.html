@@ -653,7 +653,7 @@
         .sort((a, b) => b.days - a.days);
 
       if (followUps.length < 1) {
-        followUpList.innerHTML = `<p style="width: 100%; text-align: center; color: #555;">You're caught up — no follow-ups due.</p>`;
+        followUpList.innerHTML = `<p style="width: 100%; text-align: center; color: #555;">You're caught up: no follow-ups due.</p>`;
       } else {
         followUps.forEach((friend) => {
           const imageUrl = friend.imageUrl || "https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg?semt=ais_hybrid&w=740&q=80";
@@ -698,7 +698,7 @@
             <div class="friend-card" onclick="window.location.href='newProfile.html?id=${item.friendId}'">
               <div class="friend-info" style="margin-left: 0;">
                 <h2>${item.friendName}</h2>
-                <p>${dateLabel} — ${item.title}</p>
+                <p>${dateLabel}: ${item.title}</p>
                 <p>${item.notes ? item.notes : ""}</p>
               </div>
             </div>`;

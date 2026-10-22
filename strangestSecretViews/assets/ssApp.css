@@ -431,7 +431,7 @@ img {
   transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
 }
 
-/* Top / bottom semicircles — circle-half-fill style */
+/* Top / bottom semicircles: circle-half-fill style */
 .ss-theme-swatch::before,
 .ss-theme-swatch::after {
   content: "";
@@ -615,7 +615,7 @@ html[data-ss-theme="arcadia"] .ss-theme-swatch.is-active {
   text-align: center;
 }
 
-/* ── Flip card (hero — full width) ── */
+/* ── Flip card (hero: full width) ── */
 .ss-card-scene {
   perspective: 1200px;
   margin: 0 auto 12px;

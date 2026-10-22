@@ -1,4 +1,4 @@
-/** Optional GA4 — set window.LEARN_GA_MEASUREMENT_ID before loading this script */
+/** Optional GA4. Set window.LEARN_GA_MEASUREMENT_ID before loading this script */
 export function initLearnAnalytics() {
   const id = window.LEARN_GA_MEASUREMENT_ID;
   if (!id || window.__learnGaLoaded) return;

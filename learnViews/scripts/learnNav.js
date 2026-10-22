@@ -1,21 +1,23 @@
-export const LEARN_APP_VERSION = "0.2.9.12";
+export const LEARN_APP_VERSION = "0.2.9.27";
+
+console.log(`[Képler Siguineau] working version: v${LEARN_APP_VERSION}`);
 
 export const PAGE_INDEX = {
   home: 0,
-  notes: 1,
-  speak: 2,
-  offers: 3,
-  kotfe: 4,
-  projects: 5,
+  kotfe: 1,
+  notes: 2,
+  products: 3,
+  offers: 4,
+  speak: 5,
 };
 
 export const NAV_ITEMS = [
   { id: "home", label: "Home" },
-  { id: "notes", label: "Notes" },
-  { id: "speak", label: "Talk to me" },
-  { id: "offers", label: "Offers" },
   { id: "kotfe", label: "Mangé Lakay" },
-  { id: "projects", label: "Projects" },
+  { id: "notes", label: "Notes" },
+  { id: "products", label: "Products" },
+  { id: "offers", label: "Offers" },
+  { id: "speak", label: "Talk to me" },
 ];
 
 export const CONSULTING_NAV = {
@@ -37,6 +39,7 @@ export const LEARN_NAV_BRAND_LABEL = "Képler Siguineau";
 const MOBILE_NAV_BREAKPOINT = 768;
 
 export function goToPage(pageId) {
+  if (pageId === "projects") pageId = "products";
   if (!Object.prototype.hasOwnProperty.call(PAGE_INDEX, pageId)) return;
 
   if (window.parent !== window && typeof window.parent.changeTo === "function") {

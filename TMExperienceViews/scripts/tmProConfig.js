@@ -1,4 +1,4 @@
-/** TM Experience Pro — optional subscription (Stripe wiring added later). */
+/** TM Experience Pro: optional subscription (Stripe wiring added later). */
 export const TM_PRO_PRICE_LABEL = "$13.99/month";
 
 /** When true, Profile shows Subscribe / Manage billing (Cloud Functions + Stripe). */

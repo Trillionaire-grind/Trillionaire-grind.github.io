@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#141414">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Fat Loss">
+  <title>Fat Loss App: Book + 90-Day Ledger</title>
+  <script src="assets/flClarity.js"></script>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/photos/product-stack.png">
+  <link rel="stylesheet" href="assets/flApp.css">
+  <link rel="stylesheet" href="assets/flBookReader.css">
+  <link rel="stylesheet" href="assets/flLedger.css">
+</head>
+<body class="fl-app">
+
+  <div class="fl-auth-gate is-hidden" id="authGate">
+    <div class="fl-auth-card">
+      <p class="fl-brand">How to Lose Fat as Fast as Possible</p>
+      <h2 id="authModeLabel">Sign in</h2>
+      <p class="fl-auth-lead">Create an account so your ledger follows you across phones. Meal photos still stay in your camera roll.</p>
+      <form id="authForm" class="fl-auth-form">
+        <div class="fl-field">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" autocomplete="email" required>
+        </div>
+        <div class="fl-field">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" autocomplete="current-password" minlength="6" required>
+        </div>
+        <button type="submit" class="fl-btn fl-btn--accent fl-auth-submit" id="authSubmit">Sign in</button>
+        <p class="fl-status" id="authStatus"></p>
+      </form>
+      <p class="fl-auth-links">
+        <a href="#" id="authToggle">New here? Create account</a>
+        ·
+        <a href="#" id="authReset">Forgot password</a>
+      </p>
+    </div>
+  </div>
+
+  <div id="appShell">
+  <header class="fl-app-header">
+    <div class="fl-app-top" id="topStrip"><strong>Private on this device</strong> · Book + ledger saved locally</div>
+    <div class="fl-app-bar">
+      <h1 class="fl-app-title">How to Lose Fat</h1>
+      <span class="fl-app-ver" id="flAppVersion">v0.0.0.23</span>
+    </div>
+    <div class="fl-account-bar is-hidden" id="accountBar">
+      <span id="accountEmail">account</span>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="accountBackup">Backup</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn" id="signOutBtn">Sign out</button>
+      <button type="button" class="fl-btn fl-btn--ghost fl-account-btn fl-account-btn--danger" id="deleteAccountBtn">Delete</button>
+    </div>
+    <nav class="fl-tabs" role="tablist" aria-label="App sections">
+      <button type="button" class="fl-tab is-active" data-tab="book" role="tab" aria-selected="true">Book</button>
+      <button type="button" class="fl-tab" data-tab="ledger" role="tab" aria-selected="false">Ledger</button>
+    </nav>
+  </header>
+
+  <div class="fl-install" id="installBanner">
+    <p><strong>Install the app</strong>: Add to Home Screen for one-tap access to your book and ledger.</p>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button type="button" class="fl-btn fl-btn--accent" id="installBtn">Install</button>
+      <button type="button" class="fl-btn fl-btn--ghost" id="dismissInstall">Not now</button>
+    </div>
+  </div>
+
+  <div class="fl-book-toolbar" id="kitBar" hidden>
+    <span style="font-size:13px;font-weight:700;align-self:center;">Your Boy Kibble Kit:</span>
+    <a href="#" id="kitLink">Download kit PDF</a>
+  </div>
+
+  <main class="fl-app-main">
+    <section class="fl-panel fl-panel-book" id="panel-book" role="tabpanel" aria-label="Book">
+      <aside class="fl-coach-upgrade" id="coachUpgrade">
+        <h2>Want me to run the system for you?</h2>
+        <p>The book gives you the system. Coaching gives you me: a meal plan built around your food, weekly check-ins, and a Friday group call. Same 2X guarantee.</p>
+        <a class="fl-btn fl-btn--accent" id="coachLink" href="../fatLossCoaching.html">Apply for coaching</a>
+      </aside>
+      <div class="fl-book-contents" id="bookContents">
+        <div class="fl-book-cover-wrap">
+          <img id="bookCover" class="fl-book-cover-img" alt="">
+        </div>
+
+        <h1 class="fl-book-title" id="bookTitle"></h1>
+
+        <div class="fl-meta-grid" aria-label="Book details">
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Author</p>
+            <p class="fl-meta-value" id="bookAuthor"></p>
+          </div>
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Chapters</p>
+            <p class="fl-meta-value" id="bookChapterCount"></p>
+          </div>
+          <div class="fl-meta-cell">
+            <p class="fl-meta-label">Pages</p>
+            <p class="fl-meta-value" id="bookPageTotal"></p>
+          </div>
+        </div>
+
+        <button type="button" class="fl-book-resume" id="bookResume" hidden></button>
+
+        <h2 class="fl-section-heading">Contents</h2>
+        <p class="fl-chapter-hint">Tap a chapter to read it. Your place is saved.</p>
+        <div id="bookChapters"></div>
+
+        <p class="fl-book-offline"><a href="#" id="bookPdfLink">Save PDF offline</a></p>
+      </div>
+
+      <div class="fl-book-reader" id="flBookReader" tabindex="0" aria-label="Book reader" hidden>
+        <header class="fl-reader-header">
+          <button type="button" id="bookBack" class="fl-reader-back">&#8592; Contents</button>
+          <h2 class="fl-reader-title" id="bookSectionTitle"></h2>
+        </header>
+
+        <div class="fl-reader-stage">
+          <button type="button" id="bookPrev" class="fl-reader-arrow fl-reader-arrow-left" aria-label="Previous page">&#9664;</button>
+          <article class="fl-book-surface" id="bookSurface"></article>
+          <button type="button" id="bookNext" class="fl-reader-arrow fl-reader-arrow-right" aria-label="Next page">&#9654;</button>
+        </div>
+
+        <footer class="fl-reader-footer">
+          <p id="bookPageCounter" class="fl-page-counter"></p>
+        </footer>
+      </div>
+    </section>
+
+    <section class="fl-panel fl-panel-ledger" id="panel-ledger" role="tabpanel" aria-label="Ledger" hidden>
+      <div class="fl-shell">
+        <p class="fl-brand">90-Day Program</p>
+        <h1>Ledger</h1>
+        <p class="fl-lead">
+          Track the three pillars every day: calories under target, steps hit, and three workouts a week.
+          Meal photos stay in your camera roll: check the box when you've logged them.
+        </p>
+
+        <div class="fl-pillars" aria-label="Three pillars">
+          <div class="fl-pillar"><strong>1. Calories</strong><span>Stay under your daily target</span></div>
+          <div class="fl-pillar"><strong>2. Steps</strong><span>Hit your walking number</span></div>
+          <div class="fl-pillar"><strong>3. Workouts</strong><span>Three simple sessions a week</span></div>
+        </div>
+
+        <section class="fl-card">
+          <h2>Your targets</h2>
+          <p class="fl-meta">From Chapter 2. Change these anytime: they stay on this phone/computer.</p>
+          <div class="fl-grid-2">
+            <div class="fl-field">
+              <label for="startDate">Day 1 date</label>
+              <input type="date" id="startDate">
+            </div>
+            <div class="fl-field">
+              <label for="calorieTarget">Daily calorie target</label>
+              <input type="number" id="calorieTarget" min="800" step="1" inputmode="numeric">
+            </div>
+            <div class="fl-field">
+              <label for="stepTarget">Daily step target</label>
+              <input type="number" id="stepTarget" min="1000" step="100" inputmode="numeric">
+            </div>
+          </div>
+          <div class="fl-actions">
+            <button type="button" class="fl-btn fl-btn--ghost" id="saveSetup">Save targets</button>
+          </div>
+          <p class="fl-status" id="setupStatus"></p>
+        </section>
+
+        <section class="fl-card">
+          <h2>Log meals</h2>
+          <p class="fl-meta">Type what you weighed: e.g. <b>400g cooked chicken breast</b> or <b>90g rice dry</b>. Calories and protein fill in automatically.</p>
+          <div class="fl-meal-row">
+            <input type="text" id="mealInput" class="fl-meal-input" placeholder="400g cooked chicken breast" autocomplete="off">
+            <button type="button" class="fl-btn fl-btn--accent" id="addMeal">Add</button>
+          </div>
+          <p class="fl-status" id="mealParseStatus"></p>
+          <ul class="fl-meal-list" id="mealList" aria-label="Meals today"></ul>
+          <div class="fl-meal-totals" id="mealTotals" hidden>
+            <span><b id="mealTotalCal">0</b> cal</span>
+            <span><b id="mealTotalProtein">0</b> g protein</span>
+          </div>
+        </section>
+
+        <section class="fl-card">
+          <h2>Log a day</h2>
+          <p class="fl-meta">
+            <span><b id="dayLabel">Day 1 of 90</b></span>
+            <span>Workouts goal: <b>3 / week</b></span>
+          </p>
+
+          <div class="fl-field">
+            <label for="entryDate">Date</label>
+            <input type="date" id="entryDate">
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-field">
+              <label for="calories">Calories eaten</label>
+              <input type="number" id="calories" min="0" step="1" inputmode="numeric" placeholder="Auto from meals">
+            </div>
+            <div class="fl-field">
+              <label for="protein">Protein (g)</label>
+              <input type="number" id="protein" min="0" step="0.1" inputmode="decimal" placeholder="Auto from meals">
+            </div>
+          </div>
+
+          <div class="fl-field">
+            <label for="steps">Steps</label>
+            <input type="number" id="steps" min="0" step="1" inputmode="numeric" placeholder="e.g. 10200">
+          </div>
+
+          <label class="fl-check">
+            <input type="checkbox" id="workout">
+            <span>Workout done today</span>
+          </label>
+
+          <div class="fl-field">
+            <label for="workoutNote">Workout note (optional)</label>
+            <input type="text" id="workoutNote" placeholder="e.g. Push day, 45 min">
+          </div>
+
+          <div class="fl-grid-2">
+            <div class="fl-field">
+              <label for="weight">Weight (optional)</label>
+              <input type="number" id="weight" min="0" step="0.1" inputmode="decimal" placeholder="lbs">
+            </div>
+            <div class="fl-field" style="display:flex;align-items:flex-end;">
+              <label class="fl-check" style="margin:0 0 12px;">
+                <input type="checkbox" id="mealsLogged">
+                <span>Meals photographed / logged</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="fl-field">
+            <label for="notes">Notes</label>
+            <textarea id="notes" placeholder="Hunger, sleep, stall, whatever matters"></textarea>
+          </div>
+
+          <div class="fl-actions">
+            <button type="button" class="fl-btn fl-btn--accent" id="saveDay">Save day</button>
+            <button type="button" class="fl-btn fl-btn--ghost" id="clearDay">Clear day</button>
+            <button type="button" class="fl-btn fl-btn--ghost" id="exportWeek">Copy this week</button>
+            <button type="button" class="fl-btn fl-btn--ghost" id="emailWeek">Email week</button>
+          </div>
+          <p class="fl-status" id="dayStatus"></p>
+        </section>
+
+        <section class="fl-card">
+          <h2>Progress</h2>
+          <div class="fl-stats">
+            <div class="fl-stat"><b id="statLogged">0</b><span>Days logged</span></div>
+            <div class="fl-stat"><b id="statFull">0</b><span>Full pillar days</span></div>
+            <div class="fl-stat"><b id="statWorkouts">0/3</b><span>Workouts this week</span></div>
+          </div>
+          <p class="fl-meta" id="weekCopy" style="margin-bottom:14px;"></p>
+          <div class="fl-day-grid" id="dayGrid" aria-label="90 day map"></div>
+          <div class="fl-legend">
+            <span><i></i> Empty</span>
+            <span><i class="lg-partial"></i> Partial</span>
+            <span><i class="lg-full"></i> All 3 pillars</span>
+          </div>
+        </section>
+
+        <section class="fl-card">
+          <h2>Backup &amp; restore</h2>
+          <p class="fl-meta" id="localModeNote" hidden>
+            Cloud login is not configured yet: your ledger saves on this device only.
+            <strong>Download a backup weekly</strong> so you never lose your progress.
+          </p>
+          <p class="fl-meta">
+            Download a JSON backup anytime. Restore it on a new phone or after clearing browser data.
+            Meal photos are not included: they stay in your camera roll.
+          </p>
+          <div class="fl-actions">
+            <button type="button" class="fl-btn fl-btn--accent" id="exportBackup">Download full backup</button>
+            <button type="button" class="fl-btn fl-btn--ghost" id="importBackup">Restore from backup</button>
+            <input type="file" id="importFile" accept="application/json,.json" hidden>
+          </div>
+          <p class="fl-status" id="backupStatus"></p>
+        </section>
+
+        <section class="fl-card">
+          <h2>Recent days</h2>
+          <ul class="fl-history" id="history"></ul>
+        </section>
+
+        <footer class="fl-footer">
+          <p>Signed in? Your ledger syncs to your account. Either way, <b>download a backup</b> before switching phones or deleting the app.</p>
+          <p>Questions? <a id="supportEmail" href="mailto:ksiguineau@gmail.com">ksiguineau@gmail.com</a></p>
+          <p class="ver" id="flVersion">v0.0.0.23</p>
+        </footer>
+      </div>
+    </section>
+  </main>
+  </div>
+
+  <script type="module" src="assets/flApp.js"></script>
+</body>
+</html>

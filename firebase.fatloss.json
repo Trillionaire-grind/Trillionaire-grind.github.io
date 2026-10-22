@@ -1,0 +1,6 @@
+{
+  "firestore": {
+    "rules": "fatLossViews/firestore.rules",
+    "indexes": "firestore.fatloss.indexes.json"
+  }
+}

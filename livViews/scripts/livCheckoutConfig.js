@@ -2,7 +2,7 @@
  * Liv Lakay site + Stripe checkout (Firebase Functions, project liv-lakay).
  * Deploy functions: firebase use liv-lakay && firebase deploy --only functions
  *
- * Payment Links alone are not enough — the webhook must mint codesPurchased in Firestore.
+ * Payment Links alone are not enough: the webhook must mint codesPurchased in Firestore.
  */
 
 export const LIV_SUPPORT_EMAIL = "buildingwithkepler@gmail.com";

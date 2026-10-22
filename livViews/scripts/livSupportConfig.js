@@ -1,5 +1,5 @@
 /**
- * Liv Lakay sponsorship tiers — Stripe Payment Links + Calendly for flagship tier.
+ * Liv Lakay sponsorship tiers: Stripe Payment Links + Calendly for flagship tier.
  *
  * STRIPE SETUP: each Payment Link → After payment → redirect to thankYouUrl.
  * Top tier ($45K): Calendly call + invoice/wire (same pattern as Mangé Lakay $100K).
@@ -15,7 +15,7 @@ export const LIV_SUPPORT = {
   anyAmountUrl: "",
   calendlyUrl: "https://calendly.com/buildingwithkepler",
   supportEmail: LIV_SUPPORT_EMAIL,
-  /** Retail access pass (individual) — links to purchase flow. */
+  /** Retail access pass (individual): links to purchase flow. */
   singlePassUrl: "../livPass.html",
   tiers: [
     {
@@ -25,8 +25,8 @@ export const LIV_SUPPORT = {
       name: "Twazy elèv",
       nameEn: "Three students",
       description:
-        "Aksè Liv Lakay pou twa timoun — yon ti fanmi, twa frè ak sè, oswa twa zanmi ki pa t kapab peye pès la.",
-      descriptionEn: "Liv Lakay access for three children — siblings, cousins, or friends who cannot afford a pass.",
+        "Aksè Liv Lakay pou twa timoun: yon ti fanmi, twa frè ak sè, oswa twa zanmi ki pa t kapab peye pès la.",
+      descriptionEn: "Liv Lakay access for three children: siblings, cousins, or friends who cannot afford a pass.",
       cta: "Bay $30",
       stripeUrl: "",
     },
@@ -37,7 +37,7 @@ export const LIV_SUPPORT = {
       name: "Yon klas",
       nameEn: "Classroom",
       description:
-        "Sponsorize aksè pou yon klas (~30 elèv). Pri patnè — nou mete plis pase yon pès $10 sou chak elèv pou rive nan kantite sa a.",
+        "Sponsorize aksè pou yon klas (~30 elèv). Pri patnè: nou mete plis pase yon pès $10 sou chak elèv pou rive nan kantite sa a.",
       descriptionEn: "Sponsor access for a full classroom (~30 students) at partner pricing.",
       cta: "Bay $100",
       major: true,
@@ -50,7 +50,7 @@ export const LIV_SUPPORT = {
       name: "Alimante yon lekòl",
       nameEn: "Fuel a school",
       description:
-        "Kòd aksè an gwoup, fòmasyon anplwaye, ak sipò pou mete Liv Lakay nan yon lekòl — liv Kreyòl sou telefòn ak òdinatè.",
+        "Kòd aksè an gwoup, fòmasyon anplwaye, ak sipò pou mete Liv Lakay nan yon lekòl: liv Kreyòl sou telefòn ak òdinatè.",
       descriptionEn: "Bulk passes, staff onboarding, and rollout support for one school.",
       cta: "Bay $3,000",
       major: true,
@@ -63,9 +63,9 @@ export const LIV_SUPPORT = {
       name: "Patnè rejyonal",
       nameEn: "Regional partner",
       description:
-        "Déplwayman nan plizyè lekòl — vise ~5,000 elèv nan yon rejyon. Nou planifye ak ou anvan peman (apèl + rapò).",
+        "Déplwayman nan plizyè lekòl: vise ~5,000 elèv nan yon rejyon. Nou planifye ak ou anvan peman (apèl + rapò).",
       descriptionEn:
-        "Multi-school deployment — target ~5,000 students in a region. We plan with you before payment (call + reporting).",
+        "Multi-school deployment: target ~5,000 students in a region. We plan with you before payment (call + reporting).",
       cta: "Planifye apèl patnè",
       ctaEn: "Schedule partner call",
       major: true,

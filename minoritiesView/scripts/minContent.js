@@ -41,7 +41,7 @@ const DEFAULT_LEARN = {
 
 const DEFAULT_PROMO = {
   title: "Shop",
-  body: "University collection — live now",
+  body: "University collection: live now",
   cta: "Shop the collection ›",
   image: "minoritiesView/assets/shop/uni_hd.webp",
   linkTab: "shop",

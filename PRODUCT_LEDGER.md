@@ -161,16 +161,55 @@ Check off items as you go (`[x]`). Ordered **most done → least done**.
 
 ## Tier 3 — Functional prototype
 
-### Tech Academy
-**URL:** `/techAcademy.html` · **Money:** Stripe **test** only
+### Style AI
+**URL:** `/styleAI.html` · **Money:** None
 
-- [x] Education / login shell
-- [ ] Replace test Stripe links with live
-- [ ] Remove debug `alert()`s in auth flows
-- [ ] Mock assets / broken pages fixed
-- [ ] **Not for public sale until above done**
+- [x] Selfie capture + photo upload, resized client-side before sending
+- [x] 7 hairstyles × 12 colors turned into a Gemini image-edit prompt
+- [x] Gemini Interactions API (`gemini-3.1-flash-image`) called straight from the browser
+- [x] Download the generated look
+- [ ] Needs each visitor to paste their own Gemini API key — no shared/hosted key
+- [ ] Key lives in `localStorage` and goes directly to Google; fine for personal use, revisit before public promotion
+- [x] Branded Style AI, so it no longer collides with Roxanne AI (the SVG-overlay try-on)
 
 ---
+
+### Roxanne AI
+**URL:** `/roxanneAI.html` (old `/roxanne.html` redirects) · **Money:** None
+
+- [x] Selfie capture + photo upload, all on-device
+- [x] Automatic face fit (MediaPipe face detector) with manual drag / size / tilt fallback
+- [x] 11 mock hairstyles × 14 hair colors, recolored live
+- [x] Save the look as a PNG
+- [ ] Photoreal hair (current styles are stylized overlays, not wig photography)
+- [ ] Overlay can't hide long existing hair — best on frontal photos with hair back
+
+---
+
+### Tech Academy
+**URL:** `/techAcademy.html` · **Money:** Guide Stripe Payment Link · VIP phone-only
+
+- [x] Education / login shell
+- [x] 3-tier access: Free / Guide $997 / VIP $97,000 (VIP = call only)
+- [ ] Live Stripe Payment Link for Guide ($997) + `CHECKOUT_LIVE`
+- [ ] Post-payment Guide unlock in Firebase (success URL / admin)
+- [ ] Remove debug `alert()`s in auth flows
+- [ ] Mock assets / broken pages fixed
+- [ ] **Not for public Guide sale until Stripe + unlock done**
+
+---
+
+### Princes
+**URL:** `/princesLanding.html` · **Money:** $1 ticket (testing mode). Stripe Checkout next.
+
+- [x] VSL sales page, $1 account modal, testing-mode footer
+- [x] App shell: Home, Learn (classes + courses), Calendar, Chat, Admin
+- [x] Roles: leader, staff, owner
+- [x] Army rank stack: Recruit, Private, Specialist, Sergeant, Colonel, Prince's Court
+- [ ] Firebase project + Auth/Firestore live
+- [ ] Stripe Checkout session tied to Firebase uid + webhook entitlement
+- [ ] Household chat rooms
+- [ ] Real VSL video
 
 ### The Minorities
 **URL:** `/minorities.html` · **Money:** Test Stripe stub (live Checkout planned)

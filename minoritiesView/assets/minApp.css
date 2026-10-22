@@ -1,4 +1,4 @@
-/* The Minorities — shared design system */
+/* The Minorities: shared design system */
 :root {
   --min-primary: #af2d0b;
   --min-primary-soft: #fff4f1;
@@ -217,7 +217,7 @@ img {
   border-radius: 2px;
 }
 
-/* Main — sole scroll container */
+/* Main: sole scroll container */
 .min-main {
   flex: 1;
   min-height: 0;
@@ -376,10 +376,27 @@ img {
   border-radius: var(--min-radius);
   box-shadow: var(--min-shadow);
   overflow: hidden;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
   cursor: pointer;
   border: 1px solid var(--min-outline);
   transition: box-shadow 0.2s, transform 0.2s;
+  /* Match upgrade CTA width (full .min-screen column) */
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@media (min-width: 768px) {
+  .min-content-card {
+    width: 100%;
+    max-width: none;
+  }
+
+  .min-content-card-media {
+    /* Keep mid height when cards stretch to CTA width on desktop */
+    max-height: min(48vh, 420px);
+  }
 }
 
 .min-content-card:hover {
@@ -387,12 +404,27 @@ img {
   transform: translateY(-2px);
 }
 
-.min-content-card img.hero {
+/* Mid-tall cover frame: taller than 16:9, not full poster */
+.min-content-card-media {
   width: 100%;
-  max-height: 280px;
-  object-fit: cover;
-  display: block;
+  aspect-ratio: 4 / 5;
+  max-height: min(52vh, 440px);
+  overflow: hidden;
+  background: #111;
+  position: relative;
   border-bottom: 2px solid var(--min-text);
+}
+
+.min-content-card-media img.hero,
+.min-content-card img.hero {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: cover !important;
+  object-position: center top;
+  display: block;
+  aspect-ratio: auto;
 }
 
 .min-content-card .min-card-body {
@@ -415,12 +447,18 @@ img {
 }
 
 .min-locked-wrap {
-  position: relative;
+  position: absolute;
+  inset: 0;
   overflow: hidden;
 }
 
 .min-locked-wrap img {
   filter: blur(8px);
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center top;
+  aspect-ratio: auto;
 }
 
 .min-locked-badge {
