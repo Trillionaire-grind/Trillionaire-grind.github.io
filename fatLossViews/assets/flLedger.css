@@ -117,9 +117,17 @@ body.fl-ledger {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  min-width: 0;
+  max-width: 100%;
 }
 
-.fl-field { margin: 0 0 12px; }
+.fl-grid-2 > * { min-width: 0; }
+
+.fl-field {
+  margin: 0 0 12px;
+  min-width: 0;
+  max-width: 100%;
+}
 
 .fl-field label {
   display: block;
@@ -134,13 +142,27 @@ body.fl-ledger {
 .fl-field input[type="date"],
 .fl-field input[type="text"],
 .fl-field textarea {
+  display: block;
   width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   border: 2px solid var(--ink);
   padding: 11px 12px;
   font: inherit;
   font-size: 16px;
   background: #fff;
   color: var(--ink);
+}
+
+.fl-field input[type="date"] {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.fl-field input[type="date"]::-webkit-datetime-edit {
+  min-width: 0;
+  padding: 0;
 }
 
 .fl-field textarea {

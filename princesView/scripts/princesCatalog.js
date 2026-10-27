@@ -128,7 +128,7 @@ window.PRINCES_CATALOG = {
       topic: "body",
       access: "ticket",
       image: "princesView/assets/courses/body.png",
-      href: "fatLossViews/app.html",
+      href: "fatLossViews/app.html?from=princes",
     },
   ],
   classes: [
