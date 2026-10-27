@@ -48,7 +48,7 @@ html, body.fl-app {
   padding: 10px 14px 0;
 }
 
-.fl-learn-back {
+.fl-app a.fl-learn-back {
   flex: 0 0 auto;
   font-size: 13px;
   font-weight: 800;
