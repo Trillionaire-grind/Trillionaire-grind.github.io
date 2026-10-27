@@ -9,13 +9,39 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.8">
+  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.9">
 </head>
 <body>
   <div class="pr-app">
     <header id="prHeader" class="pr-app-header"></header>
     <main id="prMain" class="pr-main"></main>
     <nav id="prTabbar" class="pr-tabbar" aria-label="Main"></nav>
+  </div>
+
+  <div class="pr-modal" id="prComposeModal" aria-hidden="true">
+    <div class="pr-modal-backdrop" data-pr-close></div>
+    <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prComposeTitle">
+      <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <h2 id="prComposeTitle">New post</h2>
+      <form id="prNewPost">
+        <label class="pr-field"><span>Title</span><input name="title" required></label>
+        <label class="pr-field"><span>Body</span><textarea name="body" rows="5" required></textarea></label>
+        <button class="pr-submit" type="submit">Publish</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="pr-modal" id="prConfirmModal" aria-hidden="true">
+    <div class="pr-modal-backdrop" data-pr-close></div>
+    <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prConfirmTitle">
+      <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <h2 id="prConfirmTitle">Remove this post?</h2>
+      <p>The post will be gone from Home.</p>
+      <div class="pr-modal-actions">
+        <button type="button" class="pr-ghost" data-pr-close>Cancel</button>
+        <button type="button" class="pr-submit" id="prConfirmDelete">Remove</button>
+      </div>
+    </div>
   </div>
   <script src="princesView/scripts/princesVersion.js"></script>
   <script src="princesView/scripts/princesCatalog.js"></script>

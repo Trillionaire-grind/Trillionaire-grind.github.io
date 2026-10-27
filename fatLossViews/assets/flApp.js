@@ -51,6 +51,12 @@ let deferredInstall = null;
 let authMode = "signin";
 
 if (versionEl) versionEl.textContent = flVersionLabel();
+
+const learnBack = document.getElementById("learnBack");
+if (learnBack) {
+  const fromLearn = new URLSearchParams(location.search).get("from") === "princes";
+  if (fromLearn) learnBack.hidden = false;
+}
 if (bookPdfLink) {
   bookPdfLink.href = EBOOK_PDF;
   bookPdfLink.setAttribute("download", "");

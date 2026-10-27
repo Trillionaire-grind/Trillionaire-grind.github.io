@@ -48,11 +48,26 @@ html, body.fl-app {
   padding: 10px 14px 0;
 }
 
+.fl-learn-back {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 6px 8px 6px 0;
+  white-space: nowrap;
+}
+
+.fl-learn-back[hidden] { display: none !important; }
+
+.fl-learn-back:hover { text-decoration: underline; }
+
 .fl-app-title {
   font-size: 15px;
   font-weight: 900;
   letter-spacing: -0.02em;
   margin: 0;
+  min-width: 0;
 }
 
 .fl-app-ver {

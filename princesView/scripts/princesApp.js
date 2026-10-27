@@ -24,7 +24,51 @@
   }
 
   function go(hash) {
-    location.hash = hash;
+    var next = String(hash || "").replace(/^#/, "");
+    if (route() === next) {
+      window.scrollTo(0, 0);
+      return;
+    }
+    location.hash = next;
+  }
+
+  var lastPath = null;
+  var pendingDeleteId = null;
+  var pendingDeleteLeave = false;
+  var composeModal = document.getElementById("prComposeModal");
+  var confirmModal = document.getElementById("prConfirmModal");
+
+  function openModal(el) {
+    if (!el) return;
+    el.classList.add("is-open");
+    el.setAttribute("aria-hidden", "false");
+  }
+
+  function closeModal(el) {
+    if (!el) return;
+    el.classList.remove("is-open");
+    el.setAttribute("aria-hidden", "true");
+  }
+
+  function closeAppModals() {
+    closeModal(composeModal);
+    closeModal(confirmModal);
+    pendingDeleteId = null;
+    pendingDeleteLeave = false;
+  }
+
+  function scrollPageTop() {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }
+
+  var FAT_LOSS_APP = (CATALOG && CATALOG.fatLossApp) || "fatLossViews/app.html";
+
+  function fatLossHref() {
+    var base = FAT_LOSS_APP;
+    if (base.indexOf("from=princes") >= 0) return base;
+    return base + (base.indexOf("?") >= 0 ? "&" : "?") + "from=princes";
   }
 
   function topicColor(topic) {
@@ -34,8 +78,6 @@
   function topicLabel(topic) {
     return (CATALOG.topics[topic] && CATALOG.topics[topic].label) || topic;
   }
-
-  var FAT_LOSS_APP = (CATALOG && CATALOG.fatLossApp) || "fatLossViews/app.html";
 
   var TEST_RANKS = [
     { id: "ticket", label: "Recruit" },
@@ -63,7 +105,7 @@
   }
 
   function openFatLossApp() {
-    window.location.href = FAT_LOSS_APP;
+    window.location.href = fatLossHref();
   }
 
   function tierName(tierId) {
@@ -198,11 +240,78 @@
     return '<p class="pr-empty">' + esc(title) + " Private opens this. $14.97 a month.</p><button type=\"button\" class=\"pr-submit\" data-go=\"upgrade\">See the ranks</button>";
   }
 
+  function bindDeleteButtons(leaveAfter) {
+    mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        event.preventDefault();
+        pendingDeleteId = btn.dataset.del;
+        pendingDeleteLeave = !!leaveAfter;
+        openModal(confirmModal);
+      });
+    });
+  }
+
+  function bindPersistentUi() {
+    document.querySelectorAll("[data-pr-close]").forEach(function (el) {
+      el.addEventListener("click", function () {
+        closeModal(el.closest(".pr-modal"));
+        if (el.closest("#prConfirmModal")) {
+          pendingDeleteId = null;
+          pendingDeleteLeave = false;
+        }
+      });
+    });
+    var composeForm = document.getElementById("prNewPost");
+    if (composeForm) {
+      composeForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var user = AUTH.currentUser();
+        if (!user || !AUTH.canCreatePost()) return;
+        var data = new FormData(composeForm);
+        var postsNow = STORE.getPosts();
+        postsNow.unshift({
+          id: STORE.uid(),
+          author: user.displayName,
+          authorId: user.id,
+          role: user.teamRole,
+          title: data.get("title"),
+          body: data.get("body"),
+          access: "private",
+          createdAt: STORE.nowIso(),
+        });
+        STORE.savePosts(postsNow);
+        composeForm.reset();
+        closeModal(composeModal);
+        go("home");
+        render();
+        scrollPageTop();
+      });
+    }
+    var confirmBtn = document.getElementById("prConfirmDelete");
+    if (confirmBtn) {
+      confirmBtn.addEventListener("click", function () {
+        if (!pendingDeleteId) {
+          closeModal(confirmModal);
+          return;
+        }
+        var id = pendingDeleteId;
+        var leave = pendingDeleteLeave;
+        pendingDeleteId = null;
+        pendingDeleteLeave = false;
+        STORE.savePosts(STORE.getPosts().filter(function (post) { return post.id !== id; }));
+        closeModal(confirmModal);
+        if (leave) go("home");
+        else render();
+      });
+    }
+  }
+
   function renderHome() {
     var user = AUTH.currentUser();
     var posts = STORE.getPosts();
     var compose = AUTH.canCreatePost()
-      ? '<form id="prNewPost" class="pr-letter" style="margin-bottom:16px"><h3>New post</h3><label class="pr-field"><span>Title</span><input name="title" required></label><label class="pr-field"><span>Body</span><textarea name="body" rows="3" required></textarea></label><button class="pr-submit" type="submit">Publish</button></form>'
+      ? '<button type="button" class="pr-compose-launch" id="prOpenCompose">Write something</button>'
       : "";
     mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + compose + posts.map(function (post) {
       var access = post.access || "private";
@@ -229,24 +338,14 @@
         "</article>";
     }).join("");
 
-    var form = document.getElementById("prNewPost");
-    if (form) {
-      form.addEventListener("submit", function (event) {
+    var openCompose = document.getElementById("prOpenCompose");
+    if (openCompose) {
+      openCompose.addEventListener("click", function (event) {
         event.preventDefault();
-        var data = new FormData(form);
-        var postsNow = STORE.getPosts();
-        postsNow.unshift({
-          id: STORE.uid(),
-          author: user.displayName,
-          authorId: user.id,
-          role: user.teamRole,
-          title: data.get("title"),
-          body: data.get("body"),
-          access: "private",
-          createdAt: STORE.nowIso(),
-        });
-        STORE.savePosts(postsNow);
-        render();
+        event.stopPropagation();
+        openModal(composeModal);
+        var titleInput = composeModal && composeModal.querySelector('input[name="title"]');
+        if (titleInput) titleInput.focus();
       });
     }
     mainEl.querySelectorAll("[data-like]").forEach(function (btn) {
@@ -257,13 +356,7 @@
         render();
       });
     });
-    mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
-      btn.addEventListener("click", function (event) {
-        event.stopPropagation();
-        STORE.savePosts(STORE.getPosts().filter(function (post) { return post.id !== btn.dataset.del; }));
-        render();
-      });
-    });
+    bindDeleteButtons(false);
     mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
       btn.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -343,12 +436,7 @@
       });
     });
     bindCommentForm(user);
-    mainEl.querySelectorAll("[data-del]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        STORE.savePosts(STORE.getPosts().filter(function (item) { return item.id !== btn.dataset.del; }));
-        go("home");
-      });
-    });
+    bindDeleteButtons(true);
     mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var postsNow = STORE.getPosts();
@@ -687,6 +775,12 @@
   function render() {
     if (!requireUser()) return;
     var path = route();
+    var pathChanged = path !== lastPath;
+    lastPath = path;
+    if (pathChanged) {
+      closeAppModals();
+      scrollPageTop();
+    }
     renderHeader();
     bindHeader();
     renderTabs();
@@ -721,5 +815,6 @@
   });
 
   window.addEventListener("hashchange", render);
+  bindPersistentUi();
   render();
 })();
