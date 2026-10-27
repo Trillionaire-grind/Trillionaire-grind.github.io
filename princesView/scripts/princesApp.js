@@ -159,10 +159,28 @@
     return row ? row.label : "Off";
   }
 
+  function initials(name) {
+    var parts = String(name || "P").trim().split(/\s+/).filter(Boolean);
+    var letters = (parts[0] && parts[0].charAt(0)) || "P";
+    if (parts[1]) letters += parts[1].charAt(0);
+    return letters.toUpperCase();
+  }
+
+  function prettyLine(value, emptyText) {
+    var text = String(value == null ? "" : value).trim();
+    if (!text) return emptyText || "Not set";
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
   function renderHeader() {
     var user = AUTH.currentUser();
     var mode = STORE.getAppMode();
     var modeLabel = mode === "fix" ? "Fix" : mode === "test" ? "Testing" : "";
+    var onProfile = route().split("/")[0] === "profile";
+    var avatar =
+      '<button type="button" class="pr-avatar-btn' + (onProfile ? " is-on" : "") + '" data-go="profile" aria-label="Profile">' +
+      esc(initials(user && user.displayName)) +
+      "</button>";
     var chip = "";
     if (modeLabel) {
       var rankId = (user && user.tier) || "ticket";
@@ -187,7 +205,7 @@
     }
     headerEl.innerHTML =
       '<a class="pr-brand" href="#home"><img src="' + esc(STORE.getLogo()) + '" alt=""><span>' + esc(STORE.getBrandName()) + "</span></a>" +
-      '<div class="pr-head-tools">' + chip + "</div>";
+      '<div class="pr-head-tools">' + chip + avatar + "</div>";
   }
 
   function bindHeader() {
@@ -760,12 +778,22 @@
 
   function renderProfile() {
     var user = AUTH.currentUser();
+    var rank = tierName(user.tier || "ticket");
     mainEl.innerHTML =
-      '<article class="pr-letter"><h1>' + esc(user.displayName) + "</h1>" +
-      "<p>" + esc(user.email) + " · " + esc(user.age || "") + " · " + esc(user.gender || "") + "</p>" +
-      "<p>Tier: " + esc(user.tier) + " · Role: " + esc(user.teamRole) + "</p>" +
+      '<article class="pr-profile">' +
+      '<div class="pr-profile-hero">' +
+      '<div class="pr-avatar pr-avatar--lg" aria-hidden="true">' + esc(initials(user.displayName)) + "</div>" +
+      "<h1>" + esc(user.displayName || "Prince") + "</h1>" +
+      '<p class="pr-profile-rank">' + esc(rank) + "</p>" +
+      "</div>" +
+      '<dl class="pr-profile-facts">' +
+      "<div><dt>Email</dt><dd>" + esc(user.email || "Not set") + "</dd></div>" +
+      "<div><dt>Age</dt><dd>" + esc(user.age ? String(user.age) : "Not set") + "</dd></div>" +
+      "<div><dt>Gender</dt><dd>" + esc(prettyLine(user.gender)) + "</dd></div>" +
+      "</dl>" +
       '<button type="button" class="pr-submit" data-go="upgrade">Subscriptions</button>' +
-      '<button type="button" class="pr-ghost" id="prLogout" style="margin-top:10px;width:100%">Log out</button></article>';
+      '<button type="button" class="pr-ghost pr-profile-logout" id="prLogout">Log out</button>' +
+      "</article>";
     document.getElementById("prLogout").onclick = function () {
       AUTH.logout();
       location.href = "princesLanding.html";
