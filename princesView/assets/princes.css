@@ -225,8 +225,6 @@ button, input, select, textarea { font: inherit; }
   line-height: 1.45;
 }
 
-.pr-test-foot span { color: #8a8478; }
-
 .pr-test-foot {
   position: fixed;
   left: 0;
