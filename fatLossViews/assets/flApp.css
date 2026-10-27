@@ -58,9 +58,9 @@ html, body.fl-app {
   white-space: nowrap;
 }
 
-.fl-learn-back[hidden] { display: none !important; }
+.fl-app a.fl-learn-back[hidden] { display: none !important; }
 
-.fl-learn-back:hover { text-decoration: underline; }
+.fl-app a.fl-learn-back:hover { text-decoration: underline; }
 
 .fl-app-title {
   font-size: 15px;
