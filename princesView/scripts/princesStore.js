@@ -10,6 +10,7 @@
   var KEY_COMMENTS = "princes.comments";
   var KEY_BRAND = "princes.brandName";
   var KEY_LOGO = "princes.logo";
+  var KEY_CHAT = "princes.chat";
 
   function read(key, fallback) {
     try {
@@ -334,7 +335,104 @@
       d2: { demo_hale: { count: 3, session: "prior-seed" } },
     });
     write(KEY_EVENTS, (global.PRINCES_CATALOG.events || []).slice());
+    write(KEY_CHAT, seedChatData());
     return { owner: owner, recruit: recruit };
+  }
+
+  function previewFrom(text) {
+    var trimmed = String(text || "").trim();
+    if (!trimmed) return "";
+    return trimmed.length > 80 ? trimmed.slice(0, 77) + "…" : trimmed;
+  }
+
+  function seedChatData() {
+    var messages = {
+      unit: [
+        { id: "m_u1", authorId: "demo_marcus", author: "Marcus Vale", text: "Post the waist. Class is Tuesday. No sweater in the photo.", createdAt: nowIso() },
+        { id: "m_u2", authorId: "demo_cole", author: "Cole Hart", text: "Hit the steps before the sun goes down.", createdAt: nowIso() },
+        { id: "m_u3", authorId: "demo_hale", author: "Hale Orth", text: "Day 9. Shirt tucked. Gut is leaving.", createdAt: nowIso() },
+      ],
+      announcements: [
+        { id: "m_a1", authorId: "demo_marcus", author: "Marcus Vale", text: "Friday shirt-off check. Camera on. No story.", createdAt: nowIso() },
+        { id: "m_a2", authorId: "demo_nash", author: "Nash Iver", text: "Waist check is on the calendar. Post the number.", createdAt: nowIso() },
+      ],
+      body: [
+        { id: "m_b1", authorId: "demo_diaz", author: "Diaz Reed", text: "Day 12. Down 4 lbs. Calories held.", createdAt: nowIso() },
+        { id: "m_b2", authorId: "demo_cole", author: "Cole Hart", text: "Protein first. Then the walk. Then sleep.", createdAt: nowIso() },
+        { id: "m_b3", authorId: "demo_wade", author: "Wade Pell", text: "Opened the ledger. Three meals logged.", createdAt: nowIso() },
+      ],
+      squad: [
+        { id: "m_s1", authorId: "demo_kim", author: "Kim Sato", text: "Eight men. Number or it did not happen.", createdAt: nowIso() },
+        { id: "m_s2", authorId: "demo_cole", author: "Cole Hart", text: "Two missed. They hear about it on the call.", createdAt: nowIso() },
+      ],
+      colonel: [
+        { id: "m_c1", authorId: "demo_nash", author: "Nash Iver", text: "Minister of war seat is open. Take it or raise your own command.", createdAt: nowIso() },
+        { id: "m_c2", authorId: "demo_marcus", author: "Marcus Vale", text: "Month-long room. Show the body. Then we talk seats.", createdAt: nowIso() },
+      ],
+      court: [
+        { id: "m_t1", authorId: "demo_marcus", author: "Marcus Vale", text: "The table is full until a chair opens. Princes talking to princes.", createdAt: nowIso() },
+      ],
+    };
+    var rooms = {};
+    Object.keys(messages).forEach(function (roomId) {
+      var last = messages[roomId][messages[roomId].length - 1];
+      rooms[roomId] = { preview: previewFrom(last && last.text) };
+    });
+    return { rooms: rooms, messages: messages };
+  }
+
+  function getChat() {
+    var chat = read(KEY_CHAT, null);
+    if (!chat || !chat.messages) {
+      chat = seedChatData();
+      write(KEY_CHAT, chat);
+    }
+    return chat;
+  }
+
+  function saveChat(chat) {
+    write(KEY_CHAT, chat);
+  }
+
+  function chatRooms() {
+    return (global.PRINCES_CATALOG.chatRooms || []).slice();
+  }
+
+  function chatRoom(id) {
+    return chatRooms().find(function (room) { return room.id === id; }) || null;
+  }
+
+  function messagesFor(roomId) {
+    var chat = getChat();
+    return (chat.messages[roomId] || []).slice();
+  }
+
+  function roomPreview(roomId, fallback) {
+    var chat = getChat();
+    var stored = chat.rooms[roomId] && chat.rooms[roomId].preview;
+    if (stored) return stored;
+    var msgs = chat.messages[roomId] || [];
+    var last = msgs[msgs.length - 1];
+    if (last) return previewFrom(last.text);
+    return fallback || "No messages yet";
+  }
+
+  function addChatMessage(roomId, fields) {
+    var chat = getChat();
+    if (!chat.messages[roomId]) chat.messages[roomId] = [];
+    if (!chat.rooms[roomId]) chat.rooms[roomId] = {};
+    var message = {
+      id: uid(),
+      authorId: fields.authorId,
+      author: fields.author,
+      text: String(fields.text || "").trim(),
+      createdAt: nowIso(),
+    };
+    if (!message.text) return null;
+    chat.messages[roomId].push(message);
+    chat.rooms[roomId].preview = previewFrom(message.text);
+    saveChat(chat);
+    return message;
   }
 
   function seedDemo() {
@@ -377,6 +475,11 @@
     getLogo: getLogo,
     setLogo: setLogo,
     seedDemo: seedDemo,
+    chatRooms: chatRooms,
+    chatRoom: chatRoom,
+    messagesFor: messagesFor,
+    roomPreview: roomPreview,
+    addChatMessage: addChatMessage,
     KEY_TEST: KEY_TEST,
   };
 })(window);
