@@ -249,7 +249,7 @@
       tabs.push({ id: "admin", label: "Admin", icon: "admin" });
     }
     tabEl.innerHTML = tabs.map(function (tab) {
-      var on = current === tab.id || (tab.id === "home" && current === "post") || (tab.id === "learn" && (current === "course" || current === "upgrade"));
+      var on = current === tab.id || (tab.id === "home" && current === "post") || (tab.id === "learn" && (current === "course" || current === "upgrade")) || (tab.id === "chat" && current === "thread");
       return '<button type="button" data-go="' + tab.id + '"' + (on ? ' class="is-on"' : "") + ">" + icon(tab.icon) + "<span>" + tab.label + "</span></button>";
     }).join("");
   }
@@ -670,24 +670,112 @@
     }
   }
 
+  function chatRooms() {
+    return STORE.chatRooms ? STORE.chatRooms() : (CATALOG.chatRooms || []);
+  }
+
   function renderChat() {
-    if (!AUTH.hasTier("private")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Chat</h1>' + lockedCard("Chat is for Private and above.");
+    var rooms = chatRooms();
+    var court = rooms.find(function (room) { return room.vip; });
+    var list = rooms.filter(function (room) { return !room.vip; });
+    var courtOpen = court && AUTH.hasTier(court.access);
+    var memberOpen = AUTH.hasTier("private");
+
+    var html = '<div class="pr-chat">';
+    if (!memberOpen) {
+      html += '<p class="pr-chat-hint">Private opens member chat. $14.97 a month. <button type="button" class="pr-link" data-go="upgrade">See the ranks</button></p>';
+    }
+
+    if (court) {
+      html +=
+        '<button type="button" class="pr-chat-hero' + (courtOpen ? "" : " is-locked") + '" data-go="' +
+        (courtOpen ? "thread/" + esc(court.id) : "upgrade") +
+        '">' +
+        '<span class="pr-chat-mark" aria-hidden="true">' + esc(court.mark || "PC") + "</span>" +
+        "<div><h2>" + esc(court.name) + "</h2><p>" + esc(courtOpen ? court.sub : "Court only · seats are few") + "</p></div>" +
+        '<span class="pr-chat-chevron" aria-hidden="true">›</span></button>';
+    }
+
+    html += '<p class="pr-chat-label">Chats</p>';
+
+    if (!memberOpen) {
+      html += '<button type="button" class="pr-chat-row is-locked" data-go="upgrade"><span class="pr-chat-mark">UN</span><div><p class="name">Member chat</p><p class="preview">Private and above</p></div></button>';
+    } else {
+      list.forEach(function (room) {
+        var open = AUTH.hasTier(room.access);
+        html +=
+          '<button type="button" class="pr-chat-row' + (open ? "" : " is-locked") + '" data-go="' +
+          (open ? "thread/" + esc(room.id) : "upgrade") +
+          '">' +
+          '<span class="pr-chat-mark" aria-hidden="true">' + esc(room.mark || initials(room.name)) + "</span>" +
+          "<div><p class=\"name\">" + esc(room.name) + "</p><p class=\"preview\">" +
+          esc(open ? STORE.roomPreview(room.id, room.sub) : room.sub) +
+          "</p></div></button>";
+      });
+    }
+
+    html += "</div>";
+    mainEl.innerHTML = html;
+  }
+
+  function renderThread(id) {
+    var room = STORE.chatRoom ? STORE.chatRoom(id) : chatRooms().find(function (item) { return item.id === id; });
+    if (!room) {
+      mainEl.innerHTML = '<div class="pr-thread-empty"><p>That room is gone.</p><button type="button" class="pr-submit" data-go="chat">Back to Chat</button></div>';
       return;
     }
-    if (AUTH.hasTier("court")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Prince\'s Court</h1><p>The small table. Princes talking to princes. Seats are few.</p>';
+    if (!AUTH.hasTier(room.access)) {
+      mainEl.innerHTML =
+        '<div class="pr-thread-empty">' +
+        "<p>" + esc(room.name) + " opens at " + esc(tierName(room.access)) + ".</p>" +
+        '<button type="button" class="pr-submit" data-go="upgrade">See the ranks</button>' +
+        '<button type="button" class="pr-ghost" data-go="chat" style="margin-top:10px;width:100%">Back to Chat</button></div>';
       return;
     }
-    if (AUTH.hasTier("colonel")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Colonel</h1><p>Month-long call with the Princes and the other Colonels. Two paths: take a named seat, like a minister of war or law, or raise your own court.</p>';
-      return;
+
+    var user = AUTH.currentUser();
+    var msgs = STORE.messagesFor(room.id);
+    var body = msgs.map(function (msg) {
+      var mine = msg.authorId === user.id;
+      return '<div class="pr-msg' + (mine ? " is-mine" : "") + '">' +
+        (mine ? "" : '<span class="pr-msg-mark" aria-hidden="true">' + esc(initials(msg.author)) + "</span>") +
+        '<div class="pr-bubble' + (mine ? " pr-bubble--mine" : " pr-bubble--them") + '">' +
+        (mine ? "" : '<p class="pr-msg-author">' + esc(msg.author) + "</p>") +
+        "<p>" + esc(msg.text) + "</p></div>" +
+        (mine ? '<span class="pr-msg-mark" aria-hidden="true">' + esc(initials(user.displayName)) + "</span>" : "") +
+        "</div>";
+    }).join("");
+
+    if (!msgs.length) {
+      body = '<p class="pr-chat-empty">No messages yet. Write something to start the room.</p>';
     }
-    if (AUTH.hasTier("sergeant")) {
-      mainEl.innerHTML = '<h1 class="pr-section-title">Squad chat</h1><p>You plus 8. Open a group. Hold each other to the number.</p>';
-      return;
+
+    mainEl.innerHTML =
+      '<div class="pr-thread">' +
+      '<header class="pr-thread-head"><button type="button" class="pr-tiny" data-go="chat">Back</button><h1>' + esc(room.name) + "</h1></header>" +
+      '<div class="pr-messages" id="prMessages">' + body + "</div>" +
+      '<form class="pr-chat-bar" id="prChatForm">' +
+      '<input type="text" name="text" id="prChatInput" placeholder="Type a message" maxlength="500" autocomplete="off" aria-label="Message">' +
+      '<button type="submit" class="pr-submit pr-chat-send">Send</button></form></div>';
+
+    var box = document.getElementById("prMessages");
+    if (box) box.scrollTop = box.scrollHeight;
+    var form = document.getElementById("prChatForm");
+    var input = document.getElementById("prChatInput");
+    if (input) input.focus();
+    if (form) {
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        var text = (input && input.value || "").trim();
+        if (!text) return;
+        STORE.addChatMessage(room.id, {
+          authorId: user.id,
+          author: user.displayName,
+          text: text,
+        });
+        render();
+      });
     }
-    mainEl.innerHTML = '<h1 class="pr-section-title">Unit chat</h1><p class="pr-empty">Member chat lands here next, same rooms pattern as The Minorities.</p>';
   }
 
   function renderAdmin() {
@@ -812,12 +900,14 @@
     renderHeader();
     bindHeader();
     renderTabs();
+    document.body.classList.toggle("pr-thread-open", path.indexOf("thread/") === 0);
     if (path === "home") renderHome();
     else if (path.indexOf("post/") === 0) renderPost(path.split("/")[1]);
     else if (path.indexOf("course/") === 0) renderCourse(path.split("/")[1]);
     else if (path === "upgrade") renderUpgrade();
     else if (path === "pay") renderPay();
     else if (path === "chat") renderChat();
+    else if (path.indexOf("thread/") === 0) renderThread(path.split("/")[1]);
     else if (path === "admin") renderAdmin();
     else if (path === "profile") renderProfile();
     else renderLearn();
