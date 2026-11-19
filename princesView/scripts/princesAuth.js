@@ -6,15 +6,42 @@
     return STORE.getSession();
   }
 
+  function tierRankMap() {
+    var map = { none: 0 };
+    var tiers = (global.PRINCES_CATALOG && global.PRINCES_CATALOG.tiers) || [];
+    if (!tiers.length) return TIER_RANK;
+    tiers.forEach(function (tier, index) {
+      map[tier.id] = index + 1;
+    });
+    if (map.private && map.household == null) map.household = map.private;
+    return map;
+  }
+
+  function entryTier() {
+    var tiers = (global.PRINCES_CATALOG && global.PRINCES_CATALOG.tiers) || [];
+    return (tiers[0] && tiers[0].id) || "ticket";
+  }
+
+  function memberTier() {
+    var catalog = global.PRINCES_CATALOG || {};
+    if (catalog.memberRankId) return catalog.memberRankId;
+    var tiers = catalog.tiers || [];
+    return (tiers[1] && tiers[1].id) || "private";
+  }
+
   function tierOf(user) {
     var tier = (user && user.tier) || "none";
-    if (tier === "household") return "private";
+    if (tier === "household") return memberTier();
     return tier;
   }
 
   function hasTier(minTier) {
+    var map = tierRankMap();
     var user = currentUser();
-    return TIER_RANK[tierOf(user)] >= TIER_RANK[minTier];
+    var have = map[tierOf(user)] || 0;
+    var need = map[minTier];
+    if (need == null) return false;
+    return have >= need;
   }
 
   function roleOf(user) {
@@ -214,5 +241,8 @@
     setRole: setRole,
     enterDemo: enterDemo,
     TIER_RANK: TIER_RANK,
+    tierRankMap: tierRankMap,
+    entryTier: entryTier,
+    memberTier: memberTier,
   };
 })(window);

@@ -11,6 +11,7 @@
   var KEY_BRAND = "princes.brandName";
   var KEY_LOGO = "princes.logo";
   var KEY_CHAT = "princes.chat";
+  var KEY_RSVPS = "princes.eventRsvps";
 
   function read(key, fallback) {
     try {
@@ -118,15 +119,46 @@
   }
 
   function getEvents() {
-    var events = read(KEY_EVENTS, null);
-    if (events) return events;
-    events = (global.PRINCES_CATALOG.events || []).slice();
-    write(KEY_EVENTS, events);
-    return events;
+    var stored = read(KEY_EVENTS, null) || [];
+    var seeds = (global.PRINCES_CATALOG.events || []).map(function (event) {
+      return Object.assign({}, event);
+    });
+    var catalogIds = {};
+    seeds.forEach(function (event) {
+      catalogIds[event.id] = true;
+    });
+    var extra = stored.filter(function (event) {
+      return event && event.id && !catalogIds[event.id];
+    });
+    return seeds.concat(extra);
   }
 
   function saveEvents(events) {
     write(KEY_EVENTS, events);
+  }
+
+  function getRsvps() {
+    return read(KEY_RSVPS, {}) || {};
+  }
+
+  function eventRsvpCount(eventId) {
+    var row = getRsvps()[eventId] || {};
+    return Object.keys(row.users || {}).length;
+  }
+
+  function hasEventRsvp(eventId, userId) {
+    var row = getRsvps()[eventId];
+    return !!(row && row.users && userId && row.users[userId]);
+  }
+
+  function addEventRsvp(eventId, userId) {
+    if (!eventId || !userId) return false;
+    var all = getRsvps();
+    if (!all[eventId]) all[eventId] = { users: {} };
+    if (!all[eventId].users) all[eventId].users = {};
+    all[eventId].users[userId] = true;
+    write(KEY_RSVPS, all);
+    return true;
   }
 
   function isTestMode() {
@@ -347,6 +379,11 @@
 
   function seedChatData() {
     var messages = {
+      global: [
+        { id: "m_g1", authorId: "demo_marcus", author: "Marcus Vale", text: "This room is for every man who paid the dollar. Post the waist. Ask the question. The unit hears you.", createdAt: nowIso() },
+        { id: "m_g2", authorId: "demo_cole", author: "Cole Hart", text: "Shirt test Friday. Camera on. No story.", createdAt: nowIso() },
+        { id: "m_g3", authorId: "demo_diaz", author: "Diaz Reed", text: "Day 12. Down 4. The course is working.", createdAt: nowIso() },
+      ],
       unit: [
         { id: "m_u1", authorId: "demo_marcus", author: "Marcus Vale", text: "Post the waist. Class is Tuesday. No sweater in the photo.", createdAt: nowIso() },
         { id: "m_u2", authorId: "demo_cole", author: "Cole Hart", text: "Hit the steps before the sun goes down.", createdAt: nowIso() },
@@ -382,11 +419,21 @@
   }
 
   function getChat() {
+    var seed = seedChatData();
     var chat = read(KEY_CHAT, null);
     if (!chat || !chat.messages) {
-      chat = seedChatData();
-      write(KEY_CHAT, chat);
+      write(KEY_CHAT, seed);
+      return seed;
     }
+    if (!chat.rooms) chat.rooms = {};
+    var changed = false;
+    Object.keys(seed.messages).forEach(function (roomId) {
+      if (chat.messages[roomId] && chat.messages[roomId].length) return;
+      chat.messages[roomId] = seed.messages[roomId];
+      chat.rooms[roomId] = seed.rooms[roomId];
+      changed = true;
+    });
+    if (changed) write(KEY_CHAT, chat);
     return chat;
   }
 
@@ -456,6 +503,9 @@
     savePosts: savePosts,
     getEvents: getEvents,
     saveEvents: saveEvents,
+    eventRsvpCount: eventRsvpCount,
+    hasEventRsvp: hasEventRsvp,
+    addEventRsvp: addEventRsvp,
     isTestMode: isTestMode,
     setTestMode: setTestMode,
     getAppMode: getAppMode,

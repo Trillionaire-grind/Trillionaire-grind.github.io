@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.12">
+  <link rel="stylesheet" href="princesView/assets/princes.css?v=0.0.0.14">
 </head>
 <body>
   <div class="pr-app">
@@ -31,6 +31,22 @@
     </div>
   </div>
 
+  <div class="pr-modal" id="prJoinModal" aria-hidden="true">
+    <div class="pr-modal-backdrop" data-pr-close></div>
+    <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prJoinTitle">
+      <button type="button" class="pr-modal-close" data-pr-close aria-label="Close">&times;</button>
+      <p class="pr-kicker" style="color:#111">Register</p>
+      <h2 id="prJoinTitle">Join this event</h2>
+      <p id="prJoinMeta"></p>
+      <p class="pr-join-seats" id="prJoinSeats"></p>
+      <p class="pr-error" id="prJoinError"></p>
+      <div class="pr-modal-actions">
+        <button type="button" class="pr-ghost" data-pr-close>Close</button>
+        <button type="button" class="pr-submit" id="prJoinAction">Register</button>
+      </div>
+    </div>
+  </div>
+
   <div class="pr-modal" id="prConfirmModal" aria-hidden="true">
     <div class="pr-modal-backdrop" data-pr-close></div>
     <div class="pr-modal-panel" role="dialog" aria-modal="true" aria-labelledby="prConfirmTitle">
@@ -44,6 +60,8 @@
     </div>
   </div>
   <script src="princesView/scripts/princesVersion.js"></script>
+  <script src="princesView/scripts/princesOwnerConfig.js"></script>
+  <script src="princesView/scripts/princesStripeConfig.js"></script>
   <script src="princesView/scripts/princesCatalog.js"></script>
   <script src="princesView/scripts/princesStore.js"></script>
   <script src="princesView/scripts/princesAuth.js"></script>

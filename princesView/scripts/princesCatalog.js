@@ -13,6 +13,8 @@ window.PRINCES_CATALOG = {
     "The 10% law",
     "Fix the man in the mirror first",
   ],
+  /** Live class room. Replace with the Princes Zoom meeting link. */
+  zoomUrl: "https://zoom.us/join",
   tiers: [
     {
       id: "ticket",
@@ -135,35 +137,42 @@ window.PRINCES_CATALOG = {
     {
       id: "class-body-1",
       title: "10% body fat: the first law",
-      when: "Tue Oct 7 · 8:00 PM ET",
+      when: "Tue Nov 25 · 8:00 PM ET",
+      date: "2026-11-25",
+      time: "20:00",
       topic: "body",
       sub: "Why every man in this unit starts with the mirror.",
     },
     {
       id: "class-mind-1",
       title: "The prince's morning",
-      when: "Thu Oct 9 · 7:00 AM ET",
+      when: "Thu Nov 27 · 7:00 AM ET",
+      date: "2026-11-27",
+      time: "07:00",
       topic: "mindset",
       sub: "A short rule set for the first hour of the day.",
     },
     {
       id: "class-biz-1",
       title: "Price like a prince",
-      when: "Sat Oct 11 · 11:00 AM ET",
+      when: "Sat Nov 29 · 11:00 AM ET",
+      date: "2026-11-29",
+      time: "11:00",
       topic: "business",
       sub: "How men who sell well stop apologizing for the number.",
     },
   ],
   events: [
-    { id: "e1", title: "10% body fat: the first law", date: "2026-10-07", time: "20:00", topic: "body", sub: "Live class. Bring your current weight and waist." },
-    { id: "e2", title: "The prince's morning", date: "2026-10-09", time: "07:00", topic: "mindset", sub: "Live class. First-hour rules." },
-    { id: "e3", title: "Price like a prince", date: "2026-10-11", time: "11:00", topic: "business", sub: "Live class. Offer, price, close." },
-    { id: "e4", title: "Build a simple app this month", date: "2026-10-14", time: "19:00", topic: "app", sub: "Workshop. Ship one page that takes money." },
-    { id: "e5", title: "City night: Kotfè", date: "2026-10-18", time: "18:00", topic: "city", sub: "How a town gets food, streets, and owners." },
-    { id: "e6", title: "Waist check", date: "2026-10-21", time: "20:00", topic: "body", sub: "Accountability. Post the number." },
-    { id: "e7", title: "Mindset office hours", date: "2026-10-21", time: "12:00", topic: "mindset", sub: "Open questions. 45 minutes." },
-    { id: "e8", title: "Offer review", date: "2026-10-21", time: "16:00", topic: "business", sub: "Bring one offer. We tighten it live." },
-    { id: "e9", title: "App office hours", date: "2026-10-21", time: "21:00", topic: "app", sub: "Unstick your build." },
+    { id: "e1", title: "10% body fat: the first law", date: "2026-11-25", time: "20:00", topic: "body", sub: "Live class. Bring your current weight and waist.", joinType: "link", joinUrl: "https://zoom.us/join", unlimited: true },
+    { id: "e10", title: "Ledger reminder", date: "2026-11-25", time: "09:00", topic: "body", sub: "Log breakfast. No live room. Add it to your calendar." },
+    { id: "e2", title: "The prince's morning", date: "2026-11-27", time: "07:00", topic: "mindset", sub: "Live class. First-hour rules.", joinType: "link", joinUrl: "https://zoom.us/join", unlimited: true },
+    { id: "e3", title: "Price like a prince", date: "2026-11-29", time: "11:00", topic: "business", sub: "Live class. Offer, price, close.", joinType: "link", joinUrl: "https://zoom.us/join" },
+    { id: "e4", title: "Build a simple app this month", date: "2026-12-02", time: "19:00", topic: "app", sub: "Workshop. Ship one page that takes money.", joinType: "register", joinUrl: "https://zoom.us/join", unlimited: true },
+    { id: "e5", title: "City night: Kotfè", date: "2026-12-05", time: "18:00", topic: "city", sub: "How a town gets food, streets, and owners.", joinType: "register", joinUrl: "https://zoom.us/join", seats: 24, seatsTaken: 18 },
+    { id: "e6", title: "Waist check", date: "2026-12-08", time: "20:00", topic: "body", sub: "Accountability. Post the number. No live room." },
+    { id: "e7", title: "Mindset office hours", date: "2026-12-08", time: "12:00", topic: "mindset", sub: "Open questions. 45 minutes.", joinType: "link", joinUrl: "https://zoom.us/join", unlimited: true },
+    { id: "e8", title: "Offer review", date: "2026-12-08", time: "16:00", topic: "business", sub: "Bring one offer. We tighten it live.", joinType: "register", joinUrl: "https://zoom.us/join", seats: 9, seatsTaken: 6 },
+    { id: "e9", title: "App office hours", date: "2026-12-08", time: "21:00", topic: "app", sub: "Unstick your build on your own time. Calendar only." },
   ],
   seedPosts: [
     {
@@ -200,6 +209,16 @@ window.PRINCES_CATALOG = {
       access: "court",
       vip: true,
       sub: "The small table. Seats are few.",
+      lockHint: "Prince's Court",
+    },
+    {
+      id: "global",
+      name: "Global",
+      mark: "GL",
+      access: "ticket",
+      global: true,
+      sub: "Every recruit in one room.",
+      lockHint: "$1 ticket",
     },
     {
       id: "unit",
@@ -207,6 +226,7 @@ window.PRINCES_CATALOG = {
       mark: "UN",
       access: "private",
       sub: "Daily talk for the men.",
+      lockHint: "Private",
     },
     {
       id: "announcements",
@@ -214,6 +234,7 @@ window.PRINCES_CATALOG = {
       mark: "AN",
       access: "private",
       sub: "Orders from staff.",
+      lockHint: "Private",
     },
     {
       id: "body",
@@ -221,6 +242,7 @@ window.PRINCES_CATALOG = {
       mark: "10",
       access: "private",
       sub: "Fat course talk.",
+      lockHint: "Private",
     },
     {
       id: "squad",
@@ -228,6 +250,7 @@ window.PRINCES_CATALOG = {
       mark: "SQ",
       access: "sergeant",
       sub: "You plus 8. Hold the number.",
+      lockHint: "Sergeant",
     },
     {
       id: "colonel",
@@ -235,7 +258,25 @@ window.PRINCES_CATALOG = {
       mark: "CO",
       access: "colonel",
       sub: "The month-long call.",
+      lockHint: "Colonel",
     },
   ],
   fatLossApp: "fatLossViews/app.html",
 };
+
+(function applyOwnerPack(catalog, owner) {
+  if (!owner) return;
+  var brand = owner.brand || {};
+  if (brand.name) catalog.brand = brand.name;
+  if (brand.tagline) catalog.tagline = brand.tagline;
+  if (brand.logo) catalog.workingLogo = brand.logo;
+  if (brand.favicon) catalog.favicon = brand.favicon;
+  if (brand.colors) catalog.brandColors = brand.colors;
+  if (owner.vsl) catalog.vsl = owner.vsl;
+  if (owner.sales) catalog.sales = owner.sales;
+  if (owner.zoomUrl) catalog.zoomUrl = owner.zoomUrl;
+  if (owner.memberRankId) catalog.memberRankId = owner.memberRankId;
+  if (owner.ranks && owner.ranks.length) catalog.tiers = owner.ranks;
+  if (owner.rooms && owner.rooms.length) catalog.chatRooms = owner.rooms;
+  if (owner.ranksManual) catalog.ranksManual = owner.ranksManual;
+})(window.PRINCES_CATALOG, window.PRINCES_OWNER);
