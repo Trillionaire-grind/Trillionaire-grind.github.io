@@ -121,23 +121,24 @@ button, input, select, textarea { font: inherit; }
 }
 
 .pr-yes li {
-  position: relative;
-  padding: 5px 40px 5px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 16px;
+  align-items: start;
+  padding: 8px 0;
   color: #d7d0c2;
   font-size: 14px;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 
 .pr-yes li::after {
   content: "Yes";
-  position: absolute;
-  right: 0;
-  top: 5px;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--pr-gold);
+  padding-top: 2px;
 }
 
 .pr-vsl-follow {
@@ -930,11 +931,21 @@ button, input, select, textarea { font: inherit; }
 @media (max-width: 720px) {
   .pr-logo-grid { grid-template-columns: 1fr 1fr; }
   .pr-cal-day { min-height: 54px; }
+  .pr-yes li {
+    column-gap: 20px;
+    padding: 10px 0;
+  }
+  .pr-vsl-follow span {
+    display: block;
+  }
+  .pr-vsl-follow span + span {
+    margin-top: 6px;
+  }
 }
 
 @media (max-height: 780px) {
   .pr-hero h1 { font-size: 1.35rem; }
-  .pr-yes li { font-size: 13px; padding: 3px 0 3px 26px; }
+  .pr-yes li { font-size: 13px; }
   .pr-vsl { height: min(24vh, 190px); }
   .pr-cta { padding: 12px 20px; }
 }
