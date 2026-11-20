@@ -1020,23 +1020,64 @@ button, input, select, textarea { font: inherit; }
 @media (max-width: 720px) {
   .pr-logo-grid { grid-template-columns: 1fr 1fr; }
   .pr-cal-day { min-height: 54px; }
+  .pr-sales { padding: 6px 0 72px; }
+  .pr-sales-header { padding: 6px 12px; }
+  .pr-brand img { width: 36px; height: 36px; }
+  .pr-brand span { font-size: 1.2rem; }
+  .pr-hero {
+    min-height: calc(100dvh - 58px - 4px - 52px);
+    padding-bottom: 0;
+  }
+  .pr-kicker {
+    margin: 0 0 6px;
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  .pr-yes {
+    margin: 0 auto 6px;
+  }
   .pr-yes li {
-    column-gap: 20px;
-    padding: 10px 0;
+    column-gap: 16px;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .pr-vsl-follow {
+    margin: 0 0 8px;
+    font-size: 13px;
   }
   .pr-vsl-follow span {
     display: block;
   }
   .pr-vsl-follow span + span {
-    margin-top: 6px;
+    margin-top: 2px;
   }
+  .pr-vsl {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 88px;
+    max-height: 140px;
+    margin-bottom: 8px;
+  }
+  .pr-hero > .pr-cta {
+    flex-shrink: 0;
+    margin-top: auto;
+    width: min(360px, 100%);
+  }
+  .pr-dollar { margin-top: 10px; }
 }
 
 @media (max-height: 780px) {
   .pr-hero h1 { font-size: 1.35rem; }
   .pr-yes li { font-size: 13px; }
-  .pr-vsl { height: min(24vh, 190px); }
   .pr-cta { padding: 12px 20px; }
+}
+
+@media (max-height: 700px) {
+  .pr-vsl {
+    min-height: 72px;
+    max-height: 110px;
+  }
+  .pr-yes li { padding: 3px 0; }
 }
 
 .pr-link {
