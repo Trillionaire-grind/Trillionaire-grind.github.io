@@ -12,6 +12,7 @@
   var KEY_LOGO = "princes.logo";
   var KEY_CHAT = "princes.chat";
   var KEY_RSVPS = "princes.eventRsvps";
+  var KEY_UNPINNED = "princes.unpinned";
 
   function read(key, fallback) {
     try {
@@ -81,24 +82,71 @@
     });
   }
 
+  function isLawPost(post) {
+    if (!post) return false;
+    return post.id === "p3" || post.id === "d8" || /10%\s*law/i.test(post.title || "");
+  }
+
   function ensureLawPost(posts) {
-    var hasLaw = posts.some(function (post) {
-      return post.id === "p3" || post.id === "d8" || /10%\s*law/i.test(post.title || "");
+    var changed = false;
+    var hasLaw = false;
+    posts.forEach(function (post) {
+      if (!isLawPost(post)) return;
+      hasLaw = true;
+      if (!post.pinned) {
+        post.pinned = true;
+        changed = true;
+      }
+      if (!post.access) {
+        post.access = "ticket";
+        changed = true;
+      }
     });
-    if (hasLaw) return posts;
-    posts.unshift({
-      id: "p3",
-      author: "Siguineau",
-      authorId: "seed",
-      role: "owner",
-      title: "The 10% law",
-      body: "Every man in this court starts at 10% body fat. That is the first law.",
-      topic: "body",
-      access: "ticket",
-      createdAt: nowIso(),
-    });
-    write(KEY_POSTS, posts);
+    if (!hasLaw) {
+      posts.unshift({
+        id: "p3",
+        author: "Siguineau",
+        authorId: "seed",
+        role: "owner",
+        title: "The 10% law",
+        body: "Every man in this court starts at 10% body fat. That is the first law.",
+        topic: "body",
+        access: "ticket",
+        pinned: true,
+        createdAt: nowIso(),
+      });
+      changed = true;
+    }
+    if (changed) write(KEY_POSTS, posts);
     return posts;
+  }
+
+  function getUnpinnedMap() {
+    return read(KEY_UNPINNED, {}) || {};
+  }
+
+  function isPostUnpinned(userId, postId) {
+    var list = getUnpinnedMap()[userId] || [];
+    return list.indexOf(postId) !== -1;
+  }
+
+  function unpinPostForUser(userId, postId) {
+    if (!userId || !postId) return;
+    var all = getUnpinnedMap();
+    if (!all[userId]) all[userId] = [];
+    if (all[userId].indexOf(postId) === -1) all[userId].push(postId);
+    write(KEY_UNPINNED, all);
+  }
+
+  function feedPosts(userId) {
+    var posts = getPosts().slice();
+    var pinned = [];
+    var rest = [];
+    posts.forEach(function (post) {
+      if (post.pinned && !isPostUnpinned(userId, post.id)) pinned.push(post);
+      else rest.push(post);
+    });
+    return pinned.concat(rest);
   }
 
   function getPosts() {
@@ -351,7 +399,7 @@
       { id: "d5", author: "Cole Hart", authorId: "demo_cole", role: "leader", title: "Squad check", body: "Eight men posted numbers. Two missed. They hear about it on the call.", topic: "mindset", access: "sergeant", createdAt: nowIso() },
       { id: "d6", author: "Nash Iver", authorId: "demo_nash", role: "staff", title: "Colonel call is live", body: "Month-long room with the Princes. Two paths: take a seat or raise your own command.", topic: "business", access: "colonel", createdAt: nowIso() },
       { id: "d7", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "Prince's Court notes", body: "The small table. Seats are few. This post stays locked until you are on the court.", topic: "city", access: "court", createdAt: nowIso() },
-      { id: "d8", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "The 10% law", body: "Every man in this court starts at 10% body fat. That is the first law.", topic: "body", access: "ticket", createdAt: nowIso() },
+      { id: "d8", author: "Marcus Vale", authorId: "demo_marcus", role: "owner", title: "The 10% law", body: "Every man in this court starts at 10% body fat. That is the first law.", topic: "body", access: "ticket", pinned: true, createdAt: nowIso() },
     ]);
 
     write(KEY_COMMENTS, {
@@ -501,6 +549,10 @@
     getPosts: getPosts,
     getPost: getPost,
     savePosts: savePosts,
+    feedPosts: feedPosts,
+    isPostUnpinned: isPostUnpinned,
+    unpinPostForUser: unpinPostForUser,
+    isLawPost: isLawPost,
     getEvents: getEvents,
     saveEvents: saveEvents,
     eventRsvpCount: eventRsvpCount,

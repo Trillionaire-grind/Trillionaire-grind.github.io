@@ -199,6 +199,7 @@ window.PRINCES_CATALOG = {
       body: "Every man in this court starts at 10% body fat. That is the first law.",
       topic: "body",
       access: "ticket",
+      pinned: true,
     },
   ],
   chatRooms: [

@@ -383,15 +383,17 @@
 
   function renderHome() {
     var user = AUTH.currentUser();
-    var posts = STORE.getPosts();
+    var posts = STORE.feedPosts(user.id);
     var compose = AUTH.canCreatePost()
       ? '<button type="button" class="pr-compose-launch" id="prOpenCompose">Write something</button>'
       : "";
     mainEl.innerHTML = '<h1 class="pr-section-title">Home</h1>' + compose + posts.map(function (post) {
       var access = post.access || "private";
       var locked = !AUTH.hasTier(access);
+      var pinned = isPinnedForUser(post, user);
       if (locked) {
-        return '<article class="pr-course pr-locked" data-go="upgrade">' +
+        return '<article class="pr-course pr-locked' + (pinned ? " pr-post--pinned" : "") + '" data-go="upgrade">' +
+          pinBar(post, user) +
           (post.image ? '<img src="' + esc(post.image) + '" alt="">' : '<div class="pr-lock-ph"></div>') +
           '<div class="pr-lock-badge">🔒 ' + esc(access) + "</div>" +
           '<div class="pr-course-body"><h3>' + esc(post.title) + "</h3><p>Upgrade to open this.</p></div></article>";
@@ -401,7 +403,9 @@
       var actions = "";
       if (AUTH.canEditOwnPost(post)) actions += '<button type="button" class="pr-tiny" data-edit="' + esc(post.id) + '">Edit</button>';
       if (AUTH.canDeletePost(post)) actions += '<button type="button" class="pr-tiny" data-del="' + esc(post.id) + '">Remove</button>';
-      return '<article class="pr-post pr-post--link" data-go="post/' + esc(post.id) + '" id="post-' + esc(post.id) + '"><header><strong>' + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
+      return '<article class="pr-post pr-post--link' + (pinned ? " pr-post--pinned" : "") + '" data-go="post/' + esc(post.id) + '" id="post-' + esc(post.id) + '">' +
+        pinBar(post, user) +
+        "<header><strong>" + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
         (post.image ? '<img class="pr-post-img" src="' + esc(post.image) + '" alt="">' : "") +
         "<h3>" + esc(post.title) + "</h3><p>" + esc(postTeaser(post)) + "</p>" +
         '<div class="pr-social">' +
@@ -431,6 +435,7 @@
       });
     });
     bindDeleteButtons(false);
+    bindUnpin(user);
     mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
       btn.addEventListener("click", function (event) {
         event.stopPropagation();
@@ -481,9 +486,11 @@
     var actions = "";
     if (AUTH.canEditOwnPost(post)) actions += '<button type="button" class="pr-tiny" data-edit="' + esc(post.id) + '">Edit</button>';
     if (AUTH.canDeletePost(post)) actions += '<button type="button" class="pr-tiny" data-del="' + esc(post.id) + '">Remove</button>';
+    var pinned = isPinnedForUser(post, user);
     mainEl.innerHTML =
-      '<article class="pr-post pr-post-page">' +
+      '<article class="pr-post pr-post-page' + (pinned ? " pr-post--pinned" : "") + '">' +
       '<button type="button" class="pr-tiny" data-go="home">Back to Home</button>' +
+      pinBar(post, user) +
       "<header><strong>" + esc(post.author) + '</strong><span class="pr-badge pr-badge--' + esc(post.role || "member") + '">' + esc(post.role || "member") + "</span></header>" +
       (post.image ? '<img class="pr-post-img" src="' + esc(post.image) + '" alt="">' : "") +
       "<h1>" + esc(post.title) + "</h1>" +
@@ -511,6 +518,7 @@
     });
     bindCommentForm(user);
     bindDeleteButtons(true);
+    bindUnpin(user);
     mainEl.querySelectorAll("[data-edit]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var postsNow = STORE.getPosts();
@@ -531,6 +539,35 @@
 
   function canJoinClass() {
     return AUTH.hasTier(memberTier());
+  }
+
+  function canUnpinPinned() {
+    return AUTH.hasTier(memberTier());
+  }
+
+  function isPinnedForUser(post, user) {
+    if (!post || !post.pinned || !user) return false;
+    return !STORE.isPostUnpinned(user.id, post.id);
+  }
+
+  function pinBar(post, user) {
+    if (!isPinnedForUser(post, user)) return "";
+    var unpin = canUnpinPinned()
+      ? '<button type="button" class="pr-tiny" data-unpin="' + esc(post.id) + '">Unpin</button>'
+      : "";
+    return '<div class="pr-pin"><span class="pr-pin-badge">Pinned</span>' + unpin + "</div>";
+  }
+
+  function bindUnpin(user) {
+    mainEl.querySelectorAll("[data-unpin]").forEach(function (btn) {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        if (!canUnpinPinned()) return;
+        STORE.unpinPostForUser(user.id, btn.dataset.unpin);
+        render();
+      });
+    });
   }
 
   function todayYmd() {
